@@ -88,17 +88,15 @@ export class CVWindowSplitter extends ReatomLitElement {
       }
 
       [part='base'][data-orientation='vertical'] {
-        grid-template-columns: var(--cv-window-splitter-primary-size, 50%) var(
-            --cv-window-splitter-divider-size,
-            8px
-          ) 1fr;
+        grid-template-columns:
+          var(--cv-window-splitter-primary-size, 50%) var(--cv-window-splitter-divider-size, 8px)
+          1fr;
       }
 
       [part='base'][data-orientation='horizontal'] {
-        grid-template-rows: var(--cv-window-splitter-primary-size, 50%) var(
-            --cv-window-splitter-divider-size,
-            8px
-          ) 1fr;
+        grid-template-rows:
+          var(--cv-window-splitter-primary-size, 50%) var(--cv-window-splitter-divider-size, 8px)
+          1fr;
       }
 
       [part='pane'] {

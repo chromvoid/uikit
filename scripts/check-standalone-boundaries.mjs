@@ -20,12 +20,10 @@ const toolingFiles = [
   path.join(packageRoot, 'tsconfig.json'),
   path.join(packageRoot, 'tsconfig.build.json'),
   path.join(packageRoot, 'tsconfig.test.json'),
-  path.join(packageRoot, 'vite.config.ts'),
   path.join(packageRoot, 'vitest.config.ts'),
   path.join(packageRoot, 'uno.config.ts'),
   path.join(packageRoot, '.oxlintrc.json'),
   path.join(packageRoot, '.oxfmtrc.json'),
-  path.join(packageRoot, 'demo', 'main.ts'),
   path.join(packageRoot, 'docs', '.vitepress', 'config.ts'),
   path.join(packageRoot, 'docs', '.vitepress', 'theme', 'index.ts'),
   path.join(packageRoot, 'docs', 'guide', 'getting-started.md'),
@@ -123,10 +121,8 @@ for (const filePath of [
   ...files,
   ...scriptFiles,
   ...docsCodeFiles,
-  path.join(packageRoot, 'vite.config.ts'),
   path.join(packageRoot, 'vitest.config.ts'),
   path.join(packageRoot, 'uno.config.ts'),
-  path.join(packageRoot, 'demo', 'main.ts'),
 ]) {
   if (!existsSync(filePath)) continue
 
