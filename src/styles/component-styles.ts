@@ -29,6 +29,11 @@ export const componentResetStyles = css`
     margin: 0;
   }
 
+  ul,
+  ol {
+    padding: 0;
+  }
+
   button,
   input,
   textarea,
@@ -48,6 +53,10 @@ export const componentResetStyles = css`
   a {
     color: inherit;
     text-decoration: none;
+  }
+
+  :focus-visible {
+    outline-offset: 2px;
   }
 
   ::slotted(img),

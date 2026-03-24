@@ -16,8 +16,12 @@ const rootOut = path.join(tmpRoot, 'root-out')
 const buttonLeafOut = path.join(tmpRoot, 'button-leaf-out')
 const selectLeafOut = path.join(tmpRoot, 'select-leaf-out')
 const rootImportPath = path.join(packageRoot, 'dist', 'index.js').replaceAll(path.sep, '/')
-const buttonLeafImportPath = path.join(packageRoot, 'dist', 'components', 'cv-button.js').replaceAll(path.sep, '/')
-const selectLeafImportPath = path.join(packageRoot, 'dist', 'components', 'cv-select.js').replaceAll(path.sep, '/')
+const buttonLeafImportPath = path
+  .join(packageRoot, 'dist', 'components', 'cv-button.js')
+  .replaceAll(path.sep, '/')
+const selectLeafImportPath = path
+  .join(packageRoot, 'dist', 'components', 'cv-select.js')
+  .replaceAll(path.sep, '/')
 const unrelatedMarkers = [
   'cv-treegrid',
   'cv-window-splitter',
@@ -26,8 +30,8 @@ const unrelatedMarkers = [
   'cv-tooltip',
 ]
 const sizeBudgets = {
-  buttonLeaf: Number.POSITIVE_INFINITY,
-  selectLeaf: Number.POSITIVE_INFINITY,
+  buttonLeaf: 43000,
+  selectLeaf: 58000,
 }
 
 async function bundle(entryFile, outdir) {
