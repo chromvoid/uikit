@@ -189,12 +189,39 @@ Normal (non-toggle) buttons rely on the native `click` event.
 <cv-button toggle pressed>Bold</cv-button>
 
 <cv-button>
-  <icon-plus slot="prefix"></icon-plus>
+  <svg
+    slot="prefix"
+    width="16"
+    height="16"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    aria-hidden="true"
+  >
+    <path d="M12 5v14"></path>
+    <path d="M5 12h14"></path>
+  </svg>
   Add item
 </cv-button>
 
 <cv-button>
   Settings
-  <icon-chevron slot="suffix"></icon-chevron>
+  <svg
+    slot="suffix"
+    width="16"
+    height="16"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    aria-hidden="true"
+  >
+    <path d="m9 18 6-6-6-6"></path>
+  </svg>
 </cv-button>
 ```

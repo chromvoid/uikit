@@ -172,9 +172,46 @@ Events are dispatched by the UIKit adapter by providing `onCopy` and `onError` c
 
 <!-- Custom icons via slots -->
 <cv-copy-button value="hello">
-  <svg slot="copy-icon"><!-- custom copy icon --></svg>
-  <svg slot="success-icon"><!-- custom success icon --></svg>
-  <svg slot="error-icon"><!-- custom error icon --></svg>
+  <svg
+    slot="copy-icon"
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  >
+    <path d="M12 5v14" />
+    <path d="M5 12h14" />
+  </svg>
+  <svg
+    slot="success-icon"
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  >
+    <circle cx="12" cy="12" r="9" />
+    <path d="m8.5 12 2.5 2.5 4.5-5" />
+  </svg>
+  <svg
+    slot="error-icon"
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  >
+    <path d="M12 3 3 20h18L12 3Z" />
+    <path d="M12 9v4" />
+    <path d="M12 17h.01" />
+  </svg>
 </cv-copy-button>
 
 <!-- Disabled -->

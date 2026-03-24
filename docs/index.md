@@ -35,6 +35,20 @@ features:
     package exposes a focused set of Lit custom elements, theme tokens, and controller helpers for
     real application flows.
   </p>
+  <ul class="uikit-intro-signals" aria-label="UIKit focus areas">
+    <li class="uikit-intro-signal">
+      <span class="uikit-intro-signal-title">Custom elements</span>
+      <span class="uikit-intro-signal-copy">Composable slots, parts, and DOM contracts.</span>
+    </li>
+    <li class="uikit-intro-signal">
+      <span class="uikit-intro-signal-title">Theme tokens</span>
+      <span class="uikit-intro-signal-copy">Scoped runtime themes without forking component logic.</span>
+    </li>
+    <li class="uikit-intro-signal">
+      <span class="uikit-intro-signal-title">Controllers</span>
+      <span class="uikit-intro-signal-copy">Dialog and toast flows kept close to the kit.</span>
+    </li>
+  </ul>
 </section>
 
 <div class="uikit-stats">
