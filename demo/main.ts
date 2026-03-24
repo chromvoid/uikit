@@ -1,7 +1,7 @@
 import 'virtual:uno.css'
 import '../src/theme/tokens.css'
-import {unoUtilities} from '../src/styles/uno-utilities'
 import {createToastController, registerUikit, setUnoUtilities} from '../src/index'
+import {unoUtilities} from '../src/styles/uno-utilities'
 
 setUnoUtilities(unoUtilities)
 registerUikit()

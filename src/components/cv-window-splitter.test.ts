@@ -31,8 +31,7 @@ const createSplitter = async (attrs?: Partial<CVWindowSplitter>) => {
   return el
 }
 
-const getBase = (el: CVWindowSplitter) =>
-  el.shadowRoot!.querySelector('[part="base"]') as HTMLElement
+const getBase = (el: CVWindowSplitter) => el.shadowRoot!.querySelector('[part="base"]') as HTMLElement
 
 const getSeparator = (el: CVWindowSplitter) =>
   el.shadowRoot!.querySelector('[part="separator"]') as HTMLElement
@@ -213,7 +212,9 @@ describe('cv-window-splitter', () => {
     it('aria-controls references both pane element ids', async () => {
       const el = await createSplitter()
       const primaryPane = el.shadowRoot!.querySelector('[part="pane"][data-pane="primary"]') as HTMLElement
-      const secondaryPane = el.shadowRoot!.querySelector('[part="pane"][data-pane="secondary"]') as HTMLElement
+      const secondaryPane = el.shadowRoot!.querySelector(
+        '[part="pane"][data-pane="secondary"]',
+      ) as HTMLElement
       const ariaControls = getSeparator(el).getAttribute('aria-controls')
       expect(ariaControls).toContain(primaryPane.id)
       expect(ariaControls).toContain(secondaryPane.id)
@@ -446,7 +447,17 @@ describe('cv-window-splitter', () => {
       const separator = getSeparator(el)
       separator.setPointerCapture = vi.fn()
       el.getBoundingClientRect = () =>
-        ({left: 0, right: 200, width: 200, top: 0, bottom: 200, height: 200, x: 0, y: 0, toJSON: () => {}}) as DOMRect
+        ({
+          left: 0,
+          right: 200,
+          width: 200,
+          top: 0,
+          bottom: 200,
+          height: 200,
+          x: 0,
+          y: 0,
+          toJSON: () => {},
+        }) as DOMRect
 
       separator.dispatchEvent(new PointerEvent('pointerdown', {pointerId: 1, clientX: 100, bubbles: true}))
       await settle(el)
@@ -466,7 +477,17 @@ describe('cv-window-splitter', () => {
 
       const base = getBase(el)
       base.getBoundingClientRect = () =>
-        ({left: 0, right: 200, width: 200, top: 0, bottom: 200, height: 200, x: 0, y: 0, toJSON: () => {}}) as DOMRect
+        ({
+          left: 0,
+          right: 200,
+          width: 200,
+          top: 0,
+          bottom: 200,
+          height: 200,
+          x: 0,
+          y: 0,
+          toJSON: () => {},
+        }) as DOMRect
 
       separator.dispatchEvent(new PointerEvent('pointerdown', {pointerId: 1, clientX: 100, bubbles: true}))
       await settle(el)
@@ -489,7 +510,17 @@ describe('cv-window-splitter', () => {
 
       const base = getBase(el)
       base.getBoundingClientRect = () =>
-        ({left: 0, right: 200, width: 200, top: 0, bottom: 200, height: 200, x: 0, y: 0, toJSON: () => {}}) as DOMRect
+        ({
+          left: 0,
+          right: 200,
+          width: 200,
+          top: 0,
+          bottom: 200,
+          height: 200,
+          x: 0,
+          y: 0,
+          toJSON: () => {},
+        }) as DOMRect
 
       let inputCount = 0
       el.addEventListener('cv-input', () => inputCount++)
@@ -516,7 +547,17 @@ describe('cv-window-splitter', () => {
 
       const base = getBase(el)
       base.getBoundingClientRect = () =>
-        ({left: 0, right: 200, width: 200, top: 0, bottom: 200, height: 200, x: 0, y: 0, toJSON: () => {}}) as DOMRect
+        ({
+          left: 0,
+          right: 200,
+          width: 200,
+          top: 0,
+          bottom: 200,
+          height: 200,
+          x: 0,
+          y: 0,
+          toJSON: () => {},
+        }) as DOMRect
 
       let changeCount = 0
       el.addEventListener('cv-change', () => changeCount++)
@@ -546,7 +587,17 @@ describe('cv-window-splitter', () => {
 
       const base = getBase(el)
       base.getBoundingClientRect = () =>
-        ({left: 0, right: 200, width: 200, top: 0, bottom: 200, height: 200, x: 0, y: 0, toJSON: () => {}}) as DOMRect
+        ({
+          left: 0,
+          right: 200,
+          width: 200,
+          top: 0,
+          bottom: 200,
+          height: 200,
+          x: 0,
+          y: 0,
+          toJSON: () => {},
+        }) as DOMRect
 
       separator.dispatchEvent(new PointerEvent('pointerdown', {pointerId: 1, clientX: 100, bubbles: true}))
       await settle(el)
@@ -570,7 +621,17 @@ describe('cv-window-splitter', () => {
 
       const base = getBase(el)
       base.getBoundingClientRect = () =>
-        ({left: 0, right: 200, width: 200, top: 0, bottom: 200, height: 200, x: 0, y: 0, toJSON: () => {}}) as DOMRect
+        ({
+          left: 0,
+          right: 200,
+          width: 200,
+          top: 0,
+          bottom: 200,
+          height: 200,
+          x: 0,
+          y: 0,
+          toJSON: () => {},
+        }) as DOMRect
 
       separator.dispatchEvent(new PointerEvent('pointerdown', {pointerId: 1, clientX: 100, bubbles: true}))
       await settle(el)

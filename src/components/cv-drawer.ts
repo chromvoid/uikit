@@ -1,4 +1,4 @@
-import {createDrawer, type DrawerModel} from '@chromvoid/headless-ui'
+import {createDrawer, type DrawerModel} from '@chromvoid/headless-ui/drawer'
 import {css, html, nothing} from 'lit'
 import type {PropertyValues} from 'lit'
 
@@ -535,7 +535,8 @@ export class CVDrawer extends ReatomLitElement {
     const requestedId = panelProps['data-initial-focus']
 
     if (requestedId) {
-      const explicit = (this.querySelector(`#${requestedId}`) as HTMLElement | null) ??
+      const explicit =
+        (this.querySelector(`#${requestedId}`) as HTMLElement | null) ??
         (this.shadowRoot?.querySelector(`#${requestedId}`) as HTMLElement | null)
       if (explicit) {
         explicit.focus()

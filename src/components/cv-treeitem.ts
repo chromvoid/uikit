@@ -120,7 +120,8 @@ export class CVTreeItem extends LitElement {
         inset-block: 0;
         inset-inline-start: calc(var(--cv-treeview-indent-size) / 2);
         inline-size: var(--cv-treeview-indent-guide-width);
-        border-inline-start: var(--cv-treeview-indent-guide-width) var(--cv-treeview-indent-guide-style) var(--cv-treeview-indent-guide-color);
+        border-inline-start: var(--cv-treeview-indent-guide-width) var(--cv-treeview-indent-guide-style)
+          var(--cv-treeview-indent-guide-color);
       }
 
       [part='children'][hidden] {

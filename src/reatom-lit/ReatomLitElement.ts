@@ -71,9 +71,7 @@ export class ReatomLitElement extends LitElement {
 
     const {result: value} = this.__abstractRender!.render(changedProperties)
     const hadOwnRender = Object.prototype.hasOwnProperty.call(this, 'render')
-    const ownRenderDescriptor = hadOwnRender
-      ? Object.getOwnPropertyDescriptor(this, 'render')
-      : undefined
+    const ownRenderDescriptor = hadOwnRender ? Object.getOwnPropertyDescriptor(this, 'render') : undefined
 
     // Keep Lit's native update path intact so SSR hydration support can
     // reuse declarative shadow DOM instead of appending a second render.

@@ -450,7 +450,10 @@ describe('cv-tabs', () => {
 
       const changes: Array<{activeTabId: string | null; selectedTabId: string | null}> = []
       tabs.addEventListener('cv-change', (event) => {
-        changes.push((event as unknown as CustomEvent<{activeTabId: string | null; selectedTabId: string | null}>).detail)
+        changes.push(
+          (event as unknown as CustomEvent<{activeTabId: string | null; selectedTabId: string | null}>)
+            .detail,
+        )
       })
 
       tabElements[0]!.dispatchEvent(new KeyboardEvent('keydown', {key: 'ArrowRight', bubbles: true}))
@@ -461,10 +464,12 @@ describe('cv-tabs', () => {
       expect(panelElements[1]!.hidden).toBe(false)
       expect(changes.at(-1)).toEqual({activeTabId: 'b', selectedTabId: 'b'})
       expect(changes.at(-1)).toMatchObject({activeTabId: 'b', selectedTabId: 'b'})
-      expect(changes.at(-1)).toEqual(expect.objectContaining({
-        activeTabId: 'b',
-        selectedTabId: 'b',
-      }))
+      expect(changes.at(-1)).toEqual(
+        expect.objectContaining({
+          activeTabId: 'b',
+          selectedTabId: 'b',
+        }),
+      )
       expect(Object.keys(changes.at(-1) ?? {})).toEqual(['activeTabId', 'selectedTabId'])
     })
 
@@ -591,7 +596,10 @@ describe('cv-tabs', () => {
 
       const changes: Array<{activeTabId: string | null; selectedTabId: string | null}> = []
       tabs.addEventListener('cv-change', (event) => {
-        changes.push((event as unknown as CustomEvent<{activeTabId: string | null; selectedTabId: string | null}>).detail)
+        changes.push(
+          (event as unknown as CustomEvent<{activeTabId: string | null; selectedTabId: string | null}>)
+            .detail,
+        )
       })
 
       tabElements[1]!.dispatchEvent(
@@ -624,7 +632,10 @@ describe('cv-tabs', () => {
 
       const changes: Array<{activeTabId: string | null; selectedTabId: string | null}> = []
       tabs.addEventListener('cv-change', (event) => {
-        changes.push((event as unknown as CustomEvent<{activeTabId: string | null; selectedTabId: string | null}>).detail)
+        changes.push(
+          (event as unknown as CustomEvent<{activeTabId: string | null; selectedTabId: string | null}>)
+            .detail,
+        )
       })
 
       tabElements[1]!.dispatchEvent(
@@ -652,7 +663,10 @@ describe('cv-tabs', () => {
 
       const changes: Array<{activeTabId: string | null; selectedTabId: string | null}> = []
       tabs.addEventListener('cv-change', (event) => {
-        changes.push((event as unknown as CustomEvent<{activeTabId: string | null; selectedTabId: string | null}>).detail)
+        changes.push(
+          (event as unknown as CustomEvent<{activeTabId: string | null; selectedTabId: string | null}>)
+            .detail,
+        )
       })
 
       tabElements[1]!.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
@@ -677,7 +691,10 @@ describe('cv-tabs', () => {
 
       const changes: Array<{activeTabId: string | null; selectedTabId: string | null}> = []
       tabs.addEventListener('cv-change', (event) => {
-        changes.push((event as unknown as CustomEvent<{activeTabId: string | null; selectedTabId: string | null}>).detail)
+        changes.push(
+          (event as unknown as CustomEvent<{activeTabId: string | null; selectedTabId: string | null}>)
+            .detail,
+        )
       })
 
       tabElements[1]!.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))

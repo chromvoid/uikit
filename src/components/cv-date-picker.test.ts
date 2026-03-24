@@ -55,7 +55,8 @@ const dispatchKeyDown = (element: Element, key: string, init?: KeyboardEventInit
   )
 }
 
-const hasElementInternals = typeof (HTMLElement.prototype as {attachInternals?: unknown}).attachInternals === 'function'
+const hasElementInternals =
+  typeof (HTMLElement.prototype as {attachInternals?: unknown}).attachInternals === 'function'
 
 afterEach(() => {
   document.body.innerHTML = ''

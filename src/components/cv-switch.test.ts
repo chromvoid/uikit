@@ -33,13 +33,12 @@ const createSwitchWithHTML = async (innerHTML: string, attrs?: Record<string, st
   return sw
 }
 
-const getBase = (sw: CVSwitch) =>
-  sw.shadowRoot!.querySelector('[part="base"]') as HTMLElement
+const getBase = (sw: CVSwitch) => sw.shadowRoot!.querySelector('[part="base"]') as HTMLElement
 
-const getControl = (sw: CVSwitch) =>
-  sw.shadowRoot!.querySelector('[part="control"]') as HTMLElement
+const getControl = (sw: CVSwitch) => sw.shadowRoot!.querySelector('[part="control"]') as HTMLElement
 
-const hasElementInternals = typeof (HTMLElement.prototype as {attachInternals?: unknown}).attachInternals === 'function'
+const hasElementInternals =
+  typeof (HTMLElement.prototype as {attachInternals?: unknown}).attachInternals === 'function'
 
 afterEach(() => {
   document.body.innerHTML = ''
@@ -222,9 +221,7 @@ describe('cv-switch', () => {
     })
 
     it('aria-describedby references help-text element when help-text slot is used', async () => {
-      const sw = await createSwitchWithHTML(
-        'Label <span slot="help-text">Slotted help</span>',
-      )
+      const sw = await createSwitchWithHTML('Label <span slot="help-text">Slotted help</span>')
       const control = getControl(sw)
       const helpTextEl = getBase(sw).querySelector('[part="help-text"]')
       expect(helpTextEl).not.toBeNull()
@@ -324,7 +321,6 @@ describe('cv-switch', () => {
 
       expect(detail).toEqual({checked: true})
     })
-
   })
 
   // --- 7. Disabled blocks activation ---
@@ -583,10 +579,9 @@ describe('cv-switch', () => {
     })
 
     it('help-text slot overrides help-text attribute', async () => {
-      const sw = await createSwitchWithHTML(
-        'Label <span slot="help-text">Slotted text</span>',
-        {'help-text': 'Attribute text'},
-      )
+      const sw = await createSwitchWithHTML('Label <span slot="help-text">Slotted text</span>', {
+        'help-text': 'Attribute text',
+      })
       const helpTextEl = getBase(sw).querySelector('[part="help-text"]')
       expect(helpTextEl).not.toBeNull()
       // The slot content should be displayed, not the attribute text

@@ -1,4 +1,4 @@
-import {createCheckbox, type CheckboxModel, type CheckboxValue} from '@chromvoid/headless-ui'
+import {createCheckbox, type CheckboxModel, type CheckboxValue} from '@chromvoid/headless-ui/checkbox'
 import {css, html, nothing} from 'lit'
 import type {PropertyValues} from 'lit'
 
@@ -23,7 +23,12 @@ export interface CVCheckboxEventMap {
 
 export class CVCheckbox extends FormAssociatedReatomElement {
   static elementName = 'cv-checkbox'
-  private static readonly forwardedHostAttributes = ['tabindex', 'aria-label', 'aria-labelledby', 'aria-describedby']
+  private static readonly forwardedHostAttributes = [
+    'tabindex',
+    'aria-label',
+    'aria-labelledby',
+    'aria-describedby',
+  ]
 
   static get properties() {
     return {
@@ -114,7 +119,11 @@ export class CVCheckbox extends FormAssociatedReatomElement {
 
       :host([checked]) [part='indicator'] {
         border-color: var(--cv-color-primary, #65d7ff);
-        background: color-mix(in oklab, var(--cv-color-primary, #65d7ff) 24%, var(--cv-color-surface, #141923));
+        background: color-mix(
+          in oklab,
+          var(--cv-color-primary, #65d7ff) 24%,
+          var(--cv-color-surface, #141923)
+        );
       }
 
       :host([checked]) [part='checkmark'] {

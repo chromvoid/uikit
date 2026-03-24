@@ -15,11 +15,13 @@ const settle = async (element: CVContextMenu) => {
 
 // --- mount helpers ---
 
-async function mountContextMenu(params: {
-  closeOnSelect?: boolean
-  closeOnOutsidePointer?: boolean
-  ariaLabel?: string
-} = {}) {
+async function mountContextMenu(
+  params: {
+    closeOnSelect?: boolean
+    closeOnOutsidePointer?: boolean
+    ariaLabel?: string
+  } = {},
+) {
   const menu = document.createElement('cv-context-menu') as CVContextMenu
   if (params.closeOnSelect === false) {
     menu.closeOnSelect = false
@@ -70,11 +72,9 @@ async function mountWithSeparator() {
 
 // shadow DOM helpers
 
-const getTarget = (el: CVContextMenu) =>
-  el.shadowRoot!.querySelector('[part="target"]') as HTMLElement
+const getTarget = (el: CVContextMenu) => el.shadowRoot!.querySelector('[part="target"]') as HTMLElement
 
-const getMenuBox = (el: CVContextMenu) =>
-  el.shadowRoot!.querySelector('[part="menu"]') as HTMLElement
+const getMenuBox = (el: CVContextMenu) => el.shadowRoot!.querySelector('[part="menu"]') as HTMLElement
 
 afterEach(() => {
   document.body.innerHTML = ''
@@ -527,7 +527,9 @@ describe('cv-context-menu', () => {
       const changes: Array<{value: string | null; activeId: string | null; open: boolean}> = []
 
       menu.addEventListener('cv-change', (event) => {
-        changes.push((event as CustomEvent<{value: string | null; activeId: string | null; open: boolean}>).detail)
+        changes.push(
+          (event as CustomEvent<{value: string | null; activeId: string | null; open: boolean}>).detail,
+        )
       })
 
       target.dispatchEvent(new MouseEvent('contextmenu', {bubbles: true, clientX: 10, clientY: 10}))

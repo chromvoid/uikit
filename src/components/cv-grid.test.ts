@@ -1,9 +1,9 @@
 import {afterEach, describe, expect, it} from 'vitest'
 
 import {CVGrid} from './cv-grid'
+import {CVGridCell} from './cv-grid-cell'
 import {CVGridColumn} from './cv-grid-column'
 import {CVGridRow} from './cv-grid-row'
-import {CVGridCell} from './cv-grid-cell'
 
 CVGrid.define()
 CVGridColumn.define()
@@ -46,11 +46,7 @@ const createCell = (column: string, text: string, params: {disabled?: boolean} =
   return cell
 }
 
-const createRow = (
-  value: string,
-  cells: CVGridCell[],
-  params: {disabled?: boolean; index?: number} = {},
-) => {
+const createRow = (value: string, cells: CVGridCell[], params: {disabled?: boolean; index?: number} = {}) => {
   const row = document.createElement('cv-grid-row') as CVGridRow
   row.value = value
 
@@ -83,8 +79,7 @@ const createGrid = async (attrs?: Partial<CVGrid>) => {
   return el
 }
 
-const getBase = (el: CVGrid) =>
-  el.shadowRoot!.querySelector('[part="base"]') as HTMLElement
+const getBase = (el: CVGrid) => el.shadowRoot!.querySelector('[part="base"]') as HTMLElement
 
 const getGridCell = (grid: CVGrid, rowId: string, colId: string) =>
   grid.querySelector(`cv-grid-row[value="${rowId}"] cv-grid-cell[column="${colId}"]`) as CVGridCell
@@ -314,10 +309,7 @@ describe('cv-grid', () => {
 
     it('aria-label falls back to "Grid" when no aria-label or aria-labelledby', async () => {
       const el = document.createElement('cv-grid') as CVGrid
-      el.append(
-        createColumn('c1', 'Col 1'),
-        createRow('r1', [createCell('c1', 'A1')]),
-      )
+      el.append(createColumn('c1', 'Col 1'), createRow('r1', [createCell('c1', 'A1')]))
       document.body.append(el)
       await settle(el)
 
@@ -1141,7 +1133,9 @@ describe('cv-grid', () => {
       const row1 = grid.querySelector('cv-grid-row[value="r1"]') as CVGridRow
 
       getGridCell(grid, 'r1', 'c2').dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
-      getGridCell(grid, 'r2', 'c1').dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true, ctrlKey: true}))
+      getGridCell(grid, 'r2', 'c1').dispatchEvent(
+        new MouseEvent('click', {bubbles: true, composed: true, ctrlKey: true}),
+      )
       await settle(grid)
 
       expect(new Set(grid.selectedValues)).toEqual(new Set(['r1::c2', 'r2::c1']))

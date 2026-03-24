@@ -18,8 +18,7 @@ const createToast = async (attrs?: Partial<CVToast>) => {
   return el
 }
 
-const getBase = (el: CVToast) =>
-  el.shadowRoot!.querySelector('[part="base"]') as HTMLElement
+const getBase = (el: CVToast) => el.shadowRoot!.querySelector('[part="base"]') as HTMLElement
 
 afterEach(() => {
   document.body.innerHTML = ''
@@ -114,17 +113,22 @@ describe('cv-toast', () => {
 
   it('dispatches a bubbling composed close event with the toast id', async () => {
     const el = await createToast({toastId: 'toast-1'})
-    let closeEvent: CustomEvent<{id: string}> | null = null
+    let closeDetailId: string | null = null
+    let closeBubbles: boolean | null = null
+    let closeComposed: boolean | null = null
 
     el.addEventListener('cv-close', (event) => {
-      closeEvent = event as CustomEvent<{id: string}>
+      const customEvent = event as CustomEvent<{id: string}>
+      closeDetailId = customEvent.detail.id
+      closeBubbles = customEvent.bubbles
+      closeComposed = customEvent.composed
     })
 
     ;(el.shadowRoot!.querySelector('[part="dismiss"]') as HTMLButtonElement).click()
     await settle(el)
 
-    expect(closeEvent?.detail.id).toBe('toast-1')
-    expect(closeEvent?.bubbles).toBe(true)
-    expect(closeEvent?.composed).toBe(true)
+    expect(closeDetailId).toBe('toast-1')
+    expect(closeBubbles).toBe(true)
+    expect(closeComposed).toBe(true)
   })
 })

@@ -20,11 +20,9 @@ const createMeter = async (attrs?: Partial<CVMeter>) => {
   return el
 }
 
-const getBase = (el: CVMeter) =>
-  el.shadowRoot!.querySelector('[part="base"]') as HTMLElement
+const getBase = (el: CVMeter) => el.shadowRoot!.querySelector('[part="base"]') as HTMLElement
 
-const getIndicator = (el: CVMeter) =>
-  el.shadowRoot!.querySelector('[part="indicator"]') as HTMLElement
+const getIndicator = (el: CVMeter) => el.shadowRoot!.querySelector('[part="indicator"]') as HTMLElement
 
 afterEach(() => {
   document.body.innerHTML = ''

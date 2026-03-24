@@ -2,7 +2,7 @@ import {
   createSliderMultiThumb,
   type SliderMultiThumbModel,
   type SliderMultiThumbOrientation,
-} from '@chromvoid/headless-ui'
+} from '@chromvoid/headless-ui/slider-multi-thumb'
 import {css, html, nothing} from 'lit'
 import type {PropertyValues} from 'lit'
 
@@ -322,7 +322,9 @@ export class CVSliderMultiThumb extends ReatomLitElement {
   }
 
   private focusThumb(index: number): void {
-    const thumb = this.shadowRoot?.querySelector(`[part="thumb"][data-index="${index}"]`) as HTMLElement | null
+    const thumb = this.shadowRoot?.querySelector(
+      `[part="thumb"][data-index="${index}"]`,
+    ) as HTMLElement | null
     thumb?.focus()
   }
 

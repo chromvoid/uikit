@@ -1,4 +1,4 @@
-import {createTreeview, type TreeNode, type TreeviewModel} from '@chromvoid/headless-ui'
+import {createTreeview, type TreeNode, type TreeviewModel} from '@chromvoid/headless-ui/treeview'
 import {css, html, nothing} from 'lit'
 import type {PropertyValues} from 'lit'
 
@@ -63,7 +63,10 @@ export class CVTreeview extends ReatomLitElement {
 
   private readonly idBase = `cv-treeview-${++cvTreeviewNonce}`
   private itemRecords: TreeItemRecord[] = []
-  private itemListeners = new WeakMap<CVTreeItem, {click: EventListener; focus: EventListener; toggle: EventListener}>()
+  private itemListeners = new WeakMap<
+    CVTreeItem,
+    {click: EventListener; focus: EventListener; toggle: EventListener}
+  >()
   private model: TreeviewModel
 
   constructor() {
@@ -153,7 +156,11 @@ export class CVTreeview extends ReatomLitElement {
 
   override updated(changedProperties: PropertyValues): void {
     super.updated(changedProperties)
-    if (!changedProperties.has('value') && !changedProperties.has('values') && !changedProperties.has('expandedValues')) {
+    if (
+      !changedProperties.has('value') &&
+      !changedProperties.has('values') &&
+      !changedProperties.has('expandedValues')
+    ) {
       this.syncItemElements()
     }
   }
@@ -215,10 +222,13 @@ export class CVTreeview extends ReatomLitElement {
     const initialSelectedIds =
       this.selectionMode === 'multiple'
         ? (previous?.selectedIds ?? this.values).filter((id) => validIds.has(id))
-        : [previous?.selectedIds[0] ?? this.value].filter((id): id is string => typeof id === 'string' && validIds.has(id))
+        : [previous?.selectedIds[0] ?? this.value].filter(
+            (id): id is string => typeof id === 'string' && validIds.has(id),
+          )
 
     const initialActiveIdCandidate = previous?.activeId ?? initialSelectedIds[0] ?? null
-    const initialActiveId = initialActiveIdCandidate && validIds.has(initialActiveIdCandidate) ? initialActiveIdCandidate : null
+    const initialActiveId =
+      initialActiveIdCandidate && validIds.has(initialActiveIdCandidate) ? initialActiveIdCandidate : null
 
     this.model = createTreeview({
       idBase: this.idBase,

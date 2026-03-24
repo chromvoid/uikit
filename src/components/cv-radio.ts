@@ -94,7 +94,11 @@ export class CVRadio extends LitElement {
 
       :host([checked]) .indicator {
         border-color: var(--cv-color-primary, #65d7ff);
-        background: color-mix(in oklab, var(--cv-color-primary, #65d7ff) 20%, var(--cv-color-surface, #141923));
+        background: color-mix(
+          in oklab,
+          var(--cv-color-primary, #65d7ff) 20%,
+          var(--cv-color-surface, #141923)
+        );
       }
 
       :host([checked]) .dot {

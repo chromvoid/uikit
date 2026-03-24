@@ -1,4 +1,4 @@
-import {createAlertDialog, type AlertDialogModel} from '@chromvoid/headless-ui'
+import {createAlertDialog, type AlertDialogModel} from '@chromvoid/headless-ui/alert-dialog'
 import {css, html, nothing} from 'lit'
 import type {PropertyValues} from 'lit'
 
@@ -144,8 +144,16 @@ export class CVAlertDialog extends ReatomLitElement {
       }
 
       [part='action'] {
-        border-color: color-mix(in oklab, var(--cv-color-danger, #ff7a8a) 52%, var(--cv-color-border, #2a3245));
-        background: color-mix(in oklab, var(--cv-color-danger, #ff7a8a) 22%, var(--cv-color-surface, #141923));
+        border-color: color-mix(
+          in oklab,
+          var(--cv-color-danger, #ff7a8a) 52%,
+          var(--cv-color-border, #2a3245)
+        );
+        background: color-mix(
+          in oklab,
+          var(--cv-color-danger, #ff7a8a) 22%,
+          var(--cv-color-surface, #141923)
+        );
       }
     `,
   ]
@@ -297,7 +305,8 @@ export class CVAlertDialog extends ReatomLitElement {
     const requestedId = contentProps['data-initial-focus']
 
     if (requestedId) {
-      const explicit = (this.querySelector(`#${requestedId}`) as HTMLElement | null) ??
+      const explicit =
+        (this.querySelector(`#${requestedId}`) as HTMLElement | null) ??
         (this.shadowRoot?.querySelector(`#${requestedId}`) as HTMLElement | null)
       if (explicit) {
         explicit.focus()

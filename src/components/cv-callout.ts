@@ -1,4 +1,4 @@
-import {createCallout, type CalloutModel, type CalloutVariant} from '@chromvoid/headless-ui'
+import {createCallout, type CalloutModel, type CalloutVariant} from '@chromvoid/headless-ui/callout'
 import {css, html, nothing} from 'lit'
 import type {PropertyValues} from 'lit'
 
@@ -51,8 +51,7 @@ export class CVCallout extends ReatomLitElement {
         display: flex;
         align-items: flex-start;
         gap: var(--cv-callout-gap, var(--cv-space-2, 8px));
-        padding:
-          var(--cv-callout-padding-block, var(--cv-space-3, 12px))
+        padding: var(--cv-callout-padding-block, var(--cv-space-3, 12px))
           var(--cv-callout-padding-inline, var(--cv-space-3, 12px));
         border-radius: var(--cv-callout-border-radius, var(--cv-radius-sm, 6px));
         border: 1px solid var(--cv-callout-border-color, var(--cv-color-border, #2a3245));
@@ -60,12 +59,10 @@ export class CVCallout extends ReatomLitElement {
         color: var(--cv-callout-color, var(--cv-color-text, #e8ecf6));
         font-size: var(--cv-callout-font-size, var(--cv-font-size-base, 14px));
         transition:
-          opacity
-          var(--cv-callout-transition-duration, var(--cv-duration-fast, 120ms))
-          var(--cv-callout-transition-easing, var(--cv-easing-standard, ease)),
-          transform
-          var(--cv-callout-transition-duration, var(--cv-duration-fast, 120ms))
-          var(--cv-callout-transition-easing, var(--cv-easing-standard, ease));
+          opacity var(--cv-callout-transition-duration, var(--cv-duration-fast, 120ms))
+            var(--cv-callout-transition-easing, var(--cv-easing-standard, ease)),
+          transform var(--cv-callout-transition-duration, var(--cv-duration-fast, 120ms))
+            var(--cv-callout-transition-easing, var(--cv-easing-standard, ease));
       }
 
       [part='icon'] {
@@ -94,7 +91,11 @@ export class CVCallout extends ReatomLitElement {
       /* --- variant: info (default) --- */
       :host([variant='info']) [part='base'] {
         border-color: color-mix(in oklab, var(--cv-color-info, #65d7ff) 52%, var(--cv-color-border, #2a3245));
-        background: color-mix(in oklab, var(--cv-color-info, #65d7ff) 12%, var(--cv-color-surface-elevated, #1d2432));
+        background: color-mix(
+          in oklab,
+          var(--cv-color-info, #65d7ff) 12%,
+          var(--cv-color-surface-elevated, #1d2432)
+        );
       }
 
       :host([variant='info']) [part='icon'] {
@@ -103,8 +104,16 @@ export class CVCallout extends ReatomLitElement {
 
       /* --- variant: success --- */
       :host([variant='success']) [part='base'] {
-        border-color: color-mix(in oklab, var(--cv-color-success, #5beba0) 52%, var(--cv-color-border, #2a3245));
-        background: color-mix(in oklab, var(--cv-color-success, #5beba0) 12%, var(--cv-color-surface-elevated, #1d2432));
+        border-color: color-mix(
+          in oklab,
+          var(--cv-color-success, #5beba0) 52%,
+          var(--cv-color-border, #2a3245)
+        );
+        background: color-mix(
+          in oklab,
+          var(--cv-color-success, #5beba0) 12%,
+          var(--cv-color-surface-elevated, #1d2432)
+        );
       }
 
       :host([variant='success']) [part='icon'] {
@@ -113,8 +122,16 @@ export class CVCallout extends ReatomLitElement {
 
       /* --- variant: warning --- */
       :host([variant='warning']) [part='base'] {
-        border-color: color-mix(in oklab, var(--cv-color-warning, #ffc857) 52%, var(--cv-color-border, #2a3245));
-        background: color-mix(in oklab, var(--cv-color-warning, #ffc857) 12%, var(--cv-color-surface-elevated, #1d2432));
+        border-color: color-mix(
+          in oklab,
+          var(--cv-color-warning, #ffc857) 52%,
+          var(--cv-color-border, #2a3245)
+        );
+        background: color-mix(
+          in oklab,
+          var(--cv-color-warning, #ffc857) 12%,
+          var(--cv-color-surface-elevated, #1d2432)
+        );
       }
 
       :host([variant='warning']) [part='icon'] {
@@ -123,8 +140,16 @@ export class CVCallout extends ReatomLitElement {
 
       /* --- variant: danger --- */
       :host([variant='danger']) [part='base'] {
-        border-color: color-mix(in oklab, var(--cv-color-danger, #ff7d86) 52%, var(--cv-color-border, #2a3245));
-        background: color-mix(in oklab, var(--cv-color-danger, #ff7d86) 12%, var(--cv-color-surface-elevated, #1d2432));
+        border-color: color-mix(
+          in oklab,
+          var(--cv-color-danger, #ff7d86) 52%,
+          var(--cv-color-border, #2a3245)
+        );
+        background: color-mix(
+          in oklab,
+          var(--cv-color-danger, #ff7d86) 12%,
+          var(--cv-color-surface-elevated, #1d2432)
+        );
       }
 
       :host([variant='danger']) [part='icon'] {

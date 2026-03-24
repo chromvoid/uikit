@@ -18,14 +18,11 @@ const createDrawer = async (attrs?: Partial<CVDrawer>) => {
   return el
 }
 
-const getPanel = (el: CVDrawer) =>
-  el.shadowRoot!.querySelector('[part="panel"]') as HTMLElement
+const getPanel = (el: CVDrawer) => el.shadowRoot!.querySelector('[part="panel"]') as HTMLElement
 
-const getOverlay = (el: CVDrawer) =>
-  el.shadowRoot!.querySelector('[part="overlay"]') as HTMLElement
+const getOverlay = (el: CVDrawer) => el.shadowRoot!.querySelector('[part="overlay"]') as HTMLElement
 
-const nextFrame = async () =>
-  new Promise<void>((resolve) => requestAnimationFrame(() => resolve()))
+const nextFrame = async () => new Promise<void>((resolve) => requestAnimationFrame(() => resolve()))
 
 afterEach(() => {
   document.body.innerHTML = ''
@@ -684,10 +681,7 @@ describe('cv-drawer', () => {
     it('header is hidden when no-header is set', async () => {
       const el = await createDrawer({noHeader: true})
       const header = el.shadowRoot!.querySelector('[part="header"]') as HTMLElement
-      const isHidden =
-        header === null ||
-        header.hidden ||
-        getComputedStyle(header).display === 'none'
+      const isHidden = header === null || header.hidden || getComputedStyle(header).display === 'none'
       expect(isHidden).toBe(true)
     })
 

@@ -1,4 +1,4 @@
-import {createDisclosure, type DisclosureModel} from '@chromvoid/headless-ui'
+import {createDisclosure, type DisclosureModel} from '@chromvoid/headless-ui/disclosure'
 import {css, html, nothing} from 'lit'
 import type {PropertyValues} from 'lit'
 
@@ -196,9 +196,7 @@ export class CVDisclosure extends ReatomLitElement {
    */
   private syncGroupedSiblings(): void {
     if (!this.name) return
-    const siblings = document.querySelectorAll<CVDisclosure>(
-      `cv-disclosure[name="${this.name}"]`,
-    )
+    const siblings = document.querySelectorAll<CVDisclosure>(`cv-disclosure[name="${this.name}"]`)
     for (const sibling of siblings) {
       if (sibling === this) continue
       const headlessOpen = sibling.model.state.isOpen()

@@ -1,4 +1,4 @@
-import {createNumber, type NumberModel} from '@chromvoid/headless-ui'
+import {createNumber, type NumberModel} from '@chromvoid/headless-ui/number'
 import {css, html, nothing} from 'lit'
 import type {PropertyValues} from 'lit'
 

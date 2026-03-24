@@ -5,7 +5,7 @@ import {
   type TreegridModel,
   type TreegridRow,
   type TreegridSelectionMode,
-} from '@chromvoid/headless-ui'
+} from '@chromvoid/headless-ui/treegrid'
 import {css, html, nothing} from 'lit'
 import type {PropertyValues} from 'lit'
 
@@ -52,7 +52,17 @@ interface TreegridSnapshot {
   expandedRowIds: string[]
 }
 
-const keysToPrevent = new Set(['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Home', 'End', 'Enter', ' ', 'Spacebar'])
+const keysToPrevent = new Set([
+  'ArrowUp',
+  'ArrowDown',
+  'ArrowLeft',
+  'ArrowRight',
+  'Home',
+  'End',
+  'Enter',
+  ' ',
+  'Spacebar',
+])
 
 const cellKey = (rowId: string, colId: string): string => `${rowId}::${colId}`
 
@@ -155,7 +165,11 @@ export class CVTreegrid extends ReatomLitElement {
   override willUpdate(changedProperties: PropertyValues): void {
     super.willUpdate(changedProperties)
 
-    if (changedProperties.has('selectionMode') || changedProperties.has('ariaLabel') || changedProperties.has('ariaLabelledBy')) {
+    if (
+      changedProperties.has('selectionMode') ||
+      changedProperties.has('ariaLabel') ||
+      changedProperties.has('ariaLabelledBy')
+    ) {
       this.rebuildModelFromSlot(true, false)
       return
     }
@@ -204,7 +218,11 @@ export class CVTreegrid extends ReatomLitElement {
   override updated(changedProperties: PropertyValues): void {
     super.updated(changedProperties)
 
-    if (!changedProperties.has('value') && !changedProperties.has('selectedValues') && !changedProperties.has('expandedValues')) {
+    if (
+      !changedProperties.has('value') &&
+      !changedProperties.has('selectedValues') &&
+      !changedProperties.has('expandedValues')
+    ) {
       this.syncElementsFromModel()
       return
     }
@@ -216,7 +234,8 @@ export class CVTreegrid extends ReatomLitElement {
 
   private getColumnElements(): CVTreegridColumn[] {
     return Array.from(this.children).filter(
-      (element): element is CVTreegridColumn => element.tagName.toLowerCase() === CVTreegridColumn.elementName,
+      (element): element is CVTreegridColumn =>
+        element.tagName.toLowerCase() === CVTreegridColumn.elementName,
     )
   }
 
@@ -281,17 +300,13 @@ export class CVTreegrid extends ReatomLitElement {
   }
 
   private normalizeRowIds(values: readonly string[]): string[] {
-    const rows = values
-      .map((value) => value.trim())
-      .filter((value) => value.length > 0)
+    const rows = values.map((value) => value.trim()).filter((value) => value.length > 0)
 
     return unique(rows).filter((id) => this.rowById.has(id))
   }
 
   private normalizeExpandedValues(values: readonly string[]): string[] {
-    const ids = values
-      .map((value) => value.trim())
-      .filter((value) => value.length > 0)
+    const ids = values.map((value) => value.trim()).filter((value) => value.length > 0)
 
     return unique(ids).filter((id) => this.rowById.has(id))
   }
@@ -331,10 +346,11 @@ export class CVTreegrid extends ReatomLitElement {
     const nextActive = previous.activeCellId
       ? previous.activeCellId
       : this.value.trim()
-          ? this.parseCellValue(this.value)
-          : null
+        ? this.parseCellValue(this.value)
+        : null
 
-    const selectedFromState = this.selectionMode === 'single' ? previous.selectedRowIds.slice(0, 1) : previous.selectedRowIds
+    const selectedFromState =
+      this.selectionMode === 'single' ? previous.selectedRowIds.slice(0, 1) : previous.selectedRowIds
 
     this.model = createTreegrid({
       idBase: this.idBase,
@@ -352,9 +368,10 @@ export class CVTreegrid extends ReatomLitElement {
       ariaLabel: this.ariaLabel || undefined,
       ariaLabelledBy: this.ariaLabelledBy || undefined,
       initialActiveCellId: this.normalizeActiveCell(nextActive, validCells),
-      initialSelectedRowIds: this.selectionMode === 'single'
-        ? this.normalizeRowIds(selectedFromState).slice(0, 1)
-        : this.normalizeRowIds(selectedFromState),
+      initialSelectedRowIds:
+        this.selectionMode === 'single'
+          ? this.normalizeRowIds(selectedFromState).slice(0, 1)
+          : this.normalizeRowIds(selectedFromState),
       initialExpandedRowIds: this.normalizeExpandedValues(previous.expandedRowIds),
     })
 
@@ -645,7 +662,8 @@ export class CVTreegrid extends ReatomLitElement {
     if (!activeCell) return
 
     const activeRecord = this.cellRecords.find((record) => {
-      if (record.rowId !== activeCell.rowId || record.colId !== activeCell.colId || !record.valid) return false
+      if (record.rowId !== activeCell.rowId || record.colId !== activeCell.colId || !record.valid)
+        return false
       return true
     })
     if (!activeRecord || activeRecord.element.disabled) return

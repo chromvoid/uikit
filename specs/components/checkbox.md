@@ -2,7 +2,7 @@
 
 Two-state or three-state (indeterminate) toggle control with a visual indicator.
 
-**Headless:** [`createCheckbox`](../../../headless/specs/components/checkbox.md)
+**Headless:** [`createCheckbox`](https://github.com/chromvoid/headless-ui/blob/main/specs/components/checkbox.md)
 
 ## Cross-Spec Consistency
 
@@ -23,25 +23,25 @@ This document is the UIKit surface contract for Checkbox.
 
 ## Attributes
 
-| Attribute | Type | Default | Description |
-|-----------|------|---------|-------------|
-| `checked` | Boolean | `false` | Checked state |
+| Attribute       | Type    | Default | Description                                                    |
+| --------------- | ------- | ------- | -------------------------------------------------------------- |
+| `checked`       | Boolean | `false` | Checked state                                                  |
 | `indeterminate` | Boolean | `false` | Indeterminate state (takes precedence over `checked` visually) |
-| `disabled` | Boolean | `false` | Prevents interaction |
-| `read-only` | Boolean | `false` | Visible but not toggleable |
+| `disabled`      | Boolean | `false` | Prevents interaction                                           |
+| `read-only`     | Boolean | `false` | Visible but not toggleable                                     |
 
 ## Slots
 
-| Slot | Description |
-|------|-------------|
+| Slot        | Description                                 |
+| ----------- | ------------------------------------------- |
 | `(default)` | Label text or content next to the indicator |
 
 ## CSS Parts
 
-| Part | Element | Description |
-|------|---------|-------------|
-| `base` | `<div>` | Root interactive element with `role="checkbox"` |
-| `indicator` | `<span>` | Box that contains the checkmark |
+| Part        | Element  | Description                                                                     |
+| ----------- | -------- | ------------------------------------------------------------------------------- |
+| `base`      | `<div>`  | Root interactive element with `role="checkbox"`                                 |
+| `indicator` | `<span>` | Box that contains the checkmark                                                 |
 | `checkmark` | `<span>` | Visual mark inside the indicator (square when checked, line when indeterminate) |
 
 ## CSS Custom Properties
@@ -59,11 +59,11 @@ No component-specific custom properties. Styling uses design tokens:
 
 ## Visual States
 
-| Host selector | Description |
-|---------------|-------------|
-| `:host([checked])` | Primary-tinted indicator border and background, solid checkmark |
-| `:host([indeterminate])` | Horizontal line checkmark (2px height, full width) |
-| `:host([disabled])` | Reduced opacity (`0.55`), `cursor: not-allowed` |
+| Host selector            | Description                                                     |
+| ------------------------ | --------------------------------------------------------------- |
+| `:host([checked])`       | Primary-tinted indicator border and background, solid checkmark |
+| `:host([indeterminate])` | Horizontal line checkmark (2px height, full width)              |
+| `:host([disabled])`      | Reduced opacity (`0.55`), `cursor: not-allowed`                 |
 
 ## ARIA
 
@@ -80,9 +80,9 @@ No component-specific custom properties. Styling uses design tokens:
 
 ## Events
 
-| Event | Detail | Description |
-|-------|--------|-------------|
-| `cv-input` | `{ checked: boolean, indeterminate: boolean, value?: string }` | Fires on toggle |
+| Event       | Detail                                                         | Description              |
+| ----------- | -------------------------------------------------------------- | ------------------------ |
+| `cv-input`  | `{ checked: boolean, indeterminate: boolean, value?: string }` | Fires on toggle          |
 | `cv-change` | `{ checked: boolean, indeterminate: boolean, value?: string }` | Fires when state commits |
 
 ## Usage
@@ -128,14 +128,14 @@ When this contract changes in a breaking way, this section MUST explicitly docum
 
 ### Parity matrix (Headless vs UIKit)
 
-This matrix is intentionally short and exists to prevent drift between `packages/headless/specs/components/checkbox.md` and `packages/uikit/specs/components/checkbox.md`.
+This matrix is intentionally short and exists to prevent drift between `headless-ui/specs/components/checkbox.md` and `uikit/specs/components/checkbox.md`.
 
-| Surface | Headless | UIKit |
-| --- | --- | --- |
-| Canonical third-state term | `indeterminate` | `indeterminate` attribute + event detail |
-| ARIA token for third state | `aria-checked="mixed"` only | `aria-checked="mixed"` only |
-| State representation | `checked:boolean`, `indeterminate:boolean` | `checked`/`indeterminate` attributes |
-| User toggle transition | `indeterminate` -> `checked` | `indeterminate` -> `checked` |
-| Disabled/read-only semantics | cannot toggle | cannot toggle |
-| Payload on user interaction | N/A (actions/state API) | `{ checked, indeterminate, value? }` |
-| Form primitives | specified (see headless spec) | not specified on `cv-checkbox` surface |
+| Surface                      | Headless                                   | UIKit                                    |
+| ---------------------------- | ------------------------------------------ | ---------------------------------------- |
+| Canonical third-state term   | `indeterminate`                            | `indeterminate` attribute + event detail |
+| ARIA token for third state   | `aria-checked="mixed"` only                | `aria-checked="mixed"` only              |
+| State representation         | `checked:boolean`, `indeterminate:boolean` | `checked`/`indeterminate` attributes     |
+| User toggle transition       | `indeterminate` -> `checked`               | `indeterminate` -> `checked`             |
+| Disabled/read-only semantics | cannot toggle                              | cannot toggle                            |
+| Payload on user interaction  | N/A (actions/state API)                    | `{ checked, indeterminate, value? }`     |
+| Form primitives              | specified (see headless spec)              | not specified on `cv-checkbox` surface   |

@@ -5,7 +5,7 @@ import {
   type ComboboxOptionGroup,
   type ComboboxType,
   type ComboboxVisibleGroup,
-} from '@chromvoid/headless-ui'
+} from '@chromvoid/headless-ui/combobox'
 import {css, html, nothing} from 'lit'
 import type {PropertyValues} from 'lit'
 
@@ -46,14 +46,7 @@ interface ComboboxGroupRecord {
   optionIds: string[]
 }
 
-const comboboxNavigationKeys = new Set([
-  'ArrowUp',
-  'ArrowDown',
-  'Home',
-  'End',
-  'Enter',
-  'Escape',
-])
+const comboboxNavigationKeys = new Set(['ArrowUp', 'ArrowDown', 'Home', 'End', 'Enter', 'Escape'])
 
 function isVisibleGroup(item: any): item is ComboboxVisibleGroup {
   return 'options' in item && Array.isArray(item.options)
@@ -350,7 +343,11 @@ export class CVCombobox extends ReatomLitElement {
     super.updated(changedProperties)
     this.syncOutsidePointerListener()
 
-    if (!changedProperties.has('value') && !changedProperties.has('inputValue') && !changedProperties.has('open')) {
+    if (
+      !changedProperties.has('value') &&
+      !changedProperties.has('inputValue') &&
+      !changedProperties.has('open')
+    ) {
       this.syncOptionElements()
     }
   }
@@ -420,8 +417,9 @@ export class CVCombobox extends ReatomLitElement {
     this.groupRecords = groupElements.map((element) => {
       const id = `group-${++groupNonce}`
       const label = element.label || element.getAttribute('label') || ''
-      const childOptions = Array.from(element.children)
-        .filter((child): child is CVComboboxOption => child.tagName.toLowerCase() === CVComboboxOption.elementName)
+      const childOptions = Array.from(element.children).filter(
+        (child): child is CVComboboxOption => child.tagName.toLowerCase() === CVComboboxOption.elementName,
+      )
       const optionIds: string[] = []
       return {id, label, element, optionIds}
     })
@@ -465,7 +463,9 @@ export class CVCombobox extends ReatomLitElement {
       }
     }
 
-    const enabledIds = new Set(this.optionRecords.filter((record) => !record.disabled).map((record) => record.id))
+    const enabledIds = new Set(
+      this.optionRecords.filter((record) => !record.disabled).map((record) => record.id),
+    )
 
     // Build headless options structure (with groups if any)
     const hasGroups = this.groupRecords.length > 0
@@ -657,7 +657,11 @@ export class CVCombobox extends ReatomLitElement {
   private makeEventDetail(): CVComboboxEventDetail {
     const state = this.captureState()
     return {
-      value: this.multiple ? (state.selectedIds.length > 0 ? state.selectedIds.join(' ') : null) : state.selectedId,
+      value: this.multiple
+        ? state.selectedIds.length > 0
+          ? state.selectedIds.join(' ')
+          : null
+        : state.selectedId,
       inputValue: state.inputValue,
       activeId: state.activeId,
       open: state.isOpen,
@@ -954,8 +958,9 @@ export class CVCombobox extends ReatomLitElement {
       <div part="base">
         <div part="input-wrapper">
           ${this.renderTags()}
-          ${isSelectOnly
-            ? html`
+          ${
+            isSelectOnly
+              ? html`
                 <div
                   id=${inputProps.id}
                   role=${inputProps.role}
@@ -972,7 +977,7 @@ export class CVCombobox extends ReatomLitElement {
                   <span part="label">${this.getSelectedOptionLabel()}</span>
                 </div>
               `
-            : html`
+              : html`
                 <input
                   id=${inputProps.id}
                   role=${inputProps.role}
@@ -991,7 +996,8 @@ export class CVCombobox extends ReatomLitElement {
                   @click=${this.handleInputClick}
                   @keydown=${this.handleKeyDown}
                 />
-              `}
+              `
+          }
           ${this.renderClearButton()}
         </div>
 

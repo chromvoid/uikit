@@ -1,8 +1,8 @@
-import {AsyncDirective, directive} from 'lit/async-directive.js'
-import type {PartInfo} from 'lit/directive.js'
 import type {AtomLike, Frame, Unsubscribe} from '@reatom/core'
 import {top} from '@reatom/core'
 import {noChange} from 'lit'
+import {AsyncDirective, directive} from 'lit/async-directive.js'
+import type {PartInfo} from 'lit/directive.js'
 
 class AtomDirective extends AsyncDirective {
   target: AtomLike | undefined

@@ -4,7 +4,7 @@ import {
   type GridFocusStrategy,
   type GridModel,
   type GridSelectionMode,
-} from '@chromvoid/headless-ui'
+} from '@chromvoid/headless-ui/grid'
 import {css, html, nothing} from 'lit'
 import type {PropertyValues} from 'lit'
 
@@ -262,7 +262,9 @@ export class CVGrid extends ReatomLitElement {
 
     if (changedProperties.has('selectedValues')) {
       const modelSelected = this.captureSnapshot().selectedKeys
-      const normalized = [...new Set(this.selectedValues.map((value) => value.trim()).filter((value) => value.length > 0))]
+      const normalized = [
+        ...new Set(this.selectedValues.map((value) => value.trim()).filter((value) => value.length > 0)),
+      ]
       if (sameSetMembers(normalized, modelSelected)) {
         return
       }
@@ -354,7 +356,9 @@ export class CVGrid extends ReatomLitElement {
       ? this.captureSnapshot()
       : {
           activeKey: this.value.trim() || null,
-          selectedKeys: [...new Set(this.selectedValues.map((value) => value.trim()).filter((value) => value.length > 0))],
+          selectedKeys: [
+            ...new Set(this.selectedValues.map((value) => value.trim()).filter((value) => value.length > 0)),
+          ],
         }
 
     this.detachCellListeners()
@@ -417,7 +421,9 @@ export class CVGrid extends ReatomLitElement {
     })
 
     const initialActiveCell =
-      previous.activeKey && this.validCellMap.has(previous.activeKey) ? this.cellFromKey(previous.activeKey) : null
+      previous.activeKey && this.validCellMap.has(previous.activeKey)
+        ? this.cellFromKey(previous.activeKey)
+        : null
 
     const initialSelectedCells = previous.selectedKeys
       .filter((key) => this.validCellMap.has(key))

@@ -1,4 +1,4 @@
-import {createSlider, type SliderModel, type SliderOrientation} from '@chromvoid/headless-ui'
+import {createSlider, type SliderModel, type SliderOrientation} from '@chromvoid/headless-ui/slider'
 import {css, html, nothing} from 'lit'
 import type {PropertyValues} from 'lit'
 

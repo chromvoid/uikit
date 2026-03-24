@@ -1,4 +1,4 @@
-import {createTextarea, type TextareaModel, type TextareaResize} from '@chromvoid/headless-ui'
+import {createTextarea, type TextareaModel, type TextareaResize} from '@chromvoid/headless-ui/textarea'
 import {css, html, nothing} from 'lit'
 import type {PropertyValues} from 'lit'
 

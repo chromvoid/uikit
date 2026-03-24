@@ -1,9 +1,9 @@
 import {afterEach, describe, expect, it} from 'vitest'
 
 import {CVTable} from './cv-table'
-import {CVTableRow} from './cv-table-row'
-import {CVTableColumn} from './cv-table-column'
 import {CVTableCell} from './cv-table-cell'
+import {CVTableColumn} from './cv-table-column'
+import {CVTableRow} from './cv-table-row'
 
 CVTable.define()
 CVTableRow.define()
@@ -204,8 +204,8 @@ describe('cv-table', () => {
     it('aria-rowindex on rows (1-based)', async () => {
       const table = await createTable()
       const rows = table.querySelectorAll('cv-table-row')
-      expect(rows[0].getAttribute('aria-rowindex')).toBe('1')
-      expect(rows[1].getAttribute('aria-rowindex')).toBe('2')
+      expect(rows.item(0)?.getAttribute('aria-rowindex')).toBe('1')
+      expect(rows.item(1)?.getAttribute('aria-rowindex')).toBe('2')
     })
   })
 
@@ -218,7 +218,9 @@ describe('cv-table', () => {
 
       const changes: Array<{sortColumnId: string | null; sortDirection: string}> = []
       table.addEventListener('cv-change', (event) => {
-        changes.push((event as unknown as CustomEvent<{sortColumnId: string | null; sortDirection: string}>).detail)
+        changes.push(
+          (event as unknown as CustomEvent<{sortColumnId: string | null; sortDirection: string}>).detail,
+        )
       })
 
       nameCol.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
@@ -251,7 +253,9 @@ describe('cv-table', () => {
 
       const inputs: Array<{sortColumnId: string | null; sortDirection: string}> = []
       table.addEventListener('cv-input', (event) => {
-        inputs.push((event as unknown as CustomEvent<{sortColumnId: string | null; sortDirection: string}>).detail)
+        inputs.push(
+          (event as unknown as CustomEvent<{sortColumnId: string | null; sortDirection: string}>).detail,
+        )
       })
 
       nameCol.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
@@ -346,10 +350,7 @@ describe('cv-table', () => {
       table.append(
         createColumn('metric', 'Metric'),
         createColumn('value', 'Value'),
-        createRow('r1', [
-          createCell('metric', 'CPU', {rowHeader: true}),
-          createCell('value', '40%'),
-        ]),
+        createRow('r1', [createCell('metric', 'CPU', {rowHeader: true}), createCell('value', '40%')]),
       )
 
       document.body.append(table)
@@ -378,10 +379,7 @@ describe('cv-table', () => {
     it('cell with rowspan >= 2 gets aria-rowspan', async () => {
       const table = document.createElement('cv-table') as CVTable
       table.ariaLabel = 'Test'
-      table.append(
-        createColumn('a', 'A'),
-        createRow('r1', [createCell('a', 'v', {rowspan: 3})]),
-      )
+      table.append(createColumn('a', 'A'), createRow('r1', [createCell('a', 'v', {rowspan: 3})]))
 
       document.body.append(table)
       await settle(table)
@@ -721,7 +719,7 @@ describe('cv-table', () => {
 
       const cells = table.querySelectorAll('cv-table-cell')
       // First cell in row should have tabindex="0"
-      expect(cells[0].getAttribute('tabindex')).toBe('0')
+      expect(cells.item(0)?.getAttribute('tabindex')).toBe('0')
     })
 
     it('End moves focus to row end', async () => {
@@ -733,7 +731,7 @@ describe('cv-table', () => {
 
       const cells = table.querySelectorAll('cv-table-cell')
       // Last cell in first row should have tabindex="0"
-      expect(cells[1].getAttribute('tabindex')).toBe('0')
+      expect(cells.item(1)?.getAttribute('tabindex')).toBe('0')
     })
 
     it('Ctrl+Home moves focus to grid start', async () => {
@@ -749,7 +747,7 @@ describe('cv-table', () => {
       await settle(table)
 
       const cells = table.querySelectorAll('cv-table-cell')
-      expect(cells[0].getAttribute('tabindex')).toBe('0')
+      expect(cells.item(0)?.getAttribute('tabindex')).toBe('0')
     })
 
     it('Ctrl+End moves focus to grid end', async () => {
@@ -761,7 +759,7 @@ describe('cv-table', () => {
 
       const cells = table.querySelectorAll('cv-table-cell')
       // Last cell overall (row2, email) should have tabindex="0"
-      expect(cells[cells.length - 1].getAttribute('tabindex')).toBe('0')
+      expect(cells.item(cells.length - 1)?.getAttribute('tabindex')).toBe('0')
     })
 
     it('cv-focus-change event fires on focus movement', async () => {

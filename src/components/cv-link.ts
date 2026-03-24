@@ -1,4 +1,4 @@
-import {createLink, type LinkModel} from '@chromvoid/headless-ui'
+import {createLink, type LinkModel} from '@chromvoid/headless-ui/link'
 import {css, html, nothing} from 'lit'
 import type {PropertyValues} from 'lit'
 
@@ -48,18 +48,12 @@ export class CVLink extends ReatomLitElement {
       }
 
       :host(:hover) [part='base'] {
-        color: var(
-          --cv-link-color-hover,
-          color-mix(in oklab, var(--cv-color-primary, #65d7ff) 78%, white)
-        );
+        color: var(--cv-link-color-hover, color-mix(in oklab, var(--cv-color-primary, #65d7ff) 78%, white));
         text-decoration: var(--cv-link-text-decoration-hover, none);
       }
 
       :host(:active) [part='base'] {
-        color: var(
-          --cv-link-color-active,
-          color-mix(in oklab, var(--cv-color-primary, #65d7ff) 60%, white)
-        );
+        color: var(--cv-link-color-active, color-mix(in oklab, var(--cv-color-primary, #65d7ff) 60%, white));
       }
 
       [part='base']:focus-visible {

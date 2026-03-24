@@ -13,12 +13,14 @@ const settle = async (element: CVCombobox) => {
   await Promise.resolve()
 }
 
-async function mountCombobox(params: {
-  openOnFocus?: boolean
-  openOnClick?: boolean
-  closeOnSelect?: boolean
-  matchMode?: 'includes' | 'startsWith'
-} = {}) {
+async function mountCombobox(
+  params: {
+    openOnFocus?: boolean
+    openOnClick?: boolean
+    closeOnSelect?: boolean
+    matchMode?: 'includes' | 'startsWith'
+  } = {},
+) {
   const combobox = document.createElement('cv-combobox') as CVCombobox
   if (params.openOnFocus != null) {
     combobox.openOnFocus = params.openOnFocus
@@ -48,10 +50,12 @@ async function mountCombobox(params: {
   return {combobox, options, input}
 }
 
-async function mountSelectOnly(params: {
-  multiple?: boolean
-  placeholder?: string
-} = {}) {
+async function mountSelectOnly(
+  params: {
+    multiple?: boolean
+    placeholder?: string
+  } = {},
+) {
   const combobox = document.createElement('cv-combobox') as CVCombobox
   ;(combobox as any).type = 'select-only'
   if (params.multiple) {
@@ -78,10 +82,12 @@ async function mountSelectOnly(params: {
   return {combobox, options, trigger, listbox}
 }
 
-async function mountMultiSelect(params: {
-  type?: 'editable' | 'select-only'
-  maxTagsVisible?: number
-} = {}) {
+async function mountMultiSelect(
+  params: {
+    type?: 'editable' | 'select-only'
+    maxTagsVisible?: number
+  } = {},
+) {
   const combobox = document.createElement('cv-combobox') as CVCombobox
   ;(combobox as any).multiple = true
   if (params.type) {
@@ -173,12 +179,19 @@ describe('cv-combobox', () => {
 
   it('supports keyboard navigation and selection with Enter', async () => {
     const {combobox, options, input} = await mountCombobox()
-    const changes: Array<{value: string | null; inputValue: string; activeId: string | null; open: boolean}> = []
+    const changes: Array<{value: string | null; inputValue: string; activeId: string | null; open: boolean}> =
+      []
 
     combobox.addEventListener('cv-change', (event) => {
       changes.push(
-        (event as CustomEvent<{value: string | null; inputValue: string; activeId: string | null; open: boolean}>)
-          .detail,
+        (
+          event as CustomEvent<{
+            value: string | null
+            inputValue: string
+            activeId: string | null
+            open: boolean
+          }>
+        ).detail,
       )
     })
 
@@ -280,13 +293,20 @@ describe('cv-combobox', () => {
 
   it('emits input on open-state interaction without emitting change', async () => {
     const {combobox, input} = await mountCombobox()
-    const inputs: Array<{value: string | null; inputValue: string; activeId: string | null; open: boolean}> = []
+    const inputs: Array<{value: string | null; inputValue: string; activeId: string | null; open: boolean}> =
+      []
     let changeCount = 0
 
     combobox.addEventListener('cv-input', (event) => {
       inputs.push(
-        (event as CustomEvent<{value: string | null; inputValue: string; activeId: string | null; open: boolean}>)
-          .detail,
+        (
+          event as CustomEvent<{
+            value: string | null
+            inputValue: string
+            activeId: string | null
+            open: boolean
+          }>
+        ).detail,
       )
     })
     combobox.addEventListener('cv-change', () => {
@@ -429,7 +449,9 @@ describe('cv-combobox', () => {
       await settle(combobox)
 
       // The active option should now be Germany (de)
-      const activeOption = combobox.querySelector('cv-combobox-option[data-active="true"]') as CVComboboxOption
+      const activeOption = combobox.querySelector(
+        'cv-combobox-option[data-active="true"]',
+      ) as CVComboboxOption
       expect(activeOption).not.toBeNull()
       expect(activeOption.value).toBe('de')
     })
@@ -445,7 +467,9 @@ describe('cv-combobox', () => {
       trigger.dispatchEvent(new KeyboardEvent('keydown', {key: 'ArrowDown', bubbles: true}))
       await settle(combobox)
 
-      const activeOption = combobox.querySelector('cv-combobox-option[data-active="true"]') as CVComboboxOption
+      const activeOption = combobox.querySelector(
+        'cv-combobox-option[data-active="true"]',
+      ) as CVComboboxOption
       expect(activeOption).not.toBeNull()
     })
 
@@ -558,8 +582,8 @@ describe('cv-combobox', () => {
       const tags = combobox.shadowRoot!.querySelectorAll('[part="tag"]')
       expect(tags.length).toBe(2)
 
-      const tagLabels = Array.from(tags).map(
-        (tag) => tag.querySelector('[part="tag-label"]')?.textContent?.trim(),
+      const tagLabels = Array.from(tags).map((tag) =>
+        tag.querySelector('[part="tag-label"]')?.textContent?.trim(),
       )
       expect(tagLabels).toContain('JavaScript')
       expect(tagLabels).toContain('TypeScript')

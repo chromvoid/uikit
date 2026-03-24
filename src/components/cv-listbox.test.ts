@@ -13,10 +13,7 @@ const settle = async (element: CVListbox) => {
   await Promise.resolve()
 }
 
-const createListbox = async (
-  attrs?: Partial<CVListbox>,
-  optionsHtml?: string,
-) => {
+const createListbox = async (attrs?: Partial<CVListbox>, optionsHtml?: string) => {
   const el = document.createElement('cv-listbox') as CVListbox
   if (attrs) Object.assign(el, attrs)
   el.innerHTML =
@@ -63,11 +60,9 @@ const createGroupedListbox = async (attrs?: Partial<CVListbox>) => {
   return el
 }
 
-const getBase = (el: CVListbox) =>
-  el.shadowRoot!.querySelector('[part="base"]') as HTMLElement
+const getBase = (el: CVListbox) => el.shadowRoot!.querySelector('[part="base"]') as HTMLElement
 
-const getOptions = (el: CVListbox) =>
-  Array.from(el.querySelectorAll('cv-option')) as CVOption[]
+const getOptions = (el: CVListbox) => Array.from(el.querySelectorAll('cv-option')) as CVOption[]
 
 const getActiveOption = (el: CVListbox) =>
   el.querySelector('cv-option[data-active="true"]') as CVOption | null
@@ -520,9 +515,7 @@ describe('cv-listbox', () => {
       const el = await createListbox({selectionMode: 'multiple'})
       const base = getBase(el)
 
-      base.dispatchEvent(
-        new KeyboardEvent('keydown', {key: 'a', ctrlKey: true, bubbles: true}),
-      )
+      base.dispatchEvent(new KeyboardEvent('keydown', {key: 'a', ctrlKey: true, bubbles: true}))
       await settle(el)
 
       // Should select a, b, d (c is disabled)
@@ -824,9 +817,7 @@ describe('cv-listbox', () => {
       await settle(el)
 
       // Shift+ArrowDown to extend
-      base.dispatchEvent(
-        new KeyboardEvent('keydown', {key: 'ArrowDown', shiftKey: true, bubbles: true}),
-      )
+      base.dispatchEvent(new KeyboardEvent('keydown', {key: 'ArrowDown', shiftKey: true, bubbles: true}))
       await settle(el)
 
       expect(el.selectedValues).toContain('a')
@@ -849,9 +840,7 @@ describe('cv-listbox', () => {
       await settle(el)
 
       // Shift+Space to select range
-      base.dispatchEvent(
-        new KeyboardEvent('keydown', {key: ' ', shiftKey: true, bubbles: true}),
-      )
+      base.dispatchEvent(new KeyboardEvent('keydown', {key: ' ', shiftKey: true, bubbles: true}))
       await settle(el)
 
       expect(el.selectedValues).toContain('a')

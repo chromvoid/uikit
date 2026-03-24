@@ -3,7 +3,7 @@ import {
   type FeedArticle,
   type FeedKeyboardResult,
   type FeedModel,
-} from '@chromvoid/headless-ui'
+} from '@chromvoid/headless-ui/feed'
 import {css, html, nothing} from 'lit'
 import type {PropertyValues} from 'lit'
 
@@ -315,8 +315,7 @@ export class CVFeed extends ReatomLitElement {
     // Check if articles changed
     const currentIds = this.model.state.articleIds()
     const newIds = articles.map((a) => a.id)
-    const changed =
-      currentIds.length !== newIds.length || currentIds.some((id, i) => id !== newIds[i])
+    const changed = currentIds.length !== newIds.length || currentIds.some((id, i) => id !== newIds[i])
 
     if (changed) {
       const previousActiveId = this.model.state.activeArticleId()
@@ -355,13 +354,29 @@ export class CVFeed extends ReatomLitElement {
         @keydown=${this.handleKeyDown}
       >
         <div part="sentinel-top"></div>
-        ${this.loading
-          ? html`<div part="loading-indicator" aria-hidden="true">
-              <slot name="loading"></slot>
-            </div>`
-          : nothing}
-        ${this.empty ? html`<slot name="empty" part="empty"></slot>` : nothing}
-        ${this.error ? html`<slot name="error" part="error"></slot>` : nothing}
+        ${
+          this.loading
+            ? html`
+                <div part="loading-indicator" aria-hidden="true">
+                  <slot name="loading"></slot>
+                </div>
+              `
+            : nothing
+        }
+        ${
+          this.empty
+            ? html`
+                <slot name="empty" part="empty"></slot>
+              `
+            : nothing
+        }
+        ${
+          this.error
+            ? html`
+                <slot name="error" part="error"></slot>
+              `
+            : nothing
+        }
         <slot @slotchange=${this.handleSlotChange}></slot>
         <div part="sentinel-bottom"></div>
       </div>

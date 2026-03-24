@@ -65,7 +65,11 @@ export class CVTab extends LitElement {
       }
 
       :host([selected]) .tab {
-        background: color-mix(in oklab, var(--cv-color-primary, #65d7ff) 28%, var(--cv-color-surface, #141923));
+        background: color-mix(
+          in oklab,
+          var(--cv-color-primary, #65d7ff) 28%,
+          var(--cv-color-surface, #141923)
+        );
         border-color: var(--cv-color-primary, #65d7ff);
       }
 
@@ -131,8 +135,9 @@ export class CVTab extends LitElement {
     return html`
       <div class="tab" part="base">
         <slot></slot>
-        ${this.closable
-          ? html`
+        ${
+          this.closable
+            ? html`
               <button
                 class="close-button"
                 part="close-button"
@@ -144,7 +149,8 @@ export class CVTab extends LitElement {
                 &times;
               </button>
             `
-          : null}
+            : null
+        }
       </div>
     `
   }

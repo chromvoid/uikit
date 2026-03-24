@@ -362,9 +362,7 @@ describe('cv-treeview', () => {
     })
 
     it('ArrowLeft on expanded branch collapses it and keeps focus on branch', async () => {
-      const tree = await createTree([
-        createItem('a', 'A', {children: [createItem('a1', 'A1')]}),
-      ])
+      const tree = await createTree([createItem('a', 'A', {children: [createItem('a1', 'A1')]})])
       const base = getBase(tree)
 
       // Expand
@@ -385,9 +383,7 @@ describe('cv-treeview', () => {
     })
 
     it('ArrowLeft on expanded branch collapses it', async () => {
-      const tree = await createTree([
-        createItem('a', 'A', {children: [createItem('a1', 'A1')]}),
-      ])
+      const tree = await createTree([createItem('a', 'A', {children: [createItem('a1', 'A1')]})])
       const base = getBase(tree)
 
       dispatchKey(base, 'ArrowRight')
@@ -430,10 +426,7 @@ describe('cv-treeview', () => {
   describe('multi-select Ctrl+A', () => {
     it('Ctrl+A selects all enabled visible nodes', async () => {
       const tree = await createTree(
-        [
-          createItem('a', 'A', {children: [createItem('a1', 'A1')]}),
-          createItem('b', 'B'),
-        ],
+        [createItem('a', 'A', {children: [createItem('a1', 'A1')]}), createItem('b', 'B')],
         {selectionMode: 'multiple'},
       )
 
@@ -447,10 +440,9 @@ describe('cv-treeview', () => {
     })
 
     it('Meta+A also selects all in multiple mode', async () => {
-      const tree = await createTree(
-        [createItem('a', 'A'), createItem('b', 'B'), createItem('c', 'C')],
-        {selectionMode: 'multiple'},
-      )
+      const tree = await createTree([createItem('a', 'A'), createItem('b', 'B'), createItem('c', 'C')], {
+        selectionMode: 'multiple',
+      })
 
       const base = getBase(tree)
       dispatchKey(base, 'a', {metaKey: true})
@@ -536,9 +528,7 @@ describe('cv-treeview', () => {
     })
 
     it('aria-expanded on branch item matches expanded state', async () => {
-      const tree = await createTree([
-        createItem('a', 'A', {children: [createItem('a1', 'A1')]}),
-      ])
+      const tree = await createTree([createItem('a', 'A', {children: [createItem('a1', 'A1')]})])
 
       const itemA = tree.querySelector('cv-treeitem[value="a"]') as CVTreeItem
       expect(itemA.hasAttribute('aria-expanded')).toBe(true)
@@ -632,27 +622,21 @@ describe('cv-treeview', () => {
     })
 
     it('toggle button is visible when item is a branch', async () => {
-      const tree = await createTree([
-        createItem('a', 'A', {children: [createItem('a1', 'A1')]}),
-      ])
+      const tree = await createTree([createItem('a', 'A', {children: [createItem('a1', 'A1')]})])
       const itemA = tree.querySelector('cv-treeitem[value="a"]') as CVTreeItem
       const toggle = itemA.shadowRoot!.querySelector('[part="toggle"]') as HTMLButtonElement
       expect(toggle.hasAttribute('hidden')).toBe(false)
     })
 
     it('[part="children"] is hidden when not expanded', async () => {
-      const tree = await createTree([
-        createItem('a', 'A', {children: [createItem('a1', 'A1')]}),
-      ])
+      const tree = await createTree([createItem('a', 'A', {children: [createItem('a1', 'A1')]})])
       const itemA = tree.querySelector('cv-treeitem[value="a"]') as CVTreeItem
       const children = itemA.shadowRoot!.querySelector('[part="children"]') as HTMLElement
       expect(children.hasAttribute('hidden')).toBe(true)
     })
 
     it('[part="children"] is visible when expanded', async () => {
-      const tree = await createTree([
-        createItem('a', 'A', {children: [createItem('a1', 'A1')]}),
-      ])
+      const tree = await createTree([createItem('a', 'A', {children: [createItem('a1', 'A1')]})])
       const base = getBase(tree)
       dispatchKey(base, 'ArrowRight')
       await settle(tree)

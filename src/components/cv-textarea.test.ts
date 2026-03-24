@@ -25,7 +25,8 @@ const getBase = (el: CVTextarea) => el.shadowRoot!.querySelector('[part="base"]'
 const getTextarea = (el: CVTextarea) =>
   el.shadowRoot!.querySelector('[part="textarea"]') as HTMLTextAreaElement
 
-const hasElementInternals = typeof (HTMLElement.prototype as {attachInternals?: unknown}).attachInternals === 'function'
+const hasElementInternals =
+  typeof (HTMLElement.prototype as {attachInternals?: unknown}).attachInternals === 'function'
 
 afterEach(() => {
   document.body.innerHTML = ''

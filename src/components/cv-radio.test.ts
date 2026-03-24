@@ -18,8 +18,7 @@ const createRadio = async (attrs?: Partial<CVRadio>) => {
   return el
 }
 
-const getBase = (el: CVRadio) =>
-  el.shadowRoot!.querySelector('[part="base"]') as HTMLElement
+const getBase = (el: CVRadio) => el.shadowRoot!.querySelector('[part="base"]') as HTMLElement
 
 afterEach(() => {
   document.body.innerHTML = ''

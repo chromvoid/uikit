@@ -52,7 +52,8 @@ export class CVMenuItem extends LitElement {
         display: flex;
         align-items: center;
         gap: var(--cv-menu-item-gap, var(--cv-space-2, 8px));
-        padding: var(--cv-menu-item-padding-block, var(--cv-space-2, 8px)) var(--cv-menu-item-padding-inline, var(--cv-space-3, 12px));
+        padding: var(--cv-menu-item-padding-block, var(--cv-space-2, 8px))
+          var(--cv-menu-item-padding-inline, var(--cv-space-3, 12px));
         border-radius: var(--cv-menu-item-border-radius, var(--cv-radius-sm, 6px));
         color: var(--cv-color-text, #e8ecf6);
         transition:
@@ -122,15 +123,17 @@ export class CVMenuItem extends LitElement {
 
     return html`
       <div class="item" part="base">
-        ${isCheckable
-          ? html`<span part="checkmark">${this.checked ? '\u2713' : ''}</span>`
-          : nothing}
+        ${isCheckable ? html`<span part="checkmark">${this.checked ? '\u2713' : ''}</span>` : nothing}
         <span part="prefix"><slot name="prefix"></slot></span>
         <span part="label"><slot></slot></span>
         <span part="suffix"><slot name="suffix"></slot></span>
-        ${this.hasSubmenu
-          ? html`<span part="submenu-icon">\u25B6</span>`
-          : nothing}
+        ${
+          this.hasSubmenu
+            ? html`
+                <span part="submenu-icon">\u25B6</span>
+              `
+            : nothing
+        }
       </div>
       <slot name="submenu" @slotchange=${this.handleSubmenuSlotChange}></slot>
     `

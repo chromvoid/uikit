@@ -2,7 +2,7 @@
 
 Tabbed interface for switching between related content panels.
 
-**Headless:** [`createTabs`](../../../headless/specs/components/tabs.md)
+**Headless:** [`createTabs`](https://github.com/chromvoid/headless-ui/blob/main/specs/components/tabs.md)
 
 ## Anatomy
 
@@ -18,60 +18,60 @@ Tabbed interface for switching between related content panels.
 
 ## Attributes
 
-| Attribute | Type | Default | Description |
-|-----------|------|---------|-------------|
-| `value` | String | `""` | Currently selected tab value |
-| `orientation` | String | `"horizontal"` | Layout: `horizontal` \| `vertical` |
-| `activation-mode` | String | `"automatic"` | Activation: `automatic` \| `manual` |
-| `aria-label` | String | `""` | Accessible label for the tablist |
+| Attribute         | Type   | Default        | Description                         |
+| ----------------- | ------ | -------------- | ----------------------------------- |
+| `value`           | String | `""`           | Currently selected tab value        |
+| `orientation`     | String | `"horizontal"` | Layout: `horizontal` \| `vertical`  |
+| `activation-mode` | String | `"automatic"`  | Activation: `automatic` \| `manual` |
+| `aria-label`      | String | `""`           | Accessible label for the tablist    |
 
 ## Slots
 
-| Slot | Description |
-|------|-------------|
-| `nav` | `<cv-tab>` children |
+| Slot        | Description               |
+| ----------- | ------------------------- |
+| `nav`       | `<cv-tab>` children       |
 | `(default)` | `<cv-tab-panel>` children |
 
 ## CSS Parts
 
-| Part | Element | Description |
-|------|---------|-------------|
-| `base` | `<div>` | Root layout container |
-| `list` | `<div>` | Tablist wrapper |
+| Part        | Element | Description                                                 |
+| ----------- | ------- | ----------------------------------------------------------- |
+| `base`      | `<div>` | Root layout container                                       |
+| `list`      | `<div>` | Tablist wrapper                                             |
 | `indicator` | `<div>` | Animated active indicator positioned under the selected tab |
-| `panels` | `<div>` | Panel container |
+| `panels`    | `<div>` | Panel container                                             |
 
 ## CSS Custom Properties
 
-| Property | Default | Description |
-|----------|---------|-------------|
-| `--cv-tabs-indicator-color` | `var(--cv-color-primary, #65d7ff)` | Color of the active indicator |
-| `--cv-tabs-indicator-size` | `3px` | Indicator thickness: height for horizontal orientation, width for vertical orientation |
+| Property                    | Default                            | Description                                                                            |
+| --------------------------- | ---------------------------------- | -------------------------------------------------------------------------------------- |
+| `--cv-tabs-indicator-color` | `var(--cv-color-primary, #65d7ff)` | Color of the active indicator                                                          |
+| `--cv-tabs-indicator-size`  | `3px`                              | Indicator thickness: height for horizontal orientation, width for vertical orientation |
 
 Additionally, component styles depend on theme tokens through fallback values:
 
-| Theme Property | Default | Description |
-|----------------|---------|-------------|
-| `--cv-space-1` | `4px` | Gap between tabs, list padding |
-| `--cv-space-2` | `8px` | Gap between list and panels |
-| `--cv-space-3` | `12px` | Panels padding |
-| `--cv-radius-md` | `10px` | List and panels border radius |
-| `--cv-color-border` | `#2a3245` | List and panels border |
-| `--cv-color-surface` | `#141923` | List and panels background |
+| Theme Property       | Default   | Description                     |
+| -------------------- | --------- | ------------------------------- |
+| `--cv-space-1`       | `4px`     | Gap between tabs, list padding  |
+| `--cv-space-2`       | `8px`     | Gap between list and panels     |
+| `--cv-space-3`       | `12px`    | Panels padding                  |
+| `--cv-radius-md`     | `10px`    | List and panels border radius   |
+| `--cv-color-border`  | `#2a3245` | List and panels border          |
+| `--cv-color-surface` | `#141923` | List and panels background      |
 | `--cv-color-primary` | `#65d7ff` | Focus and selected accent color |
 
 ## Visual States
 
-| Host selector | Description |
-|---------------|-------------|
+| Host selector                     | Description                                         |
+| --------------------------------- | --------------------------------------------------- |
 | `:host([orientation="vertical"])` | Layout switches to vertical tablist + panel columns |
 
 ## Events
 
-| Event | Detail | Description |
-|-------|--------|-------------|
-| `cv-input` | `{activeTabId: string \| null, selectedTabId: string \| null}` | Fires on any active or selected state change, including active-only changes that do not change selection |
-| `cv-change` | `{activeTabId: string \| null, selectedTabId: string \| null}` | Fires when selected tab changes |
+| Event       | Detail                                                         | Description                                                                                              |
+| ----------- | -------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
+| `cv-input`  | `{activeTabId: string \| null, selectedTabId: string \| null}` | Fires on any active or selected state change, including active-only changes that do not change selection |
+| `cv-change` | `{activeTabId: string \| null, selectedTabId: string \| null}` | Fires when selected tab changes                                                                          |
 
 `cv-input` fires on every user-driven state transition (active or selected). `cv-change` fires only when `selectedTabId` changes. Both events share the same detail shape. In `manual` activation mode, arrow-key navigation fires `cv-input` (active change) without `cv-change`; pressing `Enter`/`Space` fires both `cv-input` and `cv-change`.
 
@@ -81,35 +81,35 @@ Additionally, component styles depend on theme tokens through fallback values:
 
 ### UIKit Property to Headless Binding
 
-| UIKit Property | Direction | Headless Binding |
-|----------------|-----------|------------------|
-| `value` | attr → action | `actions.select(value)` when `value` attribute changes |
-| `orientation` | attr → option | passed as `orientation` in `createTabs(options)` |
-| `activation-mode` | attr → option | passed as `activationMode` in `createTabs(options)` |
-| `aria-label` | attr → option | passed as `ariaLabel` in `createTabs(options)` |
+| UIKit Property    | Direction     | Headless Binding                                       |
+| ----------------- | ------------- | ------------------------------------------------------ |
+| `value`           | attr → action | `actions.select(value)` when `value` attribute changes |
+| `orientation`     | attr → option | passed as `orientation` in `createTabs(options)`       |
+| `activation-mode` | attr → option | passed as `activationMode` in `createTabs(options)`    |
+| `aria-label`      | attr → option | passed as `ariaLabel` in `createTabs(options)`         |
 
 ### Headless State to DOM Reflection
 
-| Headless State | Direction | DOM Reflection |
-|----------------|-----------|----------------|
-| `state.selectedTabId()` | state → attr | `cv-tabs[value]` host attribute |
-| `state.activeTabId()` | state → attr | `cv-tab[active]` boolean attribute on the active tab element |
-| `state.selectedTabId()` | state → attr | `cv-tab[selected]` boolean attribute on the selected tab element |
+| Headless State          | Direction    | DOM Reflection                                                        |
+| ----------------------- | ------------ | --------------------------------------------------------------------- |
+| `state.selectedTabId()` | state → attr | `cv-tabs[value]` host attribute                                       |
+| `state.activeTabId()`   | state → attr | `cv-tab[active]` boolean attribute on the active tab element          |
+| `state.selectedTabId()` | state → attr | `cv-tab[selected]` boolean attribute on the selected tab element      |
 | `state.selectedTabId()` | state → attr | `cv-tab-panel[selected]` and `cv-tab-panel[hidden]` on panel elements |
 
 ### Headless Actions Called
 
-| Action | UIKit Trigger |
-|--------|---------------|
-| `actions.select(id)` | Tab is clicked or tapped (pointer activation) |
-| `actions.handleKeyDown(event)` | `keydown` event on a tab element |
+| Action                         | UIKit Trigger                                 |
+| ------------------------------ | --------------------------------------------- |
+| `actions.select(id)`           | Tab is clicked or tapped (pointer activation) |
+| `actions.handleKeyDown(event)` | `keydown` event on a tab element              |
 
 ### Headless Contracts Spread
 
-| Contract | UIKit Target |
-|----------|--------------|
-| `contracts.getTabListProps()` | Spread onto `[part="list"]` element |
-| `contracts.getTabProps(id)` | Spread onto each `cv-tab` element (via attribute sync) |
+| Contract                      | UIKit Target                                                 |
+| ----------------------------- | ------------------------------------------------------------ |
+| `contracts.getTabListProps()` | Spread onto `[part="list"]` element                          |
+| `contracts.getTabProps(id)`   | Spread onto each `cv-tab` element (via attribute sync)       |
 | `contracts.getPanelProps(id)` | Spread onto each `cv-tab-panel` element (via attribute sync) |
 
 ### UIKit-Only Concerns (Not in Headless)
@@ -165,39 +165,39 @@ Individual tab trigger within the tablist.
 
 #### Attributes
 
-| Attribute | Type | Default | Description |
-|-----------|------|---------|-------------|
-| `value` | String | `""` | Unique identifier linking this tab to a panel |
-| `disabled` | Boolean | `false` | Prevents selection and keyboard activation |
-| `active` | Boolean | `false` | Whether this tab has roving focus (managed by parent) |
+| Attribute  | Type    | Default | Description                                             |
+| ---------- | ------- | ------- | ------------------------------------------------------- |
+| `value`    | String  | `""`    | Unique identifier linking this tab to a panel           |
+| `disabled` | Boolean | `false` | Prevents selection and keyboard activation              |
+| `active`   | Boolean | `false` | Whether this tab has roving focus (managed by parent)   |
 | `selected` | Boolean | `false` | Whether this tab's panel is visible (managed by parent) |
-| `closable` | Boolean | `false` | Shows close affordance for removal flows |
+| `closable` | Boolean | `false` | Shows close affordance for removal flows                |
 
 #### Slots
 
-| Slot | Description |
-|------|-------------|
+| Slot        | Description       |
+| ----------- | ----------------- |
 | `(default)` | Tab label content |
 
 #### CSS Parts
 
-| Part | Element | Description |
-|------|---------|-------------|
-| `base` | `<div>` | Tab interactive wrapper |
+| Part           | Element    | Description                                                |
+| -------------- | ---------- | ---------------------------------------------------------- |
+| `base`         | `<div>`    | Tab interactive wrapper                                    |
 | `close-button` | `<button>` | Close affordance (rendered only when `closable` is `true`) |
 
 #### Visual States
 
-| Host selector | Description |
-|---------------|-------------|
-| `:host([active])` | Focused tab in roving tabindex model |
-| `:host([selected])` | Selected tab with visible panel |
+| Host selector       | Description                                      |
+| ------------------- | ------------------------------------------------ |
+| `:host([active])`   | Focused tab in roving tabindex model             |
+| `:host([selected])` | Selected tab with visible panel                  |
 | `:host([disabled])` | Disabled appearance and non-interactive behavior |
 
 #### Events
 
-| Event | Detail | Description |
-|-------|--------|-------------|
+| Event      | Detail            | Description                                                     |
+| ---------- | ----------------- | --------------------------------------------------------------- |
 | `cv-close` | `{value: string}` | Requests removal of this tab when close affordance is activated |
 
 The `cv-close` event bubbles and is composed. It is dispatched when the user activates the close button. The `value` in the detail corresponds to the tab's `value` attribute. The parent `cv-tabs` handles close orchestration: it determines a fallback tab, transitions selection if the closed tab was active or selected, and expects the consumer to remove the `cv-tab` and `cv-tab-panel` elements from the DOM.
@@ -218,25 +218,25 @@ Content panel associated with a tab.
 
 #### Attributes
 
-| Attribute | Type | Default | Description |
-|-----------|------|---------|-------------|
-| `tab` | String | `""` | Value of the associated `<cv-tab>` |
+| Attribute  | Type    | Default | Description                                       |
+| ---------- | ------- | ------- | ------------------------------------------------- |
+| `tab`      | String  | `""`    | Value of the associated `<cv-tab>`                |
 | `selected` | Boolean | `false` | Whether this panel is visible (managed by parent) |
 
 #### Slots
 
-| Slot | Description |
-|------|-------------|
+| Slot        | Description   |
+| ----------- | ------------- |
 | `(default)` | Panel content |
 
 #### CSS Parts
 
-| Part | Element | Description |
-|------|---------|-------------|
+| Part   | Element | Description           |
+| ------ | ------- | --------------------- |
 | `base` | `<div>` | Panel content wrapper |
 
 #### Visual States
 
-| Host selector | Description |
-|---------------|-------------|
+| Host selector     | Description                       |
+| ----------------- | --------------------------------- |
 | `:host([hidden])` | Hidden when panel is not selected |

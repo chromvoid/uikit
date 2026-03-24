@@ -1,4 +1,4 @@
-import {createMeter, type MeterModel} from '@chromvoid/headless-ui'
+import {createMeter, type MeterModel} from '@chromvoid/headless-ui/meter'
 import {css, html, nothing} from 'lit'
 import type {PropertyValues} from 'lit'
 
@@ -78,14 +78,16 @@ export class CVMeter extends ReatomLitElement {
           var(--cv-color-primary, #65d7ff) 0%,
           color-mix(in oklab, var(--cv-color-primary, #65d7ff) 70%, white) 100%
         );
-        transition: inline-size var(--cv-meter-transition-duration, var(--cv-duration-normal, 220ms)) var(--cv-easing-standard, ease);
+        transition: inline-size var(--cv-meter-transition-duration, var(--cv-duration-normal, 220ms))
+          var(--cv-easing-standard, ease);
       }
 
       [part='indicator'][data-status='low'] {
         background: linear-gradient(
           90deg,
           var(--cv-meter-suboptimum-color, var(--cv-color-warning, #ffbe65)) 0%,
-          color-mix(in oklab, var(--cv-meter-suboptimum-color, var(--cv-color-warning, #ffbe65)) 72%, white) 100%
+          color-mix(in oklab, var(--cv-meter-suboptimum-color, var(--cv-color-warning, #ffbe65)) 72%, white)
+            100%
         );
       }
 

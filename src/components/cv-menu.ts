@@ -1,4 +1,4 @@
-import {createMenu, type MenuModel} from '@chromvoid/headless-ui'
+import {createMenu, type MenuModel} from '@chromvoid/headless-ui/menu'
 import {css, html, nothing} from 'lit'
 import type {PropertyValues} from 'lit'
 
@@ -194,7 +194,9 @@ export class CVMenu extends ReatomLitElement {
 
   private rebuildModelFromSlot(preserveState: boolean, requestRender = true): void {
     const itemElements = this.getItemElements()
-    const previous = preserveState ? this.captureState() : {activeId: null, open: this.open, value: this.value || null}
+    const previous = preserveState
+      ? this.captureState()
+      : {activeId: null, open: this.open, value: this.value || null}
 
     this.detachItemListeners()
 
@@ -230,7 +232,9 @@ export class CVMenu extends ReatomLitElement {
       }
     })
 
-    const enabledIds = new Set(this.itemRecords.filter((record) => !record.disabled).map((record) => record.id))
+    const enabledIds = new Set(
+      this.itemRecords.filter((record) => !record.disabled).map((record) => record.id),
+    )
     const initialActiveId = previous.activeId && enabledIds.has(previous.activeId) ? previous.activeId : null
 
     this.model = createMenu({

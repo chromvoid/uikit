@@ -18,8 +18,7 @@ const createLandmark = async (attrs?: Partial<CVLandmark>) => {
   return el
 }
 
-const getBase = (el: CVLandmark) =>
-  el.shadowRoot!.querySelector('[part="base"]') as HTMLElement
+const getBase = (el: CVLandmark) => el.shadowRoot!.querySelector('[part="base"]') as HTMLElement
 
 afterEach(() => {
   document.body.innerHTML = ''

@@ -2,7 +2,7 @@
 
 Vertically stacked set of interactive sections that expand or collapse to reveal content.
 
-**Headless:** [`createAccordion`](../../../headless/specs/components/accordion.md)
+**Headless:** [`createAccordion`](https://github.com/chromvoid/headless-ui/blob/main/specs/components/accordion.md)
 
 ```html
 <cv-accordion aria-label="Example accordion">

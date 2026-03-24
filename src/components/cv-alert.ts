@@ -1,4 +1,4 @@
-import {createAlert, type AlertAriaLive, type AlertModel} from '@chromvoid/headless-ui'
+import {createAlert, type AlertAriaLive, type AlertModel} from '@chromvoid/headless-ui/alert'
 import {css, html} from 'lit'
 import type {PropertyValues} from 'lit'
 
@@ -48,20 +48,17 @@ export class CVAlert extends ReatomLitElement {
       [part='base'] {
         display: grid;
         gap: var(--cv-alert-gap, var(--cv-space-2, 8px));
-        padding:
-          var(--cv-alert-padding-block, var(--cv-space-2, 8px))
+        padding: var(--cv-alert-padding-block, var(--cv-space-2, 8px))
           var(--cv-alert-padding-inline, var(--cv-space-3, 12px));
         border-radius: var(--cv-alert-radius, var(--cv-radius-sm, 6px));
         border: 1px solid var(--cv-alert-border-color, var(--cv-color-border, #2a3245));
         background: var(--cv-alert-background, var(--cv-color-surface-elevated, #1d2432));
         color: var(--cv-alert-color, var(--cv-color-text, #e8ecf6));
         transition:
-          opacity
-          var(--cv-alert-transition-duration, var(--cv-duration-fast, 120ms))
-          var(--cv-alert-transition-easing, var(--cv-easing-standard, ease)),
-          transform
-          var(--cv-alert-transition-duration, var(--cv-duration-fast, 120ms))
-          var(--cv-alert-transition-easing, var(--cv-easing-standard, ease));
+          opacity var(--cv-alert-transition-duration, var(--cv-duration-fast, 120ms))
+            var(--cv-alert-transition-easing, var(--cv-easing-standard, ease)),
+          transform var(--cv-alert-transition-duration, var(--cv-duration-fast, 120ms))
+            var(--cv-alert-transition-easing, var(--cv-easing-standard, ease));
       }
 
       :host(:not([visible])) [part='base'] {
@@ -104,7 +101,11 @@ export class CVAlert extends ReatomLitElement {
   override updated(changedProperties: PropertyValues): void {
     super.updated(changedProperties)
 
-    if (changedProperties.has('durationMs') || changedProperties.has('ariaLive') || changedProperties.has('atomic')) {
+    if (
+      changedProperties.has('durationMs') ||
+      changedProperties.has('ariaLive') ||
+      changedProperties.has('atomic')
+    ) {
       return
     }
 

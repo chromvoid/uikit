@@ -145,7 +145,14 @@ describe('cv-toast-region', () => {
     })
 
     it('accepts all valid position values', async () => {
-      const positions = ['top-start', 'top-center', 'top-end', 'bottom-start', 'bottom-center', 'bottom-end'] as const
+      const positions = [
+        'top-start',
+        'top-center',
+        'top-end',
+        'bottom-start',
+        'bottom-center',
+        'bottom-end',
+      ] as const
       for (const pos of positions) {
         const region = await mountRegion()
         region.position = pos

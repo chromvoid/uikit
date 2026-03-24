@@ -18,8 +18,7 @@ const createDialog = async (attrs?: Partial<CVDialog>) => {
   return el
 }
 
-const getContent = (el: CVDialog) =>
-  el.shadowRoot!.querySelector('[part="content"]') as HTMLElement
+const getContent = (el: CVDialog) => el.shadowRoot!.querySelector('[part="content"]') as HTMLElement
 
 afterEach(() => {
   document.body.innerHTML = ''
@@ -499,10 +498,7 @@ describe('cv-dialog', () => {
       const el = await createDialog({noHeader: true})
       const header = el.shadowRoot!.querySelector('[part="header"]') as HTMLElement
       // Header should be hidden (either not rendered or display: none)
-      const isHidden =
-        header === null ||
-        header.hidden ||
-        getComputedStyle(header).display === 'none'
+      const isHidden = header === null || header.hidden || getComputedStyle(header).display === 'none'
       expect(isHidden).toBe(true)
     })
 

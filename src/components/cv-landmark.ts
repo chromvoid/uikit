@@ -1,4 +1,4 @@
-import {createLandmark, type LandmarkModel, type LandmarkType} from '@chromvoid/headless-ui'
+import {createLandmark, type LandmarkModel, type LandmarkType} from '@chromvoid/headless-ui/landmarks'
 import {css, html, nothing} from 'lit'
 import type {PropertyValues} from 'lit'
 

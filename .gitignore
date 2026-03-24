@@ -1,0 +1,8 @@
+dist
+dist-demo
+docs/.vitepress/dist
+docs/.vitepress/cache
+coverage
+node_modules
+.DS_Store
+*.tgz

@@ -18,8 +18,7 @@ const createOption = async (attrs?: Partial<CVOption>) => {
   return el
 }
 
-const getBase = (el: CVOption) =>
-  el.shadowRoot!.querySelector('[part="base"]') as HTMLElement
+const getBase = (el: CVOption) => el.shadowRoot!.querySelector('[part="base"]') as HTMLElement
 
 afterEach(() => {
   document.body.innerHTML = ''

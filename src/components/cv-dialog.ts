@@ -1,4 +1,4 @@
-import {createDialog, type DialogModel} from '@chromvoid/headless-ui'
+import {createDialog, type DialogModel} from '@chromvoid/headless-ui/dialog'
 import {css, html, nothing} from 'lit'
 import type {PropertyValues} from 'lit'
 
@@ -154,7 +154,9 @@ export class CVDialog extends ReatomLitElement {
         background: transparent;
         color: var(--cv-color-text-muted, #9aa6bf);
         cursor: pointer;
-        transition: color 0.15s ease, background 0.15s ease;
+        transition:
+          color 0.15s ease,
+          background 0.15s ease;
       }
 
       [part='header-close']:hover {
@@ -365,7 +367,8 @@ export class CVDialog extends ReatomLitElement {
     const requestedId = contentProps['data-initial-focus']
 
     if (requestedId) {
-      const explicit = (this.querySelector(`#${requestedId}`) as HTMLElement | null) ??
+      const explicit =
+        (this.querySelector(`#${requestedId}`) as HTMLElement | null) ??
         (this.shadowRoot?.querySelector(`#${requestedId}`) as HTMLElement | null)
       if (explicit) {
         explicit.focus()
@@ -477,8 +480,9 @@ export class CVDialog extends ReatomLitElement {
             <p id=${descriptionProps.id} part="description">
               <slot name="description"></slot>
             </p>
-            ${this.closable
-              ? html`
+            ${
+              this.closable
+                ? html`
                   <button
                     id=${headerCloseProps.id}
                     role=${headerCloseProps.role}
@@ -504,7 +508,8 @@ export class CVDialog extends ReatomLitElement {
                     >
                   </button>
                 `
-              : nothing}
+                : nothing
+            }
           </header>
 
           <div part="body">

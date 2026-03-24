@@ -1,7 +1,7 @@
+import {isAtom} from '@reatom/core'
 import {html as coreHtml, svg as coreSvg, type TemplateResult} from 'lit/html.js'
 
 import {watch} from './watch'
-import {isAtom} from '@reatom/core'
 
 export const withWatch =
   (coreTag: typeof coreHtml | typeof coreSvg) =>

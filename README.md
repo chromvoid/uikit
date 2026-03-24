@@ -54,7 +54,7 @@ The `src/reatom-lit/*` files are vendored from:
 ## Usage
 
 ```ts
-import {registerUikit} from '@chromvoid/uikit'
+import {registerUikit} from '@chromvoid/uikit/register'
 
 registerUikit()
 ```
@@ -62,17 +62,27 @@ registerUikit()
 Optional theme css defaults:
 
 ```ts
-import '@chromvoid/uikit/src/theme/tokens.css'
+import '@chromvoid/uikit/theme/tokens.css'
+```
+
+## Package-local Workflow
+
+```bash
+npm ci
+npm run lint
+npm run test
+npm run build
+npm pack --dry-run
 ```
 
 Run local interactive demo page:
 
 ```bash
-npm run demo -w packages/uikit
+npm run demo
 ```
 
 Run local docs site:
 
 ```bash
-npm run docs:dev -w packages/uikit
+npm run docs:dev
 ```

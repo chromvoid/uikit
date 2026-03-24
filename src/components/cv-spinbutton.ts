@@ -1,4 +1,4 @@
-import {createSpinbutton, type SpinbuttonModel} from '@chromvoid/headless-ui'
+import {createSpinbutton, type SpinbuttonModel} from '@chromvoid/headless-ui/spinbutton'
 import {css, html, nothing} from 'lit'
 import type {PropertyValues} from 'lit'
 

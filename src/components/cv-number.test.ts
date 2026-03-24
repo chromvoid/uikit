@@ -18,26 +18,17 @@ const createNumber = async (attrs?: Partial<CVNumber>) => {
   return el
 }
 
-const getBase = (el: CVNumber) =>
-  el.shadowRoot!.querySelector('[part="base"]') as HTMLElement
-const getInput = (el: CVNumber) =>
-  el.shadowRoot!.querySelector('[part="input"]') as HTMLInputElement
-const getPrefix = (el: CVNumber) =>
-  el.shadowRoot!.querySelector('[part="prefix"]') as HTMLElement
-const getSuffix = (el: CVNumber) =>
-  el.shadowRoot!.querySelector('[part="suffix"]') as HTMLElement
-const getLabel = (el: CVNumber) =>
-  el.shadowRoot!.querySelector('[part="form-control-label"]') as HTMLElement
+const getBase = (el: CVNumber) => el.shadowRoot!.querySelector('[part="base"]') as HTMLElement
+const getInput = (el: CVNumber) => el.shadowRoot!.querySelector('[part="input"]') as HTMLInputElement
+const getPrefix = (el: CVNumber) => el.shadowRoot!.querySelector('[part="prefix"]') as HTMLElement
+const getSuffix = (el: CVNumber) => el.shadowRoot!.querySelector('[part="suffix"]') as HTMLElement
+const getLabel = (el: CVNumber) => el.shadowRoot!.querySelector('[part="form-control-label"]') as HTMLElement
 const getHelpText = (el: CVNumber) =>
   el.shadowRoot!.querySelector('[part="form-control-help-text"]') as HTMLElement
-const getClearButton = (el: CVNumber) =>
-  el.shadowRoot!.querySelector('[part="clear-button"]') as HTMLElement
-const getStepper = (el: CVNumber) =>
-  el.shadowRoot!.querySelector('[part="stepper"]') as HTMLElement
-const getIncrement = (el: CVNumber) =>
-  el.shadowRoot!.querySelector('[part="increment"]') as HTMLButtonElement
-const getDecrement = (el: CVNumber) =>
-  el.shadowRoot!.querySelector('[part="decrement"]') as HTMLButtonElement
+const getClearButton = (el: CVNumber) => el.shadowRoot!.querySelector('[part="clear-button"]') as HTMLElement
+const getStepper = (el: CVNumber) => el.shadowRoot!.querySelector('[part="stepper"]') as HTMLElement
+const getIncrement = (el: CVNumber) => el.shadowRoot!.querySelector('[part="increment"]') as HTMLButtonElement
+const getDecrement = (el: CVNumber) => el.shadowRoot!.querySelector('[part="decrement"]') as HTMLButtonElement
 
 afterEach(() => {
   document.body.innerHTML = ''
@@ -396,9 +387,7 @@ describe('cv-number', () => {
       const stepperEl = getStepper(el)
       // Either not rendered or hidden
       if (stepperEl) {
-        expect(
-          stepperEl.hidden || stepperEl.getAttribute('aria-hidden') === 'true'
-        ).toBe(true)
+        expect(stepperEl.hidden || stepperEl.getAttribute('aria-hidden') === 'true').toBe(true)
       } else {
         expect(stepperEl).toBeNull()
       }
@@ -458,9 +447,7 @@ describe('cv-number', () => {
       const el = await createNumber({value: 5})
       const clearBtn = getClearButton(el)
       if (clearBtn) {
-        expect(
-          clearBtn.hidden || clearBtn.getAttribute('aria-hidden') === 'true'
-        ).toBe(true)
+        expect(clearBtn.hidden || clearBtn.getAttribute('aria-hidden') === 'true').toBe(true)
       } else {
         expect(clearBtn).toBeNull()
       }

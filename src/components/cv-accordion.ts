@@ -1,4 +1,4 @@
-import {createAccordion, type AccordionModel} from '@chromvoid/headless-ui'
+import {createAccordion, type AccordionModel} from '@chromvoid/headless-ui/accordion'
 import {css, html, nothing} from 'lit'
 import type {PropertyValues} from 'lit'
 
@@ -54,7 +54,10 @@ export class CVAccordion extends ReatomLitElement {
 
   private readonly idBase = `cv-accordion-${++cvAccordionNonce}`
   private itemRecords: AccordionItemRecord[] = []
-  private itemListeners = new WeakMap<CVAccordionItem, {click: EventListener; focus: EventListener; keydown: EventListener}>()
+  private itemListeners = new WeakMap<
+    CVAccordionItem,
+    {click: EventListener; focus: EventListener; keydown: EventListener}
+  >()
   private readonly model: AccordionModel
 
   constructor() {

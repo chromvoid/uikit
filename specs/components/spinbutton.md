@@ -2,7 +2,7 @@
 
 Numeric spinbutton input with keyboard, stepper controls, form-associated behavior, and headless-driven ARIA contracts.
 
-**Headless:** [`createSpinbutton`](../../../headless/specs/components/spinbutton.md)
+**Headless:** [`createSpinbutton`](https://github.com/chromvoid/headless-ui/blob/main/specs/components/spinbutton.md)
 
 ## Anatomy
 
@@ -99,8 +99,8 @@ Theme tokens used with fallbacks:
 
 ## Events
 
-| Event    | Detail            | Description                                                           |
-| -------- | ----------------- | --------------------------------------------------------------------- |
+| Event       | Detail            | Description                                                           |
+| ----------- | ----------------- | --------------------------------------------------------------------- |
 | `cv-input`  | `{value: number}` | Fires on each user-triggered value mutation (buttons/stepping/commit) |
 | `cv-change` | `{value: number}` | Fires together with `cv-input` for the same user-triggered mutation   |
 

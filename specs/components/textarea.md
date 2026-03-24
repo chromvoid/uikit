@@ -2,7 +2,7 @@
 
 Multi-line text input with form-field chrome, native textarea semantics, and headless state delegation.
 
-**Headless:** [`createTextarea`](../../../headless/specs/components/textarea.md)
+**Headless:** [`createTextarea`](https://github.com/chromvoid/headless-ui/blob/main/specs/components/textarea.md)
 
 ## Anatomy
 

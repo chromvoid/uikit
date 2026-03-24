@@ -6,8 +6,7 @@ Object.defineProperty(HTMLElement.prototype, 'attachInternals', {
   configurable: true,
   value: function (...args: unknown[]) {
     const host = this as HTMLElement
-    const internals =
-      (originalAttachInternals ? originalAttachInternals.apply(host, args) : null) ?? {}
+    const internals = (originalAttachInternals ? originalAttachInternals.apply(host, args) : null) ?? {}
 
     let validityFlags: ValidityStateFlags =
       ((internals as {validity?: ValidityState}).validity as ValidityStateFlags | undefined) ?? {}

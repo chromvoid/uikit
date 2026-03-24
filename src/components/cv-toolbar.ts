@@ -1,4 +1,5 @@
-import {createToolbar, type ToolbarModel, type CompositeNavigationOrientation} from '@chromvoid/headless-ui'
+import {type CompositeNavigationOrientation} from '@chromvoid/headless-ui/interactions/composite-navigation'
+import {createToolbar, type ToolbarModel} from '@chromvoid/headless-ui/toolbar'
 import {css, html, nothing} from 'lit'
 import type {PropertyValues} from 'lit'
 
@@ -109,7 +110,11 @@ export class CVToolbar extends ReatomLitElement {
   override willUpdate(changedProperties: PropertyValues): void {
     super.willUpdate(changedProperties)
 
-    if (changedProperties.has('orientation') || changedProperties.has('wrap') || changedProperties.has('ariaLabel')) {
+    if (
+      changedProperties.has('orientation') ||
+      changedProperties.has('wrap') ||
+      changedProperties.has('ariaLabel')
+    ) {
       this.rebuildModelFromSlot(true, false)
       return
     }
@@ -140,7 +145,8 @@ export class CVToolbar extends ReatomLitElement {
 
   private getSeparatorElements(): CVToolbarSeparator[] {
     return Array.from(this.children).filter(
-      (element): element is CVToolbarSeparator => element.tagName.toLowerCase() === CVToolbarSeparator.elementName,
+      (element): element is CVToolbarSeparator =>
+        element.tagName.toLowerCase() === CVToolbarSeparator.elementName,
     )
   }
 

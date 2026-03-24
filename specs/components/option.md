@@ -19,62 +19,62 @@ Individual selectable option for use as a direct child of `cv-listbox` or `cv-li
 
 ## Attributes
 
-| Attribute | Type | Default | Description |
-|-----------|------|---------|-------------|
-| `value` | String | `""` | Unique identifier for this option. The parent `cv-listbox` reads this to register the option in the headless model. Auto-generated as `option-{n}` if omitted. |
-| `disabled` | Boolean | `false` | Whether the option is disabled. Prevents selection and keyboard activation. Also reflected as `aria-disabled` by the parent via `getOptionProps`. |
-| `selected` | Boolean | `false` | Whether the option is currently selected. Set by the parent `cv-listbox` as part of state synchronisation. |
-| `active` | Boolean | `false` | Whether the option is the active (highlighted) option. Set by the parent `cv-listbox` as part of state synchronisation. |
+| Attribute  | Type    | Default | Description                                                                                                                                                    |
+| ---------- | ------- | ------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `value`    | String  | `""`    | Unique identifier for this option. The parent `cv-listbox` reads this to register the option in the headless model. Auto-generated as `option-{n}` if omitted. |
+| `disabled` | Boolean | `false` | Whether the option is disabled. Prevents selection and keyboard activation. Also reflected as `aria-disabled` by the parent via `getOptionProps`.              |
+| `selected` | Boolean | `false` | Whether the option is currently selected. Set by the parent `cv-listbox` as part of state synchronisation.                                                     |
+| `active`   | Boolean | `false` | Whether the option is the active (highlighted) option. Set by the parent `cv-listbox` as part of state synchronisation.                                        |
 
 ## Slots
 
-| Slot | Description |
-|------|-------------|
+| Slot        | Description                                                                                        |
+| ----------- | -------------------------------------------------------------------------------------------------- |
 | `(default)` | Option label text. Also used as the source text for typeahead matching by the parent `cv-listbox`. |
-| `prefix` | Icon or element placed before the label. |
-| `suffix` | Icon or element placed after the label. |
+| `prefix`    | Icon or element placed before the label.                                                           |
+| `suffix`    | Icon or element placed after the label.                                                            |
 
 ## CSS Parts
 
-| Part | Element | Description |
-|------|---------|-------------|
-| `base` | `<div>` | Root wrapper; receives layout, background, and transition styles. |
-| `label` | `<span>` | Wrapper around the default slot (label text). |
-| `prefix` | `<span>` | Wrapper around the `prefix` named slot. |
-| `suffix` | `<span>` | Wrapper around the `suffix` named slot. |
+| Part     | Element  | Description                                                       |
+| -------- | -------- | ----------------------------------------------------------------- |
+| `base`   | `<div>`  | Root wrapper; receives layout, background, and transition styles. |
+| `label`  | `<span>` | Wrapper around the default slot (label text).                     |
+| `prefix` | `<span>` | Wrapper around the `prefix` named slot.                           |
+| `suffix` | `<span>` | Wrapper around the `suffix` named slot.                           |
 
 ## CSS Custom Properties
 
-| Property | Default | Description |
-|----------|---------|-------------|
-| `--cv-option-padding-block` | `var(--cv-space-2, 8px)` | Vertical padding inside `[part="base"]`. |
-| `--cv-option-padding-inline` | `var(--cv-space-3, 12px)` | Horizontal padding inside `[part="base"]`. |
-| `--cv-option-border-radius` | `var(--cv-radius-sm, 6px)` | Border radius of `[part="base"]`. |
-| `--cv-option-active-background` | `color-mix(in oklab, var(--cv-color-primary, #65d7ff) 22%, transparent)` | Background applied when the option is active (highlighted). |
-| `--cv-option-selected-background` | `color-mix(in oklab, var(--cv-color-primary, #65d7ff) 34%, transparent)` | Background applied when the option is selected. |
-| `--cv-option-disabled-opacity` | `0.55` | Opacity applied when the option is disabled. |
-| `--cv-option-focus-outline-color` | `var(--cv-color-primary, #65d7ff)` | Outline color for `:focus-visible` (roving-tabindex focus strategy). |
+| Property                          | Default                                                                  | Description                                                          |
+| --------------------------------- | ------------------------------------------------------------------------ | -------------------------------------------------------------------- |
+| `--cv-option-padding-block`       | `var(--cv-space-2, 8px)`                                                 | Vertical padding inside `[part="base"]`.                             |
+| `--cv-option-padding-inline`      | `var(--cv-space-3, 12px)`                                                | Horizontal padding inside `[part="base"]`.                           |
+| `--cv-option-border-radius`       | `var(--cv-radius-sm, 6px)`                                               | Border radius of `[part="base"]`.                                    |
+| `--cv-option-active-background`   | `color-mix(in oklab, var(--cv-color-primary, #65d7ff) 22%, transparent)` | Background applied when the option is active (highlighted).          |
+| `--cv-option-selected-background` | `color-mix(in oklab, var(--cv-color-primary, #65d7ff) 34%, transparent)` | Background applied when the option is selected.                      |
+| `--cv-option-disabled-opacity`    | `0.55`                                                                   | Opacity applied when the option is disabled.                         |
+| `--cv-option-focus-outline-color` | `var(--cv-color-primary, #65d7ff)`                                       | Outline color for `:focus-visible` (roving-tabindex focus strategy). |
 
 Additionally, component styles depend on theme tokens through fallback values:
 
-| Theme Property | Default | Description |
-|----------------|---------|-------------|
-| `--cv-color-text` | `#e8ecf6` | Default text color. |
-| `--cv-color-primary` | `#65d7ff` | Primary accent color used for active/selected backgrounds and focus outline. |
-| `--cv-duration-fast` | `120ms` | Background and color transition duration. |
-| `--cv-easing-standard` | `ease` | Transition timing function. |
-| `--cv-space-2` | `8px` | Fallback for vertical padding. |
-| `--cv-space-3` | `12px` | Fallback for horizontal padding. |
-| `--cv-radius-sm` | `6px` | Fallback for border radius. |
+| Theme Property         | Default   | Description                                                                  |
+| ---------------------- | --------- | ---------------------------------------------------------------------------- |
+| `--cv-color-text`      | `#e8ecf6` | Default text color.                                                          |
+| `--cv-color-primary`   | `#65d7ff` | Primary accent color used for active/selected backgrounds and focus outline. |
+| `--cv-duration-fast`   | `120ms`   | Background and color transition duration.                                    |
+| `--cv-easing-standard` | `ease`    | Transition timing function.                                                  |
+| `--cv-space-2`         | `8px`     | Fallback for vertical padding.                                               |
+| `--cv-space-3`         | `12px`    | Fallback for horizontal padding.                                             |
+| `--cv-radius-sm`       | `6px`     | Fallback for border radius.                                                  |
 
 ## Visual States
 
-| Host selector | Description |
-|---------------|-------------|
-| `:host([active])` | Active/highlighted option; applies `--cv-option-active-background` to `[part="base"]`. |
-| `:host([selected])` | Selected option; applies `--cv-option-selected-background` to `[part="base"]`. |
-| `:host([disabled])` | Disabled option; applies `--cv-option-disabled-opacity` to `[part="base"]`. |
-| `:host([hidden])` | Hidden option; `display: none` on the host. |
+| Host selector           | Description                                                                                                                          |
+| ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| `:host([active])`       | Active/highlighted option; applies `--cv-option-active-background` to `[part="base"]`.                                               |
+| `:host([selected])`     | Selected option; applies `--cv-option-selected-background` to `[part="base"]`.                                                       |
+| `:host([disabled])`     | Disabled option; applies `--cv-option-disabled-opacity` to `[part="base"]`.                                                          |
+| `:host([hidden])`       | Hidden option; `display: none` on the host.                                                                                          |
 | `:host(:focus-visible)` | Focus ring when the option receives DOM focus (roving-tabindex strategy); 2px solid outline using `--cv-option-focus-outline-color`. |
 
 ## Events
@@ -85,16 +85,16 @@ Additionally, component styles depend on theme tokens through fallback values:
 
 `cv-option` sets no ARIA attributes itself. The parent `cv-listbox` spreads `contracts.getOptionProps(id)` directly onto each `cv-option` host element. The following attributes are applied by the parent:
 
-| Attribute | Source | Description |
-|-----------|--------|-------------|
-| `id` | `getOptionProps(id)` | Unique DOM id used by `aria-activedescendant` on the listbox root. |
-| `role` | `getOptionProps(id)` | Always `"option"`. |
-| `tabindex` | `getOptionProps(id)` | `"0"` for the active option (roving-tabindex) or `"-1"` for all options (aria-activedescendant strategy). |
-| `aria-selected` | `getOptionProps(id)` | `"true"` when the option is selected; `"false"` otherwise. |
-| `aria-disabled` | `getOptionProps(id)` | `"true"` when `[disabled]` is present; omitted otherwise. |
-| `aria-setsize` | `getOptionProps(id)` | Total number of options in the listbox (supports virtual scrolling). |
-| `aria-posinset` | `getOptionProps(id)` | 1-based position of this option within the full option list. |
-| `data-active` | `getOptionProps(id)` | Present when the option is the active option; used as a CSS hook. |
+| Attribute       | Source               | Description                                                                                               |
+| --------------- | -------------------- | --------------------------------------------------------------------------------------------------------- |
+| `id`            | `getOptionProps(id)` | Unique DOM id used by `aria-activedescendant` on the listbox root.                                        |
+| `role`          | `getOptionProps(id)` | Always `"option"`.                                                                                        |
+| `tabindex`      | `getOptionProps(id)` | `"0"` for the active option (roving-tabindex) or `"-1"` for all options (aria-activedescendant strategy). |
+| `aria-selected` | `getOptionProps(id)` | `"true"` when the option is selected; `"false"` otherwise.                                                |
+| `aria-disabled` | `getOptionProps(id)` | `"true"` when `[disabled]` is present; omitted otherwise.                                                 |
+| `aria-setsize`  | `getOptionProps(id)` | Total number of options in the listbox (supports virtual scrolling).                                      |
+| `aria-posinset` | `getOptionProps(id)` | 1-based position of this option within the full option list.                                              |
+| `data-active`   | `getOptionProps(id)` | Present when the option is the active option; used as a CSS hook.                                         |
 
 These attributes must not be set directly on `cv-option` by the consumer. They are owned entirely by the parent and will be overwritten on each render cycle.
 

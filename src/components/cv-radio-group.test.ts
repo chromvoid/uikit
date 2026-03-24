@@ -10,7 +10,8 @@ const settle = async (element: CVRadioGroup) => {
   await Promise.resolve()
 }
 
-const hasElementInternals = typeof (HTMLElement.prototype as {attachInternals?: unknown}).attachInternals === 'function'
+const hasElementInternals =
+  typeof (HTMLElement.prototype as {attachInternals?: unknown}).attachInternals === 'function'
 
 async function mountRadioGroup(params: {disabled?: boolean} = {}) {
   CVRadio.define()

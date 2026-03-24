@@ -29,7 +29,8 @@ export class CVTableCell extends LitElement {
     css`
       :host {
         display: table-cell;
-        padding: var(--cv-table-cell-padding-block, var(--cv-space-2, 8px)) var(--cv-table-cell-padding-inline, var(--cv-space-3, 12px));
+        padding: var(--cv-table-cell-padding-block, var(--cv-space-2, 8px))
+          var(--cv-table-cell-padding-inline, var(--cv-space-3, 12px));
         border-bottom: 1px solid color-mix(in oklab, var(--cv-color-border, #2a3245) 70%, transparent);
         color: var(--cv-color-text, #e8ecf6);
       }
@@ -38,7 +39,7 @@ export class CVTableCell extends LitElement {
         font-weight: 600;
       }
 
-      :host([data-active="true"]) {
+      :host([data-active='true']) {
         outline: 2px solid var(--cv-table-focus-outline-color, var(--cv-color-primary, #65d7ff));
         outline-offset: -2px;
       }
@@ -52,6 +53,8 @@ export class CVTableCell extends LitElement {
   }
 
   protected override render() {
-    return html`<slot></slot>`
+    return html`
+      <slot></slot>
+    `
   }
 }

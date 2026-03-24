@@ -18,14 +18,11 @@ const createDisclosure = async (attrs?: Partial<CVDisclosure>) => {
   return el
 }
 
-const getBase = (el: CVDisclosure) =>
-  el.shadowRoot!.querySelector('[part="base"]') as HTMLElement
+const getBase = (el: CVDisclosure) => el.shadowRoot!.querySelector('[part="base"]') as HTMLElement
 
-const getTrigger = (el: CVDisclosure) =>
-  el.shadowRoot!.querySelector('[part="trigger"]') as HTMLElement
+const getTrigger = (el: CVDisclosure) => el.shadowRoot!.querySelector('[part="trigger"]') as HTMLElement
 
-const getPanel = (el: CVDisclosure) =>
-  el.shadowRoot!.querySelector('[part="panel"]') as HTMLElement
+const getPanel = (el: CVDisclosure) => el.shadowRoot!.querySelector('[part="panel"]') as HTMLElement
 
 const getTriggerIcon = (el: CVDisclosure) =>
   el.shadowRoot!.querySelector('[part="trigger-icon"]') as HTMLElement
@@ -286,8 +283,12 @@ describe('cv-disclosure', () => {
       const inputValues: boolean[] = []
       const changeValues: boolean[] = []
 
-      el.addEventListener('cv-input', (e) => inputValues.push((e as CustomEvent<{open: boolean}>).detail.open))
-      el.addEventListener('cv-change', (e) => changeValues.push((e as CustomEvent<{open: boolean}>).detail.open))
+      el.addEventListener('cv-input', (e) =>
+        inputValues.push((e as CustomEvent<{open: boolean}>).detail.open),
+      )
+      el.addEventListener('cv-change', (e) =>
+        changeValues.push((e as CustomEvent<{open: boolean}>).detail.open),
+      )
 
       getTrigger(el).dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
       await settle(el)

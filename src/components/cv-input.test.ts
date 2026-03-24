@@ -20,14 +20,11 @@ const createInput = async (attrs?: Partial<CVInput>) => {
   return el
 }
 
-const getBase = (el: CVInput) =>
-  el.shadowRoot!.querySelector('[part="base"]') as HTMLElement
+const getBase = (el: CVInput) => el.shadowRoot!.querySelector('[part="base"]') as HTMLElement
 
-const getInput = (el: CVInput) =>
-  el.shadowRoot!.querySelector('[part="input"]') as HTMLInputElement
+const getInput = (el: CVInput) => el.shadowRoot!.querySelector('[part="input"]') as HTMLInputElement
 
-const getClearButton = (el: CVInput) =>
-  el.shadowRoot!.querySelector('[part="clear-button"]') as HTMLElement
+const getClearButton = (el: CVInput) => el.shadowRoot!.querySelector('[part="clear-button"]') as HTMLElement
 
 const getPasswordToggle = (el: CVInput) =>
   el.shadowRoot!.querySelector('[part="password-toggle"]') as HTMLElement
@@ -852,7 +849,8 @@ describe('cv-input', () => {
   })
 
   describe('form association', () => {
-    const hasElementInternals = typeof (HTMLElement.prototype as {attachInternals?: unknown}).attachInternals === 'function'
+    const hasElementInternals =
+      typeof (HTMLElement.prototype as {attachInternals?: unknown}).attachInternals === 'function'
 
     it('declares formAssociated for custom element', () => {
       expect(CVInput.formAssociated).toBe(true)

@@ -2,7 +2,7 @@
 
 Combobox input with popup listbox, supporting editable and select-only modes, single and multi-select, clearable behavior, and grouped options.
 
-**Headless:** [`createCombobox`](../../../headless/specs/components/combobox.md)
+**Headless:** [`createCombobox`](https://github.com/chromvoid/headless-ui/blob/main/specs/components/combobox.md)
 
 ## Cross-Spec Consistency
 
@@ -53,89 +53,89 @@ This document is the UIKit surface contract for Combobox.
 
 ## Attributes
 
-| Attribute | Type | Default | Description |
-|-----------|------|---------|-------------|
-| `value` | String | `""` | Selected option id. In multi mode, space-delimited string of selected option values. |
-| `input-value` | String | `""` | Editable input text. Read-only in select-only mode. |
-| `open` | Boolean | `false` | Popup open state |
-| `type` | String | `"editable"` | Combobox mode: `"editable"` \| `"select-only"` |
-| `multiple` | Boolean | `false` | Enables multi-select behavior |
-| `clearable` | Boolean | `false` | Shows clear button when a value is selected |
-| `max-tags-visible` | Number | `3` | Maximum tags shown before "+N more" overflow. `0` = unlimited. Only meaningful when `multiple` is `true`. |
-| `open-on-focus` | Boolean | `true` | Opens popup when input receives focus |
-| `open-on-click` | Boolean | `true` | Opens popup on input/trigger click when closed |
-| `close-on-select` | Boolean | `true` (single) / `false` (multi) | Closes popup after selection commit. Default depends on `multiple`. |
-| `match-mode` | String | `"includes"` | Default filter mode: `includes` \| `startsWith`. Ignored in select-only mode. |
-| `placeholder` | String | `""` | Placeholder text for input or trigger |
-| `disabled` | Boolean | `false` | Prevents interaction |
-| `size` | String | `"medium"` | Size: `small` \| `medium` \| `large` |
-| `aria-label` | String | `""` | Accessible label for input/listbox |
+| Attribute          | Type    | Default                           | Description                                                                                               |
+| ------------------ | ------- | --------------------------------- | --------------------------------------------------------------------------------------------------------- |
+| `value`            | String  | `""`                              | Selected option id. In multi mode, space-delimited string of selected option values.                      |
+| `input-value`      | String  | `""`                              | Editable input text. Read-only in select-only mode.                                                       |
+| `open`             | Boolean | `false`                           | Popup open state                                                                                          |
+| `type`             | String  | `"editable"`                      | Combobox mode: `"editable"` \| `"select-only"`                                                            |
+| `multiple`         | Boolean | `false`                           | Enables multi-select behavior                                                                             |
+| `clearable`        | Boolean | `false`                           | Shows clear button when a value is selected                                                               |
+| `max-tags-visible` | Number  | `3`                               | Maximum tags shown before "+N more" overflow. `0` = unlimited. Only meaningful when `multiple` is `true`. |
+| `open-on-focus`    | Boolean | `true`                            | Opens popup when input receives focus                                                                     |
+| `open-on-click`    | Boolean | `true`                            | Opens popup on input/trigger click when closed                                                            |
+| `close-on-select`  | Boolean | `true` (single) / `false` (multi) | Closes popup after selection commit. Default depends on `multiple`.                                       |
+| `match-mode`       | String  | `"includes"`                      | Default filter mode: `includes` \| `startsWith`. Ignored in select-only mode.                             |
+| `placeholder`      | String  | `""`                              | Placeholder text for input or trigger                                                                     |
+| `disabled`         | Boolean | `false`                           | Prevents interaction                                                                                      |
+| `size`             | String  | `"medium"`                        | Size: `small` \| `medium` \| `large`                                                                      |
+| `aria-label`       | String  | `""`                              | Accessible label for input/listbox                                                                        |
 
 ## Sizes
 
-| Size | `--cv-combobox-min-height` | `--cv-combobox-padding-inline` |
-|------|----------------------------|-------------------------------|
-| `small` | `30px` | `var(--cv-space-2, 8px)` |
-| `medium` | `36px` | `var(--cv-space-3, 12px)` |
-| `large` | `42px` | `var(--cv-space-4, 16px)` |
+| Size     | `--cv-combobox-min-height` | `--cv-combobox-padding-inline` |
+| -------- | -------------------------- | ------------------------------ |
+| `small`  | `30px`                     | `var(--cv-space-2, 8px)`       |
+| `medium` | `36px`                     | `var(--cv-space-3, 12px)`      |
+| `large`  | `42px`                     | `var(--cv-space-4, 16px)`      |
 
 ## Slots
 
-| Slot | Description |
-|------|-------------|
+| Slot        | Description                                                          |
+| ----------- | -------------------------------------------------------------------- |
 | `(default)` | One or more `<cv-combobox-option>` or `<cv-combobox-group>` children |
-| `prefix` | Icon or element before the input/trigger |
-| `suffix` | Icon or element after the input/trigger (before expand icon) |
+| `prefix`    | Icon or element before the input/trigger                             |
+| `suffix`    | Icon or element after the input/trigger (before expand icon)         |
 
 ## CSS Parts
 
-| Part | Element | Description |
-|------|---------|-------------|
-| `base` | `<div>` | Root layout container |
-| `input-wrapper` | `<div>` | Wrapper around input/trigger, tags, clear button, and expand icon |
-| `cv-input` | `<input>` | Editable combobox control (editable mode only) |
-| `trigger` | `<div>` | Button-like trigger control (select-only mode only) |
-| `label` | `<span>` | Selected value text inside trigger (select-only mode) |
-| `listbox` | `<div>` | Popup listbox container |
-| `tags` | `<div>` | Container for selected item tags (multi-select only) |
-| `tag` | `<span>` | Individual selected item tag (multi-select only) |
-| `tag-label` | `<span>` | Text label inside a tag |
-| `tag-remove` | `<button>` | Remove button inside a tag |
-| `tag-overflow` | `<span>` | "+N more" overflow indicator |
-| `clear-button` | `<button>` | Clear selection button (clearable mode only) |
-| `expand-icon` | `<span>` | Dropdown expand/collapse indicator icon |
-| `group` | `<div>` | Option group container inside the listbox |
-| `group-label` | `<div>` | Group header label inside the listbox |
-| `prefix` | `<span>` | Wrapper around the `prefix` slot |
-| `suffix` | `<span>` | Wrapper around the `suffix` slot |
+| Part            | Element    | Description                                                       |
+| --------------- | ---------- | ----------------------------------------------------------------- |
+| `base`          | `<div>`    | Root layout container                                             |
+| `input-wrapper` | `<div>`    | Wrapper around input/trigger, tags, clear button, and expand icon |
+| `cv-input`      | `<input>`  | Editable combobox control (editable mode only)                    |
+| `trigger`       | `<div>`    | Button-like trigger control (select-only mode only)               |
+| `label`         | `<span>`   | Selected value text inside trigger (select-only mode)             |
+| `listbox`       | `<div>`    | Popup listbox container                                           |
+| `tags`          | `<div>`    | Container for selected item tags (multi-select only)              |
+| `tag`           | `<span>`   | Individual selected item tag (multi-select only)                  |
+| `tag-label`     | `<span>`   | Text label inside a tag                                           |
+| `tag-remove`    | `<button>` | Remove button inside a tag                                        |
+| `tag-overflow`  | `<span>`   | "+N more" overflow indicator                                      |
+| `clear-button`  | `<button>` | Clear selection button (clearable mode only)                      |
+| `expand-icon`   | `<span>`   | Dropdown expand/collapse indicator icon                           |
+| `group`         | `<div>`    | Option group container inside the listbox                         |
+| `group-label`   | `<div>`    | Group header label inside the listbox                             |
+| `prefix`        | `<span>`   | Wrapper around the `prefix` slot                                  |
+| `suffix`        | `<span>`   | Wrapper around the `suffix` slot                                  |
 
 ## CSS Custom Properties
 
-| Property | Default | Description |
-|----------|---------|-------------|
-| `--cv-combobox-min-width` | `260px` | Minimum inline size of the host |
-| `--cv-combobox-min-height` | `36px` | Minimum block size of the input/trigger |
-| `--cv-combobox-padding-inline` | `var(--cv-space-3, 12px)` | Horizontal padding of the input/trigger |
-| `--cv-combobox-max-height` | `220px` | Maximum block size of the listbox popup |
-| `--cv-combobox-border-color` | `var(--cv-color-border, #2a3245)` | Border color for input/trigger and listbox |
-| `--cv-combobox-border-radius` | `var(--cv-radius-sm, 6px)` | Border radius of the input/trigger |
-| `--cv-combobox-listbox-radius` | `var(--cv-radius-md, 10px)` | Border radius of the listbox popup |
-| `--cv-combobox-gap` | `var(--cv-space-1, 4px)` | Gap between base layout sections |
-| `--cv-combobox-tag-gap` | `var(--cv-space-1, 4px)` | Gap between tags in multi-select |
-| `--cv-combobox-tag-radius` | `var(--cv-radius-sm, 6px)` | Border radius of tag chips |
-| `--cv-combobox-font-size` | `inherit` | Font size of the input/trigger text |
+| Property                       | Default                           | Description                                |
+| ------------------------------ | --------------------------------- | ------------------------------------------ |
+| `--cv-combobox-min-width`      | `260px`                           | Minimum inline size of the host            |
+| `--cv-combobox-min-height`     | `36px`                            | Minimum block size of the input/trigger    |
+| `--cv-combobox-padding-inline` | `var(--cv-space-3, 12px)`         | Horizontal padding of the input/trigger    |
+| `--cv-combobox-max-height`     | `220px`                           | Maximum block size of the listbox popup    |
+| `--cv-combobox-border-color`   | `var(--cv-color-border, #2a3245)` | Border color for input/trigger and listbox |
+| `--cv-combobox-border-radius`  | `var(--cv-radius-sm, 6px)`        | Border radius of the input/trigger         |
+| `--cv-combobox-listbox-radius` | `var(--cv-radius-md, 10px)`       | Border radius of the listbox popup         |
+| `--cv-combobox-gap`            | `var(--cv-space-1, 4px)`          | Gap between base layout sections           |
+| `--cv-combobox-tag-gap`        | `var(--cv-space-1, 4px)`          | Gap between tags in multi-select           |
+| `--cv-combobox-tag-radius`     | `var(--cv-radius-sm, 6px)`        | Border radius of tag chips                 |
+| `--cv-combobox-font-size`      | `inherit`                         | Font size of the input/trigger text        |
 
 ## Visual States
 
-| Host selector | Description |
-|---------------|-------------|
-| `:host([disabled])` | Reduced opacity (`0.55`), `cursor: not-allowed` |
-| `:host([open])` | Popup listbox is visible |
+| Host selector                 | Description                                          |
+| ----------------------------- | ---------------------------------------------------- |
+| `:host([disabled])`           | Reduced opacity (`0.55`), `cursor: not-allowed`      |
+| `:host([open])`               | Popup listbox is visible                             |
 | `:host([type="select-only"])` | Trigger is a button-like element instead of an input |
-| `:host([multiple])` | Multi-select mode with tag chips |
-| `:host([clearable])` | Clear button may be shown |
-| `:host([size="small"])` | Small size overrides |
-| `:host([size="large"])` | Large size overrides |
+| `:host([multiple])`           | Multi-select mode with tag chips                     |
+| `:host([clearable])`          | Clear button may be shown                            |
+| `:host([size="small"])`       | Small size overrides                                 |
+| `:host([size="large"])`       | Large size overrides                                 |
 
 ## ARIA Contract
 
@@ -165,11 +165,11 @@ All ARIA attributes are derived from headless contracts (`getInputProps`, `getLi
 
 ## Events
 
-| Event | Detail | Description |
-|-------|--------|-------------|
-| `cv-input` | `{value: string \| null, inputValue: string, activeId: string \| null, open: boolean, selectedIds: string[]}` | Fires when combobox interaction changes observable state |
-| `cv-change` | `{value: string \| null, inputValue: string, activeId: string \| null, open: boolean, selectedIds: string[]}` | Fires when selected option(s) change |
-| `cv-clear` | `{}` | Fires when the clear button is clicked |
+| Event       | Detail                                                                                                        | Description                                              |
+| ----------- | ------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------- |
+| `cv-input`  | `{value: string \| null, inputValue: string, activeId: string \| null, open: boolean, selectedIds: string[]}` | Fires when combobox interaction changes observable state |
+| `cv-change` | `{value: string \| null, inputValue: string, activeId: string \| null, open: boolean, selectedIds: string[]}` | Fires when selected option(s) change                     |
+| `cv-clear`  | `{}`                                                                                                          | Fires when the clear button is clicked                   |
 
 In multi mode, `cv-input` fires on each toggle and `cv-change` fires on each toggle (since every toggle changes selection). The `selectedIds` array in the detail reflects all currently selected option ids.
 
@@ -179,30 +179,30 @@ In multi mode, `cv-input` fires on each toggle and `cv-change` fires on each tog
 
 ### Attribute to Headless (UIKit -> Headless)
 
-| UIKit Property | Direction | Headless Binding |
-|----------------|-----------|------------------|
-| `value` | attr -> action | `actions.select(id)` / `actions.clearSelection()`. In multi mode, parsed as space-delimited ids. |
-| `input-value` | attr -> action | `actions.setInputValue(value)` |
-| `open` | attr -> action | `actions.open()` / `actions.close()` |
-| `type` | attr -> option | passed as `type` in `createCombobox(options)` |
-| `multiple` | attr -> option | passed as `multiple` in `createCombobox(options)` |
-| `clearable` | attr -> option | passed as `clearable` in `createCombobox(options)` |
-| `close-on-select` | attr -> option | passed as `closeOnSelect` in `createCombobox(options)` |
-| `match-mode` | attr -> option | passed as `matchMode` in `createCombobox(options)` |
-| `aria-label` | attr -> option | passed as `ariaLabel` in `createCombobox(options)` |
+| UIKit Property    | Direction      | Headless Binding                                                                                 |
+| ----------------- | -------------- | ------------------------------------------------------------------------------------------------ |
+| `value`           | attr -> action | `actions.select(id)` / `actions.clearSelection()`. In multi mode, parsed as space-delimited ids. |
+| `input-value`     | attr -> action | `actions.setInputValue(value)`                                                                   |
+| `open`            | attr -> action | `actions.open()` / `actions.close()`                                                             |
+| `type`            | attr -> option | passed as `type` in `createCombobox(options)`                                                    |
+| `multiple`        | attr -> option | passed as `multiple` in `createCombobox(options)`                                                |
+| `clearable`       | attr -> option | passed as `clearable` in `createCombobox(options)`                                               |
+| `close-on-select` | attr -> option | passed as `closeOnSelect` in `createCombobox(options)`                                           |
+| `match-mode`      | attr -> option | passed as `matchMode` in `createCombobox(options)`                                               |
+| `aria-label`      | attr -> option | passed as `ariaLabel` in `createCombobox(options)`                                               |
 
 ### Headless to DOM (Headless -> UIKit)
 
-| Headless State | Direction | DOM Reflection |
-|----------------|-----------|----------------|
-| `state.selectedId()` | state -> attr | `[value]` host attribute (single mode) |
-| `state.selectedIds()` | state -> attr | `[value]` host attribute as space-delimited string (multi mode) |
-| `state.inputValue()` | state -> attr | `[input-value]` host attribute |
-| `state.isOpen()` | state -> attr | `[open]` host attribute |
-| `state.activeId()` | state -> render | `aria-activedescendant` on input/trigger |
-| `state.hasSelection()` | state -> render | clear button visibility |
-| `state.type()` | state -> render | determines input vs trigger rendering |
-| `state.multiple()` | state -> render | determines tag rendering |
+| Headless State         | Direction       | DOM Reflection                                                  |
+| ---------------------- | --------------- | --------------------------------------------------------------- |
+| `state.selectedId()`   | state -> attr   | `[value]` host attribute (single mode)                          |
+| `state.selectedIds()`  | state -> attr   | `[value]` host attribute as space-delimited string (multi mode) |
+| `state.inputValue()`   | state -> attr   | `[input-value]` host attribute                                  |
+| `state.isOpen()`       | state -> attr   | `[open]` host attribute                                         |
+| `state.activeId()`     | state -> render | `aria-activedescendant` on input/trigger                        |
+| `state.hasSelection()` | state -> render | clear button visibility                                         |
+| `state.type()`         | state -> render | determines input vs trigger rendering                           |
+| `state.multiple()`     | state -> render | determines tag rendering                                        |
 
 ### Contract Spreading
 
@@ -369,33 +369,33 @@ Individual option within a combobox. The parent `cv-combobox` manages all ARIA a
 
 #### Attributes
 
-| Attribute | Type | Default | Description |
-|-----------|------|---------|-------------|
-| `value` | String | `""` | Unique identifier for this option. Auto-generated as `option-{n}` if omitted. |
-| `disabled` | Boolean | `false` | Whether the option is disabled |
-| `selected` | Boolean | `false` | Whether the option is selected. Managed by parent. |
-| `active` | Boolean | `false` | Whether the option is the active (highlighted) option. Managed by parent. |
+| Attribute  | Type    | Default | Description                                                                   |
+| ---------- | ------- | ------- | ----------------------------------------------------------------------------- |
+| `value`    | String  | `""`    | Unique identifier for this option. Auto-generated as `option-{n}` if omitted. |
+| `disabled` | Boolean | `false` | Whether the option is disabled                                                |
+| `selected` | Boolean | `false` | Whether the option is selected. Managed by parent.                            |
+| `active`   | Boolean | `false` | Whether the option is the active (highlighted) option. Managed by parent.     |
 
 #### Slots
 
-| Slot | Description |
-|------|-------------|
+| Slot        | Description          |
+| ----------- | -------------------- |
 | `(default)` | Option label content |
 
 #### CSS Parts
 
-| Part | Element | Description |
-|------|---------|-------------|
+| Part   | Element | Description                         |
+| ------ | ------- | ----------------------------------- |
 | `base` | `<div>` | Root wrapper for the option content |
 
 #### Visual States
 
-| Host selector | Description |
-|---------------|-------------|
-| `:host([selected])` | Option is currently selected |
+| Host selector                                     | Description                               |
+| ------------------------------------------------- | ----------------------------------------- |
+| `:host([selected])`                               | Option is currently selected              |
 | `:host([active])` / `:host([data-active="true"])` | Option is the active (highlighted) option |
-| `:host([disabled])` | Option is disabled |
-| `:host([hidden])` | Option is filtered out or popup is closed |
+| `:host([disabled])`                               | Option is disabled                        |
+| `:host([hidden])`                                 | Option is filtered out or popup is closed |
 
 ### cv-combobox-group
 
@@ -410,18 +410,18 @@ Groups related options under a labeled header. Must be a direct child of `cv-com
 
 #### Attributes
 
-| Attribute | Type | Default | Description |
-|-----------|------|---------|-------------|
-| `label` | String | `""` | Visible group header text. Also used for `aria-labelledby` linkage via headless `getGroupLabelProps`. |
+| Attribute | Type   | Default | Description                                                                                           |
+| --------- | ------ | ------- | ----------------------------------------------------------------------------------------------------- |
+| `label`   | String | `""`    | Visible group header text. Also used for `aria-labelledby` linkage via headless `getGroupLabelProps`. |
 
 #### Slots
 
-| Slot | Description |
-|------|-------------|
+| Slot        | Description                                 |
+| ----------- | ------------------------------------------- |
 | `(default)` | One or more `<cv-combobox-option>` children |
 
 #### Visual States
 
-| Host selector | Description |
-|---------------|-------------|
+| Host selector     | Description                                |
+| ----------------- | ------------------------------------------ |
 | `:host([hidden])` | All options in this group are filtered out |

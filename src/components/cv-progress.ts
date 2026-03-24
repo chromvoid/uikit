@@ -1,4 +1,4 @@
-import {createProgress, type ProgressModel} from '@chromvoid/headless-ui'
+import {createProgress, type ProgressModel} from '@chromvoid/headless-ui/progress'
 import {css, html, nothing} from 'lit'
 import type {PropertyValues} from 'lit'
 
@@ -64,7 +64,8 @@ export class CVProgress extends ReatomLitElement {
         background: linear-gradient(
           90deg,
           var(--cv-progress-indicator-color, var(--cv-color-primary, #65d7ff)) 0%,
-          color-mix(in oklab, var(--cv-progress-indicator-color, var(--cv-color-primary, #65d7ff)) 70%, white) 100%
+          color-mix(in oklab, var(--cv-progress-indicator-color, var(--cv-color-primary, #65d7ff)) 70%, white)
+            100%
         );
         transition: inline-size var(--cv-duration-normal, 220ms) var(--cv-easing-standard, ease);
         position: relative;

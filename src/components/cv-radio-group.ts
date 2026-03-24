@@ -1,4 +1,4 @@
-import {createRadioGroup, type RadioGroupModel} from '@chromvoid/headless-ui'
+import {createRadioGroup, type RadioGroupModel} from '@chromvoid/headless-ui/radio-group'
 import {css, html, nothing} from 'lit'
 import type {PropertyValues} from 'lit'
 
@@ -150,7 +150,9 @@ export class CVRadioGroup extends FormAssociatedReatomElement {
         return
       }
 
-      const enabledIds = new Set(this.radioRecords.filter((record) => !record.disabled).map((record) => record.id))
+      const enabledIds = new Set(
+        this.radioRecords.filter((record) => !record.disabled).map((record) => record.id),
+      )
       if (!enabledIds.has(next)) {
         this.syncFormAssociatedState()
         return
@@ -225,8 +227,8 @@ export class CVRadioGroup extends FormAssociatedReatomElement {
     const radios = this.getRadioElements()
 
     const configuredValue = this.resolveConfiguredValue(radios)
-    const previousValue = preserveSelection ? this.model?.state.value() ?? configuredValue : configuredValue
-    const previousActive = preserveSelection ? this.model?.state.activeId() ?? previousValue : previousValue
+    const previousValue = preserveSelection ? (this.model?.state.value() ?? configuredValue) : configuredValue
+    const previousActive = preserveSelection ? (this.model?.state.activeId() ?? previousValue) : previousValue
 
     this.detachRadioListeners()
 
@@ -244,7 +246,9 @@ export class CVRadioGroup extends FormAssociatedReatomElement {
       }
     })
 
-    const enabledIds = new Set(this.radioRecords.filter((record) => !record.disabled).map((record) => record.id))
+    const enabledIds = new Set(
+      this.radioRecords.filter((record) => !record.disabled).map((record) => record.id),
+    )
     const initialValue = previousValue && enabledIds.has(previousValue) ? previousValue : null
     const initialActiveId =
       previousActive && enabledIds.has(previousActive)

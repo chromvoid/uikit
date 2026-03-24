@@ -73,10 +73,7 @@ export class CVSidebarItem extends LitElement {
       :host([active]) [part='base'] {
         background: var(--cv-sidebar-item-background-active, transparent);
         color: var(--cv-sidebar-item-color-active, var(--cv-color-primary, #65d7ff));
-        border-inline-start-color: var(
-          --cv-sidebar-item-indicator-color,
-          var(--cv-color-primary, #65d7ff)
-        );
+        border-inline-start-color: var(--cv-sidebar-item-indicator-color, var(--cv-color-primary, #65d7ff));
       }
 
       :host([disabled]) [part='base'] {
@@ -121,7 +118,6 @@ export class CVSidebarItem extends LitElement {
       :host([data-sidebar-collapsed]:not([data-sidebar-mobile])) [part='suffix'] {
         display: none;
       }
-
     `,
   ]
 

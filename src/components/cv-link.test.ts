@@ -18,8 +18,7 @@ const createLink = async (attrs?: Partial<CVLink>) => {
   return el
 }
 
-const getBase = (el: CVLink) =>
-  el.shadowRoot!.querySelector('[part="base"]') as HTMLAnchorElement
+const getBase = (el: CVLink) => el.shadowRoot!.querySelector('[part="base"]') as HTMLAnchorElement
 
 afterEach(() => {
   document.body.innerHTML = ''

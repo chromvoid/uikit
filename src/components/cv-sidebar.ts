@@ -1,4 +1,4 @@
-import {createSidebar, type SidebarModel} from '@chromvoid/headless-ui'
+import {createSidebar, type SidebarModel} from '@chromvoid/headless-ui/sidebar'
 import {css, html, nothing} from 'lit'
 import type {PropertyValues} from 'lit'
 
@@ -170,9 +170,8 @@ export class CVSidebar extends ReatomLitElement {
         block-size: 100%;
         background: var(--cv-sidebar-background, var(--cv-color-surface, #141923));
         border-inline-end: 1px solid var(--cv-sidebar-border-color, var(--cv-color-border, #2a3245));
-        transition:
-          inline-size var(--cv-sidebar-transition-duration, var(--cv-duration-normal, 200ms))
-            var(--cv-sidebar-transition-easing, var(--cv-easing-standard, ease));
+        transition: inline-size var(--cv-sidebar-transition-duration, var(--cv-duration-normal, 200ms))
+          var(--cv-sidebar-transition-easing, var(--cv-easing-standard, ease));
         overflow: hidden;
       }
 
@@ -389,21 +388,15 @@ export class CVSidebar extends ReatomLitElement {
   }
 
   private dispatchInput(detail: CVSidebarDetail): void {
-    this.dispatchEvent(
-      new CustomEvent('cv-input', {detail, bubbles: true, composed: true}),
-    )
+    this.dispatchEvent(new CustomEvent('cv-input', {detail, bubbles: true, composed: true}))
   }
 
   private dispatchChange(detail: CVSidebarDetail): void {
-    this.dispatchEvent(
-      new CustomEvent('cv-change', {detail, bubbles: true, composed: true}),
-    )
+    this.dispatchEvent(new CustomEvent('cv-change', {detail, bubbles: true, composed: true}))
   }
 
   private dispatchLifecycleEvent(name: string): void {
-    this.dispatchEvent(
-      new CustomEvent(name, {bubbles: true, composed: true}),
-    )
+    this.dispatchEvent(new CustomEvent(name, {bubbles: true, composed: true}))
   }
 
   private dispatchDesktopLifecycle(expanded: boolean): void {
@@ -710,19 +703,15 @@ export class CVSidebar extends ReatomLitElement {
     const viewportBottom = window.innerHeight
     const effectiveHeight = Math.max(1, viewportBottom - viewportTop)
     const effectiveCenter = viewportTop + effectiveHeight / 2
-    let bestCandidate:
-      | {
-          id: string
-          score: number
-          visiblePx: number
-        }
-      | null = null
-    let currentCandidate:
-      | {
-          score: number
-          visiblePx: number
-        }
-      | null = null
+    let bestCandidate: {
+      id: string
+      score: number
+      visiblePx: number
+    } | null = null
+    let currentCandidate: {
+      score: number
+      visiblePx: number
+    } | null = null
 
     for (const binding of this.scrollspyBindings) {
       const rect = binding.target.getBoundingClientRect()
@@ -742,8 +731,7 @@ export class CVSidebar extends ReatomLitElement {
         1,
       )
       const score =
-        visibleRatio * VIEWPORT_DOMINANT_VISIBLE_WEIGHT +
-        centerScore * VIEWPORT_DOMINANT_CENTER_WEIGHT
+        visibleRatio * VIEWPORT_DOMINANT_VISIBLE_WEIGHT + centerScore * VIEWPORT_DOMINANT_CENTER_WEIGHT
 
       if (!bestCandidate || score > bestCandidate.score) {
         bestCandidate = {id: binding.id, score, visiblePx}
@@ -785,10 +773,7 @@ export class CVSidebar extends ReatomLitElement {
     return this.scrollspyStrategy === 'viewport-dominant' ? 'viewport-dominant' : 'top-anchor'
   }
 
-  private scrollBindingTarget(
-    binding: ScrollspyBinding,
-    strategy: CVSidebarScrollspyStrategy,
-  ): void {
+  private scrollBindingTarget(binding: ScrollspyBinding, strategy: CVSidebarScrollspyStrategy): void {
     const behavior = this.scrollspySmoothScroll ? 'smooth' : 'auto'
     if (strategy !== 'viewport-dominant' || typeof window === 'undefined') {
       binding.target.scrollIntoView({behavior, block: 'start'})

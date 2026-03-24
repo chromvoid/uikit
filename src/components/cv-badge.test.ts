@@ -18,8 +18,7 @@ const createBadge = async (attrs?: Partial<CVBadge>) => {
   return el
 }
 
-const getBase = (el: CVBadge) =>
-  el.shadowRoot!.querySelector('[part="base"]') as HTMLElement
+const getBase = (el: CVBadge) => el.shadowRoot!.querySelector('[part="base"]') as HTMLElement
 
 afterEach(() => {
   document.body.innerHTML = ''
@@ -235,13 +234,10 @@ describe('cv-badge', () => {
   // --- Size ---
 
   describe('size', () => {
-    it.each(['small', 'medium', 'large'] as const)(
-      'size="%s" reflects to host attribute',
-      async (s) => {
-        const badge = await createBadge({size: s})
-        expect(badge.getAttribute('size')).toBe(s)
-      },
-    )
+    it.each(['small', 'medium', 'large'] as const)('size="%s" reflects to host attribute', async (s) => {
+      const badge = await createBadge({size: s})
+      expect(badge.getAttribute('size')).toBe(s)
+    })
 
     it('changing size at runtime updates host attribute', async () => {
       const badge = await createBadge()

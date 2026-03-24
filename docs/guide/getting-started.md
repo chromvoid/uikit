@@ -6,19 +6,13 @@
 npm i @chromvoid/uikit lit
 ```
 
-For monorepo usage:
-
-```bash
-npm i -w packages/uikit
-```
-
 ## Register components
 
-`@chromvoid/uikit` exports a single registration function for all web components.
+`@chromvoid/uikit/register` exports the bulk registration entry for all web components.
 
 ```ts
-import {registerUikit} from '@chromvoid/uikit'
-import '@chromvoid/uikit/src/theme/tokens.css'
+import {registerUikit} from '@chromvoid/uikit/register'
+import '@chromvoid/uikit/theme/tokens.css'
 
 registerUikit()
 ```
@@ -34,6 +28,6 @@ registerUikit()
 ## Local docs and demo
 
 ```bash
-npm run docs:dev -w packages/uikit
-npm run demo -w packages/uikit
+npm run docs:dev
+npm run demo
 ```

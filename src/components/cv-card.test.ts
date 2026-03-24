@@ -18,23 +18,17 @@ const createCard = async (attrs?: Partial<CVCard>) => {
   return el
 }
 
-const getBase = (el: CVCard) =>
-  el.shadowRoot!.querySelector('[part="base"]') as HTMLElement
+const getBase = (el: CVCard) => el.shadowRoot!.querySelector('[part="base"]') as HTMLElement
 
-const getHeader = (el: CVCard) =>
-  el.shadowRoot!.querySelector('[part="header"]') as HTMLElement
+const getHeader = (el: CVCard) => el.shadowRoot!.querySelector('[part="header"]') as HTMLElement
 
-const getBody = (el: CVCard) =>
-  el.shadowRoot!.querySelector('[part="body"]') as HTMLElement
+const getBody = (el: CVCard) => el.shadowRoot!.querySelector('[part="body"]') as HTMLElement
 
-const getFooter = (el: CVCard) =>
-  el.shadowRoot!.querySelector('[part="footer"]') as HTMLElement
+const getFooter = (el: CVCard) => el.shadowRoot!.querySelector('[part="footer"]') as HTMLElement
 
-const getImage = (el: CVCard) =>
-  el.shadowRoot!.querySelector('[part="image"]') as HTMLElement
+const getImage = (el: CVCard) => el.shadowRoot!.querySelector('[part="image"]') as HTMLElement
 
-const getIndicator = (el: CVCard) =>
-  el.shadowRoot!.querySelector('[part="indicator"]') as HTMLElement
+const getIndicator = (el: CVCard) => el.shadowRoot!.querySelector('[part="indicator"]') as HTMLElement
 
 afterEach(() => {
   document.body.innerHTML = ''

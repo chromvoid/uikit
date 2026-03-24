@@ -74,7 +74,18 @@ async function mountCarousel(
   ) as HTMLButtonElement[]
   const slides = Array.from(carousel.querySelectorAll('cv-carousel-slide')) as CVCarouselSlide[]
 
-  return {carousel, root, controls, slidesContainer, indicatorsContainer, prev, next, playPause, indicators, slides}
+  return {
+    carousel,
+    root,
+    controls,
+    slidesContainer,
+    indicatorsContainer,
+    prev,
+    next,
+    playPause,
+    indicators,
+    slides,
+  }
 }
 
 afterEach(() => {

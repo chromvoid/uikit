@@ -1,5 +1,5 @@
+import type {TreegridCellRole} from '@chromvoid/headless-ui/treegrid'
 import {LitElement, css, html} from 'lit'
-import type {TreegridCellRole} from '@chromvoid/headless-ui'
 
 export class CVTreegridColumn extends LitElement {
   static elementName = 'cv-treegrid-column'

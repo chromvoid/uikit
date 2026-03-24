@@ -18,8 +18,7 @@ const createCopyButton = async (attrs?: Partial<CVCopyButton>) => {
   return el
 }
 
-const getBase = (el: CVCopyButton) =>
-  el.shadowRoot!.querySelector('[part="base"]') as HTMLElement
+const getBase = (el: CVCopyButton) => el.shadowRoot!.querySelector('[part="base"]') as HTMLElement
 
 afterEach(() => {
   document.body.innerHTML = ''
@@ -277,9 +276,10 @@ describe('cv-copy-button', () => {
       let resolveClip!: () => void
       const clip = {
         writeText: vi.fn().mockImplementation(
-          () => new Promise<void>((resolve) => {
-            resolveClip = resolve
-          }),
+          () =>
+            new Promise<void>((resolve) => {
+              resolveClip = resolve
+            }),
         ),
       }
       const el = await createCopyButton({value: 'test'})
@@ -324,9 +324,7 @@ describe('cv-copy-button', () => {
       const el = await createCopyButton({value: 'enter-test'})
       ;(el as any)._clipboard = clip
 
-      getBase(el).dispatchEvent(
-        new KeyboardEvent('keydown', {key: 'Enter', bubbles: true}),
-      )
+      getBase(el).dispatchEvent(new KeyboardEvent('keydown', {key: 'Enter', bubbles: true}))
       await vi.advanceTimersByTimeAsync(0)
       await settle(el)
 
@@ -339,16 +337,12 @@ describe('cv-copy-button', () => {
       ;(el as any)._clipboard = clip
 
       // keydown should NOT trigger copy
-      getBase(el).dispatchEvent(
-        new KeyboardEvent('keydown', {key: ' ', bubbles: true}),
-      )
+      getBase(el).dispatchEvent(new KeyboardEvent('keydown', {key: ' ', bubbles: true}))
       await vi.advanceTimersByTimeAsync(0)
       expect(clip.writeText).not.toHaveBeenCalled()
 
       // keyup should trigger copy
-      getBase(el).dispatchEvent(
-        new KeyboardEvent('keyup', {key: ' ', bubbles: true}),
-      )
+      getBase(el).dispatchEvent(new KeyboardEvent('keyup', {key: ' ', bubbles: true}))
       await vi.advanceTimersByTimeAsync(0)
       await settle(el)
 
@@ -386,9 +380,7 @@ describe('cv-copy-button', () => {
       const el = await createCopyButton({value: 'blocked', disabled: true})
       ;(el as any)._clipboard = clip
 
-      getBase(el).dispatchEvent(
-        new KeyboardEvent('keydown', {key: 'Enter', bubbles: true}),
-      )
+      getBase(el).dispatchEvent(new KeyboardEvent('keydown', {key: 'Enter', bubbles: true}))
       await vi.advanceTimersByTimeAsync(0)
       await settle(el)
 
@@ -400,12 +392,8 @@ describe('cv-copy-button', () => {
       const el = await createCopyButton({value: 'blocked', disabled: true})
       ;(el as any)._clipboard = clip
 
-      getBase(el).dispatchEvent(
-        new KeyboardEvent('keydown', {key: ' ', bubbles: true}),
-      )
-      getBase(el).dispatchEvent(
-        new KeyboardEvent('keyup', {key: ' ', bubbles: true}),
-      )
+      getBase(el).dispatchEvent(new KeyboardEvent('keydown', {key: ' ', bubbles: true}))
+      getBase(el).dispatchEvent(new KeyboardEvent('keyup', {key: ' ', bubbles: true}))
       await vi.advanceTimersByTimeAsync(0)
       await settle(el)
 

@@ -73,6 +73,8 @@ export class CVSelectOption extends LitElement {
   }
 
   protected override render() {
-    return html`<div class="option" part="base"><slot></slot></div>`
+    return html`
+      <div class="option" part="base"><slot></slot></div>
+    `
   }
 }

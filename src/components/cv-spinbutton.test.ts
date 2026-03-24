@@ -1,6 +1,5 @@
-import {afterEach, describe, expect, it} from 'vitest'
-
 import type {SpinbuttonModel} from '@chromvoid/headless-ui'
+import {afterEach, describe, expect, it} from 'vitest'
 
 import {CVSpinbutton} from './cv-spinbutton'
 

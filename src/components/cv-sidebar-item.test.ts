@@ -68,6 +68,11 @@ describe('cv-sidebar-item', () => {
 
     expect(el.textContent).toContain('Threats')
     const slot = el.shadowRoot!.querySelector('[part="label"] slot') as HTMLSlotElement | null
-    expect(slot?.assignedNodes().map((node) => node.textContent).join('')).toContain('Threats')
+    expect(
+      slot
+        ?.assignedNodes()
+        .map((node) => node.textContent)
+        .join(''),
+    ).toContain('Threats')
   })
 })

@@ -18,17 +18,21 @@ const createPopover = async (attrs?: Partial<CVPopover>) => {
   return el
 }
 
-const getBase = (el: CVPopover) =>
-  el.shadowRoot!.querySelector('[part="base"]') as HTMLElement
+const getBase = (el: CVPopover) => el.shadowRoot!.querySelector('[part="base"]') as HTMLElement
 
-const getTrigger = (el: CVPopover) =>
-  el.shadowRoot!.querySelector('[part="trigger"]') as HTMLButtonElement
+const getTrigger = (el: CVPopover) => el.shadowRoot!.querySelector('[part="trigger"]') as HTMLButtonElement
 
-const getContent = (el: CVPopover) =>
-  el.shadowRoot!.querySelector('[part="content"]') as HTMLElement
+const getContent = (el: CVPopover) => el.shadowRoot!.querySelector('[part="content"]') as HTMLElement
 
-const getArrow = (el: CVPopover) =>
-  el.shadowRoot!.querySelector('[part="arrow"]') as HTMLElement | null
+const getArrow = (el: CVPopover) => el.shadowRoot!.querySelector('[part="arrow"]') as HTMLElement | null
+
+type PopoverToggleDetail = {
+  open: boolean
+  openedBy: string | null
+  dismissIntent: string | null
+}
+
+const getToggleDetail = (event: Event) => (event as unknown as CustomEvent<PopoverToggleDetail>).detail
 
 afterEach(() => {
   document.body.innerHTML = ''
@@ -159,7 +163,7 @@ describe('cv-popover', () => {
       let detail: unknown = null
 
       el.addEventListener('beforetoggle', (e) => {
-        detail = (e as CustomEvent).detail
+        detail = getToggleDetail(e)
       })
 
       trigger.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
@@ -178,7 +182,7 @@ describe('cv-popover', () => {
       let detail: unknown = null
 
       el.addEventListener('toggle', (e) => {
-        detail = (e as CustomEvent).detail
+        detail = getToggleDetail(e)
       })
 
       trigger.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
@@ -210,7 +214,7 @@ describe('cv-popover', () => {
       const trigger = getTrigger(el)
 
       el.addEventListener('beforetoggle', (e) => {
-        if ((e as CustomEvent).detail.open) {
+        if (getToggleDetail(e).open) {
           e.preventDefault()
         }
       })
@@ -242,7 +246,7 @@ describe('cv-popover', () => {
       let detail: unknown = null
 
       el.addEventListener('toggle', (e) => {
-        detail = (e as CustomEvent).detail
+        detail = getToggleDetail(e)
       })
 
       content.dispatchEvent(new KeyboardEvent('keydown', {key: 'Escape', bubbles: true}))
@@ -261,7 +265,7 @@ describe('cv-popover', () => {
       let detail: unknown = null
 
       el.addEventListener('toggle', (e) => {
-        detail = (e as CustomEvent).detail
+        detail = getToggleDetail(e)
       })
 
       trigger.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
@@ -276,7 +280,7 @@ describe('cv-popover', () => {
       let detail: unknown = null
 
       el.addEventListener('toggle', (e) => {
-        detail = (e as CustomEvent).detail
+        detail = getToggleDetail(e)
       })
 
       trigger.dispatchEvent(new KeyboardEvent('keydown', {key: 'Enter', bubbles: true}))
@@ -290,7 +294,7 @@ describe('cv-popover', () => {
       let detail: unknown = null
 
       el.addEventListener('toggle', (e) => {
-        detail = (e as CustomEvent).detail
+        detail = getToggleDetail(e)
       })
 
       document.body.dispatchEvent(new MouseEvent('pointerdown', {bubbles: true}))
@@ -304,7 +308,7 @@ describe('cv-popover', () => {
       let detail: unknown = null
 
       el.addEventListener('toggle', (e) => {
-        detail = (e as CustomEvent).detail
+        detail = getToggleDetail(e)
       })
 
       document.body.dispatchEvent(new FocusEvent('focusin', {bubbles: true}))

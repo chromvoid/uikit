@@ -1,4 +1,5 @@
-import {createSelect, type SelectModel, type ListboxSelectionMode} from '@chromvoid/headless-ui'
+import {type ListboxSelectionMode} from '@chromvoid/headless-ui/listbox'
+import {createSelect, type SelectModel} from '@chromvoid/headless-ui/select'
 import {css, html, nothing} from 'lit'
 import type {PropertyValues} from 'lit'
 
@@ -649,12 +650,16 @@ export class CVSelect extends FormAssociatedReatomElement {
 
   protected override onFormStateRestore(state: string | File | FormData | null): void {
     if (state instanceof FormData) {
-      this.restoreSelectedIds(state.getAll(this.name).filter((value): value is string => typeof value === 'string'))
+      this.restoreSelectedIds(
+        state.getAll(this.name).filter((value): value is string => typeof value === 'string'),
+      )
       return
     }
 
     if (typeof state === 'string') {
-      this.restoreSelectedIds(this.selectionMode === 'multiple' ? state.split(/\s+/).filter(Boolean) : [state])
+      this.restoreSelectedIds(
+        this.selectionMode === 'multiple' ? state.split(/\s+/).filter(Boolean) : [state],
+      )
       return
     }
 
@@ -819,13 +824,15 @@ export class CVSelect extends FormAssociatedReatomElement {
           @keydown=${this.handleTriggerKeyDown}
         >
           <slot name="trigger">${this.getValueText()}</slot>
-          ${showClear
-            ? html`
+          ${
+            showClear
+              ? html`
                 <button part="clear-button" aria-hidden="true" tabindex="-1" @click=${this.handleClearClick}>
                   ✕
                 </button>
               `
-            : nothing}
+              : nothing
+          }
           <span part="chevron" aria-hidden="true">▾</span>
         </div>
 

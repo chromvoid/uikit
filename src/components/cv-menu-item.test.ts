@@ -33,11 +33,13 @@ const createItemWithSlots = async (innerHTML: string, attrs?: Partial<CVMenuItem
 /**
  * Mount an item inside a cv-menu so it gets ARIA attributes from headless contracts.
  */
-async function mountItemInMenu(params: {
-  itemAttrs?: string
-  itemText?: string
-  open?: boolean
-} = {}) {
+async function mountItemInMenu(
+  params: {
+    itemAttrs?: string
+    itemText?: string
+    open?: boolean
+  } = {},
+) {
   const menu = document.createElement('cv-menu') as CVMenu
   if (params.open !== false) {
     menu.open = true
@@ -57,8 +59,7 @@ async function mountItemInMenu(params: {
   return {menu, item}
 }
 
-const getBase = (el: CVMenuItem) =>
-  el.shadowRoot!.querySelector('[part="base"]') as HTMLElement
+const getBase = (el: CVMenuItem) => el.shadowRoot!.querySelector('[part="base"]') as HTMLElement
 
 afterEach(() => {
   document.body.innerHTML = ''
@@ -110,9 +111,7 @@ describe('cv-menu-item', () => {
     })
 
     it('prefix slot is available for content', async () => {
-      const item = await createItemWithSlots(
-        '<span slot="prefix">icon</span>Label',
-      )
+      const item = await createItemWithSlots('<span slot="prefix">icon</span>Label')
       const prefixSlot = item.shadowRoot!.querySelector('slot[name="prefix"]')
       // prefix slot may not exist yet in current implementation (RED state expected)
       // This test defines the expected behavior from the spec
@@ -120,9 +119,7 @@ describe('cv-menu-item', () => {
     })
 
     it('suffix slot is available for content', async () => {
-      const item = await createItemWithSlots(
-        'Label<span slot="suffix">Ctrl+X</span>',
-      )
+      const item = await createItemWithSlots('Label<span slot="suffix">Ctrl+X</span>')
       const suffixSlot = item.shadowRoot!.querySelector('slot[name="suffix"]')
       // suffix slot may not exist yet in current implementation (RED state expected)
       expect(suffixSlot).not.toBeNull()
@@ -195,7 +192,9 @@ describe('cv-menu-item', () => {
     it('default type is "normal"', async () => {
       const item = await createItem()
       // type may default to "normal" or "" depending on implementation
-      expect((item as any).type === 'normal' || (item as any).type === undefined || (item as any).type === '').toBe(true)
+      expect(
+        (item as any).type === 'normal' || (item as any).type === undefined || (item as any).type === '',
+      ).toBe(true)
     })
 
     it('checked property defaults to false', async () => {

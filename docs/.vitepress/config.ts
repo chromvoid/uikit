@@ -1,4 +1,5 @@
 import {defineConfig} from 'vitepress'
+
 import {liveDemoPlugin} from './markdown/liveDemo'
 
 const description =

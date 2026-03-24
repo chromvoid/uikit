@@ -1,8 +1,9 @@
+import {registerUikit} from '@chromvoid/uikit/register'
 import type {Theme} from 'vitepress'
+
+import '@chromvoid/uikit/theme/tokens.css'
 import DefaultTheme from 'vitepress/theme'
 
-import '../../../src/theme/tokens.css'
-import {registerUikit} from '../../../src/index'
 import './custom.css'
 import LiveDemo from './components/LiveDemo.vue'
 

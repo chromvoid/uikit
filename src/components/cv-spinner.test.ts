@@ -18,8 +18,7 @@ const createSpinner = async (attrs?: Partial<CVSpinner>) => {
   return el
 }
 
-const getBase = (el: CVSpinner) =>
-  el.shadowRoot!.querySelector('[part="base"]') as SVGElement
+const getBase = (el: CVSpinner) => el.shadowRoot!.querySelector('[part="base"]') as SVGElement
 
 afterEach(() => {
   document.body.innerHTML = ''

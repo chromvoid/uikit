@@ -20,8 +20,7 @@ const createProgress = async (attrs?: Partial<CVProgress>) => {
   return el
 }
 
-const getBase = (el: CVProgress) =>
-  el.shadowRoot!.querySelector('[part="base"]') as HTMLElement
+const getBase = (el: CVProgress) => el.shadowRoot!.querySelector('[part="base"]') as HTMLElement
 
 afterEach(() => {
   document.body.innerHTML = ''

@@ -2,7 +2,7 @@
 
 Bidirectional infinite-scrolling feed container that dynamically loads articles as the user scrolls, with APG-compliant keyboard navigation and focus management.
 
-**Headless:** [`createFeed`](../../../headless/specs/components/feed.md)
+**Headless:** [`createFeed`](https://github.com/chromvoid/headless-ui/blob/main/specs/components/feed.md)
 
 ## Cross-Spec Consistency
 
@@ -28,52 +28,52 @@ This document is the UIKit surface contract for Feed.
 
 ## Attributes
 
-| Attribute | Type | Default | Description |
-|-----------|------|---------|-------------|
-| `label` | String | `""` | Accessible name for the feed (`aria-label`) |
-| `busy` | Boolean | `false` | Reflects `aria-busy` during load operations |
-| `loading` | Boolean | `false` | Shows loading indicator |
-| `empty` | Boolean | `false` | Indicates no articles are loaded (read-only, reflected from headless) |
-| `error` | Boolean | `false` | Indicates an error state is present (read-only, reflected from headless) |
+| Attribute | Type    | Default | Description                                                              |
+| --------- | ------- | ------- | ------------------------------------------------------------------------ |
+| `label`   | String  | `""`    | Accessible name for the feed (`aria-label`)                              |
+| `busy`    | Boolean | `false` | Reflects `aria-busy` during load operations                              |
+| `loading` | Boolean | `false` | Shows loading indicator                                                  |
+| `empty`   | Boolean | `false` | Indicates no articles are loaded (read-only, reflected from headless)    |
+| `error`   | Boolean | `false` | Indicates an error state is present (read-only, reflected from headless) |
 
 ## Slots
 
-| Slot | Description |
-|------|-------------|
-| `(default)` | One or more `<cv-feed-article>` children |
-| `empty` | Content shown when the feed has no articles |
-| `error` | Content shown when the feed is in an error state |
-| `loading` | Custom loading indicator content |
+| Slot        | Description                                      |
+| ----------- | ------------------------------------------------ |
+| `(default)` | One or more `<cv-feed-article>` children         |
+| `empty`     | Content shown when the feed has no articles      |
+| `error`     | Content shown when the feed is in an error state |
+| `loading`   | Custom loading indicator content                 |
 
 ## CSS Parts
 
-| Part | Element | Description |
-|------|---------|-------------|
-| `base` | `<div>` | Root wrapper with `role="feed"` |
-| `sentinel-top` | `<div>` | Top intersection sentinel for loading newer content |
-| `sentinel-bottom` | `<div>` | Bottom intersection sentinel for loading more content |
-| `empty` | `<slot>` | Empty state slot wrapper |
-| `error` | `<slot>` | Error state slot wrapper |
-| `loading-indicator` | `<div>` | Loading indicator wrapper |
+| Part                | Element  | Description                                           |
+| ------------------- | -------- | ----------------------------------------------------- |
+| `base`              | `<div>`  | Root wrapper with `role="feed"`                       |
+| `sentinel-top`      | `<div>`  | Top intersection sentinel for loading newer content   |
+| `sentinel-bottom`   | `<div>`  | Bottom intersection sentinel for loading more content |
+| `empty`             | `<slot>` | Empty state slot wrapper                              |
+| `error`             | `<slot>` | Error state slot wrapper                              |
+| `loading-indicator` | `<div>`  | Loading indicator wrapper                             |
 
 ## CSS Custom Properties
 
-| Property | Default | Description |
-|----------|---------|-------------|
-| `--cv-feed-gap` | `var(--cv-space-3, 12px)` | Spacing between articles |
-| `--cv-feed-padding-block` | `var(--cv-space-3, 12px)` | Vertical padding of the feed container |
-| `--cv-feed-padding-inline` | `0` | Horizontal padding of the feed container |
-| `--cv-feed-sentinel-height` | `1px` | Height of sentinel elements (should remain minimal) |
-| `--cv-feed-loading-min-height` | `48px` | Minimum height of the loading indicator area |
+| Property                       | Default                   | Description                                         |
+| ------------------------------ | ------------------------- | --------------------------------------------------- |
+| `--cv-feed-gap`                | `var(--cv-space-3, 12px)` | Spacing between articles                            |
+| `--cv-feed-padding-block`      | `var(--cv-space-3, 12px)` | Vertical padding of the feed container              |
+| `--cv-feed-padding-inline`     | `0`                       | Horizontal padding of the feed container            |
+| `--cv-feed-sentinel-height`    | `1px`                     | Height of sentinel elements (should remain minimal) |
+| `--cv-feed-loading-min-height` | `48px`                    | Minimum height of the loading indicator area        |
 
 ## Visual States
 
-| Host selector | Description |
-|---------------|-------------|
-| `:host([busy])` | Feed is busy loading content; `aria-busy="true"` on the feed root |
-| `:host([loading])` | Loading indicator is visible |
-| `:host([empty])` | Feed has no articles; empty slot is rendered |
-| `:host([error])` | Feed has an error; error slot is rendered |
+| Host selector      | Description                                                       |
+| ------------------ | ----------------------------------------------------------------- |
+| `:host([busy])`    | Feed is busy loading content; `aria-busy="true"` on the feed root |
+| `:host([loading])` | Loading indicator is visible                                      |
+| `:host([empty])`   | Feed has no articles; empty slot is rendered                      |
+| `:host([error])`   | Feed has an error; error slot is rendered                         |
 
 ## ARIA Contract
 
@@ -87,12 +87,12 @@ All ARIA attributes on the feed root are derived from `contracts.getFeedProps()`
 
 ## Events
 
-| Event | Detail | Description |
-|-------|--------|-------------|
-| `cv-load-more` | `{}` | Fired when the bottom sentinel enters the viewport (IntersectionObserver) |
-| `cv-load-newer` | `{}` | Fired when the top sentinel enters the viewport (IntersectionObserver) |
-| `cv-exit-after` | `{}` | Fired on `Ctrl+End`; consumer should move focus after the feed |
-| `cv-exit-before` | `{}` | Fired on `Ctrl+Home`; consumer should move focus before the feed |
+| Event            | Detail | Description                                                               |
+| ---------------- | ------ | ------------------------------------------------------------------------- |
+| `cv-load-more`   | `{}`   | Fired when the bottom sentinel enters the viewport (IntersectionObserver) |
+| `cv-load-newer`  | `{}`   | Fired when the top sentinel enters the viewport (IntersectionObserver)    |
+| `cv-exit-after`  | `{}`   | Fired on `Ctrl+End`; consumer should move focus after the feed            |
+| `cv-exit-before` | `{}`   | Fired on `Ctrl+Home`; consumer should move focus before the feed          |
 
 These events are output-only signals. The feed does not use `input` or `change` events because it has no user-modifiable value state.
 
@@ -102,24 +102,24 @@ These events are output-only signals. The feed does not use `input` or `change` 
 
 ### Attribute to Headless (UIKit -> Headless)
 
-| UIKit Property | Direction | Headless Binding |
-|----------------|-----------|------------------|
-| `label` | attr -> option | passed as `ariaLabel` in `createFeed(options)` |
-| `busy` | attr -> action | `actions.setBusy(value)` |
+| UIKit Property | Direction      | Headless Binding                               |
+| -------------- | -------------- | ---------------------------------------------- |
+| `label`        | attr -> option | passed as `ariaLabel` in `createFeed(options)` |
+| `busy`         | attr -> action | `actions.setBusy(value)`                       |
 
 ### Headless to DOM (Headless -> UIKit)
 
-| Headless State | Direction | DOM Reflection |
-|----------------|-----------|----------------|
-| `state.isBusy()` | state -> attr | `[busy]` host attribute |
-| `state.isLoading()` | state -> attr | `[loading]` host attribute |
-| `state.isEmpty()` | state -> attr | `[empty]` host attribute |
-| `state.hasError()` | state -> attr | `[error]` host attribute |
-| `state.error()` | state -> render | error message available for the error slot |
-| `state.canLoadMore()` | state -> render | bottom sentinel visibility / observer activation |
-| `state.canLoadNewer()` | state -> render | top sentinel visibility / observer activation |
-| `state.articleIds()` | state -> render | ordered list for rendering articles |
-| `state.activeArticleId()` | state -> render | focus management on child articles |
+| Headless State            | Direction       | DOM Reflection                                   |
+| ------------------------- | --------------- | ------------------------------------------------ |
+| `state.isBusy()`          | state -> attr   | `[busy]` host attribute                          |
+| `state.isLoading()`       | state -> attr   | `[loading]` host attribute                       |
+| `state.isEmpty()`         | state -> attr   | `[empty]` host attribute                         |
+| `state.hasError()`        | state -> attr   | `[error]` host attribute                         |
+| `state.error()`           | state -> render | error message available for the error slot       |
+| `state.canLoadMore()`     | state -> render | bottom sentinel visibility / observer activation |
+| `state.canLoadNewer()`    | state -> render | top sentinel visibility / observer activation    |
+| `state.articleIds()`      | state -> render | ordered list for rendering articles              |
+| `state.activeArticleId()` | state -> render | focus management on child articles               |
 
 ### Contract Spreading
 
@@ -152,6 +152,7 @@ Per W3C APG Feed Pattern:
 - `Ctrl+Home`: dispatch `cv-exit-before` event; consumer moves focus before the feed
 
 Keyboard events are forwarded to `actions.handleKeyDown(event)`. The return value determines adapter behavior:
+
 - `'next'` / `'prev'`: headless handled focus movement
 - `'exit-after'`: UIKit dispatches `cv-exit-after`
 - `'exit-before'`: UIKit dispatches `cv-exit-before`
@@ -189,10 +190,10 @@ Keyboard events are forwarded to `actions.handleKeyDown(event)`. The return valu
 <!-- Feed with event handling for infinite scroll -->
 <cv-feed
   label="News feed"
-  @cv-load-more=${handleLoadMore}
-  @cv-load-newer=${handleLoadNewer}
-  @cv-exit-after=${handleExitAfter}
-  @cv-exit-before=${handleExitBefore}
+  @cv-load-more="${handleLoadMore}"
+  @cv-load-newer="${handleLoadNewer}"
+  @cv-exit-after="${handleExitAfter}"
+  @cv-exit-before="${handleExitBefore}"
 >
   <cv-feed-article article-id="news-1">
     <h3>Breaking News</h3>
@@ -217,49 +218,49 @@ Individual article within a feed. The parent `cv-feed` manages all ARIA attribut
 
 #### Attributes
 
-| Attribute | Type | Default | Description |
-|-----------|------|---------|-------------|
-| `article-id` | String | `""` | Required unique identifier for this article within the feed |
-| `active` | Boolean | `false` | Whether this article is the currently focused article. Managed by parent. |
-| `disabled` | Boolean | `false` | Whether this article is disabled (skipped during keyboard navigation) |
+| Attribute    | Type    | Default | Description                                                               |
+| ------------ | ------- | ------- | ------------------------------------------------------------------------- |
+| `article-id` | String  | `""`    | Required unique identifier for this article within the feed               |
+| `active`     | Boolean | `false` | Whether this article is the currently focused article. Managed by parent. |
+| `disabled`   | Boolean | `false` | Whether this article is disabled (skipped during keyboard navigation)     |
 
 #### Slots
 
-| Slot | Description |
-|------|-------------|
+| Slot        | Description     |
+| ----------- | --------------- |
 | `(default)` | Article content |
 
 #### CSS Parts
 
-| Part | Element | Description |
-|------|---------|-------------|
+| Part   | Element | Description                        |
+| ------ | ------- | ---------------------------------- |
 | `base` | `<div>` | Root wrapper with `role="article"` |
 
 #### CSS Custom Properties
 
-| Property | Default | Description |
-|----------|---------|-------------|
-| `--cv-feed-article-padding` | `var(--cv-space-3, 12px)` | Padding inside the article |
-| `--cv-feed-article-border-radius` | `var(--cv-radius-sm, 6px)` | Border radius of the article |
-| `--cv-feed-article-focus-ring` | `2px solid var(--cv-color-primary, #65d7ff)` | Focus ring style for the active article |
+| Property                          | Default                                      | Description                             |
+| --------------------------------- | -------------------------------------------- | --------------------------------------- |
+| `--cv-feed-article-padding`       | `var(--cv-space-3, 12px)`                    | Padding inside the article              |
+| `--cv-feed-article-border-radius` | `var(--cv-radius-sm, 6px)`                   | Border radius of the article            |
+| `--cv-feed-article-focus-ring`    | `2px solid var(--cv-color-primary, #65d7ff)` | Focus ring style for the active article |
 
 #### Visual States
 
-| Host selector | Description |
-|---------------|-------------|
-| `:host([active])` | Article is the currently focused/active article in the feed |
-| `:host([disabled])` | Article is disabled and skipped during keyboard navigation |
+| Host selector       | Description                                                 |
+| ------------------- | ----------------------------------------------------------- |
+| `:host([active])`   | Article is the currently focused/active article in the feed |
+| `:host([disabled])` | Article is disabled and skipped during keyboard navigation  |
 
 #### Reactive State Mapping
 
 `cv-feed-article` receives its ARIA props from the parent `cv-feed` via `contracts.getArticleProps(articleId)`:
 
-| Contract Prop | DOM Reflection |
-|---------------|----------------|
-| `role` | `role="article"` on `[part="base"]` |
-| `tabindex` | `tabindex="0"` (active) or `tabindex="-1"` (inactive) on host |
-| `aria-posinset` | Position within the feed (1-based) |
-| `aria-setsize` | Total article count or `-1` if unknown |
-| `aria-disabled` | `"true"` when article is disabled |
-| `data-active` | `"true"` or `"false"` reflecting active state |
-| `onFocus` | Sets this article as active in headless state |
+| Contract Prop   | DOM Reflection                                                |
+| --------------- | ------------------------------------------------------------- |
+| `role`          | `role="article"` on `[part="base"]`                           |
+| `tabindex`      | `tabindex="0"` (active) or `tabindex="-1"` (inactive) on host |
+| `aria-posinset` | Position within the feed (1-based)                            |
+| `aria-setsize`  | Total article count or `-1` if unknown                        |
+| `aria-disabled` | `"true"` when article is disabled                             |
+| `data-active`   | `"true"` or `"false"` reflecting active state                 |
+| `onFocus`       | Sets this article as active in headless state                 |

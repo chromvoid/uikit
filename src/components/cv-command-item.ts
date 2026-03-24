@@ -72,6 +72,8 @@ export class CVCommandItem extends LitElement {
   }
 
   protected override render() {
-    return html`<div part="base"><slot></slot></div>`
+    return html`
+      <div part="base"><slot></slot></div>
+    `
   }
 }

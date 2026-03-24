@@ -1,4 +1,4 @@
-import {createSpinner, type SpinnerModel} from '@chromvoid/headless-ui'
+import {createSpinner, type SpinnerModel} from '@chromvoid/headless-ui/spinner'
 import {css, svg} from 'lit'
 import type {PropertyValues} from 'lit'
 

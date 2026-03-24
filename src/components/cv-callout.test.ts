@@ -18,8 +18,7 @@ const createCallout = async (attrs?: Partial<CVCallout>) => {
   return el
 }
 
-const getBase = (el: CVCallout) =>
-  el.shadowRoot!.querySelector('[part="base"]') as HTMLElement
+const getBase = (el: CVCallout) => el.shadowRoot!.querySelector('[part="base"]') as HTMLElement
 
 afterEach(() => {
   document.body.innerHTML = ''

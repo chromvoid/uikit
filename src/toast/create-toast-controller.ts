@@ -1,4 +1,9 @@
-import {createToast, type CreateToastOptions, type ToastModel, type ToastItem} from '@chromvoid/headless-ui'
+import {
+  createToast,
+  type CreateToastOptions,
+  type ToastModel,
+  type ToastItem,
+} from '@chromvoid/headless-ui/toast'
 
 export interface CVToastController {
   readonly model: ToastModel

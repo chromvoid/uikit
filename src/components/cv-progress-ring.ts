@@ -1,4 +1,4 @@
-import {createProgress, type ProgressModel} from '@chromvoid/headless-ui'
+import {createProgress, type ProgressModel} from '@chromvoid/headless-ui/progress'
 import {css, html, nothing} from 'lit'
 import type {PropertyValues} from 'lit'
 
@@ -159,9 +159,7 @@ export class CVProgressRing extends ReatomLitElement {
 
     this.toggleAttribute('data-complete', isComplete)
 
-    const dashoffset = isIndeterminate
-      ? CIRCUMFERENCE * 0.75
-      : CIRCUMFERENCE * (1 - percentage / 100)
+    const dashoffset = isIndeterminate ? CIRCUMFERENCE * 0.75 : CIRCUMFERENCE * (1 - percentage / 100)
 
     return html`
       <div

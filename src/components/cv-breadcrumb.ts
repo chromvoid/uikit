@@ -1,4 +1,4 @@
-import {createBreadcrumb, type BreadcrumbModel} from '@chromvoid/headless-ui'
+import {createBreadcrumb, type BreadcrumbModel} from '@chromvoid/headless-ui/breadcrumb'
 import {css, html, nothing} from 'lit'
 import type {PropertyValues} from 'lit'
 
@@ -109,7 +109,8 @@ export class CVBreadcrumb extends ReatomLitElement {
 
   private getItemElements(): CVBreadcrumbItem[] {
     return Array.from(this.children).filter(
-      (element): element is CVBreadcrumbItem => element.tagName.toLowerCase() === CVBreadcrumbItem.elementName,
+      (element): element is CVBreadcrumbItem =>
+        element.tagName.toLowerCase() === CVBreadcrumbItem.elementName,
     )
   }
 
@@ -178,7 +179,8 @@ export class CVBreadcrumb extends ReatomLitElement {
       record.element.linkId = linkProps.id
       record.element.href = linkProps.href
       record.element.current = linkProps['aria-current'] === 'page'
-      record.element.showSeparator = index < this.itemRecords.length - 1 && separatorProps['aria-hidden'] === 'true'
+      record.element.showSeparator =
+        index < this.itemRecords.length - 1 && separatorProps['aria-hidden'] === 'true'
       record.element.setAttribute('data-current', itemProps['data-current'])
     }
   }

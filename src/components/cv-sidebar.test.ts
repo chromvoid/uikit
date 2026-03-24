@@ -84,8 +84,7 @@ const setElementRect = (element: Element, top: number, height: number) => {
   ;(element as HTMLElement).getBoundingClientRect = () => createRect(top, height) as DOMRect
 }
 
-const waitForAnimationFrame = () =>
-  new Promise<void>((resolve) => requestAnimationFrame(() => resolve()))
+const waitForAnimationFrame = () => new Promise<void>((resolve) => requestAnimationFrame(() => resolve()))
 
 const setViewportHeight = (height: number) => {
   Object.defineProperty(window, 'innerHeight', {
@@ -124,8 +123,7 @@ const createSidebar = async (attrs?: Partial<CVSidebar>) => {
   return el
 }
 
-const getBase = (el: CVSidebar) =>
-  el.shadowRoot!.querySelector('[part="panel"]') as HTMLElement
+const getBase = (el: CVSidebar) => el.shadowRoot!.querySelector('[part="panel"]') as HTMLElement
 
 afterEach(() => {
   document.body.innerHTML = ''
@@ -1037,7 +1035,9 @@ describe('cv-sidebar', () => {
 
       const observer = MockIntersectionObserver.instances[0]!
       observer.emit(beta, {boundingClientRect: createRect(-8, 280), isIntersecting: true})
-      await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(() => resolve(undefined))))
+      await new Promise((resolve) =>
+        requestAnimationFrame(() => requestAnimationFrame(() => resolve(undefined))),
+      )
       await settle(el)
 
       expect(body.scrollTop).toBeGreaterThan(0)

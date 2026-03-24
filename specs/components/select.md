@@ -2,7 +2,7 @@
 
 Single or multi-selection dropdown that composes a combobox trigger with a listbox popup, following the W3C APG Select-Only Combobox pattern.
 
-**Headless:** [`createSelect`](../../../headless/specs/components/select.md)
+**Headless:** [`createSelect`](https://github.com/chromvoid/headless-ui/blob/main/specs/components/select.md)
 
 ## Anatomy
 

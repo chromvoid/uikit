@@ -1,4 +1,4 @@
-import {createContextMenu, type ContextMenuModel} from '@chromvoid/headless-ui'
+import {createContextMenu, type ContextMenuModel} from '@chromvoid/headless-ui/context-menu'
 import {css, html, nothing} from 'lit'
 import type {PropertyValues} from 'lit'
 
@@ -159,7 +159,11 @@ export class CVContextMenu extends ReatomLitElement {
   override willUpdate(changedProperties: PropertyValues): void {
     super.willUpdate(changedProperties)
 
-    if (changedProperties.has('ariaLabel') || changedProperties.has('closeOnSelect') || changedProperties.has('closeOnOutsidePointer')) {
+    if (
+      changedProperties.has('ariaLabel') ||
+      changedProperties.has('closeOnSelect') ||
+      changedProperties.has('closeOnOutsidePointer')
+    ) {
       this.rebuildModelFromSlot(true, false)
       return
     }
@@ -275,7 +279,9 @@ export class CVContextMenu extends ReatomLitElement {
       }
     })
 
-    const enabledIds = new Set(this.itemRecords.filter((record) => !record.disabled).map((record) => record.id))
+    const enabledIds = new Set(
+      this.itemRecords.filter((record) => !record.disabled).map((record) => record.id),
+    )
     const initialValue = previous.value && enabledIds.has(previous.value) ? previous.value : null
 
     this.model = createContextMenu({
@@ -524,7 +530,8 @@ export class CVContextMenu extends ReatomLitElement {
 
     const previous = this.captureState()
     const isSelectionKey = event.key === 'Enter' || event.key === ' ' || event.key === 'Spacebar'
-    const isNavKey = event.key === 'ArrowDown' || event.key === 'ArrowUp' || event.key === 'Home' || event.key === 'End'
+    const isNavKey =
+      event.key === 'ArrowDown' || event.key === 'ArrowUp' || event.key === 'Home' || event.key === 'End'
 
     // When the menu just opened, the first navigation key should move to the
     // first or last item (not advance from the headless-set initial active).
@@ -555,8 +562,7 @@ export class CVContextMenu extends ReatomLitElement {
       return
     }
 
-    const selectedCandidate =
-      event.key === 'Enter' ? this.model.state.activeId() : undefined
+    const selectedCandidate = event.key === 'Enter' ? this.model.state.activeId() : undefined
 
     this.model.actions.handleKeyDown({
       key: event.key,

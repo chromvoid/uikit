@@ -2,7 +2,7 @@
 
 One-sentence description of the component's purpose.
 
-**Headless:** [`create{Name}`](../../headless/specs/components/{name}.md)
+**Headless:** [`create{Name}`](https://github.com/chromvoid/headless-ui/blob/main/specs/components/{name}.md)
 
 ## Anatomy
 
@@ -14,56 +14,56 @@ One-sentence description of the component's purpose.
 
 ## Attributes
 
-| Attribute | Type | Default | Description |
-|-----------|------|---------|-------------|
+| Attribute | Type    | Default | Description |
+| --------- | ------- | ------- | ----------- |
 | `example` | Boolean | `false` | Description |
 
 ## Variants
 
 > _Include only if the component has visual variants (e.g. solid, outline, ghost)._
 
-| Variant | Description |
-|---------|-------------|
+| Variant | Description          |
+| ------- | -------------------- |
 | `solid` | Default filled style |
 
 ## Sizes
 
 > _Include only if the component has size options._
 
-| Size | Description |
-|------|-------------|
+| Size | Description  |
+| ---- | ------------ |
 | `md` | Default size |
 
 ## Slots
 
-| Slot | Description |
-|------|-------------|
+| Slot        | Description  |
+| ----------- | ------------ |
 | `(default)` | Main content |
 
 ## CSS Parts
 
-| Part | Element | Description |
-|------|---------|-------------|
+| Part   | Element      | Description                          |
+| ------ | ------------ | ------------------------------------ |
 | `base` | Root wrapper | Outermost interactive/layout element |
 
 ## CSS Custom Properties
 
-| Property | Default | Description |
-|----------|---------|-------------|
-| `--cv-{name}-*` | `…` | Description |
+| Property        | Default | Description |
+| --------------- | ------- | ----------- |
+| `--cv-{name}-*` | `…`     | Description |
 
 ## Visual States
 
-| Host selector | Description |
-|---------------|-------------|
+| Host selector    | Description |
+| ---------------- | ----------- |
 | `:host([state])` | Description |
 
 ## Events
 
-| Event | Detail | Description |
-|-------|--------|-------------|
-| `input` | `{…}` | Fires on interaction |
-| `change` | `{…}` | Fires when value commits |
+| Event    | Detail | Description              |
+| -------- | ------ | ------------------------ |
+| `input`  | `{…}`  | Fires on interaction     |
+| `change` | `{…}`  | Fires when value commits |
 
 ## Usage
 
@@ -87,24 +87,24 @@ One-sentence description of the component's purpose.
 
 #### Attributes
 
-| Attribute | Type | Default | Description |
-|-----------|------|---------|-------------|
-| `value` | String | `""` | Identifier |
+| Attribute | Type   | Default | Description |
+| --------- | ------ | ------- | ----------- |
+| `value`   | String | `""`    | Identifier  |
 
 #### Slots
 
-| Slot | Description |
-|------|-------------|
-| `(default)` | Content |
+| Slot        | Description |
+| ----------- | ----------- |
+| `(default)` | Content     |
 
 #### CSS Parts
 
-| Part | Element | Description |
-|------|---------|-------------|
+| Part   | Element      | Description       |
+| ------ | ------------ | ----------------- |
 | `base` | Root wrapper | Outermost element |
 
 #### Visual States
 
-| Host selector | Description |
-|---------------|-------------|
+| Host selector    | Description |
+| ---------------- | ----------- |
 | `:host([state])` | Description |

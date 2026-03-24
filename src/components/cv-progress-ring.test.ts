@@ -20,8 +20,7 @@ const createProgressRing = async (attrs?: Partial<CVProgressRing>) => {
   return el
 }
 
-const getBase = (el: CVProgressRing) =>
-  el.shadowRoot!.querySelector('[part="base"]') as HTMLElement
+const getBase = (el: CVProgressRing) => el.shadowRoot!.querySelector('[part="base"]') as HTMLElement
 
 afterEach(() => {
   document.body.innerHTML = ''

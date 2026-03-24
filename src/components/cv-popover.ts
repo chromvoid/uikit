@@ -1,4 +1,4 @@
-import {createPopover, type PopoverModel} from '@chromvoid/headless-ui'
+import {createPopover, type PopoverModel} from '@chromvoid/headless-ui/popover'
 import {css, html, nothing} from 'lit'
 import type {PropertyValues} from 'lit'
 
@@ -29,8 +29,7 @@ type CVPopoverAnchor = 'trigger' | 'host'
 const popoverTriggerKeys = new Set(['Enter', ' ', 'Spacebar', 'ArrowDown'])
 
 const supportsNativePopover =
-  typeof HTMLElement !== 'undefined' &&
-  typeof HTMLElement.prototype.showPopover === 'function'
+  typeof HTMLElement !== 'undefined' && typeof HTMLElement.prototype.showPopover === 'function'
 
 let cvPopoverNonce = 0
 
@@ -434,9 +433,13 @@ export class CVPopover extends ReatomLitElement {
           @keydown=${this.handleContentKeyDown}
         >
           <slot></slot>
-          ${this.arrow
-            ? html`<span part="arrow"><slot name="arrow"></slot></span>`
-            : nothing}
+          ${
+            this.arrow
+              ? html`
+                  <span part="arrow"><slot name="arrow"></slot></span>
+                `
+              : nothing
+          }
         </div>
       </div>
     `

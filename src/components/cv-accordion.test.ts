@@ -24,7 +24,8 @@ const createItem = (value: string, label: string, content: string) => {
   return item
 }
 
-const getTrigger = (item: CVAccordionItem) => item.shadowRoot?.querySelector('[part="trigger"]') as HTMLButtonElement
+const getTrigger = (item: CVAccordionItem) =>
+  item.shadowRoot?.querySelector('[part="trigger"]') as HTMLButtonElement
 
 afterEach(() => {
   vi.restoreAllMocks()
@@ -81,13 +82,17 @@ describe('cv-accordion', () => {
     document.body.append(accordion)
     await settle(accordion)
 
-    getTrigger(itemA).dispatchEvent(new KeyboardEvent('keydown', {key: 'ArrowDown', bubbles: true, composed: true}))
+    getTrigger(itemA).dispatchEvent(
+      new KeyboardEvent('keydown', {key: 'ArrowDown', bubbles: true, composed: true}),
+    )
     await settle(accordion)
 
     expect(itemA.active).toBe(false)
     expect(itemC.active).toBe(true)
 
-    getTrigger(itemC).dispatchEvent(new KeyboardEvent('keydown', {key: 'Enter', bubbles: true, composed: true}))
+    getTrigger(itemC).dispatchEvent(
+      new KeyboardEvent('keydown', {key: 'Enter', bubbles: true, composed: true}),
+    )
     await settle(accordion)
 
     expect(accordion.value).toBe('c')

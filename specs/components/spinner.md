@@ -2,7 +2,7 @@
 
 Indeterminate loading spinner with SVG track and indicator animation.
 
-**Headless:** [`createSpinner`](../../../headless/specs/components/spinner.md)
+**Headless:** [`createSpinner`](https://github.com/chromvoid/headless-ui/blob/main/specs/components/spinner.md)
 
 ## Anatomy
 
@@ -15,9 +15,9 @@ Indeterminate loading spinner with SVG track and indicator animation.
 
 ## Attributes
 
-| Attribute | Type   | Default      | Description                                              |
-| --------- | ------ | ------------ | -------------------------------------------------------- |
-| `label`   | String | `"Loading"`  | Accessible name announced by assistive technology        |
+| Attribute | Type   | Default     | Description                                       |
+| --------- | ------ | ----------- | ------------------------------------------------- |
+| `label`   | String | `"Loading"` | Accessible name announced by assistive technology |
 
 No `size` attribute is provided. Sizing is controlled entirely via CSS `font-size` on the host element; the SVG scales relative to `1em`.
 
@@ -27,11 +27,11 @@ None. The spinner is purely visual with no slotted content.
 
 ## CSS Parts
 
-| Part        | Element    | Description                                      |
-| ----------- | ---------- | ------------------------------------------------ |
-| `base`      | `<svg>`    | Root SVG element with ARIA attributes             |
-| `track`     | `<circle>` | Background circle (static ring)                  |
-| `indicator` | `<circle>` | Animated arc indicating indeterminate progress   |
+| Part        | Element    | Description                                    |
+| ----------- | ---------- | ---------------------------------------------- |
+| `base`      | `<svg>`    | Root SVG element with ARIA attributes          |
+| `track`     | `<circle>` | Background circle (static ring)                |
+| `indicator` | `<circle>` | Animated arc indicating indeterminate progress |
 
 ## CSS Custom Properties
 
@@ -54,13 +54,13 @@ None. The spinner is purely presentational and does not emit events.
 
 `cv-spinner` is a visual adapter over headless `createSpinner`.
 
-| UIKit Property | Direction     | Headless Binding           |
-| -------------- | ------------- | -------------------------- |
+| UIKit Property | Direction      | Headless Binding          |
+| -------------- | -------------- | ------------------------- |
 | `label`        | attr -> action | `actions.setLabel(value)` |
 
-| Headless State   | Direction    | DOM Reflection                        |
-| ---------------- | ------------ | ------------------------------------- |
-| `state.label()`  | state -> contract | Consumed via `getSpinnerProps()` |
+| Headless State  | Direction         | DOM Reflection                   |
+| --------------- | ----------------- | -------------------------------- |
+| `state.label()` | state -> contract | Consumed via `getSpinnerProps()` |
 
 - `contracts.getSpinnerProps()` is spread onto the inner `[part="base"]` SVG element to apply `role="progressbar"` and `aria-label`.
 - UIKit does not own ARIA semantics; headless state is the source of truth.

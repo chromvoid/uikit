@@ -1,4 +1,4 @@
-import {createMenuButton, type MenuButtonModel} from '@chromvoid/headless-ui'
+import {createMenuButton, type MenuButtonModel} from '@chromvoid/headless-ui/menu-button'
 import {css, html, nothing} from 'lit'
 import type {PropertyValues} from 'lit'
 
@@ -252,16 +252,32 @@ export class CVMenuButton extends ReatomLitElement {
       :host([variant='primary']) [part='trigger'],
       :host([variant='primary']) [part='action'],
       :host([variant='primary']) [part='dropdown'] {
-        border-color: color-mix(in oklab, var(--cv-color-primary, #65d7ff) 52%, var(--cv-color-border, #2a3245));
-        background: color-mix(in oklab, var(--cv-color-primary, #65d7ff) 22%, var(--cv-color-surface, #141923));
+        border-color: color-mix(
+          in oklab,
+          var(--cv-color-primary, #65d7ff) 52%,
+          var(--cv-color-border, #2a3245)
+        );
+        background: color-mix(
+          in oklab,
+          var(--cv-color-primary, #65d7ff) 22%,
+          var(--cv-color-surface, #141923)
+        );
       }
 
       /* --- variant: danger --- */
       :host([variant='danger']) [part='trigger'],
       :host([variant='danger']) [part='action'],
       :host([variant='danger']) [part='dropdown'] {
-        border-color: color-mix(in oklab, var(--cv-color-danger, #ff7d86) 52%, var(--cv-color-border, #2a3245));
-        background: color-mix(in oklab, var(--cv-color-danger, #ff7d86) 22%, var(--cv-color-surface, #141923));
+        border-color: color-mix(
+          in oklab,
+          var(--cv-color-danger, #ff7d86) 52%,
+          var(--cv-color-border, #2a3245)
+        );
+        background: color-mix(
+          in oklab,
+          var(--cv-color-danger, #ff7d86) 22%,
+          var(--cv-color-surface, #141923)
+        );
       }
 
       /* --- variant: ghost --- */
@@ -301,7 +317,11 @@ export class CVMenuButton extends ReatomLitElement {
   override willUpdate(changedProperties: PropertyValues): void {
     super.willUpdate(changedProperties)
 
-    if (changedProperties.has('closeOnSelect') || changedProperties.has('ariaLabel') || changedProperties.has('split')) {
+    if (
+      changedProperties.has('closeOnSelect') ||
+      changedProperties.has('ariaLabel') ||
+      changedProperties.has('split')
+    ) {
       this.rebuildModelFromSlot(true, false)
       return
     }
@@ -536,7 +556,9 @@ export class CVMenuButton extends ReatomLitElement {
   private rebuildModelFromSlot(preserveState: boolean, requestRender = true): void {
     const itemElements = this.getItemElements()
 
-    const previous = preserveState ? this.captureState() : {activeId: null, open: this.open, value: this.value || null}
+    const previous = preserveState
+      ? this.captureState()
+      : {activeId: null, open: this.open, value: this.value || null}
     this.detachItemListeners()
 
     this.itemRecords = itemElements.map((element, index) => {
@@ -551,7 +573,9 @@ export class CVMenuButton extends ReatomLitElement {
       }
     })
 
-    const enabledIds = new Set(this.itemRecords.filter((record) => !record.disabled).map((record) => record.id))
+    const enabledIds = new Set(
+      this.itemRecords.filter((record) => !record.disabled).map((record) => record.id),
+    )
     const initialActiveId = previous.activeId && enabledIds.has(previous.activeId) ? previous.activeId : null
 
     this.model = createMenuButton({
@@ -822,11 +846,19 @@ export class CVMenuButton extends ReatomLitElement {
   }
 
   private renderDropdownIcon() {
-    return html`<span part="dropdown-icon" aria-hidden="true"
-      ><svg viewBox="0 0 12 12" xmlns="http://www.w3.org/2000/svg">
-        <path d="M2.5 4.5L6 8L9.5 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none" />
-      </svg></span
-    >`
+    return html`
+      <span part="dropdown-icon" aria-hidden="true"
+        ><svg viewBox="0 0 12 12" xmlns="http://www.w3.org/2000/svg">
+          <path
+            d="M2.5 4.5L6 8L9.5 4.5"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            fill="none"
+          /></svg
+      ></span>
+    `
   }
 
   private renderSplitMode() {

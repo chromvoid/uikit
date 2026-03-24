@@ -1,4 +1,9 @@
-import {createTabs, type TabsActivationMode, type TabsModel, type TabsOrientation} from '@chromvoid/headless-ui'
+import {
+  createTabs,
+  type TabsActivationMode,
+  type TabsModel,
+  type TabsOrientation,
+} from '@chromvoid/headless-ui/tabs'
 import {css, html, nothing} from 'lit'
 import type {PropertyValues} from 'lit'
 
@@ -61,7 +66,10 @@ export class CVTabs extends ReatomLitElement {
   private orphanPanels: CVTabPanel[] = []
   private unsupportedTabs: CVTab[] = []
   private unsupportedPanels: CVTabPanel[] = []
-  private tabListeners = new WeakMap<CVTab, {click: EventListener; keydown: EventListener; close: EventListener}>()
+  private tabListeners = new WeakMap<
+    CVTab,
+    {click: EventListener; keydown: EventListener; close: EventListener}
+  >()
   private model?: TabsModel
   private pendingCloseRequest: PendingCloseRequest | null = null
 
@@ -114,7 +122,8 @@ export class CVTabs extends ReatomLitElement {
       [part='indicator'] {
         position: absolute;
         background: var(--cv-tabs-indicator-color, var(--cv-color-primary, #65d7ff));
-        transition: transform var(--cv-duration-fast, 120ms) var(--cv-easing-standard, ease),
+        transition:
+          transform var(--cv-duration-fast, 120ms) var(--cv-easing-standard, ease),
           width var(--cv-duration-fast, 120ms) var(--cv-easing-standard, ease),
           height var(--cv-duration-fast, 120ms) var(--cv-easing-standard, ease);
         pointer-events: none;
@@ -164,7 +173,11 @@ export class CVTabs extends ReatomLitElement {
   override willUpdate(changedProperties: PropertyValues): void {
     super.willUpdate(changedProperties)
 
-    if (changedProperties.has('orientation') || changedProperties.has('activationMode') || changedProperties.has('ariaLabel')) {
+    if (
+      changedProperties.has('orientation') ||
+      changedProperties.has('activationMode') ||
+      changedProperties.has('ariaLabel')
+    ) {
       this.rebuildModelFromSlot(true, false)
       return
     }
@@ -252,8 +265,12 @@ export class CVTabs extends ReatomLitElement {
     this.unsupportedPanels = allPanelElements.filter((panel) => !this.isDefaultPanelElement(panel))
 
     const configuredValue = this.resolveConfiguredValue(tabElements)
-    let previousSelected = preserveSelection ? this.model?.state.selectedTabId() ?? configuredValue : configuredValue
-    let previousActive = preserveSelection ? this.model?.state.activeTabId() ?? previousSelected : previousSelected
+    let previousSelected = preserveSelection
+      ? (this.model?.state.selectedTabId() ?? configuredValue)
+      : configuredValue
+    let previousActive = preserveSelection
+      ? (this.model?.state.activeTabId() ?? previousSelected)
+      : previousSelected
 
     const pendingCloseRequest = this.pendingCloseRequest
     let emitCloseTransition = false
@@ -309,7 +326,9 @@ export class CVTabs extends ReatomLitElement {
 
     this.orphanPanels = panelElements.filter((panel) => !attachedPanels.has(panel))
 
-    const enabledIds = new Set(this.tabRecords.filter((record) => !record.disabled).map((record) => record.id))
+    const enabledIds = new Set(
+      this.tabRecords.filter((record) => !record.disabled).map((record) => record.id),
+    )
     const initialSelected = previousSelected && enabledIds.has(previousSelected) ? previousSelected : null
     const initialActive =
       previousActive && enabledIds.has(previousActive)

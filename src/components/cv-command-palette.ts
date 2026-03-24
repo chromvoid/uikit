@@ -1,4 +1,4 @@
-import {createCommandPalette, type CommandPaletteModel} from '@chromvoid/headless-ui'
+import {createCommandPalette, type CommandPaletteModel} from '@chromvoid/headless-ui/command-palette'
 import {css, html, nothing} from 'lit'
 import type {PropertyValues} from 'lit'
 
@@ -236,7 +236,11 @@ export class CVCommandPalette extends ReatomLitElement {
     this.syncOutsidePointerListener()
     this.syncGlobalShortcutListener()
 
-    if (!changedProperties.has('open') && !changedProperties.has('value') && !changedProperties.has('inputValue')) {
+    if (
+      !changedProperties.has('open') &&
+      !changedProperties.has('value') &&
+      !changedProperties.has('inputValue')
+    ) {
       this.syncItemElements()
     }
 
@@ -304,7 +308,9 @@ export class CVCommandPalette extends ReatomLitElement {
     })
 
     const validIds = new Set(this.itemRecords.map((record) => record.id))
-    const validEnabledIds = new Set(this.itemRecords.filter((record) => !record.disabled).map((record) => record.id))
+    const validEnabledIds = new Set(
+      this.itemRecords.filter((record) => !record.disabled).map((record) => record.id),
+    )
 
     this.model = createCommandPalette({
       idBase: this.idBase,
@@ -524,7 +530,8 @@ export class CVCommandPalette extends ReatomLitElement {
   private handleDocumentKeyDown = (event: KeyboardEvent) => {
     if (!this.model || !this.listenGlobalShortcut) return
 
-    const isShortcut = (event.metaKey || event.ctrlKey) && event.key.toLowerCase() === this.openShortcutKey.toLowerCase()
+    const isShortcut =
+      (event.metaKey || event.ctrlKey) && event.key.toLowerCase() === this.openShortcutKey.toLowerCase()
     if (!isShortcut) return
 
     event.preventDefault()

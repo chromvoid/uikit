@@ -1,4 +1,4 @@
-import {createButton, type ButtonModel} from '@chromvoid/headless-ui'
+import {createButton, type ButtonModel} from '@chromvoid/headless-ui/button'
 import {css, html, nothing} from 'lit'
 import type {PropertyValues} from 'lit'
 
@@ -239,10 +239,7 @@ export class CVButton extends FormAssociatedReatomElement {
         --cv-button-min-height: 30px;
         --cv-button-padding-inline: var(--cv-space-2, 8px);
         --cv-button-padding-block: var(--cv-space-1, 4px);
-        --cv-button-font-size: var(
-          --cv-button-font-size-small,
-          var(--cv-font-size-sm, 13px)
-        );
+        --cv-button-font-size: var(--cv-button-font-size-small, var(--cv-font-size-sm, 13px));
       }
 
       :host([size='large']) {
@@ -458,7 +455,13 @@ export class CVButton extends FormAssociatedReatomElement {
         @keydown=${this.handleKeyDown}
         @keyup=${this.handleKeyUp}
       >
-        ${this.loading ? html`<span part="spinner" aria-hidden="true"></span>` : nothing}
+        ${
+          this.loading
+            ? html`
+                <span part="spinner" aria-hidden="true"></span>
+              `
+            : nothing
+        }
         <span part="prefix" ?hidden=${!hasPrefixContent}
           ><slot name="prefix" @slotchange=${this.handleContentSlotChange}></slot
         ></span>

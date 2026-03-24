@@ -42,7 +42,8 @@ const getOptions = (el: CVSelect) => Array.from(el.querySelectorAll('cv-select-o
 const getClearButton = (el: CVSelect) =>
   el.shadowRoot!.querySelector('[part="clear-button"]') as HTMLElement | null
 
-const hasElementInternals = typeof (HTMLElement.prototype as {attachInternals?: unknown}).attachInternals === 'function'
+const hasElementInternals =
+  typeof (HTMLElement.prototype as {attachInternals?: unknown}).attachInternals === 'function'
 
 afterEach(() => {
   document.body.innerHTML = ''

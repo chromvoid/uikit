@@ -50,7 +50,11 @@ export class CVToolbarItem extends LitElement {
 
       :host([active]) .item {
         border-color: var(--cv-color-primary, #65d7ff);
-        background: color-mix(in oklab, var(--cv-color-primary, #65d7ff) 22%, var(--cv-color-surface, #141923));
+        background: color-mix(
+          in oklab,
+          var(--cv-color-primary, #65d7ff) 22%,
+          var(--cv-color-surface, #141923)
+        );
       }
 
       :host([disabled]) .item {
@@ -71,6 +75,8 @@ export class CVToolbarItem extends LitElement {
   }
 
   protected override render() {
-    return html`<div class="item" part="base"><slot></slot></div>`
+    return html`
+      <div class="item" part="base"><slot></slot></div>
+    `
   }
 }

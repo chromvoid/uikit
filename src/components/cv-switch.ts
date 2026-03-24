@@ -1,4 +1,4 @@
-import {createSwitch, type CreateSwitchOptions, type SwitchModel} from '@chromvoid/headless-ui'
+import {createSwitch, type CreateSwitchOptions, type SwitchModel} from '@chromvoid/headless-ui/switch'
 import {css, html, nothing} from 'lit'
 import type {PropertyValues} from 'lit'
 
@@ -271,7 +271,7 @@ export class CVSwitch extends FormAssociatedReatomElement {
   }
 
   protected override getFormAssociatedValue(): string | File | FormData | null {
-    return this.checked ? (this.value || 'on') : null
+    return this.checked ? this.value || 'on' : null
   }
 
   protected override getFormAssociatedValidity(): FormAssociatedValidity {
@@ -324,15 +324,17 @@ export class CVSwitch extends FormAssociatedReatomElement {
           <span part="thumb"></span>
         </div>
         <span part="label"><slot></slot></span>
-        ${this.hasHelpText
-          ? html`<span part="help-text" id=${this.helpTextId}>
+        ${
+          this.hasHelpText
+            ? html`<span part="help-text" id=${this.helpTextId}>
               <slot name="help-text" @slotchange=${this.handleHelpTextSlotChange}>${this.helpText}</slot>
             </span>`
-          : html`<slot
+            : html`<slot
               name="help-text"
               @slotchange=${this.handleHelpTextSlotChange}
               style="display:none"
-            ></slot>`}
+            ></slot>`
+        }
       </div>
     `
   }

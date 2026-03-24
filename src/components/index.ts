@@ -28,6 +28,7 @@ export {CVGridCell} from './cv-grid-cell'
 export {CVGridColumn} from './cv-grid-column'
 export {CVGridRow} from './cv-grid-row'
 export {CVGrid} from './cv-grid'
+export {CVIcon} from './cv-icon'
 export {CVInput} from './cv-input'
 export type {
   CVAccordionItemEventMap,

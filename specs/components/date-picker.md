@@ -2,7 +2,7 @@
 
 Date-time control with an editable combobox trigger and a popup calendar dialog.
 
-**Headless:** [`createDatePicker`](../../../headless/specs/components/date-picker.md)
+**Headless:** [`createDatePicker`](https://github.com/chromvoid/headless-ui/blob/main/specs/components/date-picker.md)
 
 ## Cross-Spec Consistency
 
@@ -46,133 +46,133 @@ This document is the UIKit surface contract for `cv-date-picker`.
 
 ## Attributes
 
-| Attribute | Type | Default | Description |
-|-----------|------|---------|-------------|
-| `value` | String | `""` | Current committed ISO value (`YYYY-MM-DDTHH:mm`) when present |
-| `open` | Boolean | `false` | Popup dialog open state |
-| `disabled` | Boolean | `false` | Blocks all interaction |
-| `readonly` | Boolean | `false` | Input editing blocked; calendar/time actions blocked |
-| `required` | Boolean | `false` | Required marker for form/validation |
-| `placeholder` | String | `"Select date and time"` | Placeholder shown in the input |
-| `size` | String | `"medium"` | Size: `small` \| `medium` \| `large` |
-| `locale` | String | `"en-US"` | Locale for formatting/parsing hook context |
-| `time-zone` | String | `"local"` | Time basis: `local` \| `utc` |
-| `min` | String | `""` | Minimum accepted date-time (ISO) |
-| `max` | String | `""` | Maximum accepted date-time (ISO) |
-| `minute-step` | Number | `1` | Minute granularity for draft editing |
-| `hour-cycle` | Number | `24` | Time input style: `12` \| `24` |
-| `close-on-escape` | Boolean | `true` | Closes dialog on `Escape` |
-| `aria-label` | String | `""` | Input and dialog accessible label |
-| `input-invalid` | Boolean | `false` | Read-only derived state: input parse/validation failed |
-| `has-value` | Boolean | `false` | Read-only derived state: committed value present |
+| Attribute         | Type    | Default                  | Description                                                   |
+| ----------------- | ------- | ------------------------ | ------------------------------------------------------------- |
+| `value`           | String  | `""`                     | Current committed ISO value (`YYYY-MM-DDTHH:mm`) when present |
+| `open`            | Boolean | `false`                  | Popup dialog open state                                       |
+| `disabled`        | Boolean | `false`                  | Blocks all interaction                                        |
+| `readonly`        | Boolean | `false`                  | Input editing blocked; calendar/time actions blocked          |
+| `required`        | Boolean | `false`                  | Required marker for form/validation                           |
+| `placeholder`     | String  | `"Select date and time"` | Placeholder shown in the input                                |
+| `size`            | String  | `"medium"`               | Size: `small` \| `medium` \| `large`                          |
+| `locale`          | String  | `"en-US"`                | Locale for formatting/parsing hook context                    |
+| `time-zone`       | String  | `"local"`                | Time basis: `local` \| `utc`                                  |
+| `min`             | String  | `""`                     | Minimum accepted date-time (ISO)                              |
+| `max`             | String  | `""`                     | Maximum accepted date-time (ISO)                              |
+| `minute-step`     | Number  | `1`                      | Minute granularity for draft editing                          |
+| `hour-cycle`      | Number  | `24`                     | Time input style: `12` \| `24`                                |
+| `close-on-escape` | Boolean | `true`                   | Closes dialog on `Escape`                                     |
+| `aria-label`      | String  | `""`                     | Input and dialog accessible label                             |
+| `input-invalid`   | Boolean | `false`                  | Read-only derived state: input parse/validation failed        |
+| `has-value`       | Boolean | `false`                  | Read-only derived state: committed value present              |
 
 ## Sizes
 
-| Size | `--cv-date-picker-input-min-height` | `--cv-date-picker-input-padding-inline` | `--cv-date-picker-input-padding-block` |
-|------|--------------------------------------|------------------------------------------|------------------------------------------|
-| `small` | `30px` | `var(--cv-space-2, 8px)` | `var(--cv-space-1, 4px)` |
-| `medium` | `36px` | `var(--cv-space-3, 12px)` | `var(--cv-space-2, 8px)` |
-| `large` | `42px` | `var(--cv-space-4, 16px)` | `var(--cv-space-2, 8px)` |
+| Size     | `--cv-date-picker-input-min-height` | `--cv-date-picker-input-padding-inline` | `--cv-date-picker-input-padding-block` |
+| -------- | ----------------------------------- | --------------------------------------- | -------------------------------------- |
+| `small`  | `30px`                              | `var(--cv-space-2, 8px)`                | `var(--cv-space-1, 4px)`               |
+| `medium` | `36px`                              | `var(--cv-space-3, 12px)`               | `var(--cv-space-2, 8px)`               |
+| `large`  | `42px`                              | `var(--cv-space-4, 16px)`               | `var(--cv-space-2, 8px)`               |
 
 ## Slots
 
-| Slot | Description |
-|------|-------------|
+| Slot     | Description                  |
+| -------- | ---------------------------- |
 | `prefix` | Icon or element before input |
-| `suffix` | Icon or element after input |
+| `suffix` | Icon or element after input  |
 
 ## CSS Parts
 
-| Part | Element | Description |
-|------|---------|-------------|
-| `base` | `<div>` | Root layout wrapper |
-| `input-wrap` | `<div>` | Input + optional action row container |
-| `prefix` | `<span>` | Prefix icon/element wrapper |
-| `label` | `<span>` | Main text wrapper around the input value |
-| `cv-input` | `<input>` | Editable combobox input |
-| `suffix` | `<span>` | Suffix icon/element wrapper |
-| `clear-button` | `<button>` | Clear committed value |
-| `dialog` | `<div>` | Popup shell for calendar/time panel |
-| `calendar-shell` | `<div>` | Calendar header + grid wrapper |
-| `month-label` | `<span>` | Visible month/year label |
-| `month-nav-button` | `<button>` | Previous/next month navigation button |
-| `year-nav-button` | `<button>` | Previous/next year navigation button |
-| `calendar-grid` | `<div>` | Calendar grid surface |
-| `calendar-day` | `<button>` | Day cell for each visible calendar day |
-| `time-row` | `<div>` | Time editing row |
-| `hour-input` | `<input>` | Hour segment editor |
-| `minute-input` | `<input>` | Minute segment editor |
-| `time-separator` | `<span>` | Time separator between segments |
-| `actions` | `<div>` | Footer actions area |
-| `apply-button` | `<button>` | Commit draft selection |
-| `cancel-button` | `<button>` | Discard draft selection |
-| `dialog-caption` | `<span>` | Optional helper text/status label |
+| Part               | Element    | Description                              |
+| ------------------ | ---------- | ---------------------------------------- |
+| `base`             | `<div>`    | Root layout wrapper                      |
+| `input-wrap`       | `<div>`    | Input + optional action row container    |
+| `prefix`           | `<span>`   | Prefix icon/element wrapper              |
+| `label`            | `<span>`   | Main text wrapper around the input value |
+| `cv-input`         | `<input>`  | Editable combobox input                  |
+| `suffix`           | `<span>`   | Suffix icon/element wrapper              |
+| `clear-button`     | `<button>` | Clear committed value                    |
+| `dialog`           | `<div>`    | Popup shell for calendar/time panel      |
+| `calendar-shell`   | `<div>`    | Calendar header + grid wrapper           |
+| `month-label`      | `<span>`   | Visible month/year label                 |
+| `month-nav-button` | `<button>` | Previous/next month navigation button    |
+| `year-nav-button`  | `<button>` | Previous/next year navigation button     |
+| `calendar-grid`    | `<div>`    | Calendar grid surface                    |
+| `calendar-day`     | `<button>` | Day cell for each visible calendar day   |
+| `time-row`         | `<div>`    | Time editing row                         |
+| `hour-input`       | `<input>`  | Hour segment editor                      |
+| `minute-input`     | `<input>`  | Minute segment editor                    |
+| `time-separator`   | `<span>`   | Time separator between segments          |
+| `actions`          | `<div>`    | Footer actions area                      |
+| `apply-button`     | `<button>` | Commit draft selection                   |
+| `cancel-button`    | `<button>` | Discard draft selection                  |
+| `dialog-caption`   | `<span>`   | Optional helper text/status label        |
 
 ## CSS Custom Properties
 
-| Property | Default | Description |
-|----------|---------|-------------|
-| `--cv-date-picker-min-width` | `260px` | Host minimum width |
-| `--cv-date-picker-input-min-height` | `36px` | Input control minimum block size |
-| `--cv-date-picker-input-padding-inline` | `var(--cv-space-3, 12px)` | Horizontal input padding |
-| `--cv-date-picker-input-padding-block` | `var(--cv-space-2, 8px)` | Vertical input padding |
-| `--cv-date-picker-dialog-width` | `min(560px, calc(100vw - 32px))` | Dialog inline size |
-| `--cv-date-picker-calendar-size` | `304px` | Calendar body block size |
-| `--cv-date-picker-day-size` | `34px` | Calendar cell size |
-| `--cv-date-picker-day-gap` | `var(--cv-space-1, 4px)` | Calendar grid gap |
-| `--cv-date-picker-font-size` | `inherit` | Component font size |
-| `--cv-date-picker-border-radius` | `var(--cv-radius-md, 10px)` | Dialog/calendar border radius |
-| `--cv-date-picker-button-gap` | `var(--cv-space-2, 8px)` | Spacing between footer actions |
+| Property                                | Default                          | Description                      |
+| --------------------------------------- | -------------------------------- | -------------------------------- |
+| `--cv-date-picker-min-width`            | `260px`                          | Host minimum width               |
+| `--cv-date-picker-input-min-height`     | `36px`                           | Input control minimum block size |
+| `--cv-date-picker-input-padding-inline` | `var(--cv-space-3, 12px)`        | Horizontal input padding         |
+| `--cv-date-picker-input-padding-block`  | `var(--cv-space-2, 8px)`         | Vertical input padding           |
+| `--cv-date-picker-dialog-width`         | `min(560px, calc(100vw - 32px))` | Dialog inline size               |
+| `--cv-date-picker-calendar-size`        | `304px`                          | Calendar body block size         |
+| `--cv-date-picker-day-size`             | `34px`                           | Calendar cell size               |
+| `--cv-date-picker-day-gap`              | `var(--cv-space-1, 4px)`         | Calendar grid gap                |
+| `--cv-date-picker-font-size`            | `inherit`                        | Component font size              |
+| `--cv-date-picker-border-radius`        | `var(--cv-radius-md, 10px)`      | Dialog/calendar border radius    |
+| `--cv-date-picker-button-gap`           | `var(--cv-space-2, 8px)`         | Spacing between footer actions   |
 
 Additionally, styles may rely on theme tokens (no separate listing required here if already defined globally):
 `--cv-color-border`, `--cv-color-surface`, `--cv-color-text`, `--cv-color-text-muted`, `--cv-color-primary`, `--cv-color-danger`, `--cv-space-2`, `--cv-space-3`, `--cv-space-4`, `--cv-duration-fast`, `--cv-easing-standard`, `--cv-radius-sm`, `--cv-radius-md`.
 
 ## Visual States
 
-| Host selector | Description |
-|---------------|-------------|
-| `:host([disabled])` | Disabled, non-interactive |
-| `:host([readonly])` | Read-only input mode |
-| `:host([required])` | Required marker active |
-| `:host([open])` | Popup dialog visible |
-| `:host([size="small"])` | Small size tokens used |
-| `:host([size="large"])` | Large size tokens used |
+| Host selector            | Description               |
+| ------------------------ | ------------------------- |
+| `:host([disabled])`      | Disabled, non-interactive |
+| `:host([readonly])`      | Read-only input mode      |
+| `:host([required])`      | Required marker active    |
+| `:host([open])`          | Popup dialog visible      |
+| `:host([size="small"])`  | Small size tokens used    |
+| `:host([size="large"])`  | Large size tokens used    |
 | `:host([input-invalid])` | Input value invalid state |
-| `:host([has-value])` | Committed value present |
+| `:host([has-value])`     | Committed value present   |
 
 ## ARIA Contract
 
-| Element | Attribute | Value |
-|---------|-----------|-------|
-| Input | `role` | `combobox` |
-| Input | `aria-haspopup` | `dialog` |
-| Input | `aria-expanded` | `true` / `false` |
-| Input | `aria-controls` | Dialog id |
-| Input | `aria-activedescendant` | Focused day id when dialog is open |
-| Input | `aria-invalid` | `true` when input cannot be parsed or out of range |
-| Input | `aria-required` | `true` when `required` |
-| Input | `aria-label` | Provided `aria-label` string |
-| Dialog | `role` | `dialog` |
-| Dialog | `aria-modal` | `true` |
-| Dialog | `aria-label` | Provided `aria-label` or default text |
-| Calendar grid | `role` | `grid` |
-| Calendar day | `role` | `gridcell` |
-| Calendar day | `tabindex` | `0` / `-1` |
-| Calendar day | `aria-selected` | `true` / `false` |
-| Calendar day | `aria-disabled` | `true` when out of range / blocked |
-| Calendar day | `aria-current` | `date` when current day |
-| Month nav button | `role` | `button` |
-| Year nav button | `role` | `button` |
-| Time inputs | `type` | `text` |
-| Time inputs | `inputmode` | `numeric` |
-| Action buttons | `role` | `button` |
+| Element          | Attribute               | Value                                              |
+| ---------------- | ----------------------- | -------------------------------------------------- |
+| Input            | `role`                  | `combobox`                                         |
+| Input            | `aria-haspopup`         | `dialog`                                           |
+| Input            | `aria-expanded`         | `true` / `false`                                   |
+| Input            | `aria-controls`         | Dialog id                                          |
+| Input            | `aria-activedescendant` | Focused day id when dialog is open                 |
+| Input            | `aria-invalid`          | `true` when input cannot be parsed or out of range |
+| Input            | `aria-required`         | `true` when `required`                             |
+| Input            | `aria-label`            | Provided `aria-label` string                       |
+| Dialog           | `role`                  | `dialog`                                           |
+| Dialog           | `aria-modal`            | `true`                                             |
+| Dialog           | `aria-label`            | Provided `aria-label` or default text              |
+| Calendar grid    | `role`                  | `grid`                                             |
+| Calendar day     | `role`                  | `gridcell`                                         |
+| Calendar day     | `tabindex`              | `0` / `-1`                                         |
+| Calendar day     | `aria-selected`         | `true` / `false`                                   |
+| Calendar day     | `aria-disabled`         | `true` when out of range / blocked                 |
+| Calendar day     | `aria-current`          | `date` when current day                            |
+| Month nav button | `role`                  | `button`                                           |
+| Year nav button  | `role`                  | `button`                                           |
+| Time inputs      | `type`                  | `text`                                             |
+| Time inputs      | `inputmode`             | `numeric`                                          |
+| Action buttons   | `role`                  | `button`                                           |
 
 ## Events
 
-| Event | Detail | Description |
-|-------|--------|-------------|
-| `cv-input` | `{ value: string, inputValue: string, open: boolean, invalid: boolean }` | Fires when the user changes the input text |
-| `cv-change` | `{ value: string, previousValue: string, source: "input" \| "dialog" }` | Fires when committed value changes |
+| Event       | Detail                                                                   | Description                                |
+| ----------- | ------------------------------------------------------------------------ | ------------------------------------------ |
+| `cv-input`  | `{ value: string, inputValue: string, open: boolean, invalid: boolean }` | Fires when the user changes the input text |
+| `cv-change` | `{ value: string, previousValue: string, source: "input" \| "dialog" }`  | Fires when committed value changes         |
 
 `cv-input` and `cv-change` are only emitted for user-modifiable state updates.
 
@@ -182,38 +182,38 @@ Additionally, styles may rely on theme tokens (no separate listing required here
 
 ### UIKit properties to headless actions/options
 
-| UIKit Property | Direction | Headless Binding |
-|----------------|-----------|------------------|
-| `value` | attr → action | `actions.setInputValue(value)` then `actions.commitInput()` |
-| `open` | attr → action | `actions.open()` / `actions.close()` |
-| `disabled` | attr → action | `actions.setDisabled(value)` |
-| `readonly` | attr → action | `actions.setReadonly(value)` |
-| `required` | attr → action | `actions.setRequired(value)` |
-| `placeholder` | attr → action | `actions.setPlaceholder(value)` |
-| `locale` | attr → action | `actions.setLocale(value)` |
-| `time-zone` | attr → action | `actions.setTimeZone(value)` |
-| `min` | attr → action | `actions.setMin(value || null)` |
-| `max` | attr → action | `actions.setMax(value || null)` |
-| `minute-step` | attr → action | `actions.setMinuteStep(value)` |
-| `hour-cycle` | attr → action | `actions.setHourCycle(value as 12 \/ 24)` |
-| `close-on-escape` | attr → option | Passed as `closeOnEscape` during `createDatePicker(...)` setup |
-| `aria-label` | attr → option | Passed as `ariaLabel` during `createDatePicker(...)` setup |
-| `size` | attr → DOM/styling | Local styling tokens only |
+| UIKit Property    | Direction          | Headless Binding                                               |
+| ----------------- | ------------------ | -------------------------------------------------------------- | --- | ------ |
+| `value`           | attr → action      | `actions.setInputValue(value)` then `actions.commitInput()`    |
+| `open`            | attr → action      | `actions.open()` / `actions.close()`                           |
+| `disabled`        | attr → action      | `actions.setDisabled(value)`                                   |
+| `readonly`        | attr → action      | `actions.setReadonly(value)`                                   |
+| `required`        | attr → action      | `actions.setRequired(value)`                                   |
+| `placeholder`     | attr → action      | `actions.setPlaceholder(value)`                                |
+| `locale`          | attr → action      | `actions.setLocale(value)`                                     |
+| `time-zone`       | attr → action      | `actions.setTimeZone(value)`                                   |
+| `min`             | attr → action      | `actions.setMin(value                                          |     | null)` |
+| `max`             | attr → action      | `actions.setMax(value                                          |     | null)` |
+| `minute-step`     | attr → action      | `actions.setMinuteStep(value)`                                 |
+| `hour-cycle`      | attr → action      | `actions.setHourCycle(value as 12 \/ 24)`                      |
+| `close-on-escape` | attr → option      | Passed as `closeOnEscape` during `createDatePicker(...)` setup |
+| `aria-label`      | attr → option      | Passed as `ariaLabel` during `createDatePicker(...)` setup     |
+| `size`            | attr → DOM/styling | Local styling tokens only                                      |
 
 ### Headless state to DOM reflection
 
-| Headless State | Direction | DOM Reflection |
-|----------------|-----------|----------------|
-| `state.committedValue()` | state → attr | `[value]` and input value text |
-| `state.isOpen()` | state → attr | `[open]` |
-| `state.disabled()` | state → attr | `[disabled]` |
-| `state.readonly()` | state → attr | `[readonly]` |
-| `state.required()` | state → attr | `[required]` |
-| `state.hasCommittedSelection()` | state → attr | `[has-value]` |
-| `state.inputInvalid()` | state → attr | `[input-invalid]` |
+| Headless State                                                                                                | Direction      | DOM Reflection                                              |
+| ------------------------------------------------------------------------------------------------------------- | -------------- | ----------------------------------------------------------- |
+| `state.committedValue()`                                                                                      | state → attr   | `[value]` and input value text                              |
+| `state.isOpen()`                                                                                              | state → attr   | `[open]`                                                    |
+| `state.disabled()`                                                                                            | state → attr   | `[disabled]`                                                |
+| `state.readonly()`                                                                                            | state → attr   | `[readonly]`                                                |
+| `state.required()`                                                                                            | state → attr   | `[required]`                                                |
+| `state.hasCommittedSelection()`                                                                               | state → attr   | `[has-value]`                                               |
+| `state.inputInvalid()`                                                                                        | state → attr   | `[input-invalid]`                                           |
 | `state.min()`, `state.max()`, `state.locale()`, `state.timeZone()`, `state.hourCycle()`, `state.minuteStep()` | state → render | Applied to internal dialog/time controls and contract props |
-| `state.visibleDays()` | state → render | Drives `[part="calendar-day"]` list |
-| `state.focusedDate()`, `state.displayedMonth()`, `state.displayedYear()` | state → render | Calendar focus/visible range rendering |
+| `state.visibleDays()`                                                                                         | state → render | Drives `[part="calendar-day"]` list                         |
+| `state.focusedDate()`, `state.displayedMonth()`, `state.displayedYear()`                                      | state → render | Calendar focus/visible range rendering                      |
 
 ### Contract props spreading
 
@@ -230,6 +230,7 @@ Additionally, styles may rely on theme tokens (no separate listing required here
 ### UIKit-only concerns
 
 UIKit owns rendering and animation only.
+
 - Layout and spacing between input, calendar, and footer.
 - Visual-only styling (`:host` states and CSS parts).
 - Optional `dialog-caption` content text.
@@ -283,10 +284,7 @@ UIKit owns rendering and animation only.
   disabled
 ></cv-date-picker>
 
-<cv-date-picker
-  locale="ru-RU"
-  size="large"
->
+<cv-date-picker locale="ru-RU" size="large">
   <icon-schedule slot="suffix"></icon-schedule>
 </cv-date-picker>
 ```

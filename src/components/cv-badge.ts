@@ -1,4 +1,4 @@
-import {createBadge, type BadgeModel, type BadgeVariant, type BadgeSize} from '@chromvoid/headless-ui'
+import {createBadge, type BadgeModel, type BadgeVariant, type BadgeSize} from '@chromvoid/headless-ui/badge'
 import {css, html, nothing} from 'lit'
 import type {PropertyValues} from 'lit'
 
@@ -100,26 +100,58 @@ export class CVBadge extends ReatomLitElement {
 
       /* --- variant: primary --- */
       :host([variant='primary']) [part='base'] {
-        border-color: color-mix(in oklab, var(--cv-color-primary, #65d7ff) 52%, var(--cv-color-border, #2a3245));
-        background: color-mix(in oklab, var(--cv-color-primary, #65d7ff) 22%, var(--cv-color-surface, #141923));
+        border-color: color-mix(
+          in oklab,
+          var(--cv-color-primary, #65d7ff) 52%,
+          var(--cv-color-border, #2a3245)
+        );
+        background: color-mix(
+          in oklab,
+          var(--cv-color-primary, #65d7ff) 22%,
+          var(--cv-color-surface, #141923)
+        );
       }
 
       /* --- variant: success --- */
       :host([variant='success']) [part='base'] {
-        border-color: color-mix(in oklab, var(--cv-color-success, #5beba0) 52%, var(--cv-color-border, #2a3245));
-        background: color-mix(in oklab, var(--cv-color-success, #5beba0) 22%, var(--cv-color-surface, #141923));
+        border-color: color-mix(
+          in oklab,
+          var(--cv-color-success, #5beba0) 52%,
+          var(--cv-color-border, #2a3245)
+        );
+        background: color-mix(
+          in oklab,
+          var(--cv-color-success, #5beba0) 22%,
+          var(--cv-color-surface, #141923)
+        );
       }
 
       /* --- variant: warning --- */
       :host([variant='warning']) [part='base'] {
-        border-color: color-mix(in oklab, var(--cv-color-warning, #ffc857) 52%, var(--cv-color-border, #2a3245));
-        background: color-mix(in oklab, var(--cv-color-warning, #ffc857) 22%, var(--cv-color-surface, #141923));
+        border-color: color-mix(
+          in oklab,
+          var(--cv-color-warning, #ffc857) 52%,
+          var(--cv-color-border, #2a3245)
+        );
+        background: color-mix(
+          in oklab,
+          var(--cv-color-warning, #ffc857) 22%,
+          var(--cv-color-surface, #141923)
+        );
       }
 
       /* --- variant: danger --- */
       :host([variant='danger']) [part='base'] {
-        border-color: color-mix(in oklab, var(--cv-color-danger, #ff7d86) 52%, var(--cv-color-border, #2a3245));
-        background: color-mix(in oklab, var(--cv-color-danger, #ff7d86) 22%, var(--cv-color-surface, #141923));
+        border-color: color-mix(
+          in oklab,
+          var(--cv-color-danger, #ff7d86) 52%,
+          var(--cv-color-border, #2a3245)
+        );
+        background: color-mix(
+          in oklab,
+          var(--cv-color-danger, #ff7d86) 22%,
+          var(--cv-color-surface, #141923)
+        );
       }
 
       /* --- pill modifier --- */

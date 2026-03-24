@@ -26,16 +26,8 @@ cv-theme-provider {
   --cv-color-primary: #65d7ff;
   --cv-color-primary-dark: #36bae8;
   --cv-color-primary-darker: #1794c2;
-  --cv-color-primary-subtle: color-mix(
-    in oklch,
-    var(--cv-color-primary) 12%,
-    var(--cv-color-surface)
-  );
-  --cv-color-primary-muted: color-mix(
-    in oklch,
-    var(--cv-color-primary) 22%,
-    var(--cv-color-surface)
-  );
+  --cv-color-primary-subtle: color-mix(in oklch, var(--cv-color-primary) 12%, var(--cv-color-surface));
+  --cv-color-primary-muted: color-mix(in oklch, var(--cv-color-primary) 22%, var(--cv-color-surface));
   --cv-color-on-primary: #03151c;
   --cv-color-accent: #b388ff;
   --cv-color-accent-light: color-mix(in oklch, var(--cv-color-accent) 70%, white);
@@ -160,7 +152,7 @@ cv-theme-provider {
 }
 
 /* === Light tokens — explicit mode === */
-cv-theme-provider[mode="light"] {
+cv-theme-provider[mode='light'] {
   color-scheme: light;
   --cv-color-bg: #f8f9fb;
   --cv-color-surface: #ffffff;
@@ -185,16 +177,8 @@ cv-theme-provider[mode="light"] {
   --cv-color-primary: #0e8ab4;
   --cv-color-primary-dark: #0b7199;
   --cv-color-primary-darker: #085a7a;
-  --cv-color-primary-subtle: color-mix(
-    in oklch,
-    var(--cv-color-primary) 8%,
-    var(--cv-color-surface)
-  );
-  --cv-color-primary-muted: color-mix(
-    in oklch,
-    var(--cv-color-primary) 15%,
-    var(--cv-color-surface)
-  );
+  --cv-color-primary-subtle: color-mix(in oklch, var(--cv-color-primary) 8%, var(--cv-color-surface));
+  --cv-color-primary-muted: color-mix(in oklch, var(--cv-color-primary) 15%, var(--cv-color-surface));
   --cv-color-on-primary: #ffffff;
   --cv-color-accent: #7c3aed;
   --cv-color-accent-light: color-mix(in oklch, var(--cv-color-accent) 70%, white);
@@ -225,7 +209,7 @@ cv-theme-provider[mode="light"] {
 /* === Light tokens — system preference === */
 @media (prefers-color-scheme: light) {
   :root,
-  cv-theme-provider[mode="system"] {
+  cv-theme-provider[mode='system'] {
     color-scheme: light;
     --cv-color-bg: #f8f9fb;
     --cv-color-surface: #ffffff;
@@ -250,16 +234,8 @@ cv-theme-provider[mode="light"] {
     --cv-color-primary: #0e8ab4;
     --cv-color-primary-dark: #0b7199;
     --cv-color-primary-darker: #085a7a;
-    --cv-color-primary-subtle: color-mix(
-      in oklch,
-      var(--cv-color-primary) 8%,
-      var(--cv-color-surface)
-    );
-    --cv-color-primary-muted: color-mix(
-      in oklch,
-      var(--cv-color-primary) 15%,
-      var(--cv-color-surface)
-    );
+    --cv-color-primary-subtle: color-mix(in oklch, var(--cv-color-primary) 8%, var(--cv-color-surface));
+    --cv-color-primary-muted: color-mix(in oklch, var(--cv-color-primary) 15%, var(--cv-color-surface));
     --cv-color-on-primary: #ffffff;
     --cv-color-accent: #7c3aed;
     --cv-color-accent-light: color-mix(in oklch, var(--cv-color-accent) 70%, white);

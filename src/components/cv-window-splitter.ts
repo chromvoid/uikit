@@ -1,4 +1,8 @@
-import {createWindowSplitter, type WindowSplitterModel, type WindowSplitterOrientation} from '@chromvoid/headless-ui'
+import {
+  createWindowSplitter,
+  type WindowSplitterModel,
+  type WindowSplitterOrientation,
+} from '@chromvoid/headless-ui/window-splitter'
 import {css, html, nothing} from 'lit'
 import type {PropertyValues} from 'lit'
 
@@ -8,7 +12,15 @@ export interface CVWindowSplitterEventDetail {
   position: number
 }
 
-const splitterKeysToPrevent = new Set(['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Home', 'End', 'Enter'])
+const splitterKeysToPrevent = new Set([
+  'ArrowLeft',
+  'ArrowRight',
+  'ArrowUp',
+  'ArrowDown',
+  'Home',
+  'End',
+  'Enter',
+])
 
 let cvWindowSplitterNonce = 0
 
@@ -76,11 +88,17 @@ export class CVWindowSplitter extends ReatomLitElement {
       }
 
       [part='base'][data-orientation='vertical'] {
-        grid-template-columns: var(--cv-window-splitter-primary-size, 50%) var(--cv-window-splitter-divider-size, 8px) 1fr;
+        grid-template-columns: var(--cv-window-splitter-primary-size, 50%) var(
+            --cv-window-splitter-divider-size,
+            8px
+          ) 1fr;
       }
 
       [part='base'][data-orientation='horizontal'] {
-        grid-template-rows: var(--cv-window-splitter-primary-size, 50%) var(--cv-window-splitter-divider-size, 8px) 1fr;
+        grid-template-rows: var(--cv-window-splitter-primary-size, 50%) var(
+            --cv-window-splitter-divider-size,
+            8px
+          ) 1fr;
       }
 
       [part='pane'] {
@@ -229,7 +247,11 @@ export class CVWindowSplitter extends ReatomLitElement {
   }
 
   private _onPointerDown = (e: PointerEvent): void => {
-    if ((e as PointerEvent & {button?: number}).button !== undefined && (e as PointerEvent & {button: number}).button !== 0) return
+    if (
+      (e as PointerEvent & {button?: number}).button !== undefined &&
+      (e as PointerEvent & {button: number}).button !== 0
+    )
+      return
     e.preventDefault()
     const sep = e.currentTarget as HTMLElement
     sep.setPointerCapture(e.pointerId)
@@ -274,7 +296,9 @@ export class CVWindowSplitter extends ReatomLitElement {
     this.model.actions.stopDragging()
     const pos = this.model.state.position()
     if (pos !== this._dragStartPosition) {
-      this.dispatchEvent(new CustomEvent('cv-change', {detail: {position: pos}, bubbles: true, composed: true}))
+      this.dispatchEvent(
+        new CustomEvent('cv-change', {detail: {position: pos}, bubbles: true, composed: true}),
+      )
     }
   }
 
@@ -288,7 +312,9 @@ export class CVWindowSplitter extends ReatomLitElement {
     this.model.actions.stopDragging()
     const pos = this.model.state.position()
     if (pos !== this._dragStartPosition) {
-      this.dispatchEvent(new CustomEvent('cv-change', {detail: {position: pos}, bubbles: true, composed: true}))
+      this.dispatchEvent(
+        new CustomEvent('cv-change', {detail: {position: pos}, bubbles: true, composed: true}),
+      )
     }
   }
 

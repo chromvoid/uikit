@@ -53,7 +53,9 @@ describe('cv-slider-multi-thumb', () => {
     document.body.append(slider)
     await settle(slider)
 
-    const thumbs = Array.from(slider.shadowRoot?.querySelectorAll('[part="thumb"]') ?? []) as HTMLButtonElement[]
+    const thumbs = Array.from(
+      slider.shadowRoot?.querySelectorAll('[part="thumb"]') ?? [],
+    ) as HTMLButtonElement[]
     thumbs[0]!.dispatchEvent(new KeyboardEvent('keydown', {key: 'ArrowRight', bubbles: true}))
     await settle(slider)
 
@@ -99,7 +101,9 @@ describe('cv-slider-multi-thumb', () => {
     document.body.append(slider)
     await settle(slider)
 
-    const thumbs = Array.from(slider.shadowRoot?.querySelectorAll('[part="thumb"]') ?? []) as HTMLButtonElement[]
+    const thumbs = Array.from(
+      slider.shadowRoot?.querySelectorAll('[part="thumb"]') ?? [],
+    ) as HTMLButtonElement[]
     for (let step = 0; step < 40; step += 1) {
       thumbs[1]!.dispatchEvent(new KeyboardEvent('keydown', {key: 'ArrowLeft', bubbles: true}))
     }
@@ -121,7 +125,9 @@ describe('cv-slider-multi-thumb', () => {
     const track = slider.shadowRoot?.querySelector('[part="track"]') as HTMLElement
     mockTrackRect(track, {left: 0, top: 0, width: 200, height: 20})
 
-    const thumbs = Array.from(slider.shadowRoot?.querySelectorAll('[part="thumb"]') ?? []) as HTMLButtonElement[]
+    const thumbs = Array.from(
+      slider.shadowRoot?.querySelectorAll('[part="thumb"]') ?? [],
+    ) as HTMLButtonElement[]
     thumbs[0]!.dispatchEvent(new KeyboardEvent('keydown', {key: 'ArrowRight', bubbles: true}))
     track.dispatchEvent(new MouseEvent('mousedown', {clientX: 170, clientY: 10, bubbles: true}))
     document.dispatchEvent(new MouseEvent('mouseup', {clientX: 180, clientY: 10, bubbles: true}))

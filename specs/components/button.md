@@ -2,7 +2,7 @@
 
 Interactive element that triggers an action or toggles a pressed state.
 
-**Headless:** [`createButton`](../../../headless/specs/components/button.md)
+**Headless:** [`createButton`](https://github.com/chromvoid/headless-ui/blob/main/specs/components/button.md)
 
 ## Anatomy
 
@@ -146,8 +146,8 @@ Additionally, component styles depend on theme tokens through fallback values:
 
 ## Events
 
-| Event    | Detail                                | Description                                           |
-| -------- | ------------------------------------- | ----------------------------------------------------- |
+| Event       | Detail                                | Description                                           |
+| ----------- | ------------------------------------- | ----------------------------------------------------- |
 | `cv-input`  | `{pressed: boolean, toggle: boolean}` | Fires on activation in toggle mode only               |
 | `cv-change` | `{pressed: boolean}`                  | Fires when `pressed` state changes (toggle mode only) |
 

@@ -1,4 +1,4 @@
-import {createCard, type CardModel} from '@chromvoid/headless-ui'
+import {createCard, type CardModel} from '@chromvoid/headless-ui/card'
 import {css, html, nothing} from 'lit'
 import type {PropertyValues} from 'lit'
 
@@ -58,8 +58,7 @@ export class CVCard extends ReatomLitElement {
         --cv-card-shadow: 0 1px 3px rgba(0, 0, 0, 0.24);
         --cv-card-gap: var(--cv-space-0, 0px);
         --cv-card-indicator-size: var(--cv-space-4, 16px);
-        --cv-card-indicator-transition: var(--cv-duration-fast, 120ms)
-          var(--cv-easing-standard, ease);
+        --cv-card-indicator-transition: var(--cv-duration-fast, 120ms) var(--cv-easing-standard, ease);
       }
 
       [part='base'] {
@@ -281,9 +280,13 @@ export class CVCard extends ReatomLitElement {
           @keydown=${this.handleHeaderKeyDown}
         >
           <slot name="header"></slot>
-          ${isExpandable
-            ? html`<span part="indicator" aria-hidden="true">&#x25B6;</span>`
-            : nothing}
+          ${
+            isExpandable
+              ? html`
+                  <span part="indicator" aria-hidden="true">&#x25B6;</span>
+                `
+              : nothing
+          }
         </div>
 
         <div

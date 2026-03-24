@@ -1,0 +1,56 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["eslint", "typescript", "import"],
+  "env": {
+    "browser": true,
+    "node": true,
+    "es2022": true
+  },
+  "ignorePatterns": [
+    "node_modules/**",
+    "dist/**",
+    "dist-demo/**",
+    "coverage/**",
+    "docs/.vitepress/dist/**",
+    "docs/.vitepress/cache/**",
+    "**/*.d.ts",
+    "specs/**/*.md",
+    "docs/**/*.md"
+  ],
+  "rules": {
+    "no-unused-vars": [
+      "warn",
+      {
+        "argsIgnorePattern": "^_",
+        "varsIgnorePattern": "^_",
+        "caughtErrorsIgnorePattern": "^_"
+      }
+    ],
+    "typescript/consistent-type-imports": "error",
+    "typescript/no-explicit-any": "warn",
+    "typescript/no-inferrable-types": "warn",
+    "typescript/no-empty-interface": "warn",
+    "typescript/no-namespace": "error",
+    "typescript/no-var-requires": "error",
+    "typescript/prefer-namespace-keyword": "error",
+    "typescript/triple-slash-reference": "off",
+    "typescript/no-non-null-assertion": "off",
+    "typescript/no-unnecessary-type-constraint": "off",
+    "no-undef": "off",
+    "no-redeclare": "off",
+    "quotes": [
+      "warn",
+      "single",
+      {
+        "allowTemplateLiterals": true,
+        "avoidEscape": true
+      }
+    ],
+    "semi": ["error", "never"],
+    "no-console": "warn",
+    "no-mixed-spaces-and-tabs": ["error", "smart-tabs"],
+    "no-empty": ["error", {"allowEmptyCatch": true}],
+    "object-curly-spacing": ["error", "never"],
+    "import/no-duplicates": "error"
+  }
+}

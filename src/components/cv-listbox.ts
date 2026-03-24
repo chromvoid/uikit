@@ -1,4 +1,4 @@
-import {createListbox, type ListboxModel, type ListboxGroup} from '@chromvoid/headless-ui'
+import {createListbox, type ListboxModel, type ListboxGroup} from '@chromvoid/headless-ui/listbox'
 import {css, html, nothing} from 'lit'
 import type {PropertyValues} from 'lit'
 
@@ -230,10 +230,10 @@ export class CVListbox extends ReatomLitElement {
     const {groups, optionGroupMap} = this.scanGroups()
 
     const previousSelected = preserveSelection
-      ? this.model?.state.selectedIds() ?? this.getInitialSelectedFromOptions(optionElements)
+      ? (this.model?.state.selectedIds() ?? this.getInitialSelectedFromOptions(optionElements))
       : this.getInitialSelectedFromOptions(optionElements)
 
-    const previousActive = preserveSelection ? this.model?.state.activeId() ?? null : null
+    const previousActive = preserveSelection ? (this.model?.state.activeId() ?? null) : null
 
     this.detachOptionListeners()
 
@@ -252,7 +252,9 @@ export class CVListbox extends ReatomLitElement {
       }
     })
 
-    const selectableIds = new Set(this.optionRecords.filter((record) => !record.disabled).map((record) => record.id))
+    const selectableIds = new Set(
+      this.optionRecords.filter((record) => !record.disabled).map((record) => record.id),
+    )
 
     const initialSelectedIds = previousSelected.filter((id) => selectableIds.has(id))
     const initialActiveId = previousActive && selectableIds.has(previousActive) ? previousActive : null

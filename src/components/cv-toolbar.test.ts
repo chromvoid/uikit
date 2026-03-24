@@ -27,7 +27,9 @@ const createSeparator = (value?: string) => {
 }
 
 const createToolbar = async (
-  items: Array<{type: 'item'; value: string; label: string; disabled?: boolean} | {type: 'separator'; value?: string}>,
+  items: Array<
+    {type: 'item'; value: string; label: string; disabled?: boolean} | {type: 'separator'; value?: string}
+  >,
   attrs?: {orientation?: 'horizontal' | 'vertical'; wrap?: boolean; 'aria-label'?: string; value?: string},
 ) => {
   const toolbar = document.createElement('cv-toolbar') as CVToolbar
@@ -49,8 +51,7 @@ const createToolbar = async (
   return toolbar
 }
 
-const getBase = (toolbar: CVToolbar) =>
-  toolbar.shadowRoot!.querySelector('[part="base"]') as HTMLElement
+const getBase = (toolbar: CVToolbar) => toolbar.shadowRoot!.querySelector('[part="base"]') as HTMLElement
 
 const getItems = (toolbar: CVToolbar) =>
   Array.from(toolbar.querySelectorAll('cv-toolbar-item')) as CVToolbarItem[]
@@ -70,26 +71,20 @@ describe('cv-toolbar', () => {
 
   describe('shadow DOM structure', () => {
     it('renders [part="base"] as a div element', async () => {
-      const toolbar = await createToolbar([
-        {type: 'item', value: 'a', label: 'A'},
-      ])
+      const toolbar = await createToolbar([{type: 'item', value: 'a', label: 'A'}])
       const base = getBase(toolbar)
       expect(base).not.toBeNull()
       expect(base.tagName.toLowerCase()).toBe('div')
     })
 
     it('renders [part="base"] with role="toolbar"', async () => {
-      const toolbar = await createToolbar([
-        {type: 'item', value: 'a', label: 'A'},
-      ])
+      const toolbar = await createToolbar([{type: 'item', value: 'a', label: 'A'}])
       const base = getBase(toolbar)
       expect(base.getAttribute('role')).toBe('toolbar')
     })
 
     it('renders a default slot inside [part="base"]', async () => {
-      const toolbar = await createToolbar([
-        {type: 'item', value: 'a', label: 'A'},
-      ])
+      const toolbar = await createToolbar([{type: 'item', value: 'a', label: 'A'}])
       const base = getBase(toolbar)
       const slot = base.querySelector('slot:not([name])')
       expect(slot).not.toBeNull()
@@ -100,9 +95,7 @@ describe('cv-toolbar', () => {
 
   describe('default property values', () => {
     it('has correct defaults', async () => {
-      const toolbar = await createToolbar([
-        {type: 'item', value: 'a', label: 'A'},
-      ])
+      const toolbar = await createToolbar([{type: 'item', value: 'a', label: 'A'}])
       expect(toolbar.orientation).toBe('horizontal')
       expect(toolbar.wrap).toBe(true)
       expect(toolbar.ariaLabel).toBe('')
@@ -121,18 +114,12 @@ describe('cv-toolbar', () => {
 
   describe('attribute reflection', () => {
     it('orientation attribute reflects to DOM', async () => {
-      const toolbar = await createToolbar(
-        [{type: 'item', value: 'a', label: 'A'}],
-        {orientation: 'vertical'},
-      )
+      const toolbar = await createToolbar([{type: 'item', value: 'a', label: 'A'}], {orientation: 'vertical'})
       expect(toolbar.getAttribute('orientation')).toBe('vertical')
     })
 
     it('wrap attribute reflects to DOM as boolean', async () => {
-      const toolbar = await createToolbar(
-        [{type: 'item', value: 'a', label: 'A'}],
-        {wrap: true},
-      )
+      const toolbar = await createToolbar([{type: 'item', value: 'a', label: 'A'}], {wrap: true})
       expect(toolbar.hasAttribute('wrap')).toBe(true)
     })
 
@@ -149,32 +136,24 @@ describe('cv-toolbar', () => {
 
   describe('ARIA', () => {
     it('role="toolbar" on [part="base"]', async () => {
-      const toolbar = await createToolbar([
-        {type: 'item', value: 'a', label: 'A'},
-      ])
+      const toolbar = await createToolbar([{type: 'item', value: 'a', label: 'A'}])
       expect(getBase(toolbar).getAttribute('role')).toBe('toolbar')
     })
 
     it('aria-orientation defaults to "horizontal"', async () => {
-      const toolbar = await createToolbar([
-        {type: 'item', value: 'a', label: 'A'},
-      ])
+      const toolbar = await createToolbar([{type: 'item', value: 'a', label: 'A'}])
       expect(getBase(toolbar).getAttribute('aria-orientation')).toBe('horizontal')
     })
 
     it('aria-orientation reflects orientation attribute', async () => {
-      const toolbar = await createToolbar(
-        [{type: 'item', value: 'a', label: 'A'}],
-        {orientation: 'vertical'},
-      )
+      const toolbar = await createToolbar([{type: 'item', value: 'a', label: 'A'}], {orientation: 'vertical'})
       expect(getBase(toolbar).getAttribute('aria-orientation')).toBe('vertical')
     })
 
     it('aria-label is set when provided', async () => {
-      const toolbar = await createToolbar(
-        [{type: 'item', value: 'a', label: 'A'}],
-        {'aria-label': 'Text formatting'},
-      )
+      const toolbar = await createToolbar([{type: 'item', value: 'a', label: 'A'}], {
+        'aria-label': 'Text formatting',
+      })
       expect(getBase(toolbar).getAttribute('aria-label')).toBe('Text formatting')
     })
 
@@ -185,9 +164,9 @@ describe('cv-toolbar', () => {
         {type: 'item', value: 'c', label: 'C'},
       ])
       const items = getItems(toolbar)
-      expect(items[0].tabIndex).toBe(0)
-      expect(items[1].tabIndex).toBe(-1)
-      expect(items[2].tabIndex).toBe(-1)
+      expect(items.at(0)?.tabIndex).toBe(0)
+      expect(items.at(1)?.tabIndex).toBe(-1)
+      expect(items.at(2)?.tabIndex).toBe(-1)
     })
 
     it('disabled item has aria-disabled="true"', async () => {
@@ -196,7 +175,7 @@ describe('cv-toolbar', () => {
         {type: 'item', value: 'b', label: 'B', disabled: true},
       ])
       const items = getItems(toolbar)
-      expect(items[1].getAttribute('aria-disabled')).toBe('true')
+      expect(items.at(1)?.getAttribute('aria-disabled')).toBe('true')
     })
   })
 
@@ -584,8 +563,8 @@ describe('cv-toolbar', () => {
         {type: 'item', value: 'b', label: 'B', disabled: true},
       ])
       const items = getItems(toolbar)
-      expect(items[0].active).toBe(true)
-      expect(items[1].active).toBe(false)
+      expect(items.at(0)?.active).toBe(true)
+      expect(items.at(1)?.active).toBe(false)
     })
   })
 
@@ -642,13 +621,11 @@ describe('cv-toolbar', () => {
     })
 
     it('cv-toolbar-separator aria-orientation is perpendicular to toolbar orientation', async () => {
-      const toolbarH = await createToolbar(
-        [
-          {type: 'item', value: 'a', label: 'A'},
-          {type: 'separator', value: 'sep1'},
-          {type: 'item', value: 'b', label: 'B'},
-        ],
-      )
+      const toolbarH = await createToolbar([
+        {type: 'item', value: 'a', label: 'A'},
+        {type: 'separator', value: 'sep1'},
+        {type: 'item', value: 'b', label: 'B'},
+      ])
       const sepH = toolbarH.querySelector('cv-toolbar-separator')
       const baseH = sepH!.shadowRoot?.querySelector('[part="base"]')
       const orientationTarget = baseH ?? sepH!
@@ -752,12 +729,7 @@ describe('cv-toolbar', () => {
     })
 
     it('no events fire when navigation does not change active item', async () => {
-      const toolbar = await createToolbar(
-        [
-          {type: 'item', value: 'a', label: 'A'},
-        ],
-        {wrap: false},
-      )
+      const toolbar = await createToolbar([{type: 'item', value: 'a', label: 'A'}], {wrap: false})
       let eventCount = 0
 
       toolbar.addEventListener('cv-input', () => eventCount++)
@@ -773,10 +745,7 @@ describe('cv-toolbar', () => {
 
   describe('headless contract delegation', () => {
     it('getRootProps() attributes are reflected on [part="base"]', async () => {
-      const toolbar = await createToolbar(
-        [{type: 'item', value: 'a', label: 'A'}],
-        {'aria-label': 'Actions'},
-      )
+      const toolbar = await createToolbar([{type: 'item', value: 'a', label: 'A'}], {'aria-label': 'Actions'})
       const base = getBase(toolbar)
       expect(base.getAttribute('role')).toBe('toolbar')
       expect(base.getAttribute('aria-orientation')).toBe('horizontal')
@@ -793,19 +762,19 @@ describe('cv-toolbar', () => {
       const items = getItems(toolbar)
 
       // Active item (first)
-      expect(items[0].id).toBeTruthy()
-      expect(items[0].tabIndex).toBe(0)
-      expect(items[0].getAttribute('data-active')).toBe('true')
+      expect(items.at(0)?.id).toBeTruthy()
+      expect(items.at(0)?.tabIndex).toBe(0)
+      expect(items.at(0)?.getAttribute('data-active')).toBe('true')
 
       // Inactive item
-      expect(items[1].id).toBeTruthy()
-      expect(items[1].tabIndex).toBe(-1)
-      expect(items[1].getAttribute('data-active')).toBe('false')
+      expect(items.at(1)?.id).toBeTruthy()
+      expect(items.at(1)?.tabIndex).toBe(-1)
+      expect(items.at(1)?.getAttribute('data-active')).toBe('false')
 
       // Disabled item
-      expect(items[2].id).toBeTruthy()
-      expect(items[2].getAttribute('aria-disabled')).toBe('true')
-      expect(items[2].getAttribute('data-active')).toBe('false')
+      expect(items.at(2)?.id).toBeTruthy()
+      expect(items.at(2)?.getAttribute('aria-disabled')).toBe('true')
+      expect(items.at(2)?.getAttribute('data-active')).toBe('false')
     })
 
     it('roving tabindex updates when active item changes', async () => {
@@ -816,15 +785,15 @@ describe('cv-toolbar', () => {
       ])
       const items = getItems(toolbar)
 
-      expect(items[0].tabIndex).toBe(0)
-      expect(items[1].tabIndex).toBe(-1)
-      expect(items[2].tabIndex).toBe(-1)
+      expect(items.at(0)?.tabIndex).toBe(0)
+      expect(items.at(1)?.tabIndex).toBe(-1)
+      expect(items.at(2)?.tabIndex).toBe(-1)
 
       await pressKey(toolbar, 'ArrowRight')
 
-      expect(items[0].tabIndex).toBe(-1)
-      expect(items[1].tabIndex).toBe(0)
-      expect(items[2].tabIndex).toBe(-1)
+      expect(items.at(0)?.tabIndex).toBe(-1)
+      expect(items.at(1)?.tabIndex).toBe(0)
+      expect(items.at(2)?.tabIndex).toBe(-1)
     })
 
     it('data-active attribute updates when active item changes', async () => {
@@ -834,13 +803,13 @@ describe('cv-toolbar', () => {
       ])
       const items = getItems(toolbar)
 
-      expect(items[0].getAttribute('data-active')).toBe('true')
-      expect(items[1].getAttribute('data-active')).toBe('false')
+      expect(items.at(0)?.getAttribute('data-active')).toBe('true')
+      expect(items.at(1)?.getAttribute('data-active')).toBe('false')
 
       await pressKey(toolbar, 'ArrowRight')
 
-      expect(items[0].getAttribute('data-active')).toBe('false')
-      expect(items[1].getAttribute('data-active')).toBe('true')
+      expect(items.at(0)?.getAttribute('data-active')).toBe('false')
+      expect(items.at(1)?.getAttribute('data-active')).toBe('true')
     })
 
     it('cv-toolbar-item active property syncs with data-active', async () => {
@@ -850,13 +819,13 @@ describe('cv-toolbar', () => {
       ])
       const items = getItems(toolbar)
 
-      expect(items[0].active).toBe(true)
-      expect(items[1].active).toBe(false)
+      expect(items.at(0)?.active).toBe(true)
+      expect(items.at(1)?.active).toBe(false)
 
       await pressKey(toolbar, 'ArrowRight')
 
-      expect(items[0].active).toBe(false)
-      expect(items[1].active).toBe(true)
+      expect(items.at(0)?.active).toBe(false)
+      expect(items.at(1)?.active).toBe(true)
     })
   })
 
@@ -912,8 +881,8 @@ describe('cv-toolbar', () => {
 
       expect(toolbar.value).toBe('c')
       const items = getItems(toolbar)
-      expect(items[2].active).toBe(true)
-      expect(items[0].active).toBe(false)
+      expect(items.at(2)?.active).toBe(true)
+      expect(items.at(0)?.active).toBe(false)
     })
   })
 })

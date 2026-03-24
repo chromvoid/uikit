@@ -1,5 +1,5 @@
-import {afterEach, describe, expect, it, vi} from 'vitest'
 import {html} from 'lit'
+import {afterEach, describe, expect, it, vi} from 'vitest'
 
 import type {CVDialog} from '../components/cv-dialog'
 import {createDialogController} from './create-dialog-controller'
@@ -134,8 +134,12 @@ describe('createDialogController', () => {
     const resultPromise = controller.showCustom<string>(
       {
         title: 'Custom dialog',
-        content: html`<button id="inside-button">Inside</button>`,
-        footer: html`<button id="inside-action">Action</button>`,
+        content: html`
+          <button id="inside-button">Inside</button>
+        `,
+        footer: html`
+          <button id="inside-action">Action</button>
+        `,
       },
       (dialog, resolve) => {
         dialogRef = dialog as CVDialog
@@ -157,7 +161,9 @@ describe('createDialogController', () => {
     const resultPromise = controller.showCustom<string>(
       {
         title: 'Dismiss dialog',
-        content: html`<button id="dismiss-button">Dismiss</button>`,
+        content: html`
+          <button id="dismiss-button">Dismiss</button>
+        `,
       },
       (dialog) => {
         dialogRef = dialog as CVDialog
@@ -179,7 +185,9 @@ describe('createDialogController', () => {
     const resultPromise = controller.showCustom<string>(
       {
         title: 'Immediate dialog',
-        content: html`<span>Immediate</span>`,
+        content: html`
+          <span>Immediate</span>
+        `,
       },
       (_dialog, resolve) => {
         resolve('instant')
@@ -219,7 +227,9 @@ describe('createDialogController', () => {
       const resultPromise = controller.showCustom<string>(
         {
           title: 'Focus dialog',
-          content: html`<button id="focus-target">Focusable</button>`,
+          content: html`
+            <button id="focus-target">Focusable</button>
+          `,
         },
         (dialog, resolve) => {
           dialogRef = dialog as CVDialog

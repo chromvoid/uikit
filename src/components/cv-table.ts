@@ -1,4 +1,4 @@
-import {createTable, type TableModel, type TableSortDirection} from '@chromvoid/headless-ui'
+import {createTable, type TableModel, type TableSortDirection} from '@chromvoid/headless-ui/table'
 import {css, html, nothing} from 'lit'
 import type {PropertyValues} from 'lit'
 
@@ -437,7 +437,8 @@ export class CVTable extends ReatomLitElement {
   private attachColumnListeners(): void {
     for (const record of this.columnRecords) {
       const click = () => this.handleColumnClick(record.id, record.sortable)
-      const keydown = (event: Event) => this.handleColumnKeyDown(event as KeyboardEvent, record.id, record.sortable)
+      const keydown = (event: Event) =>
+        this.handleColumnKeyDown(event as KeyboardEvent, record.id, record.sortable)
 
       record.element.addEventListener('click', click)
       record.element.addEventListener('keydown', keydown)

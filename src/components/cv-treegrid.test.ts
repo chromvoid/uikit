@@ -530,10 +530,7 @@ describe('cv-treegrid', () => {
 
     it('disabled rows get aria-disabled="true"', async () => {
       const grid = await createTreegrid({ariaLabel: 'Test'})
-      grid.append(
-        createColumn('name', 'Name'),
-        createRow('r1', [createCell('name', 'A')], {disabled: true}),
-      )
+      grid.append(createColumn('name', 'Name'), createRow('r1', [createCell('name', 'A')], {disabled: true}))
       await settle(grid)
 
       const row1 = grid.querySelector('cv-treegrid-row[value="r1"]') as CVTreegridRow
@@ -785,13 +782,17 @@ describe('cv-treegrid', () => {
         )
         await settle(grid)
 
-        getBase(grid).dispatchEvent(new KeyboardEvent('keydown', {key: 'Enter', ctrlKey: true, bubbles: true}))
+        getBase(grid).dispatchEvent(
+          new KeyboardEvent('keydown', {key: 'Enter', ctrlKey: true, bubbles: true}),
+        )
         await settle(grid)
         expect(grid.selectedValues).toContain('r1')
 
         getBase(grid).dispatchEvent(new KeyboardEvent('keydown', {key: 'ArrowDown', bubbles: true}))
         await settle(grid)
-        getBase(grid).dispatchEvent(new KeyboardEvent('keydown', {key: 'Enter', ctrlKey: true, bubbles: true}))
+        getBase(grid).dispatchEvent(
+          new KeyboardEvent('keydown', {key: 'Enter', ctrlKey: true, bubbles: true}),
+        )
         await settle(grid)
         expect(grid.selectedValues).toContain('r1')
         expect(grid.selectedValues).toContain('r2')
@@ -1005,7 +1006,9 @@ describe('cv-treegrid', () => {
       )
       await settle(grid)
 
-      const disabledCell = grid.querySelector('cv-treegrid-row[value="r1"] cv-treegrid-cell[column="size"]') as CVTreegridCell
+      const disabledCell = grid.querySelector(
+        'cv-treegrid-row[value="r1"] cv-treegrid-cell[column="size"]',
+      ) as CVTreegridCell
       const initialValue = grid.value
       disabledCell.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
       await settle(grid)
@@ -1015,10 +1018,7 @@ describe('cv-treegrid', () => {
 
     it('disabled row gets aria-disabled attribute', async () => {
       const grid = await createTreegrid({ariaLabel: 'Test'})
-      grid.append(
-        createColumn('name', 'Name'),
-        createRow('r1', [createCell('name', 'A')], {disabled: true}),
-      )
+      grid.append(createColumn('name', 'Name'), createRow('r1', [createCell('name', 'A')], {disabled: true}))
       await settle(grid)
 
       const row1 = grid.querySelector('cv-treegrid-row[value="r1"]') as CVTreegridRow
@@ -1186,11 +1186,7 @@ describe('cv-treegrid', () => {
     it('removing a cv-treegrid-row triggers model rebuild', async () => {
       const grid = await createTreegrid({ariaLabel: 'Test'})
       const row2 = createRow('r2', [createCell('name', 'B')])
-      grid.append(
-        createColumn('name', 'Name'),
-        createRow('r1', [createCell('name', 'A')]),
-        row2,
-      )
+      grid.append(createColumn('name', 'Name'), createRow('r1', [createCell('name', 'A')]), row2)
       await settle(grid)
 
       expect(Number(getBase(grid).getAttribute('aria-rowcount'))).toBe(2)
@@ -1241,7 +1237,9 @@ describe('cv-treegrid', () => {
       expect(grid.expandedValues).toContain('r1')
 
       // Navigate to r2 and select it
-      const cell2 = grid.querySelector('cv-treegrid-row[value="r2"] cv-treegrid-cell[column="name"]') as CVTreegridCell
+      const cell2 = grid.querySelector(
+        'cv-treegrid-row[value="r2"] cv-treegrid-cell[column="name"]',
+      ) as CVTreegridCell
       cell2.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
       await settle(grid)
       expect(grid.value).toBe('r2::name')

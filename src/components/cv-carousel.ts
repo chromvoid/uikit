@@ -1,4 +1,4 @@
-import {createCarousel, type CarouselModel} from '@chromvoid/headless-ui'
+import {createCarousel, type CarouselModel} from '@chromvoid/headless-ui/carousel'
 import {css, html, nothing} from 'lit'
 import type {PropertyValues} from 'lit'
 
@@ -179,7 +179,9 @@ export class CVCarousel extends ReatomLitElement {
     super.updated(changedProperties)
 
     const shouldSyncFromModel =
-      !changedProperties.has('activeIndex') && !changedProperties.has('value') && !changedProperties.has('paused')
+      !changedProperties.has('activeIndex') &&
+      !changedProperties.has('value') &&
+      !changedProperties.has('paused')
 
     if (shouldSyncFromModel) {
       const previous: CarouselSnapshot = {
@@ -234,8 +236,10 @@ export class CVCarousel extends ReatomLitElement {
   }
 
   private rebuildModelFromSlot(preserveState: boolean, requestRender = true): void {
-    const previous = preserveState ? this.captureSnapshot() : {activeIndex: this.activeIndex, paused: this.paused}
-    const previousActiveSlideId = preserveState ? this.slideRecords[previous.activeIndex]?.id ?? null : null
+    const previous = preserveState
+      ? this.captureSnapshot()
+      : {activeIndex: this.activeIndex, paused: this.paused}
+    const previousActiveSlideId = preserveState ? (this.slideRecords[previous.activeIndex]?.id ?? null) : null
 
     this.slideRecords = this.getSlideElements().map((element, index) => ({
       id: this.ensureSlideValue(element, index),
@@ -256,7 +260,11 @@ export class CVCarousel extends ReatomLitElement {
         : -1
 
     const initialActiveSlideIndex =
-      activeIndexByValue >= 0 ? activeIndexByValue : activeIndexById >= 0 ? activeIndexById : previous.activeIndex
+      activeIndexByValue >= 0
+        ? activeIndexByValue
+        : activeIndexById >= 0
+          ? activeIndexById
+          : previous.activeIndex
 
     this.model = createCarousel({
       idBase: this.idBase,

@@ -13,14 +13,16 @@ const settle = async (element: CVMenuButton) => {
 const initialInnerWidth = Object.getOwnPropertyDescriptor(window, 'innerWidth')
 const initialInnerHeight = Object.getOwnPropertyDescriptor(window, 'innerHeight')
 
-async function mountMenuButton(params: {
-  closeOnSelect?: boolean
-  split?: boolean
-  disabled?: boolean
-  variant?: string
-  size?: string
-  content?: string
-} = {}) {
+async function mountMenuButton(
+  params: {
+    closeOnSelect?: boolean
+    split?: boolean
+    disabled?: boolean
+    variant?: string
+    size?: string
+    content?: string
+  } = {},
+) {
   CVMenuItem.define()
   CVMenuButton.define()
 
@@ -63,10 +65,7 @@ async function mountMenuButton(params: {
   return {menu, trigger, actionBtn, dropdownBtn, base, menuBox, items}
 }
 
-function mockRect(
-  element: HTMLElement,
-  rect: {left: number; top: number; width: number; height: number},
-) {
+function mockRect(element: HTMLElement, rect: {left: number; top: number; width: number; height: number}) {
   Object.defineProperty(element, 'getBoundingClientRect', {
     configurable: true,
     value: () =>
@@ -117,7 +116,9 @@ describe('cv-menu-button', () => {
     const changes: Array<{value: string | null; activeId: string | null; open: boolean}> = []
 
     menu.addEventListener('cv-change', (event) => {
-      changes.push((event as CustomEvent<{value: string | null; activeId: string | null; open: boolean}>).detail)
+      changes.push(
+        (event as CustomEvent<{value: string | null; activeId: string | null; open: boolean}>).detail,
+      )
     })
 
     trigger!.dispatchEvent(new KeyboardEvent('keydown', {key: 'ArrowDown', bubbles: true}))

@@ -38,11 +38,9 @@ const createEmptyFeed = async (attrs?: Partial<CVFeed>) => {
   return el
 }
 
-const getBase = (el: CVFeed | CVFeedArticle) =>
-  el.shadowRoot!.querySelector('[part="base"]') as HTMLElement
+const getBase = (el: CVFeed | CVFeedArticle) => el.shadowRoot!.querySelector('[part="base"]') as HTMLElement
 
-const getArticles = (feed: CVFeed) =>
-  Array.from(feed.querySelectorAll('cv-feed-article')) as CVFeedArticle[]
+const getArticles = (feed: CVFeed) => Array.from(feed.querySelectorAll('cv-feed-article')) as CVFeedArticle[]
 
 afterEach(() => {
   document.body.innerHTML = ''

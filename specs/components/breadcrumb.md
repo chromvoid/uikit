@@ -2,7 +2,7 @@
 
 Navigation landmark that displays a trail of links showing the user's current location within a hierarchical structure.
 
-**Headless:** [`createBreadcrumb`](../../../headless/specs/components/breadcrumb.md)
+**Headless:** [`createBreadcrumb`](https://github.com/chromvoid/headless-ui/blob/main/specs/components/breadcrumb.md)
 
 ## Anatomy
 
@@ -15,29 +15,29 @@ Navigation landmark that displays a trail of links showing the user's current lo
 
 ## Attributes
 
-| Attribute | Type | Default | Description |
-|-----------|------|---------|-------------|
-| `value` | String | `""` | Value of the current (active) breadcrumb item. Reflects and controls which item has `aria-current="page"`. |
-| `aria-label` | String | `"Breadcrumb"` | Accessible label for the navigation landmark |
-| `aria-labelledby` | String | `""` | ID of an element that labels the navigation landmark. When set, `aria-label` is omitted. |
+| Attribute         | Type   | Default        | Description                                                                                                |
+| ----------------- | ------ | -------------- | ---------------------------------------------------------------------------------------------------------- |
+| `value`           | String | `""`           | Value of the current (active) breadcrumb item. Reflects and controls which item has `aria-current="page"`. |
+| `aria-label`      | String | `"Breadcrumb"` | Accessible label for the navigation landmark                                                               |
+| `aria-labelledby` | String | `""`           | ID of an element that labels the navigation landmark. When set, `aria-label` is omitted.                   |
 
 ## Slots
 
-| Slot | Description |
-|------|-------------|
+| Slot        | Description                   |
+| ----------- | ----------------------------- |
 | `(default)` | `cv-breadcrumb-item` elements |
 
 ## CSS Parts
 
-| Part | Element | Description |
-|------|---------|-------------|
-| `base` | `<nav>` | Navigation landmark wrapper |
-| `list` | `<ol>` | Ordered list container for breadcrumb items |
+| Part   | Element | Description                                 |
+| ------ | ------- | ------------------------------------------- |
+| `base` | `<nav>` | Navigation landmark wrapper                 |
+| `list` | `<ol>`  | Ordered list container for breadcrumb items |
 
 ## CSS Custom Properties
 
-| Property | Default | Description |
-|----------|---------|-------------|
+| Property              | Default                  | Description                  |
+| --------------------- | ------------------------ | ---------------------------- |
 | `--cv-breadcrumb-gap` | `var(--cv-space-2, 8px)` | Gap between breadcrumb items |
 
 ## Events
@@ -105,48 +105,48 @@ No component-specific events. Navigation uses standard link click behavior.
 
 #### Attributes
 
-| Attribute | Type | Default | Description |
-|-----------|------|---------|-------------|
-| `value` | String | `""` | Unique identifier for this item. Auto-generated as `item-{n}` if empty. |
-| `href` | String | `""` | URL destination. Defaults to `#` if empty. |
-| `current` | Boolean | `false` | Whether this item represents the current page. Managed by parent, reflects `aria-current="page"` on the link. |
-| `show-separator` | Boolean | `true` | Whether the separator is visible. Managed by parent — hidden on the last item. |
+| Attribute        | Type    | Default | Description                                                                                                   |
+| ---------------- | ------- | ------- | ------------------------------------------------------------------------------------------------------------- |
+| `value`          | String  | `""`    | Unique identifier for this item. Auto-generated as `item-{n}` if empty.                                       |
+| `href`           | String  | `""`    | URL destination. Defaults to `#` if empty.                                                                    |
+| `current`        | Boolean | `false` | Whether this item represents the current page. Managed by parent, reflects `aria-current="page"` on the link. |
+| `show-separator` | Boolean | `true`  | Whether the separator is visible. Managed by parent — hidden on the last item.                                |
 
 **Internal property (not reflected):**
 
-| Property | Type | Default | Description |
-|----------|------|---------|-------------|
-| `linkId` | String | `""` | DOM id for the link element, set by parent from headless contract |
+| Property | Type   | Default | Description                                                       |
+| -------- | ------ | ------- | ----------------------------------------------------------------- |
+| `linkId` | String | `""`    | DOM id for the link element, set by parent from headless contract |
 
 #### Slots
 
-| Slot | Description |
-|------|-------------|
-| `(default)` | Label text |
-| `prefix` | Icon or element before the label |
-| `suffix` | Icon or element after the label |
+| Slot        | Description                           |
+| ----------- | ------------------------------------- |
+| `(default)` | Label text                            |
+| `prefix`    | Icon or element before the label      |
+| `suffix`    | Icon or element after the label       |
 | `separator` | Separator between items. Default: `/` |
 
 #### CSS Parts
 
-| Part | Element | Description |
-|------|---------|-------------|
-| `link` | `<a>` | The anchor element |
-| `prefix` | `<span>` | Prefix container |
-| `suffix` | `<span>` | Suffix container |
+| Part        | Element  | Description                                    |
+| ----------- | -------- | ---------------------------------------------- |
+| `link`      | `<a>`    | The anchor element                             |
+| `prefix`    | `<span>` | Prefix container                               |
+| `suffix`    | `<span>` | Suffix container                               |
 | `separator` | `<span>` | Separator container (has `aria-hidden="true"`) |
 
 #### CSS Custom Properties
 
-| Property | Default | Description |
-|----------|---------|-------------|
-| `--cv-breadcrumb-item-gap` | `var(--cv-space-2, 8px)` | Gap between prefix, link, suffix, and separator |
-| `--cv-breadcrumb-item-separator-opacity` | `0.6` | Opacity of the separator |
-| `--cv-breadcrumb-item-current-font-weight` | `600` | Font weight of the current item's link |
+| Property                                   | Default                  | Description                                     |
+| ------------------------------------------ | ------------------------ | ----------------------------------------------- |
+| `--cv-breadcrumb-item-gap`                 | `var(--cv-space-2, 8px)` | Gap between prefix, link, suffix, and separator |
+| `--cv-breadcrumb-item-separator-opacity`   | `0.6`                    | Opacity of the separator                        |
+| `--cv-breadcrumb-item-current-font-weight` | `600`                    | Font weight of the current item's link          |
 
 #### Visual States
 
-| Host selector | Description |
-|---------------|-------------|
-| `:host([current])` | Current page — link has `font-weight: 600`, `aria-current="page"` |
-| `:host(:not([show-separator]))` | Separator hidden (last item) |
+| Host selector                   | Description                                                       |
+| ------------------------------- | ----------------------------------------------------------------- |
+| `:host([current])`              | Current page — link has `font-weight: 600`, `aria-current="page"` |
+| `:host(:not([show-separator]))` | Separator hidden (last item)                                      |

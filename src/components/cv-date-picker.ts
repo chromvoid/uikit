@@ -3,7 +3,7 @@ import {
   type DatePickerKeyboardEventLike,
   type DatePickerModel,
   type DatePickerTimeZone,
-} from '@chromvoid/headless-ui'
+} from '@chromvoid/headless-ui/date-picker'
 import {css, html, nothing} from 'lit'
 import type {PropertyValues} from 'lit'
 

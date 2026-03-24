@@ -2,7 +2,7 @@
 
 Standalone listbox widget for single or multiple selection from a list of options, with keyboard navigation, typeahead, optional grouping, and virtual scroll support.
 
-**Headless:** [`createListbox`](../../../headless/specs/components/listbox.md)
+**Headless:** [`createListbox`](https://github.com/chromvoid/headless-ui/blob/main/specs/components/listbox.md)
 
 ## Anatomy
 
@@ -14,80 +14,80 @@ Standalone listbox widget for single or multiple selection from a list of option
 
 ## Attributes
 
-| Attribute | Type | Default | Description |
-|-----------|------|---------|-------------|
-| `selection-mode` | String | `"single"` | Selection mode: `"single"` \| `"multiple"` |
-| `orientation` | String | `"vertical"` | Layout orientation: `"vertical"` \| `"horizontal"` |
-| `focus-strategy` | String | `"aria-activedescendant"` | Focus management: `"aria-activedescendant"` \| `"roving-tabindex"` |
-| `selection-follows-focus` | Boolean | `false` | Auto-select focused option in single mode |
-| `range-selection` | Boolean | `false` | Enable Shift+Arrow and Shift+Space range selection (multiple mode only) |
-| `typeahead` | Boolean | `true` | Enable typeahead character navigation |
-| `aria-label` | String | `""` | Accessible label for the listbox |
+| Attribute                 | Type    | Default                   | Description                                                             |
+| ------------------------- | ------- | ------------------------- | ----------------------------------------------------------------------- |
+| `selection-mode`          | String  | `"single"`                | Selection mode: `"single"` \| `"multiple"`                              |
+| `orientation`             | String  | `"vertical"`              | Layout orientation: `"vertical"` \| `"horizontal"`                      |
+| `focus-strategy`          | String  | `"aria-activedescendant"` | Focus management: `"aria-activedescendant"` \| `"roving-tabindex"`      |
+| `selection-follows-focus` | Boolean | `false`                   | Auto-select focused option in single mode                               |
+| `range-selection`         | Boolean | `false`                   | Enable Shift+Arrow and Shift+Space range selection (multiple mode only) |
+| `typeahead`               | Boolean | `true`                    | Enable typeahead character navigation                                   |
+| `aria-label`              | String  | `""`                      | Accessible label for the listbox                                        |
 
 Non-reflected properties:
 
-| Property | Type | Default | Description |
-|----------|------|---------|-------------|
-| `value` | `string \| null` | `null` | First selected option value (single-select shorthand) |
-| `selectedValues` | `string[]` | `[]` | Array of all selected option values |
+| Property         | Type             | Default | Description                                           |
+| ---------------- | ---------------- | ------- | ----------------------------------------------------- |
+| `value`          | `string \| null` | `null`  | First selected option value (single-select shorthand) |
+| `selectedValues` | `string[]`       | `[]`    | Array of all selected option values                   |
 
 ## Slots
 
-| Slot | Description |
-|------|-------------|
+| Slot        | Description                                                |
+| ----------- | ---------------------------------------------------------- |
 | `(default)` | One or more `<cv-option>` or `<cv-listbox-group>` children |
 
 ## CSS Parts
 
-| Part | Element | Description |
-|------|---------|-------------|
+| Part   | Element | Description                                |
+| ------ | ------- | ------------------------------------------ |
 | `base` | `<div>` | Root listbox element with `role="listbox"` |
 
 ## CSS Custom Properties
 
-| Property | Default | Description |
-|----------|---------|-------------|
-| `--cv-listbox-gap` | `var(--cv-space-1, 4px)` | Gap between options |
-| `--cv-listbox-padding` | `var(--cv-space-1, 4px)` | Inner padding of the listbox container |
-| `--cv-listbox-border-radius` | `var(--cv-radius-md, 10px)` | Border radius of the listbox container |
-| `--cv-listbox-border-color` | `var(--cv-color-border, #2a3245)` | Border color |
-| `--cv-listbox-background` | `var(--cv-color-surface, #141923)` | Background color |
-| `--cv-listbox-focus-outline-color` | `var(--cv-color-primary, #65d7ff)` | Focus-visible outline color |
+| Property                           | Default                            | Description                            |
+| ---------------------------------- | ---------------------------------- | -------------------------------------- |
+| `--cv-listbox-gap`                 | `var(--cv-space-1, 4px)`           | Gap between options                    |
+| `--cv-listbox-padding`             | `var(--cv-space-1, 4px)`           | Inner padding of the listbox container |
+| `--cv-listbox-border-radius`       | `var(--cv-radius-md, 10px)`        | Border radius of the listbox container |
+| `--cv-listbox-border-color`        | `var(--cv-color-border, #2a3245)`  | Border color                           |
+| `--cv-listbox-background`          | `var(--cv-color-surface, #141923)` | Background color                       |
+| `--cv-listbox-focus-outline-color` | `var(--cv-color-primary, #65d7ff)` | Focus-visible outline color            |
 
 ## Visual States
 
-| Host selector | Description |
-|---------------|-------------|
-| `:host([orientation="horizontal"])` | Horizontal layout (flexbox row direction) |
-| `:host([selection-mode="multiple"])` | Multiple selection mode active |
-| `:host([focus-strategy="roving-tabindex"])` | Options receive DOM focus directly |
+| Host selector                               | Description                               |
+| ------------------------------------------- | ----------------------------------------- |
+| `:host([orientation="horizontal"])`         | Horizontal layout (flexbox row direction) |
+| `:host([selection-mode="multiple"])`        | Multiple selection mode active            |
+| `:host([focus-strategy="roving-tabindex"])` | Options receive DOM focus directly        |
 
 ## Events
 
-| Event | Detail | Description |
-|-------|--------|-------------|
-| `cv-input` | `{selectedValues: string[], activeValue: string \| null}` | Fires when active option or selection changes via user interaction |
-| `cv-change` | `{selectedValues: string[], activeValue: string \| null}` | Fires when selected option(s) change via user interaction |
+| Event       | Detail                                                    | Description                                                        |
+| ----------- | --------------------------------------------------------- | ------------------------------------------------------------------ |
+| `cv-input`  | `{selectedValues: string[], activeValue: string \| null}` | Fires when active option or selection changes via user interaction |
+| `cv-change` | `{selectedValues: string[], activeValue: string \| null}` | Fires when selected option(s) change via user interaction          |
 
 ## Keyboard Interaction
 
 All keyboard handling is delegated to headless `actions.handleKeyDown`. The following is the resulting behavior:
 
-| Key | Context | Action |
-|-----|---------|--------|
-| `ArrowDown` / `ArrowRight`* | any | Move to next enabled option |
-| `ArrowUp` / `ArrowLeft`* | any | Move to previous enabled option |
-| `Home` | any | Move to first enabled option |
-| `End` | any | Move to last enabled option |
-| `Space` / `Enter` | single mode | Select active option exclusively |
-| `Space` / `Enter` | multiple mode | Toggle active option selection |
-| `Escape` | any | Close (for composite patterns) |
-| `Ctrl/Cmd + A` | multiple mode | Select all enabled options |
-| `Shift + Arrow` | multiple + range-selection | Extend range selection |
-| `Shift + Space` | multiple + range-selection | Select range from anchor to active |
-| printable char | typeahead enabled | Typeahead navigation to matching option |
+| Key                          | Context                    | Action                                  |
+| ---------------------------- | -------------------------- | --------------------------------------- |
+| `ArrowDown` / `ArrowRight`\* | any                        | Move to next enabled option             |
+| `ArrowUp` / `ArrowLeft`\*    | any                        | Move to previous enabled option         |
+| `Home`                       | any                        | Move to first enabled option            |
+| `End`                        | any                        | Move to last enabled option             |
+| `Space` / `Enter`            | single mode                | Select active option exclusively        |
+| `Space` / `Enter`            | multiple mode              | Toggle active option selection          |
+| `Escape`                     | any                        | Close (for composite patterns)          |
+| `Ctrl/Cmd + A`               | multiple mode              | Select all enabled options              |
+| `Shift + Arrow`              | multiple + range-selection | Extend range selection                  |
+| `Shift + Space`              | multiple + range-selection | Select range from anchor to active      |
+| printable char               | typeahead enabled          | Typeahead navigation to matching option |
 
-*Arrow key mapping depends on orientation: vertical uses Up/Down, horizontal uses Left/Right.
+\*Arrow key mapping depends on orientation: vertical uses Up/Down, horizontal uses Left/Right.
 
 ## Reactive State Mapping
 
@@ -95,29 +95,29 @@ All keyboard handling is delegated to headless `actions.handleKeyDown`. The foll
 
 ### Attribute to Headless (UIKit -> Headless)
 
-| UIKit Property | Direction | Headless Binding |
-|----------------|-----------|------------------|
-| `selection-mode` | attr -> option | passed as `selectionMode` in `createListbox(options)` |
-| `orientation` | attr -> option | passed as `orientation` in `createListbox(options)` |
-| `focus-strategy` | attr -> option | passed as `focusStrategy` in `createListbox(options)` |
+| UIKit Property            | Direction      | Headless Binding                                              |
+| ------------------------- | -------------- | ------------------------------------------------------------- |
+| `selection-mode`          | attr -> option | passed as `selectionMode` in `createListbox(options)`         |
+| `orientation`             | attr -> option | passed as `orientation` in `createListbox(options)`           |
+| `focus-strategy`          | attr -> option | passed as `focusStrategy` in `createListbox(options)`         |
 | `selection-follows-focus` | attr -> option | passed as `selectionFollowsFocus` in `createListbox(options)` |
-| `range-selection` | attr -> option | passed as `rangeSelection` in `createListbox(options)` |
-| `typeahead` | attr -> option | passed as `typeahead` in `createListbox(options)` |
-| `aria-label` | attr -> option | passed as `ariaLabel` in `createListbox(options)` |
-| `value` (setter) | prop -> action | `actions.selectOnly(id)` / `actions.clearSelected()` |
+| `range-selection`         | attr -> option | passed as `rangeSelection` in `createListbox(options)`        |
+| `typeahead`               | attr -> option | passed as `typeahead` in `createListbox(options)`             |
+| `aria-label`              | attr -> option | passed as `ariaLabel` in `createListbox(options)`             |
+| `value` (setter)          | prop -> action | `actions.selectOnly(id)` / `actions.clearSelected()`          |
 
 When any configuration attribute changes, the headless model is rebuilt via `createListbox` with updated options, preserving current selection and active state where still valid.
 
 ### Headless to DOM (Headless -> UIKit)
 
-| Headless State | Direction | DOM Reflection |
-|----------------|-----------|----------------|
-| `state.activeId()` | state -> render | `aria-activedescendant` on `[part="base"]` (activedescendant strategy); DOM focus on active option (roving-tabindex strategy) |
-| `state.selectedIds()` | state -> render | `[aria-selected]` on each `cv-option`; `selectedValues` property; `value` property |
-| `state.selectionMode` | state -> attr | `[selection-mode]` host attribute |
-| `state.focusStrategy` | state -> attr | `[focus-strategy]` host attribute |
-| `state.orientation` | state -> attr | `[orientation]` host attribute |
-| `state.optionCount` | state -> render | `aria-setsize` on each option via `getOptionProps` |
+| Headless State        | Direction       | DOM Reflection                                                                                                                |
+| --------------------- | --------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| `state.activeId()`    | state -> render | `aria-activedescendant` on `[part="base"]` (activedescendant strategy); DOM focus on active option (roving-tabindex strategy) |
+| `state.selectedIds()` | state -> render | `[aria-selected]` on each `cv-option`; `selectedValues` property; `value` property                                            |
+| `state.selectionMode` | state -> attr   | `[selection-mode]` host attribute                                                                                             |
+| `state.focusStrategy` | state -> attr   | `[focus-strategy]` host attribute                                                                                             |
+| `state.orientation`   | state -> attr   | `[orientation]` host attribute                                                                                                |
+| `state.optionCount`   | state -> render | `aria-setsize` on each option via `getOptionProps`                                                                            |
 
 ### Contract Spreading
 
@@ -252,32 +252,32 @@ Individual selectable option within a `cv-listbox` or `cv-listbox-group`. The pa
 
 #### Attributes
 
-| Attribute | Type | Default | Description |
-|-----------|------|---------|-------------|
-| `value` | String | `""` | Unique identifier for this option. Auto-generated as `option-{n}` if omitted. |
-| `disabled` | Boolean | `false` | Whether the option is disabled |
-| `selected` | Boolean | `false` | Whether the option is selected. Managed by parent. |
-| `active` | Boolean | `false` | Whether the option is the active (highlighted) option. Managed by parent. |
+| Attribute  | Type    | Default | Description                                                                   |
+| ---------- | ------- | ------- | ----------------------------------------------------------------------------- |
+| `value`    | String  | `""`    | Unique identifier for this option. Auto-generated as `option-{n}` if omitted. |
+| `disabled` | Boolean | `false` | Whether the option is disabled                                                |
+| `selected` | Boolean | `false` | Whether the option is selected. Managed by parent.                            |
+| `active`   | Boolean | `false` | Whether the option is the active (highlighted) option. Managed by parent.     |
 
 #### Slots
 
-| Slot | Description |
-|------|-------------|
+| Slot        | Description          |
+| ----------- | -------------------- |
 | `(default)` | Option label content |
 
 #### CSS Parts
 
-| Part | Element | Description |
-|------|---------|-------------|
+| Part   | Element | Description                         |
+| ------ | ------- | ----------------------------------- |
 | `base` | `<div>` | Root wrapper for the option content |
 
 #### Visual States
 
-| Host selector | Description |
-|---------------|-------------|
-| `:host([selected])` | Option is currently selected (primary tint at 34%) |
-| `:host([active])` | Option is the active/highlighted option (primary tint at 22%) |
-| `:host([disabled])` | Option is disabled (opacity 0.55) |
+| Host selector           | Description                                                          |
+| ----------------------- | -------------------------------------------------------------------- |
+| `:host([selected])`     | Option is currently selected (primary tint at 34%)                   |
+| `:host([active])`       | Option is the active/highlighted option (primary tint at 22%)        |
+| `:host([disabled])`     | Option is disabled (opacity 0.55)                                    |
 | `:host(:focus-visible)` | Focus ring when option receives DOM focus (roving-tabindex strategy) |
 
 ---
@@ -296,32 +296,32 @@ Groups related options under a visible label header. Must be a direct child of `
 
 #### Attributes
 
-| Attribute | Type | Default | Description |
-|-----------|------|---------|-------------|
-| `label` | String | `""` | Visible group header text. Also used for `aria-labelledby` linkage via headless `getGroupLabelProps`. |
+| Attribute | Type   | Default | Description                                                                                           |
+| --------- | ------ | ------- | ----------------------------------------------------------------------------------------------------- |
+| `label`   | String | `""`    | Visible group header text. Also used for `aria-labelledby` linkage via headless `getGroupLabelProps`. |
 
 #### Slots
 
-| Slot | Description |
-|------|-------------|
+| Slot        | Description                        |
+| ----------- | ---------------------------------- |
 | `(default)` | One or more `<cv-option>` children |
 
 #### CSS Parts
 
-| Part | Element | Description |
-|------|---------|-------------|
+| Part    | Element | Description              |
+| ------- | ------- | ------------------------ |
 | `label` | `<div>` | Group label text element |
 
 #### CSS Custom Properties
 
-| Property | Default | Description |
-|----------|---------|-------------|
-| `--cv-listbox-group-label-color` | `var(--cv-color-text-muted, #8892a6)` | Group label text color |
-| `--cv-listbox-group-label-font-size` | `0.85em` | Group label font size |
-| `--cv-listbox-group-gap` | `var(--cv-space-1, 4px)` | Gap between group label and options |
+| Property                             | Default                               | Description                         |
+| ------------------------------------ | ------------------------------------- | ----------------------------------- |
+| `--cv-listbox-group-label-color`     | `var(--cv-color-text-muted, #8892a6)` | Group label text color              |
+| `--cv-listbox-group-label-font-size` | `0.85em`                              | Group label font size               |
+| `--cv-listbox-group-gap`             | `var(--cv-space-1, 4px)`              | Gap between group label and options |
 
 #### Visual States
 
-| Host selector | Description |
-|---------------|-------------|
-| `:host` | Block display with group role and aria-labelledby |
+| Host selector | Description                                       |
+| ------------- | ------------------------------------------------- |
+| `:host`       | Block display with group role and aria-labelledby |

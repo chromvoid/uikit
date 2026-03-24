@@ -1,0 +1,21 @@
+{
+  "$schema": "./node_modules/oxfmt/configuration_schema.json",
+  "printWidth": 110,
+  "tabWidth": 2,
+  "semi": false,
+  "singleQuote": true,
+  "trailingComma": "all",
+  "bracketSpacing": false,
+  "sortImports": {},
+  "sortPackageJson": {
+    "sortScripts": false
+  },
+  "ignorePatterns": [
+    "dist/**",
+    "dist-demo/**",
+    "node_modules/**",
+    "coverage/**",
+    "docs/.vitepress/dist/**",
+    "docs/.vitepress/cache/**"
+  ]
+}

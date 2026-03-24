@@ -63,8 +63,7 @@ async function mountMenuWithManyItems(params: {open?: boolean} = {}) {
   return {menu, root, items}
 }
 
-const getBase = (el: CVMenu) =>
-  el.shadowRoot!.querySelector('[part="base"]') as HTMLElement
+const getBase = (el: CVMenu) => el.shadowRoot!.querySelector('[part="base"]') as HTMLElement
 
 afterEach(() => {
   document.body.innerHTML = ''

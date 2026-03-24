@@ -1,4 +1,4 @@
-import type {ToastAction, ToastLevel} from '@chromvoid/headless-ui'
+import type {ToastAction, ToastLevel} from '@chromvoid/headless-ui/toast'
 import {css, html, nothing} from 'lit'
 
 import {ReatomLitElement} from '../reatom-lit/ReatomLitElement'
@@ -281,7 +281,9 @@ export class CVToast extends ReatomLitElement {
 
   private renderFallbackIcon() {
     if (this.level === 'loading') {
-      return html`<cv-spinner label="Loading"></cv-spinner>`
+      return html`
+        <cv-spinner label="Loading"></cv-spinner>
+      `
     }
 
     if (this.iconName) {
@@ -302,9 +304,16 @@ export class CVToast extends ReatomLitElement {
         <span part="icon-wrap"><slot name="icon">${this.renderFallbackIcon()}</slot></span>
         <div part="content">
           ${hasTitle ? html`<span part="title">${this.title}</span>` : nothing}
-          <span part="label">${hasMessage ? this.message : html`<slot></slot>`}</span>
-          ${hasActions
-            ? html`
+          <span part="label">${
+            hasMessage
+              ? this.message
+              : html`
+                  <slot></slot>
+                `
+          }</span>
+          ${
+            hasActions
+              ? html`
                 <div part="actions">
                   ${this.actions.map(
                     (action, index) => html`
@@ -320,10 +329,12 @@ export class CVToast extends ReatomLitElement {
                   )}
                 </div>
               `
-            : nothing}
+              : nothing
+          }
         </div>
-        ${this.closable
-          ? html`
+        ${
+          this.closable
+            ? html`
               <button
                 part="dismiss"
                 type="button"
@@ -335,8 +346,15 @@ export class CVToast extends ReatomLitElement {
                 ×
               </button>
             `
-          : nothing}
-        ${this.progress && this.durationMs > 0 ? html`<span part="progress"></span>` : nothing}
+            : nothing
+        }
+        ${
+          this.progress && this.durationMs > 0
+            ? html`
+                <span part="progress"></span>
+              `
+            : nothing
+        }
       </div>
     `
   }

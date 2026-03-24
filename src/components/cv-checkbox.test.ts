@@ -8,7 +8,8 @@ const settle = async (element: CVCheckbox) => {
   await element.updateComplete
 }
 
-const hasElementInternals = typeof (HTMLElement.prototype as {attachInternals?: unknown}).attachInternals === 'function'
+const hasElementInternals =
+  typeof (HTMLElement.prototype as {attachInternals?: unknown}).attachInternals === 'function'
 
 afterEach(() => {
   document.body.innerHTML = ''

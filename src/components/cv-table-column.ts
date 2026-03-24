@@ -1,5 +1,5 @@
+import type {TableSortDirection} from '@chromvoid/headless-ui/table'
 import {LitElement, css, html, nothing} from 'lit'
-import type {TableSortDirection} from '@chromvoid/headless-ui'
 
 export class CVTableColumn extends LitElement {
   static elementName = 'cv-table-column'

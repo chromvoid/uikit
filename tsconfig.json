@@ -1,5 +1,4 @@
 {
-  "extends": "../../tsconfig.json",
   "compilerOptions": {
     "target": "ES2022",
     "module": "ES2022",
@@ -20,10 +19,7 @@
     "useDefineForClassFields": true,
     "verbatimModuleSyntax": true,
     "baseUrl": ".",
-    "paths": {
-      "@chromvoid/headless-ui": ["../headless/src/index.ts"],
-      "@chromvoid/headless-ui/*": ["../headless/src/*"]
-    }
+    "importHelpers": false
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist"]
