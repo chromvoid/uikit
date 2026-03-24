@@ -3,8 +3,8 @@ layout: home
 
 hero:
   name: ChromVoid UIKit
-  text: Production-ready Lit components for ChromVoid surfaces
-  tagline: Accessible web components, headless behavior from @chromvoid/headless-ui, and token-driven theming packaged for real product work.
+  text: UI kit for ChromVoid product surfaces
+  tagline: Accessible Lit web components, headless behavior from @chromvoid/headless-ui, and token-driven theming shaped for production application work.
   actions:
     - theme: brand
       text: Get Started
@@ -20,7 +20,7 @@ features:
   - title: Spec-backed reference
     details: Component API pages are generated from the specs directory so docs stay aligned with the source of truth.
   - title: Playground included
-    details: The old standalone demo now lives inside the docs as an interactive page with working controllers and live states.
+    details: The interactive playground lives inside the docs and covers live controller and state scenarios.
   - title: GitHub Pages ready
     details: Static-safe routing, generated reference pages, and a deploy workflow ship with the package.
 ---
@@ -48,6 +48,35 @@ features:
   </article>
 </div>
 
+## Why This Site Exists
+
+<div class="component-grid">
+  <section class="component-card">
+    <p class="components-kicker">Reference</p>
+    <h3>Docs stay close to the specs</h3>
+    <p>
+      Component pages are generated from <code>specs/components</code>, so the published API
+      reference stays aligned with the real contract instead of drifting into hand-maintained copy.
+    </p>
+  </section>
+  <section class="component-card">
+    <p class="components-kicker">Tooling</p>
+    <h3>One static surface</h3>
+    <p>
+      Guides, reference pages, and the live playground ship from the same VitePress build and work
+      under the GitHub Pages subpath without rewrite assumptions.
+    </p>
+  </section>
+  <section class="component-card">
+    <p class="components-kicker">Workflow</p>
+    <h3>Built for product teams</h3>
+    <p>
+      Start with install and registration, move into theming and architecture, then validate
+      composed states in the playground before wiring a real shell.
+    </p>
+  </section>
+</div>
+
 ## Quick Start
 
 ```ts
@@ -67,32 +96,65 @@ registerUikit()
 
 ## How The Package Is Layered
 
-<div class="component-grid">
-  <section class="component-card">
-    <h3>Headless First</h3>
+<div class="uikit-architecture-strip">
+  <article class="uikit-architecture-step">
+    <span>01</span>
+    <h3>Headless models</h3>
     <p>
-      Interaction logic comes from <code>@chromvoid/headless-ui</code>, so state machines and
-      keyboard behavior stay testable outside the visual layer.
+      Interaction and accessibility contracts stay in <code>@chromvoid/headless-ui</code> where
+      they remain testable outside the render layer.
     </p>
-  </section>
-  <section class="component-card">
-    <h3>Thin Lit Adapters</h3>
+  </article>
+  <article class="uikit-architecture-step">
+    <span>02</span>
+    <h3>Lit adapters</h3>
     <p>
-      Custom elements adapt those headless models into a consistent DOM contract with parts, slots,
-      attributes, and theme-token hooks.
+      UIKit custom elements translate those models into slots, parts, attributes, events, and DOM
+      contracts that application shells can compose directly.
     </p>
-  </section>
-  <section class="component-card">
-    <h3>Theme As Data</h3>
+  </article>
+  <article class="uikit-architecture-step">
+    <span>03</span>
+    <h3>Theme engine</h3>
     <p>
-      Use static tokens, named runtime themes, or <code>cv-theme-provider</code> to scope a visual
-      identity without forking component logic.
+      Tokens, runtime themes, and <code>cv-theme-provider</code> let products scope visual identity
+      without forking component logic.
     </p>
-  </section>
+  </article>
+  <article class="uikit-architecture-step">
+    <span>04</span>
+    <h3>Controller helpers</h3>
+    <p>
+      Toast and dialog helpers keep common orchestration flows close to the package while the visual
+      contract stays on the documented elements.
+    </p>
+  </article>
 </div>
 
-## Live Playground
+## Choose Your Entry Point
 
-<ClientOnly>
-  <UIKitPlayground compact />
-</ClientOnly>
+<div class="component-links">
+  <a class="component-link" href="./guide/getting-started.html">Install and register the full kit</a>
+  <a class="component-link" href="./guide/architecture.html">Understand the package layering</a>
+  <a class="component-link" href="./guide/theming.html">Customize tokens and runtime themes</a>
+  <a class="component-link" href="./components/">Browse the generated component catalog</a>
+</div>
+
+## Need Live Validation?
+
+<div class="uikit-callout">
+  <div class="uikit-callout-copy">
+    <p class="components-kicker">Playground</p>
+    <h3>Use the docs as the working surface</h3>
+    <p>
+      The live playground keeps controller-backed alerts, toasts, selection patterns, and composed
+      component states in one dedicated page instead of a separate demo app.
+    </p>
+  </div>
+  <div class="uikit-callout-actions">
+    <a class="component-action component-action-primary" href="./guide/playground.html">
+      Open playground
+    </a>
+    <a class="component-action" href="./components/">Browse reference</a>
+  </div>
+</div>

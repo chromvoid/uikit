@@ -54,7 +54,7 @@ npm run demo
 ```
 
 - `npm run docs:dev` starts VitePress with generated reference pages.
-- `npm run demo` is an alias that opens the docs playground directly.
+- `npm run demo` is a compatibility alias that opens the docs dev server.
 
 ## Next steps
 

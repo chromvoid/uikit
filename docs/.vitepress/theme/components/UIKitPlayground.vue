@@ -73,7 +73,7 @@ onBeforeUnmount(() => {
     <div class="components-hero">
       <p class="components-kicker">Interactive Playground</p>
       <h2 class="components-title">
-        {{ compact ? 'Preview the kit in-place' : 'The former demo page now lives inside the docs' }}
+        {{ compact ? 'Preview the kit in-place' : 'Validate the kit inside the docs' }}
       </h2>
       <p class="components-description">
         {{
@@ -85,7 +85,7 @@ onBeforeUnmount(() => {
       <div v-if="!compact" class="components-hero-actions">
         <a
           class="component-action component-action-primary"
-          :href="withBase('/guide/getting-started')"
+          :href="withBase('/guide/getting-started.html')"
         >
           Quick start
         </a>

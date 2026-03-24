@@ -22,12 +22,31 @@ export default defineConfig({
   description,
   lang: 'en-US',
   base,
+  appearance: 'force-dark',
   cleanUrls: false,
   lastUpdated: true,
   head: [
     ['meta', {name: 'theme-color', content: '#0b0d12'}],
     ['meta', {property: 'og:title', content: 'ChromVoid UIKit'}],
     ['meta', {property: 'og:description', content: description}],
+    [
+      'link',
+      {
+        rel: 'preload',
+        href: `${base}fonts/manrope-latin-400.woff2`,
+        as: 'font',
+        type: 'font/woff2',
+      },
+    ],
+    [
+      'link',
+      {
+        rel: 'preload',
+        href: `${base}fonts/orbitron-latin-700.woff2`,
+        as: 'font',
+        type: 'font/woff2',
+      },
+    ],
   ],
   themeConfig: {
     nav: [

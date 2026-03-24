@@ -1,7 +1,8 @@
 # Playground
 
-The standalone demo page has been folded into the documentation site so onboarding, API reference,
-and live interaction checks all happen in one place.
+Use this page as the interactive working surface for the package. It keeps live interaction checks,
+controller-backed examples, and composed states inside the same documentation site as the guides
+and reference pages.
 
 Use this page to validate:
 
