@@ -1,15 +1,28 @@
 import {defineConfig} from 'vitepress'
 
+import {componentGroups} from './component-catalog.mjs'
 import {liveDemoPlugin} from './markdown/liveDemo'
 
 const description =
   'ChromVoid UIKit is a Lit-based component layer over @chromvoid/headless-ui with reusable theme tokens and accessible interactions.'
 
+const repoName = process.env.GITHUB_REPOSITORY?.split('/')[1]
+const base =
+  process.env.DOCS_BASE ?? (process.env.GITHUB_ACTIONS === 'true' && repoName ? `/${repoName}/` : '/')
+
+const guideItems = [
+  {text: 'Getting Started', link: '/guide/getting-started'},
+  {text: 'Architecture', link: '/guide/architecture'},
+  {text: 'Theming', link: '/guide/theming'},
+  {text: 'Playground', link: '/guide/playground'},
+]
+
 export default defineConfig({
   title: 'ChromVoid UIKit',
   description,
   lang: 'en-US',
-  cleanUrls: true,
+  base,
+  cleanUrls: false,
   lastUpdated: true,
   head: [
     ['meta', {name: 'theme-color', content: '#0b0d12'}],
@@ -19,53 +32,52 @@ export default defineConfig({
   themeConfig: {
     nav: [
       {text: 'Guide', link: '/guide/getting-started'},
+      {text: 'Playground', link: '/guide/playground'},
       {text: 'Components', link: '/components/'},
     ],
-    sidebar: [
-      {
-        text: 'Guide',
-        items: [
-          {text: 'Getting Started', link: '/guide/getting-started'},
-          {text: 'Theming', link: '/guide/theming'},
-        ],
-      },
-      {
-        text: 'Components',
-        items: [
-          {text: 'Overview', link: '/components/'},
-          {text: 'cv-accordion', link: '/components/accordion'},
-          {text: 'cv-alert', link: '/components/alert'},
-          {text: 'cv-breadcrumb', link: '/components/breadcrumb'},
-          {text: 'cv-button', link: '/components/button'},
-          {text: 'cv-carousel', link: '/components/carousel'},
-          {text: 'cv-checkbox', link: '/components/checkbox'},
-          {text: 'cv-combobox', link: '/components/combobox'},
-          {text: 'cv-context-menu', link: '/components/context-menu'},
-          {text: 'cv-dialog', link: '/components/dialog'},
-          {text: 'cv-disclosure', link: '/components/disclosure'},
-          {text: 'cv-feed', link: '/components/feed'},
-          {text: 'cv-grid', link: '/components/grid'},
-          {text: 'cv-landmark', link: '/components/landmark'},
-          {text: 'cv-link', link: '/components/link'},
-          {text: 'cv-listbox', link: '/components/listbox'},
-          {text: 'cv-menu', link: '/components/menu'},
-          {text: 'cv-meter', link: '/components/meter'},
-          {text: 'cv-option', link: '/components/option'},
-          {text: 'cv-select', link: '/components/select'},
-          {text: 'cv-sidebar', link: '/components/sidebar'},
-          {text: 'cv-switch', link: '/components/switch'},
-          {text: 'cv-tabs', link: '/components/tabs'},
-        ],
-      },
-    ],
+    sidebar: {
+      '/guide/': [
+        {
+          text: 'Guide',
+          items: guideItems,
+        },
+      ],
+      '/components/': [
+        {
+          text: 'Components',
+          items: [{text: 'Overview', link: '/components/'}],
+        },
+        ...componentGroups.map((group) => ({
+          text: group.title,
+          items: group.items.map((item) => ({
+            text: item.name,
+            link: `/components/${item.slug}`,
+          })),
+        })),
+      ],
+    },
     search: {
       provider: 'local',
     },
     outline: [2, 3],
+    socialLinks: [{icon: 'github', link: 'https://github.com/chromvoid/uikit'}],
+    footer: {
+      message: 'ChromVoid UIKit documentation',
+      copyright: 'Released under AGPL-3.0-only',
+    },
+    editLink: {
+      pattern: 'https://github.com/chromvoid/uikit/edit/main/docs/:path',
+      text: 'Edit this page on GitHub',
+    },
   },
   markdown: {
     config: (md) => {
       liveDemoPlugin(md)
+    },
+  },
+  vite: {
+    build: {
+      chunkSizeWarningLimit: 1100,
     },
   },
   vue: {

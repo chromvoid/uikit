@@ -68,21 +68,27 @@ import '@chromvoid/uikit/theme/tokens.css'
 ## Package-local Workflow
 
 ```bash
-npm ci
+npm install
 npm run lint
 npm run test
 npm run build
 npm pack --dry-run
 ```
 
-Run local interactive demo page:
+Run local documentation site:
+
+```bash
+npm run docs:dev
+```
+
+Open the interactive playground directly:
 
 ```bash
 npm run demo
 ```
 
-Run local docs site:
+Build the static docs output used for GitHub Pages:
 
 ```bash
-npm run docs:dev
+npm run docs:build
 ```

@@ -300,6 +300,38 @@ body::before {
   color: var(--uikit-text-muted);
 }
 
+.uikit-stats {
+  display: grid;
+  gap: 14px;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  margin: 24px 0 28px;
+}
+
+.uikit-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-block-size: 120px;
+  padding: 18px;
+  border-radius: 14px;
+  border: 1px solid var(--uikit-border);
+  background:
+    linear-gradient(150deg, rgba(16, 24, 37, 0.92), rgba(11, 18, 29, 0.96)),
+    radial-gradient(circle at 100% 0%, rgba(126, 178, 255, 0.12), transparent 42%);
+}
+
+.uikit-stat-value {
+  font-family: 'Orbitron', 'Manrope', sans-serif;
+  font-size: clamp(1.25rem, 2.3vw, 1.8rem);
+  color: #dff5ff;
+}
+
+.uikit-stat-label {
+  color: var(--uikit-text-muted);
+  font-size: 0.92rem;
+  line-height: 1.4;
+}
+
 .uikit-shell {
   padding: 14px;
   border-radius: 18px;
@@ -515,6 +547,22 @@ body::before {
   margin-top: 10px;
 }
 
+.catalog-shell {
+  margin-top: 22px;
+}
+
+.catalog-grid {
+  margin-top: 18px;
+}
+
+.catalog-card .components-title {
+  margin-bottom: 6px;
+}
+
+.catalog-links {
+  margin-bottom: 0;
+}
+
 @media (max-width: 960px) {
   .VPHero .name {
     font-size: clamp(2rem, 8.5vw, 2.7rem);
@@ -536,6 +584,10 @@ body::before {
   }
 
   .component-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .uikit-stats {
     grid-template-columns: 1fr;
   }
 

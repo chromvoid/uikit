@@ -1,57 +1,10 @@
 # Components
 
-All UIKit components with their anatomy, attributes, slots, CSS parts, and usage examples.
+Reference pages are generated from `specs/components/*.md` so the published docs stay aligned with
+the source-of-truth component contracts.
 
-<div class="component-grid">
+The reference focuses on spec-backed primary surfaces. Composition partner elements such as
+`cv-tab`, `cv-menu-item`, `cv-treeitem`, `cv-select-option`, and grid or table child elements are
+documented through their parent component pages.
 
-<div class="component-card">
-
-### Action
-
-- [cv-button](/components/button)
-- [cv-link](/components/link)
-- [cv-menu](/components/menu)
-- [cv-context-menu](/components/context-menu)
-
-</div>
-
-<div class="component-card">
-
-### Selection
-
-- [cv-checkbox](/components/checkbox)
-- [cv-switch](/components/switch)
-- [cv-select](/components/select)
-- [cv-combobox](/components/combobox)
-- [cv-listbox](/components/listbox)
-- [cv-option](/components/option)
-
-</div>
-
-<div class="component-card">
-
-### Layout
-
-- [cv-accordion](/components/accordion)
-- [cv-tabs](/components/tabs)
-- [cv-dialog](/components/dialog)
-- [cv-disclosure](/components/disclosure)
-- [cv-carousel](/components/carousel)
-- [cv-grid](/components/grid)
-- [cv-landmark](/components/landmark)
-- [cv-sidebar](/components/sidebar)
-
-</div>
-
-<div class="component-card">
-
-### Data
-
-- [cv-meter](/components/meter)
-- [cv-feed](/components/feed)
-- [cv-breadcrumb](/components/breadcrumb)
-- [cv-alert](/components/alert)
-
-</div>
-
-</div>
+<ComponentCatalog />

@@ -1,8 +1,19 @@
 # Theming
 
-UIKit tokens follow the `--cv-*` naming scheme and can be changed at runtime.
+UIKit tokens follow the `--cv-*` naming scheme and can be changed statically or at runtime.
 
-## Define a custom theme
+## Baseline tokens
+
+Import the packaged defaults first:
+
+```ts
+import '@chromvoid/uikit/theme/tokens.css'
+```
+
+Those tokens cover colors, spacing, typography, radius, motion, z-index, and control sizing for
+both light and dark modes.
+
+## Define a named custom theme
 
 ```ts
 import {defineTheme, applyTheme} from '@chromvoid/uikit'
@@ -22,15 +33,33 @@ applyTheme(document, 'sunset')
 ## Use `cv-theme-provider` for scoped theming
 
 ```html
-<cv-theme-provider theme="sunset">
+<cv-theme-provider theme="sunset" mode="dark">
   <cv-button>Scoped theme button</cv-button>
   <cv-checkbox checked>Scoped checkbox</cv-checkbox>
 </cv-theme-provider>
 ```
 
-## Default token source
+`mode` supports `light`, `dark`, and `system`. In `system` mode the provider follows
+`prefers-color-scheme`.
 
-UIKit ships baseline tokens in:
+## Apply themes programmatically
+
+```ts
+import {applyTheme} from '@chromvoid/uikit/theme'
+
+const panel = document.querySelector('#settings-panel')
+
+if (panel) {
+  applyTheme(panel, 'sunset')
+}
+```
+
+## Reference surface
+
+The full token and provider contract is documented on
+[cv-theme-provider](/components/theme-provider).
+
+## Default token source
 
 `src/theme/tokens.css`
 
