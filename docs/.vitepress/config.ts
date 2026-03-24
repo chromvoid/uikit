@@ -2,6 +2,7 @@ import {defineConfig} from 'vitepress'
 
 import {componentGroups} from './component-catalog.mjs'
 import {liveDemoPlugin} from './markdown/liveDemo'
+import {responsiveTablesPlugin} from './markdown/responsiveTables'
 
 const description =
   'ChromVoid UIKit is a Lit-based component layer over @chromvoid/headless-ui with reusable theme tokens and accessible interactions.'
@@ -92,6 +93,7 @@ export default defineConfig({
   markdown: {
     config: (md) => {
       liveDemoPlugin(md)
+      responsiveTablesPlugin(md)
     },
   },
   vite: {

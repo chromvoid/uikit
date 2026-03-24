@@ -101,7 +101,7 @@ onBeforeUnmount(() => {
           <cv-button>Continue</cv-button>
           <cv-button toggle pressed>Toggle</cv-button>
           <cv-button disabled>Disabled</cv-button>
-          <cv-switch checked></cv-switch>
+          <cv-switch checked aria-label="Enable realtime sync"></cv-switch>
         </div>
       </article>
 
@@ -112,7 +112,11 @@ onBeforeUnmount(() => {
           <cv-checkbox checked>Enable sync</cv-checkbox>
           <cv-checkbox indeterminate>Indeterminate state</cv-checkbox>
         </div>
-        <cv-listbox selection-mode="multiple" aria-label="UIKit demo options">
+        <cv-listbox
+          selection-mode="multiple"
+          focus-strategy="roving-tabindex"
+          aria-label="UIKit demo options"
+        >
           <cv-option value="alpha" selected>Alpha</cv-option>
           <cv-option value="beta">Beta</cv-option>
           <cv-option value="gamma">Gamma</cv-option>
@@ -123,7 +127,7 @@ onBeforeUnmount(() => {
       <article class="component-card">
         <h3>Progress / Slider</h3>
         <p>Feedback and range input components.</p>
-        <cv-progress value="60" max="100"></cv-progress>
+        <cv-progress value="60" max="100" aria-label="Migration progress"></cv-progress>
         <cv-slider value="35" min="0" max="100" aria-label="volume"></cv-slider>
         <cv-meter
           ref="meterElement"
@@ -133,6 +137,7 @@ onBeforeUnmount(() => {
           low="25"
           high="80"
           optimum="50"
+          aria-label="Performance headroom"
         ></cv-meter>
       </article>
 

@@ -9,8 +9,13 @@ const props = defineProps<{
 const container = ref<HTMLElement | null>(null)
 const hasScript = ref(false)
 
-const decoded = computed(() => atob(props.code))
-const highlightedHtml = computed(() => atob(props.highlighted))
+function decodeBase64Utf8(value: string): string {
+  const bytes = Uint8Array.from(atob(value), (char) => char.charCodeAt(0))
+  return new TextDecoder().decode(bytes)
+}
+
+const decoded = computed(() => decodeBase64Utf8(props.code))
+const highlightedHtml = computed(() => decodeBase64Utf8(props.highlighted))
 
 onMounted(() => {
   if (!container.value) return
@@ -22,14 +27,27 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="live-demo-wrapper">
-    <div ref="container" class="live-demo-preview" />
-    <p v-if="hasScript" class="live-demo-script-note">
-      This example includes script logic that must run in a real document.
-    </p>
-    <details class="live-demo-source">
-      <summary>View source</summary>
+  <cv-card class="live-demo-card" variant="outlined">
+    <div slot="header" class="live-demo-header">
+      <div class="live-demo-meta">
+        <cv-badge variant="primary" pill size="small">Live demo</cv-badge>
+        <cv-badge :variant="hasScript ? 'warning' : 'success'" pill size="small">
+          {{ hasScript ? 'Document script' : 'Static preview' }}
+        </cv-badge>
+      </div>
+      <p class="live-demo-title">Rendered inside the documentation shell</p>
+    </div>
+
+    <div class="live-demo-body">
+      <div ref="container" class="live-demo-preview" />
+      <cv-callout v-if="hasScript" class="live-demo-script-note" variant="warning">
+        This example includes script logic that must run in a real document.
+      </cv-callout>
+    </div>
+
+    <cv-disclosure slot="footer" class="live-demo-source">
+      <span slot="trigger">View source</span>
       <div v-html="highlightedHtml" />
-    </details>
-  </div>
+    </cv-disclosure>
+  </cv-card>
 </template>

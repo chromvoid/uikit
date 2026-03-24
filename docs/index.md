@@ -26,7 +26,11 @@ features:
 ---
 
 <section class="uikit-intro">
-  <p>
+  <div class="uikit-intro-copy">
+    <p class="components-kicker">Surface layer</p>
+    <h2 class="uikit-intro-title">Built for product shells, not isolated gallery demos.</h2>
+  </div>
+  <p class="uikit-intro-body">
     UIKit is the surface layer for ChromVoid products. Behavior stays in headless models, while the
     package exposes a focused set of Lit custom elements, theme tokens, and controller helpers for
     real application flows.
