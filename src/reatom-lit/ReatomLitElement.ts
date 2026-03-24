@@ -1,22 +1,17 @@
 import type {AbstractRender, Frame, Unsubscribe} from '@reatom/core'
 import {reatomAbstractRender, top} from '@reatom/core'
-import {css, LitElement} from 'lit'
+import {LitElement} from 'lit'
 import type {CSSResultGroup, CSSResultOrNative, PropertyValues, TemplateResult} from 'lit'
 
 const __inner_update = Symbol('Inner update')
 const __aliased_event_dispatch = Symbol('Aliased event dispatch')
 const CV_EVENT_PREFIX = 'cv-'
 
-/**
- * Vendored from kaifaty/reatom branch LIT_UPDATE.
- */
-const boxSizingStyle = css`
-  *,
-  *::before,
-  *::after {
-    box-sizing: border-box;
-  }
-`
+import {
+  componentResetStyles,
+  getComponentHostDisplayStyles,
+  type ComponentHostDisplay,
+} from '../styles/component-styles'
 
 let _unoUtilities: CSSResultOrNative | undefined
 
@@ -31,8 +26,11 @@ export function setUnoUtilities(sheet: CSSResultOrNative) {
 }
 
 export class ReatomLitElement extends LitElement {
+  protected static hostDisplay: ComponentHostDisplay = 'block'
+
   protected static override finalizeStyles(styles?: CSSResultGroup): CSSResultOrNative[] {
-    const base = [boxSizingStyle, ...super.finalizeStyles(styles)]
+    const display = this.hostDisplay ?? 'block'
+    const base = [componentResetStyles, getComponentHostDisplayStyles(display), ...super.finalizeStyles(styles)]
     if (_unoUtilities) base.push(_unoUtilities)
     return base
   }

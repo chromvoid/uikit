@@ -1,5 +1,4 @@
 dist
-dist-demo
 docs/.vitepress/dist
 docs/.vitepress/cache
 coverage

@@ -1,5 +1,7 @@
 import {LitElement, css, html} from 'lit'
 
+import {componentResetStyles, getComponentHostDisplayStyles} from '../styles/component-styles'
+
 export class CVOption extends LitElement {
   static elementName = 'cv-option'
 
@@ -26,19 +28,14 @@ export class CVOption extends LitElement {
   }
 
   static styles = [
+    componentResetStyles,
+    getComponentHostDisplayStyles('block'),
     css`
       :host {
-        display: block;
         outline: none;
       }
 
-      :host([hidden]) {
-        display: none;
-      }
-
       [part='base'] {
-        display: flex;
-        align-items: center;
         padding-block: var(--cv-option-padding-block, var(--cv-space-2, 8px));
         padding-inline: var(--cv-option-padding-inline, var(--cv-space-3, 12px));
         border-radius: var(--cv-option-border-radius, var(--cv-radius-sm, 6px));
@@ -89,7 +86,7 @@ export class CVOption extends LitElement {
 
   protected override render() {
     return html`
-      <div part="base">
+      <div part="base" class="cv-u-row">
         <span part="prefix"><slot name="prefix"></slot></span>
         <span part="label"><slot></slot></span>
         <span part="suffix"><slot name="suffix"></slot></span>

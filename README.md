@@ -81,11 +81,13 @@ Run local documentation site:
 npm run docs:dev
 ```
 
-Open the interactive playground directly:
+Open the docs dev server through the legacy shortcut:
 
 ```bash
 npm run demo
 ```
+
+The interactive playground now lives inside the documentation site at `/guide/playground`.
 
 Build the static docs output used for GitHub Pages:
 

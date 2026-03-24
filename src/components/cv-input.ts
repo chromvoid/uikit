@@ -30,6 +30,7 @@ export interface CVInputEventMap {
 
 export class CVInput extends FormAssociatedReatomElement {
   static elementName = 'cv-input'
+  static override hostDisplay = 'inline-block' as const
 
   static get properties() {
     return {
@@ -97,7 +98,6 @@ export class CVInput extends FormAssociatedReatomElement {
   static styles = [
     css`
       :host {
-        display: inline-block;
         --cv-input-height: 36px;
         --cv-input-padding-inline: var(--cv-space-3, 12px);
         --cv-input-font-size: var(--cv-font-size-base, 14px);
@@ -113,8 +113,6 @@ export class CVInput extends FormAssociatedReatomElement {
       }
 
       [part='base'] {
-        display: inline-flex;
-        align-items: center;
         gap: var(--cv-input-gap);
         padding-inline: var(--cv-input-padding-inline);
         height: var(--cv-input-height);
@@ -134,8 +132,6 @@ export class CVInput extends FormAssociatedReatomElement {
 
       [part='input'] {
         width: 100%;
-        flex: 1;
-        min-width: 0;
         border: none;
         outline: none;
         background: transparent;
@@ -150,26 +146,16 @@ export class CVInput extends FormAssociatedReatomElement {
       }
 
       [part='prefix'],
-      [part='suffix'] {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
+      [part='suffix'],
+      [part='clear-button'],
+      [part='password-toggle'] {
         font-size: var(--cv-input-icon-size);
       }
 
       [part='clear-button'],
       [part='password-toggle'] {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
         cursor: pointer;
-        font-size: var(--cv-input-icon-size);
         user-select: none;
-      }
-
-      [part='clear-button'][hidden],
-      [part='password-toggle'][hidden] {
-        display: none;
       }
 
       [part='password-toggle-icon'] {
@@ -507,10 +493,11 @@ export class CVInput extends FormAssociatedReatomElement {
 
     return html`
       <span part="form-control-label"><slot name="label"></slot></span>
-      <div part="base">
-        <span part="prefix"><slot name="prefix"></slot></span>
+      <div part="base" class="cv-u-control-shell">
+        <span part="prefix" class="cv-u-icon-slot"><slot name="prefix"></slot></span>
         <input
           part="input"
+          class="cv-u-fill"
           id=${inputProps.id}
           type=${inputProps.type}
           .value=${this.model.state.value()}
@@ -532,6 +519,7 @@ export class CVInput extends FormAssociatedReatomElement {
         />
         <span
           part="clear-button"
+          class="cv-u-icon-slot"
           role=${clearButtonProps.role}
           aria-label=${clearButtonProps['aria-label']}
           tabindex=${clearButtonProps.tabindex}
@@ -543,6 +531,7 @@ export class CVInput extends FormAssociatedReatomElement {
         </span>
         <span
           part="password-toggle"
+          class="cv-u-icon-slot"
           role=${passwordToggleProps.role}
           aria-label=${passwordToggleProps['aria-label']}
           aria-pressed=${passwordToggleProps['aria-pressed']}
@@ -587,7 +576,7 @@ export class CVInput extends FormAssociatedReatomElement {
                 `
           }
         </span>
-        <span part="suffix"><slot name="suffix"></slot></span>
+        <span part="suffix" class="cv-u-icon-slot"><slot name="suffix"></slot></span>
       </div>
       <span part="form-control-help-text"><slot name="help-text"></slot></span>
     `

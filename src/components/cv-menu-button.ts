@@ -45,6 +45,7 @@ let cvMenuButtonNonce = 0
 
 export class CVMenuButton extends ReatomLitElement {
   static elementName = 'cv-menu-button'
+  static override hostDisplay = 'inline-block' as const
 
   static get properties() {
     return {
@@ -93,7 +94,6 @@ export class CVMenuButton extends ReatomLitElement {
   static styles = [
     css`
       :host {
-        display: inline-block;
         --cv-menu-button-min-height: 36px;
         --cv-menu-button-padding-inline: var(--cv-space-3, 12px);
         --cv-menu-button-padding-block: var(--cv-space-2, 8px);
@@ -115,15 +115,11 @@ export class CVMenuButton extends ReatomLitElement {
       [part='action'],
       [part='dropdown'] {
         display: inline-flex;
-        align-items: center;
         justify-content: center;
         gap: var(--cv-menu-button-gap);
         min-block-size: var(--cv-menu-button-min-height);
         padding: var(--cv-menu-button-padding-block) var(--cv-menu-button-padding-inline);
         font-size: var(--cv-menu-button-font-size);
-        border-radius: var(--cv-menu-button-border-radius);
-        border: 1px solid var(--cv-color-border, #2a3245);
-        background: var(--cv-color-surface, #141923);
         color: var(--cv-color-text, #e8ecf6);
         cursor: pointer;
         font: inherit;
@@ -137,30 +133,6 @@ export class CVMenuButton extends ReatomLitElement {
       }
 
       /* --- label / prefix / suffix / dropdown-icon --- */
-      [part='label'] {
-        display: inline-flex;
-        align-items: center;
-      }
-
-      [part='prefix'],
-      [part='suffix'] {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-      }
-
-      [part='prefix'][hidden],
-      [part='label'][hidden],
-      [part='suffix'][hidden] {
-        display: none;
-      }
-
-      [part='dropdown-icon'] {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-      }
-
       [part='dropdown-icon'] svg {
         width: 12px;
         height: 12px;
@@ -182,15 +154,8 @@ export class CVMenuButton extends ReatomLitElement {
         gap: var(--cv-space-1, 4px);
         align-content: start;
         padding: var(--cv-space-1, 4px);
-        border-radius: var(--cv-radius-md, 10px);
-        border: 1px solid var(--cv-color-border, #2a3245);
         background: var(--cv-color-surface-elevated, #1d2432);
-        box-shadow: var(--cv-shadow-1, 0 2px 8px rgba(0, 0, 0, 0.24));
         overflow-y: auto;
-      }
-
-      [part='menu'][hidden] {
-        display: none;
       }
 
       ::slotted([slot='menu']) {
@@ -847,7 +812,7 @@ export class CVMenuButton extends ReatomLitElement {
 
   private renderDropdownIcon() {
     return html`
-      <span part="dropdown-icon" aria-hidden="true"
+      <span part="dropdown-icon" class="cv-u-icon-slot" aria-hidden="true"
         ><svg viewBox="0 0 12 12" xmlns="http://www.w3.org/2000/svg">
           <path
             d="M2.5 4.5L6 8L9.5 4.5"
@@ -877,16 +842,17 @@ export class CVMenuButton extends ReatomLitElement {
         <button
           type="button"
           part="action"
+          class="cv-u-control-shell"
           ?disabled=${this.disabled}
           @click=${this.handleActionClick}
         >
-          <span part="prefix" ?hidden=${!this.hasPrefixContent}
+          <span part="prefix" class="cv-u-icon-slot" ?hidden=${!this.hasPrefixContent}
             ><slot name="prefix" @slotchange=${this.handleContentSlotChange}></slot
           ></span>
-          <span part="label" ?hidden=${!this.hasLabelContent}
+          <span part="label" class="cv-u-row" ?hidden=${!this.hasLabelContent}
             ><slot @slotchange=${this.handleContentSlotChange}></slot
           ></span>
-          <span part="suffix" ?hidden=${!this.hasSuffixContent}
+          <span part="suffix" class="cv-u-icon-slot" ?hidden=${!this.hasSuffixContent}
             ><slot name="suffix" @slotchange=${this.handleContentSlotChange}></slot
           ></span>
         </button>
@@ -903,6 +869,7 @@ export class CVMenuButton extends ReatomLitElement {
           ?disabled=${this.disabled}
           @click=${this.handleDropdownClick}
           @keydown=${this.handleKeyDown}
+          class="cv-u-control-shell"
         >
           ${this.renderDropdownIcon()}
         </button>
@@ -914,6 +881,7 @@ export class CVMenuButton extends ReatomLitElement {
           aria-label=${menuProps['aria-label'] ?? nothing}
           ?hidden=${menuProps.hidden}
           part="menu"
+          class="cv-u-panel-shell"
           @keydown=${this.handleKeyDown}
         >
           <slot name="menu" @slotchange=${this.handleMenuSlotChange}></slot>
@@ -953,17 +921,18 @@ export class CVMenuButton extends ReatomLitElement {
           aria-label=${triggerProps['aria-label'] ?? nothing}
           type="button"
           part="trigger"
+          class="cv-u-control-shell"
           ?disabled=${this.disabled}
           @click=${this.handleTriggerClick}
           @keydown=${this.handleKeyDown}
         >
-          <span part="prefix" ?hidden=${!this.hasPrefixContent}
+          <span part="prefix" class="cv-u-icon-slot" ?hidden=${!this.hasPrefixContent}
             ><slot name="prefix" @slotchange=${this.handleContentSlotChange}></slot
           ></span>
-          <span part="label" ?hidden=${!this.hasLabelContent}
+          <span part="label" class="cv-u-row" ?hidden=${!this.hasLabelContent}
             ><slot @slotchange=${this.handleContentSlotChange}></slot
           ></span>
-          <span part="suffix" ?hidden=${!this.hasSuffixContent}
+          <span part="suffix" class="cv-u-icon-slot" ?hidden=${!this.hasSuffixContent}
             ><slot name="suffix" @slotchange=${this.handleContentSlotChange}></slot
           ></span>
           ${this.renderDropdownIcon()}
@@ -976,6 +945,7 @@ export class CVMenuButton extends ReatomLitElement {
           aria-label=${menuProps['aria-label'] ?? nothing}
           ?hidden=${menuProps.hidden}
           part="menu"
+          class="cv-u-panel-shell"
           @keydown=${this.handleKeyDown}
         >
           <slot name="menu" @slotchange=${this.handleMenuSlotChange}></slot>

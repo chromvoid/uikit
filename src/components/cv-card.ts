@@ -262,7 +262,7 @@ export class CVCard extends ReatomLitElement {
     const bodyHidden = isExpandable ? (contentProps as any).hidden : false
 
     return html`
-      <div part="base" class="flex flex-col overflow-hidden">
+      <div part="base">
         <div part="image">
           <slot name="image"></slot>
         </div>
@@ -275,7 +275,6 @@ export class CVCard extends ReatomLitElement {
           aria-controls=${headerAriaControls ?? nothing}
           aria-disabled=${headerAriaDisabled ?? nothing}
           part="header"
-          class="flex items-center justify-between p-4"
           @click=${this.handleHeaderClick}
           @keydown=${this.handleHeaderKeyDown}
         >

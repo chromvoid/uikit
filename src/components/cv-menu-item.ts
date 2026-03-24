@@ -1,5 +1,7 @@
 import {LitElement, css, html, nothing} from 'lit'
 
+import {componentResetStyles, getComponentHostDisplayStyles} from '../styles/component-styles'
+
 export class CVMenuItem extends LitElement {
   static elementName = 'cv-menu-item'
 
@@ -38,19 +40,14 @@ export class CVMenuItem extends LitElement {
   }
 
   static styles = [
+    componentResetStyles,
+    getComponentHostDisplayStyles('block'),
     css`
       :host {
-        display: block;
         outline: none;
       }
 
-      :host([hidden]) {
-        display: none;
-      }
-
       .item {
-        display: flex;
-        align-items: center;
         gap: var(--cv-menu-item-gap, var(--cv-space-2, 8px));
         padding: var(--cv-menu-item-padding-block, var(--cv-space-2, 8px))
           var(--cv-menu-item-padding-inline, var(--cv-space-3, 12px));
@@ -79,28 +76,15 @@ export class CVMenuItem extends LitElement {
       }
 
       [part='label'] {
-        flex: 1;
+        min-inline-size: 0;
       }
 
       [part='checkmark'] {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
         inline-size: 1em;
         block-size: 1em;
       }
 
-      [part='prefix'],
-      [part='suffix'] {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-      }
-
       [part='submenu-icon'] {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
         margin-inline-start: auto;
       }
     `,
@@ -122,15 +106,15 @@ export class CVMenuItem extends LitElement {
     const isCheckable = this.type === 'checkbox' || this.type === 'radio'
 
     return html`
-      <div class="item" part="base">
-        ${isCheckable ? html`<span part="checkmark">${this.checked ? '\u2713' : ''}</span>` : nothing}
-        <span part="prefix"><slot name="prefix"></slot></span>
-        <span part="label"><slot></slot></span>
-        <span part="suffix"><slot name="suffix"></slot></span>
+      <div class="item cv-u-row" part="base">
+        ${isCheckable ? html`<span part="checkmark" class="cv-u-icon-slot">${this.checked ? '\u2713' : ''}</span>` : nothing}
+        <span part="prefix" class="cv-u-icon-slot"><slot name="prefix"></slot></span>
+        <span part="label" class="cv-u-fill"><slot></slot></span>
+        <span part="suffix" class="cv-u-icon-slot"><slot name="suffix"></slot></span>
         ${
           this.hasSubmenu
             ? html`
-                <span part="submenu-icon">\u25B6</span>
+                <span part="submenu-icon" class="cv-u-icon-slot">\u25B6</span>
               `
             : nothing
         }

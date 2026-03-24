@@ -1,5 +1,7 @@
 import {LitElement, css, html} from 'lit'
 
+import {componentResetStyles, getComponentHostDisplayStyles} from '../styles/component-styles'
+
 export class CVSelectOption extends LitElement {
   static elementName = 'cv-select-option'
 
@@ -26,18 +28,14 @@ export class CVSelectOption extends LitElement {
   }
 
   static styles = [
+    componentResetStyles,
+    getComponentHostDisplayStyles('block'),
     css`
       :host {
-        display: block;
         outline: none;
       }
 
-      :host([hidden]) {
-        display: none;
-      }
-
       .option {
-        display: block;
         padding: var(--cv-space-2, 8px) var(--cv-space-3, 12px);
         border-radius: var(--cv-radius-sm, 6px);
         color: var(--cv-color-text, #e8ecf6);
@@ -74,7 +72,7 @@ export class CVSelectOption extends LitElement {
 
   protected override render() {
     return html`
-      <div class="option" part="base"><slot></slot></div>
+      <div class="option cv-u-row" part="base"><slot></slot></div>
     `
   }
 }

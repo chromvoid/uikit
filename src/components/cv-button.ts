@@ -66,7 +66,6 @@ export class CVButton extends FormAssociatedReatomElement {
   static styles = [
     css`
       :host {
-        display: block;
         width: 100%;
         cursor: pointer;
         user-select: none;
@@ -80,20 +79,14 @@ export class CVButton extends FormAssociatedReatomElement {
       }
 
       [part='base'] {
-        display: flex;
         width: 100%;
-        align-items: center;
         justify-content: center;
-        appearance: none;
-        font: inherit;
         gap: var(--cv-button-gap);
         padding: var(--cv-button-padding-block) var(--cv-button-padding-inline);
         min-height: var(--cv-button-min-height);
         font-size: var(--cv-button-font-size);
         font-weight: var(--cv-button-font-weight);
         border-radius: var(--cv-button-border-radius);
-        border: 1px solid var(--cv-color-border, #2a3245);
-        background: var(--cv-color-surface, #141923);
         color: var(--cv-color-text, #e8ecf6);
         cursor: pointer;
         user-select: none;
@@ -104,22 +97,7 @@ export class CVButton extends FormAssociatedReatomElement {
       }
 
       [part='label'] {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
         gap: var(--cv-button-gap);
-      }
-
-      [part='prefix'],
-      [part='suffix'] {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-      }
-
-      [part='prefix'][hidden],
-      [part='suffix'][hidden] {
-        display: none;
       }
 
       /* --- variant: primary --- */
@@ -451,6 +429,7 @@ export class CVButton extends FormAssociatedReatomElement {
         aria-busy=${props['aria-busy'] ?? nothing}
         aria-pressed=${props['aria-pressed'] ?? nothing}
         part="base"
+        class="cv-u-control-shell"
         @click=${this.handleClick}
         @keydown=${this.handleKeyDown}
         @keyup=${this.handleKeyUp}
@@ -462,11 +441,11 @@ export class CVButton extends FormAssociatedReatomElement {
               `
             : nothing
         }
-        <span part="prefix" ?hidden=${!hasPrefixContent}
+        <span part="prefix" class="cv-u-icon-slot" ?hidden=${!hasPrefixContent}
           ><slot name="prefix" @slotchange=${this.handleContentSlotChange}></slot
         ></span>
-        <span part="label"><slot></slot></span>
-        <span part="suffix" ?hidden=${!hasSuffixContent}
+        <span part="label" class="cv-u-inline-center"><slot></slot></span>
+        <span part="suffix" class="cv-u-icon-slot" ?hidden=${!hasSuffixContent}
           ><slot name="suffix" @slotchange=${this.handleContentSlotChange}></slot
         ></span>
       </button>

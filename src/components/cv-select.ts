@@ -64,6 +64,7 @@ let cvSelectNonce = 0
 
 export class CVSelect extends FormAssociatedReatomElement {
   static elementName = 'cv-select'
+  static override hostDisplay = 'inline-block' as const
 
   static get properties() {
     return {
@@ -131,7 +132,6 @@ export class CVSelect extends FormAssociatedReatomElement {
   static styles = [
     css`
       :host {
-        display: inline-block;
         inline-size: var(--cv-select-inline-size, 260px);
       }
 
@@ -148,16 +148,10 @@ export class CVSelect extends FormAssociatedReatomElement {
       }
 
       [part='trigger'] {
-        display: inline-flex;
-        align-items: center;
-        justify-content: space-between;
         gap: var(--cv-space-2, 8px);
         min-block-size: var(--cv-select-min-height, 36px);
         padding: var(--cv-select-padding-block, var(--cv-space-2, 8px))
           var(--cv-select-padding-inline, var(--cv-space-3, 12px));
-        border-radius: var(--cv-radius-sm, 6px);
-        border: 1px solid var(--cv-color-border, #2a3245);
-        background: var(--cv-color-surface, #141923);
         color: var(--cv-color-text, #e8ecf6);
         cursor: pointer;
       }
@@ -184,9 +178,6 @@ export class CVSelect extends FormAssociatedReatomElement {
       }
 
       [part='clear-button'] {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
         border: none;
         background: none;
         color: inherit;
@@ -208,17 +199,9 @@ export class CVSelect extends FormAssociatedReatomElement {
         min-inline-size: 100%;
         max-block-size: 240px;
         overflow: auto;
-        display: grid;
         gap: var(--cv-space-1, 4px);
         padding: var(--cv-space-1, 4px);
-        border-radius: var(--cv-radius-md, 10px);
-        border: 1px solid var(--cv-color-border, #2a3245);
         background: var(--cv-color-surface-elevated, #1d2432);
-        box-shadow: var(--cv-shadow-1, 0 2px 8px rgba(0, 0, 0, 0.24));
-      }
-
-      [part='listbox'][hidden] {
-        display: none;
       }
     `,
   ]
@@ -820,6 +803,7 @@ export class CVSelect extends FormAssociatedReatomElement {
           data-selected-id=${triggerProps['data-selected-id'] ?? nothing}
           data-selected-label=${triggerProps['data-selected-label'] ?? nothing}
           part="trigger"
+          class="cv-u-control-shell cv-u-row-between"
           @click=${this.handleTriggerClick}
           @keydown=${this.handleTriggerKeyDown}
         >
@@ -827,7 +811,13 @@ export class CVSelect extends FormAssociatedReatomElement {
           ${
             showClear
               ? html`
-                <button part="clear-button" aria-hidden="true" tabindex="-1" @click=${this.handleClearClick}>
+                <button
+                  part="clear-button"
+                  class="cv-u-icon-slot"
+                  aria-hidden="true"
+                  tabindex="-1"
+                  @click=${this.handleClearClick}
+                >
                   ✕
                 </button>
               `
@@ -845,6 +835,7 @@ export class CVSelect extends FormAssociatedReatomElement {
           aria-activedescendant=${listboxProps['aria-activedescendant'] ?? nothing}
           ?hidden=${listboxProps.hidden}
           part="listbox"
+          class="cv-u-panel-shell"
           @keydown=${this.handleListboxKeyDown}
         >
           <slot @slotchange=${this.handleSlotChange}></slot>

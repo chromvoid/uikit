@@ -56,6 +56,7 @@ let cvComboboxNonce = 0
 
 export class CVCombobox extends ReatomLitElement {
   static elementName = 'cv-combobox'
+  static override hostDisplay = 'inline-block' as const
 
   static get properties() {
     return {
@@ -115,7 +116,6 @@ export class CVCombobox extends ReatomLitElement {
   static styles = [
     css`
       :host {
-        display: inline-block;
         inline-size: 260px;
       }
 
@@ -125,19 +125,13 @@ export class CVCombobox extends ReatomLitElement {
       }
 
       [part='input-wrapper'] {
-        display: flex;
-        align-items: center;
         flex-wrap: wrap;
         gap: var(--cv-space-1, 4px);
         min-block-size: 36px;
-        border-radius: var(--cv-radius-sm, 6px);
-        border: 1px solid var(--cv-color-border, #2a3245);
-        background: var(--cv-color-surface, #141923);
         padding: 0 var(--cv-space-3, 12px);
       }
 
       [part='input'] {
-        flex: 1;
         min-inline-size: 60px;
         block-size: 100%;
         min-block-size: 36px;
@@ -153,9 +147,6 @@ export class CVCombobox extends ReatomLitElement {
       }
 
       [part='trigger'] {
-        flex: 1;
-        display: flex;
-        align-items: center;
         gap: var(--cv-space-2, 8px);
         min-block-size: 36px;
         border: none;
@@ -171,20 +162,15 @@ export class CVCombobox extends ReatomLitElement {
       }
 
       [part='label'] {
-        flex: 1;
         text-align: start;
       }
 
       [part='tags'] {
-        display: flex;
         flex-wrap: wrap;
         gap: var(--cv-space-1, 4px);
-        align-items: center;
       }
 
       [part='tag'] {
-        display: inline-flex;
-        align-items: center;
         gap: var(--cv-space-1, 4px);
         padding: 2px var(--cv-space-2, 8px);
         border-radius: var(--cv-radius-sm, 6px);
@@ -193,9 +179,6 @@ export class CVCombobox extends ReatomLitElement {
       }
 
       [part='tag-remove'] {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
         border: none;
         background: transparent;
         color: inherit;
@@ -211,9 +194,6 @@ export class CVCombobox extends ReatomLitElement {
       }
 
       [part='clear-button'] {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
         border: none;
         background: transparent;
         color: var(--cv-color-text-muted, #9aa6bf);
@@ -222,33 +202,20 @@ export class CVCombobox extends ReatomLitElement {
       }
 
       [part='expand-icon'] {
-        display: inline-flex;
-        align-items: center;
         color: var(--cv-color-text-muted, #9aa6bf);
       }
 
       [part='listbox'] {
-        display: grid;
         gap: var(--cv-space-1, 4px);
         max-block-size: 220px;
         overflow: auto;
         padding: var(--cv-space-1, 4px);
-        border-radius: var(--cv-radius-md, 10px);
-        border: 1px solid var(--cv-color-border, #2a3245);
         background: var(--cv-color-surface, #141923);
-      }
-
-      [part='listbox'][hidden] {
-        display: none;
       }
 
       [part='group'] {
         display: grid;
         gap: var(--cv-space-1, 4px);
-      }
-
-      [part='group'][hidden] {
-        display: none;
       }
 
       [part='group-label'] {
@@ -855,13 +822,14 @@ export class CVCombobox extends ReatomLitElement {
     const overflowCount = selectedRecords.length - maxVisible
 
     return html`
-      <div part="tags">
+      <div part="tags" class="cv-u-row">
         ${visibleRecords.map(
           (record) => html`
-            <span part="tag">
+            <span part="tag" class="cv-u-row">
               <span part="tag-label">${record.label}</span>
               <button
                 part="tag-remove"
+                class="cv-u-icon-slot"
                 aria-label="Remove ${record.label}"
                 @click=${(e: Event) => {
                   e.stopPropagation()
@@ -881,7 +849,9 @@ export class CVCombobox extends ReatomLitElement {
     if (!this.model?.state.hasSelection()) return nothing
 
     return html`
-      <button part="clear-button" aria-label="Clear" @click=${this.handleClearClick}>&times;</button>
+      <button part="clear-button" class="cv-u-icon-slot" aria-label="Clear" @click=${this.handleClearClick}>
+        &times;
+      </button>
     `
   }
 
@@ -956,7 +926,7 @@ export class CVCombobox extends ReatomLitElement {
 
     return html`
       <div part="base">
-        <div part="input-wrapper">
+        <div part="input-wrapper" class="cv-u-control-shell">
           ${this.renderTags()}
           ${
             isSelectOnly
@@ -971,10 +941,11 @@ export class CVCombobox extends ReatomLitElement {
                   aria-activedescendant=${inputProps['aria-activedescendant'] ?? nothing}
                   aria-label=${inputProps['aria-label'] ?? nothing}
                   part="trigger"
+                  class="cv-u-row cv-u-fill"
                   @click=${this.handleInputClick}
                   @keydown=${this.handleKeyDown}
                 >
-                  <span part="label">${this.getSelectedOptionLabel()}</span>
+                  <span part="label" class="cv-u-fill">${this.getSelectedOptionLabel()}</span>
                 </div>
               `
               : html`
@@ -991,6 +962,7 @@ export class CVCombobox extends ReatomLitElement {
                   .value=${this.inputValue}
                   placeholder=${this.placeholder}
                   part="input"
+                  class="cv-u-fill"
                   @input=${this.handleInputChange}
                   @focus=${this.handleInputFocus}
                   @click=${this.handleInputClick}
@@ -1009,6 +981,7 @@ export class CVCombobox extends ReatomLitElement {
           aria-multiselectable=${listboxProps['aria-multiselectable'] ?? nothing}
           ?hidden=${!this.open}
           part="listbox"
+          class="cv-u-panel-shell"
         >
           ${hasGroups ? this.renderListboxContent() : html`<slot @slotchange=${this.handleSlotChange}></slot>`}
         </div>

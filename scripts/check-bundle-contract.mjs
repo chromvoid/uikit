@@ -10,11 +10,14 @@ const packageRoot = path.resolve(scriptDir, '..')
 const tmpRoot = await mkdtemp(path.join(os.tmpdir(), 'uikit-bundle-contract-'))
 
 const rootEntry = path.join(tmpRoot, 'root-entry.js')
-const leafEntry = path.join(tmpRoot, 'leaf-entry.js')
+const buttonLeafEntry = path.join(tmpRoot, 'button-leaf-entry.js')
+const selectLeafEntry = path.join(tmpRoot, 'select-leaf-entry.js')
 const rootOut = path.join(tmpRoot, 'root-out')
-const leafOut = path.join(tmpRoot, 'leaf-out')
+const buttonLeafOut = path.join(tmpRoot, 'button-leaf-out')
+const selectLeafOut = path.join(tmpRoot, 'select-leaf-out')
 const rootImportPath = path.join(packageRoot, 'dist', 'index.js').replaceAll(path.sep, '/')
-const leafImportPath = path.join(packageRoot, 'dist', 'components', 'cv-button.js').replaceAll(path.sep, '/')
+const buttonLeafImportPath = path.join(packageRoot, 'dist', 'components', 'cv-button.js').replaceAll(path.sep, '/')
+const selectLeafImportPath = path.join(packageRoot, 'dist', 'components', 'cv-select.js').replaceAll(path.sep, '/')
 const unrelatedMarkers = [
   'cv-treegrid',
   'cv-window-splitter',
@@ -22,6 +25,10 @@ const unrelatedMarkers = [
   'cv-command-palette',
   'cv-tooltip',
 ]
+const sizeBudgets = {
+  buttonLeaf: Number.POSITIVE_INFINITY,
+  selectLeaf: Number.POSITIVE_INFINITY,
+}
 
 async function bundle(entryFile, outdir) {
   await mkdir(outdir, {recursive: true})
@@ -43,25 +50,55 @@ async function bundle(entryFile, outdir) {
   return readFile(outfile, 'utf8')
 }
 
-await writeFile(rootEntry, `import {CVButton} from '${rootImportPath}';\nconsole.log(CVButton.elementName)\n`)
-await writeFile(leafEntry, `import {CVButton} from '${leafImportPath}';\nconsole.log(CVButton.elementName)\n`)
+function assertBundleHasNoUnrelatedMarkers(bundle, label) {
+  for (const marker of unrelatedMarkers) {
+    if (bundle.includes(marker)) {
+      throw new Error(`${label} pulled unrelated marker: ${marker}`)
+    }
+  }
+}
+
+function assertBundleContainsMarker(bundle, marker, label) {
+  if (!bundle.includes(marker)) {
+    throw new Error(`Expected ${label} to retain marker: ${marker}`)
+  }
+}
+
+function assertBundleSizeWithinBudget(bundle, budget, label) {
+  if (bundle.length > budget) {
+    throw new Error(`${label} exceeded size budget (${bundle.length} > ${budget})`)
+  }
+}
+
+await writeFile(
+  rootEntry,
+  `import {CVButton, CVSelect} from '${rootImportPath}';\nconsole.log(CVButton.elementName, CVSelect.elementName)\n`,
+)
+await writeFile(
+  buttonLeafEntry,
+  `import {CVButton} from '${buttonLeafImportPath}';\nconsole.log(CVButton.elementName)\n`,
+)
+await writeFile(
+  selectLeafEntry,
+  `import {CVSelect} from '${selectLeafImportPath}';\nconsole.log(CVSelect.elementName)\n`,
+)
 
 try {
   const rootBundle = await bundle(rootEntry, rootOut)
-  const leafBundle = await bundle(leafEntry, leafOut)
+  const buttonLeafBundle = await bundle(buttonLeafEntry, buttonLeafOut)
+  const selectLeafBundle = await bundle(selectLeafEntry, selectLeafOut)
 
-  for (const marker of unrelatedMarkers) {
-    if (rootBundle.includes(marker)) {
-      throw new Error(`Root bundle pulled unrelated marker: ${marker}`)
-    }
-    if (leafBundle.includes(marker)) {
-      throw new Error(`Leaf bundle pulled unrelated marker: ${marker}`)
-    }
-  }
+  assertBundleHasNoUnrelatedMarkers(rootBundle, 'Root bundle')
+  assertBundleHasNoUnrelatedMarkers(buttonLeafBundle, 'Button leaf bundle')
+  assertBundleHasNoUnrelatedMarkers(selectLeafBundle, 'Select leaf bundle')
 
-  if (!rootBundle.includes('cv-button') || !leafBundle.includes('cv-button')) {
-    throw new Error('Expected cv-button marker to stay in the bundled outputs')
-  }
+  assertBundleContainsMarker(rootBundle, 'cv-button', 'root bundle')
+  assertBundleContainsMarker(rootBundle, 'cv-select', 'root bundle')
+  assertBundleContainsMarker(buttonLeafBundle, 'cv-button', 'button leaf bundle')
+  assertBundleContainsMarker(selectLeafBundle, 'cv-select', 'select leaf bundle')
+
+  assertBundleSizeWithinBudget(buttonLeafBundle, sizeBudgets.buttonLeaf, 'Button leaf bundle')
+  assertBundleSizeWithinBudget(selectLeafBundle, sizeBudgets.selectLeaf, 'Select leaf bundle')
 
   console.log('[bundle] bundle contract passed')
 } finally {

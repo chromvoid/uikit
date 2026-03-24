@@ -27,6 +27,7 @@ let cvNumberNonce = 0
 
 export class CVNumber extends FormAssociatedReatomElement {
   static elementName = 'cv-number'
+  static override hostDisplay = 'inline-block' as const
 
   static get properties() {
     return {
@@ -100,7 +101,6 @@ export class CVNumber extends FormAssociatedReatomElement {
   static styles = [
     css`
       :host {
-        display: inline-block;
         --cv-number-height: 36px;
         --cv-number-padding-inline: var(--cv-space-3, 12px);
         --cv-number-font-size: var(--cv-font-size-base, 14px);
@@ -117,8 +117,6 @@ export class CVNumber extends FormAssociatedReatomElement {
       }
 
       [part='base'] {
-        display: inline-flex;
-        align-items: center;
         gap: var(--cv-number-gap);
         padding-inline: var(--cv-number-padding-inline);
         height: var(--cv-number-height);
@@ -137,8 +135,6 @@ export class CVNumber extends FormAssociatedReatomElement {
       }
 
       [part='input'] {
-        flex: 1;
-        min-width: 0;
         border: none;
         outline: none;
         background: transparent;
@@ -154,34 +150,20 @@ export class CVNumber extends FormAssociatedReatomElement {
       }
 
       [part='prefix'],
-      [part='suffix'] {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
+      [part='suffix'],
+      [part='clear-button'] {
         font-size: var(--cv-number-icon-size);
       }
 
       [part='clear-button'] {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
         cursor: pointer;
-        font-size: var(--cv-number-icon-size);
         user-select: none;
-      }
-
-      [part='clear-button'][hidden] {
-        display: none;
       }
 
       [part='stepper'] {
         display: inline-flex;
         flex-direction: column;
         gap: 1px;
-      }
-
-      [part='stepper'][hidden] {
-        display: none;
       }
 
       [part='increment'],
@@ -598,10 +580,11 @@ export class CVNumber extends FormAssociatedReatomElement {
 
     return html`
       <span part="form-control-label"><slot name="label"></slot></span>
-      <div part="base">
-        <span part="prefix"><slot name="prefix"></slot></span>
+      <div part="base" class="cv-u-control-shell">
+        <span part="prefix" class="cv-u-icon-slot"><slot name="prefix"></slot></span>
         <input
           part="input"
+          class="cv-u-fill"
           id=${inputProps.id}
           role=${inputProps.role}
           tabindex=${inputProps.tabindex}
@@ -626,6 +609,7 @@ export class CVNumber extends FormAssociatedReatomElement {
         />
         <span
           part="clear-button"
+          class="cv-u-icon-slot"
           role=${clearButtonProps.role}
           aria-label=${clearButtonProps['aria-label']}
           tabindex=${clearButtonProps.tabindex}
@@ -667,7 +651,7 @@ export class CVNumber extends FormAssociatedReatomElement {
             -
           </button>
         </span>
-        <span part="suffix"><slot name="suffix"></slot></span>
+        <span part="suffix" class="cv-u-icon-slot"><slot name="suffix"></slot></span>
       </div>
       <span part="form-control-help-text"><slot name="help-text"></slot></span>
     `

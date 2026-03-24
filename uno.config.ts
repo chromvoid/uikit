@@ -4,9 +4,32 @@ import {defineConfig, presetWind3} from 'unocss'
 export default defineConfig({
   presets: [presetWind3({preflight: false})],
   transformers: [transformerDirectives()],
+  shortcuts: {
+    'cv-u-row': 'flex items-center',
+    'cv-u-row-between': 'flex items-center justify-between',
+    'cv-u-inline-center': 'inline-flex items-center justify-center',
+    'cv-u-stack-2': 'flex flex-col gap-2',
+    'cv-u-stack-3': 'flex flex-col gap-3',
+    'cv-u-control-shell': 'flex items-center gap-2 rounded-sm border border-border bg-surface',
+    'cv-u-panel-shell': 'grid rounded-md border border-border bg-surface shadow-sm overflow-hidden',
+    'cv-u-icon-slot': 'inline-flex items-center justify-center flex-shrink-0',
+    'cv-u-fill': 'flex-1 min-w-0',
+    'cv-u-clip': 'overflow-hidden',
+  },
+  blocklist: [
+    'absolute', 'bg-surface', 'block', 'border', 'border-border', 'border-collapse', 'border-inline',
+    'columns-2', 'columns-3', 'contents', 'ease', 'ease-in-out', 'fixed', 'flex', 'flex-1', 'flex-col',
+    'flex-shrink', 'flex-shrink-0', 'flex-wrap', 'gap-2', 'gap-3', 'grid', 'hidden', 'inline',
+    'inline-block', 'inline-flex', 'inline-grid', 'items-center', 'justify-center', 'justify-between',
+    'min-w-0', 'ms', 'outline', 'overflow-hidden', 'p-4', 'px', 'relative', 'resize', 'rounded-md',
+    'rounded-sm', 'shadow', 'shadow-sm', 'static', 'sticky', 'tab', 'table', 'table-cell',
+    'table-header-group', 'table-row', 'table-row-group', 'tabular-nums', 'transform', 'transition',
+    'visible',
+  ],
   content: {
     pipeline: {
-      include: [/\.ts$/],
+      include: [/[/\\]src[/\\].*\.ts$/],
+      exclude: [/[/\\]src[/\\]test[/\\]/, /\.test\.ts$/, /\.d\.ts$/],
     },
   },
   theme: {
