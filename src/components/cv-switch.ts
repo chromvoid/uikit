@@ -304,6 +304,13 @@ export class CVSwitch extends FormAssociatedReatomElement {
   protected override render() {
     const props = this.model.contracts.getSwitchProps()
     const isChecked = this.model.state.isOn()
+    const hostAriaLabel = this.getAttribute('aria-label')?.trim() || undefined
+    const hostAriaLabelledBy = this.getAttribute('aria-labelledby')?.trim() || undefined
+    const fallbackLabelId =
+      hostAriaLabel || hostAriaLabelledBy ? undefined : `${this.idBase}-label`
+    const ariaLabelledBy = hostAriaLabel
+      ? undefined
+      : hostAriaLabelledBy || props['aria-labelledby'] || fallbackLabelId
 
     return html`
       <div part="base" @click=${this.handleClick}>
@@ -314,7 +321,8 @@ export class CVSwitch extends FormAssociatedReatomElement {
           aria-checked=${props['aria-checked']}
           aria-disabled=${props['aria-disabled']}
           aria-required=${this.required ? 'true' : nothing}
-          aria-labelledby=${props['aria-labelledby'] ?? nothing}
+          aria-label=${hostAriaLabel ?? nothing}
+          aria-labelledby=${ariaLabelledBy ?? nothing}
           aria-describedby=${props['aria-describedby'] ?? nothing}
           part="control"
           @keydown=${this.handleKeyDown}
@@ -323,7 +331,7 @@ export class CVSwitch extends FormAssociatedReatomElement {
           <span part="untoggled" ?hidden=${isChecked}><slot name="untoggled"></slot></span>
           <span part="thumb"></span>
         </div>
-        <span part="label"><slot></slot></span>
+        <span part="label" id=${fallbackLabelId ?? nothing}><slot></slot></span>
         ${
           this.hasHelpText
             ? html`<span part="help-text" id=${this.helpTextId}>

@@ -227,6 +227,24 @@ describe('cv-switch', () => {
       expect(helpTextEl).not.toBeNull()
       expect(control.getAttribute('aria-describedby')).toBe(helpTextEl!.id)
     })
+
+    it('links the visible label to the switch control by default', async () => {
+      const sw = await createSwitchWithHTML('Enable sync')
+      const control = getControl(sw)
+      const label = getBase(sw).querySelector('[part="label"]') as HTMLElement
+
+      expect(label.id).toBeTruthy()
+      expect(control.getAttribute('aria-labelledby')).toBe(label.id)
+      expect(control.hasAttribute('aria-label')).toBe(false)
+    })
+
+    it('forwards host aria-label to the switch control', async () => {
+      const sw = await createSwitchWithHTML('', {'aria-label': 'Enable realtime sync'})
+      const control = getControl(sw)
+
+      expect(control.getAttribute('aria-label')).toBe('Enable realtime sync')
+      expect(control.hasAttribute('aria-labelledby')).toBe(false)
+    })
   })
 
   // --- 5. Toggle behavior ---

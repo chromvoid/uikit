@@ -21,12 +21,37 @@ const createButton = async (attrs?: Partial<CVButton>) => {
 }
 
 const getBase = (button: CVButton) => button.shadowRoot!.querySelector('[part="base"]') as HTMLElement
+const getStylesText = () =>
+  (CVButton.styles as Array<{cssText?: string}>)
+    .map((style) => style.cssText ?? '')
+    .join('\n')
 
 afterEach(() => {
   document.body.innerHTML = ''
 })
 
 describe('cv-button', () => {
+  describe('style contract', () => {
+    it('defines shared hover, focus, and active selectors on the base button', () => {
+      const stylesText = getStylesText()
+
+      expect(stylesText).toContain("[part='base']:hover:not(:disabled)")
+      expect(stylesText).toContain("[part='base']:focus-visible")
+      expect(stylesText).toContain("[part='base']:active:not(:disabled)")
+    })
+
+    it('drives variants through state tokens so shared selectors can style every variant', () => {
+      const stylesText = getStylesText()
+
+      expect(stylesText).toContain('--cv-button-background-hover')
+      expect(stylesText).toContain('--cv-button-border-color-hover')
+      expect(stylesText).toContain('--cv-button-background-active')
+      expect(stylesText).toContain('--cv-button-background-pressed')
+      expect(stylesText).toContain("--cv-button-accent-color: var(--cv-color-primary, #65d7ff);")
+      expect(stylesText).toContain("--cv-button-accent-color: var(--cv-color-danger, #ff7d86);")
+    })
+  })
+
   // --- 2a. Shadow DOM structure ---
 
   describe('shadow DOM structure', () => {

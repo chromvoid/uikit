@@ -1,6 +1,6 @@
 import {LitElement, css, html, nothing} from 'lit'
 
-import {componentResetStyles, getComponentHostDisplayStyles} from '../styles/component-styles'
+import {componentResetStyles} from '../styles/component-styles'
 
 export class CVMenuItem extends LitElement {
   static elementName = 'cv-menu-item'
@@ -41,9 +41,9 @@ export class CVMenuItem extends LitElement {
 
   static styles = [
     componentResetStyles,
-    getComponentHostDisplayStyles('block'),
     css`
       :host {
+        display: inline-block;
         outline: none;
       }
 

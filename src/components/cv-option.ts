@@ -29,9 +29,9 @@ export class CVOption extends LitElement {
 
   static styles = [
     componentResetStyles,
-    getComponentHostDisplayStyles('block'),
     css`
       :host {
+        display: inline-block;
         outline: none;
       }
 

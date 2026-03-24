@@ -66,7 +66,9 @@ export class CVButton extends FormAssociatedReatomElement {
   static styles = [
     css`
       :host {
-        width: 100%;
+        display: inline-block;
+        max-inline-size: 100%;
+        vertical-align: middle;
         cursor: pointer;
         user-select: none;
         --cv-button-min-height: 36px;
@@ -76,9 +78,48 @@ export class CVButton extends FormAssociatedReatomElement {
         --cv-button-gap: var(--cv-space-2, 8px);
         --cv-button-font-size: var(--cv-button-font-size-medium, var(--cv-font-size-base, 14px));
         --cv-button-font-weight: var(--cv-button-font-weight-medium, inherit);
+        --cv-button-accent-color: var(--cv-color-primary, #65d7ff);
+        --cv-button-text-color: var(--cv-color-text, #e8ecf6);
+        --cv-button-border-color: var(--cv-color-border, #2a3245);
+        --cv-button-background: var(--cv-color-surface, #141923);
+        --cv-button-text-color-hover: var(--cv-button-text-color);
+        --cv-button-border-color-hover: color-mix(
+          in oklab,
+          var(--cv-button-accent-color) 74%,
+          var(--cv-button-border-color)
+        );
+        --cv-button-background-hover: color-mix(
+          in oklab,
+          var(--cv-button-accent-color) 10%,
+          var(--cv-button-background)
+        );
+        --cv-button-text-color-active: var(--cv-button-text-color);
+        --cv-button-border-color-active: color-mix(
+          in oklab,
+          var(--cv-button-accent-color) 86%,
+          var(--cv-button-border-color)
+        );
+        --cv-button-background-active: color-mix(
+          in oklab,
+          var(--cv-button-accent-color) 18%,
+          var(--cv-button-background)
+        );
+        --cv-button-text-color-pressed: var(--cv-button-text-color);
+        --cv-button-border-color-pressed: var(--cv-button-border-color-active);
+        --cv-button-background-pressed: color-mix(
+          in oklab,
+          var(--cv-button-accent-color) 30%,
+          var(--cv-button-background)
+        );
+        --cv-button-text-color-pressed-hover: var(--cv-button-text-color-pressed);
+        --cv-button-border-color-pressed-hover: var(--cv-button-border-color-pressed);
+        --cv-button-background-pressed-hover: var(--cv-button-background-active);
+        --cv-button-focus-ring-color: var(--cv-button-accent-color);
       }
 
       [part='base'] {
+        display: inline-flex;
+        align-items: center;
         width: 100%;
         justify-content: center;
         gap: var(--cv-button-gap);
@@ -87,9 +128,12 @@ export class CVButton extends FormAssociatedReatomElement {
         font-size: var(--cv-button-font-size);
         font-weight: var(--cv-button-font-weight);
         border-radius: var(--cv-button-border-radius);
-        color: var(--cv-color-text, #e8ecf6);
+        border: 1px solid var(--cv-button-border-color);
+        background: var(--cv-button-background);
+        color: var(--cv-button-text-color);
         cursor: pointer;
         user-select: none;
+        white-space: nowrap;
         transition:
           background var(--cv-duration-fast, 120ms) var(--cv-easing-standard, ease),
           border-color var(--cv-duration-fast, 120ms) var(--cv-easing-standard, ease),
@@ -97,62 +141,219 @@ export class CVButton extends FormAssociatedReatomElement {
       }
 
       [part='label'] {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
         gap: var(--cv-button-gap);
+      }
+
+      [part='prefix'],
+      [part='suffix'] {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
       }
 
       /* --- variant: primary --- */
       :host([variant='primary']) [part='base'] {
-        border-color: color-mix(
+        --cv-button-accent-color: var(--cv-color-primary, #65d7ff);
+        --cv-button-border-color: color-mix(
           in oklab,
           var(--cv-color-primary, #65d7ff) 52%,
           var(--cv-color-border, #2a3245)
         );
-        background: color-mix(
+        --cv-button-background: color-mix(
           in oklab,
           var(--cv-color-primary, #65d7ff) 22%,
+          var(--cv-color-surface, #141923)
+        );
+        --cv-button-border-color-hover: color-mix(
+          in oklab,
+          var(--cv-color-primary, #65d7ff) 72%,
+          var(--cv-color-border, #2a3245)
+        );
+        --cv-button-background-hover: color-mix(
+          in oklab,
+          var(--cv-color-primary, #65d7ff) 30%,
+          var(--cv-color-surface, #141923)
+        );
+        --cv-button-border-color-active: color-mix(
+          in oklab,
+          var(--cv-color-primary, #65d7ff) 84%,
+          var(--cv-color-border, #2a3245)
+        );
+        --cv-button-background-active: color-mix(
+          in oklab,
+          var(--cv-color-primary, #65d7ff) 36%,
+          var(--cv-color-surface, #141923)
+        );
+        --cv-button-background-pressed: color-mix(
+          in oklab,
+          var(--cv-color-primary, #65d7ff) 38%,
+          var(--cv-color-surface, #141923)
+        );
+        --cv-button-background-pressed-hover: color-mix(
+          in oklab,
+          var(--cv-color-primary, #65d7ff) 44%,
           var(--cv-color-surface, #141923)
         );
       }
 
       /* --- variant: danger --- */
       :host([variant='danger']) [part='base'] {
-        border-color: color-mix(
+        --cv-button-accent-color: var(--cv-color-danger, #ff7d86);
+        --cv-button-border-color: color-mix(
           in oklab,
           var(--cv-color-danger, #ff7d86) 52%,
           var(--cv-color-border, #2a3245)
         );
-        background: color-mix(
+        --cv-button-background: color-mix(
           in oklab,
           var(--cv-color-danger, #ff7d86) 22%,
+          var(--cv-color-surface, #141923)
+        );
+        --cv-button-border-color-hover: color-mix(
+          in oklab,
+          var(--cv-color-danger, #ff7d86) 72%,
+          var(--cv-color-border, #2a3245)
+        );
+        --cv-button-background-hover: color-mix(
+          in oklab,
+          var(--cv-color-danger, #ff7d86) 30%,
+          var(--cv-color-surface, #141923)
+        );
+        --cv-button-border-color-active: color-mix(
+          in oklab,
+          var(--cv-color-danger, #ff7d86) 84%,
+          var(--cv-color-border, #2a3245)
+        );
+        --cv-button-background-active: color-mix(
+          in oklab,
+          var(--cv-color-danger, #ff7d86) 36%,
+          var(--cv-color-surface, #141923)
+        );
+        --cv-button-background-pressed: color-mix(
+          in oklab,
+          var(--cv-color-danger, #ff7d86) 32%,
+          var(--cv-color-surface, #141923)
+        );
+        --cv-button-background-pressed-hover: color-mix(
+          in oklab,
+          var(--cv-color-danger, #ff7d86) 38%,
           var(--cv-color-surface, #141923)
         );
       }
 
       /* --- variant: ghost --- */
       :host([variant='ghost']) [part='base'] {
-        background: transparent;
-        border-color: transparent;
+        --cv-button-background: transparent;
+        --cv-button-border-color: transparent;
+        --cv-button-border-color-hover: transparent;
+        --cv-button-background-hover: color-mix(
+          in oklab,
+          var(--cv-button-accent-color) 10%,
+          transparent
+        );
+        --cv-button-border-color-active: transparent;
+        --cv-button-background-active: color-mix(
+          in oklab,
+          var(--cv-button-accent-color) 16%,
+          transparent
+        );
+        --cv-button-border-color-pressed: transparent;
+        --cv-button-border-color-pressed-hover: transparent;
+        --cv-button-background-pressed: color-mix(
+          in oklab,
+          var(--cv-button-accent-color) 14%,
+          transparent
+        );
+        --cv-button-background-pressed-hover: color-mix(
+          in oklab,
+          var(--cv-button-accent-color) 18%,
+          transparent
+        );
       }
 
       /* --- outline modifier --- */
       :host([outline]) [part='base'] {
-        background: transparent;
-        border-color: var(--cv-color-border, #2a3245);
+        --cv-button-background: transparent;
+        --cv-button-border-color: var(--cv-color-border, #2a3245);
+        --cv-button-background-hover: color-mix(
+          in oklab,
+          var(--cv-button-accent-color) 10%,
+          transparent
+        );
+        --cv-button-background-active: color-mix(
+          in oklab,
+          var(--cv-button-accent-color) 16%,
+          transparent
+        );
+        --cv-button-background-pressed: color-mix(
+          in oklab,
+          var(--cv-button-accent-color) 16%,
+          transparent
+        );
+        --cv-button-background-pressed-hover: color-mix(
+          in oklab,
+          var(--cv-button-accent-color) 20%,
+          transparent
+        );
       }
 
       :host([outline][variant='primary']) [part='base'] {
-        border-color: color-mix(
+        --cv-button-border-color: color-mix(
           in oklab,
           var(--cv-color-primary, #65d7ff) 52%,
           var(--cv-color-border, #2a3245)
         );
+        --cv-button-border-color-hover: color-mix(
+          in oklab,
+          var(--cv-color-primary, #65d7ff) 76%,
+          var(--cv-color-border, #2a3245)
+        );
+        --cv-button-border-color-active: color-mix(
+          in oklab,
+          var(--cv-color-primary, #65d7ff) 90%,
+          var(--cv-color-border, #2a3245)
+        );
+        --cv-button-background-pressed: color-mix(
+          in oklab,
+          var(--cv-color-primary, #65d7ff) 20%,
+          transparent
+        );
+        --cv-button-background-pressed-hover: color-mix(
+          in oklab,
+          var(--cv-color-primary, #65d7ff) 24%,
+          transparent
+        );
       }
 
       :host([outline][variant='danger']) [part='base'] {
-        border-color: color-mix(
+        --cv-button-border-color: color-mix(
           in oklab,
           var(--cv-color-danger, #ff7d86) 52%,
           var(--cv-color-border, #2a3245)
+        );
+        --cv-button-border-color-hover: color-mix(
+          in oklab,
+          var(--cv-color-danger, #ff7d86) 76%,
+          var(--cv-color-border, #2a3245)
+        );
+        --cv-button-border-color-active: color-mix(
+          in oklab,
+          var(--cv-color-danger, #ff7d86) 90%,
+          var(--cv-color-border, #2a3245)
+        );
+        --cv-button-background-pressed: color-mix(
+          in oklab,
+          var(--cv-color-danger, #ff7d86) 16%,
+          transparent
+        );
+        --cv-button-background-pressed-hover: color-mix(
+          in oklab,
+          var(--cv-color-danger, #ff7d86) 22%,
+          transparent
         );
       }
 
@@ -162,54 +363,34 @@ export class CVButton extends FormAssociatedReatomElement {
       }
 
       /* --- hover --- */
-      [part='base']:hover {
-        border-color: var(--cv-color-primary, #65d7ff);
+      [part='base']:hover:not(:disabled) {
+        background: var(--cv-button-background-hover);
+        border-color: var(--cv-button-border-color-hover);
+        color: var(--cv-button-text-color-hover);
       }
 
       [part='base']:focus-visible {
-        outline: 2px solid var(--cv-color-primary, #65d7ff);
+        outline: 2px solid var(--cv-button-focus-ring-color);
         outline-offset: 2px;
+      }
+
+      [part='base']:active:not(:disabled) {
+        background: var(--cv-button-background-active);
+        border-color: var(--cv-button-border-color-active);
+        color: var(--cv-button-text-color-active);
       }
 
       /* --- pressed states --- */
       :host([pressed]) [part='base'] {
-        background: color-mix(
-          in oklab,
-          var(--cv-color-primary, #65d7ff) 30%,
-          var(--cv-color-surface, #141923)
-        );
+        background: var(--cv-button-background-pressed);
+        border-color: var(--cv-button-border-color-pressed);
+        color: var(--cv-button-text-color-pressed);
       }
 
-      :host([pressed][outline]) [part='base'] {
-        background: color-mix(in oklab, var(--cv-color-primary, #65d7ff) 16%, transparent);
-      }
-
-      :host([pressed][variant='ghost']) [part='base'] {
-        background: color-mix(in oklab, var(--cv-color-primary, #65d7ff) 14%, transparent);
-      }
-
-      :host([pressed][variant='danger']) [part='base'] {
-        background: color-mix(
-          in oklab,
-          var(--cv-color-danger, #ff7d86) 32%,
-          var(--cv-color-surface, #141923)
-        );
-      }
-
-      :host([pressed][outline][variant='danger']) [part='base'] {
-        background: color-mix(in oklab, var(--cv-color-danger, #ff7d86) 16%, transparent);
-      }
-
-      :host([pressed][variant='primary']) [part='base'] {
-        background: color-mix(
-          in oklab,
-          var(--cv-color-primary, #65d7ff) 38%,
-          var(--cv-color-surface, #141923)
-        );
-      }
-
-      :host([pressed][outline][variant='primary']) [part='base'] {
-        background: color-mix(in oklab, var(--cv-color-primary, #65d7ff) 20%, transparent);
+      :host([pressed]) [part='base']:hover:not(:disabled) {
+        background: var(--cv-button-background-pressed-hover);
+        border-color: var(--cv-button-border-color-pressed-hover);
+        color: var(--cv-button-text-color-pressed-hover);
       }
 
       /* --- sizes --- */
@@ -232,8 +413,8 @@ export class CVButton extends FormAssociatedReatomElement {
         inline-size: 14px;
         block-size: 14px;
         border-radius: 999px;
-        border: 2px solid color-mix(in oklab, var(--cv-color-primary, #65d7ff) 32%, transparent);
-        border-top-color: var(--cv-color-primary, #65d7ff);
+        border: 2px solid color-mix(in oklab, var(--cv-button-accent-color) 32%, transparent);
+        border-top-color: var(--cv-button-accent-color);
         animation: cv-button-spin 800ms linear infinite;
       }
 

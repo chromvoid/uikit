@@ -1,6 +1,6 @@
 import {LitElement, css, html} from 'lit'
 
-import {componentResetStyles, getComponentHostDisplayStyles} from '../styles/component-styles'
+import {componentResetStyles} from '../styles/component-styles'
 
 export class CVSelectOption extends LitElement {
   static elementName = 'cv-select-option'
@@ -29,9 +29,9 @@ export class CVSelectOption extends LitElement {
 
   static styles = [
     componentResetStyles,
-    getComponentHostDisplayStyles('block'),
     css`
       :host {
+        display: inline-block;
         outline: none;
       }
 
