@@ -372,4 +372,3 @@ Individual data cell within a table row.
 | ----------------------------- | ----------------------------------------------------------------------------------- |
 | `:host([row-header])`         | Bold text (`font-weight: 600`) for row header cells                                 |
 | `:host([data-active="true"])` | Active cell in grid navigation mode (receives `tabindex="0"` via headless contract) |
-

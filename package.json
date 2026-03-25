@@ -67,6 +67,11 @@
       "default": "./dist/theme/*.js"
     },
     "./theme/tokens.css": "./dist/theme/tokens.css",
+    "./styles/uno-utilities": {
+      "types": "./dist/styles/uno-utilities.d.ts",
+      "import": "./dist/styles/uno-utilities.js",
+      "default": "./dist/styles/uno-utilities.js"
+    },
     "./dialog": {
       "types": "./dist/dialog/index.d.ts",
       "import": "./dist/dialog/index.js",

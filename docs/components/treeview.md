@@ -263,4 +263,3 @@ Additionally, component styles depend on theme tokens:
 - Checkbox or radio variant tree items
 - Typeahead (jump to node by typed character)
 - Leaf-only selection mode (preventing branch-node selection)
-

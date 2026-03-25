@@ -423,4 +423,3 @@ Individual data cell within a grid row. The parent `cv-grid` manages all ARIA at
 | `:host([disabled])`     | Reduced opacity (`0.55`)                               |
 | `:host(:focus-visible)` | 2px solid primary outline with -2px offset             |
 | `:host([hidden])`       | Hidden (cell references non-existent column)           |
-

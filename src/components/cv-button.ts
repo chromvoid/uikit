@@ -250,24 +250,12 @@ export class CVButton extends FormAssociatedReatomElement {
         --cv-button-background: transparent;
         --cv-button-border-color: transparent;
         --cv-button-border-color-hover: transparent;
-        --cv-button-background-hover: color-mix(
-          in oklab,
-          var(--cv-button-accent-color) 10%,
-          transparent
-        );
+        --cv-button-background-hover: color-mix(in oklab, var(--cv-button-accent-color) 10%, transparent);
         --cv-button-border-color-active: transparent;
-        --cv-button-background-active: color-mix(
-          in oklab,
-          var(--cv-button-accent-color) 16%,
-          transparent
-        );
+        --cv-button-background-active: color-mix(in oklab, var(--cv-button-accent-color) 16%, transparent);
         --cv-button-border-color-pressed: transparent;
         --cv-button-border-color-pressed-hover: transparent;
-        --cv-button-background-pressed: color-mix(
-          in oklab,
-          var(--cv-button-accent-color) 14%,
-          transparent
-        );
+        --cv-button-background-pressed: color-mix(in oklab, var(--cv-button-accent-color) 14%, transparent);
         --cv-button-background-pressed-hover: color-mix(
           in oklab,
           var(--cv-button-accent-color) 18%,
@@ -279,21 +267,9 @@ export class CVButton extends FormAssociatedReatomElement {
       :host([outline]) [part='base'] {
         --cv-button-background: transparent;
         --cv-button-border-color: var(--cv-color-border, #2a3245);
-        --cv-button-background-hover: color-mix(
-          in oklab,
-          var(--cv-button-accent-color) 10%,
-          transparent
-        );
-        --cv-button-background-active: color-mix(
-          in oklab,
-          var(--cv-button-accent-color) 16%,
-          transparent
-        );
-        --cv-button-background-pressed: color-mix(
-          in oklab,
-          var(--cv-button-accent-color) 16%,
-          transparent
-        );
+        --cv-button-background-hover: color-mix(in oklab, var(--cv-button-accent-color) 10%, transparent);
+        --cv-button-background-active: color-mix(in oklab, var(--cv-button-accent-color) 16%, transparent);
+        --cv-button-background-pressed: color-mix(in oklab, var(--cv-button-accent-color) 16%, transparent);
         --cv-button-background-pressed-hover: color-mix(
           in oklab,
           var(--cv-button-accent-color) 20%,
@@ -345,11 +321,7 @@ export class CVButton extends FormAssociatedReatomElement {
           var(--cv-color-danger, #ff7d86) 90%,
           var(--cv-color-border, #2a3245)
         );
-        --cv-button-background-pressed: color-mix(
-          in oklab,
-          var(--cv-color-danger, #ff7d86) 16%,
-          transparent
-        );
+        --cv-button-background-pressed: color-mix(in oklab, var(--cv-color-danger, #ff7d86) 16%, transparent);
         --cv-button-background-pressed-hover: color-mix(
           in oklab,
           var(--cv-color-danger, #ff7d86) 22%,

@@ -268,4 +268,3 @@ UIKit does not own value management, clamping, snapping, draft commit logic, or 
 | `cv-clear`  | `{ }`               | Fires when the value is cleared via the clear button or `Escape` key                                                                                          |
 | `cv-focus`  | `{ }`               | Fires when the input receives focus                                                                                                                           |
 | `cv-blur`   | `{ }`               | Fires when the input loses focus                                                                                                                              |
-

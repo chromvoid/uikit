@@ -157,4 +157,3 @@ UA callbacks supported for form-associated lifecycle:
 - Submit value is serialized as raw numeric string from committed `value`.
 - `disabled` state removes form value from submission.
 - Reset restores the initial `value` snapshot captured on first connection.
-

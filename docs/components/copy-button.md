@@ -236,4 +236,3 @@ Events are dispatched by the UIKit adapter by providing `onCopy` and `onError` c
 
 - `onCopy(value)` -> dispatches `cv-copy` with `{ detail: { value } }`
 - `onError(error)` -> dispatches `cv-error` with `{ detail: { error } }`
-

@@ -148,4 +148,3 @@ All accessibility semantics are provided by the headless contract `getMeterProps
 - `aria-label`, `aria-labelledby`, `aria-describedby` pass-through when provided
 
 The UIKit layer does not construct any ARIA attributes directly.
-

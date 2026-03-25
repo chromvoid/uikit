@@ -225,4 +225,3 @@ The implementation MUST use pointer events with capture for reliable cross-bound
 | `cv-change` | `{ position: number }` | Fires on committed changes: keyboard key release that caused a position change, or `pointerup` when position changed during the drag. Bubbles and is composed. |
 
 Both events are dispatched as `CustomEvent` with `bubbles: true` and `composed: true`. The `cv-input` event fires continuously during interaction; `cv-change` fires once per committed gesture.
-

@@ -192,4 +192,3 @@ Additionally, component styles depend on theme tokens through fallback values:
 | `cv-change` | `{expanded: boolean}` | Fires when the expanded state commits after user interaction              |
 
 Events only fire when `expandable` is `true` and the state change is triggered by user action (not programmatic attribute changes). Normal (non-expandable) cards do not emit these events.
-

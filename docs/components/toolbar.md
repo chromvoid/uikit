@@ -258,4 +258,3 @@ The separator's `aria-orientation` is perpendicular to the toolbar's orientation
 | Host selector | Description                                                                                                                                                                                                                                                             |
 | ------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `:host`       | In a horizontal toolbar: vertical line (`height: auto`, `width: --cv-toolbar-separator-size`). In a vertical toolbar: horizontal line (`width: auto`, `height: --cv-toolbar-separator-size`). Orientation is communicated via the parent spreading `getSeparatorProps`. |
-

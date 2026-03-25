@@ -22,9 +22,7 @@ const createButton = async (attrs?: Partial<CVButton>) => {
 
 const getBase = (button: CVButton) => button.shadowRoot!.querySelector('[part="base"]') as HTMLElement
 const getStylesText = () =>
-  (CVButton.styles as Array<{cssText?: string}>)
-    .map((style) => style.cssText ?? '')
-    .join('\n')
+  (CVButton.styles as Array<{cssText?: string}>).map((style) => style.cssText ?? '').join('\n')
 
 afterEach(() => {
   document.body.innerHTML = ''
@@ -47,8 +45,8 @@ describe('cv-button', () => {
       expect(stylesText).toContain('--cv-button-border-color-hover')
       expect(stylesText).toContain('--cv-button-background-active')
       expect(stylesText).toContain('--cv-button-background-pressed')
-      expect(stylesText).toContain("--cv-button-accent-color: var(--cv-color-primary, #65d7ff);")
-      expect(stylesText).toContain("--cv-button-accent-color: var(--cv-color-danger, #ff7d86);")
+      expect(stylesText).toContain('--cv-button-accent-color: var(--cv-color-primary, #65d7ff);')
+      expect(stylesText).toContain('--cv-button-accent-color: var(--cv-color-danger, #ff7d86);')
     })
   })
 

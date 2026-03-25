@@ -110,4 +110,3 @@ A read-only indicator that communicates determinate or indeterminate loading/com
 ## Events
 
 None. `cv-progress` is a read-only indicator with no user-modifiable state.
-

@@ -427,4 +427,3 @@ Groups related options under a labeled header. Must be a direct child of `cv-com
 | Host selector     | Description                                |
 | ----------------- | ------------------------------------------ |
 | `:host([hidden])` | All options in this group are filtered out |
-

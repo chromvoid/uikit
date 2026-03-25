@@ -207,4 +207,3 @@ Vertically stacked set of interactive sections that expand or collapse to reveal
 | `:host([expanded])` | Panel visible; collapse-icon shown, expand-icon hidden; indicator rotated 90° (for default icon) |
 | `:host([active])`   | Trigger has roving focus; border highlighted with `--cv-color-primary`                           |
 | `:host([disabled])` | Trigger opacity reduced (`0.55`), `cursor: not-allowed`, interaction blocked                     |
-

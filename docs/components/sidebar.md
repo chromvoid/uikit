@@ -204,4 +204,3 @@ Lightweight sidebar navigation item that adapts to expanded and collapsed rail m
 | `--cv-sidebar-item-indicator-color`   | `var(--cv-color-primary, #65d7ff)`    |
 
 `cv-sidebar` propagates `collapsed` and `mobile` context to direct child `cv-sidebar-item` elements so labels and suffix content are visually hidden in desktop rail mode without consumer-specific wiring.
-

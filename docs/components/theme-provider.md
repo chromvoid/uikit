@@ -364,4 +364,3 @@ Light and dark tokens are defined entirely in `tokens.css` using CSS selectors a
 The `:root` selector inside the `@media` block handles the no-provider case (bare `import 'tokens.css'`).
 
 The light block overrides only color-varying tokens (colors, shadows, overlay). Scheme-invariant tokens (spacing, radius, typography, motion, z-index, sizing) are defined once in the default block and shared.
-

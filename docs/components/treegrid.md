@@ -363,4 +363,3 @@ Additionally, component styles depend on theme tokens:
 - Column resizing or column visibility toggling
 - Row grouping beyond the existing tree hierarchy
 - Inline cell editing
-

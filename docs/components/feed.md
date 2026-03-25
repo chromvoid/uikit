@@ -266,4 +266,3 @@ Individual article within a feed. The parent `cv-feed` manages all ARIA attribut
 | `aria-disabled` | `"true"` when article is disabled                             |
 | `data-active`   | `"true"` or `"false"` reflecting active state                 |
 | `onFocus`       | Sets this article as active in headless state                 |
-

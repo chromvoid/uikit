@@ -152,4 +152,3 @@ No component-specific events. Navigation uses standard link click behavior.
 | ------------------------------- | ----------------------------------------------------------------- |
 | `:host([current])`              | Current page — link has `font-weight: 600`, `aria-current="page"` |
 | `:host(:not([show-separator]))` | Separator hidden (last item)                                      |
-

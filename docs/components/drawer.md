@@ -216,4 +216,3 @@ Slide-out panel dialog anchored to a viewport edge, used for navigation, forms, 
 - UIKit dispatches `cv-input` and `cv-change` events by observing `isOpen` changes triggered by user interaction (not by controlled `open` attribute changes).
 - UIKit dispatches `cv-show`/`cv-after-show`/`cv-hide`/`cv-after-hide` lifecycle events to bracket CSS transitions.
 - UIKit owns scroll lock implementation, focus trap implementation, focus restoration, backdrop rendering, slide animations, and CSS transitions -- headless provides signals, UIKit applies side effects.
-

@@ -375,4 +375,3 @@ Labels a group of related menu items. Not actionable, skipped during keyboard na
 | ------------ | ---------------- |
 | `role`       | `presentation`   |
 | `aria-label` | group label text |
-

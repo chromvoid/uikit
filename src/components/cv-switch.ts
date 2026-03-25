@@ -306,8 +306,7 @@ export class CVSwitch extends FormAssociatedReatomElement {
     const isChecked = this.model.state.isOn()
     const hostAriaLabel = this.getAttribute('aria-label')?.trim() || undefined
     const hostAriaLabelledBy = this.getAttribute('aria-labelledby')?.trim() || undefined
-    const fallbackLabelId =
-      hostAriaLabel || hostAriaLabelledBy ? undefined : `${this.idBase}-label`
+    const fallbackLabelId = hostAriaLabel || hostAriaLabelledBy ? undefined : `${this.idBase}-label`
     const ariaLabelledBy = hostAriaLabel
       ? undefined
       : hostAriaLabelledBy || props['aria-labelledby'] || fallbackLabelId

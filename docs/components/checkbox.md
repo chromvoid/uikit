@@ -141,4 +141,3 @@ This matrix is intentionally short and exists to prevent drift between `headless
 | Disabled/read-only semantics | cannot toggle                              | cannot toggle                            |
 | Payload on user interaction  | N/A (actions/state API)                    | `{ checked, indeterminate, value? }`     |
 | Form primitives              | specified (see headless spec)              | not specified on `cv-checkbox` surface   |
-

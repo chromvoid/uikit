@@ -208,4 +208,3 @@ None. All events are dispatched by the parent `cv-radio-group`.
 | Size                | not applicable                      | `small` \| `medium` \| `large` on radio           |
 | Orientation         | `orientation` option                | `orientation` attribute on group                  |
 | Events              | N/A (actions/state API)             | `cv-input` / `cv-change` with `{value, activeId}` |
-

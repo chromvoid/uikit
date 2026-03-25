@@ -167,4 +167,3 @@ Additionally, component styles depend on theme tokens through fallback values:
 | `data-active`   | `getOptionProps(id)` | Present when the option is the active option; used as a CSS hook.                                         |
 
 These attributes must not be set directly on `cv-option` by the consumer. They are owned entirely by the parent and will be overwritten on each render cycle.
-

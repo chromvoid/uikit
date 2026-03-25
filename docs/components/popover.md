@@ -207,4 +207,3 @@ Placement is CSS-only (no Floating UI). The `placement` attribute maps to `data-
 ### Arrow (UIKit-only)
 
 When the `arrow` boolean attribute is present, the `[part="arrow"]` element is rendered inside the content panel. It is positioned via CSS to point toward the anchor, with its direction derived from the current `placement`. The `arrow` slot allows custom arrow content. Arrow size is controlled by `--cv-popover-arrow-size`.
-

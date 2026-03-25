@@ -83,4 +83,3 @@ Passive live-region message that announces important updates without taking focu
 - `aria-live` and `aria-atomic` are sourced from headless `getAlertProps()`.
 - Component is passive and does not move focus or manage keyboard interaction.
 - For interactive/decision-required flows, use `cv-alert-dialog`.
-

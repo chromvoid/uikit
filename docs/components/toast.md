@@ -198,4 +198,3 @@ Each toast item is bound to headless contracts per toast ID.
 - In standalone usage, `cv-toast` computes role from its `level` property matching the headless contract logic.
 - When rendered within `cv-toast-region`, the region spreads headless contract props onto each inline toast item.
 - The dismiss button `onClick` handler from `getDismissButtonProps(id)` calls `actions.dismiss(id)` internally.
-

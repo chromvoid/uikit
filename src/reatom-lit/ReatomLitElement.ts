@@ -10,6 +10,7 @@ const CV_EVENT_PREFIX = 'cv-'
 import {
   componentResetStyles,
   type ComponentHostDisplay,
+  getComponentHostDisplayStyles,
 } from '../styles/component-styles'
 
 let _unoUtilities: CSSResultOrNative | undefined
@@ -30,6 +31,7 @@ export class ReatomLitElement extends LitElement {
   protected static override finalizeStyles(styles?: CSSResultGroup): CSSResultOrNative[] {
     const base = [
       componentResetStyles,
+      getComponentHostDisplayStyles(this.hostDisplay),
       ...super.finalizeStyles(styles),
     ]
     if (_unoUtilities) base.push(_unoUtilities)

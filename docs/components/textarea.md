@@ -166,4 +166,3 @@ UIKit does not own ARIA computation, disabled/readonly guards, or filled-state d
 | `cv-change` | `{ value: string }` | Fires on blur when value changed since focus |
 | `cv-focus`  | `{ }`               | Fires when textarea receives focus           |
 | `cv-blur`   | `{ }`               | Fires when textarea loses focus              |
-

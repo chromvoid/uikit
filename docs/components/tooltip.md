@@ -152,4 +152,3 @@ Both events bubble and are composed. They are dispatched together on every trans
 - UIKit does not own trigger or delay logic; headless state is the source of truth.
 - When `show-delay` or `hide-delay` changes, the model is recreated with the current `open` state preserved as `initialOpen`.
 - Public methods `show()` and `hide()` delegate to `model.actions.show()` / `model.actions.hide()` for `manual` mode consumers.
-

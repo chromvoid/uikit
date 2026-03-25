@@ -117,4 +117,3 @@ Additionally, component styles depend on theme tokens through fallback values:
 | Event   | Detail           | Description                                     |
 | ------- | ---------------- | ----------------------------------------------- |
 | `press` | `{href: string}` | Fires on activation (click or `Enter` keypress) |
-

@@ -92,4 +92,3 @@ None. Landmark has no user-driven interactions.
 - `contracts.getLandmarkProps()` is spread onto the inner `[part="base"]` element to apply `role`, `aria-label`, and `aria-labelledby`.
 - When any of `type`, `label`, or `label-id` attributes change, the headless model is recreated with updated options.
 - UIKit does not own labeling precedence logic; headless `getLandmarkProps()` determines whether `aria-label` or `aria-labelledby` is emitted.
-

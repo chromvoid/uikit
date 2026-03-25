@@ -83,4 +83,3 @@ None. The spinner is purely presentational and does not emit events.
 - `contracts.getSpinnerProps()` is spread onto the inner `[part="base"]` SVG element to apply `role="progressbar"` and `aria-label`.
 - UIKit does not own ARIA semantics; headless state is the source of truth.
 - `aria-valuenow`, `aria-valuemin`, `aria-valuemax`, and `aria-valuetext` are never present (indeterminate mode only).
-

@@ -327,4 +327,3 @@ Groups related options under a visible label header. Must be a direct child of `
 | Host selector | Description                                       |
 | ------------- | ------------------------------------------------- |
 | `:host`       | Block display with group role and aria-labelledby |
-

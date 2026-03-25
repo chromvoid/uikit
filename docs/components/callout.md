@@ -153,4 +153,3 @@ Additionally, component styles depend on theme tokens through fallback values:
 | `cv-close` | `undefined` | Fires when the callout is dismissed via the close button (`closable` must be `true`) |
 
 No `cv-input` or `cv-change` events are emitted. The callout has no user-modifiable state; closing is a one-way action.
-

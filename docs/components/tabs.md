@@ -242,4 +242,3 @@ Content panel associated with a tab.
 | Host selector     | Description                       |
 | ----------------- | --------------------------------- |
 | `:host([hidden])` | Hidden when panel is not selected |
-

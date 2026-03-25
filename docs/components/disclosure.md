@@ -151,4 +151,3 @@ Events fire only on user-initiated state changes (click, keyboard). Programmatic
 - `show()` and `hide()` delegate directly to `actions.open()` and `actions.close()` without firing `cv-input`/`cv-change` events.
 - `actions.destroy()` must be called in `disconnectedCallback` to unregister from the name group registry.
 - UIKit does not own toggle, keyboard, or grouping logic; headless state is the source of truth.
-

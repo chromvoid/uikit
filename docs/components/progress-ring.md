@@ -134,4 +134,3 @@ A read-only circular indicator that communicates determinate or indeterminate lo
 ## Events
 
 None. `cv-progress-ring` is a read-only indicator with no user-modifiable state.
-

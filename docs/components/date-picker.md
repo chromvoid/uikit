@@ -290,4 +290,3 @@ UIKit owns rendering and animation only.
 ### Disabled / read-only
 
 - `disabled` and `readonly` block all mutating actions and interactions.
-

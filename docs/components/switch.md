@@ -145,4 +145,3 @@ The `help-text` part is rendered only when the `help-text` attribute is set or t
 | ----------- | -------------------- | -------------------------------- |
 | `cv-input`  | `{checked: boolean}` | Fires on toggle interaction      |
 | `cv-change` | `{checked: boolean}` | Fires when checked state commits |
-

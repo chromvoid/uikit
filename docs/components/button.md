@@ -227,4 +227,3 @@ Normal (non-toggle) buttons rely on the native `click` event.
 
 - `slot="start"` -> `slot="prefix"`
 - `slot="end"` -> `slot="suffix"`
-

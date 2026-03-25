@@ -183,4 +183,3 @@ Additionally, component styles depend on theme tokens through fallback values:
 ## Events
 
 Badge is non-interactive. No `input`, `change`, or custom events are emitted.
-

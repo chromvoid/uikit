@@ -1,12 +1,12 @@
-import {registerUikit} from '@chromvoid/uikit/register'
 import {setUnoUtilities} from '@chromvoid/uikit/reatom-lit'
+import {registerUikit} from '@chromvoid/uikit/register'
+import {unoUtilities} from '@chromvoid/uikit/styles/uno-utilities'
 import type {Theme} from 'vitepress'
 import DefaultTheme from 'vitepress/theme-without-fonts'
 
 import '@chromvoid/uikit/theme/tokens.css'
 import {defineAsyncComponent} from 'vue'
 
-import {unoUtilities} from '../../../src/styles/uno-utilities'
 import './custom.css'
 import ComponentCatalog from './components/ComponentCatalog.vue'
 import LiveDemo from './components/LiveDemo.vue'

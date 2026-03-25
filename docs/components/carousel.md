@@ -232,4 +232,3 @@ Individual slide within a carousel. The parent `cv-carousel` manages all ARIA at
 | ----------------- | ----------------------------------------------------------- |
 | `:host([active])` | Slide is currently active; border uses `--cv-color-primary` |
 | `:host([hidden])` | Slide is not visible; `display: none`                       |
-

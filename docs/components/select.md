@@ -305,4 +305,3 @@ Groups related options under a visible label.
 | Host selector     | Description                            |
 | ----------------- | -------------------------------------- |
 | `:host([hidden])` | Group is hidden when listbox is closed |
-
