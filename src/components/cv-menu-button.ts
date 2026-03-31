@@ -1,5 +1,6 @@
 import {createMenuButton, type MenuButtonModel} from '@chromvoid/headless-ui/menu-button'
-import {css, html, nothing} from 'lit'
+import {css, nothing} from 'lit'
+import {html} from '../reatom-lit/index.js'
 import type {PropertyValues} from 'lit'
 
 import {ReatomLitElement} from '../reatom-lit/ReatomLitElement'
@@ -98,6 +99,8 @@ export class CVMenuButton extends ReatomLitElement {
         --cv-menu-button-padding-inline: var(--cv-space-3, 12px);
         --cv-menu-button-padding-block: var(--cv-space-2, 8px);
         --cv-menu-button-border-radius: var(--cv-radius-sm, 6px);
+        --cv-menu-button-border-color: var(--cv-color-border, #2a3245);
+        --cv-menu-button-background: var(--cv-color-surface, #141923);
         --cv-menu-button-gap: var(--cv-space-2, 8px);
         --cv-menu-button-font-size: inherit;
         --cv-menu-button-menu-offset: var(--cv-space-1, 4px);
@@ -119,6 +122,9 @@ export class CVMenuButton extends ReatomLitElement {
         gap: var(--cv-menu-button-gap);
         min-block-size: var(--cv-menu-button-min-height);
         padding: var(--cv-menu-button-padding-block) var(--cv-menu-button-padding-inline);
+        border: 1px solid var(--cv-menu-button-border-color);
+        border-radius: var(--cv-menu-button-border-radius);
+        background: var(--cv-menu-button-background);
         font-size: var(--cv-menu-button-font-size);
         color: var(--cv-color-text, #e8ecf6);
         cursor: pointer;

@@ -12,17 +12,19 @@ import {
   type ComponentHostDisplay,
   getComponentHostDisplayStyles,
 } from '../styles/component-styles'
+import {unoUtilities as bundledUnoUtilities} from '../styles/uno-utilities'
 
-let _unoUtilities: CSSResultOrNative | undefined
+let _unoUtilitiesOverride: CSSResultOrNative | undefined
 
 /**
- * Lazily set the shared UnoCSS utility stylesheet.
- * Call once at app bootstrap (after `virtual:uno.css` is available):
- *   import {unoUtilities} from './styles/uno-utilities'
+ * Override the shared UnoCSS utility stylesheet.
+ * By default, ReatomLitElement uses the bundled runtime-generated utilities.
+ * Call this only when a host app needs to provide a custom utility sheet:
+ *   import {unoUtilities} from '../styles/uno-utilities'
  *   setUnoUtilities(unoUtilities)
  */
 export function setUnoUtilities(sheet: CSSResultOrNative) {
-  _unoUtilities = sheet
+  _unoUtilitiesOverride = sheet
 }
 
 export class ReatomLitElement extends LitElement {
@@ -32,9 +34,9 @@ export class ReatomLitElement extends LitElement {
     const base = [
       componentResetStyles,
       getComponentHostDisplayStyles(this.hostDisplay),
+      _unoUtilitiesOverride ?? bundledUnoUtilities,
       ...super.finalizeStyles(styles),
     ]
-    if (_unoUtilities) base.push(_unoUtilities)
     return base
   }
 

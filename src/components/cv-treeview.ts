@@ -1,5 +1,6 @@
 import {createTreeview, type TreeNode, type TreeviewModel} from '@chromvoid/headless-ui/treeview'
-import {css, html, nothing} from 'lit'
+import {css, nothing} from 'lit'
+import {html} from '../reatom-lit/index.js'
 import type {PropertyValues} from 'lit'
 
 import {ReatomLitElement} from '../reatom-lit/ReatomLitElement'

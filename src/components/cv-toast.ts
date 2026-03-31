@@ -1,5 +1,6 @@
 import type {ToastAction, ToastLevel} from '@chromvoid/headless-ui/toast'
-import {css, html, nothing} from 'lit'
+import {css, nothing} from 'lit'
+import {html} from '../reatom-lit/index.js'
 
 import {ReatomLitElement} from '../reatom-lit/ReatomLitElement'
 import {CVIcon} from './cv-icon'
@@ -77,35 +78,19 @@ export class CVToast extends ReatomLitElement {
       }
 
       [part='base'][data-level='success'] {
-        border-color: color-mix(
-          in oklab,
-          var(--cv-color-success, #6ef7c8) 45%,
-          var(--cv-color-border, #2a3245)
-        );
+        border-color: var(--cv-color-success-border-strong, var(--cv-color-success, #6ef7c8));
       }
 
       [part='base'][data-level='warning'] {
-        border-color: color-mix(
-          in oklab,
-          var(--cv-color-warning, #ffd36e) 45%,
-          var(--cv-color-border, #2a3245)
-        );
+        border-color: var(--cv-color-warning-border-strong, var(--cv-color-warning, #ffd36e));
       }
 
       [part='base'][data-level='error'] {
-        border-color: color-mix(
-          in oklab,
-          var(--cv-color-danger, #ff7d86) 45%,
-          var(--cv-color-border, #2a3245)
-        );
+        border-color: var(--cv-color-danger-border-strong, var(--cv-color-danger, #ff7d86));
       }
 
       [part='base'][data-level='loading'] {
-        border-color: color-mix(
-          in oklab,
-          var(--cv-color-primary, #65d7ff) 40%,
-          var(--cv-color-border, #2a3245)
-        );
+        border-color: var(--cv-color-primary-border-strong, var(--cv-color-primary, #65d7ff));
       }
 
       [part='icon-wrap'] {
@@ -174,7 +159,7 @@ export class CVToast extends ReatomLitElement {
 
       [part='action'] {
         border: 1px solid var(--cv-color-border, #2a3245);
-        background: color-mix(in oklab, var(--cv-color-surface-elevated, #1d2432) 88%, white 4%);
+        background: var(--cv-color-surface-glass, var(--cv-color-surface-elevated, #1d2432));
         color: var(--cv-color-text, #e8ecf6);
         font: inherit;
         font-size: var(--cv-font-size-xs, 0.75rem);
@@ -199,12 +184,20 @@ export class CVToast extends ReatomLitElement {
         inset-inline: 0;
         inset-block-end: 0;
         block-size: var(--cv-toast-progress-height, 3px);
-        background: linear-gradient(
-          90deg,
-          var(--cv-toast-accent, var(--cv-color-primary, #65d7ff)) 0%,
-          color-mix(in oklab, var(--cv-toast-accent, var(--cv-color-primary, #65d7ff)) 70%, white) 100%
-        );
+        background: var(--cv-gradient-progress-primary, var(--cv-gradient-primary));
         transform-origin: left center;
+      }
+
+      [part='base'][data-level='success'] [part='progress'] {
+        background: var(--cv-gradient-progress-success, var(--cv-gradient-success));
+      }
+
+      [part='base'][data-level='warning'] [part='progress'] {
+        background: var(--cv-gradient-progress-warning, var(--cv-gradient-primary));
+      }
+
+      [part='base'][data-level='error'] [part='progress'] {
+        background: var(--cv-gradient-progress-danger, var(--cv-gradient-primary));
       }
 
       :host([progress]) [part='progress'] {

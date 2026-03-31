@@ -133,6 +133,9 @@ export class CVSelect extends FormAssociatedReatomElement {
     css`
       :host {
         inline-size: var(--cv-select-inline-size, 260px);
+        --cv-select-border-color: var(--cv-color-border, #2a3245);
+        --cv-select-border-radius: var(--cv-radius-sm, 6px);
+        --cv-select-background: var(--cv-color-surface, #141923);
       }
 
       :host([disabled]) {
@@ -152,6 +155,9 @@ export class CVSelect extends FormAssociatedReatomElement {
         min-block-size: var(--cv-select-min-height, 36px);
         padding: var(--cv-select-padding-block, var(--cv-space-2, 8px))
           var(--cv-select-padding-inline, var(--cv-space-3, 12px));
+        border: 1px solid var(--cv-select-border-color);
+        border-radius: var(--cv-select-border-radius);
+        background: var(--cv-select-background);
         color: var(--cv-color-text, #e8ecf6);
         cursor: pointer;
       }

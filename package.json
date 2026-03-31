@@ -98,6 +98,10 @@
     "access": "public"
   },
   "scripts": {
+    "generate:uno": "node ./scripts/generate-uno-inline.mjs",
+    "prebuild": "npm run generate:uno",
+    "pretest:unit": "npm run generate:uno",
+    "prelint": "npm run generate:uno",
     "build": "rm -rf dist && tsc -p tsconfig.build.json && node ./scripts/postbuild.mjs",
     "check:bundle": "npm run build && node ./scripts/check-bundle-contract.mjs",
     "check:entry-imports": "node ./scripts/check-entry-imports.mjs",
@@ -131,7 +135,7 @@
     "lit": "^3.3.1",
     "oxfmt": "^0.41.0",
     "oxlint": "^1.51.0",
-    "typescript": "^5.9.3",
+    "typescript": "^6.0.2",
     "unocss": "^66.6.7",
     "vite": "^7.1.0",
     "vitepress": "^1.6.3",

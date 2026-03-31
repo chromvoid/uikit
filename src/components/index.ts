@@ -131,6 +131,13 @@ export {CVMeter} from './cv-meter'
 export {CVNumber} from './cv-number'
 export {CVOption} from './cv-option'
 export {CVPopover} from './cv-popover'
+export type {
+  CVPopoverAnchor,
+  CVPopoverEventDetail,
+  CVPopoverPlacement,
+  CVPopoverShowOptions,
+  CVPopoverTriggerMode,
+} from './cv-popover'
 export {CVProgress} from './cv-progress'
 export {CVProgressRing} from './cv-progress-ring'
 export {CVRadio} from './cv-radio'

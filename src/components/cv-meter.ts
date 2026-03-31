@@ -1,5 +1,6 @@
 import {createMeter, type MeterModel} from '@chromvoid/headless-ui/meter'
-import {css, html, nothing} from 'lit'
+import {css, nothing} from 'lit'
+import {html} from '../reatom-lit/index.js'
 import type {PropertyValues} from 'lit'
 
 import {ReatomLitElement} from '../reatom-lit/ReatomLitElement'
@@ -73,38 +74,21 @@ export class CVMeter extends ReatomLitElement {
         block-size: 100%;
         inline-size: var(--cv-meter-width, 0%);
         border-radius: inherit;
-        background: linear-gradient(
-          90deg,
-          var(--cv-color-primary, #65d7ff) 0%,
-          color-mix(in oklab, var(--cv-color-primary, #65d7ff) 70%, white) 100%
-        );
+        background: var(--cv-gradient-progress-primary, var(--cv-gradient-primary));
         transition: inline-size var(--cv-meter-transition-duration, var(--cv-duration-normal, 220ms))
           var(--cv-easing-standard, ease);
       }
 
       [part='indicator'][data-status='low'] {
-        background: linear-gradient(
-          90deg,
-          var(--cv-meter-suboptimum-color, var(--cv-color-warning, #ffbe65)) 0%,
-          color-mix(in oklab, var(--cv-meter-suboptimum-color, var(--cv-color-warning, #ffbe65)) 72%, white)
-            100%
-        );
+        background: var(--cv-gradient-progress-warning, var(--cv-gradient-primary));
       }
 
       [part='indicator'][data-status='high'] {
-        background: linear-gradient(
-          90deg,
-          var(--cv-meter-danger-color, var(--cv-color-danger, #ff7a8a)) 0%,
-          color-mix(in oklab, var(--cv-meter-danger-color, var(--cv-color-danger, #ff7a8a)) 72%, white) 100%
-        );
+        background: var(--cv-gradient-progress-danger, var(--cv-gradient-primary));
       }
 
       [part='indicator'][data-status='optimum'] {
-        background: linear-gradient(
-          90deg,
-          var(--cv-meter-optimum-color, var(--cv-color-success, #6ef7c8)) 0%,
-          color-mix(in oklab, var(--cv-meter-optimum-color, var(--cv-color-success, #6ef7c8)) 72%, white) 100%
-        );
+        background: var(--cv-gradient-progress-success, var(--cv-gradient-success));
       }
     `,
   ]

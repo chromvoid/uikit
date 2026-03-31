@@ -1,5 +1,6 @@
 import {createProgress, type ProgressModel} from '@chromvoid/headless-ui/progress'
-import {css, html, nothing} from 'lit'
+import {css, nothing} from 'lit'
+import {html} from '../reatom-lit/index.js'
 import type {PropertyValues} from 'lit'
 
 import {ReatomLitElement} from '../reatom-lit/ReatomLitElement'
@@ -61,12 +62,7 @@ export class CVProgress extends ReatomLitElement {
         block-size: 100%;
         inline-size: var(--cv-progress-width, 0%);
         border-radius: inherit;
-        background: linear-gradient(
-          90deg,
-          var(--cv-progress-indicator-color, var(--cv-color-primary, #65d7ff)) 0%,
-          color-mix(in oklab, var(--cv-progress-indicator-color, var(--cv-color-primary, #65d7ff)) 70%, white)
-            100%
-        );
+        background: var(--cv-progress-indicator-background, var(--cv-gradient-progress-primary, var(--cv-gradient-primary)));
         transition: inline-size var(--cv-duration-normal, 220ms) var(--cv-easing-standard, ease);
         position: relative;
       }
@@ -86,11 +82,7 @@ export class CVProgress extends ReatomLitElement {
       }
 
       :host([data-complete]) [part='indicator'] {
-        background: linear-gradient(
-          90deg,
-          var(--cv-color-success, #6ef7c8) 0%,
-          color-mix(in oklab, var(--cv-color-success, #6ef7c8) 70%, white) 100%
-        );
+        background: var(--cv-gradient-progress-success, var(--cv-gradient-success));
       }
 
       @keyframes cv-progress-indeterminate {

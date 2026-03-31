@@ -8,21 +8,30 @@ Modal or non-modal dialog overlay for presenting focused content, confirmations,
 
 ```
 <cv-dialog> (host)
-├── <button part="trigger">
+├── <button part="trigger"> (legacy, deprecated)
 │   └── <slot name="trigger">
-└── <div part="overlay"> (hidden when closed)
-    └── <section part="content" role="dialog|alertdialog">
-        ├── <header part="header">
-        │   ├── <h2 part="title" id="...">
-        │   │   └── <slot name="title">
-        │   ├── <p part="description" id="...">
-        │   │   └── <slot name="description">
-        │   └── <button part="header-close" aria-label="Close">
-        │       └── <slot name="header-close">
-        ├── <div part="body">
-        │   └── <slot>
-        └── <footer part="footer">
-            └── <slot name="footer">
+└── modal=true:
+    └── <dialog class="portal-shell"> (top layer)
+        └── <div part="overlay">
+            └── <section part="content" role="dialog|alertdialog">
+                ├── <header part="header">
+                │   ├── <h2 part="title" id="...">
+                │   │   └── <slot name="title">
+                │   ├── <p part="description" id="...">
+                │   │   └── <slot name="description">
+                │   └── <button part="header-close" aria-label="Close">
+                │       └── <slot name="header-close">
+                ├── <div part="body">
+                │   └── <slot>
+                └── <footer part="footer">
+                    └── <slot name="footer">
+└── modal=false:
+    └── <div class="portal-shell popover-shell" popover="manual"> (top layer)
+        └── <div part="overlay">
+            └── <section part="content" role="dialog|alertdialog">
+                ├── <header part="header">
+                ├── <div part="body">
+                └── <footer part="footer">
 ```
 
 ## Attributes
@@ -40,20 +49,20 @@ Modal or non-modal dialog overlay for presenting focused content, confirmations,
 
 ## Slots
 
-| Slot           | Description                                              |
-| -------------- | -------------------------------------------------------- |
-| `(default)`    | Dialog body content                                      |
-| `trigger`      | Content for the trigger button                           |
-| `title`        | Dialog title text                                        |
-| `description`  | Description text below the title                         |
-| `header-close` | Icon content for the header close button (defaults to X) |
-| `footer`       | Footer content (action buttons, etc.)                    |
+| Slot           | Description                                               |
+| -------------- | --------------------------------------------------------- |
+| `(default)`    | Dialog body content                                       |
+| `trigger`      | Deprecated legacy content for the built-in trigger button |
+| `title`        | Dialog title text                                         |
+| `description`  | Description text below the title                          |
+| `header-close` | Icon content for the header close button (defaults to X)  |
+| `footer`       | Footer content (action buttons, etc.)                     |
 
 ## CSS Parts
 
 | Part           | Element     | Description                                                       |
 | -------------- | ----------- | ----------------------------------------------------------------- |
-| `trigger`      | `<button>`  | Trigger button that opens the dialog                              |
+| `trigger`      | `<button>`  | Deprecated built-in trigger button                                |
 | `overlay`      | `<div>`     | Backdrop/overlay container                                        |
 | `content`      | `<section>` | Dialog content panel with `role="dialog"` or `role="alertdialog"` |
 | `header`       | `<header>`  | Header area containing title, description, and close button       |
@@ -130,14 +139,15 @@ Modal or non-modal dialog overlay for presenting focused content, confirmations,
 - `contracts.getHeaderCloseButtonProps()` is spread onto `[part="header-close"]` to apply `role`, `tabindex`, `aria-label: 'Close'`, and click handler.
 - UIKit dispatches `cv-input` and `cv-change` events by observing `isOpen` changes triggered by user interaction (not by controlled `open` attribute changes).
 - UIKit dispatches `cv-show`/`cv-after-show`/`cv-hide`/`cv-after-hide` lifecycle events to bracket CSS transitions.
+- UIKit renders the visible dialog through native top-layer primitives (`<dialog>` for modal, popover root for non-modal) so it is not clipped by ancestor `overflow`, `contain`, `transform`, or `isolation`.
 - UIKit owns scroll lock implementation, focus trap implementation, focus restoration, backdrop rendering, and CSS transitions — headless provides signals, UIKit applies side effects.
 
 ## Usage
 
 ```html
-<!-- Basic dialog -->
-<cv-dialog>
-  <span slot="trigger">Open</span>
+<!-- Controlled dialog -->
+<button type="button" onclick="dialog.open = true">Open</button>
+<cv-dialog id="dialog">
   <span slot="title">Confirm action</span>
   <span slot="description">Are you sure you want to proceed?</span>
   <p>This action cannot be undone.</p>
@@ -148,8 +158,8 @@ Modal or non-modal dialog overlay for presenting focused content, confirmations,
 </cv-dialog>
 
 <!-- Alert dialog -->
-<cv-dialog type="alertdialog">
-  <span slot="trigger">Delete</span>
+<button type="button" onclick="alertDialog.open = true">Delete</button>
+<cv-dialog id="alertDialog" type="alertdialog">
   <span slot="title">Delete item?</span>
   <span slot="description">This will permanently delete the item.</span>
   <div slot="footer">
@@ -159,15 +169,14 @@ Modal or non-modal dialog overlay for presenting focused content, confirmations,
 </cv-dialog>
 
 <!-- Non-modal dialog -->
-<cv-dialog modal="false">
-  <span slot="trigger">Show info</span>
+<button type="button" onclick="infoDialog.open = true">Show info</button>
+<cv-dialog id="infoDialog" modal="false">
   <span slot="title">Information</span>
   <p>This dialog does not block the page.</p>
 </cv-dialog>
 
 <!-- Without header -->
 <cv-dialog no-header>
-  <span slot="trigger">Quick action</span>
   <p>Minimal dialog with body content only.</p>
   <div slot="footer">
     <cv-button variant="primary">OK</cv-button>
@@ -176,9 +185,15 @@ Modal or non-modal dialog overlay for presenting focused content, confirmations,
 
 <!-- Custom header close icon -->
 <cv-dialog>
-  <span slot="trigger">Open</span>
   <span slot="title">Settings</span>
   <icon-close slot="header-close"></icon-close>
   <p>Dialog content here.</p>
+</cv-dialog>
+
+<!-- Legacy built-in trigger (deprecated) -->
+<cv-dialog>
+  <span slot="trigger">Open</span>
+  <span slot="title">Legacy trigger</span>
+  <p>Prefer external triggers with controlled .open.</p>
 </cv-dialog>
 ```

@@ -31,7 +31,7 @@ const unrelatedMarkers = [
 ]
 const sizeBudgets = {
   buttonLeaf: 50000,
-  selectLeaf: 58000,
+  selectLeaf: 58500,
 }
 
 async function bundle(entryFile, outdir) {

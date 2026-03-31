@@ -10,7 +10,7 @@ export default defineConfig({
     'cv-u-inline-center': 'inline-flex items-center justify-center',
     'cv-u-stack-2': 'flex flex-col gap-2',
     'cv-u-stack-3': 'flex flex-col gap-3',
-    'cv-u-control-shell': 'flex items-center gap-2 rounded-sm border border-border bg-surface',
+    'cv-u-control-shell': 'flex items-center gap-2',
     'cv-u-panel-shell': 'grid rounded-md border border-border bg-surface shadow-sm overflow-hidden',
     'cv-u-icon-slot': 'inline-flex items-center justify-center flex-shrink-0',
     'cv-u-fill': 'flex-1 min-w-0',

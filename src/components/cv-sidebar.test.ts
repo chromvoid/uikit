@@ -16,6 +16,7 @@ class MockIntersectionObserver implements IntersectionObserver {
 
   readonly root = null
   readonly rootMargin: string
+  readonly scrollMargin = '0px'
   readonly thresholds: ReadonlyArray<number>
   private readonly observed = new Set<Element>()
 

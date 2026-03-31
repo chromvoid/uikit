@@ -19,6 +19,7 @@ async function main() {
   const dialogModule = await import('@chromvoid/uikit/dialog')
   const toastModule = await import('@chromvoid/uikit/toast')
   const themeModule = await import('@chromvoid/uikit/theme')
+  const unoUtilitiesModule = await import('@chromvoid/uikit/styles/uno-utilities')
 
   if (typeof rootModule.CVButton !== 'function') {
     throw new Error('Root export smoke failed: CVButton export is missing')
@@ -41,6 +42,9 @@ async function main() {
   if (typeof themeModule.defineTheme !== 'function') {
     throw new Error('Theme export smoke failed')
   }
+  if (!unoUtilitiesModule.unoUtilities) {
+    throw new Error('Uno utilities export smoke failed')
+  }
 
   const packageJson = JSON.parse(await readFile(path.join(packageRoot, 'package.json'), 'utf8'))
   const cssTarget = packageJson.exports['./theme/tokens.css']
@@ -55,6 +59,7 @@ async function main() {
     packageJson.exports['./theme'].types,
     packageJson.exports['./reatom-lit'].types,
     packageJson.exports['./html'].types,
+    packageJson.exports['./styles/uno-utilities'].types,
   ]
 
   for (const target of typeTargets) {

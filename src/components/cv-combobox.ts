@@ -6,7 +6,8 @@ import {
   type ComboboxType,
   type ComboboxVisibleGroup,
 } from '@chromvoid/headless-ui/combobox'
-import {css, html, nothing} from 'lit'
+import {css, nothing} from 'lit'
+import {html} from '../reatom-lit/index.js'
 import type {PropertyValues} from 'lit'
 
 import {ReatomLitElement} from '../reatom-lit/ReatomLitElement'
@@ -117,6 +118,9 @@ export class CVCombobox extends ReatomLitElement {
     css`
       :host {
         inline-size: 260px;
+        --cv-combobox-border-color: var(--cv-color-border, #2a3245);
+        --cv-combobox-border-radius: var(--cv-radius-sm, 6px);
+        --cv-combobox-background: var(--cv-color-surface, #141923);
       }
 
       [part='base'] {
@@ -129,6 +133,9 @@ export class CVCombobox extends ReatomLitElement {
         gap: var(--cv-space-1, 4px);
         min-block-size: 36px;
         padding: 0 var(--cv-space-3, 12px);
+        border: 1px solid var(--cv-combobox-border-color);
+        border-radius: var(--cv-combobox-border-radius);
+        background: var(--cv-combobox-background);
       }
 
       [part='input'] {

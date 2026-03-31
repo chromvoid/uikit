@@ -1,14 +1,41 @@
 import {createDialog, type DialogModel} from '@chromvoid/headless-ui/dialog'
-import {css, html, nothing} from 'lit'
-import type {PropertyValues} from 'lit'
+import {css, nothing, type PropertyValues} from 'lit'
 
+import {html} from '../reatom-lit/index.js'
 import {ReatomLitElement} from '../reatom-lit/ReatomLitElement'
 
 export interface CVDialogEventDetail {
   open: boolean
 }
 
+type PopoverHostElement = HTMLElement & {
+  showPopover?: () => void
+  hidePopover?: () => void
+}
+
 let cvDialogNonce = 0
+let hasWarnedAboutTriggerSlot = false
+
+function getDeepActiveElement(): HTMLElement | null {
+  let activeElement = document.activeElement
+  while (
+    activeElement instanceof HTMLElement &&
+    activeElement.shadowRoot?.activeElement instanceof HTMLElement
+  ) {
+    activeElement = activeElement.shadowRoot.activeElement
+  }
+
+  return activeElement instanceof HTMLElement ? activeElement : null
+}
+
+function getFocusRestoreTarget(): HTMLElement | null {
+  const activeElement = getDeepActiveElement()
+  if (!activeElement || activeElement === document.body || activeElement === document.documentElement) {
+    return null
+  }
+
+  return activeElement
+}
 
 export class CVDialog extends ReatomLitElement {
   static elementName = 'cv-dialog'
@@ -43,6 +70,9 @@ export class CVDialog extends ReatomLitElement {
   private previousBodyOverflow = ''
   private suppressLifecycleFromUpdate = false
   private lifecycleToken = 0
+  private focusRestoreTarget: HTMLElement | null = null
+  private suppressNextNativeCancel = false
+  private readonly handleDocumentFocusInBound = (event: FocusEvent) => this.handleDocumentFocusIn(event)
 
   constructor() {
     super()
@@ -80,6 +110,32 @@ export class CVDialog extends ReatomLitElement {
       [part='trigger']:focus-visible {
         outline: 2px solid var(--cv-color-primary, #65d7ff);
         outline-offset: 1px;
+      }
+
+      .portal-shell {
+        margin: 0;
+        padding: 0;
+        border: none;
+        background: transparent;
+        color: inherit;
+        inline-size: 100vw;
+        max-inline-size: none;
+        block-size: 100dvh;
+        max-block-size: none;
+        overflow: visible;
+      }
+
+      .portal-shell::backdrop {
+        background: transparent;
+      }
+
+      .portal-shell[hidden] {
+        display: none;
+      }
+
+      .popover-shell {
+        position: fixed;
+        inset: 0;
       }
 
       [part='overlay'] {
@@ -197,11 +253,13 @@ export class CVDialog extends ReatomLitElement {
 
   override connectedCallback(): void {
     super.connectedCallback()
+    this.warnAboutDeprecatedTriggerSlot()
     this.syncOutsideFocusListener()
     this.syncScrollLock()
   }
 
   override disconnectedCallback(): void {
+    this.closeNativeShells()
     super.disconnectedCallback()
     this.syncOutsideFocusListener(true)
     this.releaseScrollLock()
@@ -222,6 +280,10 @@ export class CVDialog extends ReatomLitElement {
       this.model = this.createModel(wasOpen)
     }
 
+    if (changedProperties.has('open') && this.open && changedProperties.get('open') !== true) {
+      this.captureFocusRestoreTarget()
+    }
+
     if (changedProperties.has('open') && this.model.state.isOpen() !== this.open) {
       if (this.open) {
         this.model.actions.open()
@@ -234,6 +296,8 @@ export class CVDialog extends ReatomLitElement {
   override updated(changedProperties: PropertyValues): void {
     super.updated(changedProperties)
 
+    this.warnAboutDeprecatedTriggerSlot()
+    this.syncTopLayerVisibility()
     this.syncOutsideFocusListener()
     this.syncScrollLock()
 
@@ -243,10 +307,13 @@ export class CVDialog extends ReatomLitElement {
         this.suppressLifecycleFromUpdate = false
       } else if (previousOpen !== undefined && previousOpen !== this.open) {
         this.dispatchLifecycleTransition(this.open)
+        if (previousOpen === true && this.open === false) {
+          this.restoreFocus(this.model.state.restoreTargetId())
+        }
       }
 
       if (this.open) {
-        this.focusInitialTarget()
+        queueMicrotask(() => this.focusInitialTarget())
       }
     }
   }
@@ -326,19 +393,145 @@ export class CVDialog extends ReatomLitElement {
       this.open = nextOpen
     }
 
-    const restoreTargetId = this.model.state.restoreTargetId()
-    if (restoreTargetId && previous.restoreTargetId !== restoreTargetId) {
-      const trigger = this.shadowRoot?.querySelector(`[id="${restoreTargetId}"]`) as HTMLElement | null
-      trigger?.focus()
+    if (!nextOpen) {
+      this.restoreFocus(previous.restoreTargetId)
+    }
+  }
+
+  private captureFocusRestoreTarget(): void {
+    this.focusRestoreTarget = getFocusRestoreTarget()
+  }
+
+  private restoreFocus(restoreTargetId: string | null): void {
+    const target =
+      (this.focusRestoreTarget?.isConnected ? this.focusRestoreTarget : null) ??
+      (restoreTargetId
+        ? ((this.shadowRoot?.querySelector(`[id="${restoreTargetId}"]`) as HTMLElement | null) ?? null)
+        : null)
+
+    target?.focus({preventScroll: true})
+    this.focusRestoreTarget = null
+  }
+
+  private getPortalOverlay(): HTMLElement | null {
+    return this.shadowRoot?.querySelector('[part="overlay"]') as HTMLElement | null
+  }
+
+  private getModalShell(): HTMLDialogElement | null {
+    return this.shadowRoot?.querySelector('dialog.portal-shell') as HTMLDialogElement | null
+  }
+
+  private getPopoverShell(): PopoverHostElement | null {
+    return this.shadowRoot?.querySelector('.popover-shell') as PopoverHostElement | null
+  }
+
+  private isPopoverOpen(shell: PopoverHostElement): boolean {
+    return shell.dataset['popoverOpen'] === 'true'
+  }
+
+  private openPopoverShell(shell: PopoverHostElement): void {
+    shell.hidden = false
+
+    if (typeof shell.showPopover === 'function') {
+      try {
+        shell.showPopover()
+      } catch {
+        // noop fallback for tests or unsupported environments
+      }
+    }
+
+    shell.dataset['popoverOpen'] = 'true'
+  }
+
+  private closePopoverShell(shell: PopoverHostElement): void {
+    if (typeof shell.hidePopover === 'function' && this.isPopoverOpen(shell)) {
+      try {
+        shell.hidePopover()
+      } catch {
+        // noop fallback for tests or unsupported environments
+      }
+    }
+
+    delete shell.dataset['popoverOpen']
+    shell.hidden = true
+  }
+
+  private syncTopLayerVisibility(): void {
+    const modalShell = this.getModalShell()
+    const popoverShell = this.getPopoverShell()
+
+    if (this.modal) {
+      if (popoverShell) {
+        this.closePopoverShell(popoverShell)
+      }
+
+      if (!modalShell) return
+
+      if (this.open) {
+        modalShell.hidden = false
+        if (!modalShell.open) {
+          try {
+            modalShell.showModal()
+          } catch {
+            modalShell.setAttribute('open', '')
+          }
+        }
+      } else {
+        if (modalShell.open) {
+          try {
+            modalShell.close()
+          } catch {
+            modalShell.removeAttribute('open')
+          }
+        }
+        modalShell.hidden = true
+      }
+
+      return
+    }
+
+    if (modalShell?.open) {
+      try {
+        modalShell.close()
+      } catch {
+        modalShell.removeAttribute('open')
+      }
+    }
+    if (modalShell) {
+      modalShell.hidden = true
+    }
+
+    if (!popoverShell) return
+
+    if (this.open) {
+      this.openPopoverShell(popoverShell)
+    } else {
+      this.closePopoverShell(popoverShell)
+    }
+  }
+
+  private closeNativeShells(): void {
+    const modalShell = this.getModalShell()
+    const popoverShell = this.getPopoverShell()
+
+    if (modalShell?.open) {
+      try {
+        modalShell.close()
+      } catch {
+        modalShell.removeAttribute('open')
+      }
+    }
+    if (popoverShell) {
+      this.closePopoverShell(popoverShell)
     }
   }
 
   private syncOutsideFocusListener(forceOff = false): void {
     const shouldListen = !forceOff && this.open
     if (shouldListen) {
-      document.addEventListener('focusin', this.handleDocumentFocusIn)
+      document.addEventListener('focusin', this.handleDocumentFocusInBound)
     } else {
-      document.removeEventListener('focusin', this.handleDocumentFocusIn)
+      document.removeEventListener('focusin', this.handleDocumentFocusInBound)
     }
   }
 
@@ -380,11 +573,22 @@ export class CVDialog extends ReatomLitElement {
     content?.focus()
   }
 
-  private handleDocumentFocusIn = (event: FocusEvent) => {
+  private warnAboutDeprecatedTriggerSlot(): void {
+    if (hasWarnedAboutTriggerSlot) return
+    if (!this.querySelector('[slot="trigger"]')) return
+
+    hasWarnedAboutTriggerSlot = true
+    console.warn(
+      '[cv-dialog] slot="trigger" is deprecated. Control dialog visibility with `.open` or use createDialogController/dialogService.',
+    )
+  }
+
+  private handleDocumentFocusIn(event: FocusEvent) {
     if (!this.open) return
 
     const path = event.composedPath()
-    if (path.includes(this)) return
+    const overlay = this.getPortalOverlay()
+    if (path.includes(this) || (overlay && path.includes(overlay))) return
 
     const previous = this.captureState()
     this.model.actions.handleOutsideFocus()
@@ -392,6 +596,7 @@ export class CVDialog extends ReatomLitElement {
   }
 
   private handleTriggerClick() {
+    this.captureFocusRestoreTarget()
     const previous = this.captureState()
     this.model.contracts.getTriggerProps().onClick()
     this.applyInteractionResult(previous)
@@ -402,6 +607,7 @@ export class CVDialog extends ReatomLitElement {
       event.preventDefault()
     }
 
+    this.captureFocusRestoreTarget()
     const previous = this.captureState()
     this.model.contracts.getTriggerProps().onKeyDown({key: event.key})
     this.applyInteractionResult(previous)
@@ -418,10 +624,26 @@ export class CVDialog extends ReatomLitElement {
   private handleContentKeyDown(event: KeyboardEvent) {
     if (event.key === 'Escape') {
       event.preventDefault()
+      this.suppressNextNativeCancel = true
     }
 
     const previous = this.captureState()
     this.model.contracts.getContentProps().onKeyDown({key: event.key})
+    this.applyInteractionResult(previous)
+  }
+
+  private handleNativeCancel(event: Event) {
+    event.preventDefault()
+
+    if (this.suppressNextNativeCancel) {
+      this.suppressNextNativeCancel = false
+      return
+    }
+
+    if (!this.closeOnEscape) return
+
+    const previous = this.captureState()
+    this.model.contracts.getContentProps().onKeyDown({key: 'Escape'})
     this.applyInteractionResult(previous)
   }
 
@@ -431,34 +653,17 @@ export class CVDialog extends ReatomLitElement {
     this.applyInteractionResult(previous)
   }
 
-  protected override render() {
-    const triggerProps = this.model.contracts.getTriggerProps()
-    const overlayProps = this.model.contracts.getOverlayProps()
+  private renderContent() {
     const contentProps = this.model.contracts.getContentProps()
     const titleProps = this.model.contracts.getTitleProps()
     const descriptionProps = this.model.contracts.getDescriptionProps()
     const headerCloseProps = this.model.contracts.getHeaderCloseButtonProps()
 
     return html`
-      <button
-        id=${triggerProps.id}
-        role=${triggerProps.role}
-        tabindex=${triggerProps.tabindex}
-        aria-haspopup=${triggerProps['aria-haspopup']}
-        aria-expanded=${triggerProps['aria-expanded']}
-        aria-controls=${triggerProps['aria-controls']}
-        part="trigger"
-        type="button"
-        @click=${this.handleTriggerClick}
-        @keydown=${this.handleTriggerKeyDown}
-      >
-        <slot name="trigger">Open dialog</slot>
-      </button>
-
       <div
-        id=${overlayProps.id}
-        data-open=${overlayProps['data-open']}
-        ?hidden=${overlayProps.hidden}
+        id=${this.model.contracts.getOverlayProps().id}
+        data-open=${this.model.contracts.getOverlayProps()['data-open']}
+        ?hidden=${this.model.contracts.getOverlayProps().hidden}
         part="overlay"
         @mousedown=${this.handleOverlayPointerDown}
       >
@@ -483,31 +688,31 @@ export class CVDialog extends ReatomLitElement {
             ${
               this.closable
                 ? html`
-                  <button
-                    id=${headerCloseProps.id}
-                    role=${headerCloseProps.role}
-                    tabindex=${headerCloseProps.tabindex}
-                    aria-label=${headerCloseProps['aria-label']}
-                    type="button"
-                    part="header-close"
-                    @click=${this.handleHeaderCloseClick}
-                  >
-                    <slot name="header-close"
-                      ><svg
-                        width="16"
-                        height="16"
-                        viewBox="0 0 16 16"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="1.5"
-                        stroke-linecap="round"
-                      >
-                        <line x1="4" y1="4" x2="12" y2="12" />
-                        <line x1="12" y1="4" x2="4" y2="12" />
-                      </svg></slot
+                    <button
+                      id=${headerCloseProps.id}
+                      role=${headerCloseProps.role}
+                      tabindex=${headerCloseProps.tabindex}
+                      aria-label=${headerCloseProps['aria-label']}
+                      type="button"
+                      part="header-close"
+                      @click=${this.handleHeaderCloseClick}
                     >
-                  </button>
-                `
+                      <slot name="header-close"
+                        ><svg
+                          width="16"
+                          height="16"
+                          viewBox="0 0 16 16"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="1.5"
+                          stroke-linecap="round"
+                        >
+                          <line x1="4" y1="4" x2="12" y2="12" />
+                          <line x1="12" y1="4" x2="4" y2="12" />
+                        </svg></slot
+                      >
+                    </button>
+                  `
                 : nothing
             }
           </header>
@@ -521,6 +726,41 @@ export class CVDialog extends ReatomLitElement {
           </footer>
         </section>
       </div>
+    `
+  }
+
+  protected override render() {
+    const triggerProps = this.model.contracts.getTriggerProps()
+
+    return html`
+      <button
+        id=${triggerProps.id}
+        role=${triggerProps.role}
+        tabindex=${triggerProps.tabindex}
+        aria-haspopup=${triggerProps['aria-haspopup']}
+        aria-expanded=${triggerProps['aria-expanded']}
+        aria-controls=${triggerProps['aria-controls']}
+        part="trigger"
+        type="button"
+        @click=${this.handleTriggerClick}
+        @keydown=${this.handleTriggerKeyDown}
+      >
+        <slot name="trigger">Open dialog</slot>
+      </button>
+
+      ${
+        this.modal
+          ? html`
+              <dialog class="portal-shell" ?hidden=${!this.open} @cancel=${this.handleNativeCancel}>
+                ${this.renderContent()}
+              </dialog>
+            `
+          : html`
+              <div class="portal-shell popover-shell" popover="manual" ?hidden=${!this.open}>
+                ${this.renderContent()}
+              </div>
+            `
+      }
     `
   }
 }

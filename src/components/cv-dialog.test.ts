@@ -1,4 +1,4 @@
-import {afterEach, describe, expect, it} from 'vitest'
+import {afterEach, describe, expect, it, vi} from 'vitest'
 
 import {CVDialog} from './cv-dialog'
 
@@ -19,6 +19,9 @@ const createDialog = async (attrs?: Partial<CVDialog>) => {
 }
 
 const getContent = (el: CVDialog) => el.shadowRoot!.querySelector('[part="content"]') as HTMLElement
+const getModalShell = (el: CVDialog) =>
+  el.shadowRoot!.querySelector('dialog.portal-shell') as HTMLDialogElement | null
+const getPopoverShell = (el: CVDialog) => el.shadowRoot!.querySelector('.popover-shell') as HTMLElement | null
 
 afterEach(() => {
   document.body.innerHTML = ''
@@ -43,6 +46,22 @@ describe('cv-dialog', () => {
       const overlay = el.shadowRoot!.querySelector('[part="overlay"]') as HTMLElement
       expect(overlay).not.toBeNull()
       expect(overlay.tagName).toBe('DIV')
+    })
+
+    it('renders modal dialogs through a native <dialog> top-layer shell', async () => {
+      const el = await createDialog()
+      const shell = getModalShell(el)
+
+      expect(shell).not.toBeNull()
+      expect(shell?.tagName).toBe('DIALOG')
+    })
+
+    it('renders non-modal dialogs through a popover shell', async () => {
+      const el = await createDialog({modal: false})
+      const shell = getPopoverShell(el)
+
+      expect(shell).not.toBeNull()
+      expect(shell?.getAttribute('popover')).toBe('manual')
     })
 
     it('renders [part="content"] as a <section> with role', async () => {
@@ -238,6 +257,22 @@ describe('cv-dialog', () => {
       await settle(el)
 
       expect(events).toEqual(['show', 'after-show', 'hide', 'after-hide'])
+    })
+
+    it('controlled open/close restores focus to the opener target', async () => {
+      const opener = document.createElement('button')
+      opener.textContent = 'Open externally'
+      document.body.append(opener)
+      opener.focus()
+
+      const el = await createDialog()
+      el.open = true
+      await settle(el)
+
+      el.open = false
+      await settle(el)
+
+      expect(document.activeElement).toBe(opener)
     })
 
     it('cv-show fires when dialog begins to open', async () => {
@@ -560,6 +595,26 @@ describe('cv-dialog', () => {
       await settle(el)
 
       expect(el.open).toBe(true)
+    })
+  })
+
+  describe('deprecated trigger slot', () => {
+    it('warns once when slot="trigger" is used', async () => {
+      const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
+
+      try {
+        const el = document.createElement('cv-dialog') as CVDialog
+        const trigger = document.createElement('span')
+        trigger.slot = 'trigger'
+        trigger.textContent = 'Legacy trigger'
+        el.append(trigger)
+        document.body.append(el)
+        await settle(el)
+
+        expect(warn).toHaveBeenCalledWith(expect.stringContaining('slot="trigger" is deprecated'))
+      } finally {
+        warn.mockRestore()
+      }
     })
   })
 

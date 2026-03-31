@@ -1,4 +1,5 @@
-import {css, html} from 'lit'
+import {css} from 'lit'
+import {html} from '../reatom-lit/index.js'
 
 import {ReatomLitElement} from '../reatom-lit/ReatomLitElement'
 

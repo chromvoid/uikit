@@ -101,7 +101,7 @@ const managedDialogStyles = `
     justify-content: flex-end;
     padding: var(--cv-space-4, 16px);
     border-top: 1px solid var(--cv-color-border, #2a3245);
-    background: color-mix(in oklab, var(--cv-color-surface-elevated, #1d2432) 90%, black);
+    background: var(--cv-color-surface-glass-strong, var(--cv-color-surface-elevated, #1d2432));
   }
 
   @media (max-width: 640px) {

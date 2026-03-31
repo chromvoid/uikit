@@ -18,7 +18,6 @@
     "forceConsistentCasingInFileNames": true,
     "useDefineForClassFields": true,
     "verbatimModuleSyntax": true,
-    "baseUrl": ".",
     "importHelpers": false
   },
   "include": ["src/**/*"],

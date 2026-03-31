@@ -582,7 +582,6 @@ export class CVButton extends FormAssociatedReatomElement {
         aria-busy=${props['aria-busy'] ?? nothing}
         aria-pressed=${props['aria-pressed'] ?? nothing}
         part="base"
-        class="cv-u-control-shell"
         @click=${this.handleClick}
         @keydown=${this.handleKeyDown}
         @keyup=${this.handleKeyUp}

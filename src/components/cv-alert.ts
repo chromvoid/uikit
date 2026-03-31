@@ -1,5 +1,6 @@
 import {createAlert, type AlertAriaLive, type AlertModel} from '@chromvoid/headless-ui/alert'
-import {css, html} from 'lit'
+import {css} from 'lit'
+import {html} from '../reatom-lit/index.js'
 import type {PropertyValues} from 'lit'
 
 import {ReatomLitElement} from '../reatom-lit/ReatomLitElement'

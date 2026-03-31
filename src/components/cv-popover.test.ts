@@ -1,4 +1,4 @@
-import {afterEach, describe, expect, it} from 'vitest'
+import {afterEach, describe, expect, it, vi} from 'vitest'
 
 import {CVPopover} from './cv-popover'
 
@@ -26,6 +26,104 @@ const getContent = (el: CVPopover) => el.shadowRoot!.querySelector('[part="conte
 
 const getArrow = (el: CVPopover) => el.shadowRoot!.querySelector('[part="arrow"]') as HTMLElement | null
 
+let restoreCssEnvironment: (() => void) | null = null
+
+const ensureCssSupports = () => {
+  const originalCss = globalThis.CSS
+
+  if (originalCss && typeof originalCss.supports === 'function') {
+    return originalCss
+  }
+
+  const stub = {
+    supports() {
+      return false
+    },
+  } as unknown as typeof CSS
+
+  Object.defineProperty(globalThis, 'CSS', {
+    value: stub,
+    configurable: true,
+    writable: true,
+  })
+
+  restoreCssEnvironment = () => {
+    if (originalCss) {
+      Object.defineProperty(globalThis, 'CSS', {
+        value: originalCss,
+        configurable: true,
+        writable: true,
+      })
+      return
+    }
+
+    Reflect.deleteProperty(globalThis, 'CSS')
+  }
+
+  return stub
+}
+
+const withNativePopoverSupport = () => {
+  const proto = HTMLElement.prototype as HTMLElement & {
+    showPopover?: (options?: {source?: HTMLElement}) => void
+    hidePopover?: () => void
+  }
+  const originalShowPopover = proto.showPopover
+  const originalHidePopover = proto.hidePopover
+  const showPopover = vi.fn()
+  const hidePopover = vi.fn()
+  Object.defineProperty(proto, 'showPopover', {
+    value: showPopover,
+    configurable: true,
+    writable: true,
+  })
+  Object.defineProperty(proto, 'hidePopover', {
+    value: hidePopover,
+    configurable: true,
+    writable: true,
+  })
+
+  const css = ensureCssSupports()
+  const originalCssSupports = css.supports.bind(css)
+  vi.spyOn(css, 'supports').mockImplementation((query: string) => {
+    if (
+      query === 'position-area: top left' ||
+      query === 'top: anchor(bottom)' ||
+      query === 'position-try-fallbacks: flip-block'
+    ) {
+      return true
+    }
+
+    return originalCssSupports(query)
+  })
+
+  return {
+    showPopover,
+    hidePopover,
+    restore() {
+      if (originalShowPopover) {
+        Object.defineProperty(proto, 'showPopover', {
+          value: originalShowPopover,
+          configurable: true,
+          writable: true,
+        })
+      } else {
+        Reflect.deleteProperty(proto, 'showPopover')
+      }
+
+      if (originalHidePopover) {
+        Object.defineProperty(proto, 'hidePopover', {
+          value: originalHidePopover,
+          configurable: true,
+          writable: true,
+        })
+      } else {
+        Reflect.deleteProperty(proto, 'hidePopover')
+      }
+    },
+  }
+}
+
 type PopoverToggleDetail = {
   open: boolean
   openedBy: string | null
@@ -36,6 +134,22 @@ const getToggleDetail = (event: Event) => (event as unknown as CustomEvent<Popov
 
 afterEach(() => {
   document.body.innerHTML = ''
+  const proto = HTMLElement.prototype as HTMLElement & {
+    showPopover?: unknown
+    hidePopover?: unknown
+  }
+  if (vi.isMockFunction(proto.showPopover)) {
+    Reflect.deleteProperty(proto, 'showPopover')
+  }
+  if (vi.isMockFunction(proto.hidePopover)) {
+    Reflect.deleteProperty(proto, 'hidePopover')
+  }
+  if (typeof CSS !== 'undefined') {
+    ;(CSS.supports as unknown as {mockRestore?: () => void}).mockRestore?.()
+  }
+  restoreCssEnvironment?.()
+  restoreCssEnvironment = null
+  vi.restoreAllMocks()
 })
 
 describe('cv-popover', () => {
@@ -114,6 +228,7 @@ describe('cv-popover', () => {
       expect(el.open).toBe(false)
       expect(el.placement).toBe('bottom-start')
       expect(el.anchor).toBe('trigger')
+      expect(el.triggerMode).toBe('internal')
       expect(el.offset).toBe(4)
       expect(el.arrow).toBe(false)
       expect(el.closeOnEscape).toBe(true)
@@ -142,10 +257,11 @@ describe('cv-popover', () => {
       expect(el.hasAttribute('close-on-outside-focus')).toBe(true)
     })
 
-    it('string attributes reflect: placement, anchor', async () => {
-      const el = await createPopover({placement: 'top-end', anchor: 'host'})
+    it('string attributes reflect: placement, anchor, trigger-mode', async () => {
+      const el = await createPopover({placement: 'top-end', anchor: 'host', triggerMode: 'external'})
       expect(el.getAttribute('placement')).toBe('top-end')
       expect(el.getAttribute('anchor')).toBe('host')
+      expect(el.getAttribute('trigger-mode')).toBe('external')
     })
 
     it('number attribute reflects: offset', async () => {
@@ -422,6 +538,28 @@ describe('cv-popover', () => {
       await settle(el)
       expect(getContent(el).hidden).toBe(true)
     })
+
+    it('imperative show/hide/toggle update the open state in external mode', async () => {
+      const el = await createPopover({triggerMode: 'external'})
+      const source = document.createElement('button')
+      document.body.append(source)
+
+      el.show({source, openedBy: 'pointer'})
+      await settle(el)
+      expect(el.open).toBe(true)
+
+      el.toggle()
+      await settle(el)
+      expect(el.open).toBe(false)
+
+      el.toggle({source, openedBy: 'programmatic'})
+      await settle(el)
+      expect(el.open).toBe(true)
+
+      el.hide()
+      await settle(el)
+      expect(el.open).toBe(false)
+    })
   })
 
   // --- Keyboard behavior ---
@@ -551,6 +689,28 @@ describe('cv-popover', () => {
     })
   })
 
+  describe('external trigger mode', () => {
+    it('does not render the internal trigger button when triggerMode="external"', async () => {
+      const el = await createPopover({triggerMode: 'external'})
+      expect(getTrigger(el)).toBeNull()
+    })
+
+    it('restores focus to the external invoker after hide', async () => {
+      const el = await createPopover({triggerMode: 'external'})
+      const source = document.createElement('button')
+      document.body.append(source)
+
+      source.focus()
+      el.show({source, openedBy: 'pointer'})
+      await settle(el)
+
+      el.hide()
+      await settle(el)
+
+      expect(document.activeElement).toBe(source)
+    })
+  })
+
   // --- Arrow ---
 
   describe('arrow', () => {
@@ -655,6 +815,67 @@ describe('cv-popover', () => {
       expect(triggerId).toBeTruthy()
       expect(contentId).toBeTruthy()
       expect(trigger.getAttribute('aria-controls')).toBe(contentId)
+    })
+  })
+
+  describe('native popover integration', () => {
+    it('applies popover="manual" in the UIKit wrapper and opens with the external source', async () => {
+      const native = withNativePopoverSupport()
+      const el = await createPopover({triggerMode: 'external'})
+      const source = document.createElement('button')
+      document.body.append(source)
+
+      el.show({source, openedBy: 'pointer'})
+      await settle(el)
+
+      const content = getContent(el)
+      expect(content.getAttribute('popover')).toBe('manual')
+      expect(native.showPopover).toHaveBeenCalled()
+      expect(native.showPopover.mock.calls.at(-1)?.[0]).toEqual({source})
+
+      native.restore()
+    })
+
+    it('syncs native toggle events back into headless state', async () => {
+      const native = withNativePopoverSupport()
+      const el = await createPopover({open: true})
+      await settle(el)
+
+      const content = getContent(el)
+      const toggleEvent = new Event('toggle')
+      Object.defineProperty(toggleEvent, 'newState', {value: 'closed'})
+      content.dispatchEvent(toggleEvent)
+      await settle(el)
+
+      expect(el.open).toBe(false)
+      native.restore()
+    })
+  })
+
+  describe('fallback positioning', () => {
+    it('positions external popovers from the provided source element when anchor positioning is unavailable', async () => {
+      vi.spyOn(window, 'requestAnimationFrame').mockImplementation((callback: FrameRequestCallback): number => {
+        callback(0)
+        return 1
+      })
+      vi.spyOn(window, 'cancelAnimationFrame').mockImplementation((): void => {})
+
+      const el = await createPopover({triggerMode: 'external', placement: 'right-end', offset: 8})
+      const source = document.createElement('button')
+      source.getBoundingClientRect = () => new DOMRect(120, 140, 64, 36)
+      document.body.append(source)
+      document.body.append(el)
+
+      const content = getContent(el)
+      content.getBoundingClientRect = () => new DOMRect(0, 0, 140, 72)
+
+      el.show({source, openedBy: 'pointer'})
+      await settle(el)
+
+      expect(content.dataset['anchorPositioning']).toBe('false')
+      expect(content.style.position).toBe('fixed')
+      expect(content.style.left).toBe('192px')
+      expect(content.style.top).toBe('104px')
     })
   })
 })

@@ -1,5 +1,6 @@
 import {createSpinner, type SpinnerModel} from '@chromvoid/headless-ui/spinner'
-import {css, svg} from 'lit'
+import {css} from 'lit'
+import {svg} from '../reatom-lit/index.js'
 import type {PropertyValues} from 'lit'
 
 import {ReatomLitElement} from '../reatom-lit/ReatomLitElement'

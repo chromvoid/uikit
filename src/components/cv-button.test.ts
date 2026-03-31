@@ -60,6 +60,7 @@ describe('cv-button', () => {
       expect(base.tagName.toLowerCase()).toBe('button')
       expect((base as HTMLButtonElement).type).toBe('button')
       expect(base.getAttribute('role')).toBe('button')
+      expect(base.getAttribute('class')).toBeNull()
     })
 
     it('renders [part="label"] containing default slot', async () => {

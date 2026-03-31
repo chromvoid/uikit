@@ -1,6 +1,7 @@
 import {type CompositeNavigationOrientation} from '@chromvoid/headless-ui/interactions/composite-navigation'
 import {createToolbar, type ToolbarModel} from '@chromvoid/headless-ui/toolbar'
-import {css, html, nothing} from 'lit'
+import {css, nothing} from 'lit'
+import {html} from '../reatom-lit/index.js'
 import type {PropertyValues} from 'lit'
 
 import {ReatomLitElement} from '../reatom-lit/ReatomLitElement'

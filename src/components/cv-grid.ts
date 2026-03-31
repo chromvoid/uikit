@@ -5,7 +5,8 @@ import {
   type GridModel,
   type GridSelectionMode,
 } from '@chromvoid/headless-ui/grid'
-import {css, html, nothing} from 'lit'
+import {css, nothing} from 'lit'
+import {html} from '../reatom-lit/index.js'
 import type {PropertyValues} from 'lit'
 
 import {ReatomLitElement} from '../reatom-lit/ReatomLitElement'
