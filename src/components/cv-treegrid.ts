@@ -7,9 +7,9 @@ import {
   type TreegridSelectionMode,
 } from '@chromvoid/headless-ui/treegrid'
 import {css, nothing} from 'lit'
-import {html} from '../reatom-lit/index.js'
 import type {PropertyValues} from 'lit'
 
+import {html} from '../reatom-lit/index.js'
 import {ReatomLitElement} from '../reatom-lit/ReatomLitElement'
 import {CVTreegridCell} from './cv-treegrid-cell'
 import {CVTreegridColumn} from './cv-treegrid-column'

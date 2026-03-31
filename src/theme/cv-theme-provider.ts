@@ -1,7 +1,7 @@
 import {LitElement, css, html} from 'lit'
 import type {PropertyValues} from 'lit'
 
-import {applyTheme, getTheme} from './theme-engine'
+import {getTheme} from './theme-engine'
 
 export type CVThemeMode = 'light' | 'dark' | 'system'
 
@@ -117,7 +117,7 @@ export class CVThemeProvider extends LitElement {
 
     const definition = getTheme(this.theme)
     if (!definition) {
-      console.warn(`[cv-theme-provider] Theme "${this.theme}" is not registered.`)
+      globalThis['console']?.warn?.(`[cv-theme-provider] Theme "${this.theme}" is not registered.`)
       return
     }
 

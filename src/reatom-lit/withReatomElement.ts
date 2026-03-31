@@ -6,6 +6,10 @@ const __inner_update = Symbol('Inner update')
 
 export const __reatom_user_render__ = Symbol.for('reatom.user_render')
 
+type ReatomUserRenderHolder = {
+  [__reatom_user_render__]?: (this: LitElement) => unknown
+}
+
 export const withReatomElement = <T extends Constructor<LitElement>>(superClass: T): T => {
   return class ReatomLitElement extends superClass {
     private __frame: Frame
@@ -13,15 +17,15 @@ export const withReatomElement = <T extends Constructor<LitElement>>(superClass:
     private __abstractRender: AbstractRender<PropertyValues | undefined, unknown>
     private __unmount?: Unsubscribe
 
-    constructor(...args: any[]) {
-      super(...args)
+    constructor(...args: unknown[]) {
+      super(...(args as never[]))
 
       this.__frame = top()
 
       this.__abstractRender = reatomAbstractRender({
         frame: this.__frame,
         render: () => {
-          const symbolRender = (this.constructor.prototype as any)[__reatom_user_render__]
+          const symbolRender = (this.constructor.prototype as ReatomUserRenderHolder)[__reatom_user_render__]
           if (symbolRender) {
             return symbolRender.call(this)
           }
@@ -31,7 +35,7 @@ export const withReatomElement = <T extends Constructor<LitElement>>(superClass:
           return userRender?.call(this)
         },
         rerender: () => {
-          return this.requestUpdate(__inner_update as any, 1)
+          return this.requestUpdate(__inner_update, 1)
         },
         name: 'ReatomElement',
       })
@@ -42,7 +46,7 @@ export const withReatomElement = <T extends Constructor<LitElement>>(superClass:
     }
 
     override shouldUpdate(_changedProperties: PropertyValues): boolean {
-      if (_changedProperties.size === 1 && _changedProperties.has(__inner_update as any)) {
+      if (_changedProperties.size === 1 && _changedProperties.has(__inner_update)) {
         // updates from Reatom are internal
       }
       this.__changedProps = _changedProperties

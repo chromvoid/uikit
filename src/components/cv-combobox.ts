@@ -7,9 +7,9 @@ import {
   type ComboboxVisibleGroup,
 } from '@chromvoid/headless-ui/combobox'
 import {css, nothing} from 'lit'
-import {html} from '../reatom-lit/index.js'
 import type {PropertyValues} from 'lit'
 
+import {html} from '../reatom-lit/index.js'
 import {ReatomLitElement} from '../reatom-lit/ReatomLitElement'
 import {CVComboboxGroup} from './cv-combobox-group'
 import {CVComboboxOption} from './cv-combobox-option'
@@ -49,8 +49,13 @@ interface ComboboxGroupRecord {
 
 const comboboxNavigationKeys = new Set(['ArrowUp', 'ArrowDown', 'Home', 'End', 'Enter', 'Escape'])
 
-function isVisibleGroup(item: any): item is ComboboxVisibleGroup {
-  return 'options' in item && Array.isArray(item.options)
+function isVisibleGroup(item: unknown): item is ComboboxVisibleGroup {
+  return (
+    typeof item === 'object' &&
+    item !== null &&
+    'options' in item &&
+    Array.isArray((item as {options?: unknown}).options)
+  )
 }
 
 let cvComboboxNonce = 0
@@ -391,9 +396,6 @@ export class CVCombobox extends ReatomLitElement {
     this.groupRecords = groupElements.map((element) => {
       const id = `group-${++groupNonce}`
       const label = element.label || element.getAttribute('label') || ''
-      const childOptions = Array.from(element.children).filter(
-        (child): child is CVComboboxOption => child.tagName.toLowerCase() === CVComboboxOption.elementName,
-      )
       const optionIds: string[] = []
       return {id, label, element, optionIds}
     })

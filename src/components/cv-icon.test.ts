@@ -10,6 +10,13 @@ import {
 
 CVIcon.define()
 
+type TestableCVIconClass = typeof CVIcon & {
+  svgCache: Map<unknown, unknown>
+  inFlight: Map<unknown, unknown>
+}
+
+const testableCVIcon = CVIcon as TestableCVIconClass
+
 const settle = async (element: CVIcon) => {
   await element.updateComplete
   await Promise.resolve()
@@ -28,8 +35,8 @@ afterEach(() => {
   document.body.innerHTML = ''
   setIconBasePath('/assets/icons/lucide')
   unregisterIconCollection('brand')
-  ;(CVIcon as any).svgCache.clear()
-  ;(CVIcon as any).inFlight.clear()
+  testableCVIcon.svgCache.clear()
+  testableCVIcon.inFlight.clear()
   vi.unstubAllGlobals()
 })
 

@@ -102,7 +102,11 @@ function computeCoords(
   }
 }
 
-function fitsViewport(position: CVPopoverResolvedPosition, panelRect: CVPopoverRect, viewport: CVPopoverViewport): boolean {
+function fitsViewport(
+  position: CVPopoverResolvedPosition,
+  panelRect: CVPopoverRect,
+  viewport: CVPopoverViewport,
+): boolean {
   return (
     position.left >= viewport.padding &&
     position.top >= viewport.padding &&
@@ -111,7 +115,11 @@ function fitsViewport(position: CVPopoverResolvedPosition, panelRect: CVPopoverR
   )
 }
 
-function clampToViewport(position: CVPopoverResolvedPosition, panelRect: CVPopoverRect, viewport: CVPopoverViewport): CVPopoverResolvedPosition {
+function clampToViewport(
+  position: CVPopoverResolvedPosition,
+  panelRect: CVPopoverRect,
+  viewport: CVPopoverViewport,
+): CVPopoverResolvedPosition {
   const maxLeft = Math.max(viewport.padding, viewport.width - panelRect.width - viewport.padding)
   const maxTop = Math.max(viewport.padding, viewport.height - panelRect.height - viewport.padding)
 
@@ -135,8 +143,26 @@ export function getPlacementFallbacks(placement: CVPopoverPlacement): CVPopoverP
 
 export function getPositionAreaForPlacement(placement: CVPopoverPlacement): string {
   const {side, align} = parsePlacement(placement)
-  const row = side === 'top' ? 'top' : side === 'bottom' ? 'bottom' : align === 'start' ? 'top' : align === 'end' ? 'bottom' : 'center'
-  const column = side === 'left' ? 'left' : side === 'right' ? 'right' : align === 'start' ? 'left' : align === 'end' ? 'right' : 'center'
+  const row =
+    side === 'top'
+      ? 'top'
+      : side === 'bottom'
+        ? 'bottom'
+        : align === 'start'
+          ? 'top'
+          : align === 'end'
+            ? 'bottom'
+            : 'center'
+  const column =
+    side === 'left'
+      ? 'left'
+      : side === 'right'
+        ? 'right'
+        : align === 'start'
+          ? 'left'
+          : align === 'end'
+            ? 'right'
+            : 'center'
 
   return `${row} ${column}`
 }

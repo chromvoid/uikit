@@ -1,8 +1,8 @@
 import {createProgress, type ProgressModel} from '@chromvoid/headless-ui/progress'
 import {css, nothing} from 'lit'
-import {html} from '../reatom-lit/index.js'
 import type {PropertyValues} from 'lit'
 
+import {html} from '../reatom-lit/index.js'
 import {ReatomLitElement} from '../reatom-lit/ReatomLitElement'
 
 let cvProgressNonce = 0
@@ -62,7 +62,10 @@ export class CVProgress extends ReatomLitElement {
         block-size: 100%;
         inline-size: var(--cv-progress-width, 0%);
         border-radius: inherit;
-        background: var(--cv-progress-indicator-background, var(--cv-gradient-progress-primary, var(--cv-gradient-primary)));
+        background: var(
+          --cv-progress-indicator-background,
+          var(--cv-gradient-progress-primary, var(--cv-gradient-primary))
+        );
         transition: inline-size var(--cv-duration-normal, 220ms) var(--cv-easing-standard, ease);
         position: relative;
       }

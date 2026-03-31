@@ -1,6 +1,6 @@
 import {LitElement, css, html} from 'lit'
 
-import {componentResetStyles, getComponentHostDisplayStyles} from '../styles/component-styles'
+import {componentResetStyles} from '../styles/component-styles'
 
 export class CVOption extends LitElement {
   static elementName = 'cv-option'

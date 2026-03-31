@@ -1,17 +1,33 @@
-const originalAttachInternals = (HTMLElement.prototype as any).attachInternals as
-  | ((...args: unknown[]) => any)
-  | undefined
+type MockElementInternals = {
+  validity?: ValidityStateFlags
+  validationMessage?: string
+  setFormValue?: (...args: unknown[]) => void
+  setValidity?: (flags?: ValidityStateFlags, message?: string) => void
+  checkValidity?: () => boolean
+  reportValidity?: () => boolean
+  form?: HTMLFormElement | null
+  labels?: HTMLLabelElement[]
+  willValidate?: boolean
+  states?: Set<string>
+}
+
+type AttachInternalsFn = (...args: unknown[]) => MockElementInternals | null
+
+const htmlElementPrototype = HTMLElement.prototype as typeof HTMLElement.prototype & {
+  attachInternals?: AttachInternalsFn
+}
+
+const originalAttachInternals = htmlElementPrototype.attachInternals
 
 Object.defineProperty(HTMLElement.prototype, 'attachInternals', {
   configurable: true,
   value: function (...args: unknown[]) {
     const host = this as HTMLElement
-    const internals = (originalAttachInternals ? originalAttachInternals.apply(host, args) : null) ?? {}
+    const internals: MockElementInternals =
+      (originalAttachInternals ? originalAttachInternals.apply(host, args) : null) ?? {}
 
-    let validityFlags: ValidityStateFlags =
-      ((internals as {validity?: ValidityState}).validity as ValidityStateFlags | undefined) ?? {}
-    let validationMessage =
-      ((internals as {validationMessage?: string}).validationMessage as string | undefined) ?? ''
+    let validityFlags = internals.validity ?? {}
+    let validationMessage = internals.validationMessage ?? ''
 
     if (typeof internals.setFormValue !== 'function') {
       internals.setFormValue = () => {}

@@ -157,11 +157,7 @@ cv-theme-provider[mode='dark'] {
     var(--cv-color-accent) 0%,
     var(--cv-color-primary-dark) 100%
   );
-  --cv-gradient-success: linear-gradient(
-    135deg,
-    var(--cv-color-success) 0%,
-    var(--cv-color-primary) 100%
-  );
+  --cv-gradient-success: linear-gradient(135deg, var(--cv-color-success) 0%, var(--cv-color-primary) 100%);
   --cv-gradient-brand: linear-gradient(135deg, var(--cv-color-cyan) 0%, var(--cv-color-accent) 100%);
   --cv-gradient-subtle: linear-gradient(
     135deg,

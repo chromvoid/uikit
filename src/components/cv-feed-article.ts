@@ -1,6 +1,6 @@
 import {css} from 'lit'
-import {html} from '../reatom-lit/index.js'
 
+import {html} from '../reatom-lit/index.js'
 import {ReatomLitElement} from '../reatom-lit/ReatomLitElement'
 
 export class CVFeedArticle extends ReatomLitElement {

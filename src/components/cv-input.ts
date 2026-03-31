@@ -69,7 +69,7 @@ export class CVInput extends FormAssociatedReatomElement {
   declare invalid: boolean
 
   private model: InputModel
-  private _valueOnFocus: string = ''
+  private _valueOnFocus = ''
   private defaultValue = ''
   private didCaptureDefaultValue = false
   private didAutoFocus = false

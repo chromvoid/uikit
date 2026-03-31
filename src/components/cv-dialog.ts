@@ -578,7 +578,7 @@ export class CVDialog extends ReatomLitElement {
     if (!this.querySelector('[slot="trigger"]')) return
 
     hasWarnedAboutTriggerSlot = true
-    console.warn(
+    globalThis['console']?.warn?.(
       '[cv-dialog] slot="trigger" is deprecated. Control dialog visibility with `.open` or use createDialogController/dialogService.',
     )
   }

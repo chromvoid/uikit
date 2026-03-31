@@ -1,8 +1,8 @@
 import {createAlert, type AlertAriaLive, type AlertModel} from '@chromvoid/headless-ui/alert'
 import {css} from 'lit'
-import {html} from '../reatom-lit/index.js'
 import type {PropertyValues} from 'lit'
 
+import {html} from '../reatom-lit/index.js'
 import {ReatomLitElement} from '../reatom-lit/ReatomLitElement'
 
 export interface CVAlertEventDetail {

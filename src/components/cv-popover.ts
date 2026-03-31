@@ -58,7 +58,11 @@ function supportsAnchorPositioning(): boolean {
 }
 
 function supportsAnchorTryFallbacks(): boolean {
-  return typeof CSS !== 'undefined' && typeof CSS.supports === 'function' && CSS.supports('position-try-fallbacks: flip-block')
+  return (
+    typeof CSS !== 'undefined' &&
+    typeof CSS.supports === 'function' &&
+    CSS.supports('position-try-fallbacks: flip-block')
+  )
 }
 
 function supportsNativeAnchoredAutoplacement(): boolean {
@@ -632,7 +636,10 @@ export class CVPopover extends ReatomLitElement {
 
     if (supportsNativeAnchoredAutoplacement()) {
       this.clearInlineLayout(content)
-      content.style.setProperty('--cv-popover-anchor-inline-size', `${Math.max(0, Math.round(anchorRect.width))}px`)
+      content.style.setProperty(
+        '--cv-popover-anchor-inline-size',
+        `${Math.max(0, Math.round(anchorRect.width))}px`,
+      )
       content.dataset['anchorPositioning'] = 'true'
       content.dataset['placement'] = this.placement
       content.style.position = 'fixed'
@@ -658,7 +665,10 @@ export class CVPopover extends ReatomLitElement {
     })
 
     this.clearInlineLayout(content)
-    content.style.setProperty('--cv-popover-anchor-inline-size', `${Math.max(0, Math.round(anchorRect.width))}px`)
+    content.style.setProperty(
+      '--cv-popover-anchor-inline-size',
+      `${Math.max(0, Math.round(anchorRect.width))}px`,
+    )
     content.dataset['anchorPositioning'] = 'false'
     content.dataset['placement'] = resolved.placement
     content.style.position = 'fixed'
@@ -708,8 +718,9 @@ export class CVPopover extends ReatomLitElement {
 
     return html`
       <div part="base">
-        ${renderTrigger
-          ? html`
+        ${
+          renderTrigger
+            ? html`
               <button
                 id=${triggerProps.id}
                 role=${triggerProps.role}
@@ -725,7 +736,8 @@ export class CVPopover extends ReatomLitElement {
                 <slot name="trigger">Open popover</slot>
               </button>
             `
-          : nothing}
+            : nothing
+        }
 
         <div
           id=${contentProps.id}
@@ -746,11 +758,13 @@ export class CVPopover extends ReatomLitElement {
           @toggle=${this.handleNativeToggle}
         >
           <slot></slot>
-          ${this.arrow
-            ? html`
-                <span part="arrow"><slot name="arrow"></slot></span>
-              `
-            : nothing}
+          ${
+            this.arrow
+              ? html`
+                  <span part="arrow"><slot name="arrow"></slot></span>
+                `
+              : nothing
+          }
         </div>
       </div>
     `

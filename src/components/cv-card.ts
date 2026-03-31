@@ -1,8 +1,8 @@
 import {createCard, type CardModel} from '@chromvoid/headless-ui/card'
 import {css, nothing} from 'lit'
-import {html} from '../reatom-lit/index.js'
 import type {PropertyValues} from 'lit'
 
+import {html} from '../reatom-lit/index.js'
 import {ReatomLitElement} from '../reatom-lit/ReatomLitElement'
 
 type CVCardVariant = 'elevated' | 'outlined' | 'filled'
@@ -242,25 +242,36 @@ export class CVCard extends ReatomLitElement {
   }
 
   protected override render() {
-    const cardProps = this.model.contracts.getCardProps()
-    const triggerProps = this.model.contracts.getTriggerProps()
-    const contentProps = this.model.contracts.getContentProps()
+    const triggerProps = this.model.contracts.getTriggerProps() as {
+      id?: string
+      role?: string
+      tabindex?: number | string
+      'aria-expanded'?: string | boolean
+      'aria-controls'?: string
+      'aria-disabled'?: string | boolean
+    }
+    const contentProps = this.model.contracts.getContentProps() as {
+      id?: string
+      role?: string
+      'aria-labelledby'?: string
+      hidden?: boolean
+    }
 
     const isExpandable = this.model.state.isExpandable()
 
     // Spread trigger props onto header only when expandable
-    const headerId = isExpandable ? (triggerProps as any).id : undefined
-    const headerRole = isExpandable ? (triggerProps as any).role : undefined
-    const headerTabindex = isExpandable ? (triggerProps as any).tabindex : undefined
-    const headerAriaExpanded = isExpandable ? (triggerProps as any)['aria-expanded'] : undefined
-    const headerAriaControls = isExpandable ? (triggerProps as any)['aria-controls'] : undefined
-    const headerAriaDisabled = isExpandable ? (triggerProps as any)['aria-disabled'] : undefined
+    const headerId = isExpandable ? triggerProps.id : undefined
+    const headerRole = isExpandable ? triggerProps.role : undefined
+    const headerTabindex = isExpandable ? triggerProps.tabindex : undefined
+    const headerAriaExpanded = isExpandable ? triggerProps['aria-expanded'] : undefined
+    const headerAriaControls = isExpandable ? triggerProps['aria-controls'] : undefined
+    const headerAriaDisabled = isExpandable ? triggerProps['aria-disabled'] : undefined
 
     // Spread content props onto body only when expandable
-    const bodyId = isExpandable ? (contentProps as any).id : undefined
-    const bodyRole = isExpandable ? (contentProps as any).role : undefined
-    const bodyAriaLabelledby = isExpandable ? (contentProps as any)['aria-labelledby'] : undefined
-    const bodyHidden = isExpandable ? (contentProps as any).hidden : false
+    const bodyId = isExpandable ? contentProps.id : undefined
+    const bodyRole = isExpandable ? contentProps.role : undefined
+    const bodyAriaLabelledby = isExpandable ? contentProps['aria-labelledby'] : undefined
+    const bodyHidden = isExpandable ? contentProps.hidden : false
 
     return html`
       <div part="base">

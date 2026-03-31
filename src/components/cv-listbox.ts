@@ -1,8 +1,8 @@
 import {createListbox, type ListboxModel, type ListboxGroup} from '@chromvoid/headless-ui/listbox'
 import {css, nothing} from 'lit'
-import {html} from '../reatom-lit/index.js'
 import type {PropertyValues} from 'lit'
 
+import {html} from '../reatom-lit/index.js'
 import {ReatomLitElement} from '../reatom-lit/ReatomLitElement'
 import {CVListboxGroup} from './cv-listbox-group'
 import {CVOption} from './cv-option'

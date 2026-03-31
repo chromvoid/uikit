@@ -2,8 +2,8 @@ import {atom} from '@reatom/core'
 import {LitElement, css} from 'lit'
 import {afterEach, describe, expect, it} from 'vitest'
 
-import {ReatomLitElement} from './ReatomLitElement'
 import {html} from './html'
+import {ReatomLitElement} from './ReatomLitElement'
 import {watch} from './watch'
 import {withReatomElement} from './withReatomElement'
 

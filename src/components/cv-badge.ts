@@ -1,8 +1,8 @@
 import {createBadge, type BadgeModel, type BadgeVariant, type BadgeSize} from '@chromvoid/headless-ui/badge'
 import {css, nothing} from 'lit'
-import {html} from '../reatom-lit/index.js'
 import type {PropertyValues} from 'lit'
 
+import {html} from '../reatom-lit/index.js'
 import {ReatomLitElement} from '../reatom-lit/ReatomLitElement'
 
 export class CVBadge extends ReatomLitElement {

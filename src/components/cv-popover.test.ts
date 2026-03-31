@@ -854,10 +854,12 @@ describe('cv-popover', () => {
 
   describe('fallback positioning', () => {
     it('positions external popovers from the provided source element when anchor positioning is unavailable', async () => {
-      vi.spyOn(window, 'requestAnimationFrame').mockImplementation((callback: FrameRequestCallback): number => {
-        callback(0)
-        return 1
-      })
+      vi.spyOn(window, 'requestAnimationFrame').mockImplementation(
+        (callback: FrameRequestCallback): number => {
+          callback(0)
+          return 1
+        },
+      )
       vi.spyOn(window, 'cancelAnimationFrame').mockImplementation((): void => {})
 
       const el = await createPopover({triggerMode: 'external', placement: 'right-end', offset: 8})

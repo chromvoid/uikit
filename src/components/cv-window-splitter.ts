@@ -4,9 +4,9 @@ import {
   type WindowSplitterOrientation,
 } from '@chromvoid/headless-ui/window-splitter'
 import {css, nothing} from 'lit'
-import {html} from '../reatom-lit/index.js'
 import type {PropertyValues} from 'lit'
 
+import {html} from '../reatom-lit/index.js'
 import {ReatomLitElement} from '../reatom-lit/ReatomLitElement'
 
 export interface CVWindowSplitterEventDetail {
@@ -56,7 +56,7 @@ export class CVWindowSplitter extends ReatomLitElement {
 
   private readonly idBase = `cv-window-splitter-${++cvWindowSplitterNonce}`
   private model: WindowSplitterModel
-  private _dragStartPosition: number = 0
+  private _dragStartPosition = 0
 
   constructor() {
     super()

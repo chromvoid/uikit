@@ -1,8 +1,8 @@
 import {createSpinner, type SpinnerModel} from '@chromvoid/headless-ui/spinner'
 import {css} from 'lit'
-import {svg} from '../reatom-lit/index.js'
 import type {PropertyValues} from 'lit'
 
+import {svg} from '../reatom-lit/index.js'
 import {ReatomLitElement} from '../reatom-lit/ReatomLitElement'
 
 const RADIUS = 45

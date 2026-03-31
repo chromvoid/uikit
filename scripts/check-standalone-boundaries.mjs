@@ -72,6 +72,14 @@ const forbiddenMarkdownPatterns = [
 const importLikeRegex =
   /(?:import|export)\s+(?:[^'"`]*?\sfrom\s*)?['"]([^'"]+)['"]|import\s*\(\s*['"]([^'"]+)['"]\s*\)|require\s*\(\s*['"]([^'"]+)['"]\s*\)/g
 
+const writeStdout = (message) => {
+  process.stdout.write(`${message}\n`)
+}
+
+const writeStderr = (message) => {
+  process.stderr.write(`${message}\n`)
+}
+
 const isInsidePackage = (targetPath) => {
   const normalizedRoot = path.resolve(packageRoot)
   const normalizedTarget = path.resolve(targetPath)
@@ -103,7 +111,7 @@ const walkFiles = async (dirPath, allowedExtensions) => {
 }
 
 if (!existsSync(srcRoot)) {
-  console.log('uikit-boundaries: no src directory, skipping')
+  writeStdout('uikit-boundaries: no src directory, skipping')
   process.exit(0)
 }
 
@@ -200,12 +208,12 @@ for (const filePath of markdownFiles) {
 }
 
 if (violations.length > 0) {
-  console.error('uikit-boundaries: FAILED')
+  writeStderr('uikit-boundaries: FAILED')
   for (const violation of violations) {
     const relativeFilePath = path.relative(packageRoot, violation.filePath)
-    console.error(`- ${relativeFilePath}: '${violation.specifier}' (${violation.reason})`)
+    writeStderr(`- ${relativeFilePath}: '${violation.specifier}' (${violation.reason})`)
   }
   process.exit(1)
 }
 
-console.log('uikit-boundaries: OK')
+writeStdout('uikit-boundaries: OK')

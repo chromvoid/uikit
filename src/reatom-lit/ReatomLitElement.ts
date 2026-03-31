@@ -59,7 +59,7 @@ export class ReatomLitElement extends LitElement {
         return this.render()
       },
       rerender: () => {
-        return this.requestUpdate(__inner_update as any, 1)
+        return this.requestUpdate(__inner_update, 1)
       },
       name: 'ReatomElement',
     })

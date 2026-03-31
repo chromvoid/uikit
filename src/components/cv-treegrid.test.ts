@@ -10,13 +10,6 @@ CVTreegridColumn.define()
 CVTreegridRow.define()
 CVTreegridCell.define()
 
-interface CVTreegridEventDetail {
-  value: string | null
-  activeCell: {rowId: string; colId: string} | null
-  selectedValues: string[]
-  expandedValues: string[]
-}
-
 const settle = async (element: CVTreegrid) => {
   await element.updateComplete
   await Promise.resolve()

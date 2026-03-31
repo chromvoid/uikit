@@ -4,13 +4,24 @@ import {CVCopyButton} from './cv-copy-button'
 
 CVCopyButton.define()
 
+type ClipboardStub = {
+  writeText: (value: string) => Promise<unknown>
+}
+
+type AsyncCopyValue = () => Promise<string>
+
+type TestableCopyButton = CVCopyButton & {
+  _clipboard?: ClipboardStub
+  value: CVCopyButton['value'] | AsyncCopyValue
+}
+
 const settle = async (element: CVCopyButton) => {
   await element.updateComplete
   await Promise.resolve()
   await element.updateComplete
 }
 
-const createCopyButton = async (attrs?: Partial<CVCopyButton>) => {
+const createCopyButton = async (attrs?: Partial<TestableCopyButton>) => {
   const el = document.createElement('cv-copy-button') as CVCopyButton
   if (attrs) Object.assign(el, attrs)
   document.body.append(el)
@@ -19,6 +30,9 @@ const createCopyButton = async (attrs?: Partial<CVCopyButton>) => {
 }
 
 const getBase = (el: CVCopyButton) => el.shadowRoot!.querySelector('[part="base"]') as HTMLElement
+const setClipboard = (el: CVCopyButton, clipboard: ClipboardStub) => {
+  ;(el as TestableCopyButton)._clipboard = clipboard
+}
 
 afterEach(() => {
   document.body.innerHTML = ''
@@ -151,7 +165,7 @@ describe('cv-copy-button', () => {
       const clip = {writeText: vi.fn().mockResolvedValue(undefined)}
       const el = await createCopyButton({value: 'hello'})
       // Inject mock clipboard — the component should pass it to createCopyButton
-      ;(el as any)._clipboard = clip
+      setClipboard(el, clip)
 
       let detail: unknown
       el.addEventListener('cv-copy', ((e: CustomEvent) => {
@@ -171,7 +185,7 @@ describe('cv-copy-button', () => {
       const error = new Error('denied')
       const clip = {writeText: vi.fn().mockRejectedValue(error)}
       const el = await createCopyButton({value: 'test'})
-      ;(el as any)._clipboard = clip
+      setClipboard(el, clip)
 
       let detail: unknown
       el.addEventListener('cv-error', ((e: CustomEvent) => {
@@ -248,7 +262,7 @@ describe('cv-copy-button', () => {
       vi.useFakeTimers()
       const clip = {writeText: vi.fn().mockResolvedValue(undefined)}
       const el = await createCopyButton({value: 'test'})
-      ;(el as any)._clipboard = clip
+      setClipboard(el, clip)
 
       getBase(el).click()
       await vi.advanceTimersByTimeAsync(0)
@@ -262,7 +276,7 @@ describe('cv-copy-button', () => {
       vi.useFakeTimers()
       const clip = {writeText: vi.fn().mockRejectedValue(new Error('fail'))}
       const el = await createCopyButton({value: 'test'})
-      ;(el as any)._clipboard = clip
+      setClipboard(el, clip)
 
       getBase(el).click()
       await vi.advanceTimersByTimeAsync(0)
@@ -283,7 +297,7 @@ describe('cv-copy-button', () => {
         ),
       }
       const el = await createCopyButton({value: 'test'})
-      ;(el as any)._clipboard = clip
+      setClipboard(el, clip)
 
       getBase(el).click()
       await settle(el)
@@ -310,7 +324,7 @@ describe('cv-copy-button', () => {
     it('click on base triggers copy', async () => {
       const clip = {writeText: vi.fn().mockResolvedValue(undefined)}
       const el = await createCopyButton({value: 'click-test'})
-      ;(el as any)._clipboard = clip
+      setClipboard(el, clip)
 
       getBase(el).click()
       await vi.advanceTimersByTimeAsync(0)
@@ -322,7 +336,7 @@ describe('cv-copy-button', () => {
     it('Enter keydown triggers copy', async () => {
       const clip = {writeText: vi.fn().mockResolvedValue(undefined)}
       const el = await createCopyButton({value: 'enter-test'})
-      ;(el as any)._clipboard = clip
+      setClipboard(el, clip)
 
       getBase(el).dispatchEvent(new KeyboardEvent('keydown', {key: 'Enter', bubbles: true}))
       await vi.advanceTimersByTimeAsync(0)
@@ -334,7 +348,7 @@ describe('cv-copy-button', () => {
     it('Space keyup triggers copy (keydown alone does not)', async () => {
       const clip = {writeText: vi.fn().mockResolvedValue(undefined)}
       const el = await createCopyButton({value: 'space-test'})
-      ;(el as any)._clipboard = clip
+      setClipboard(el, clip)
 
       // keydown should NOT trigger copy
       getBase(el).dispatchEvent(new KeyboardEvent('keydown', {key: ' ', bubbles: true}))
@@ -352,8 +366,8 @@ describe('cv-copy-button', () => {
     it('async value is resolved before writing to clipboard', async () => {
       const clip = {writeText: vi.fn().mockResolvedValue(undefined)}
       const asyncGetter = async () => 'async-resolved-value'
-      const el = await createCopyButton({value: asyncGetter as any})
-      ;(el as any)._clipboard = clip
+      const el = await createCopyButton({value: asyncGetter})
+      setClipboard(el, clip)
 
       getBase(el).click()
       await vi.advanceTimersByTimeAsync(0)
@@ -365,7 +379,7 @@ describe('cv-copy-button', () => {
     it('disabled blocks copy', async () => {
       const clip = {writeText: vi.fn().mockResolvedValue(undefined)}
       const el = await createCopyButton({value: 'blocked', disabled: true})
-      ;(el as any)._clipboard = clip
+      setClipboard(el, clip)
 
       getBase(el).click()
       await vi.advanceTimersByTimeAsync(0)
@@ -378,7 +392,7 @@ describe('cv-copy-button', () => {
     it('disabled blocks Enter key copy', async () => {
       const clip = {writeText: vi.fn().mockResolvedValue(undefined)}
       const el = await createCopyButton({value: 'blocked', disabled: true})
-      ;(el as any)._clipboard = clip
+      setClipboard(el, clip)
 
       getBase(el).dispatchEvent(new KeyboardEvent('keydown', {key: 'Enter', bubbles: true}))
       await vi.advanceTimersByTimeAsync(0)
@@ -390,7 +404,7 @@ describe('cv-copy-button', () => {
     it('disabled blocks Space key copy', async () => {
       const clip = {writeText: vi.fn().mockResolvedValue(undefined)}
       const el = await createCopyButton({value: 'blocked', disabled: true})
-      ;(el as any)._clipboard = clip
+      setClipboard(el, clip)
 
       getBase(el).dispatchEvent(new KeyboardEvent('keydown', {key: ' ', bubbles: true}))
       getBase(el).dispatchEvent(new KeyboardEvent('keyup', {key: ' ', bubbles: true}))
@@ -403,7 +417,7 @@ describe('cv-copy-button', () => {
     it('success reverts to idle after feedbackDuration', async () => {
       const clip = {writeText: vi.fn().mockResolvedValue(undefined)}
       const el = await createCopyButton({value: 'test', feedbackDuration: 2000})
-      ;(el as any)._clipboard = clip
+      setClipboard(el, clip)
 
       getBase(el).click()
       await vi.advanceTimersByTimeAsync(0)
@@ -422,7 +436,7 @@ describe('cv-copy-button', () => {
     it('error reverts to idle after feedbackDuration', async () => {
       const clip = {writeText: vi.fn().mockRejectedValue(new Error('fail'))}
       const el = await createCopyButton({value: 'test', feedbackDuration: 1000})
-      ;(el as any)._clipboard = clip
+      setClipboard(el, clip)
 
       getBase(el).click()
       await vi.advanceTimersByTimeAsync(0)
@@ -493,7 +507,7 @@ describe('cv-copy-button', () => {
       vi.useFakeTimers()
       const clip = {writeText: vi.fn().mockResolvedValue(undefined)}
       const el = await createCopyButton({value: 'test'})
-      ;(el as any)._clipboard = clip
+      setClipboard(el, clip)
 
       getBase(el).click()
       await vi.advanceTimersByTimeAsync(0)
@@ -513,7 +527,7 @@ describe('cv-copy-button', () => {
       vi.useFakeTimers()
       const clip = {writeText: vi.fn().mockRejectedValue(new Error('fail'))}
       const el = await createCopyButton({value: 'test'})
-      ;(el as any)._clipboard = clip
+      setClipboard(el, clip)
 
       getBase(el).click()
       await vi.advanceTimersByTimeAsync(0)

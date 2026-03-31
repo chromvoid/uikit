@@ -34,6 +34,10 @@ const sizeBudgets = {
   selectLeaf: 58500,
 }
 
+const writeStdout = (message) => {
+  process.stdout.write(`${message}\n`)
+}
+
 async function bundle(entryFile, outdir) {
   await mkdir(outdir, {recursive: true})
   const outfile = path.join(outdir, path.basename(entryFile))
@@ -104,7 +108,7 @@ try {
   assertBundleSizeWithinBudget(buttonLeafBundle, sizeBudgets.buttonLeaf, 'Button leaf bundle')
   assertBundleSizeWithinBudget(selectLeafBundle, sizeBudgets.selectLeaf, 'Select leaf bundle')
 
-  console.log('[bundle] bundle contract passed')
+  writeStdout('[bundle] bundle contract passed')
 } finally {
   await rm(tmpRoot, {recursive: true, force: true})
 }

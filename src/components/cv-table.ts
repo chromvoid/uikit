@@ -1,8 +1,8 @@
 import {createTable, type TableModel, type TableSortDirection} from '@chromvoid/headless-ui/table'
 import {css, nothing} from 'lit'
-import {html} from '../reatom-lit/index.js'
 import type {PropertyValues} from 'lit'
 
+import {html} from '../reatom-lit/index.js'
 import {ReatomLitElement} from '../reatom-lit/ReatomLitElement'
 import {CVTableCell} from './cv-table-cell'
 import {CVTableColumn} from './cv-table-column'

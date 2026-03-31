@@ -6,6 +6,13 @@ import {CVMenuItem} from './cv-menu-item'
 CVMenu.define()
 CVMenuItem.define()
 
+type TestableMenuItem = CVMenuItem & {
+  checked?: boolean
+  type?: '' | 'normal' | 'checkbox' | 'radio'
+}
+
+const asTestableMenuItem = (item: CVMenuItem): TestableMenuItem => item as TestableMenuItem
+
 const settle = async (element: CVMenuItem | CVMenu) => {
   await element.updateComplete
   await Promise.resolve()
@@ -156,7 +163,7 @@ describe('cv-menu-item', () => {
     it('[checked] attribute reflects on host for checkable items', async () => {
       // checked property may not exist yet on the current implementation (RED state expected)
       const item = await createItem()
-      ;(item as any).checked = true
+      asTestableMenuItem(item).checked = true
       await settle(item)
       expect(item.hasAttribute('checked')).toBe(true)
     })
@@ -177,36 +184,39 @@ describe('cv-menu-item', () => {
     it('checkbox type item has type="checkbox" property', async () => {
       // type property may not exist yet (RED state expected)
       const item = await createItem()
-      ;(item as any).type = 'checkbox'
+      asTestableMenuItem(item).type = 'checkbox'
       await settle(item)
-      expect((item as any).type).toBe('checkbox')
+      expect(asTestableMenuItem(item).type).toBe('checkbox')
     })
 
     it('radio type item has type="radio" property', async () => {
       const item = await createItem()
-      ;(item as any).type = 'radio'
+      asTestableMenuItem(item).type = 'radio'
       await settle(item)
-      expect((item as any).type).toBe('radio')
+      expect(asTestableMenuItem(item).type).toBe('radio')
     })
 
     it('default type is "normal"', async () => {
       const item = await createItem()
+      const testableItem = asTestableMenuItem(item)
       // type may default to "normal" or "" depending on implementation
       expect(
-        (item as any).type === 'normal' || (item as any).type === undefined || (item as any).type === '',
+        testableItem.type === 'normal' || testableItem.type === undefined || testableItem.type === '',
       ).toBe(true)
     })
 
     it('checked property defaults to false', async () => {
       const item = await createItem()
-      expect((item as any).checked === false || (item as any).checked === undefined).toBe(true)
+      const testableItem = asTestableMenuItem(item)
+      expect(testableItem.checked === false || testableItem.checked === undefined).toBe(true)
     })
 
     it('checkbox type renders checkmark part when checked', async () => {
       // checkmark part may not exist yet (RED state expected)
       const item = await createItem()
-      ;(item as any).type = 'checkbox'
-      ;(item as any).checked = true
+      const testableItem = asTestableMenuItem(item)
+      testableItem.type = 'checkbox'
+      testableItem.checked = true
       await settle(item)
       const checkmark = item.shadowRoot!.querySelector('[part="checkmark"]')
       expect(checkmark).not.toBeNull()

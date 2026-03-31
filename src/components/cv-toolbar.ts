@@ -1,9 +1,9 @@
 import {type CompositeNavigationOrientation} from '@chromvoid/headless-ui/interactions/composite-navigation'
 import {createToolbar, type ToolbarModel} from '@chromvoid/headless-ui/toolbar'
 import {css, nothing} from 'lit'
-import {html} from '../reatom-lit/index.js'
 import type {PropertyValues} from 'lit'
 
+import {html} from '../reatom-lit/index.js'
 import {ReatomLitElement} from '../reatom-lit/ReatomLitElement'
 import {CVToolbarItem} from './cv-toolbar-item'
 import {CVToolbarSeparator} from './cv-toolbar-separator'

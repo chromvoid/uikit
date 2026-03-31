@@ -5,10 +5,22 @@ import {fileURLToPath} from 'node:url'
 const scriptDir = path.dirname(fileURLToPath(import.meta.url))
 const packageRoot = path.resolve(scriptDir, '..')
 
+const writeStdout = (message) => {
+  process.stdout.write(`${message}\n`)
+}
+
+const writeStderr = (message) => {
+  process.stderr.write(`${message}\n`)
+}
+
+const formatError = (error) => {
+  return error instanceof Error ? (error.stack ?? error.message) : String(error)
+}
+
 async function assertReadable(label, targetUrl) {
   const filePath = fileURLToPath(targetUrl)
   await access(filePath)
-  console.log(`[exports] ${label}: ${filePath}`)
+  writeStdout(`[exports] ${label}: ${filePath}`)
 }
 
 async function main() {
@@ -65,10 +77,10 @@ async function main() {
   for (const target of typeTargets) {
     const fullPath = path.join(packageRoot, target)
     await access(fullPath)
-    console.log(`[exports] types: ${fullPath}`)
+    writeStdout(`[exports] types: ${fullPath}`)
   }
 
-  console.log('[exports] package export smoke passed')
+  writeStdout('[exports] package export smoke passed')
 }
 
 main()
@@ -76,6 +88,6 @@ main()
     process.exit(0)
   })
   .catch((error) => {
-    console.error(error)
+    writeStderr(formatError(error))
     process.exit(1)
   })

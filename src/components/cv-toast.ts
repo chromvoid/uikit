@@ -1,7 +1,7 @@
 import type {ToastAction, ToastLevel} from '@chromvoid/headless-ui/toast'
 import {css, nothing} from 'lit'
-import {html} from '../reatom-lit/index.js'
 
+import {html} from '../reatom-lit/index.js'
 import {ReatomLitElement} from '../reatom-lit/ReatomLitElement'
 import {CVIcon} from './cv-icon'
 import {CVSpinner} from './cv-spinner'

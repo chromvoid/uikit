@@ -1,7 +1,7 @@
 import {css} from 'lit'
-import {html} from '../reatom-lit/index.js'
 import type {PropertyValues} from 'lit'
 
+import {html} from '../reatom-lit/index.js'
 import {ReatomLitElement} from '../reatom-lit/ReatomLitElement'
 import {createToastController, type CVToastController} from '../toast/create-toast-controller'
 import {CVToast} from './cv-toast'

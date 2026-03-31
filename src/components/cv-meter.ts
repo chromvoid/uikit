@@ -1,8 +1,8 @@
 import {createMeter, type MeterModel} from '@chromvoid/headless-ui/meter'
 import {css, nothing} from 'lit'
-import {html} from '../reatom-lit/index.js'
 import type {PropertyValues} from 'lit'
 
+import {html} from '../reatom-lit/index.js'
 import {ReatomLitElement} from '../reatom-lit/ReatomLitElement'
 
 let cvMeterNonce = 0

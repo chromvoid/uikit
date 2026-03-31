@@ -4,9 +4,9 @@ import {
   type CopyButtonValue,
 } from '@chromvoid/headless-ui/copy-button'
 import {css, nothing} from 'lit'
-import {html} from '../reatom-lit/index.js'
 import type {PropertyValues} from 'lit'
 
+import {html} from '../reatom-lit/index.js'
 import {ReatomLitElement} from '../reatom-lit/ReatomLitElement'
 
 type CVCopyButtonSize = 'small' | 'medium' | 'large'

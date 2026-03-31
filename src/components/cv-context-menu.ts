@@ -1,8 +1,8 @@
 import {createContextMenu, type ContextMenuModel} from '@chromvoid/headless-ui/context-menu'
 import {css, nothing} from 'lit'
-import {html} from '../reatom-lit/index.js'
 import type {PropertyValues} from 'lit'
 
+import {html} from '../reatom-lit/index.js'
 import {ReatomLitElement} from '../reatom-lit/ReatomLitElement'
 import {CVMenuItem} from './cv-menu-item'
 

@@ -57,9 +57,9 @@ async function mountSelectOnly(
   } = {},
 ) {
   const combobox = document.createElement('cv-combobox') as CVCombobox
-  ;(combobox as any).type = 'select-only'
+  combobox.type = 'select-only'
   if (params.multiple) {
-    ;(combobox as any).multiple = true
+    combobox.multiple = true
   }
   if (params.placeholder) {
     combobox.placeholder = params.placeholder
@@ -89,12 +89,12 @@ async function mountMultiSelect(
   } = {},
 ) {
   const combobox = document.createElement('cv-combobox') as CVCombobox
-  ;(combobox as any).multiple = true
+  combobox.multiple = true
   if (params.type) {
-    ;(combobox as any).type = params.type
+    combobox.type = params.type
   }
   if (params.maxTagsVisible != null) {
-    ;(combobox as any).maxTagsVisible = params.maxTagsVisible
+    combobox.maxTagsVisible = params.maxTagsVisible
   }
 
   combobox.innerHTML = `
@@ -118,7 +118,7 @@ async function mountMultiSelect(
 
 async function mountClearable() {
   const combobox = document.createElement('cv-combobox') as CVCombobox
-  ;(combobox as any).clearable = true
+  combobox.clearable = true
 
   combobox.innerHTML = `
     <cv-combobox-option value="apple">Apple</cv-combobox-option>
@@ -497,7 +497,7 @@ describe('cv-combobox', () => {
     it('multiple attribute enables multi-select', async () => {
       const {combobox} = await mountMultiSelect()
 
-      expect((combobox as any).multiple).toBe(true)
+      expect(combobox.multiple).toBe(true)
     })
 
     it('clicking options toggles selection (does not replace)', async () => {

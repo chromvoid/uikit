@@ -37,6 +37,7 @@ describe('cv-theme-provider', () => {
     it('host uses display: contents', async () => {
       const el = await createProvider()
       const hostStyles = el.shadowRoot!.adoptedStyleSheets?.[0] ?? el.shadowRoot!.querySelector('style')
+      expect(hostStyles).toBeTruthy()
       // Verify via computed style — display: contents means no box
       const computed = getComputedStyle(el)
       expect(computed.display).toBe('contents')

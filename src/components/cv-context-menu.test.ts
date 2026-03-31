@@ -50,26 +50,6 @@ async function mountContextMenu(
   return {menu, target, menuBox, items}
 }
 
-async function mountWithSeparator() {
-  const menu = document.createElement('cv-context-menu') as CVContextMenu
-
-  menu.innerHTML = `
-    <div slot="target">Right-click here</div>
-    <cv-menu-item value="cut">Cut</cv-menu-item>
-    <cv-menu-item value="copy">Copy</cv-menu-item>
-    <cv-menu-item value="paste">Paste</cv-menu-item>
-  `
-
-  document.body.append(menu)
-  await settle(menu)
-
-  const target = menu.shadowRoot?.querySelector('[part="target"]') as HTMLElement
-  const menuBox = menu.shadowRoot?.querySelector('[part="menu"]') as HTMLElement
-  const items = Array.from(menu.querySelectorAll('cv-menu-item')) as CVMenuItem[]
-
-  return {menu, target, menuBox, items}
-}
-
 // shadow DOM helpers
 
 const getTarget = (el: CVContextMenu) => el.shadowRoot!.querySelector('[part="target"]') as HTMLElement

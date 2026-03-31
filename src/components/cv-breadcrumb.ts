@@ -1,8 +1,8 @@
 import {createBreadcrumb, type BreadcrumbModel} from '@chromvoid/headless-ui/breadcrumb'
 import {css, nothing} from 'lit'
-import {html} from '../reatom-lit/index.js'
 import type {PropertyValues} from 'lit'
 
+import {html} from '../reatom-lit/index.js'
 import {ReatomLitElement} from '../reatom-lit/ReatomLitElement'
 import {CVBreadcrumbItem} from './cv-breadcrumb-item'
 

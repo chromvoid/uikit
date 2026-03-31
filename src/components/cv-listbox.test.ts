@@ -6,6 +6,16 @@ import {CVOption} from './cv-option'
 CVListbox.define()
 CVOption.define()
 
+type TestableCVListbox = CVListbox & {
+  rangeSelection?: boolean
+  selectionFollowsFocus?: boolean
+}
+
+type CVListboxEventDetail = {
+  selectedValues: string[]
+  activeValue: string | null
+}
+
 const settle = async (element: CVListbox) => {
   await element.updateComplete
   await Promise.resolve()
@@ -13,7 +23,7 @@ const settle = async (element: CVListbox) => {
   await Promise.resolve()
 }
 
-const createListbox = async (attrs?: Partial<CVListbox>, optionsHtml?: string) => {
+const createListbox = async (attrs?: Partial<TestableCVListbox>, optionsHtml?: string) => {
   const el = document.createElement('cv-listbox') as CVListbox
   if (attrs) Object.assign(el, attrs)
   el.innerHTML =
@@ -29,7 +39,7 @@ const createListbox = async (attrs?: Partial<CVListbox>, optionsHtml?: string) =
   return el
 }
 
-const createListboxWithSelected = async (attrs?: Partial<CVListbox>) => {
+const createListboxWithSelected = async (attrs?: Partial<TestableCVListbox>) => {
   const el = document.createElement('cv-listbox') as CVListbox
   if (attrs) Object.assign(el, attrs)
   el.innerHTML = `
@@ -42,7 +52,7 @@ const createListboxWithSelected = async (attrs?: Partial<CVListbox>) => {
   return el
 }
 
-const createGroupedListbox = async (attrs?: Partial<CVListbox>) => {
+const createGroupedListbox = async (attrs?: Partial<TestableCVListbox>) => {
   const el = document.createElement('cv-listbox') as CVListbox
   if (attrs) Object.assign(el, attrs)
   el.innerHTML = `
@@ -243,7 +253,7 @@ describe('cv-listbox', () => {
 
       expect(detail).toHaveProperty('selectedValues')
       expect(detail).toHaveProperty('activeValue')
-      expect(Array.isArray((detail as any).selectedValues)).toBe(true)
+      expect(Array.isArray((detail as CVListboxEventDetail | undefined)?.selectedValues)).toBe(true)
     })
 
     it('change event detail shape: {selectedValues: string[], activeValue: string | null}', async () => {
@@ -263,7 +273,7 @@ describe('cv-listbox', () => {
 
       expect(detail).toHaveProperty('selectedValues')
       expect(detail).toHaveProperty('activeValue')
-      expect(Array.isArray((detail as any).selectedValues)).toBe(true)
+      expect(Array.isArray((detail as CVListboxEventDetail | undefined)?.selectedValues)).toBe(true)
     })
 
     it('input fires on active option change (navigation)', async () => {
@@ -809,7 +819,7 @@ describe('cv-listbox', () => {
       const el = await createListbox({
         selectionMode: 'multiple',
         rangeSelection: true,
-      } as any)
+      })
       const base = getBase(el)
 
       // Select starting option
@@ -828,7 +838,7 @@ describe('cv-listbox', () => {
       const el = await createListbox({
         selectionMode: 'multiple',
         rangeSelection: true,
-      } as any)
+      })
       const base = getBase(el)
 
       // Select starting option (anchor)
@@ -968,7 +978,7 @@ describe('cv-listbox', () => {
     it('auto-selects focused option in single mode when enabled', async () => {
       const el = await createListbox({
         selectionFollowsFocus: true,
-      } as any)
+      })
       const base = getBase(el)
 
       base.dispatchEvent(new KeyboardEvent('keydown', {key: 'ArrowDown', bubbles: true}))
@@ -997,7 +1007,6 @@ describe('cv-listbox', () => {
       const options = getOptions(el)
       const disabledOpt = options.find((o) => o.value === 'c')!
 
-      const prevActive = getActiveOption(el)?.value
       disabledOpt.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
       await settle(el)
 
