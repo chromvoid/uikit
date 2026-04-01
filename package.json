@@ -6,7 +6,7 @@
   "bugs": {
     "url": "https://github.com/chromvoid/uikit/issues"
   },
-  "license": "AGPL-3.0-only",
+  "license": "MIT",
   "author": "ChromVoid Team",
   "repository": {
     "type": "git",
