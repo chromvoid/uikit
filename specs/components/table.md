@@ -52,19 +52,19 @@ Data table for displaying structured tabular content with optional sorting, row 
 
 ## CSS Custom Properties
 
-| Property                                 | Default                                                                  | Description                                    |
-| ---------------------------------------- | ------------------------------------------------------------------------ | ---------------------------------------------- |
-| `--cv-table-border-radius`               | `var(--cv-radius-md, 10px)`                                              | Border radius of the table container           |
-| `--cv-table-border-color`                | `var(--cv-color-border, #2a3245)`                                        | Border color of the table and cells            |
-| `--cv-table-background`                  | `var(--cv-color-surface, #141923)`                                       | Table background color                         |
-| `--cv-table-header-background`           | `color-mix(in oklab, var(--cv-color-surface, #141923) 82%, transparent)` | Header row background                          |
-| `--cv-table-stripe-background`           | `color-mix(in oklab, var(--cv-color-surface, #141923) 90%, transparent)` | Background for alternating rows when `striped` |
-| `--cv-table-row-selected-background`     | `color-mix(in oklab, var(--cv-color-primary, #65d7ff) 12%, transparent)` | Background for selected rows                   |
-| `--cv-table-cell-padding-block`          | `var(--cv-space-2, 8px)`                                                 | Vertical cell padding                          |
-| `--cv-table-cell-padding-inline`         | `var(--cv-space-3, 12px)`                                                | Horizontal cell padding                        |
-| `--cv-table-compact-cell-padding-block`  | `var(--cv-space-1, 4px)`                                                 | Vertical cell padding in compact mode          |
-| `--cv-table-compact-cell-padding-inline` | `var(--cv-space-2, 8px)`                                                 | Horizontal cell padding in compact mode        |
-| `--cv-table-focus-outline-color`         | `var(--cv-color-primary, #65d7ff)`                                       | Focus ring color for grid navigation           |
+| Property                                 | Default                                          | Description                                    |
+| ---------------------------------------- | ------------------------------------------------ | ---------------------------------------------- |
+| `--cv-table-border-radius`               | `var(--cv-radius-md, 10px)`                      | Border radius of the table container           |
+| `--cv-table-border-color`                | `var(--cv-color-border, #2a3245)`                | Border color of the table and cells            |
+| `--cv-table-background`                  | `var(--cv-color-surface, #141923)`               | Table background color                         |
+| `--cv-table-header-background`           | `var(--cv-color-surface-glass-strong)`           | Header row background                          |
+| `--cv-table-stripe-background`           | `var(--cv-color-surface-secondary-glass-strong)` | Background for alternating rows when `striped` |
+| `--cv-table-row-selected-background`     | `var(--cv-color-primary-surface)`                | Background for selected rows                   |
+| `--cv-table-cell-padding-block`          | `var(--cv-space-2, 8px)`                         | Vertical cell padding                          |
+| `--cv-table-cell-padding-inline`         | `var(--cv-space-3, 12px)`                        | Horizontal cell padding                        |
+| `--cv-table-compact-cell-padding-block`  | `var(--cv-space-1, 4px)`                         | Vertical cell padding in compact mode          |
+| `--cv-table-compact-cell-padding-inline` | `var(--cv-space-2, 8px)`                         | Horizontal cell padding in compact mode        |
+| `--cv-table-focus-outline-color`         | `var(--cv-color-primary, #65d7ff)`               | Focus ring color for grid navigation           |
 
 Additionally, component styles depend on theme tokens through fallback values:
 

@@ -62,7 +62,7 @@ export class CVTreegridRow extends LitElement {
 
       :host([active]) [part='row'],
       :host([selected]) [part='row'] {
-        background: color-mix(in oklab, var(--cv-color-primary, #65d7ff) 18%, transparent);
+        background: var(--cv-color-active);
       }
 
       :host([disabled]) [part='row'],

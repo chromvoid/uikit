@@ -16,6 +16,7 @@
     "node_modules/**",
     "coverage/**",
     "docs/.vitepress/dist/**",
-    "docs/.vitepress/cache/**"
+    "docs/.vitepress/cache/**",
+    "src/styles/uno-generated.ts"
   ]
 }

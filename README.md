@@ -8,6 +8,7 @@ Thin Lit UI layer over `@chromvoid/headless-ui`.
 - `cv-accordion` + `cv-accordion-item`
 - `cv-alert-dialog`
 - `cv-alert`
+- `cv-bottom-sheet`
 - `cv-breadcrumb` + `cv-breadcrumb-item`
 - `cv-button`
 - `cv-carousel` + `cv-carousel-slide`

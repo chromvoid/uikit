@@ -58,12 +58,16 @@ export class CVMenuItem extends LitElement {
           color var(--cv-duration-fast, 120ms) var(--cv-easing-standard, ease);
       }
 
+      :host(:hover) .item {
+        background: var(--cv-color-primary-ring);
+      }
+
       :host([active]) .item {
-        background: color-mix(in oklab, var(--cv-color-primary, #65d7ff) 24%, transparent);
+        background: var(--cv-color-primary-ring);
       }
 
       :host([selected]) .item {
-        background: color-mix(in oklab, var(--cv-color-primary, #65d7ff) 32%, transparent);
+        background: var(--cv-color-primary-border);
       }
 
       :host([disabled]) .item {

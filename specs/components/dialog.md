@@ -74,15 +74,15 @@ Modal or non-modal dialog overlay for presenting focused content, confirmations,
 
 ## CSS Custom Properties
 
-| Property                     | Default                                       | Description                         |
-| ---------------------------- | --------------------------------------------- | ----------------------------------- |
-| `--cv-dialog-width`          | `min(560px, calc(100vw - 32px))`              | Preferred dialog inline size        |
-| `--cv-dialog-max-height`     | `calc(100dvh - 32px)`                         | Maximum block size before scrolling |
-| `--cv-dialog-header-spacing` | `var(--cv-space-4, 16px)`                     | Header padding                      |
-| `--cv-dialog-body-spacing`   | `var(--cv-space-4, 16px)`                     | Body padding                        |
-| `--cv-dialog-footer-spacing` | `var(--cv-space-4, 16px)`                     | Footer padding                      |
-| `--cv-dialog-overlay-color`  | `color-mix(in oklab, black 56%, transparent)` | Backdrop overlay color              |
-| `--cv-dialog-border-radius`  | `var(--cv-radius-lg, 14px)`                   | Panel border radius                 |
+| Property                     | Default                          | Description                         |
+| ---------------------------- | -------------------------------- | ----------------------------------- |
+| `--cv-dialog-width`          | `min(560px, calc(100vw - 32px))` | Preferred dialog inline size        |
+| `--cv-dialog-max-height`     | `calc(100dvh - 32px)`            | Maximum block size before scrolling |
+| `--cv-dialog-header-spacing` | `var(--cv-space-4, 16px)`        | Header padding                      |
+| `--cv-dialog-body-spacing`   | `var(--cv-space-4, 16px)`        | Body padding                        |
+| `--cv-dialog-footer-spacing` | `var(--cv-space-4, 16px)`        | Footer padding                      |
+| `--cv-dialog-overlay-color`  | `var(--cv-color-overlay)`        | Backdrop overlay color              |
+| `--cv-dialog-border-radius`  | `var(--cv-radius-lg, 14px)`      | Panel border radius                 |
 
 ## Visual States
 

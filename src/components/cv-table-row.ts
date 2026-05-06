@@ -35,10 +35,7 @@ export class CVTableRow extends LitElement {
       }
 
       :host([selected]) {
-        background: var(
-          --cv-table-row-selected-background,
-          color-mix(in oklab, var(--cv-color-primary, #65d7ff) 12%, transparent)
-        );
+        background: var(--cv-table-row-selected-background, var(--cv-color-primary-surface));
       }
     `,
   ]

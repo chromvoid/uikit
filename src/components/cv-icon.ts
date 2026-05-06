@@ -15,6 +15,15 @@ function normalizeCollectionName(name: string): string {
   return name.trim().toLowerCase()
 }
 
+function looksLikeSvgMarkup(markup: string): boolean {
+  const normalized = markup.trim()
+  if (!normalized) return false
+  if (/<(html|head|body|script|meta|title|link)\b/i.test(normalized)) {
+    return false
+  }
+  return /<svg[\s>]/i.test(normalized)
+}
+
 export function setIconBasePath(path: string): void {
   iconBasePath = normalizeBasePath(path)
 }
@@ -76,6 +85,7 @@ const BOOTSTRAP_TO_LUCIDE: Record<string, string> = {
   x: 'x',
   'x-lg': 'x',
   'plus-lg': 'plus',
+  'check-lg': 'check',
   check: 'check',
   justify: 'align-justify',
   bars: 'menu',
@@ -147,6 +157,7 @@ export class CVIcon extends ReatomLitElement {
 
   private static svgCache = new Map<string, string>()
   private static inFlight = new Map<string, Promise<string>>()
+  private loadVersion = 0
 
   static get properties() {
     return {
@@ -226,7 +237,12 @@ export class CVIcon extends ReatomLitElement {
       }
 
       .icon {
-        display: contents;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        inline-size: 100%;
+        block-size: 100%;
+        flex: 0 0 100%;
       }
 
       .icon svg,
@@ -321,7 +337,10 @@ export class CVIcon extends ReatomLitElement {
   }
 
   private async loadSvg(urls: string | string[]): Promise<void> {
-    this.svgMarkup = await CVIcon.fetchSvg(urls)
+    const loadVersion = ++this.loadVersion
+    const svgMarkup = await CVIcon.fetchSvg(urls)
+    if (loadVersion !== this.loadVersion) return
+    this.svgMarkup = svgMarkup
     this.requestUpdate()
   }
 
@@ -352,6 +371,10 @@ export class CVIcon extends ReatomLitElement {
           return ''
         }
         const svg = await response.text()
+        if (!looksLikeSvgMarkup(svg)) {
+          CVIcon.inFlight.delete(url)
+          return ''
+        }
         CVIcon.svgCache.set(url, svg)
         CVIcon.inFlight.delete(url)
         return svg

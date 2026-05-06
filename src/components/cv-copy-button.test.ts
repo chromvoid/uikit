@@ -5,7 +5,7 @@ import {CVCopyButton} from './cv-copy-button'
 CVCopyButton.define()
 
 type ClipboardStub = {
-  writeText: (value: string) => Promise<unknown>
+  writeText: (value: string) => Promise<void>
 }
 
 type AsyncCopyValue = () => Promise<string>

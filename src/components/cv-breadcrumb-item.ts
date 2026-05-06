@@ -46,7 +46,7 @@ export class CVBreadcrumbItem extends LitElement {
       }
 
       [part='separator'] {
-        color: color-mix(in oklab, var(--cv-color-text, #e8ecf6) 60%, transparent);
+        color: var(--cv-color-text-subtle, #7f8aa3);
       }
 
       [part='separator'][hidden] {

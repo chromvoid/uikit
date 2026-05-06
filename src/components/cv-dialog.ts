@@ -46,7 +46,11 @@ export class CVDialog extends ReatomLitElement {
       modal: {type: Boolean, reflect: true},
       type: {type: String, reflect: true},
       closeOnEscape: {type: Boolean, attribute: 'close-on-escape', reflect: true},
-      closeOnOutsidePointer: {type: Boolean, attribute: 'close-on-outside-pointer', reflect: true},
+      closeOnOutsidePointer: {
+        type: Boolean,
+        attribute: 'close-on-outside-pointer',
+        reflect: true,
+      },
       closeOnOutsideFocus: {type: Boolean, attribute: 'close-on-outside-focus', reflect: true},
       initialFocusId: {type: String, attribute: 'initial-focus-id'},
       noHeader: {type: Boolean, attribute: 'no-header', reflect: true},
@@ -72,6 +76,7 @@ export class CVDialog extends ReatomLitElement {
   private lifecycleToken = 0
   private focusRestoreTarget: HTMLElement | null = null
   private suppressNextNativeCancel = false
+  private lastTouchClientY = 0
   private readonly handleDocumentFocusInBound = (event: FocusEvent) => this.handleDocumentFocusIn(event)
 
   constructor() {
@@ -92,6 +97,31 @@ export class CVDialog extends ReatomLitElement {
     css`
       :host {
         display: inline-block;
+        --cv-dialog-viewport-inset-top: var(--safe-area-top, env(safe-area-inset-top, 0px));
+        --cv-dialog-viewport-inset-right: var(--safe-area-right, env(safe-area-inset-right, 0px));
+        --cv-dialog-viewport-inset-bottom: calc(
+          var(--safe-area-bottom-active, var(--safe-area-bottom, env(safe-area-inset-bottom, 0px))) +
+            var(--visual-viewport-bottom-inset, 0px)
+        );
+        --cv-dialog-viewport-inset-left: var(--safe-area-left, env(safe-area-inset-left, 0px));
+        --cv-dialog-overlay-padding-block-start: calc(
+          var(--cv-dialog-padding-block, var(--cv-space-4, 16px)) + var(--cv-dialog-viewport-inset-top)
+        );
+        --cv-dialog-overlay-padding-inline-end: calc(
+          var(--cv-dialog-padding-inline, var(--cv-space-4, 16px)) + var(--cv-dialog-viewport-inset-right)
+        );
+        --cv-dialog-overlay-padding-block-end: calc(
+          var(--cv-dialog-padding-block, var(--cv-space-4, 16px)) + var(--cv-dialog-viewport-inset-bottom)
+        );
+        --cv-dialog-overlay-padding-inline-start: calc(
+          var(--cv-dialog-padding-inline, var(--cv-space-4, 16px)) + var(--cv-dialog-viewport-inset-left)
+        );
+        --cv-dialog-available-inline-size: calc(
+          100vw - var(--cv-dialog-overlay-padding-inline-start) - var(--cv-dialog-overlay-padding-inline-end)
+        );
+        --cv-dialog-available-block-size: calc(
+          100dvh - var(--cv-dialog-overlay-padding-block-start) - var(--cv-dialog-overlay-padding-block-end)
+        );
       }
 
       [part='trigger'] {
@@ -113,6 +143,8 @@ export class CVDialog extends ReatomLitElement {
       }
 
       .portal-shell {
+        position: fixed;
+        inset: 0;
         margin: 0;
         padding: 0;
         border: none;
@@ -144,8 +176,11 @@ export class CVDialog extends ReatomLitElement {
         z-index: var(--cv-dialog-z-index, 40);
         display: grid;
         place-items: center;
-        background: var(--cv-dialog-overlay-color, color-mix(in oklab, black 56%, transparent));
-        padding: var(--cv-space-4, 16px);
+        background: var(--cv-dialog-overlay-color, var(--cv-color-overlay));
+        padding-block: var(--cv-dialog-overlay-padding-block-start) var(--cv-dialog-overlay-padding-block-end);
+        padding-inline: var(--cv-dialog-overlay-padding-inline-start)
+          var(--cv-dialog-overlay-padding-inline-end);
+        overscroll-behavior: contain;
       }
 
       [part='overlay'][hidden] {
@@ -155,8 +190,14 @@ export class CVDialog extends ReatomLitElement {
       [part='content'] {
         box-sizing: border-box;
         inline-size: var(--cv-dialog-width, min(560px, calc(100vw - 32px)));
-        max-block-size: var(--cv-dialog-max-height, calc(100dvh - 32px));
+        max-inline-size: min(var(--cv-dialog-width, 100%), var(--cv-dialog-available-inline-size));
+        max-block-size: min(
+          var(--cv-dialog-max-height, var(--cv-dialog-available-block-size)),
+          var(--cv-dialog-available-block-size)
+        );
         overflow: auto;
+        overscroll-behavior: contain;
+        -webkit-overflow-scrolling: touch;
         display: grid;
         gap: var(--cv-space-3, 12px);
         padding: var(--cv-space-4, 16px);
@@ -177,6 +218,12 @@ export class CVDialog extends ReatomLitElement {
         row-gap: var(--cv-space-1, 4px);
         column-gap: var(--cv-space-3, 12px);
         align-items: start;
+      }
+
+      [part='header'],
+      [part='body'],
+      [part='footer'] {
+        min-inline-size: 0;
       }
 
       [part='title'] {
@@ -217,7 +264,7 @@ export class CVDialog extends ReatomLitElement {
 
       [part='header-close']:hover {
         color: var(--cv-color-text, #e8ecf6);
-        background: color-mix(in oklab, var(--cv-color-text, #e8ecf6) 8%, transparent);
+        background: var(--cv-color-surface-highlight);
       }
 
       [part='header-close']:focus-visible {
@@ -417,6 +464,10 @@ export class CVDialog extends ReatomLitElement {
     return this.shadowRoot?.querySelector('[part="overlay"]') as HTMLElement | null
   }
 
+  private getContentElement(): HTMLElement | null {
+    return this.shadowRoot?.querySelector('[part="content"]') as HTMLElement | null
+  }
+
   private getModalShell(): HTMLDialogElement | null {
     return this.shadowRoot?.querySelector('dialog.portal-shell') as HTMLDialogElement | null
   }
@@ -569,8 +620,62 @@ export class CVDialog extends ReatomLitElement {
       }
     }
 
-    const content = this.shadowRoot?.querySelector('[part="content"]') as HTMLElement | null
-    content?.focus()
+    this.getContentElement()?.focus()
+  }
+
+  private getTouchClientY(event: TouchEvent): number | null {
+    const touch = event.touches[0] ?? event.changedTouches[0]
+    return touch?.clientY ?? null
+  }
+
+  private isVerticallyScrollable(element: HTMLElement): boolean {
+    const styles = window.getComputedStyle(element)
+    const overflowY = styles.overflowY || styles.overflow
+    return /(auto|scroll|overlay)/.test(overflowY) && element.scrollHeight > element.clientHeight
+  }
+
+  private collectScrollableContentAncestors(event: Event, content: HTMLElement): HTMLElement[] {
+    const path = event.composedPath()
+    const contentIndex = path.indexOf(content)
+
+    if (contentIndex >= 0) {
+      return path.slice(0, contentIndex + 1).filter((node): node is HTMLElement => node instanceof HTMLElement)
+    }
+
+    const {target} = event
+    const eventTarget =
+      target instanceof HTMLElement
+        ? target
+        : target instanceof Node && target.parentElement instanceof HTMLElement
+          ? target.parentElement
+          : null
+    if (!eventTarget || !content.contains(eventTarget)) return []
+
+    const ancestors: HTMLElement[] = []
+    let current: HTMLElement | null = eventTarget
+    while (current) {
+      ancestors.push(current)
+      if (current === content) return ancestors
+      current = current.parentElement
+    }
+
+    return []
+  }
+
+  private canScrollDialogContent(event: Event, deltaY: number): boolean {
+    const content = this.getContentElement()
+    if (!content) return false
+
+    for (const current of this.collectScrollableContentAncestors(event, content)) {
+      if (!this.isVerticallyScrollable(current)) continue
+
+      const maxScrollTop = current.scrollHeight - current.clientHeight
+      if (deltaY < 0 && current.scrollTop > 0) return true
+      if (deltaY > 0 && current.scrollTop < maxScrollTop) return true
+      if (deltaY === 0) return true
+    }
+
+    return false
   }
 
   private warnAboutDeprecatedTriggerSlot(): void {
@@ -621,6 +726,35 @@ export class CVDialog extends ReatomLitElement {
     this.applyInteractionResult(previous)
   }
 
+  private handleOverlayTouchStart(event: TouchEvent) {
+    const clientY = this.getTouchClientY(event)
+    if (clientY !== null) {
+      this.lastTouchClientY = clientY
+    }
+  }
+
+  private handleOverlayTouchMove(event: TouchEvent) {
+    if (!this.open || !this.modal) return
+
+    const clientY = this.getTouchClientY(event)
+    if (clientY === null) {
+      event.preventDefault()
+      return
+    }
+
+    const deltaY = this.lastTouchClientY - clientY
+    this.lastTouchClientY = clientY
+
+    if (this.canScrollDialogContent(event, deltaY)) return
+    event.preventDefault()
+  }
+
+  private handleOverlayWheel(event: WheelEvent) {
+    if (!this.open || !this.modal) return
+    if (this.canScrollDialogContent(event, event.deltaY)) return
+    event.preventDefault()
+  }
+
   private handleContentKeyDown(event: KeyboardEvent) {
     if (event.key === 'Escape') {
       event.preventDefault()
@@ -666,6 +800,10 @@ export class CVDialog extends ReatomLitElement {
         ?hidden=${this.model.contracts.getOverlayProps().hidden}
         part="overlay"
         @mousedown=${this.handleOverlayPointerDown}
+        @click=${this.handleOverlayPointerDown}
+        @touchstart=${this.handleOverlayTouchStart}
+        @touchmove=${this.handleOverlayTouchMove}
+        @wheel=${this.handleOverlayWheel}
       >
         <section
           id=${contentProps.id}

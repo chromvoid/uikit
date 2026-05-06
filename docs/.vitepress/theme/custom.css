@@ -45,9 +45,9 @@
   --vp-home-hero-image-filter: blur(56px);
   --docs-bg-top: oklch(17% 0.026 238);
   --docs-bg-bottom: oklch(11% 0.016 244);
-  --docs-glow-primary: color-mix(in oklch, var(--cv-color-primary, #65d7ff) 22%, transparent);
+  --docs-glow-primary: var(--cv-color-primary-ring);
   --docs-glow-secondary: rgba(120, 180, 255, 0.14);
-  --docs-grid-color: color-mix(in oklch, var(--cv-color-primary, #65d7ff) 9%, transparent);
+  --docs-grid-color: var(--cv-color-primary-subtle);
   --docs-surface-1: color-mix(in oklch, var(--cv-color-surface, #101722) 92%, var(--docs-bg-bottom));
   --docs-surface-2: color-mix(in oklch, var(--cv-color-surface-elevated, #181c23) 94%, var(--docs-bg-bottom));
   --docs-surface-3: color-mix(in oklch, var(--cv-color-surface-tertiary, #262a32) 92%, var(--docs-bg-top));
@@ -197,7 +197,7 @@ body::after {
 
   .VPSidebarItem .is-active .link {
     background: linear-gradient(90deg, rgba(42, 80, 110, 0.34), rgba(24, 43, 63, 0.18));
-    border: 1px solid color-mix(in oklch, var(--docs-border-strong) 65%, transparent);
+    border: 1px solid var(--docs-border-strong);
   }
 
   .VPSidebarItem .is-active .text {
@@ -705,7 +705,7 @@ body::after {
   display: grid;
   gap: 5px;
   padding: 12px 14px;
-  border: 1px solid color-mix(in oklch, var(--docs-border) 88%, transparent);
+  border: 1px solid var(--docs-border);
   border-radius: 14px;
   background:
     linear-gradient(180deg, rgba(18, 28, 43, 0.88), rgba(12, 18, 28, 0.9)),
@@ -1149,7 +1149,7 @@ cv-card.live-demo-card {
 
 .live-demo-preview {
   border-radius: 14px;
-  border: 1px solid color-mix(in oklch, var(--docs-border) 80%, transparent);
+  border: 1px solid var(--docs-border);
   padding: 24px;
   display: flex;
   flex-wrap: wrap;

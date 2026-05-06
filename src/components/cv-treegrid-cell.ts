@@ -36,7 +36,7 @@ export class CVTreegridCell extends LitElement {
       }
 
       :host([active]) {
-        background: color-mix(in oklab, var(--cv-color-primary, #65d7ff) 16%, transparent);
+        background: var(--cv-color-selected);
       }
 
       :host([selected]) {

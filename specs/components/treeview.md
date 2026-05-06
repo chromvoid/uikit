@@ -237,16 +237,16 @@ Additionally, component styles depend on theme tokens:
 
 #### Visual States
 
-| Host selector                         | Description                                                                 |
-| ------------------------------------- | --------------------------------------------------------------------------- |
-| `:host`                               | `display: block`, `outline: none`                                           |
-| `:host([hidden])`                     | `display: none`                                                             |
-| `:host([active]) [part="row"]`        | `background: color-mix(in oklab, var(--cv-color-primary) 22%, transparent)` |
-| `:host([selected]) [part="row"]`      | `background: color-mix(in oklab, var(--cv-color-primary) 30%, transparent)` |
-| `:host([disabled]) [part="row"]`      | `opacity: 0.55`                                                             |
-| `:host([expanded]) [part="children"]` | Visible (default); children hidden only when `[expanded]` is absent         |
-| `:host([branch]) [part="toggle"]`     | Toggle button rendered and visible                                          |
-| `:host(:focus-visible) [part="row"]`  | `outline: 2px solid var(--cv-color-primary)` at `outline-offset: 1px`       |
+| Host selector                         | Description                                                           |
+| ------------------------------------- | --------------------------------------------------------------------- |
+| `:host`                               | `display: block`, `outline: none`                                     |
+| `:host([hidden])`                     | `display: none`                                                       |
+| `:host([active]) [part="row"]`        | `background: var(--cv-color-primary-ring)`                            |
+| `:host([selected]) [part="row"]`      | `background: var(--cv-color-primary-border)`                          |
+| `:host([disabled]) [part="row"]`      | `opacity: 0.55`                                                       |
+| `:host([expanded]) [part="children"]` | Visible (default); children hidden only when `[expanded]` is absent   |
+| `:host([branch]) [part="toggle"]`     | Toggle button rendered and visible                                    |
+| `:host(:focus-visible) [part="row"]`  | `outline: 2px solid var(--cv-color-primary)` at `outline-offset: 1px` |
 
 #### Events
 

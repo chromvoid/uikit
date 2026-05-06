@@ -64,6 +64,7 @@ export const componentGroups = [
     title: 'Overlays & Floating UI',
     description: 'Contextual overlays, floating actions, and transient surfaces layered above the page.',
     items: [
+      {name: 'cv-bottom-sheet', slug: 'bottom-sheet', spec: 'bottom-sheet'},
       {name: 'cv-dialog', slug: 'dialog', spec: 'dialog'},
       {name: 'cv-popover', slug: 'popover', spec: 'popover'},
       {name: 'cv-tooltip', slug: 'tooltip', spec: 'tooltip'},

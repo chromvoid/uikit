@@ -4,6 +4,7 @@ import {
   CVAlertDialog,
   CVAlert,
   CVBadge,
+  CVBottomSheet,
   CVBreadcrumb,
   CVBreadcrumbItem,
   CVButton,
@@ -90,6 +91,7 @@ export function registerUikit(): void {
   CVBreadcrumbItem.define()
   CVBreadcrumb.define()
   CVBadge.define()
+  CVBottomSheet.define()
   CVButton.define()
   CVCallout.define()
   CVCard.define()

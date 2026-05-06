@@ -27,6 +27,12 @@ const mockTrackRect = (track: HTMLElement, rect: Partial<DOMRect>) => {
   })
 }
 
+const createPointerEvent = (type: string, init: MouseEventInit & {pointerId?: number} = {}) =>
+  new MouseEvent(type, {
+    bubbles: true,
+    ...init,
+  })
+
 afterEach(() => {
   document.body.innerHTML = ''
 })
@@ -88,9 +94,9 @@ describe('cv-slider', () => {
     const track = slider.shadowRoot?.querySelector('[part="track"]') as HTMLElement
     mockTrackRect(track, {left: 0, top: 0, width: 200, height: 20})
 
-    track.dispatchEvent(new MouseEvent('mousedown', {clientX: 100, clientY: 10, bubbles: true}))
-    document.dispatchEvent(new MouseEvent('mousemove', {clientX: 150, clientY: 10, bubbles: true}))
-    document.dispatchEvent(new MouseEvent('mouseup', {clientX: 150, clientY: 10, bubbles: true}))
+    track.dispatchEvent(createPointerEvent('pointerdown', {clientX: 100, clientY: 10}))
+    document.dispatchEvent(createPointerEvent('pointermove', {clientX: 150, clientY: 10}))
+    document.dispatchEvent(createPointerEvent('pointerup', {clientX: 150, clientY: 10}))
     await settle(slider)
 
     expect(slider.value).toBe(75)
@@ -113,8 +119,8 @@ describe('cv-slider', () => {
     const track = slider.shadowRoot?.querySelector('[part="track"]') as HTMLElement
     mockTrackRect(track, {left: 0, top: 0, width: 20, height: 200})
 
-    track.dispatchEvent(new MouseEvent('mousedown', {clientX: 10, clientY: 150, bubbles: true}))
-    document.dispatchEvent(new MouseEvent('mouseup', {clientX: 10, clientY: 150, bubbles: true}))
+    track.dispatchEvent(createPointerEvent('pointerdown', {clientX: 10, clientY: 150}))
+    document.dispatchEvent(createPointerEvent('pointerup', {clientX: 10, clientY: 150}))
     await settle(slider)
 
     expect(slider.value).toBe(25)
@@ -137,8 +143,8 @@ describe('cv-slider', () => {
     mockTrackRect(track, {left: 0, top: 0, width: 100, height: 10})
 
     thumb.dispatchEvent(new KeyboardEvent('keydown', {key: 'ArrowRight', bubbles: true}))
-    track.dispatchEvent(new MouseEvent('mousedown', {clientX: 80, clientY: 5, bubbles: true}))
-    document.dispatchEvent(new MouseEvent('mouseup', {clientX: 80, clientY: 5, bubbles: true}))
+    track.dispatchEvent(createPointerEvent('pointerdown', {clientX: 80, clientY: 5}))
+    document.dispatchEvent(createPointerEvent('pointerup', {clientX: 80, clientY: 5}))
     await settle(slider)
 
     expect(slider.value).toBe(5)

@@ -157,10 +157,7 @@ export class CVTable extends ReatomLitElement {
 
       [part='head-row'] {
         display: table-row;
-        background: var(
-          --cv-table-header-background,
-          color-mix(in oklab, var(--cv-color-surface, #141923) 82%, transparent)
-        );
+        background: var(--cv-table-header-background, var(--cv-color-surface-glass-strong));
       }
 
       :host([sticky-header]) [part='head-row'] {
@@ -174,10 +171,7 @@ export class CVTable extends ReatomLitElement {
       }
 
       :host([striped]) ::slotted(cv-table-row:nth-child(even)) {
-        background: var(
-          --cv-table-stripe-background,
-          color-mix(in oklab, var(--cv-color-surface, #141923) 90%, transparent)
-        );
+        background: var(--cv-table-stripe-background, var(--cv-color-surface-secondary-glass-strong));
       }
 
       :host([compact]) ::slotted(cv-table-row) {

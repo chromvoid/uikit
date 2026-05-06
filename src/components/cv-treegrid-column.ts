@@ -39,7 +39,7 @@ export class CVTreegridColumn extends LitElement {
         border-bottom: 1px solid var(--cv-color-border, #2a3245);
         font-weight: 600;
         color: var(--cv-color-text, #e8ecf6);
-        background: color-mix(in oklab, var(--cv-color-surface, #141923) 82%, transparent);
+        background: var(--cv-color-surface-glass-strong);
         outline: none;
       }
 

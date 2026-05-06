@@ -89,7 +89,7 @@ export class CVRadio extends LitElement {
       }
 
       :host([active]) .radio {
-        background: color-mix(in oklab, var(--cv-color-primary, #65d7ff) 12%, transparent);
+        background: var(--cv-color-primary-surface);
       }
 
       :host([checked]) .indicator {

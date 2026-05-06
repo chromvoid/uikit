@@ -1,4 +1,4 @@
-import {afterEach, describe, expect, it} from 'vitest'
+import {afterEach, describe, expect, it, vi} from 'vitest'
 
 import {CVTextarea} from './cv-textarea'
 
@@ -87,6 +87,7 @@ describe('cv-textarea', () => {
       expect(el.resize).toBe('vertical')
       expect(el.size).toBe('medium')
       expect(el.variant).toBe('outlined')
+      expect(el.enterBehavior).toBe('newline')
       expect(el.name).toBe('')
     })
   })
@@ -114,6 +115,14 @@ describe('cv-textarea', () => {
       expect(el.getAttribute('size')).toBe('large')
       expect(el.getAttribute('variant')).toBe('filled')
       expect(el.getAttribute('resize')).toBe('none')
+    })
+
+    it('reflects enter-behavior attribute', async () => {
+      const el = await createTextarea({
+        enterBehavior: 'submit',
+      })
+
+      expect(el.getAttribute('enter-behavior')).toBe('submit')
     })
 
     it('reflects [focused] on focus and clears on blur', async () => {
@@ -277,6 +286,16 @@ describe('cv-textarea', () => {
   })
 
   describe('behavior', () => {
+    it('proxies host focus to the inner textarea', async () => {
+      const el = await createTextarea()
+      const textarea = getTextarea(el)
+      const focusSpy = vi.spyOn(textarea, 'focus')
+
+      el.focus({preventScroll: true})
+
+      expect(focusSpy).toHaveBeenCalledWith({preventScroll: true})
+    })
+
     it('disabled blocks user input updates', async () => {
       const el = await createTextarea({disabled: true, value: 'seed'})
       let inputCount = 0
@@ -319,6 +338,64 @@ describe('cv-textarea', () => {
       const textarea = getTextarea(el)
       expect(textarea.getAttribute('rows')).toBe('10')
       expect(textarea.getAttribute('cols')).toBe('50')
+    })
+
+    it('submits the parent form on Enter when enter-behavior is submit', async () => {
+      const form = document.createElement('form')
+      const el = document.createElement('cv-textarea') as CVTextarea
+      el.enterBehavior = 'submit'
+      form.append(el)
+      document.body.append(form)
+      await settle(el)
+
+      const requestSubmitSpy = vi.spyOn(form, 'requestSubmit').mockImplementation(() => {})
+      const textarea = getTextarea(el)
+      const event = new KeyboardEvent('keydown', {key: 'Enter', bubbles: true, cancelable: true})
+
+      textarea.dispatchEvent(event)
+
+      expect(event.defaultPrevented).toBe(true)
+      expect(requestSubmitSpy).toHaveBeenCalledTimes(1)
+    })
+
+    it('keeps default newline behavior on Enter by default', async () => {
+      const form = document.createElement('form')
+      const el = document.createElement('cv-textarea') as CVTextarea
+      form.append(el)
+      document.body.append(form)
+      await settle(el)
+
+      const requestSubmitSpy = vi.spyOn(form, 'requestSubmit').mockImplementation(() => {})
+      const textarea = getTextarea(el)
+      const event = new KeyboardEvent('keydown', {key: 'Enter', bubbles: true, cancelable: true})
+
+      textarea.dispatchEvent(event)
+
+      expect(event.defaultPrevented).toBe(false)
+      expect(requestSubmitSpy).not.toHaveBeenCalled()
+    })
+
+    it('keeps newline behavior on Shift+Enter when enter-behavior is submit', async () => {
+      const form = document.createElement('form')
+      const el = document.createElement('cv-textarea') as CVTextarea
+      el.enterBehavior = 'submit'
+      form.append(el)
+      document.body.append(form)
+      await settle(el)
+
+      const requestSubmitSpy = vi.spyOn(form, 'requestSubmit').mockImplementation(() => {})
+      const textarea = getTextarea(el)
+      const event = new KeyboardEvent('keydown', {
+        key: 'Enter',
+        shiftKey: true,
+        bubbles: true,
+        cancelable: true,
+      })
+
+      textarea.dispatchEvent(event)
+
+      expect(event.defaultPrevented).toBe(false)
+      expect(requestSubmitSpy).not.toHaveBeenCalled()
     })
   })
 

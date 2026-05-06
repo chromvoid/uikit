@@ -10,6 +10,14 @@ export interface CVSliderEventDetail {
   percentage: number
 }
 
+export type CVSliderInputEvent = CustomEvent<CVSliderEventDetail>
+export type CVSliderChangeEvent = CustomEvent<CVSliderEventDetail>
+
+export interface CVSliderEventMap {
+  'cv-input': CVSliderInputEvent
+  'cv-change': CVSliderChangeEvent
+}
+
 const sliderKeyboardKeys = new Set([
   'ArrowLeft',
   'ArrowRight',
@@ -56,6 +64,8 @@ export class CVSlider extends ReatomLitElement {
   private model: SliderModel
   private dragging = false
   private dragValueChanged = false
+  private activePointerId: number | null = null
+  private dragAbortController: AbortController | null = null
 
   constructor() {
     super()
@@ -86,6 +96,8 @@ export class CVSlider extends ReatomLitElement {
         place-items: center;
         inline-size: 100%;
         block-size: 24px;
+        touch-action: pan-y;
+        -webkit-tap-highlight-color: transparent;
         --cv-slider-percentage: 0%;
       }
 
@@ -96,6 +108,8 @@ export class CVSlider extends ReatomLitElement {
         border-radius: 999px;
         border: 1px solid var(--cv-color-border, #2a3245);
         background: var(--cv-color-surface, #141923);
+        touch-action: pan-y;
+        -webkit-tap-highlight-color: transparent;
       }
 
       [part='range'] {
@@ -122,6 +136,8 @@ export class CVSlider extends ReatomLitElement {
         background: var(--cv-color-surface-elevated, #1d2432);
         transform: translate(-50%, -50%);
         cursor: grab;
+        touch-action: pan-y;
+        -webkit-tap-highlight-color: transparent;
       }
 
       [part='thumb']:focus-visible {
@@ -141,11 +157,13 @@ export class CVSlider extends ReatomLitElement {
       :host([orientation='vertical']) [part='base'] {
         inline-size: 24px;
         block-size: 100%;
+        touch-action: pan-x;
       }
 
       :host([orientation='vertical']) [part='track'] {
         inline-size: 6px;
         block-size: 100%;
+        touch-action: pan-x;
       }
 
       :host([orientation='vertical']) [part='range'] {
@@ -166,6 +184,7 @@ export class CVSlider extends ReatomLitElement {
         inset-block-start: auto;
         inset-block-end: var(--cv-slider-percentage);
         transform: translate(-50%, 50%);
+        touch-action: pan-x;
       }
 
       :host([disabled]) [part='base'] {
@@ -295,6 +314,10 @@ export class CVSlider extends ReatomLitElement {
     return this.syncFromModelAndEmit(previousValue, false)
   }
 
+  private getPointerId(event: PointerEvent): number {
+    return Number.isFinite(event.pointerId) ? event.pointerId : 1
+  }
+
   private handleThumbKeyDown(event: KeyboardEvent) {
     if (sliderKeyboardKeys.has(event.key)) {
       event.preventDefault()
@@ -305,26 +328,39 @@ export class CVSlider extends ReatomLitElement {
     this.syncFromModelAndEmit(previousValue, true)
   }
 
-  private handleTrackMouseDown(event: MouseEvent) {
-    if (this.disabled || event.button !== 0) return
+  private handleTrackPointerDown(event: PointerEvent) {
+    if (this.disabled || event.isPrimary === false || event.button !== 0) return
 
     event.preventDefault()
     ;(this.shadowRoot?.querySelector('[part="thumb"]') as HTMLElement | null)?.focus()
+    this.cleanupDragListeners()
     this.dragging = true
+    this.activePointerId = this.getPointerId(event)
     this.dragValueChanged = this.updateValueFromPointer(event.clientX, event.clientY)
 
-    document.addEventListener('mousemove', this.handleDocumentMouseMove)
-    document.addEventListener('mouseup', this.handleDocumentMouseUp)
+    const controller = new AbortController()
+    this.dragAbortController = controller
+    document.addEventListener('pointermove', (moveEvent) => this.handleDocumentPointerMove(moveEvent), {
+      signal: controller.signal,
+    })
+    document.addEventListener('pointerup', (upEvent) => this.handleDocumentPointerUp(upEvent), {
+      signal: controller.signal,
+    })
+    document.addEventListener('pointercancel', (cancelEvent) => this.handleDocumentPointerCancel(cancelEvent), {
+      signal: controller.signal,
+    })
   }
 
-  private handleDocumentMouseMove = (event: MouseEvent) => {
-    if (!this.dragging) return
+  private handleDocumentPointerMove(event: PointerEvent) {
+    if (!this.dragging || this.getPointerId(event) !== this.activePointerId) return
+    event.preventDefault()
     const changed = this.updateValueFromPointer(event.clientX, event.clientY)
     this.dragValueChanged = this.dragValueChanged || changed
   }
 
-  private handleDocumentMouseUp = (event: MouseEvent) => {
-    if (!this.dragging) return
+  private handleDocumentPointerUp(event: PointerEvent) {
+    if (!this.dragging || this.getPointerId(event) !== this.activePointerId) return
+    event.preventDefault()
 
     const changed = this.updateValueFromPointer(event.clientX, event.clientY)
     this.dragValueChanged = this.dragValueChanged || changed
@@ -338,9 +374,18 @@ export class CVSlider extends ReatomLitElement {
     this.cleanupDragListeners()
   }
 
+  private handleDocumentPointerCancel(event: PointerEvent) {
+    if (this.getPointerId(event) !== this.activePointerId) return
+
+    this.dragging = false
+    this.dragValueChanged = false
+    this.cleanupDragListeners()
+  }
+
   private cleanupDragListeners(): void {
-    document.removeEventListener('mousemove', this.handleDocumentMouseMove)
-    document.removeEventListener('mouseup', this.handleDocumentMouseUp)
+    this.dragAbortController?.abort()
+    this.dragAbortController = null
+    this.activePointerId = null
   }
 
   protected override render() {
@@ -361,7 +406,7 @@ export class CVSlider extends ReatomLitElement {
           id=${trackProps.id}
           data-orientation=${trackProps['data-orientation']}
           part="track"
-          @mousedown=${this.handleTrackMouseDown}
+          @pointerdown=${this.handleTrackPointerDown}
         >
           <div part="range"></div>
           <div

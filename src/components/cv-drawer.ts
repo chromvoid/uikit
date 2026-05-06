@@ -97,7 +97,7 @@ export class CVDrawer extends ReatomLitElement {
         display: flex;
         overflow: clip;
         contain: paint;
-        background: var(--cv-drawer-overlay-color, color-mix(in oklab, black 56%, transparent));
+        background: var(--cv-drawer-overlay-color, var(--cv-color-overlay));
         opacity: var(--cv-drawer-overlay-closed-opacity, 1);
         transition: opacity var(--cv-drawer-overlay-transition-duration, 0ms) ease;
       }
@@ -584,6 +584,15 @@ export class CVDrawer extends ReatomLitElement {
     this.applyInteractionResult(previous)
   }
 
+  private handleOverlayClick(event: MouseEvent) {
+    if (event.target !== event.currentTarget) return
+    if (!this.open) return
+
+    const previous = this.captureState()
+    this.model.contracts.getOverlayProps().onPointerDownOutside()
+    this.applyInteractionResult(previous)
+  }
+
   private handlePanelKeyDown(event: KeyboardEvent) {
     if (event.key === 'Escape') {
       event.preventDefault()
@@ -631,6 +640,7 @@ export class CVDrawer extends ReatomLitElement {
         ?hidden=${!this.overlayVisible}
         part="overlay"
         @mousedown=${this.handleOverlayPointerDown}
+        @click=${this.handleOverlayClick}
       >
         <section
           id=${panelProps.id}

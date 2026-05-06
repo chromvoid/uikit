@@ -30,17 +30,17 @@ export class CVGridCell extends LitElement {
       :host {
         display: table-cell;
         padding: var(--cv-space-2, 8px) var(--cv-space-3, 12px);
-        border-bottom: 1px solid color-mix(in oklab, var(--cv-color-border, #2a3245) 70%, transparent);
+        border-bottom: 1px solid var(--cv-color-border-soft);
         color: var(--cv-color-text, #e8ecf6);
         outline: none;
       }
 
       :host([active]) {
-        background: color-mix(in oklab, var(--cv-color-primary, #65d7ff) 14%, transparent);
+        background: var(--cv-color-active);
       }
 
       :host([selected]) {
-        background: color-mix(in oklab, var(--cv-color-primary, #65d7ff) 24%, transparent);
+        background: var(--cv-color-primary-ring);
       }
 
       :host([disabled]) {

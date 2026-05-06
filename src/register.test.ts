@@ -8,6 +8,7 @@ const registeredElements = [
   'cv-alert',
   'cv-alert-dialog',
   'cv-badge',
+  'cv-bottom-sheet',
   'cv-breadcrumb',
   'cv-breadcrumb-item',
   'cv-button',

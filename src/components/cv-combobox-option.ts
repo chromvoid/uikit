@@ -46,11 +46,11 @@ export class CVComboboxOption extends LitElement {
       }
 
       :host([active]) .option {
-        background: color-mix(in oklab, var(--cv-color-primary, #65d7ff) 24%, transparent);
+        background: var(--cv-color-primary-ring);
       }
 
       :host([selected]) .option {
-        background: color-mix(in oklab, var(--cv-color-primary, #65d7ff) 32%, transparent);
+        background: var(--cv-color-primary-border);
       }
 
       :host([disabled]) .option {

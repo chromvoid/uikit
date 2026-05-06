@@ -53,17 +53,11 @@ export class CVOption extends LitElement {
       }
 
       :host([active]) [part='base'] {
-        background: var(
-          --cv-option-active-background,
-          color-mix(in oklab, var(--cv-color-primary, #65d7ff) 22%, transparent)
-        );
+        background: var(--cv-option-active-background, var(--cv-color-primary-ring));
       }
 
       :host([selected]) [part='base'] {
-        background: var(
-          --cv-option-selected-background,
-          color-mix(in oklab, var(--cv-color-primary, #65d7ff) 34%, transparent)
-        );
+        background: var(--cv-option-selected-background, var(--cv-color-primary-border));
         color: var(--cv-color-text, #e8ecf6);
       }
 

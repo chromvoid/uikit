@@ -223,14 +223,14 @@ Additionally, component styles depend on theme tokens:
 
 #### Visual States
 
-| Host selector                         | Description                                                                 |
-| ------------------------------------- | --------------------------------------------------------------------------- |
-| `:host([hidden])`                     | `display: none`                                                             |
-| `:host(:focus-visible) [part="row"]`  | `outline: 2px solid var(--cv-color-primary)` at `outline-offset: -2px`      |
-| `:host([active]) [part="row"]`        | Primary-tinted background (`color-mix(in oklab, primary 18%, transparent)`) |
-| `:host([selected]) [part="row"]`      | Same primary-tinted background as `[active]`                                |
-| `:host([disabled]) [part="row"]`      | `opacity: 0.55`                                                             |
-| `:host([disabled]) [part="children"]` | `opacity: 0.55`                                                             |
+| Host selector                         | Description                                                            |
+| ------------------------------------- | ---------------------------------------------------------------------- |
+| `:host([hidden])`                     | `display: none`                                                        |
+| `:host(:focus-visible) [part="row"]`  | `outline: 2px solid var(--cv-color-primary)` at `outline-offset: -2px` |
+| `:host([active]) [part="row"]`        | Primary-tinted background (`var(--cv-color-active)`)                   |
+| `:host([selected]) [part="row"]`      | Same primary-tinted background as `[active]`                           |
+| `:host([disabled]) [part="row"]`      | `opacity: 0.55`                                                        |
+| `:host([disabled]) [part="children"]` | `opacity: 0.55`                                                        |
 
 ---
 
@@ -343,13 +343,13 @@ Additionally, component styles depend on theme tokens:
 
 #### Visual States
 
-| Host selector           | Description                                                                 |
-| ----------------------- | --------------------------------------------------------------------------- |
-| `:host`                 | `display: block`                                                            |
-| `:host([active])`       | `background: color-mix(in oklab, var(--cv-color-primary) 16%, transparent)` |
-| `:host([selected])`     | `font-weight: 600`                                                          |
-| `:host([disabled])`     | `opacity: 0.55`                                                             |
-| `:host(:focus-visible)` | `outline: 2px solid var(--cv-color-primary)` at `outline-offset: -2px`      |
+| Host selector           | Description                                                            |
+| ----------------------- | ---------------------------------------------------------------------- |
+| `:host`                 | `display: block`                                                       |
+| `:host([active])`       | `background: var(--cv-color-selected)`                                 |
+| `:host([selected])`     | `font-weight: 600`                                                     |
+| `:host([disabled])`     | `opacity: 0.55`                                                        |
+| `:host(:focus-visible)` | `outline: 2px solid var(--cv-color-primary)` at `outline-offset: -2px` |
 
 ## Out of Scope
 

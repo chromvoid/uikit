@@ -115,15 +115,15 @@ Individual selectable option for use as a direct child of `cv-listbox` or `cv-li
 
 ## CSS Custom Properties
 
-| Property                          | Default                                                                  | Description                                                          |
-| --------------------------------- | ------------------------------------------------------------------------ | -------------------------------------------------------------------- |
-| `--cv-option-padding-block`       | `var(--cv-space-2, 8px)`                                                 | Vertical padding inside `[part="base"]`.                             |
-| `--cv-option-padding-inline`      | `var(--cv-space-3, 12px)`                                                | Horizontal padding inside `[part="base"]`.                           |
-| `--cv-option-border-radius`       | `var(--cv-radius-sm, 6px)`                                               | Border radius of `[part="base"]`.                                    |
-| `--cv-option-active-background`   | `color-mix(in oklab, var(--cv-color-primary, #65d7ff) 22%, transparent)` | Background applied when the option is active (highlighted).          |
-| `--cv-option-selected-background` | `color-mix(in oklab, var(--cv-color-primary, #65d7ff) 34%, transparent)` | Background applied when the option is selected.                      |
-| `--cv-option-disabled-opacity`    | `0.55`                                                                   | Opacity applied when the option is disabled.                         |
-| `--cv-option-focus-outline-color` | `var(--cv-color-primary, #65d7ff)`                                       | Outline color for `:focus-visible` (roving-tabindex focus strategy). |
+| Property                          | Default                            | Description                                                          |
+| --------------------------------- | ---------------------------------- | -------------------------------------------------------------------- |
+| `--cv-option-padding-block`       | `var(--cv-space-2, 8px)`           | Vertical padding inside `[part="base"]`.                             |
+| `--cv-option-padding-inline`      | `var(--cv-space-3, 12px)`          | Horizontal padding inside `[part="base"]`.                           |
+| `--cv-option-border-radius`       | `var(--cv-radius-sm, 6px)`         | Border radius of `[part="base"]`.                                    |
+| `--cv-option-active-background`   | `var(--cv-color-primary-ring)`     | Background applied when the option is active (highlighted).          |
+| `--cv-option-selected-background` | `var(--cv-color-primary-border)`   | Background applied when the option is selected.                      |
+| `--cv-option-disabled-opacity`    | `0.55`                             | Opacity applied when the option is disabled.                         |
+| `--cv-option-focus-outline-color` | `var(--cv-color-primary, #65d7ff)` | Outline color for `:focus-visible` (roving-tabindex focus strategy). |
 
 Additionally, component styles depend on theme tokens through fallback values:
 

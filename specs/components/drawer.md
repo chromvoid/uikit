@@ -66,19 +66,19 @@ Slide-out panel dialog anchored to a viewport edge, used for navigation, forms, 
 
 ## CSS Custom Properties
 
-| Property                                  | Default                                       | Description                                                                                           |
-| ----------------------------------------- | --------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
-| `--cv-drawer-z-index`                     | `40`                                          | Z-index of the overlay layer                                                                          |
-| `--cv-drawer-size`                        | `360px`                                       | Inline size (for `start`/`end`) or block size (for `top`/`bottom`) of the panel                       |
-| `--cv-drawer-max-size`                    | `calc(100dvh - 32px)`                         | Maximum size before internal scrolling (block axis for `top`/`bottom`, inline axis for `start`/`end`) |
-| `--cv-drawer-header-spacing`              | `var(--cv-space-4, 16px)`                     | Header padding                                                                                        |
-| `--cv-drawer-body-spacing`                | `var(--cv-space-4, 16px)`                     | Body padding                                                                                          |
-| `--cv-drawer-footer-spacing`              | `var(--cv-space-4, 16px)`                     | Footer padding                                                                                        |
-| `--cv-drawer-overlay-color`               | `color-mix(in oklab, black 56%, transparent)` | Backdrop overlay color                                                                                |
-| `--cv-drawer-overlay-transition-duration` | `0ms`                                         | Overlay opacity transition duration                                                                   |
-| `--cv-drawer-overlay-closed-opacity`      | `1`                                           | Overlay opacity while the panel is animating out or before the panel animates in                      |
-| `--cv-drawer-border-radius`               | `var(--cv-radius-lg, 14px)`                   | Panel border radius (applied to the inward edge only)                                                 |
-| `--cv-drawer-transition-duration`         | `250ms`                                       | Slide transition duration                                                                             |
+| Property                                  | Default                     | Description                                                                                           |
+| ----------------------------------------- | --------------------------- | ----------------------------------------------------------------------------------------------------- |
+| `--cv-drawer-z-index`                     | `40`                        | Z-index of the overlay layer                                                                          |
+| `--cv-drawer-size`                        | `360px`                     | Inline size (for `start`/`end`) or block size (for `top`/`bottom`) of the panel                       |
+| `--cv-drawer-max-size`                    | `calc(100dvh - 32px)`       | Maximum size before internal scrolling (block axis for `top`/`bottom`, inline axis for `start`/`end`) |
+| `--cv-drawer-header-spacing`              | `var(--cv-space-4, 16px)`   | Header padding                                                                                        |
+| `--cv-drawer-body-spacing`                | `var(--cv-space-4, 16px)`   | Body padding                                                                                          |
+| `--cv-drawer-footer-spacing`              | `var(--cv-space-4, 16px)`   | Footer padding                                                                                        |
+| `--cv-drawer-overlay-color`               | `var(--cv-color-overlay)`   | Backdrop overlay color                                                                                |
+| `--cv-drawer-overlay-transition-duration` | `0ms`                       | Overlay opacity transition duration                                                                   |
+| `--cv-drawer-overlay-closed-opacity`      | `1`                         | Overlay opacity while the panel is animating out or before the panel animates in                      |
+| `--cv-drawer-border-radius`               | `var(--cv-radius-lg, 14px)` | Panel border radius (applied to the inward edge only)                                                 |
+| `--cv-drawer-transition-duration`         | `250ms`                     | Slide transition duration                                                                             |
 
 ## Visual States
 

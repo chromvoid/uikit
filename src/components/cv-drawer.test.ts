@@ -502,6 +502,21 @@ describe('cv-drawer', () => {
       expect(el.open).toBe(false)
     })
 
+    it('overlay click event closes the drawer without relying on mousedown', async () => {
+      const el = await createDrawer()
+      const trigger = el.shadowRoot!.querySelector('[part="trigger"]') as HTMLElement
+
+      trigger.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+      await settle(el)
+      expect(el.open).toBe(true)
+
+      const overlay = el.shadowRoot!.querySelector('[part="overlay"]') as HTMLElement
+      overlay.dispatchEvent(new MouseEvent('click', {bubbles: true}))
+      await settle(el)
+
+      expect(el.open).toBe(false)
+    })
+
     it('trigger click toggles open state', async () => {
       const el = await createDrawer()
       const trigger = el.shadowRoot!.querySelector('[part="trigger"]') as HTMLElement

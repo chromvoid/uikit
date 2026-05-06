@@ -219,7 +219,7 @@ export class CVDatePicker extends FormAssociatedReatomElement {
       }
 
       [part='calendar-day'][aria-selected='true'] {
-        background: color-mix(in oklab, var(--cv-color-primary, #65d7ff) 22%, transparent);
+        background: var(--cv-color-primary-surface-strong);
       }
 
       [part='time-row'] {

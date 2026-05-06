@@ -22,6 +22,8 @@ const getContent = (el: CVDialog) => el.shadowRoot!.querySelector('[part="conten
 const getModalShell = (el: CVDialog) =>
   el.shadowRoot!.querySelector('dialog.portal-shell') as HTMLDialogElement | null
 const getPopoverShell = (el: CVDialog) => el.shadowRoot!.querySelector('.popover-shell') as HTMLElement | null
+const getStylesText = () =>
+  (CVDialog.styles as Array<{cssText?: string}>).map((style) => style.cssText ?? '').join('\n')
 
 afterEach(() => {
   document.body.innerHTML = ''
@@ -29,6 +31,16 @@ afterEach(() => {
 })
 
 describe('cv-dialog', () => {
+  describe('style contract', () => {
+    it('allows header, body, and footer grid items to shrink when content has long unbroken tokens', () => {
+      const stylesText = getStylesText()
+
+      expect(stylesText).toMatch(
+        /\[part='header'\],\s*\[part='body'\],\s*\[part='footer'\]\s*\{\s*min-inline-size:\s*0;/,
+      )
+    })
+  })
+
   // --- Shadow DOM structure ---
 
   describe('shadow DOM structure', () => {
@@ -747,6 +759,84 @@ describe('cv-dialog', () => {
 
       el.remove()
       expect(document.body.style.overflow).toBe('')
+    })
+  })
+
+  describe('scroll guard', () => {
+    it('prevents wheel scrolling on the modal overlay background', async () => {
+      const el = await createDialog({open: true})
+      const overlay = el.shadowRoot!.querySelector('[part="overlay"]') as HTMLElement
+      const event = new WheelEvent('wheel', {bubbles: true, cancelable: true, deltaY: 48})
+
+      overlay.dispatchEvent(event)
+
+      expect(event.defaultPrevented).toBe(true)
+    })
+
+    it('allows wheel scrolling inside dialog content when content can still scroll', async () => {
+      const el = await createDialog({open: true})
+      const content = getContent(el)
+      content.style.overflowY = 'auto'
+      Object.defineProperty(content, 'scrollHeight', {configurable: true, value: 400})
+      Object.defineProperty(content, 'clientHeight', {configurable: true, value: 100})
+      Object.defineProperty(content, 'scrollTop', {configurable: true, value: 20, writable: true})
+
+      const event = new WheelEvent('wheel', {bubbles: true, cancelable: true, deltaY: 48})
+      content.dispatchEvent(event)
+
+      expect(event.defaultPrevented).toBe(false)
+    })
+
+    it('allows wheel scrolling inside a shadow-dom descendant when it can still scroll', async () => {
+      const el = await createDialog({open: true})
+      const host = document.createElement('div')
+      const shadowRoot = host.attachShadow({mode: 'open'})
+      const scroller = document.createElement('div')
+
+      scroller.style.overflowY = 'auto'
+      shadowRoot.append(scroller)
+      el.append(host)
+      await settle(el)
+
+      Object.defineProperty(scroller, 'scrollHeight', {configurable: true, value: 400})
+      Object.defineProperty(scroller, 'clientHeight', {configurable: true, value: 100})
+      Object.defineProperty(scroller, 'scrollTop', {configurable: true, value: 20, writable: true})
+
+      const event = new WheelEvent('wheel', {bubbles: true, cancelable: true, composed: true, deltaY: 48})
+      scroller.dispatchEvent(event)
+
+      expect(event.defaultPrevented).toBe(false)
+    })
+
+    it('prevents wheel scroll chaining when content is already at the end', async () => {
+      const el = await createDialog({open: true})
+      const content = getContent(el)
+      content.style.overflowY = 'auto'
+      Object.defineProperty(content, 'scrollHeight', {configurable: true, value: 400})
+      Object.defineProperty(content, 'clientHeight', {configurable: true, value: 100})
+      Object.defineProperty(content, 'scrollTop', {configurable: true, value: 300, writable: true})
+
+      const event = new WheelEvent('wheel', {bubbles: true, cancelable: true, deltaY: 48})
+      content.dispatchEvent(event)
+
+      expect(event.defaultPrevented).toBe(true)
+    })
+
+    it('prevents touchmove scrolling on the modal overlay background', async () => {
+      const el = await createDialog({open: true})
+      const overlay = el.shadowRoot!.querySelector('[part="overlay"]') as HTMLElement
+      const touchStartEvent = new Event('touchstart', {bubbles: true, cancelable: true}) as TouchEvent
+      const touchMoveEvent = new Event('touchmove', {bubbles: true, cancelable: true}) as TouchEvent
+
+      Object.defineProperty(touchStartEvent, 'touches', {configurable: true, value: [{clientY: 100}]})
+      Object.defineProperty(touchStartEvent, 'changedTouches', {configurable: true, value: [{clientY: 100}]})
+      Object.defineProperty(touchMoveEvent, 'touches', {configurable: true, value: [{clientY: 40}]})
+      Object.defineProperty(touchMoveEvent, 'changedTouches', {configurable: true, value: [{clientY: 40}]})
+
+      overlay.dispatchEvent(touchStartEvent)
+      overlay.dispatchEvent(touchMoveEvent)
+
+      expect(touchMoveEvent.defaultPrevented).toBe(true)
     })
   })
 })

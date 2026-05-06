@@ -70,18 +70,18 @@ When `scrollspyRoot` is `null`, `cv-sidebar` resolves section targets in the hos
 
 ## CSS Custom Properties
 
-| Property                           | Default                                       |
-| ---------------------------------- | --------------------------------------------- |
-| `--cv-sidebar-inline-size`         | `280px`                                       |
-| `--cv-sidebar-rail-inline-size`    | `56px`                                        |
-| `--cv-sidebar-z-index`             | `30`                                          |
-| `--cv-sidebar-background`          | `var(--cv-color-surface, #141923)`            |
-| `--cv-sidebar-border-color`        | `var(--cv-color-border, #2a3245)`             |
-| `--cv-sidebar-padding-block`       | `var(--cv-space-3, 12px)`                     |
-| `--cv-sidebar-padding-inline`      | `var(--cv-space-3, 12px)`                     |
-| `--cv-sidebar-overlay-color`       | `color-mix(in oklab, black 56%, transparent)` |
-| `--cv-sidebar-transition-duration` | `var(--cv-duration-normal, 200ms)`            |
-| `--cv-sidebar-transition-easing`   | `var(--cv-easing-standard, ease)`             |
+| Property                           | Default                            |
+| ---------------------------------- | ---------------------------------- |
+| `--cv-sidebar-inline-size`         | `280px`                            |
+| `--cv-sidebar-rail-inline-size`    | `56px`                             |
+| `--cv-sidebar-z-index`             | `30`                               |
+| `--cv-sidebar-background`          | `var(--cv-color-surface, #141923)` |
+| `--cv-sidebar-border-color`        | `var(--cv-color-border, #2a3245)`  |
+| `--cv-sidebar-padding-block`       | `var(--cv-space-3, 12px)`          |
+| `--cv-sidebar-padding-inline`      | `var(--cv-space-3, 12px)`          |
+| `--cv-sidebar-overlay-color`       | `var(--cv-color-overlay)`          |
+| `--cv-sidebar-transition-duration` | `var(--cv-duration-normal, 200ms)` |
+| `--cv-sidebar-transition-easing`   | `var(--cv-easing-standard, ease)`  |
 
 ## Events
 

@@ -10,6 +10,21 @@ type CVButtonVariant = 'default' | 'primary' | 'danger' | 'ghost'
 type CVButtonSize = 'small' | 'medium' | 'large'
 type CVButtonType = 'button' | 'submit' | 'reset'
 
+const passthroughAttributes = [
+  'aria-controls',
+  'aria-current',
+  'aria-expanded',
+  'aria-haspopup',
+  'aria-hidden',
+  'aria-label',
+  'aria-labelledby',
+  'aria-describedby',
+  'aria-pressed',
+  'aria-selected',
+  'role',
+  'title',
+] as const
+
 export interface CVButtonInputDetail {
   pressed: boolean
   toggle: boolean
@@ -33,7 +48,13 @@ export class CVButton extends FormAssociatedReatomElement {
       pill: {type: Boolean, reflect: true},
       size: {type: String, reflect: true},
       type: {type: String, reflect: true},
+      unstyled: {type: Boolean, reflect: true},
+      buttonTabIndex: {type: String, attribute: 'button-tabindex'},
     }
+  }
+
+  static override get observedAttributes(): string[] {
+    return Array.from(new Set([...super.observedAttributes, ...passthroughAttributes]))
   }
 
   declare disabled: boolean
@@ -45,6 +66,8 @@ export class CVButton extends FormAssociatedReatomElement {
   declare pill: boolean
   declare size: CVButtonSize
   declare type: CVButtonType
+  declare unstyled: boolean
+  declare buttonTabIndex: string | null
 
   private model: ButtonModel
   private suppressKeyboardClick = false
@@ -60,6 +83,8 @@ export class CVButton extends FormAssociatedReatomElement {
     this.pill = false
     this.size = 'medium'
     this.type = 'button'
+    this.unstyled = false
+    this.buttonTabIndex = null
     this.model = this.createModel()
   }
 
@@ -250,31 +275,23 @@ export class CVButton extends FormAssociatedReatomElement {
         --cv-button-background: transparent;
         --cv-button-border-color: transparent;
         --cv-button-border-color-hover: transparent;
-        --cv-button-background-hover: color-mix(in oklab, var(--cv-button-accent-color) 10%, transparent);
+        --cv-button-background-hover: rgb(from var(--cv-button-accent-color) r g b / 0.1);
         --cv-button-border-color-active: transparent;
-        --cv-button-background-active: color-mix(in oklab, var(--cv-button-accent-color) 16%, transparent);
+        --cv-button-background-active: rgb(from var(--cv-button-accent-color) r g b / 0.16);
         --cv-button-border-color-pressed: transparent;
         --cv-button-border-color-pressed-hover: transparent;
-        --cv-button-background-pressed: color-mix(in oklab, var(--cv-button-accent-color) 14%, transparent);
-        --cv-button-background-pressed-hover: color-mix(
-          in oklab,
-          var(--cv-button-accent-color) 18%,
-          transparent
-        );
+        --cv-button-background-pressed: rgb(from var(--cv-button-accent-color) r g b / 0.14);
+        --cv-button-background-pressed-hover: rgb(from var(--cv-button-accent-color) r g b / 0.18);
       }
 
       /* --- outline modifier --- */
       :host([outline]) [part='base'] {
         --cv-button-background: transparent;
         --cv-button-border-color: var(--cv-color-border, #2a3245);
-        --cv-button-background-hover: color-mix(in oklab, var(--cv-button-accent-color) 10%, transparent);
-        --cv-button-background-active: color-mix(in oklab, var(--cv-button-accent-color) 16%, transparent);
-        --cv-button-background-pressed: color-mix(in oklab, var(--cv-button-accent-color) 16%, transparent);
-        --cv-button-background-pressed-hover: color-mix(
-          in oklab,
-          var(--cv-button-accent-color) 20%,
-          transparent
-        );
+        --cv-button-background-hover: rgb(from var(--cv-button-accent-color) r g b / 0.1);
+        --cv-button-background-active: rgb(from var(--cv-button-accent-color) r g b / 0.16);
+        --cv-button-background-pressed: rgb(from var(--cv-button-accent-color) r g b / 0.16);
+        --cv-button-background-pressed-hover: rgb(from var(--cv-button-accent-color) r g b / 0.2);
       }
 
       :host([outline][variant='primary']) [part='base'] {
@@ -293,16 +310,8 @@ export class CVButton extends FormAssociatedReatomElement {
           var(--cv-color-primary, #65d7ff) 90%,
           var(--cv-color-border, #2a3245)
         );
-        --cv-button-background-pressed: color-mix(
-          in oklab,
-          var(--cv-color-primary, #65d7ff) 20%,
-          transparent
-        );
-        --cv-button-background-pressed-hover: color-mix(
-          in oklab,
-          var(--cv-color-primary, #65d7ff) 24%,
-          transparent
-        );
+        --cv-button-background-pressed: var(--cv-color-primary-surface-strong);
+        --cv-button-background-pressed-hover: var(--cv-color-primary-ring);
       }
 
       :host([outline][variant='danger']) [part='base'] {
@@ -321,12 +330,8 @@ export class CVButton extends FormAssociatedReatomElement {
           var(--cv-color-danger, #ff7d86) 90%,
           var(--cv-color-border, #2a3245)
         );
-        --cv-button-background-pressed: color-mix(in oklab, var(--cv-color-danger, #ff7d86) 16%, transparent);
-        --cv-button-background-pressed-hover: color-mix(
-          in oklab,
-          var(--cv-color-danger, #ff7d86) 22%,
-          transparent
-        );
+        --cv-button-background-pressed: var(--cv-color-danger-surface);
+        --cv-button-background-pressed-hover: var(--cv-color-danger-surface-strong);
       }
 
       /* --- pill modifier --- */
@@ -385,7 +390,7 @@ export class CVButton extends FormAssociatedReatomElement {
         inline-size: 14px;
         block-size: 14px;
         border-radius: 999px;
-        border: 2px solid color-mix(in oklab, var(--cv-button-accent-color) 32%, transparent);
+        border: 2px solid rgb(from var(--cv-button-accent-color) r g b / 0.32);
         border-top-color: var(--cv-button-accent-color);
         animation: cv-button-spin 800ms linear infinite;
       }
@@ -412,6 +417,48 @@ export class CVButton extends FormAssociatedReatomElement {
         cursor: not-allowed;
       }
 
+      :host([unstyled]) {
+        --cv-button-min-height: 0;
+        --cv-button-padding-inline: 0;
+        --cv-button-padding-block: 0;
+        --cv-button-border-radius: inherit;
+        --cv-button-gap: inherit;
+      }
+
+      :host([unstyled]) [part='base'] {
+        display: inherit;
+        align-items: inherit;
+        justify-content: inherit;
+        justify-items: inherit;
+        flex-direction: inherit;
+        flex-wrap: inherit;
+        gap: inherit;
+        box-sizing: border-box;
+        inline-size: 100%;
+        block-size: 100%;
+        min-inline-size: 0;
+        min-block-size: 0;
+        padding: var(--cv-button-padding-block) var(--cv-button-padding-inline);
+        border: 0;
+        border-radius: inherit;
+        background: transparent;
+        color: inherit;
+        box-shadow: none;
+        font: inherit;
+        letter-spacing: inherit;
+        line-height: inherit;
+        text-align: inherit;
+      }
+
+      :host([unstyled]) [part='base']:hover:not(:disabled),
+      :host([unstyled]) [part='base']:active:not(:disabled),
+      :host([unstyled][pressed]) [part='base'],
+      :host([unstyled][pressed]) [part='base']:hover:not(:disabled) {
+        border-color: transparent;
+        background: transparent;
+        color: inherit;
+      }
+
       @keyframes cv-button-spin {
         to {
           transform: rotate(360deg);
@@ -423,6 +470,23 @@ export class CVButton extends FormAssociatedReatomElement {
   static define() {
     if (!customElements.get(this.elementName)) {
       customElements.define(this.elementName, this)
+    }
+  }
+
+  override connectedCallback(): void {
+    super.connectedCallback()
+    this.addEventListener('click', this.handleHostClick, {capture: true})
+  }
+
+  override disconnectedCallback(): void {
+    this.removeEventListener('click', this.handleHostClick, {capture: true})
+    super.disconnectedCallback()
+  }
+
+  override attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null): void {
+    super.attributeChangedCallback(name, oldValue, newValue)
+    if (oldValue !== newValue && passthroughAttributes.includes(name as (typeof passthroughAttributes)[number])) {
+      this.requestUpdate()
     }
   }
 
@@ -541,6 +605,20 @@ export class CVButton extends FormAssociatedReatomElement {
     this.model.contracts.getButtonProps().onClick()
   }
 
+  private handleHostClick(event: MouseEvent) {
+    if (event.composedPath()[0] !== this) {
+      return
+    }
+
+    if (this.isFormAssociatedDisabled()) {
+      event.preventDefault()
+      event.stopImmediatePropagation()
+      return
+    }
+
+    this.model.contracts.getButtonProps().onClick()
+  }
+
   private handleKeyDown(event: KeyboardEvent) {
     if (event.key === 'Enter') {
       this.suppressKeyboardClick = true
@@ -565,22 +643,38 @@ export class CVButton extends FormAssociatedReatomElement {
     return Array.from(this.children ?? []).some((child) => child.getAttribute('slot') === name)
   }
 
+  private getPassthroughAttribute(name: (typeof passthroughAttributes)[number]) {
+    return this.getAttribute(name) ?? nothing
+  }
+
   protected override render() {
     const props = this.model.contracts.getButtonProps()
     const isUnavailable = this.disabled || this.loading
     const hasPrefixContent = this.hasSlotContent('prefix')
     const hasSuffixContent = this.hasSlotContent('suffix')
+    const tabIndex = this.buttonTabIndex ?? props.tabindex
+    const ariaPressed = props['aria-pressed'] ?? this.getPassthroughAttribute('aria-pressed')
 
     return html`
       <button
         id=${props.id}
         type="button"
-        role=${props.role}
-        tabindex=${props.tabindex}
+        role=${this.getAttribute('role') ?? props.role}
+        tabindex=${tabIndex}
         ?disabled=${isUnavailable}
         aria-disabled=${props['aria-disabled'] ?? nothing}
         aria-busy=${props['aria-busy'] ?? nothing}
-        aria-pressed=${props['aria-pressed'] ?? nothing}
+        aria-controls=${this.getPassthroughAttribute('aria-controls')}
+        aria-current=${this.getPassthroughAttribute('aria-current')}
+        aria-expanded=${this.getPassthroughAttribute('aria-expanded')}
+        aria-haspopup=${this.getPassthroughAttribute('aria-haspopup')}
+        aria-hidden=${this.getPassthroughAttribute('aria-hidden')}
+        aria-label=${this.getPassthroughAttribute('aria-label')}
+        aria-labelledby=${this.getPassthroughAttribute('aria-labelledby')}
+        aria-describedby=${this.getPassthroughAttribute('aria-describedby')}
+        aria-pressed=${ariaPressed}
+        aria-selected=${this.getPassthroughAttribute('aria-selected')}
+        title=${this.getPassthroughAttribute('title')}
         part="base"
         @click=${this.handleClick}
         @keydown=${this.handleKeyDown}

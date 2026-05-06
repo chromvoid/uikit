@@ -31,7 +31,7 @@ export class CVTableCell extends LitElement {
         display: table-cell;
         padding: var(--cv-table-cell-padding-block, var(--cv-space-2, 8px))
           var(--cv-table-cell-padding-inline, var(--cv-space-3, 12px));
-        border-bottom: 1px solid color-mix(in oklab, var(--cv-color-border, #2a3245) 70%, transparent);
+        border-bottom: 1px solid var(--cv-color-border-soft);
         color: var(--cv-color-text, #e8ecf6);
       }
 

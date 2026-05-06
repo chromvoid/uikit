@@ -156,7 +156,7 @@ export class CVSidebar extends ReatomLitElement {
         position: fixed;
         inset: 0;
         z-index: calc(var(--cv-sidebar-z-index, 30) + 10);
-        background: var(--cv-sidebar-overlay-color, color-mix(in oklab, black 56%, transparent));
+        background: var(--cv-sidebar-overlay-color, var(--cv-color-overlay));
       }
 
       [part='overlay'][hidden] {

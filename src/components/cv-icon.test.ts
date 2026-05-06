@@ -10,12 +10,12 @@ import {
 
 CVIcon.define()
 
-type TestableCVIconClass = typeof CVIcon & {
+type TestableCVIconClass = {
   svgCache: Map<unknown, unknown>
   inFlight: Map<unknown, unknown>
 }
 
-const testableCVIcon = CVIcon as TestableCVIconClass
+const testableCVIcon = CVIcon as unknown as TestableCVIconClass
 
 const settle = async (element: CVIcon) => {
   await element.updateComplete
@@ -51,6 +51,18 @@ describe('cv-icon', () => {
     await createIcon({name: 'folder-fill'})
 
     expect(fetchMock).toHaveBeenCalledWith('/assets/icons/lucide/folder.svg')
+  })
+
+  it('maps check-lg to the lucide check asset', async () => {
+    const fetchMock = vi.fn(async () => ({
+      ok: true,
+      text: async () => '<svg viewBox="0 0 24 24"></svg>',
+    }))
+    vi.stubGlobal('fetch', fetchMock)
+
+    await createIcon({name: 'check-lg'})
+
+    expect(fetchMock).toHaveBeenCalledWith('/assets/icons/lucide/check.svg')
   })
 
   it('uses the configured base path when loading icons by name', async () => {
@@ -137,5 +149,71 @@ describe('cv-icon', () => {
     await createIcon({name: 'search'})
 
     expect(fetchMock).toHaveBeenCalledTimes(1)
+  })
+
+  it('ignores stale async loads when the icon name changes', async () => {
+    let resolveFolderResponse: (() => void) | undefined
+    let resolveImageResponse: (() => void) | undefined
+    const fetchMock = vi.fn((url: string) => {
+      if (url.endsWith('/folder.svg')) {
+        return new Promise((resolve) => {
+          resolveFolderResponse = () =>
+            resolve({
+              ok: false,
+              text: async () => '',
+            })
+        })
+      }
+
+      if (url.endsWith('/file-image.svg')) {
+        return new Promise((resolve) => {
+          resolveImageResponse = () =>
+            resolve({
+              ok: true,
+              text: async () => '<svg data-icon="image" viewBox="0 0 24 24"></svg>',
+            })
+        })
+      }
+
+      return Promise.resolve({
+        ok: true,
+        text: async () => '<svg viewBox="0 0 24 24"></svg>',
+      })
+    })
+    vi.stubGlobal('fetch', fetchMock)
+
+    const el = document.createElement('cv-icon') as CVIcon
+    document.body.append(el)
+    el.name = 'folder-fill'
+    await el.updateComplete
+    el.name = 'file-earmark-image'
+    await el.updateComplete
+
+    expect(resolveFolderResponse).toBeTypeOf('function')
+    expect(resolveImageResponse).toBeTypeOf('function')
+
+    resolveImageResponse?.()
+    await vi.waitFor(() => {
+      expect(el.shadowRoot?.querySelector('svg[data-icon=\"image\"]')).not.toBeNull()
+    })
+
+    resolveFolderResponse?.()
+    await Promise.resolve()
+    await el.updateComplete
+
+    expect(el.shadowRoot?.querySelector('svg[data-icon=\"image\"]')).not.toBeNull()
+  })
+
+  it('ignores successful non-SVG responses instead of rendering arbitrary markup', async () => {
+    const fetchMock = vi.fn(async () => ({
+      ok: true,
+      text: async () => '<!doctype html><html><body><chromvoid-app></chromvoid-app></body></html>',
+    }))
+    vi.stubGlobal('fetch', fetchMock)
+
+    const el = await createIcon({name: 'check-lg'})
+
+    expect(el.shadowRoot?.querySelector('chromvoid-app')).toBeNull()
+    expect(el.shadowRoot?.querySelector('svg')).toBeNull()
   })
 })

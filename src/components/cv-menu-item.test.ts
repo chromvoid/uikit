@@ -6,6 +6,9 @@ import {CVMenuItem} from './cv-menu-item'
 CVMenu.define()
 CVMenuItem.define()
 
+const getStylesText = () =>
+  (CVMenuItem.styles as Array<{cssText?: string}>).map((style) => style.cssText ?? '').join('\n')
+
 type TestableMenuItem = CVMenuItem & {
   checked?: boolean
   type?: '' | 'normal' | 'checkbox' | 'radio'
@@ -145,6 +148,11 @@ describe('cv-menu-item', () => {
   // --- Visual states ---
 
   describe('visual states', () => {
+    it('includes hover styling for pointer interaction', () => {
+      const stylesText = getStylesText()
+      expect(stylesText).toContain(':host(:hover) .item')
+    })
+
     it('[disabled] attribute reflects on host', async () => {
       const item = await createItem({disabled: true})
       expect(item.hasAttribute('disabled')).toBe(true)
@@ -199,10 +207,8 @@ describe('cv-menu-item', () => {
     it('default type is "normal"', async () => {
       const item = await createItem()
       const testableItem = asTestableMenuItem(item)
-      // type may default to "normal" or "" depending on implementation
-      expect(
-        testableItem.type === 'normal' || testableItem.type === undefined || testableItem.type === '',
-      ).toBe(true)
+      const typeValue = testableItem.type as string | undefined
+      expect(typeValue === 'normal' || typeValue === undefined).toBe(true)
     })
 
     it('checked property defaults to false', async () => {

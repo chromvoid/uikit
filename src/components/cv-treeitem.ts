@@ -74,11 +74,11 @@ export class CVTreeItem extends LitElement {
       }
 
       :host([active]) [part='row'] {
-        background: color-mix(in oklab, var(--cv-color-primary, #65d7ff) 22%, transparent);
+        background: var(--cv-color-primary-ring);
       }
 
       :host([selected]) [part='row'] {
-        background: color-mix(in oklab, var(--cv-color-primary, #65d7ff) 30%, transparent);
+        background: var(--cv-color-primary-border);
       }
 
       :host([disabled]) [part='row'] {

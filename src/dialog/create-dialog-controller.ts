@@ -35,6 +35,7 @@ export interface DialogController {
     options: CustomDialogOptions,
     resultHandler: (dialog: HTMLElement, resolve: (value: T | null) => void) => void,
   ): Promise<T | null>
+  closeTop(): boolean
   closeAll(): void
   getActiveCount(): number
 }
@@ -415,9 +416,20 @@ export function createDialogController(adapters: DialogControllerAdapters = {}):
     adapters.restoreInert?.()
   }
 
+  const closeTop = (): boolean => {
+    const close = [...activeDialogs.values()].at(-1)
+    if (!close) {
+      return false
+    }
+
+    close()
+    return true
+  }
+
   return {
     present,
     showCustom,
+    closeTop,
     closeAll,
     getActiveCount: () => activeDialogs.size,
   }

@@ -9,6 +9,7 @@ let cvTextareaNonce = 0
 
 type CVTextareaSize = 'small' | 'medium' | 'large'
 type CVTextareaVariant = 'outlined' | 'filled'
+type CVTextareaEnterBehavior = 'newline' | 'submit'
 
 export interface CVTextareaValueDetail {
   value: string
@@ -43,6 +44,7 @@ export class CVTextarea extends FormAssociatedReatomElement {
       resize: {type: String, reflect: true},
       size: {type: String, reflect: true},
       variant: {type: String, reflect: true},
+      enterBehavior: {type: String, reflect: true, attribute: 'enter-behavior'},
       name: {type: String},
     }
   }
@@ -59,6 +61,7 @@ export class CVTextarea extends FormAssociatedReatomElement {
   declare resize: TextareaResize
   declare size: CVTextareaSize
   declare variant: CVTextareaVariant
+  declare enterBehavior: CVTextareaEnterBehavior
   declare name: string
 
   private model: TextareaModel
@@ -80,6 +83,7 @@ export class CVTextarea extends FormAssociatedReatomElement {
     this.resize = 'vertical'
     this.size = 'medium'
     this.variant = 'outlined'
+    this.enterBehavior = 'newline'
     this.name = ''
     this.model = this.createModel()
   }
@@ -140,6 +144,7 @@ export class CVTextarea extends FormAssociatedReatomElement {
 
       [part='form-control-label'] {
         display: block;
+        margin-bottom: 5px;
       }
 
       [part='form-control-help-text'] {
@@ -297,6 +302,15 @@ export class CVTextarea extends FormAssociatedReatomElement {
     this.model.actions.setValue(state)
   }
 
+  override focus(options?: FocusOptions): void {
+    const textarea = this.shadowRoot?.querySelector('[part="textarea"]') as HTMLTextAreaElement | null
+    if (textarea) {
+      textarea.focus(options)
+      return
+    }
+    super.focus(options)
+  }
+
   protected override isFormAssociatedDisabled(): boolean {
     return this.isEffectivelyDisabled()
   }
@@ -322,6 +336,10 @@ export class CVTextarea extends FormAssociatedReatomElement {
 
   private normalizeResize(resize: string): TextareaResize {
     return resize === 'none' ? 'none' : 'vertical'
+  }
+
+  private normalizeEnterBehavior(value: string): CVTextareaEnterBehavior {
+    return value === 'submit' ? 'submit' : 'newline'
   }
 
   private toNonNegativeIntegerOrUndefined(value: number | undefined): number | undefined {
@@ -378,6 +396,28 @@ export class CVTextarea extends FormAssociatedReatomElement {
     this.syncFormAssociatedState()
   }
 
+  private handleNativeKeyDown(event: KeyboardEvent) {
+    if (
+      this.normalizeEnterBehavior(this.enterBehavior) !== 'submit' ||
+      event.key !== 'Enter' ||
+      event.defaultPrevented ||
+      event.shiftKey ||
+      event.altKey ||
+      event.ctrlKey ||
+      event.metaKey
+    ) {
+      return
+    }
+
+    const form = this.form ?? this.closest('form')
+    if (!form) {
+      return
+    }
+
+    event.preventDefault()
+    form.requestSubmit()
+  }
+
   protected override render() {
     const textareaProps = this.model.contracts.getTextareaProps()
 
@@ -404,6 +444,7 @@ export class CVTextarea extends FormAssociatedReatomElement {
           @input=${this.handleNativeInput}
           @focus=${this.handleNativeFocus}
           @blur=${this.handleNativeBlur}
+          @keydown=${this.handleNativeKeyDown}
         ></textarea>
       </div>
       <span part="form-control-help-text"><slot name="help-text"></slot></span>

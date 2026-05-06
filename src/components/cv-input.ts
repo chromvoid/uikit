@@ -166,6 +166,7 @@ export class CVInput extends FormAssociatedReatomElement {
 
       [part='form-control-label'] {
         display: block;
+        margin-bottom: 5px;
       }
 
       [part='form-control-help-text'] {
@@ -194,7 +195,7 @@ export class CVInput extends FormAssociatedReatomElement {
       }
 
       :host([invalid][focused]) [part='base'] {
-        box-shadow: 0 0 0 2px color-mix(in oklch, var(--cv-color-danger, #ef4444) 35%, transparent);
+        box-shadow: 0 0 0 2px var(--cv-color-danger-border-strong);
       }
 
       /* --- sizes --- */

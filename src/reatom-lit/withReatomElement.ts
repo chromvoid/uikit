@@ -17,8 +17,9 @@ export const withReatomElement = <T extends Constructor<LitElement>>(superClass:
     private __abstractRender: AbstractRender<PropertyValues | undefined, unknown>
     private __unmount?: Unsubscribe
 
-    constructor(...args: unknown[]) {
-      super(...(args as never[]))
+    // oxlint-disable-next-line typescript-eslint/no-explicit-any -- TypeScript mixin constructors must use any[].
+    constructor(...args: any[]) {
+      super(...args)
 
       this.__frame = top()
 

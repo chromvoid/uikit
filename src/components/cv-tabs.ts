@@ -147,7 +147,7 @@ export class CVTabs extends ReatomLitElement {
       [part='panels'] {
         border-radius: var(--cv-radius-md, 10px);
         border: 1px solid var(--cv-color-border, #2a3245);
-        background: color-mix(in oklab, var(--cv-color-surface, #141923) 75%, transparent);
+        background: var(--cv-color-surface-secondary-glass);
         padding: var(--cv-space-3, 12px);
       }
     `,

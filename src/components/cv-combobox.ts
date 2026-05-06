@@ -186,7 +186,7 @@ export class CVCombobox extends ReatomLitElement {
         gap: var(--cv-space-1, 4px);
         padding: 2px var(--cv-space-2, 8px);
         border-radius: var(--cv-radius-sm, 6px);
-        background: color-mix(in oklab, var(--cv-color-primary, #65d7ff) 24%, transparent);
+        background: var(--cv-color-primary-ring);
         font-size: 0.85em;
       }
 

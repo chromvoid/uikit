@@ -69,7 +69,7 @@ The provider defines the full design token surface. All tokens use the `--cv-` p
 | `--cv-color-text-strong`       | `#f5f7fc`                                                                   | `#0e1219`                                                                   | Emphasized text                |
 | `--cv-color-text-strongest`    | `#ffffff`                                                                   | `#000000`                                                                   | Maximum contrast text          |
 | `--cv-color-border`            | `#2a3245`                                                                   | `#d0d5de`                                                                   | Default border color           |
-| `--cv-color-border-muted`      | `color-mix(in oklab, var(--cv-color-border) 55%, transparent)`              | `color-mix(in oklab, var(--cv-color-border) 55%, transparent)`              | Subtle border                  |
+| `--cv-color-border-muted`      | `hwb(214 17.3% 63.5% / 0.52)`                                               | `hwb(216 9.8% 72.5% / 0.08)`                                                | Subtle border                  |
 | `--cv-color-border-strong`     | `color-mix(in oklab, var(--cv-color-border) 82%, white 18%)`                | `color-mix(in oklab, var(--cv-color-border) 82%, black 18%)`                | Strong border                  |
 | `--cv-color-border-accent`     | `color-mix(in oklab, var(--cv-color-primary) 35%, var(--cv-color-border))`  | `color-mix(in oklab, var(--cv-color-primary) 35%, var(--cv-color-border))`  | Accent-tinted border           |
 | `--cv-color-brand`             | `var(--cv-color-primary)`                                                   | _(inherits)_                                                                | Alias: brand color             |
@@ -101,7 +101,7 @@ The provider defines the full design token surface. All tokens use the `--cv-` p
 | `--cv-color-focus`             | `var(--cv-color-primary)`                                                   | _(inherits)_                                                                | Focus indicator color          |
 | `--cv-color-focus-ring`        | `var(--cv-color-primary)`                                                   | _(inherits)_                                                                | Focus ring color               |
 | `--cv-color-hover`             | `color-mix(in oklab, var(--cv-color-primary) 10%, var(--cv-color-surface))` | `color-mix(in oklab, var(--cv-color-primary) 8%, var(--cv-color-surface))`  | General hover state            |
-| `--cv-color-active`            | `color-mix(in oklab, var(--cv-color-primary) 18%, transparent)`             | `color-mix(in oklab, var(--cv-color-primary) 14%, transparent)`             | General active / pressed state |
+| `--cv-color-active`            | `hwb(186 0% 0% / 0.18)`                                                     | `hwb(186 0% 20% / 0.14)`                                                    | General active / pressed state |
 | `--cv-color-selected`          | `color-mix(in oklab, var(--cv-color-primary) 16%, var(--cv-color-surface))` | `color-mix(in oklab, var(--cv-color-primary) 12%, var(--cv-color-surface))` | Selected item background       |
 | `--cv-color-overlay`           | `rgba(4, 7, 13, 0.72)`                                                      | `rgba(15, 20, 30, 0.38)`                                                    | Modal / overlay backdrop       |
 
@@ -167,17 +167,17 @@ The provider defines the full design token surface. All tokens use the `--cv-` p
 
 ### Shadow tokens
 
-| Property           | Dark value                                                            | Light value                                                           | Description        |
-| ------------------ | --------------------------------------------------------------------- | --------------------------------------------------------------------- | ------------------ |
-| `--cv-shadow-sm`   | `0 2px 8px rgba(0, 0, 0, 0.24)`                                       | `0 2px 8px rgba(0, 0, 0, 0.08)`                                       | Small shadow       |
-| `--cv-shadow-md`   | `0 8px 28px rgba(0, 0, 0, 0.32)`                                      | `0 8px 28px rgba(0, 0, 0, 0.12)`                                      | Medium shadow      |
-| `--cv-shadow-lg`   | `0 16px 48px rgba(0, 0, 0, 0.38)`                                     | `0 16px 48px rgba(0, 0, 0, 0.14)`                                     | Large shadow       |
-| `--cv-shadow-xl`   | `0 24px 64px rgba(0, 0, 0, 0.42)`                                     | `0 24px 64px rgba(0, 0, 0, 0.16)`                                     | Extra-large shadow |
-| `--cv-shadow-glow` | `0 0 40px color-mix(in oklab, var(--cv-color-cyan) 15%, transparent)` | `0 0 40px color-mix(in oklab, var(--cv-color-cyan) 10%, transparent)` | Glow effect        |
-| `--cv-shadow-1`    | `var(--cv-shadow-sm)`                                                 | `var(--cv-shadow-sm)`                                                 | Alias: level 1     |
-| `--cv-shadow-2`    | `var(--cv-shadow-md)`                                                 | `var(--cv-shadow-md)`                                                 | Alias: level 2     |
-| `--cv-shadow-3`    | `var(--cv-shadow-lg)`                                                 | `var(--cv-shadow-lg)`                                                 | Alias: level 3     |
-| `--cv-shadow-4`    | `var(--cv-shadow-xl)`                                                 | `var(--cv-shadow-xl)`                                                 | Alias: level 4     |
+| Property           | Dark value                              | Light value                             | Description        |
+| ------------------ | --------------------------------------- | --------------------------------------- | ------------------ |
+| `--cv-shadow-sm`   | `0 2px 8px rgba(0, 0, 0, 0.24)`         | `0 2px 8px rgba(0, 0, 0, 0.08)`         | Small shadow       |
+| `--cv-shadow-md`   | `0 8px 28px rgba(0, 0, 0, 0.32)`        | `0 8px 28px rgba(0, 0, 0, 0.12)`        | Medium shadow      |
+| `--cv-shadow-lg`   | `0 16px 48px rgba(0, 0, 0, 0.38)`       | `0 16px 48px rgba(0, 0, 0, 0.14)`       | Large shadow       |
+| `--cv-shadow-xl`   | `0 24px 64px rgba(0, 0, 0, 0.42)`       | `0 24px 64px rgba(0, 0, 0, 0.16)`       | Extra-large shadow |
+| `--cv-shadow-glow` | `0 0 40px var(--cv-color-primary-ring)` | `0 0 40px var(--cv-color-primary-ring)` | Glow effect        |
+| `--cv-shadow-1`    | `var(--cv-shadow-sm)`                   | `var(--cv-shadow-sm)`                   | Alias: level 1     |
+| `--cv-shadow-2`    | `var(--cv-shadow-md)`                   | `var(--cv-shadow-md)`                   | Alias: level 2     |
+| `--cv-shadow-3`    | `var(--cv-shadow-lg)`                   | `var(--cv-shadow-lg)`                   | Alias: level 3     |
+| `--cv-shadow-4`    | `var(--cv-shadow-xl)`                   | `var(--cv-shadow-xl)`                   | Alias: level 4     |
 
 ### Motion tokens
 

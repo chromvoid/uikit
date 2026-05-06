@@ -5,6 +5,7 @@ declare global {
     'cv-alert': import('./cv-alert').CVAlert
     'cv-alert-dialog': import('./cv-alert-dialog').CVAlertDialog
     'cv-badge': import('./cv-badge').CVBadge
+    'cv-bottom-sheet': import('./cv-bottom-sheet').CVBottomSheet
     'cv-breadcrumb': import('./cv-breadcrumb').CVBreadcrumb
     'cv-breadcrumb-item': import('./cv-breadcrumb-item').CVBreadcrumbItem
     'cv-button': import('./cv-button').CVButton
@@ -97,6 +98,7 @@ declare global {
       | import('./cv-number').CVNumberChangeEvent
       | import('./cv-select').CVSelectChangeEvent
       | import('./cv-sidebar').CVSidebarChangeEvent
+      | import('./cv-slider').CVSliderChangeEvent
       | import('./cv-switch').CVSwitchChangeEvent
       | import('./cv-textarea').CVTextareaChangeEvent
     'cv-cancel': import('./cv-alert-dialog').CVAlertDialogCancelEvent
@@ -124,6 +126,7 @@ declare global {
       | import('./cv-input').CVInputInputEvent
       | import('./cv-select').CVSelectInputEvent
       | import('./cv-sidebar').CVSidebarInputEvent
+      | import('./cv-slider').CVSliderInputEvent
       | import('./cv-switch').CVSwitchInputEvent
       | import('./cv-textarea').CVTextareaInputEvent
     'cv-load-more': import('./cv-feed').CVFeedLoadMoreEvent

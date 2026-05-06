@@ -88,7 +88,7 @@ export class CVAlertDialog extends ReatomLitElement {
         z-index: 45;
         display: grid;
         place-items: center;
-        background: color-mix(in oklab, black 62%, transparent);
+        background: var(--cv-alpha-black-62);
         padding: var(--cv-space-4, 16px);
       }
 
