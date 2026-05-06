@@ -230,6 +230,7 @@ export class CVBottomSheet extends ReatomLitElement {
   }
 
   private handleDialogChange(event: CustomEvent<CVBottomSheetEventDetail>): void {
+    if (typeof event.detail.open !== 'boolean') return
     this.open = event.detail.open
   }
 

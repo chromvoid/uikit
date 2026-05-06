@@ -144,6 +144,7 @@ describe('cv-bottom-sheet', () => {
   })
 
   it('snaps back after a below-threshold drag without closing', async () => {
+    vi.useFakeTimers()
     const el = await createBottomSheet({open: true})
     const changes: unknown[] = []
     const handle = getHandle(el)!
@@ -151,6 +152,7 @@ describe('cv-bottom-sheet', () => {
     el.addEventListener('cv-change', (event) => changes.push((event as CustomEvent).detail))
 
     handle.dispatchEvent(createPointerEvent('pointerdown', {clientY: 0}))
+    vi.advanceTimersByTime(1_000)
     handle.dispatchEvent(createPointerEvent('pointermove', {clientY: 40}))
     handle.dispatchEvent(createPointerEvent('pointerup', {clientY: 40}))
 
@@ -174,6 +176,18 @@ describe('cv-bottom-sheet', () => {
     expect(el.open).toBe(true)
     expect(changes).toEqual([])
     expect(dialog.style.getPropertyValue('--cv-bottom-sheet-drag-offset')).toBe('')
+  })
+
+  it('ignores slotted cv-change events that do not carry dialog open state', async () => {
+    const el = await createBottomSheet({open: true})
+    const button = document.createElement('button')
+    el.append(button)
+    await settle(el)
+
+    button.dispatchEvent(new CustomEvent('cv-change', {detail: {value: 12}, bubbles: true, composed: true}))
+    await settle(el)
+
+    expect(el.open).toBe(true)
   })
 
   it('hides the handle when show-handle is false', async () => {
