@@ -26,6 +26,18 @@ const getDialogContent = (el: CVBottomSheet) =>
   getDialog(el).shadowRoot!.querySelector('[part="content"]') as HTMLElement
 const getHandle = (el: CVBottomSheet) => el.shadowRoot!.querySelector('[part="handle"]') as HTMLElement | null
 
+function stylesToText(styles: unknown): string {
+  const values = Array.isArray(styles) ? styles : [styles]
+  return values
+    .map((value) => {
+      if (value == null) return ''
+      return typeof value === 'object' && 'cssText' in (value as object)
+        ? String((value as {cssText: string}).cssText)
+        : String(value)
+    })
+    .join('\n')
+}
+
 function createPointerEvent(
   type: string,
   options: {clientY: number; pointerId?: number; button?: number},
@@ -46,6 +58,18 @@ afterEach(() => {
 })
 
 describe('cv-bottom-sheet', () => {
+  it('reserves visual viewport keyboard space in sheet placement and sizing', () => {
+    const cssText = stylesToText(CVBottomSheet.styles)
+
+    expect(cssText).toContain('--cv-bottom-sheet-overlay-block-end: calc(')
+    expect(cssText).toContain('--safe-area-bottom-active')
+    expect(cssText).toContain(
+      'var(--cv-bottom-sheet-keyboard-inset, var(--visual-viewport-bottom-inset, 0px))',
+    )
+    expect(cssText).toContain('padding-block-end: var(--cv-bottom-sheet-overlay-block-end);')
+    expect(cssText).toContain('100dvh - var(--cv-bottom-sheet-overlay-block-start)')
+  })
+
   it('renders a cv-dialog shell with sheet handle parts and forwarded slots', async () => {
     const el = await createBottomSheet()
     const title = document.createElement('span')
@@ -81,6 +105,7 @@ describe('cv-bottom-sheet', () => {
       closeOnOutsideFocus: false,
       initialFocusId: 'target',
       noHeader: true,
+      closable: false,
     })
     const dialog = getDialog(el)
 
@@ -92,6 +117,7 @@ describe('cv-bottom-sheet', () => {
     expect(dialog.closeOnOutsideFocus).toBe(false)
     expect(dialog.initialFocusId).toBe('target')
     expect(dialog.noHeader).toBe(true)
+    expect(dialog.closable).toBe(false)
   })
 
   it('closes from backdrop click through dialog outside-pointer behavior', async () => {

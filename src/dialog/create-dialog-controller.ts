@@ -9,6 +9,7 @@ export interface DialogControllerAdapters {
   setInertExcept?: (element: HTMLElement) => void
   restoreInert?: () => void
   findFirstFocusable?: (container: Element) => HTMLElement | null
+  createCustomDialogElement?: () => ManagedDialogSurfaceElement
 }
 
 export interface ManagedDialogOptions<T> {
@@ -40,7 +41,7 @@ export interface DialogController {
   getActiveCount(): number
 }
 
-interface ManagedCVDialogElement extends HTMLElement {
+export interface ManagedDialogSurfaceElement extends HTMLElement {
   open: boolean
   noHeader: boolean
   closable: boolean
@@ -72,21 +73,21 @@ const STANDARD_FOCUSABLE_SELECTORS = [
 const INPUT_LIKE_COMPONENTS = ['cv-input', 'cv-number', 'cv-textarea', 'cv-select']
 
 const managedDialogStyles = `
-  cv-dialog.cv-managed-dialog::part(trigger) {
+  :is(cv-dialog, adaptive-modal-surface).cv-managed-dialog::part(trigger) {
     display: none;
   }
 
-  cv-dialog.cv-managed-dialog::part(content) {
+  :is(cv-dialog, adaptive-modal-surface).cv-managed-dialog::part(content) {
     gap: 0;
     padding: 0;
     overflow: hidden;
   }
 
-  cv-dialog.cv-managed-dialog::part(body) {
+  :is(cv-dialog, adaptive-modal-surface).cv-managed-dialog::part(body) {
     padding: 0;
   }
 
-  cv-dialog.cv-managed-dialog::part(footer) {
+  :is(cv-dialog, adaptive-modal-surface).cv-managed-dialog::part(footer) {
     display: block;
     padding: 0;
   }
@@ -236,6 +237,9 @@ export function createDialogController(adapters: DialogControllerAdapters = {}):
   let zIndexCounter = 1100
 
   const findFirstFocusable = adapters.findFirstFocusable ?? defaultFindFirstFocusable
+  const createCustomDialogElement =
+    adapters.createCustomDialogElement ??
+    (() => document.createElement('cv-dialog') as ManagedDialogSurfaceElement)
 
   const getNextZIndex = () => zIndexCounter++
 
@@ -243,6 +247,8 @@ export function createDialogController(adapters: DialogControllerAdapters = {}):
     activeDialogs.set(element, closeFn)
     const zIndex = getNextZIndex().toString()
     element.style.setProperty('--cv-dialog-z-index', zIndex)
+    element.style.setProperty('--cv-bottom-sheet-z-index', zIndex)
+    element.style.setProperty('--adaptive-modal-z-index', zIndex)
   }
 
   const removeDialog = (element: HTMLElement) => {
@@ -306,7 +312,7 @@ export function createDialogController(adapters: DialogControllerAdapters = {}):
         resolve(result)
       }
 
-      const dialog = document.createElement('cv-dialog') as ManagedCVDialogElement
+      const dialog = createCustomDialogElement()
       dialog.classList.add('cv-managed-dialog')
       dialog.noHeader = options.noHeader ?? false
       dialog.closable = options.closable !== false
@@ -319,6 +325,7 @@ export function createDialogController(adapters: DialogControllerAdapters = {}):
       }
 
       dialog.style.setProperty('--cv-dialog-width', sizeMap[options.size || 'm'])
+      dialog.style.setProperty('--adaptive-modal-width', sizeMap[options.size || 'm'])
 
       if (!options.noHeader && options.title) {
         const title = document.createElement('span')

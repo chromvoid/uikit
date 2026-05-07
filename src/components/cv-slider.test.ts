@@ -104,6 +104,41 @@ describe('cv-slider', () => {
     expect(changeValues).toEqual([75])
   })
 
+  it('updates value from pointer interactions on the expanded base area', async () => {
+    CVSlider.define()
+
+    const slider = document.createElement('cv-slider') as CVSlider
+    slider.min = 0
+    slider.max = 100
+    slider.value = 0
+
+    const inputValues: number[] = []
+    const changeValues: number[] = []
+
+    slider.addEventListener('cv-input', (event) => {
+      inputValues.push((event as unknown as CustomEvent<{value: number}>).detail.value)
+    })
+
+    slider.addEventListener('cv-change', (event) => {
+      changeValues.push((event as unknown as CustomEvent<{value: number}>).detail.value)
+    })
+
+    document.body.append(slider)
+    await settle(slider)
+
+    const base = slider.shadowRoot?.querySelector('[part="base"]') as HTMLElement
+    const track = slider.shadowRoot?.querySelector('[part="track"]') as HTMLElement
+    mockTrackRect(track, {left: 0, top: 17, width: 200, height: 8})
+
+    base.dispatchEvent(createPointerEvent('pointerdown', {clientX: 100, clientY: 0}))
+    document.dispatchEvent(createPointerEvent('pointerup', {clientX: 100, clientY: 0}))
+    await settle(slider)
+
+    expect(slider.value).toBe(50)
+    expect(inputValues).toEqual([50])
+    expect(changeValues).toEqual([50])
+  })
+
   it('supports vertical orientation pointer mapping', async () => {
     CVSlider.define()
 

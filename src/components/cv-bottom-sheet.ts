@@ -29,6 +29,7 @@ export class CVBottomSheet extends ReatomLitElement {
       closeOnOutsideFocus: {type: Boolean, attribute: 'close-on-outside-focus', reflect: true},
       initialFocusId: {type: String, attribute: 'initial-focus-id'},
       noHeader: {type: Boolean, attribute: 'no-header', reflect: true},
+      closable: {type: Boolean, reflect: true},
       showHandle: {type: Boolean, attribute: 'show-handle', reflect: true},
       dragToClose: {type: Boolean, attribute: 'drag-to-close', reflect: true},
     }
@@ -42,6 +43,7 @@ export class CVBottomSheet extends ReatomLitElement {
   declare closeOnOutsideFocus: boolean
   declare initialFocusId: string
   declare noHeader: boolean
+  declare closable: boolean
   declare showHandle: boolean
   declare dragToClose: boolean
 
@@ -60,6 +62,7 @@ export class CVBottomSheet extends ReatomLitElement {
     this.closeOnOutsideFocus = true
     this.initialFocusId = ''
     this.noHeader = false
+    this.closable = true
     this.showHandle = true
     this.dragToClose = true
   }
@@ -70,6 +73,17 @@ export class CVBottomSheet extends ReatomLitElement {
     }
 
     cv-dialog {
+      --cv-bottom-sheet-overlay-block-start: max(
+        var(--cv-bottom-sheet-safe-top, 16px),
+        env(safe-area-inset-top, 0px)
+      );
+      --cv-bottom-sheet-overlay-block-end: calc(
+        var(
+            --cv-bottom-sheet-safe-bottom,
+            var(--safe-area-bottom-active, var(--safe-area-bottom, env(safe-area-inset-bottom, 0px)))
+          ) +
+          var(--cv-bottom-sheet-keyboard-inset, var(--visual-viewport-bottom-inset, 0px))
+      );
       --cv-dialog-z-index: var(--cv-bottom-sheet-z-index, 40);
       --cv-dialog-width: var(--cv-bottom-sheet-width, 100%);
       --cv-dialog-max-height: var(--cv-bottom-sheet-max-height, min(82dvh, calc(100dvh - 32px)));
@@ -88,15 +102,21 @@ export class CVBottomSheet extends ReatomLitElement {
 
     cv-dialog::part(overlay) {
       place-items: end center;
-      padding-block-start: max(var(--cv-bottom-sheet-safe-top, 16px), env(safe-area-inset-top, 0px));
-      padding-block-end: var(--cv-bottom-sheet-safe-bottom, env(safe-area-inset-bottom, 0px));
+      padding-block-start: var(--cv-bottom-sheet-overlay-block-start);
+      padding-block-end: var(--cv-bottom-sheet-overlay-block-end);
       padding-inline: var(--cv-bottom-sheet-inline-inset, 0px);
     }
 
     cv-dialog::part(content) {
       inline-size: var(--cv-bottom-sheet-width, 100%);
       max-inline-size: var(--cv-bottom-sheet-max-width, 100%);
-      max-block-size: var(--cv-bottom-sheet-max-height, min(82dvh, calc(100dvh - 32px)));
+      max-block-size: min(
+        var(--cv-bottom-sheet-max-height, min(82dvh, calc(100dvh - 32px))),
+        max(
+          0px,
+          calc(100dvh - var(--cv-bottom-sheet-overlay-block-start) - var(--cv-bottom-sheet-overlay-block-end))
+        )
+      );
       gap: 0;
       overflow: hidden;
       padding: 0;
@@ -296,6 +316,7 @@ export class CVBottomSheet extends ReatomLitElement {
         .closeOnOutsideFocus=${this.closeOnOutsideFocus}
         .initialFocusId=${this.initialFocusId}
         .noHeader=${this.noHeader}
+        .closable=${this.closable}
         @cv-change=${this.handleDialogChange}
       >
         <slot name="title" slot="title"></slot>

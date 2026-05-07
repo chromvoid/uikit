@@ -328,7 +328,7 @@ export class CVSlider extends ReatomLitElement {
     this.syncFromModelAndEmit(previousValue, true)
   }
 
-  private handleTrackPointerDown(event: PointerEvent) {
+  private handleBasePointerDown(event: PointerEvent) {
     if (this.disabled || event.isPrimary === false || event.button !== 0) return
 
     event.preventDefault()
@@ -401,13 +401,9 @@ export class CVSlider extends ReatomLitElement {
         aria-disabled=${rootProps['aria-disabled'] ?? nothing}
         style=${`--cv-slider-percentage:${percentage}%;`}
         part="base"
+        @pointerdown=${this.handleBasePointerDown}
       >
-        <div
-          id=${trackProps.id}
-          data-orientation=${trackProps['data-orientation']}
-          part="track"
-          @pointerdown=${this.handleTrackPointerDown}
-        >
+        <div id=${trackProps.id} data-orientation=${trackProps['data-orientation']} part="track">
           <div part="range"></div>
           <div
             id=${thumbProps.id}

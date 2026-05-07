@@ -2,12 +2,26 @@ import {html} from 'lit'
 import {afterEach, describe, expect, it, vi} from 'vitest'
 
 import type {CVDialog} from '../components/cv-dialog'
-import {createDialogController} from './create-dialog-controller'
+import {createDialogController, type ManagedDialogSurfaceElement} from './create-dialog-controller'
 
 const settleDialog = async (dialog: CVDialog) => {
   await dialog.updateComplete
   await Promise.resolve()
   await dialog.updateComplete
+}
+
+class TestManagedSurface extends HTMLElement implements ManagedDialogSurfaceElement {
+  open = false
+  noHeader = false
+  closable = true
+  closeOnEscape = true
+  closeOnOutsidePointer = true
+  closeOnOutsideFocus = true
+  updateComplete = Promise.resolve(true)
+}
+
+if (!customElements.get('test-managed-surface')) {
+  customElements.define('test-managed-surface', TestManagedSurface)
 }
 
 afterEach(() => {
@@ -202,6 +216,66 @@ describe('createDialogController', () => {
     expect(controller.getActiveCount()).toBe(0)
   })
 
+  it('showCustom keeps cv-dialog as the default managed surface', async () => {
+    const controller = createDialogController()
+    let dialogRef: HTMLElement | null = null
+    let resolveDialog: ((value: string | null) => void) | undefined
+
+    const resultPromise = controller.showCustom<string>(
+      {
+        title: 'Default surface',
+        content: 'Body',
+      },
+      (dialog, resolve) => {
+        dialogRef = dialog
+        resolveDialog = resolve
+      },
+    )
+
+    expect(dialogRef?.tagName.toLowerCase()).toBe('cv-dialog')
+    resolveDialog?.('done')
+    await expect(resultPromise).resolves.toBe('done')
+  })
+
+  it('showCustom can mount an adapter-created managed surface', async () => {
+    const createCustomDialogElement = vi.fn(
+      () => document.createElement('test-managed-surface') as ManagedDialogSurfaceElement,
+    )
+    const controller = createDialogController({createCustomDialogElement})
+    let dialogRef: ManagedDialogSurfaceElement | null = null
+    let resolveDialog: ((value: string | null) => void) | undefined
+
+    const resultPromise = controller.showCustom<string>(
+      {
+        title: 'Factory surface',
+        content: 'Body',
+        size: 'l',
+        closable: false,
+        noHeader: true,
+      },
+      (dialog, resolve) => {
+        dialogRef = dialog as ManagedDialogSurfaceElement
+        resolveDialog = resolve
+      },
+    )
+
+    expect(createCustomDialogElement).toHaveBeenCalledTimes(1)
+    expect(dialogRef?.tagName.toLowerCase()).toBe('test-managed-surface')
+    expect(dialogRef?.classList.contains('cv-managed-dialog')).toBe(true)
+    expect(dialogRef?.noHeader).toBe(true)
+    expect(dialogRef?.closable).toBe(false)
+    expect(dialogRef?.closeOnEscape).toBe(false)
+    expect(dialogRef?.closeOnOutsidePointer).toBe(false)
+    expect(dialogRef?.closeOnOutsideFocus).toBe(false)
+    expect(dialogRef?.style.getPropertyValue('--cv-dialog-width')).toBe('640px')
+    expect(dialogRef?.style.getPropertyValue('--adaptive-modal-width')).toBe('640px')
+    expect(dialogRef?.style.getPropertyValue('--adaptive-modal-z-index')).toBe('1100')
+    expect(dialogRef?.style.getPropertyValue('--cv-bottom-sheet-z-index')).toBe('1100')
+
+    resolveDialog?.('done')
+    await expect(resultPromise).resolves.toBe('done')
+  })
+
   it('showCustom focuses the first focusable element using the built-in finder', async () => {
     const originalOffsetWidth = Object.getOwnPropertyDescriptor(HTMLElement.prototype, 'offsetWidth')
     const originalOffsetHeight = Object.getOwnPropertyDescriptor(HTMLElement.prototype, 'offsetHeight')
@@ -293,6 +367,8 @@ describe('createDialogController', () => {
     const secondZIndex = Number(second.style.getPropertyValue('--cv-dialog-z-index'))
 
     expect(secondZIndex).toBeGreaterThan(firstZIndex)
+    expect(first.style.getPropertyValue('--adaptive-modal-z-index')).toBe(String(firstZIndex))
+    expect(second.style.getPropertyValue('--cv-bottom-sheet-z-index')).toBe(String(secondZIndex))
     expect(controller.getActiveCount()).toBe(2)
 
     resolveFirst?.('first')
