@@ -190,6 +190,11 @@ cv-theme-provider[mode='dark'] {
     var(--cv-color-border-glass) 82%,
     transparent 100%
   );
+  --cv-gradient-transparency-canvas:
+    linear-gradient(45deg, var(--cv-color-surface) 25%, transparent 25%),
+    linear-gradient(-45deg, var(--cv-color-surface) 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, var(--cv-color-surface) 75%),
+    linear-gradient(-45deg, transparent 75%, var(--cv-color-surface) 75%);
   --cv-gradient-surface: linear-gradient(180deg, var(--cv-color-surface) 0%, var(--cv-color-surface-2) 100%);
   --cv-gradient-surface-primary: linear-gradient(
     180deg,

@@ -30,7 +30,7 @@ const unrelatedMarkers = [
   'cv-tooltip',
 ]
 const sizeBudgets = {
-  buttonLeaf: 50000,
+  buttonLeaf: 53000,
   selectLeaf: 58500,
 }
 

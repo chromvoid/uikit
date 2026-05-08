@@ -108,8 +108,6 @@ export class CVTable extends ReatomLitElement {
   private columnListeners = new WeakMap<CVTableColumn, {click: EventListener; keydown: EventListener}>()
   private rowListeners = new WeakMap<CVTableRow, EventListener>()
   private model: TableModel
-  private prevFocusedRowIndex: number | null = null
-  private prevFocusedColumnIndex: number | null = null
 
   constructor() {
     super()

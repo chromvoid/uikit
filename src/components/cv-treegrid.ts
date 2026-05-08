@@ -481,7 +481,7 @@ export class CVTreegrid extends ReatomLitElement {
       if (!record.valid) continue
 
       const focus = () => this.handleCellFocus(record)
-      const click = (event: Event) => this.handleCellPointer(event as MouseEvent, record)
+      const click = () => this.handleCellPointer(record)
 
       record.element.addEventListener('focus', focus)
       record.element.addEventListener('click', click)
@@ -739,7 +739,7 @@ export class CVTreegrid extends ReatomLitElement {
     this.applyInteractionResult(previous)
   }
 
-  private handleCellPointer = (event: MouseEvent, record: TreegridCellRecord) => {
+  private handleCellPointer = (record: TreegridCellRecord) => {
     if (record.element.disabled) return
 
     const previous = this.captureSnapshot()
