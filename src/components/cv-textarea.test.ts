@@ -161,6 +161,24 @@ describe('cv-textarea', () => {
       expect(details).toEqual([{value: 'hello'}])
     })
 
+    it('preserves Cyrillic text exactly on user input', async () => {
+      const el = await createTextarea()
+      const details: Array<{value: string}> = []
+      el.addEventListener('cv-input', (event: Event) => {
+        details.push((event as CustomEvent<{value: string}>).detail)
+      })
+
+      const value = 'Привет, заметка №1'
+      const textarea = getTextarea(el)
+      textarea.value = value
+      textarea.dispatchEvent(new InputEvent('input', {bubbles: true, data: value}))
+      await settle(el)
+
+      expect(el.value).toBe(value)
+      expect(textarea.value).toBe(value)
+      expect(details).toEqual([{value}])
+    })
+
     it('dispatches cv-focus and cv-blur on focus transitions', async () => {
       const el = await createTextarea()
       let focusCount = 0
@@ -391,6 +409,25 @@ describe('cv-textarea', () => {
         bubbles: true,
         cancelable: true,
       })
+
+      textarea.dispatchEvent(event)
+
+      expect(event.defaultPrevented).toBe(false)
+      expect(requestSubmitSpy).not.toHaveBeenCalled()
+    })
+
+    it('does not submit while IME composition is active', async () => {
+      const form = document.createElement('form')
+      const el = document.createElement('cv-textarea') as CVTextarea
+      el.enterBehavior = 'submit'
+      form.append(el)
+      document.body.append(form)
+      await settle(el)
+
+      const requestSubmitSpy = vi.spyOn(form, 'requestSubmit').mockImplementation(() => {})
+      const textarea = getTextarea(el)
+      const event = new KeyboardEvent('keydown', {key: 'Enter', bubbles: true, cancelable: true})
+      Object.defineProperty(event, 'isComposing', {value: true})
 
       textarea.dispatchEvent(event)
 

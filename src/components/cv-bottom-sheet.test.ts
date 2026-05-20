@@ -75,6 +75,17 @@ describe('cv-bottom-sheet', () => {
     expect(cssText).toContain('100dvh - var(--cv-bottom-sheet-overlay-block-start)')
   })
 
+  it('keeps the sheet footer in a reserved grid row while the body scrolls', () => {
+    const cssText = stylesToText(CVBottomSheet.styles)
+
+    expect(cssText).toMatch(
+      /cv-dialog::part\(content\)\s*{[\s\S]*grid-template-rows:\s*auto minmax\(0,\s*1fr\) auto;/,
+    )
+    expect(cssText).toMatch(/cv-dialog::part\(content\)\s*{[\s\S]*overflow:\s*hidden;/)
+    expect(cssText).toMatch(/cv-dialog::part\(body\)\s*{[\s\S]*min-block-size:\s*0;/)
+    expect(cssText).toMatch(/cv-dialog::part\(body\)\s*{[\s\S]*overflow:\s*auto;/)
+  })
+
   it('defines detent sizing hooks without changing the default open-close mode', () => {
     const cssText = stylesToText(CVBottomSheet.styles)
 
