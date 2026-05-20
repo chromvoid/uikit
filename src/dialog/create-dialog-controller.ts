@@ -260,7 +260,13 @@ export function createDialogController(adapters: DialogControllerAdapters = {}):
     }
   }
 
-  const present = async <T>({element, title, show, close, autoFocus = true}: ManagedDialogOptions<T>): Promise<T> => {
+  const present = async <T>({
+    element,
+    title,
+    show,
+    close,
+    autoFocus = true,
+  }: ManagedDialogOptions<T>): Promise<T> => {
     const focusRestoreTarget = getFocusRestoreTarget()
 
     document.body.appendChild(element)

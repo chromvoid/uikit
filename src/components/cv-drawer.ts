@@ -817,8 +817,7 @@ export class CVDrawer extends ReatomLitElement {
     const elapsed = Math.max(1, performance.now() - this.dragStartedAt)
     const closingDistance = Math.max(0, this.getClosingDistance(event))
     const velocity = closingDistance / elapsed
-    const shouldClose =
-      closingDistance >= DRAG_CLOSE_DISTANCE_PX || velocity >= DRAG_CLOSE_VELOCITY_PX_PER_MS
+    const shouldClose = closingDistance >= DRAG_CLOSE_DISTANCE_PX || velocity >= DRAG_CLOSE_VELOCITY_PX_PER_MS
 
     if (shouldClose) {
       this.finishDragInteraction()

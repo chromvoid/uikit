@@ -701,7 +701,9 @@ describe('cv-drawer', () => {
       const el = await createDrawer({open: true, placement: 'start', dragToClose: true})
       const panel = getPanel(el)
 
-      panel.dispatchEvent(createPointerEvent('pointerdown', {clientX: 240, clientY: 40, pointerType: 'mouse'}))
+      panel.dispatchEvent(
+        createPointerEvent('pointerdown', {clientX: 240, clientY: 40, pointerType: 'mouse'}),
+      )
       panel.dispatchEvent(createPointerEvent('pointermove', {clientX: 80, clientY: 40, pointerType: 'mouse'}))
       panel.dispatchEvent(createPointerEvent('pointerup', {clientX: 80, clientY: 40, pointerType: 'mouse'}))
       await settle(el)

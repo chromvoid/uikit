@@ -22,51 +22,51 @@ Product-agnostic guidance body layout for coach marks, inline hints, warnings, a
 
 ## Attributes
 
-| Attribute | Type | Default | Description |
-| --- | --- | --- | --- |
-| `variant` | String | `"coach-mark"` | Visual variant: `"coach-mark"` \| `"hint"` \| `"warning"` \| `"blocked"` |
-| `density` | String | `"comfortable"` | Spacing density: `"comfortable"` \| `"compact"` |
+| Attribute | Type   | Default         | Description                                                              |
+| --------- | ------ | --------------- | ------------------------------------------------------------------------ |
+| `variant` | String | `"coach-mark"`  | Visual variant: `"coach-mark"` \| `"hint"` \| `"warning"` \| `"blocked"` |
+| `density` | String | `"comfortable"` | Spacing density: `"comfortable"` \| `"compact"`                          |
 
 ## Slots
 
-| Slot | Description |
-| --- | --- |
-| `icon` | Optional leading visual. |
-| `title` | Guidance title exposed through the stable `title` part. |
-| `(default)` | Main body content. |
-| `actions` | Optional action controls supplied by the app host or owning surface. |
-| `progress` | Optional progress text or indicator, such as `1 / 4`. |
+| Slot        | Description                                                          |
+| ----------- | -------------------------------------------------------------------- |
+| `icon`      | Optional leading visual.                                             |
+| `title`     | Guidance title exposed through the stable `title` part.              |
+| `(default)` | Main body content.                                                   |
+| `actions`   | Optional action controls supplied by the app host or owning surface. |
+| `progress`  | Optional progress text or indicator, such as `1 / 4`.                |
 
 ## CSS Parts
 
-| Part | Element | Description |
-| --- | --- | --- |
-| `base` | `<section>` | Outer neutral content container. |
-| `header` | `<header>` | Layout row for icon, title, and progress. |
-| `icon` | `<span>` | Wrapper around the `icon` slot. |
-| `title` | `<div>` | Wrapper around the `title` slot. |
-| `progress` | `<div>` | Wrapper around the `progress` slot. |
-| `body` | `<div>` | Wrapper around the default slot. |
-| `actions` | `<div>` | Wrapper around the `actions` slot. |
+| Part       | Element     | Description                               |
+| ---------- | ----------- | ----------------------------------------- |
+| `base`     | `<section>` | Outer neutral content container.          |
+| `header`   | `<header>`  | Layout row for icon, title, and progress. |
+| `icon`     | `<span>`    | Wrapper around the `icon` slot.           |
+| `title`    | `<div>`     | Wrapper around the `title` slot.          |
+| `progress` | `<div>`     | Wrapper around the `progress` slot.       |
+| `body`     | `<div>`     | Wrapper around the default slot.          |
+| `actions`  | `<div>`     | Wrapper around the `actions` slot.        |
 
 ## CSS Custom Properties
 
-| Property | Default | Description |
-| --- | --- | --- |
-| `--cv-guidance-panel-background` | `var(--cv-color-surface-elevated, #1d2432)` | Base background. |
-| `--cv-guidance-panel-border-color` | `var(--cv-color-border, #2a3245)` | Base border color. |
-| `--cv-guidance-panel-border-radius` | `var(--cv-radius-md, 8px)` | Base border radius. |
-| `--cv-guidance-panel-color` | `var(--cv-color-text, #e8ecf6)` | Host text color. |
-| `--cv-guidance-panel-body-color` | `var(--cv-color-text-muted, #bac4d8)` | Body text color. |
-| `--cv-guidance-panel-title-color` | `var(--cv-color-text-strong, currentColor)` | Title text color. |
-| `--cv-guidance-panel-icon-color` | `currentColor` | Icon color before variant overrides. |
-| `--cv-guidance-panel-padding-inline` | `var(--cv-space-4, 16px)` | Horizontal padding. |
-| `--cv-guidance-panel-padding-block` | `var(--cv-space-4, 16px)` | Vertical padding. |
-| `--cv-guidance-panel-gap` | `var(--cv-space-3, 12px)` | Main layout gap. |
-| `--cv-guidance-panel-actions-gap` | `var(--cv-space-2, 8px)` | Gap between action controls. |
-| `--cv-guidance-panel-compact-padding-inline` | `var(--cv-space-3, 12px)` | Compact horizontal padding. |
-| `--cv-guidance-panel-compact-padding-block` | `var(--cv-space-3, 12px)` | Compact vertical padding. |
-| `--cv-guidance-panel-compact-gap` | `var(--cv-space-2, 8px)` | Compact main layout gap. |
+| Property                                     | Default                                     | Description                          |
+| -------------------------------------------- | ------------------------------------------- | ------------------------------------ |
+| `--cv-guidance-panel-background`             | `var(--cv-color-surface-elevated, #1d2432)` | Base background.                     |
+| `--cv-guidance-panel-border-color`           | `var(--cv-color-border, #2a3245)`           | Base border color.                   |
+| `--cv-guidance-panel-border-radius`          | `var(--cv-radius-md, 8px)`                  | Base border radius.                  |
+| `--cv-guidance-panel-color`                  | `var(--cv-color-text, #e8ecf6)`             | Host text color.                     |
+| `--cv-guidance-panel-body-color`             | `var(--cv-color-text-muted, #bac4d8)`       | Body text color.                     |
+| `--cv-guidance-panel-title-color`            | `var(--cv-color-text-strong, currentColor)` | Title text color.                    |
+| `--cv-guidance-panel-icon-color`             | `currentColor`                              | Icon color before variant overrides. |
+| `--cv-guidance-panel-padding-inline`         | `var(--cv-space-4, 16px)`                   | Horizontal padding.                  |
+| `--cv-guidance-panel-padding-block`          | `var(--cv-space-4, 16px)`                   | Vertical padding.                    |
+| `--cv-guidance-panel-gap`                    | `var(--cv-space-3, 12px)`                   | Main layout gap.                     |
+| `--cv-guidance-panel-actions-gap`            | `var(--cv-space-2, 8px)`                    | Gap between action controls.         |
+| `--cv-guidance-panel-compact-padding-inline` | `var(--cv-space-3, 12px)`                   | Compact horizontal padding.          |
+| `--cv-guidance-panel-compact-padding-block`  | `var(--cv-space-3, 12px)`                   | Compact vertical padding.            |
+| `--cv-guidance-panel-compact-gap`            | `var(--cv-space-2, 8px)`                    | Compact main layout gap.             |
 
 ## Accessibility
 

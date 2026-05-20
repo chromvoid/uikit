@@ -361,9 +361,13 @@ export class CVSlider extends ReatomLitElement {
     document.addEventListener('pointerup', (upEvent) => this.handleDocumentPointerUp(upEvent), {
       signal: controller.signal,
     })
-    document.addEventListener('pointercancel', (cancelEvent) => this.handleDocumentPointerCancel(cancelEvent), {
-      signal: controller.signal,
-    })
+    document.addEventListener(
+      'pointercancel',
+      (cancelEvent) => this.handleDocumentPointerCancel(cancelEvent),
+      {
+        signal: controller.signal,
+      },
+    )
   }
 
   private handleDocumentPointerMove(event: PointerEvent) {

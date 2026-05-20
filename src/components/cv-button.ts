@@ -477,7 +477,10 @@ export class CVButton extends FormAssociatedReatomElement {
 
   override attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null): void {
     super.attributeChangedCallback(name, oldValue, newValue)
-    if (oldValue !== newValue && passthroughAttributes.includes(name as (typeof passthroughAttributes)[number])) {
+    if (
+      oldValue !== newValue &&
+      passthroughAttributes.includes(name as (typeof passthroughAttributes)[number])
+    ) {
       this.requestUpdate()
     }
   }

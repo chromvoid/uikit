@@ -1,7 +1,7 @@
 import {afterEach, describe, expect, it, vi} from 'vitest'
 
 import {CVBottomSheet} from './cv-bottom-sheet'
-import {CVDialog} from './cv-dialog'
+import type {CVDialog} from './cv-dialog'
 
 CVBottomSheet.define()
 
@@ -104,9 +104,13 @@ describe('cv-bottom-sheet', () => {
     const cssText = stylesToText(CVBottomSheet.styles)
 
     expect(cssText).toContain('--cv-dialog-content-transition-property: transform;')
-    expect(cssText).toContain('--cv-dialog-transition-duration: var(--cv-bottom-sheet-dismiss-duration, 180ms);')
+    expect(cssText).toContain(
+      '--cv-dialog-transition-duration: var(--cv-bottom-sheet-dismiss-duration, 180ms);',
+    )
     expect(cssText).toContain('--cv-dialog-content-closed-transform: translateY(calc(100% + 32px));')
-    expect(cssText).toContain('--cv-dialog-content-open-transform: translateY(var(--cv-bottom-sheet-drag-offset, 0px));')
+    expect(cssText).toContain(
+      '--cv-dialog-content-open-transform: translateY(var(--cv-bottom-sheet-drag-offset, 0px));',
+    )
     expect(cssText).not.toContain('scale(')
   })
 

@@ -25,47 +25,47 @@ The underlying dialog exports `trigger`, `overlay`, `content`, `header`, `title`
 
 ## Attributes
 
-| Attribute                  | Type    | Default    | Description                                             |
-| -------------------------- | ------- | ---------- | ------------------------------------------------------- |
-| `open`                     | Boolean | `false`    | Whether the sheet is visible                            |
-| `modal`                    | Boolean | `true`     | Enables dialog modal behavior                           |
-| `type`                     | String  | `"dialog"` | ARIA role type: `dialog` \| `alertdialog`               |
-| `close-on-escape`          | Boolean | `true`     | Whether Escape closes the sheet                         |
-| `close-on-outside-pointer` | Boolean | `true`     | Whether backdrop pointer/click closes the sheet         |
-| `close-on-outside-focus`   | Boolean | `true`     | Whether outside focus closes the sheet                  |
-| `initial-focus-id`         | String  | ---        | Id of element to focus when the sheet opens             |
-| `no-header`                | Boolean | `false`    | Hides the dialog header                                 |
-| `show-handle`              | Boolean | `true`     | Renders the drag affordance                             |
-| `drag-to-close`            | Boolean | `true`     | Enables pull-down close from the handle                 |
-| `detents`                  | String  | `""`       | Space/comma-separated detents: `collapsed middle expanded` |
-| `detent`                   | String  | `expanded` | Active detent: `collapsed` \| `middle` \| `expanded`    |
-| `handle-label`             | String  | `Resize sheet` | Accessible label for the handle button              |
+| Attribute                  | Type    | Default        | Description                                                |
+| -------------------------- | ------- | -------------- | ---------------------------------------------------------- |
+| `open`                     | Boolean | `false`        | Whether the sheet is visible                               |
+| `modal`                    | Boolean | `true`         | Enables dialog modal behavior                              |
+| `type`                     | String  | `"dialog"`     | ARIA role type: `dialog` \| `alertdialog`                  |
+| `close-on-escape`          | Boolean | `true`         | Whether Escape closes the sheet                            |
+| `close-on-outside-pointer` | Boolean | `true`         | Whether backdrop pointer/click closes the sheet            |
+| `close-on-outside-focus`   | Boolean | `true`         | Whether outside focus closes the sheet                     |
+| `initial-focus-id`         | String  | ---            | Id of element to focus when the sheet opens                |
+| `no-header`                | Boolean | `false`        | Hides the dialog header                                    |
+| `show-handle`              | Boolean | `true`         | Renders the drag affordance                                |
+| `drag-to-close`            | Boolean | `true`         | Enables pull-down close from the handle                    |
+| `detents`                  | String  | `""`           | Space/comma-separated detents: `collapsed middle expanded` |
+| `detent`                   | String  | `expanded`     | Active detent: `collapsed` \| `middle` \| `expanded`       |
+| `handle-label`             | String  | `Resize sheet` | Accessible label for the handle button                     |
 
 ## Slots
 
-| Slot           | Description                                              |
-| -------------- | -------------------------------------------------------- |
-| `(default)`    | Sheet body content                                       |
-| `title`        | Accessible title forwarded to `cv-dialog`                |
-| `description`  | Accessible description forwarded to `cv-dialog`          |
-| `header-close` | Header close icon forwarded to `cv-dialog`               |
-| `footer`       | Footer content forwarded to `cv-dialog`                  |
+| Slot           | Description                                     |
+| -------------- | ----------------------------------------------- |
+| `(default)`    | Sheet body content                              |
+| `title`        | Accessible title forwarded to `cv-dialog`       |
+| `description`  | Accessible description forwarded to `cv-dialog` |
+| `header-close` | Header close icon forwarded to `cv-dialog`      |
+| `footer`       | Footer content forwarded to `cv-dialog`         |
 
 ## CSS Custom Properties
 
-| Property                                  | Default                          | Description                         |
-| ----------------------------------------- | -------------------------------- | ----------------------------------- |
-| `--cv-bottom-sheet-z-index`               | `40`                             | Overlay stack level                 |
-| `--cv-bottom-sheet-width`                 | `100%`                           | Sheet inline size                   |
-| `--cv-bottom-sheet-max-width`             | `100%`                           | Sheet maximum inline size           |
-| `--cv-bottom-sheet-max-height`            | `min(82dvh, calc(100dvh - 32px))` | Sheet maximum block size            |
-| `--cv-bottom-sheet-collapsed-height`      | `148px`                          | Collapsed detent height             |
-| `--cv-bottom-sheet-middle-height`         | `min(52dvh, 440px)`              | Middle detent height                |
-| `--cv-bottom-sheet-expanded-height`       | `min(92dvh, calc(100dvh - 32px))` | Expanded detent height              |
-| `--cv-bottom-sheet-overlay-color`         | `var(--cv-color-overlay)`        | Backdrop color                      |
-| `--cv-bottom-sheet-border-radius`         | top corners rounded              | Sheet corner radius                 |
-| `--cv-bottom-sheet-grabber-color`         | `var(--cv-color-border-strong)`  | Grabber color                       |
-| `--cv-bottom-sheet-dismiss-duration`      | `180ms`                          | Drag dismiss transition duration    |
+| Property                             | Default                           | Description                      |
+| ------------------------------------ | --------------------------------- | -------------------------------- |
+| `--cv-bottom-sheet-z-index`          | `40`                              | Overlay stack level              |
+| `--cv-bottom-sheet-width`            | `100%`                            | Sheet inline size                |
+| `--cv-bottom-sheet-max-width`        | `100%`                            | Sheet maximum inline size        |
+| `--cv-bottom-sheet-max-height`       | `min(82dvh, calc(100dvh - 32px))` | Sheet maximum block size         |
+| `--cv-bottom-sheet-collapsed-height` | `148px`                           | Collapsed detent height          |
+| `--cv-bottom-sheet-middle-height`    | `min(52dvh, 440px)`               | Middle detent height             |
+| `--cv-bottom-sheet-expanded-height`  | `min(92dvh, calc(100dvh - 32px))` | Expanded detent height           |
+| `--cv-bottom-sheet-overlay-color`    | `var(--cv-color-overlay)`         | Backdrop color                   |
+| `--cv-bottom-sheet-border-radius`    | top corners rounded               | Sheet corner radius              |
+| `--cv-bottom-sheet-grabber-color`    | `var(--cv-color-border-strong)`   | Grabber color                    |
+| `--cv-bottom-sheet-dismiss-duration` | `180ms`                           | Drag dismiss transition duration |
 
 `cv-bottom-sheet` composes with `cv-dialog` presence state by overriding dialog content motion variables. The sheet uses bottom-up `translateY(...)` transforms for open, close, drag, detent, and dismiss states instead of the centered dialog scale transform.
 

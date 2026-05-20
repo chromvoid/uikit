@@ -147,6 +147,8 @@ export class CVGuidanceAnchor extends ReatomLitElement {
   }
 
   protected override render() {
-    return html`<slot></slot>`
+    return html`
+      <slot></slot>
+    `
   }
 }

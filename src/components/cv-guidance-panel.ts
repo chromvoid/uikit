@@ -41,8 +41,7 @@ export class CVGuidancePanel extends ReatomLitElement {
       [part='base'] {
         display: grid;
         gap: var(--cv-guidance-panel-gap, 14px);
-        padding: var(--cv-guidance-panel-padding-block, 20px)
-          var(--cv-guidance-panel-padding-inline, 20px);
+        padding: var(--cv-guidance-panel-padding-block, 20px) var(--cv-guidance-panel-padding-inline, 20px);
         border: 1px solid var(--cv-guidance-panel-border-color, var(--cv-color-border, #2a3245));
         border-radius: var(--cv-guidance-panel-border-radius, 14px);
         background: var(--cv-guidance-panel-background, var(--cv-color-surface-elevated, #1d2432));
@@ -172,11 +171,7 @@ export class CVGuidancePanel extends ReatomLitElement {
       }
 
       :host([variant='coach-mark']) [part='base'] {
-        border-color: color-mix(
-          in oklab,
-          var(--cv-color-info, #65d7ff) 44%,
-          var(--cv-color-border, #2a3245)
-        );
+        border-color: color-mix(in oklab, var(--cv-color-info, #65d7ff) 44%, var(--cv-color-border, #2a3245));
         background: color-mix(
           in oklab,
           var(--cv-color-info, #65d7ff) 10%,

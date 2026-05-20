@@ -67,13 +67,19 @@ describe('cv-dialog', () => {
       expect(stylesText).toContain('--cv-dialog-transition-easing-open: var(')
       expect(stylesText).toContain('--cv-dialog-transition-easing-close: var(')
       expect(stylesText).toContain('--cv-dialog-content-transition-property: opacity, transform;')
-      expect(stylesText).toContain('--cv-dialog-content-closed-transform: translate3d(0, 8px, 0) scale(0.98);')
+      expect(stylesText).toContain(
+        '--cv-dialog-content-closed-transform: translate3d(0, 8px, 0) scale(0.98);',
+      )
       expect(stylesText).toContain('--cv-dialog-content-open-transform: translate3d(0, 0, 0) scale(1);')
       expect(stylesText).toMatch(/\.portal-shell[\s\S]*transition:[\s\S]*display[\s\S]*allow-discrete/)
       expect(stylesText).toMatch(/\.portal-shell[\s\S]*transition:[\s\S]*overlay[\s\S]*allow-discrete/)
-      expect(stylesText).toMatch(/\[part='overlay'\]::before[\s\S]*background:\s*var\(--cv-dialog-overlay-color/)
+      expect(stylesText).toMatch(
+        /\[part='overlay'\]::before[\s\S]*background:\s*var\(--cv-dialog-overlay-color/,
+      )
       expect(stylesText).toMatch(/\[part='overlay'\]::before[\s\S]*transition:\s*opacity/)
-      expect(stylesText).toMatch(/\[part='content'\][\s\S]*transition-property:\s*var\(--cv-dialog-content-transition-property/)
+      expect(stylesText).toMatch(
+        /\[part='content'\][\s\S]*transition-property:\s*var\(--cv-dialog-content-transition-property/,
+      )
       expect(stylesText).toMatch(/@starting-style[\s\S]*\[part='overlay'\]\[data-state='open'\]::before/)
     })
 

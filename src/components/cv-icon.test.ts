@@ -194,14 +194,14 @@ describe('cv-icon', () => {
 
     resolveImageResponse?.()
     await vi.waitFor(() => {
-      expect(el.shadowRoot?.querySelector('svg[data-icon=\"image\"]')).not.toBeNull()
+      expect(el.shadowRoot?.querySelector('svg[data-icon="image"]')).not.toBeNull()
     })
 
     resolveFolderResponse?.()
     await Promise.resolve()
     await el.updateComplete
 
-    expect(el.shadowRoot?.querySelector('svg[data-icon=\"image\"]')).not.toBeNull()
+    expect(el.shadowRoot?.querySelector('svg[data-icon="image"]')).not.toBeNull()
   })
 
   it('ignores successful non-SVG responses instead of rendering arbitrary markup', async () => {

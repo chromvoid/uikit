@@ -21,8 +21,8 @@ Lightweight semantic anchor wrapper for product guidance registration.
 
 ## Slots
 
-| Slot        | Description                                      |
-| ----------- | ------------------------------------------------ |
+| Slot        | Description                                       |
+| ----------- | ------------------------------------------------- |
 | `(default)` | Action or content visually associated with anchor |
 
 ## CSS Parts
@@ -42,10 +42,10 @@ None. `cv-guidance-anchor` is a light wrapper with `display: contents` by defaul
 
 ## Events
 
-| Event                        | When                         | Detail                                      |
-| ---------------------------- | ---------------------------- | ------------------------------------------- |
-| `guidance-anchor-register`   | On connect and semantic update | `{anchorId, surface, owner, element}`       |
-| `guidance-anchor-unregister` | On disconnect                | `{anchorId, surface, owner, element}`       |
+| Event                        | When                           | Detail                                |
+| ---------------------------- | ------------------------------ | ------------------------------------- |
+| `guidance-anchor-register`   | On connect and semantic update | `{anchorId, surface, owner, element}` |
+| `guidance-anchor-unregister` | On disconnect                  | `{anchorId, surface, owner, element}` |
 
 Both events bubble and are composed so an app-level guidance host can observe anchors across shadow boundaries. `detail.element` is always the `cv-guidance-anchor` host.
 
