@@ -401,6 +401,7 @@ export class CVTextarea extends FormAssociatedReatomElement {
       this.normalizeEnterBehavior(this.enterBehavior) !== 'submit' ||
       event.key !== 'Enter' ||
       event.defaultPrevented ||
+      event.isComposing ||
       event.shiftKey ||
       event.altKey ||
       event.ctrlKey ||
