@@ -422,17 +422,9 @@ export class CVButton extends FormAssociatedReatomElement {
         --cv-button-padding-inline: 0;
         --cv-button-padding-block: 0;
         --cv-button-border-radius: inherit;
-        --cv-button-gap: inherit;
       }
 
       :host([unstyled]) [part='base'] {
-        display: inherit;
-        align-items: inherit;
-        justify-content: inherit;
-        justify-items: inherit;
-        flex-direction: inherit;
-        flex-wrap: inherit;
-        gap: inherit;
         box-sizing: border-box;
         inline-size: 100%;
         block-size: 100%;

@@ -24,9 +24,45 @@ const getOverlay = (el: CVDrawer) => el.shadowRoot!.querySelector('[part="overla
 
 const nextFrame = async () => new Promise<void>((resolve) => requestAnimationFrame(() => resolve()))
 
+function stylesToText(styles: unknown): string {
+  const values = Array.isArray(styles) ? styles : [styles]
+  return values
+    .map((value) => {
+      if (value == null) return ''
+      return typeof value === 'object' && 'cssText' in (value as object)
+        ? String((value as {cssText: string}).cssText)
+        : String(value)
+    })
+    .join('\n')
+}
+
+function createPointerEvent(
+  type: string,
+  options: {
+    clientX: number
+    clientY: number
+    pointerId?: number
+    button?: number
+    pointerType?: string
+    isPrimary?: boolean
+  },
+): PointerEvent {
+  const event = new Event(type, {bubbles: true, composed: true, cancelable: true}) as PointerEvent
+  Object.defineProperties(event, {
+    button: {value: options.button ?? 0},
+    clientX: {value: options.clientX},
+    clientY: {value: options.clientY},
+    pointerId: {value: options.pointerId ?? 1},
+    pointerType: {value: options.pointerType ?? 'touch'},
+    isPrimary: {value: options.isPrimary ?? true},
+  })
+  return event
+}
+
 afterEach(() => {
   document.body.innerHTML = ''
   document.body.style.overflow = ''
+  vi.restoreAllMocks()
   vi.useRealTimers()
 })
 
@@ -41,6 +77,15 @@ describe('cv-drawer', () => {
       expect(trigger.tagName).toBe('BUTTON')
       const slot = trigger.querySelector('slot[name="trigger"]')
       expect(slot).not.toBeNull()
+    })
+
+    it('keeps reduced-motion drawer transitions instant', () => {
+      const cssText = stylesToText(CVDrawer.styles)
+
+      expect(cssText).toContain('@media (prefers-reduced-motion: reduce)')
+      expect(cssText).toMatch(
+        /@media \(prefers-reduced-motion: reduce\)[\s\S]*\[part='overlay'\],[\s\S]*\[part='panel'\]\s*{[\s\S]*transition-duration: 0ms;/,
+      )
     })
 
     it('renders [part="overlay"] as a <div>', async () => {
@@ -124,6 +169,7 @@ describe('cv-drawer', () => {
       expect(el.closeOnOutsidePointer).toBe(true)
       expect(el.closeOnOutsideFocus).toBe(true)
       expect(el.noHeader).toBe(false)
+      expect(el.dragToClose).toBe(false)
     })
   })
 
@@ -154,6 +200,11 @@ describe('cv-drawer', () => {
     it('no-header attribute reflects when set', async () => {
       const el = await createDrawer({noHeader: true})
       expect(el.hasAttribute('no-header')).toBe(true)
+    })
+
+    it('drag-to-close attribute reflects when set', async () => {
+      const el = await createDrawer({dragToClose: true})
+      expect(el.hasAttribute('drag-to-close')).toBe(true)
     })
 
     it('close-on-escape attribute reflects', async () => {
@@ -585,6 +636,78 @@ describe('cv-drawer', () => {
       await settle(el)
 
       expect(panel.getAttribute('data-state')).toBe('closed')
+    })
+  })
+
+  describe('drag-to-close', () => {
+    it('does not drag or close when drag-to-close is false', async () => {
+      const el = await createDrawer({open: true, placement: 'start', dragToClose: false})
+      const panel = getPanel(el)
+
+      panel.dispatchEvent(createPointerEvent('pointerdown', {clientX: 240, clientY: 40}))
+      panel.dispatchEvent(createPointerEvent('pointermove', {clientX: 120, clientY: 40}))
+      panel.dispatchEvent(createPointerEvent('pointerup', {clientX: 120, clientY: 40}))
+      await settle(el)
+
+      expect(el.open).toBe(true)
+      expect(panel.style.getPropertyValue('--cv-drawer-drag-offset-x')).toBe('')
+    })
+
+    it('closes a start drawer after a threshold touch drag', async () => {
+      const el = await createDrawer({open: true, placement: 'start', dragToClose: true})
+      const panel = getPanel(el)
+      const inputDetails: unknown[] = []
+      const changeDetails: unknown[] = []
+
+      el.addEventListener('cv-input', (event) => inputDetails.push((event as CustomEvent).detail))
+      el.addEventListener('cv-change', (event) => changeDetails.push((event as CustomEvent).detail))
+
+      panel.dispatchEvent(createPointerEvent('pointerdown', {clientX: 240, clientY: 40}))
+      panel.dispatchEvent(createPointerEvent('pointermove', {clientX: 120, clientY: 40}))
+
+      expect(panel.getAttribute('data-dragging')).toBe('true')
+      expect(panel.style.getPropertyValue('--cv-drawer-drag-offset-x')).toBe('-120px')
+
+      panel.dispatchEvent(createPointerEvent('pointerup', {clientX: 120, clientY: 40}))
+      await settle(el)
+
+      expect(el.open).toBe(false)
+      expect(inputDetails).toEqual([{open: false}])
+      expect(changeDetails).toEqual([{open: false}])
+    })
+
+    it('snaps back after a below-threshold touch drag without closing', async () => {
+      const now = vi.spyOn(performance, 'now')
+      now.mockReturnValueOnce(0).mockReturnValueOnce(200)
+
+      const el = await createDrawer({open: true, placement: 'start', dragToClose: true})
+      const panel = getPanel(el)
+      const changeDetails: unknown[] = []
+
+      el.addEventListener('cv-change', (event) => changeDetails.push((event as CustomEvent).detail))
+
+      panel.dispatchEvent(createPointerEvent('pointerdown', {clientX: 240, clientY: 40}))
+      panel.dispatchEvent(createPointerEvent('pointermove', {clientX: 200, clientY: 40}))
+      panel.dispatchEvent(createPointerEvent('pointerup', {clientX: 200, clientY: 40}))
+      await settle(el)
+
+      expect(el.open).toBe(true)
+      expect(panel.getAttribute('data-dragging')).toBeNull()
+      expect(panel.style.getPropertyValue('--cv-drawer-drag-offset-x')).toBe('')
+      expect(changeDetails).toEqual([])
+    })
+
+    it('ignores mouse drag gestures', async () => {
+      const el = await createDrawer({open: true, placement: 'start', dragToClose: true})
+      const panel = getPanel(el)
+
+      panel.dispatchEvent(createPointerEvent('pointerdown', {clientX: 240, clientY: 40, pointerType: 'mouse'}))
+      panel.dispatchEvent(createPointerEvent('pointermove', {clientX: 80, clientY: 40, pointerType: 'mouse'}))
+      panel.dispatchEvent(createPointerEvent('pointerup', {clientX: 80, clientY: 40, pointerType: 'mouse'}))
+      await settle(el)
+
+      expect(el.open).toBe(true)
+      expect(panel.style.getPropertyValue('--cv-drawer-drag-offset-x')).toBe('')
     })
   })
 

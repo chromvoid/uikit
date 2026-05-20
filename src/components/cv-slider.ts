@@ -234,6 +234,11 @@ export class CVSlider extends ReatomLitElement {
     }
   }
 
+  override updated(changedProperties: PropertyValues): void {
+    super.updated(changedProperties)
+    this.applySliderPercentage()
+  }
+
   private createModel(): SliderModel {
     return createSlider({
       idBase: this.idBase,
@@ -255,6 +260,15 @@ export class CVSlider extends ReatomLitElement {
       value: this.model.state.value(),
       percentage: this.model.state.percentage(),
     }
+  }
+
+  private getSliderPercentage(): number {
+    return Math.max(0, Math.min(100, this.model.state.percentage()))
+  }
+
+  private applySliderPercentage(): void {
+    const base = this.shadowRoot?.querySelector('[part="base"]') as HTMLElement | null
+    base?.style.setProperty('--cv-slider-percentage', `${this.getSliderPercentage()}%`)
   }
 
   private dispatchInput(detail: CVSliderEventDetail): void {
@@ -280,6 +294,7 @@ export class CVSlider extends ReatomLitElement {
   private syncFromModelAndEmit(previousValue: number, emitChange: boolean): boolean {
     const nextValue = this.model.state.value()
     this.value = nextValue
+    this.applySliderPercentage()
 
     if (previousValue === nextValue) return false
 
@@ -392,14 +407,12 @@ export class CVSlider extends ReatomLitElement {
     const rootProps = this.model.contracts.getRootProps()
     const trackProps = this.model.contracts.getTrackProps()
     const thumbProps = this.model.contracts.getThumbProps()
-    const percentage = Math.max(0, Math.min(100, this.model.state.percentage()))
 
     return html`
       <div
         id=${rootProps.id}
         data-orientation=${rootProps['data-orientation']}
         aria-disabled=${rootProps['aria-disabled'] ?? nothing}
-        style=${`--cv-slider-percentage:${percentage}%;`}
         part="base"
         @pointerdown=${this.handleBasePointerDown}
       >

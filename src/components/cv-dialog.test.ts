@@ -19,24 +19,75 @@ const createDialog = async (attrs?: Partial<CVDialog>) => {
 }
 
 const getContent = (el: CVDialog) => el.shadowRoot!.querySelector('[part="content"]') as HTMLElement
+const getOverlay = (el: CVDialog) => el.shadowRoot!.querySelector('[part="overlay"]') as HTMLElement
 const getModalShell = (el: CVDialog) =>
   el.shadowRoot!.querySelector('dialog.portal-shell') as HTMLDialogElement | null
 const getPopoverShell = (el: CVDialog) => el.shadowRoot!.querySelector('.popover-shell') as HTMLElement | null
 const getStylesText = () =>
   (CVDialog.styles as Array<{cssText?: string}>).map((style) => style.cssText ?? '').join('\n')
 
+const setPresenceTransitionDuration = (el: CVDialog, duration: string) => {
+  getOverlay(el).style.transitionDuration = duration
+  getContent(el).style.transitionDuration = duration
+}
+
+const advancePresenceTimers = async (el: CVDialog, ms: number) => {
+  vi.advanceTimersByTime(ms)
+  await settle(el)
+}
+
 afterEach(() => {
   document.body.innerHTML = ''
   document.body.style.overflow = ''
+  vi.useRealTimers()
 })
 
 describe('cv-dialog', () => {
   describe('style contract', () => {
+    it('keeps visual viewport keyboard inset in the dialog viewport bottom inset', () => {
+      const stylesText = getStylesText()
+
+      expect(stylesText).toMatch(
+        /--cv-dialog-viewport-inset-bottom:\s*calc\([\s\S]*--visual-viewport-bottom-inset,\s*0px/,
+      )
+    })
+
     it('allows header, body, and footer grid items to shrink when content has long unbroken tokens', () => {
       const stylesText = getStylesText()
 
       expect(stylesText).toMatch(
         /\[part='header'\],\s*\[part='body'\],\s*\[part='footer'\]\s*\{\s*min-inline-size:\s*0;/,
+      )
+    })
+
+    it('defines token-based dialog presence motion for shell, overlay, and content', () => {
+      const stylesText = getStylesText()
+
+      expect(stylesText).toContain('--cv-dialog-transition-duration: var(--cv-duration-fast, 120ms);')
+      expect(stylesText).toContain('--cv-dialog-transition-easing-open: var(')
+      expect(stylesText).toContain('--cv-dialog-transition-easing-close: var(')
+      expect(stylesText).toContain('--cv-dialog-content-transition-property: opacity, transform;')
+      expect(stylesText).toContain('--cv-dialog-content-closed-transform: translate3d(0, 8px, 0) scale(0.98);')
+      expect(stylesText).toContain('--cv-dialog-content-open-transform: translate3d(0, 0, 0) scale(1);')
+      expect(stylesText).toMatch(/\.portal-shell[\s\S]*transition:[\s\S]*display[\s\S]*allow-discrete/)
+      expect(stylesText).toMatch(/\.portal-shell[\s\S]*transition:[\s\S]*overlay[\s\S]*allow-discrete/)
+      expect(stylesText).toMatch(/\[part='overlay'\]::before[\s\S]*background:\s*var\(--cv-dialog-overlay-color/)
+      expect(stylesText).toMatch(/\[part='overlay'\]::before[\s\S]*transition:\s*opacity/)
+      expect(stylesText).toMatch(/\[part='content'\][\s\S]*transition-property:\s*var\(--cv-dialog-content-transition-property/)
+      expect(stylesText).toMatch(/@starting-style[\s\S]*\[part='overlay'\]\[data-state='open'\]::before/)
+    })
+
+    it('removes spatial dialog motion for reduced-motion users', () => {
+      const stylesText = getStylesText()
+
+      expect(stylesText).toMatch(
+        /@media \(prefers-reduced-motion: reduce\)[\s\S]*--cv-dialog-transition-duration:\s*0ms;/,
+      )
+      expect(stylesText).toMatch(
+        /@media \(prefers-reduced-motion: reduce\)[\s\S]*--cv-dialog-content-closed-transform:\s*none;/,
+      )
+      expect(stylesText).toMatch(
+        /@media \(prefers-reduced-motion: reduce\)[\s\S]*--cv-dialog-content-open-transform:\s*none;/,
       )
     })
   })
@@ -89,6 +140,19 @@ describe('cv-dialog', () => {
       const header = el.shadowRoot!.querySelector('[part="header"]') as HTMLElement
       expect(header).not.toBeNull()
       expect(header.tagName).toBe('HEADER')
+    })
+
+    it('renders slot[name="before-header"] before the header', async () => {
+      const el = await createDialog()
+      const content = getContent(el)
+      const beforeHeaderSlot = content.querySelector('slot[name="before-header"]')
+      const header = content.querySelector('[part="header"]')
+
+      expect(beforeHeaderSlot).not.toBeNull()
+      expect(header).not.toBeNull()
+      expect(
+        beforeHeaderSlot!.compareDocumentPosition(header!) & Node.DOCUMENT_POSITION_FOLLOWING,
+      ).toBeTruthy()
     })
 
     it('renders [part="title"] as an <h2> with slot[name="title"]', async () => {
@@ -254,6 +318,7 @@ describe('cv-dialog', () => {
     })
 
     it('programmatic open and close fire lifecycle events', async () => {
+      vi.useFakeTimers()
       const el = await createDialog()
       const events: string[] = []
 
@@ -264,14 +329,28 @@ describe('cv-dialog', () => {
 
       el.open = true
       await settle(el)
+      setPresenceTransitionDuration(el, '120ms')
+      expect(events).toEqual(['show'])
+
+      await advancePresenceTimers(el, 16)
+      expect(events).toEqual(['show'])
+
+      await advancePresenceTimers(el, 119)
+      expect(events).toEqual(['show'])
+
+      await advancePresenceTimers(el, 1)
+      expect(events).toEqual(['show', 'after-show'])
 
       el.open = false
       await settle(el)
+      expect(events).toEqual(['show', 'after-show', 'hide'])
 
+      await advancePresenceTimers(el, 120)
       expect(events).toEqual(['show', 'after-show', 'hide', 'after-hide'])
     })
 
     it('controlled open/close restores focus to the opener target', async () => {
+      vi.useFakeTimers()
       const opener = document.createElement('button')
       opener.textContent = 'Open externally'
       document.body.append(opener)
@@ -280,11 +359,39 @@ describe('cv-dialog', () => {
       const el = await createDialog()
       el.open = true
       await settle(el)
+      setPresenceTransitionDuration(el, '120ms')
+      await advancePresenceTimers(el, 16)
+      await advancePresenceTimers(el, 120)
 
       el.open = false
       await settle(el)
 
+      expect(document.activeElement).not.toBe(opener)
+      await advancePresenceTimers(el, 120)
+
       expect(document.activeElement).toBe(opener)
+    })
+
+    it('ignores a disconnected controlled focus restore target without throwing', async () => {
+      vi.useFakeTimers()
+      const opener = document.createElement('button')
+      document.body.append(opener)
+      opener.focus()
+
+      const el = await createDialog()
+      el.open = true
+      await settle(el)
+      setPresenceTransitionDuration(el, '120ms')
+      await advancePresenceTimers(el, 16)
+      await advancePresenceTimers(el, 120)
+
+      opener.remove()
+
+      expect(() => {
+        el.open = false
+      }).not.toThrow()
+      await settle(el)
+      await advancePresenceTimers(el, 120)
     })
 
     it('cv-show fires when dialog begins to open', async () => {
@@ -318,6 +425,7 @@ describe('cv-dialog', () => {
     })
 
     it('cv-after-show fires after dialog open animation completes', async () => {
+      vi.useFakeTimers()
       const el = await createDialog()
       const trigger = el.shadowRoot!.querySelector('[part="trigger"]') as HTMLElement
       let fired = false
@@ -328,12 +436,24 @@ describe('cv-dialog', () => {
 
       trigger.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
       await settle(el)
+      setPresenceTransitionDuration(el, '120ms')
 
+      expect(fired).toBe(false)
+
+      await advancePresenceTimers(el, 16)
+      expect(fired).toBe(false)
+
+      await advancePresenceTimers(el, 119)
+      expect(fired).toBe(false)
+
+      await advancePresenceTimers(el, 1)
       expect(fired).toBe(true)
     })
 
     it('cv-after-hide fires after dialog close animation completes', async () => {
+      vi.useFakeTimers()
       const el = await createDialog({open: true})
+      setPresenceTransitionDuration(el, '120ms')
       const content = getContent(el)
       let fired = false
 
@@ -344,7 +464,60 @@ describe('cv-dialog', () => {
       content.dispatchEvent(new KeyboardEvent('keydown', {key: 'Escape', bubbles: true}))
       await settle(el)
 
+      expect(fired).toBe(false)
+
+      await advancePresenceTimers(el, 119)
+      expect(fired).toBe(false)
+
+      await advancePresenceTimers(el, 1)
       expect(fired).toBe(true)
+    })
+
+    it('dispatches after lifecycle events immediately when transition duration is zero', async () => {
+      vi.useFakeTimers()
+      const el = await createDialog()
+      const events: string[] = []
+
+      el.addEventListener('cv-show', () => events.push('show'))
+      el.addEventListener('cv-after-show', () => events.push('after-show'))
+      el.addEventListener('cv-hide', () => events.push('hide'))
+      el.addEventListener('cv-after-hide', () => events.push('after-hide'))
+
+      el.open = true
+      await settle(el)
+      setPresenceTransitionDuration(el, '0ms')
+      await advancePresenceTimers(el, 16)
+
+      el.open = false
+      await settle(el)
+      await advancePresenceTimers(el, 0)
+
+      expect(events).toEqual(['show', 'after-show', 'hide', 'after-hide'])
+    })
+
+    it('keeps user close input/change immediate while delaying after-hide', async () => {
+      vi.useFakeTimers()
+      const el = await createDialog({open: true})
+      setPresenceTransitionDuration(el, '120ms')
+      const events: string[] = []
+
+      el.addEventListener('cv-hide', () => events.push('hide'))
+      el.addEventListener('cv-input', (event) =>
+        events.push(`input:${(event as CustomEvent<{open: boolean}>).detail.open}`),
+      )
+      el.addEventListener('cv-change', (event) =>
+        events.push(`change:${(event as CustomEvent<{open: boolean}>).detail.open}`),
+      )
+      el.addEventListener('cv-after-hide', () => events.push('after-hide'))
+
+      getContent(el).dispatchEvent(new KeyboardEvent('keydown', {key: 'Escape', bubbles: true}))
+      await settle(el)
+
+      expect(events).toEqual(['hide', 'input:false', 'change:false'])
+
+      await advancePresenceTimers(el, 120)
+
+      expect(events).toEqual(['hide', 'input:false', 'change:false', 'after-hide'])
     })
   })
 
@@ -679,7 +852,7 @@ describe('cv-dialog', () => {
 
     it('overlay hidden attribute reflects headless getOverlayProps().hidden', async () => {
       const el = await createDialog()
-      const overlay = el.shadowRoot!.querySelector('[part="overlay"]') as HTMLElement
+      const overlay = getOverlay(el)
       expect(overlay.hidden).toBe(true)
 
       const trigger = el.shadowRoot!.querySelector('[part="trigger"]') as HTMLElement
@@ -687,6 +860,34 @@ describe('cv-dialog', () => {
       await settle(el)
 
       expect(overlay.hidden).toBe(false)
+    })
+
+    it('keeps the overlay present during the close presence transition', async () => {
+      vi.useFakeTimers()
+      const el = await createDialog({open: true})
+      const overlay = getOverlay(el)
+      const shell = getModalShell(el)
+
+      setPresenceTransitionDuration(el, '120ms')
+      expect(shell?.hidden).toBe(false)
+      expect(overlay.hidden).toBe(false)
+
+      el.open = false
+      await settle(el)
+
+      expect(shell?.hidden).toBe(false)
+      expect(overlay.hidden).toBe(false)
+      expect(shell?.dataset['state']).toBe('closing')
+      expect(overlay.dataset['state']).toBe('closing')
+      expect(getContent(el).dataset['state']).toBe('closing')
+
+      await advancePresenceTimers(el, 120)
+
+      expect(shell?.hidden).toBe(true)
+      expect(overlay.hidden).toBe(true)
+      expect(shell?.dataset['state']).toBe('closed')
+      expect(overlay.dataset['state']).toBe('closed')
+      expect(getContent(el).dataset['state']).toBe('closed')
     })
 
     it('aria-controls on trigger matches content id', async () => {
@@ -725,16 +926,21 @@ describe('cv-dialog', () => {
     })
 
     it('body overflow is restored when modal dialog is closed', async () => {
+      vi.useFakeTimers()
       const el = await createDialog()
       const trigger = el.shadowRoot!.querySelector('[part="trigger"]') as HTMLElement
 
       trigger.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
       await settle(el)
+      setPresenceTransitionDuration(el, '120ms')
       expect(document.body.style.overflow).toBe('hidden')
 
       const content = getContent(el)
       content.dispatchEvent(new KeyboardEvent('keydown', {key: 'Escape', bubbles: true}))
       await settle(el)
+
+      expect(document.body.style.overflow).toBe('hidden')
+      await advancePresenceTimers(el, 120)
 
       expect(document.body.style.overflow).toBe('')
     })
@@ -779,7 +985,11 @@ describe('cv-dialog', () => {
       content.style.overflowY = 'auto'
       Object.defineProperty(content, 'scrollHeight', {configurable: true, value: 400})
       Object.defineProperty(content, 'clientHeight', {configurable: true, value: 100})
-      Object.defineProperty(content, 'scrollTop', {configurable: true, value: 20, writable: true})
+      Object.defineProperty(content, 'scrollTop', {
+        configurable: true,
+        value: 20,
+        writable: true,
+      })
 
       const event = new WheelEvent('wheel', {bubbles: true, cancelable: true, deltaY: 48})
       content.dispatchEvent(event)
@@ -800,9 +1010,18 @@ describe('cv-dialog', () => {
 
       Object.defineProperty(scroller, 'scrollHeight', {configurable: true, value: 400})
       Object.defineProperty(scroller, 'clientHeight', {configurable: true, value: 100})
-      Object.defineProperty(scroller, 'scrollTop', {configurable: true, value: 20, writable: true})
+      Object.defineProperty(scroller, 'scrollTop', {
+        configurable: true,
+        value: 20,
+        writable: true,
+      })
 
-      const event = new WheelEvent('wheel', {bubbles: true, cancelable: true, composed: true, deltaY: 48})
+      const event = new WheelEvent('wheel', {
+        bubbles: true,
+        cancelable: true,
+        composed: true,
+        deltaY: 48,
+      })
       scroller.dispatchEvent(event)
 
       expect(event.defaultPrevented).toBe(false)
@@ -814,7 +1033,11 @@ describe('cv-dialog', () => {
       content.style.overflowY = 'auto'
       Object.defineProperty(content, 'scrollHeight', {configurable: true, value: 400})
       Object.defineProperty(content, 'clientHeight', {configurable: true, value: 100})
-      Object.defineProperty(content, 'scrollTop', {configurable: true, value: 300, writable: true})
+      Object.defineProperty(content, 'scrollTop', {
+        configurable: true,
+        value: 300,
+        writable: true,
+      })
 
       const event = new WheelEvent('wheel', {bubbles: true, cancelable: true, deltaY: 48})
       content.dispatchEvent(event)
@@ -825,13 +1048,31 @@ describe('cv-dialog', () => {
     it('prevents touchmove scrolling on the modal overlay background', async () => {
       const el = await createDialog({open: true})
       const overlay = el.shadowRoot!.querySelector('[part="overlay"]') as HTMLElement
-      const touchStartEvent = new Event('touchstart', {bubbles: true, cancelable: true}) as TouchEvent
-      const touchMoveEvent = new Event('touchmove', {bubbles: true, cancelable: true}) as TouchEvent
+      const touchStartEvent = new Event('touchstart', {
+        bubbles: true,
+        cancelable: true,
+      }) as TouchEvent
+      const touchMoveEvent = new Event('touchmove', {
+        bubbles: true,
+        cancelable: true,
+      }) as TouchEvent
 
-      Object.defineProperty(touchStartEvent, 'touches', {configurable: true, value: [{clientY: 100}]})
-      Object.defineProperty(touchStartEvent, 'changedTouches', {configurable: true, value: [{clientY: 100}]})
-      Object.defineProperty(touchMoveEvent, 'touches', {configurable: true, value: [{clientY: 40}]})
-      Object.defineProperty(touchMoveEvent, 'changedTouches', {configurable: true, value: [{clientY: 40}]})
+      Object.defineProperty(touchStartEvent, 'touches', {
+        configurable: true,
+        value: [{clientY: 100}],
+      })
+      Object.defineProperty(touchStartEvent, 'changedTouches', {
+        configurable: true,
+        value: [{clientY: 100}],
+      })
+      Object.defineProperty(touchMoveEvent, 'touches', {
+        configurable: true,
+        value: [{clientY: 40}],
+      })
+      Object.defineProperty(touchMoveEvent, 'changedTouches', {
+        configurable: true,
+        value: [{clientY: 40}],
+      })
 
       overlay.dispatchEvent(touchStartEvent)
       overlay.dispatchEvent(touchMoveEvent)

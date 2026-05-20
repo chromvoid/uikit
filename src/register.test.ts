@@ -34,6 +34,8 @@ const registeredElements = [
   'cv-grid-cell',
   'cv-grid-column',
   'cv-grid-row',
+  'cv-guidance-anchor',
+  'cv-guidance-panel',
   'cv-icon',
   'cv-input',
   'cv-landmark',

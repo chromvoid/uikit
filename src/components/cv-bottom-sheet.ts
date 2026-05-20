@@ -6,11 +6,24 @@ import {CVDialog} from './cv-dialog'
 
 export interface CVBottomSheetEventDetail {
   open: boolean
+  detent?: CVBottomSheetDetent
+}
+
+export type CVBottomSheetDetent = 'collapsed' | 'middle' | 'expanded'
+export type CVBottomSheetInputEvent = CustomEvent<CVBottomSheetEventDetail>
+export type CVBottomSheetChangeEvent = CustomEvent<CVBottomSheetEventDetail>
+
+export interface CVBottomSheetEventMap {
+  'cv-input': CVBottomSheetInputEvent
+  'cv-change': CVBottomSheetChangeEvent
 }
 
 const DRAG_DISMISS_DISTANCE_PX = 96
 const DRAG_DISMISS_VELOCITY_PX_PER_MS = 0.75
+const DRAG_DETENT_DISTANCE_PX = 64
+const DRAG_DETENT_VELOCITY_PX_PER_MS = 0.5
 const SHEET_DISMISS_ANIMATION_MS = 180
+const DETENT_ORDER: CVBottomSheetDetent[] = ['collapsed', 'middle', 'expanded']
 
 export class CVBottomSheet extends ReatomLitElement {
   static elementName = 'cv-bottom-sheet'
@@ -32,6 +45,9 @@ export class CVBottomSheet extends ReatomLitElement {
       closable: {type: Boolean, reflect: true},
       showHandle: {type: Boolean, attribute: 'show-handle', reflect: true},
       dragToClose: {type: Boolean, attribute: 'drag-to-close', reflect: true},
+      detents: {type: String, reflect: true},
+      detent: {type: String, reflect: true},
+      handleLabel: {type: String, attribute: 'handle-label'},
     }
   }
 
@@ -46,10 +62,16 @@ export class CVBottomSheet extends ReatomLitElement {
   declare closable: boolean
   declare showHandle: boolean
   declare dragToClose: boolean
+  declare detents: string
+  declare detent: CVBottomSheetDetent
+  declare handleLabel: string
 
   private dragPointerId: number | null = null
   private dragStartY = 0
   private dragStartedAt = 0
+  private dragStartDetent: CVBottomSheetDetent = 'expanded'
+  private dragMoved = false
+  private suppressNextHandleClick = false
   private dismissAnimationTimer: number | null = null
 
   constructor() {
@@ -65,6 +87,9 @@ export class CVBottomSheet extends ReatomLitElement {
     this.closable = true
     this.showHandle = true
     this.dragToClose = true
+    this.detents = ''
+    this.detent = 'expanded'
+    this.handleLabel = 'Resize sheet'
   }
 
   static styles = css`
@@ -84,6 +109,10 @@ export class CVBottomSheet extends ReatomLitElement {
           ) +
           var(--cv-bottom-sheet-keyboard-inset, var(--visual-viewport-bottom-inset, 0px))
       );
+      --cv-bottom-sheet-available-height: max(
+        0px,
+        calc(100dvh - var(--cv-bottom-sheet-overlay-block-start) - var(--cv-bottom-sheet-overlay-block-end))
+      );
       --cv-dialog-z-index: var(--cv-bottom-sheet-z-index, 40);
       --cv-dialog-width: var(--cv-bottom-sheet-width, 100%);
       --cv-dialog-max-height: var(--cv-bottom-sheet-max-height, min(82dvh, calc(100dvh - 32px)));
@@ -94,6 +123,12 @@ export class CVBottomSheet extends ReatomLitElement {
       --cv-dialog-overlay-color: var(--cv-bottom-sheet-overlay-color, var(--cv-color-overlay));
       --cv-dialog-padding-block: 0px;
       --cv-dialog-padding-inline: 0px;
+      --cv-dialog-content-transition-property: transform;
+      --cv-dialog-transition-duration: var(--cv-bottom-sheet-dismiss-duration, 180ms);
+      --cv-dialog-transition-easing-open: var(--cv-easing-standard, ease);
+      --cv-dialog-transition-easing-close: var(--cv-easing-standard, ease);
+      --cv-dialog-content-closed-transform: translateY(calc(100% + 32px));
+      --cv-dialog-content-open-transform: translateY(var(--cv-bottom-sheet-drag-offset, 0px));
     }
 
     cv-dialog::part(trigger) {
@@ -112,10 +147,7 @@ export class CVBottomSheet extends ReatomLitElement {
       max-inline-size: var(--cv-bottom-sheet-max-width, 100%);
       max-block-size: min(
         var(--cv-bottom-sheet-max-height, min(82dvh, calc(100dvh - 32px))),
-        max(
-          0px,
-          calc(100dvh - var(--cv-bottom-sheet-overlay-block-start) - var(--cv-bottom-sheet-overlay-block-end))
-        )
+        var(--cv-bottom-sheet-available-height)
       );
       gap: 0;
       overflow: hidden;
@@ -125,17 +157,66 @@ export class CVBottomSheet extends ReatomLitElement {
         --cv-bottom-sheet-border-radius,
         var(--cv-radius-lg, 14px) var(--cv-radius-lg, 14px) 0 0
       );
-      transform: translateY(var(--cv-bottom-sheet-drag-offset, 0));
-      transition: transform var(--cv-bottom-sheet-dismiss-duration, 180ms) var(--cv-easing-standard, ease);
       will-change: transform;
+    }
+
+    cv-dialog.has-detents {
+      --cv-bottom-sheet-detent-max-height: min(
+        var(--cv-bottom-sheet-expanded-height, min(92dvh, calc(100dvh - 32px))),
+        var(--cv-bottom-sheet-available-height)
+      );
+      --cv-bottom-sheet-active-detent-height: var(--cv-bottom-sheet-detent-max-height);
+      --cv-bottom-sheet-detent-visible-height: min(
+        var(--cv-bottom-sheet-active-detent-height),
+        var(--cv-bottom-sheet-detent-max-height)
+      );
+      --cv-bottom-sheet-detent-offset: 0px;
+      --cv-dialog-content-open-transform: translateY(
+        calc(var(--cv-bottom-sheet-detent-offset, 0px) + var(--cv-bottom-sheet-drag-offset, 0px))
+      );
+    }
+
+    cv-dialog.has-detents::part(content) {
+      block-size: var(--cv-bottom-sheet-detent-max-height);
+    }
+
+    cv-dialog.has-detents::part(body) {
+      block-size: var(--cv-bottom-sheet-detent-visible-height);
+      max-block-size: var(--cv-bottom-sheet-detent-visible-height);
+    }
+
+    cv-dialog.detent-collapsed {
+      --cv-bottom-sheet-active-detent-height: var(--cv-bottom-sheet-collapsed-height, 148px);
+      --cv-bottom-sheet-detent-offset: max(
+        0px,
+        calc(var(--cv-bottom-sheet-detent-max-height) - var(--cv-bottom-sheet-collapsed-height, 148px))
+      );
+    }
+
+    cv-dialog.detent-middle {
+      --cv-bottom-sheet-active-detent-height: var(--cv-bottom-sheet-middle-height, min(52dvh, 440px));
+      --cv-bottom-sheet-detent-offset: max(
+        0px,
+        calc(
+          var(--cv-bottom-sheet-detent-max-height) - var(--cv-bottom-sheet-middle-height, min(52dvh, 440px))
+        )
+      );
+    }
+
+    cv-dialog.detent-expanded {
+      --cv-bottom-sheet-active-detent-height: var(
+        --cv-bottom-sheet-expanded-height,
+        min(92dvh, calc(100dvh - 32px))
+      );
+      --cv-bottom-sheet-detent-offset: 0px;
     }
 
     cv-dialog.is-dragging::part(content) {
       transition: none;
     }
 
-    cv-dialog.is-dismissing::part(content) {
-      transform: translateY(calc(100% + 32px));
+    cv-dialog.is-dismissing {
+      --cv-dialog-content-open-transform: translateY(calc(100% + 32px));
     }
 
     cv-dialog::part(body) {
@@ -151,10 +232,19 @@ export class CVBottomSheet extends ReatomLitElement {
       align-items: center;
       justify-content: center;
       padding-block: var(--cv-bottom-sheet-handle-padding-block, 12px 8px);
+      border: 0;
+      background: transparent;
+      color: inherit;
+      font: inherit;
       cursor: grab;
       touch-action: none;
       user-select: none;
       -webkit-tap-highlight-color: transparent;
+    }
+
+    .sheet-handle:focus-visible {
+      outline: 2px solid var(--cv-color-primary, #65d7ff);
+      outline-offset: -2px;
     }
 
     .sheet-handle:active {
@@ -169,8 +259,9 @@ export class CVBottomSheet extends ReatomLitElement {
     }
 
     @media (prefers-reduced-motion: reduce) {
-      cv-dialog::part(content) {
-        transition-duration: 0ms;
+      cv-dialog {
+        --cv-bottom-sheet-dismiss-duration: 0ms;
+        --cv-dialog-transition-duration: 0ms;
       }
     }
   `
@@ -192,6 +283,38 @@ export class CVBottomSheet extends ReatomLitElement {
     return this.shadowRoot?.querySelector('cv-dialog') as HTMLElement | null
   }
 
+  private getEnabledDetents(): CVBottomSheetDetent[] {
+    const values = (this.detents ?? '').split(/[,\s]+/).filter(Boolean)
+    const seen = new Set<CVBottomSheetDetent>()
+    const enabled: CVBottomSheetDetent[] = []
+
+    for (const value of values) {
+      if (!this.isDetent(value) || seen.has(value)) continue
+      seen.add(value)
+      enabled.push(value)
+    }
+
+    return DETENT_ORDER.filter((detent) => seen.has(detent))
+  }
+
+  private hasDetents(): boolean {
+    return this.getEnabledDetents().length > 0
+  }
+
+  private isDetent(value: string): value is CVBottomSheetDetent {
+    return value === 'collapsed' || value === 'middle' || value === 'expanded'
+  }
+
+  private getResolvedDetent(): CVBottomSheetDetent {
+    const enabled = this.getEnabledDetents()
+    if (enabled.includes(this.detent)) return this.detent
+    return enabled[0] ?? 'expanded'
+  }
+
+  private getResolvedDetentIndex(): number {
+    return this.getEnabledDetents().indexOf(this.getResolvedDetent())
+  }
+
   private clearDismissAnimationTimer(): void {
     if (this.dismissAnimationTimer === null) return
     window.clearTimeout(this.dismissAnimationTimer)
@@ -202,15 +325,28 @@ export class CVBottomSheet extends ReatomLitElement {
     this.dragPointerId = null
     this.dragStartY = 0
     this.dragStartedAt = 0
+    this.dragStartDetent = this.getResolvedDetent()
+    this.dragMoved = false
 
     const dialog = this.getDialogElement()
     dialog?.classList.remove('is-dragging', 'is-dismissing')
     dialog?.style.removeProperty('--cv-bottom-sheet-drag-offset')
   }
 
-  private setSheetDragOffset(offset: number): void {
-    const safeOffset = Math.max(0, offset)
+  private setSheetDragOffset(offset: number, allowNegative = false): void {
+    const safeOffset = allowNegative ? offset : Math.max(0, offset)
     this.getDialogElement()?.style.setProperty('--cv-bottom-sheet-drag-offset', `${Math.round(safeOffset)}px`)
+  }
+
+  private createEventDetail(open: boolean): CVBottomSheetEventDetail {
+    if (!this.hasDetents()) {
+      return {open}
+    }
+
+    return {
+      open,
+      detent: this.getResolvedDetent(),
+    }
   }
 
   private dispatchInput(detail: CVBottomSheetEventDetail): void {
@@ -224,8 +360,17 @@ export class CVBottomSheet extends ReatomLitElement {
   private commitUserClose(): void {
     if (!this.open) return
 
-    const detail = {open: false}
+    const detail = this.createEventDetail(false)
     this.open = false
+    this.dispatchInput(detail)
+    this.dispatchChange(detail)
+  }
+
+  private commitUserDetent(detent: CVBottomSheetDetent): void {
+    if (!this.open || !this.hasDetents() || detent === this.getResolvedDetent()) return
+
+    this.detent = detent
+    const detail = this.createEventDetail(true)
     this.dispatchInput(detail)
     this.dispatchChange(detail)
   }
@@ -249,20 +394,32 @@ export class CVBottomSheet extends ReatomLitElement {
     }, SHEET_DISMISS_ANIMATION_MS)
   }
 
+  private handleDialogInput(event: CustomEvent<CVBottomSheetEventDetail>): void {
+    if (typeof event.detail.open !== 'boolean') return
+    event.stopPropagation()
+    this.open = event.detail.open
+    this.dispatchInput(this.createEventDetail(this.open))
+  }
+
   private handleDialogChange(event: CustomEvent<CVBottomSheetEventDetail>): void {
     if (typeof event.detail.open !== 'boolean') return
+    event.stopPropagation()
     this.open = event.detail.open
+    this.dispatchChange(this.createEventDetail(this.open))
   }
 
   private handleDragPointerDown(event: PointerEvent): void {
-    if (!this.dragToClose) return
+    if (!this.open) return
+    if (!this.dragToClose && !this.hasDetents()) return
     if (this.dismissAnimationTimer !== null) return
     if (typeof event.button === 'number' && event.button !== 0) return
 
     this.dragPointerId = event.pointerId
     this.dragStartY = event.clientY
     this.dragStartedAt = performance.now()
-    this.setSheetDragOffset(0)
+    this.dragStartDetent = this.getResolvedDetent()
+    this.dragMoved = false
+    this.setSheetDragOffset(0, this.hasDetents())
     this.getDialogElement()?.classList.add('is-dragging')
     const handle = event.currentTarget as HTMLElement | null
     handle?.setPointerCapture?.(event.pointerId)
@@ -272,11 +429,34 @@ export class CVBottomSheet extends ReatomLitElement {
   private handleDragPointerMove(event: PointerEvent): void {
     if (this.dragPointerId !== event.pointerId) return
 
-    const offset = Math.max(0, event.clientY - this.dragStartY)
-    this.setSheetDragOffset(offset)
-    if (offset > 0) {
+    const offset = event.clientY - this.dragStartY
+    this.dragMoved ||= Math.abs(offset) > 4
+    this.setSheetDragOffset(offset, this.hasDetents())
+    if (offset !== 0) {
       event.preventDefault()
     }
+  }
+
+  private getNextDetentForDrag(offset: number, velocity: number): CVBottomSheetDetent | null {
+    const enabled = this.getEnabledDetents()
+    const index = enabled.indexOf(this.dragStartDetent)
+    if (index < 0) return this.getResolvedDetent()
+
+    const shouldExpand = offset <= -DRAG_DETENT_DISTANCE_PX || velocity <= -DRAG_DETENT_VELOCITY_PX_PER_MS
+    if (shouldExpand) {
+      return enabled[Math.min(index + 1, enabled.length - 1)] ?? this.dragStartDetent
+    }
+
+    const shouldCollapse = offset >= DRAG_DETENT_DISTANCE_PX || velocity >= DRAG_DETENT_VELOCITY_PX_PER_MS
+    if (!shouldCollapse) {
+      return this.dragStartDetent
+    }
+
+    if (index > 0) {
+      return enabled[index - 1] ?? this.dragStartDetent
+    }
+
+    return null
   }
 
   private handleDragPointerUp(event: PointerEvent): void {
@@ -285,10 +465,28 @@ export class CVBottomSheet extends ReatomLitElement {
     const handle = event.currentTarget as HTMLElement | null
     handle?.releasePointerCapture?.(event.pointerId)
     const elapsed = Math.max(1, performance.now() - this.dragStartedAt)
-    const offset = Math.max(0, event.clientY - this.dragStartY)
+    const offset = event.clientY - this.dragStartY
     const velocity = offset / elapsed
+    this.suppressNextHandleClick = this.dragMoved
 
-    if (offset >= DRAG_DISMISS_DISTANCE_PX || velocity >= DRAG_DISMISS_VELOCITY_PX_PER_MS) {
+    if (this.hasDetents()) {
+      const nextDetent = this.getNextDetentForDrag(offset, velocity)
+
+      if (nextDetent === null && this.dragToClose) {
+        this.animateSheetDismiss()
+        return
+      }
+
+      this.resetSheetDragState()
+      if (nextDetent) {
+        this.commitUserDetent(nextDetent)
+      }
+      return
+    }
+
+    const dismissOffset = Math.max(0, offset)
+    const dismissVelocity = dismissOffset / elapsed
+    if (dismissOffset >= DRAG_DISMISS_DISTANCE_PX || dismissVelocity >= DRAG_DISMISS_VELOCITY_PX_PER_MS) {
       this.animateSheetDismiss()
       return
     }
@@ -303,10 +501,35 @@ export class CVBottomSheet extends ReatomLitElement {
     this.resetSheetDragState()
   }
 
+  private handleHandleClick(event: Event): void {
+    if (this.suppressNextHandleClick) {
+      this.suppressNextHandleClick = false
+      return
+    }
+    if (!this.hasDetents()) return
+
+    const enabled = this.getEnabledDetents()
+    const index = this.getResolvedDetentIndex()
+    const next = enabled[index + 1]
+    if (!next) return
+
+    event.preventDefault()
+    this.commitUserDetent(next)
+  }
+
   protected override render() {
+    const hasDetents = this.hasDetents()
+    const dialogClass = [
+      'sheet-dialog',
+      hasDetents ? 'has-detents' : '',
+      hasDetents ? `detent-${this.getResolvedDetent()}` : '',
+    ]
+      .filter(Boolean)
+      .join(' ')
+
     return html`
       <cv-dialog
-        class="sheet-dialog"
+        class=${dialogClass}
         exportparts="trigger, overlay, content, header, title, description, header-close, body, footer"
         .open=${this.open}
         .modal=${this.modal}
@@ -317,6 +540,7 @@ export class CVBottomSheet extends ReatomLitElement {
         .initialFocusId=${this.initialFocusId}
         .noHeader=${this.noHeader}
         .closable=${this.closable}
+        @cv-input=${this.handleDialogInput}
         @cv-change=${this.handleDialogChange}
       >
         <slot name="title" slot="title"></slot>
@@ -325,17 +549,20 @@ export class CVBottomSheet extends ReatomLitElement {
         ${
           this.showHandle
             ? html`
-                <div
+                <button
+                  slot="before-header"
                   class="sheet-handle"
                   part="handle"
-                  aria-hidden="true"
+                  type="button"
+                  aria-label=${this.handleLabel}
                   @pointerdown=${this.handleDragPointerDown}
                   @pointermove=${this.handleDragPointerMove}
                   @pointerup=${this.handleDragPointerUp}
                   @pointercancel=${this.handleDragPointerCancel}
+                  @click=${this.handleHandleClick}
                 >
                   <span class="sheet-grabber" part="grabber"></span>
-                </div>
+                </button>
               `
             : null
         }

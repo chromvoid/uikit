@@ -106,6 +106,7 @@ Slide-out panel dialog anchored to a viewport edge, used for navigation, forms, 
 | `close-on-outside-focus`   | Boolean | `true`     | Whether focusing outside closes the drawer                         |
 | `initial-focus-id`         | String  | ---        | Id of element to focus when drawer opens                           |
 | `no-header`                | Boolean | `false`    | Hides the header (title, description, header close button)         |
+| `drag-to-close`            | Boolean | `false`    | Enables touch drag dismissal in the drawer's closing direction     |
 
 ## Slots
 
@@ -147,6 +148,9 @@ Slide-out panel dialog anchored to a viewport edge, used for navigation, forms, 
 | `--cv-drawer-overlay-closed-opacity`      | `1`                         | Overlay opacity while the panel is animating out or before the panel animates in                      |
 | `--cv-drawer-border-radius`               | `var(--cv-radius-lg, 14px)` | Panel border radius (applied to the inward edge only)                                                 |
 | `--cv-drawer-transition-duration`         | `250ms`                     | Slide transition duration                                                                             |
+| `--cv-drawer-drag-offset-x`               | `0px`                       | Internal horizontal drag offset applied while touch dragging                                          |
+| `--cv-drawer-drag-offset-y`               | `0px`                       | Internal vertical drag offset applied while touch dragging                                            |
+| `--cv-drawer-drag-overlay-opacity`        | `1`                         | Internal overlay opacity applied while touch dragging                                                 |
 
 ## Visual States
 
@@ -160,6 +164,7 @@ Slide-out panel dialog anchored to a viewport edge, used for navigation, forms, 
 | `:host([placement="end"])`    | Panel anchored to the inline-end edge (right in LTR, left in RTL)   |
 | `:host([placement="top"])`    | Panel anchored to the top edge                                      |
 | `:host([placement="bottom"])` | Panel anchored to the bottom edge                                   |
+| `:host([drag-to-close])`      | Touch drag dismissal is enabled                                     |
 
 ### Placement layout rules
 

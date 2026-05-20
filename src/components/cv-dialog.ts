@@ -13,6 +13,8 @@ type PopoverHostElement = HTMLElement & {
   hidePopover?: () => void
 }
 
+type DialogPresenceState = 'closed' | 'opening' | 'open' | 'closing'
+
 let cvDialogNonce = 0
 let hasWarnedAboutTriggerSlot = false
 
@@ -75,6 +77,12 @@ export class CVDialog extends ReatomLitElement {
   private suppressLifecycleFromUpdate = false
   private lifecycleToken = 0
   private focusRestoreTarget: HTMLElement | null = null
+  private portalVisible = false
+  private presenceState: DialogPresenceState = 'closed'
+  private openAnimationFrame = 0
+  private presenceAnimationTimeout = 0
+  private pendingFocusRestoreTargetId: string | null = null
+  private shouldAnimatePresence = false
   private suppressNextNativeCancel = false
   private lastTouchClientY = 0
   private readonly handleDocumentFocusInBound = (event: FocusEvent) => this.handleDocumentFocusIn(event)
@@ -91,6 +99,8 @@ export class CVDialog extends ReatomLitElement {
     this.noHeader = false
     this.closable = true
     this.model = this.createModel()
+    this.portalVisible = this.open
+    this.presenceState = this.open ? 'open' : 'closed'
   }
 
   static styles = [
@@ -122,6 +132,12 @@ export class CVDialog extends ReatomLitElement {
         --cv-dialog-available-block-size: calc(
           100dvh - var(--cv-dialog-overlay-padding-block-start) - var(--cv-dialog-overlay-padding-block-end)
         );
+        --cv-dialog-transition-duration: var(--cv-duration-fast, 120ms);
+        --cv-dialog-transition-easing-open: var(--cv-easing-decelerate, cubic-bezier(0, 0, 0.2, 1));
+        --cv-dialog-transition-easing-close: var(--cv-easing-accelerate, cubic-bezier(0.4, 0, 1, 1));
+        --cv-dialog-content-transition-property: opacity, transform;
+        --cv-dialog-content-closed-transform: translate3d(0, 8px, 0) scale(0.98);
+        --cv-dialog-content-open-transform: translate3d(0, 0, 0) scale(1);
       }
 
       [part='trigger'] {
@@ -155,6 +171,9 @@ export class CVDialog extends ReatomLitElement {
         block-size: 100dvh;
         max-block-size: none;
         overflow: visible;
+        transition:
+          display var(--cv-dialog-transition-duration) allow-discrete,
+          overlay var(--cv-dialog-transition-duration) allow-discrete;
       }
 
       .portal-shell::backdrop {
@@ -176,18 +195,40 @@ export class CVDialog extends ReatomLitElement {
         z-index: var(--cv-dialog-z-index, 40);
         display: grid;
         place-items: center;
-        background: var(--cv-dialog-overlay-color, var(--cv-color-overlay));
+        background: transparent;
         padding-block: var(--cv-dialog-overlay-padding-block-start) var(--cv-dialog-overlay-padding-block-end);
         padding-inline: var(--cv-dialog-overlay-padding-inline-start)
           var(--cv-dialog-overlay-padding-inline-end);
         overscroll-behavior: contain;
       }
 
+      [part='overlay']::before {
+        content: '';
+        position: fixed;
+        inset: 0;
+        background: var(--cv-dialog-overlay-color, var(--cv-color-overlay));
+        opacity: 0;
+        transition: opacity var(--cv-dialog-transition-duration) var(--cv-dialog-transition-easing-open);
+        pointer-events: none;
+      }
+
       [part='overlay'][hidden] {
         display: none;
       }
 
+      [part='overlay'][data-state='opening']::before,
+      [part='overlay'][data-state='open']::before {
+        opacity: 1;
+      }
+
+      [part='overlay'][data-state='closing']::before {
+        opacity: 0;
+        transition-timing-function: var(--cv-dialog-transition-easing-close);
+      }
+
       [part='content'] {
+        position: relative;
+        z-index: 1;
         box-sizing: border-box;
         inline-size: var(--cv-dialog-width, min(560px, calc(100vw - 32px)));
         max-inline-size: min(var(--cv-dialog-width, 100%), var(--cv-dialog-available-inline-size));
@@ -205,6 +246,23 @@ export class CVDialog extends ReatomLitElement {
         border: 1px solid var(--cv-color-border, #2a3245);
         background: var(--cv-color-surface-elevated, #1d2432);
         color: var(--cv-color-text, #e8ecf6);
+        opacity: 0;
+        transform: var(--cv-dialog-content-closed-transform);
+        transition-property: var(--cv-dialog-content-transition-property);
+        transition-duration: var(--cv-dialog-transition-duration);
+        transition-timing-function: var(--cv-dialog-transition-easing-open);
+        will-change: opacity, transform;
+      }
+
+      [part='content'][data-state='open'] {
+        opacity: 1;
+        transform: var(--cv-dialog-content-open-transform);
+      }
+
+      [part='content'][data-state='closing'] {
+        opacity: 0;
+        transform: var(--cv-dialog-content-closed-transform);
+        transition-timing-function: var(--cv-dialog-transition-easing-close);
       }
 
       [part='content']:focus-visible {
@@ -289,6 +347,29 @@ export class CVDialog extends ReatomLitElement {
         gap: var(--cv-space-2, 8px);
         justify-content: flex-end;
       }
+
+      @starting-style {
+        [part='overlay'][data-state='open']::before {
+          opacity: 0;
+        }
+
+        [part='content'][data-state='open'] {
+          opacity: 0;
+          transform: var(--cv-dialog-content-closed-transform);
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        :host {
+          --cv-dialog-transition-duration: 0ms;
+          --cv-dialog-content-closed-transform: none;
+          --cv-dialog-content-open-transform: none;
+        }
+
+        [part='content'] {
+          transform: none;
+        }
+      }
     `,
   ]
 
@@ -306,6 +387,7 @@ export class CVDialog extends ReatomLitElement {
   }
 
   override disconnectedCallback(): void {
+    this.clearPresenceAnimationQueue()
     this.closeNativeShells()
     super.disconnectedCallback()
     this.syncOutsideFocusListener(true)
@@ -338,6 +420,23 @@ export class CVDialog extends ReatomLitElement {
         this.model.actions.close()
       }
     }
+
+    if (changedProperties.has('open')) {
+      this.clearPresenceAnimationQueue()
+
+      if (this.open) {
+        this.portalVisible = true
+        this.presenceState = this.hasUpdated ? 'opening' : 'open'
+      } else {
+        this.presenceState = 'closing'
+        if (!this.hasUpdated) {
+          this.portalVisible = false
+          this.presenceState = 'closed'
+        }
+      }
+
+      this.shouldAnimatePresence = this.hasUpdated
+    }
   }
 
   override updated(changedProperties: PropertyValues): void {
@@ -347,17 +446,33 @@ export class CVDialog extends ReatomLitElement {
     this.syncTopLayerVisibility()
     this.syncOutsideFocusListener()
     this.syncScrollLock()
+    this.syncRenderedPresenceState()
 
     if (changedProperties.has('open')) {
       const previousOpen = changedProperties.get('open')
+      const hasLogicalTransition = previousOpen !== undefined && previousOpen !== this.open
       if (this.suppressLifecycleFromUpdate) {
         this.suppressLifecycleFromUpdate = false
-      } else if (previousOpen !== undefined && previousOpen !== this.open) {
+      } else if (hasLogicalTransition) {
         this.dispatchLifecycleTransition(this.open)
-        if (previousOpen === true && this.open === false) {
-          this.restoreFocus(this.model.state.restoreTargetId())
+      }
+
+      if (hasLogicalTransition && previousOpen === true && this.open === false) {
+        this.queueFocusRestore(this.model.state.restoreTargetId())
+      }
+
+      if (hasLogicalTransition) {
+        if (this.shouldAnimatePresence) {
+          if (this.open) {
+            this.startOpenPresenceTransition()
+          } else {
+            this.startClosePresenceTransition()
+          }
+        } else {
+          this.finishPresenceTransition(this.open)
         }
       }
+      this.shouldAnimatePresence = false
 
       if (this.open) {
         queueMicrotask(() => this.focusInitialTarget())
@@ -376,6 +491,139 @@ export class CVDialog extends ReatomLitElement {
       closeOnOutsideFocus: this.closeOnOutsideFocus,
       initialFocusId: this.initialFocusId || undefined,
     })
+  }
+
+  private clearPresenceAnimationQueue(): void {
+    if (this.openAnimationFrame) {
+      cancelAnimationFrame(this.openAnimationFrame)
+      this.openAnimationFrame = 0
+    }
+
+    if (this.presenceAnimationTimeout) {
+      window.clearTimeout(this.presenceAnimationTimeout)
+      this.presenceAnimationTimeout = 0
+    }
+  }
+
+  private startOpenPresenceTransition(): void {
+    this.openAnimationFrame = requestAnimationFrame(() => {
+      this.openAnimationFrame = 0
+
+      if (!this.open) return
+
+      this.presenceState = 'open'
+      this.syncRenderedPresenceState()
+
+      const duration = this.getPresenceTransitionDuration()
+      if (duration === 0) {
+        this.finishPresenceTransition(true)
+        return
+      }
+
+      const token = this.lifecycleToken
+      this.presenceAnimationTimeout = window.setTimeout(() => {
+        this.presenceAnimationTimeout = 0
+        if (!this.open || token !== this.lifecycleToken) return
+        this.finishPresenceTransition(true)
+      }, duration)
+    })
+  }
+
+  private startClosePresenceTransition(): void {
+    const duration = this.getPresenceTransitionDuration()
+
+    if (duration === 0) {
+      this.finishPresenceTransition(false)
+      return
+    }
+
+    const token = this.lifecycleToken
+    this.presenceAnimationTimeout = window.setTimeout(() => {
+      this.presenceAnimationTimeout = 0
+      if (this.open || token !== this.lifecycleToken) return
+      this.finishPresenceTransition(false)
+    }, duration)
+  }
+
+  private finishPresenceTransition(open: boolean): void {
+    if (this.open !== open) return
+
+    if (open) {
+      this.portalVisible = true
+      this.presenceState = 'open'
+      this.syncRenderedPresenceState()
+      this.dispatchLifecycleEvent('cv-after-show')
+      return
+    }
+
+    this.portalVisible = false
+    this.presenceState = 'closed'
+    this.syncTopLayerVisibility()
+    this.syncScrollLock()
+    this.syncRenderedPresenceState()
+    this.restoreQueuedFocus()
+    this.dispatchLifecycleEvent('cv-after-hide')
+  }
+
+  private syncRenderedPresenceState(): void {
+    const shell = this.getCurrentPortalShell()
+    const overlay = this.getPortalOverlay()
+    const content = this.getContentElement()
+
+    if (shell) {
+      shell.dataset['state'] = this.presenceState
+      shell.hidden = !this.portalVisible
+    }
+
+    if (overlay) {
+      overlay.hidden = !this.portalVisible
+      overlay.dataset['state'] = this.presenceState
+    }
+
+    if (content) {
+      content.dataset['state'] = this.presenceState
+    }
+  }
+
+  private shouldLockScrollForPresence(): boolean {
+    return this.portalVisible && this.modal
+  }
+
+  private getPresenceTransitionDuration(): number {
+    return Math.max(
+      this.readTransitionDuration(this.getPortalOverlay()),
+      this.readTransitionDuration(this.getContentElement()),
+    )
+  }
+
+  private readTransitionDuration(element: HTMLElement | null): number {
+    if (!element) return 0
+
+    const styles = getComputedStyle(element)
+    const durations = this.parseTimeValues(styles.transitionDuration)
+    const delays = this.parseTimeValues(styles.transitionDelay)
+    const transitionCount = Math.max(durations.length, delays.length)
+    let maxDuration = 0
+
+    for (let index = 0; index < transitionCount; index += 1) {
+      const duration = durations[index] ?? durations[durations.length - 1] ?? 0
+      const delay = delays[index] ?? delays[delays.length - 1] ?? 0
+      maxDuration = Math.max(maxDuration, duration + delay)
+    }
+
+    return maxDuration
+  }
+
+  private parseTimeValues(value: string): number[] {
+    return value
+      .split(',')
+      .map((entry) => entry.trim())
+      .filter(Boolean)
+      .map((entry) => {
+        if (entry.endsWith('ms')) return Number.parseFloat(entry)
+        if (entry.endsWith('s')) return Number.parseFloat(entry) * 1000
+        return Number.parseFloat(entry) || 0
+      })
   }
 
   private captureState() {
@@ -415,14 +663,8 @@ export class CVDialog extends ReatomLitElement {
   }
 
   private dispatchLifecycleTransition(open: boolean): void {
-    const token = ++this.lifecycleToken
-
+    ++this.lifecycleToken
     this.dispatchLifecycleEvent(open ? 'cv-show' : 'cv-hide')
-
-    this.updateComplete.then(() => {
-      if (this.lifecycleToken !== token) return
-      this.dispatchLifecycleEvent(open ? 'cv-after-show' : 'cv-after-hide')
-    })
   }
 
   private applyInteractionResult(previous: {open: boolean; restoreTargetId: string | null}): void {
@@ -441,12 +683,21 @@ export class CVDialog extends ReatomLitElement {
     }
 
     if (!nextOpen) {
-      this.restoreFocus(previous.restoreTargetId)
+      this.queueFocusRestore(previous.restoreTargetId)
     }
   }
 
   private captureFocusRestoreTarget(): void {
     this.focusRestoreTarget = getFocusRestoreTarget()
+  }
+
+  private queueFocusRestore(restoreTargetId: string | null): void {
+    this.pendingFocusRestoreTargetId = restoreTargetId
+  }
+
+  private restoreQueuedFocus(): void {
+    this.restoreFocus(this.pendingFocusRestoreTargetId)
+    this.pendingFocusRestoreTargetId = null
   }
 
   private restoreFocus(restoreTargetId: string | null): void {
@@ -474,6 +725,10 @@ export class CVDialog extends ReatomLitElement {
 
   private getPopoverShell(): PopoverHostElement | null {
     return this.shadowRoot?.querySelector('.popover-shell') as PopoverHostElement | null
+  }
+
+  private getCurrentPortalShell(): HTMLElement | null {
+    return this.modal ? this.getModalShell() : this.getPopoverShell()
   }
 
   private isPopoverOpen(shell: PopoverHostElement): boolean {
@@ -518,7 +773,7 @@ export class CVDialog extends ReatomLitElement {
 
       if (!modalShell) return
 
-      if (this.open) {
+      if (this.portalVisible) {
         modalShell.hidden = false
         if (!modalShell.open) {
           try {
@@ -554,7 +809,7 @@ export class CVDialog extends ReatomLitElement {
 
     if (!popoverShell) return
 
-    if (this.open) {
+    if (this.portalVisible) {
       this.openPopoverShell(popoverShell)
     } else {
       this.closePopoverShell(popoverShell)
@@ -587,7 +842,7 @@ export class CVDialog extends ReatomLitElement {
   }
 
   private syncScrollLock(): void {
-    if (!this.model.state.shouldLockScroll()) {
+    if (!this.shouldLockScrollForPresence()) {
       this.releaseScrollLock()
       return
     }
@@ -639,7 +894,9 @@ export class CVDialog extends ReatomLitElement {
     const contentIndex = path.indexOf(content)
 
     if (contentIndex >= 0) {
-      return path.slice(0, contentIndex + 1).filter((node): node is HTMLElement => node instanceof HTMLElement)
+      return path
+        .slice(0, contentIndex + 1)
+        .filter((node): node is HTMLElement => node instanceof HTMLElement)
     }
 
     const {target} = event
@@ -797,7 +1054,8 @@ export class CVDialog extends ReatomLitElement {
       <div
         id=${this.model.contracts.getOverlayProps().id}
         data-open=${this.model.contracts.getOverlayProps()['data-open']}
-        ?hidden=${this.model.contracts.getOverlayProps().hidden}
+        data-state=${this.presenceState}
+        ?hidden=${!this.portalVisible}
         part="overlay"
         @mousedown=${this.handleOverlayPointerDown}
         @click=${this.handleOverlayPointerDown}
@@ -813,9 +1071,12 @@ export class CVDialog extends ReatomLitElement {
           aria-labelledby=${contentProps['aria-labelledby'] ?? nothing}
           aria-describedby=${contentProps['aria-describedby'] ?? nothing}
           data-initial-focus=${contentProps['data-initial-focus'] ?? nothing}
+          data-state=${this.presenceState}
           part="content"
           @keydown=${this.handleContentKeyDown}
         >
+          <slot name="before-header"></slot>
+
           <header part="header" ?hidden=${this.noHeader}>
             <h2 id=${titleProps.id} part="title">
               <slot name="title">Dialog</slot>
@@ -889,12 +1150,22 @@ export class CVDialog extends ReatomLitElement {
       ${
         this.modal
           ? html`
-              <dialog class="portal-shell" ?hidden=${!this.open} @cancel=${this.handleNativeCancel}>
+              <dialog
+                class="portal-shell"
+                data-state=${this.presenceState}
+                ?hidden=${!this.portalVisible}
+                @cancel=${this.handleNativeCancel}
+              >
                 ${this.renderContent()}
               </dialog>
             `
           : html`
-              <div class="portal-shell popover-shell" popover="manual" ?hidden=${!this.open}>
+              <div
+                class="portal-shell popover-shell"
+                popover="manual"
+                data-state=${this.presenceState}
+                ?hidden=${!this.portalVisible}
+              >
                 ${this.renderContent()}
               </div>
             `

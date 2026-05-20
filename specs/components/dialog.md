@@ -83,15 +83,22 @@ Modal or non-modal dialog overlay for presenting focused content, confirmations,
 | `--cv-dialog-footer-spacing` | `var(--cv-space-4, 16px)`        | Footer padding                      |
 | `--cv-dialog-overlay-color`  | `var(--cv-color-overlay)`        | Backdrop overlay color              |
 | `--cv-dialog-border-radius`  | `var(--cv-radius-lg, 14px)`      | Panel border radius                 |
+| `--cv-dialog-transition-duration` | `var(--cv-duration-fast, 120ms)` | Presence transition duration        |
+| `--cv-dialog-transition-easing-open` | `var(--cv-easing-decelerate)` | Opening transition easing           |
+| `--cv-dialog-transition-easing-close` | `var(--cv-easing-accelerate)` | Closing transition easing           |
+| `--cv-dialog-content-closed-transform` | `translate3d(0, 8px, 0) scale(0.98)` | Panel transform while closed/closing |
+| `--cv-dialog-content-open-transform` | `translate3d(0, 0, 0) scale(1)` | Panel transform while open          |
 
 ## Visual States
 
 | Host selector                 | Description                                           |
 | ----------------------------- | ----------------------------------------------------- |
-| `:host([open])`               | Dialog visible, overlay shown                         |
+| `:host([open])`               | Dialog logical state is open                           |
 | `:host([modal])`              | Modal mode active (focus trap, scroll lock, backdrop) |
 | `:host([type="alertdialog"])` | Alert dialog mode with `role="alertdialog"`           |
 | `:host([no-header])`          | Header section hidden                                 |
+
+The top-layer shell, overlay, and content expose `data-state="closed|opening|open|closing"` internally. The shell remains mounted during `closing` so the exit transition can finish before native dialog/popover cleanup.
 
 ## Events
 
@@ -105,6 +112,8 @@ Modal or non-modal dialog overlay for presenting focused content, confirmations,
 | `cv-after-hide` | —                 | Fires after dialog close animation completes       |
 
 `cv-input` and `cv-change` fire only for user-initiated state changes (trigger click, Escape, outside pointer, outside focus, header close). Programmatic `open` attribute changes do not emit these events.
+
+`cv-after-show` and `cv-after-hide` fire after the presence transition completes. Reduced-motion and zero-duration paths complete immediately.
 
 ## Reactive State Mapping
 
@@ -138,9 +147,10 @@ Modal or non-modal dialog overlay for presenting focused content, confirmations,
 - `contracts.getDescriptionProps()` is spread onto `[part="description"]` to apply the `id` for `aria-describedby`.
 - `contracts.getHeaderCloseButtonProps()` is spread onto `[part="header-close"]` to apply `role`, `tabindex`, `aria-label: 'Close'`, and click handler.
 - UIKit dispatches `cv-input` and `cv-change` events by observing `isOpen` changes triggered by user interaction (not by controlled `open` attribute changes).
-- UIKit dispatches `cv-show`/`cv-after-show`/`cv-hide`/`cv-after-hide` lifecycle events to bracket CSS transitions.
+- UIKit dispatches `cv-show`/`cv-hide` immediately and `cv-after-show`/`cv-after-hide` after presence transitions.
 - UIKit renders the visible dialog through native top-layer primitives (`<dialog>` for modal, popover root for non-modal) so it is not clipped by ancestor `overflow`, `contain`, `transform`, or `isolation`.
 - UIKit owns scroll lock implementation, focus trap implementation, focus restoration, backdrop rendering, and CSS transitions — headless provides signals, UIKit applies side effects.
+- UIKit keeps modal scroll lock and native top-layer presence active during the close transition, then restores focus after the shell has closed.
 
 ## Usage
 

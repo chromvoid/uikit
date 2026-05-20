@@ -17,6 +17,7 @@ export interface ManagedDialogOptions<T> {
   title?: string
   show: () => Promise<T>
   close: () => void
+  autoFocus?: boolean
 }
 
 export interface CustomDialogOptions {
@@ -259,7 +260,7 @@ export function createDialogController(adapters: DialogControllerAdapters = {}):
     }
   }
 
-  const present = async <T>({element, title, show, close}: ManagedDialogOptions<T>): Promise<T> => {
+  const present = async <T>({element, title, show, close, autoFocus = true}: ManagedDialogOptions<T>): Promise<T> => {
     const focusRestoreTarget = getFocusRestoreTarget()
 
     document.body.appendChild(element)
@@ -270,7 +271,7 @@ export function createDialogController(adapters: DialogControllerAdapters = {}):
       () => {
         if (!activeDialogs.has(element)) return
         adapters.setInertExcept?.(element)
-        const firstFocusable = findFirstFocusable(element)
+        const firstFocusable = autoFocus ? findFirstFocusable(element) : null
         if (firstFocusable) {
           setTimeout(() => {
             if (firstFocusable.isConnected) {

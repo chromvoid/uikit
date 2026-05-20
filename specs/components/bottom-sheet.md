@@ -16,7 +16,7 @@ Mobile modal sheet primitive that reuses `cv-dialog` for modal state, focus mana
 ```
 <cv-bottom-sheet> (host)
 └── <cv-dialog exportparts="...">
-    └── <div part="handle">
+    └── <button part="handle">
         └── <span part="grabber">
     └── <slot>
 ```
@@ -37,6 +37,9 @@ The underlying dialog exports `trigger`, `overlay`, `content`, `header`, `title`
 | `no-header`                | Boolean | `false`    | Hides the dialog header                                 |
 | `show-handle`              | Boolean | `true`     | Renders the drag affordance                             |
 | `drag-to-close`            | Boolean | `true`     | Enables pull-down close from the handle                 |
+| `detents`                  | String  | `""`       | Space/comma-separated detents: `collapsed middle expanded` |
+| `detent`                   | String  | `expanded` | Active detent: `collapsed` \| `middle` \| `expanded`    |
+| `handle-label`             | String  | `Resize sheet` | Accessible label for the handle button              |
 
 ## Slots
 
@@ -56,20 +59,31 @@ The underlying dialog exports `trigger`, `overlay`, `content`, `header`, `title`
 | `--cv-bottom-sheet-width`                 | `100%`                           | Sheet inline size                   |
 | `--cv-bottom-sheet-max-width`             | `100%`                           | Sheet maximum inline size           |
 | `--cv-bottom-sheet-max-height`            | `min(82dvh, calc(100dvh - 32px))` | Sheet maximum block size            |
+| `--cv-bottom-sheet-collapsed-height`      | `148px`                          | Collapsed detent height             |
+| `--cv-bottom-sheet-middle-height`         | `min(52dvh, 440px)`              | Middle detent height                |
+| `--cv-bottom-sheet-expanded-height`       | `min(92dvh, calc(100dvh - 32px))` | Expanded detent height              |
 | `--cv-bottom-sheet-overlay-color`         | `var(--cv-color-overlay)`        | Backdrop color                      |
 | `--cv-bottom-sheet-border-radius`         | top corners rounded              | Sheet corner radius                 |
 | `--cv-bottom-sheet-grabber-color`         | `var(--cv-color-border-strong)`  | Grabber color                       |
 | `--cv-bottom-sheet-dismiss-duration`      | `180ms`                          | Drag dismiss transition duration    |
 
+`cv-bottom-sheet` composes with `cv-dialog` presence state by overriding dialog content motion variables. The sheet uses bottom-up `translateY(...)` transforms for open, close, drag, detent, and dismiss states instead of the centered dialog scale transform.
+
 ## Events
 
 Matches `cv-dialog`: `cv-input`, `cv-change`, `cv-show`, `cv-after-show`, `cv-hide`, and `cv-after-hide`.
 
-`cv-input` and `cv-change` fire for dialog user interactions and for successful drag-to-close. Programmatic `open` changes do not emit input/change.
+`cv-after-show` and `cv-after-hide` follow the underlying `cv-dialog` presence transition. Reduced-motion and zero-duration paths complete immediately.
+
+`cv-input` and `cv-change` fire for dialog user interactions, successful drag-to-close, and user-driven detent changes. Programmatic `open` / `detent` changes do not emit input/change.
+
+When `detents` is set, event detail is `{open, detent}`. In default open-close mode, event detail remains `{open}`.
 
 ## Interaction Rules
 
 - Backdrop pointer/click and Escape are delegated to `cv-dialog`.
-- Pull-down dismissal starts only from `part="handle"`.
-- Drag closes at `96px` downward movement or `0.75px/ms` downward velocity.
-- Below-threshold drags snap back without changing `open`.
+- Drag starts only from `part="handle"`.
+- Without `detents`, drag closes at `96px` downward movement or `0.75px/ms` downward velocity.
+- With `detents`, upward/downward drags snap one detent at a time; dragging down from the smallest detent dismisses when `drag-to-close` is enabled.
+- Tapping the handle advances to the next larger detent when one exists.
+- Below-threshold drags snap back without changing `open` or `detent`.

@@ -196,6 +196,17 @@ cv-theme-provider[mode='dark'] {
     linear-gradient(45deg, transparent 75%, var(--cv-color-surface) 75%),
     linear-gradient(-45deg, transparent 75%, var(--cv-color-surface) 75%);
   --cv-gradient-surface: linear-gradient(180deg, var(--cv-color-surface) 0%, var(--cv-color-surface-2) 100%);
+  --cv-gradient-surface-deep: linear-gradient(180deg, var(--cv-color-surface-2) 0%, var(--cv-color-bg) 100%);
+  --cv-gradient-audio-waveform-bar: linear-gradient(
+    180deg,
+    transparent 0%,
+    transparent 40%,
+    var(--cv-alpha-white-10) 49%,
+    var(--cv-alpha-white-20) 50%,
+    var(--cv-alpha-white-10) 51%,
+    transparent 60%,
+    transparent 100%
+  );
   --cv-gradient-surface-primary: linear-gradient(
     180deg,
     var(--cv-color-primary-surface-strong) 0%,
@@ -470,7 +481,7 @@ cv-theme-provider[mode='light'] {
 }
 
 @media (prefers-color-scheme: light) {
-  :root,
+  :root:not([data-theme]):not([theme]),
   cv-theme-provider[mode='system'] {
     color-scheme: light;
 

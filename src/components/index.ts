@@ -6,6 +6,13 @@ export {CVBreadcrumb} from './cv-breadcrumb'
 export {CVBreadcrumbItem} from './cv-breadcrumb-item'
 export {CVBadge} from './cv-badge'
 export {CVBottomSheet} from './cv-bottom-sheet'
+export type {
+  CVBottomSheetChangeEvent,
+  CVBottomSheetDetent,
+  CVBottomSheetEventDetail,
+  CVBottomSheetEventMap,
+  CVBottomSheetInputEvent,
+} from './cv-bottom-sheet'
 export {CVButton} from './cv-button'
 export {CVCallout} from './cv-callout'
 export {CVCopyButton} from './cv-copy-button'
@@ -29,6 +36,18 @@ export {CVGridCell} from './cv-grid-cell'
 export {CVGridColumn} from './cv-grid-column'
 export {CVGridRow} from './cv-grid-row'
 export {CVGrid} from './cv-grid'
+export {
+  CVGuidanceAnchor,
+  GUIDANCE_ANCHOR_REGISTER_EVENT,
+  GUIDANCE_ANCHOR_UNREGISTER_EVENT,
+} from './cv-guidance-anchor'
+export type {
+  CVGuidanceAnchorEventDetail,
+  CVGuidanceAnchorRegisterEvent,
+  CVGuidanceAnchorUnregisterEvent,
+} from './cv-guidance-anchor'
+export {CVGuidancePanel} from './cv-guidance-panel'
+export type {GuidancePanelDensity, GuidancePanelVariant} from './cv-guidance-panel'
 export {CVIcon} from './cv-icon'
 export {CVInput} from './cv-input'
 export type {

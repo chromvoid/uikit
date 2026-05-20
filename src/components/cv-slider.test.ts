@@ -38,6 +38,35 @@ afterEach(() => {
 })
 
 describe('cv-slider', () => {
+  it('does not render percentage through a style attribute binding', async () => {
+    CVSlider.define()
+
+    const originalSetAttribute = HTMLElement.prototype.setAttribute
+    const styleAttributeWrites: string[] = []
+    HTMLElement.prototype.setAttribute = function setAttribute(name: string, value: string) {
+      if (name === 'style') {
+        styleAttributeWrites.push(value)
+      }
+      return originalSetAttribute.call(this, name, value)
+    }
+
+    try {
+      const slider = document.createElement('cv-slider') as CVSlider
+      slider.min = 0
+      slider.max = 100
+      slider.value = 25
+
+      document.body.append(slider)
+      await settle(slider)
+
+      const base = slider.shadowRoot?.querySelector('[part="base"]') as HTMLElement | null
+      expect(styleAttributeWrites).toEqual([])
+      expect(base?.style.getPropertyValue('--cv-slider-percentage')).toBe('25%')
+    } finally {
+      HTMLElement.prototype.setAttribute = originalSetAttribute
+    }
+  })
+
   it('handles keyboard value updates and emits input/change', async () => {
     CVSlider.define()
 
@@ -92,6 +121,7 @@ describe('cv-slider', () => {
     await settle(slider)
 
     const track = slider.shadowRoot?.querySelector('[part="track"]') as HTMLElement
+    const base = slider.shadowRoot?.querySelector('[part="base"]') as HTMLElement
     mockTrackRect(track, {left: 0, top: 0, width: 200, height: 20})
 
     track.dispatchEvent(createPointerEvent('pointerdown', {clientX: 100, clientY: 10}))
@@ -100,6 +130,7 @@ describe('cv-slider', () => {
     await settle(slider)
 
     expect(slider.value).toBe(75)
+    expect(base.style.getPropertyValue('--cv-slider-percentage')).toBe('75%')
     expect(inputValues.at(-1)).toBe(75)
     expect(changeValues).toEqual([75])
   })

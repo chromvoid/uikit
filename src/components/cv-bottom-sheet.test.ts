@@ -42,7 +42,11 @@ function createPointerEvent(
   type: string,
   options: {clientY: number; pointerId?: number; button?: number},
 ): PointerEvent {
-  const event = new Event(type, {bubbles: true, composed: true, cancelable: true}) as PointerEvent
+  const event = new Event(type, {
+    bubbles: true,
+    composed: true,
+    cancelable: true,
+  }) as PointerEvent
   Object.defineProperties(event, {
     button: {value: options.button ?? 0},
     clientY: {value: options.clientY},
@@ -58,16 +62,61 @@ afterEach(() => {
 })
 
 describe('cv-bottom-sheet', () => {
-  it('reserves visual viewport keyboard space in sheet placement and sizing', () => {
+  it('reserves visual viewport keyboard space through the public sheet-level clearance hook', () => {
     const cssText = stylesToText(CVBottomSheet.styles)
 
     expect(cssText).toContain('--cv-bottom-sheet-overlay-block-end: calc(')
     expect(cssText).toContain('--safe-area-bottom-active')
+    expect(cssText).toContain('--cv-bottom-sheet-keyboard-inset')
     expect(cssText).toContain(
       'var(--cv-bottom-sheet-keyboard-inset, var(--visual-viewport-bottom-inset, 0px))',
     )
     expect(cssText).toContain('padding-block-end: var(--cv-bottom-sheet-overlay-block-end);')
     expect(cssText).toContain('100dvh - var(--cv-bottom-sheet-overlay-block-start)')
+  })
+
+  it('defines detent sizing hooks without changing the default open-close mode', () => {
+    const cssText = stylesToText(CVBottomSheet.styles)
+
+    expect(cssText).toContain('cv-dialog.has-detents::part(content)')
+    expect(cssText).toContain('--cv-bottom-sheet-detent-max-height')
+    expect(cssText).toContain('--cv-bottom-sheet-detent-visible-height')
+    expect(cssText).toContain('--cv-bottom-sheet-detent-offset')
+    expect(cssText).toContain('--cv-bottom-sheet-collapsed-height')
+    expect(cssText).toContain('--cv-bottom-sheet-middle-height')
+    expect(cssText).toContain('--cv-bottom-sheet-expanded-height')
+    expect(cssText).toContain('cv-dialog.has-detents::part(body)')
+    expect(cssText).toContain('block-size: var(--cv-bottom-sheet-detent-visible-height)')
+  })
+
+  it('maps sheet movement to cv-dialog content motion variables', () => {
+    const cssText = stylesToText(CVBottomSheet.styles)
+
+    expect(cssText).toContain('--cv-dialog-content-transition-property: transform;')
+    expect(cssText).toContain('--cv-dialog-transition-duration: var(--cv-bottom-sheet-dismiss-duration, 180ms);')
+    expect(cssText).toContain('--cv-dialog-content-closed-transform: translateY(calc(100% + 32px));')
+    expect(cssText).toContain('--cv-dialog-content-open-transform: translateY(var(--cv-bottom-sheet-drag-offset, 0px));')
+    expect(cssText).not.toContain('scale(')
+  })
+
+  it('keeps detent and dismiss transforms in cv-dialog motion variables', () => {
+    const cssText = stylesToText(CVBottomSheet.styles)
+
+    expect(cssText).toMatch(
+      /cv-dialog\.has-detents\s*{[\s\S]*--cv-dialog-content-open-transform:\s*translateY\(\s*calc\(var\(--cv-bottom-sheet-detent-offset,\s*0px\) \+ var\(--cv-bottom-sheet-drag-offset,\s*0px\)\)\s*\);/,
+    )
+    expect(cssText).toMatch(
+      /cv-dialog\.is-dismissing\s*{[\s\S]*--cv-dialog-content-open-transform:\s*translateY\(calc\(100% \+ 32px\)\);/,
+    )
+  })
+
+  it('keeps reduced-motion sheet displacement instant', () => {
+    const cssText = stylesToText(CVBottomSheet.styles)
+
+    expect(cssText).toContain('@media (prefers-reduced-motion: reduce)')
+    expect(cssText).toMatch(
+      /@media \(prefers-reduced-motion: reduce\)[\s\S]*cv-dialog\s*{[\s\S]*--cv-dialog-transition-duration: 0ms;/,
+    )
   })
 
   it('renders a cv-dialog shell with sheet handle parts and forwarded slots', async () => {
@@ -88,8 +137,10 @@ describe('cv-bottom-sheet', () => {
     expect(dialog).not.toBeNull()
     expect(dialog.open).toBe(false)
     expect(getHandle(el)).not.toBeNull()
+    expect(getHandle(el)?.getAttribute('slot')).toBe('before-header')
     expect(el.shadowRoot!.querySelector('[part="grabber"]')).not.toBeNull()
     expect(dialog.querySelector('[slot="title"]')).not.toBeNull()
+    expect(dialog.querySelector('[slot="before-header"]')).toBe(getHandle(el))
     expect(dialog.querySelector('slot:not([name])')).not.toBeNull()
     expect(dialog.querySelector('[slot="footer"]')).not.toBeNull()
     expect(dialog.getAttribute('exportparts')).toContain('content')
@@ -222,7 +273,86 @@ describe('cv-bottom-sheet', () => {
     expect(getHandle(el)).toBeNull()
   })
 
+  it('applies the active detent class and exposes detent changes through events', async () => {
+    const el = await createBottomSheet({
+      open: true,
+      detents: 'collapsed middle expanded',
+      detent: 'collapsed',
+    })
+    const changes: unknown[] = []
+    el.addEventListener('cv-change', (event) => changes.push((event as CustomEvent).detail))
+
+    const handle = getHandle(el)!
+    expect(getDialog(el).classList.contains('has-detents')).toBe(true)
+    expect(getDialog(el).classList.contains('detent-collapsed')).toBe(true)
+
+    handle.click()
+    await settle(el)
+
+    expect(el.detent).toBe('middle')
+    expect(getDialog(el).classList.contains('detent-middle')).toBe(true)
+    expect(changes).toEqual([{open: true, detent: 'middle'}])
+
+    handle.click()
+    await settle(el)
+
+    expect(el.detent).toBe('expanded')
+    expect(getDialog(el).classList.contains('detent-expanded')).toBe(true)
+    expect(changes).toEqual([
+      {open: true, detent: 'middle'},
+      {open: true, detent: 'expanded'},
+    ])
+  })
+
+  it('snaps detented sheets up and down before dismissing from the collapsed detent', async () => {
+    vi.useFakeTimers()
+    const el = await createBottomSheet({
+      open: true,
+      detents: 'collapsed middle expanded',
+      detent: 'collapsed',
+    })
+    const changes: unknown[] = []
+    const handle = getHandle(el)!
+    const dialog = getDialog(el)
+    el.addEventListener('cv-change', (event) => changes.push((event as CustomEvent).detail))
+
+    handle.dispatchEvent(createPointerEvent('pointerdown', {clientY: 200}))
+    handle.dispatchEvent(createPointerEvent('pointermove', {clientY: 120}))
+    expect(dialog.style.getPropertyValue('--cv-bottom-sheet-drag-offset')).toBe('-80px')
+    handle.dispatchEvent(createPointerEvent('pointerup', {clientY: 120}))
+    await settle(el)
+
+    expect(el.open).toBe(true)
+    expect(el.detent).toBe('middle')
+
+    handle.dispatchEvent(createPointerEvent('pointerdown', {clientY: 120}))
+    handle.dispatchEvent(createPointerEvent('pointermove', {clientY: 210}))
+    handle.dispatchEvent(createPointerEvent('pointerup', {clientY: 210}))
+    await settle(el)
+
+    expect(el.open).toBe(true)
+    expect(el.detent).toBe('collapsed')
+
+    handle.dispatchEvent(createPointerEvent('pointerdown', {clientY: 210}))
+    handle.dispatchEvent(createPointerEvent('pointermove', {clientY: 310}))
+    handle.dispatchEvent(createPointerEvent('pointerup', {clientY: 310}))
+
+    expect(dialog.classList.contains('is-dismissing')).toBe(true)
+    expect(el.open).toBe(true)
+
+    vi.advanceTimersByTime(180)
+    await settle(el)
+
+    expect(el.open).toBe(false)
+    expect(changes).toEqual([
+      {open: true, detent: 'middle'},
+      {open: true, detent: 'collapsed'},
+      {open: false, detent: 'collapsed'},
+    ])
+  })
+
   it('preserves dialog lifecycle events', async () => {
+    vi.useFakeTimers()
     const el = await createBottomSheet()
     const events: string[] = []
 
@@ -230,6 +360,11 @@ describe('cv-bottom-sheet', () => {
     el.addEventListener('cv-after-show', () => events.push('after-show'))
 
     el.open = true
+    await settle(el)
+
+    expect(events).toEqual(['show'])
+
+    vi.advanceTimersByTime(16)
     await settle(el)
 
     expect(events).toEqual(['show', 'after-show'])

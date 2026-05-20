@@ -10,6 +10,10 @@ export interface CVDrawerEventDetail {
 }
 
 let cvDrawerNonce = 0
+const DRAG_CLOSE_DISTANCE_PX = 96
+const DRAG_CLOSE_VELOCITY_PX_PER_MS = 0.75
+const DRAG_SCROLL_DOMINANCE_PX = 18
+const DRAG_MOVE_EPSILON_PX = 4
 
 export class CVDrawer extends ReatomLitElement {
   static elementName = 'cv-drawer'
@@ -25,6 +29,7 @@ export class CVDrawer extends ReatomLitElement {
       closeOnOutsideFocus: {type: Boolean, attribute: 'close-on-outside-focus', reflect: true},
       initialFocusId: {type: String, attribute: 'initial-focus-id'},
       noHeader: {type: Boolean, attribute: 'no-header', reflect: true},
+      dragToClose: {type: Boolean, attribute: 'drag-to-close', reflect: true},
     }
   }
 
@@ -37,6 +42,7 @@ export class CVDrawer extends ReatomLitElement {
   declare closeOnOutsideFocus: boolean
   declare initialFocusId: string
   declare noHeader: boolean
+  declare dragToClose: boolean
 
   private readonly idBase = `cv-drawer-${++cvDrawerNonce}`
   private model: DrawerModel
@@ -49,6 +55,11 @@ export class CVDrawer extends ReatomLitElement {
   private openAnimationFrame = 0
   private closeAnimationTimeout = 0
   private shouldAnimatePresence = false
+  private dragPointerId: number | null = null
+  private dragStartX = 0
+  private dragStartY = 0
+  private dragStartedAt = 0
+  private dragMoved = false
 
   constructor() {
     super()
@@ -61,6 +72,7 @@ export class CVDrawer extends ReatomLitElement {
     this.closeOnOutsideFocus = true
     this.initialFocusId = ''
     this.noHeader = false
+    this.dragToClose = false
     this.model = this.createModel()
     this.overlayVisible = this.open
     this.renderState = this.open ? 'open' : 'closed'
@@ -110,7 +122,14 @@ export class CVDrawer extends ReatomLitElement {
         opacity: 1;
       }
 
+      [part='overlay'][data-dragging='true'] {
+        opacity: var(--cv-drawer-drag-overlay-opacity, 1);
+        transition: none;
+      }
+
       [part='panel'] {
+        --cv-drawer-drag-offset-x: 0px;
+        --cv-drawer-drag-offset-y: 0px;
         position: fixed;
         overflow: auto;
         display: grid;
@@ -139,6 +158,7 @@ export class CVDrawer extends ReatomLitElement {
         border-radius: 0 var(--cv-drawer-border-radius, var(--cv-radius-lg, 14px))
           var(--cv-drawer-border-radius, var(--cv-radius-lg, 14px)) 0;
         transform: translate3d(-100%, 0, 0);
+        touch-action: pan-y;
       }
 
       /* Placement: end (inline-end edge) */
@@ -150,6 +170,7 @@ export class CVDrawer extends ReatomLitElement {
         border-radius: var(--cv-drawer-border-radius, var(--cv-radius-lg, 14px)) 0 0
           var(--cv-drawer-border-radius, var(--cv-radius-lg, 14px));
         transform: translate3d(100%, 0, 0);
+        touch-action: pan-y;
       }
 
       /* Placement: top */
@@ -161,6 +182,7 @@ export class CVDrawer extends ReatomLitElement {
         border-radius: 0 0 var(--cv-drawer-border-radius, var(--cv-radius-lg, 14px))
           var(--cv-drawer-border-radius, var(--cv-radius-lg, 14px));
         transform: translate3d(0, -100%, 0);
+        touch-action: pan-x;
       }
 
       /* Placement: bottom */
@@ -172,11 +194,25 @@ export class CVDrawer extends ReatomLitElement {
         border-radius: var(--cv-drawer-border-radius, var(--cv-radius-lg, 14px))
           var(--cv-drawer-border-radius, var(--cv-radius-lg, 14px)) 0 0;
         transform: translate3d(0, 100%, 0);
+        touch-action: pan-x;
       }
 
       [part='panel'][data-state='open'] {
         opacity: 1;
-        transform: translate3d(0, 0, 0);
+      }
+
+      [part='panel'][data-placement='start'][data-state='open'],
+      [part='panel'][data-placement='end'][data-state='open'] {
+        transform: translate3d(var(--cv-drawer-drag-offset-x, 0px), 0, 0);
+      }
+
+      [part='panel'][data-placement='top'][data-state='open'],
+      [part='panel'][data-placement='bottom'][data-state='open'] {
+        transform: translate3d(0, var(--cv-drawer-drag-offset-y, 0px), 0);
+      }
+
+      [part='panel'][data-dragging='true'] {
+        transition: none;
       }
 
       @media (prefers-reduced-motion: reduce) {
@@ -252,6 +288,7 @@ export class CVDrawer extends ReatomLitElement {
     this.syncOutsideFocusListener(true)
     this.releaseScrollLock()
     this.clearAnimationQueue()
+    this.resetDragState()
   }
 
   override willUpdate(changedProperties: PropertyValues): void {
@@ -339,6 +376,7 @@ export class CVDrawer extends ReatomLitElement {
   }
 
   private startOpenAnimation(): void {
+    this.resetDragState()
     this.openAnimationFrame = requestAnimationFrame(() => {
       this.openAnimationFrame = 0
 
@@ -354,6 +392,7 @@ export class CVDrawer extends ReatomLitElement {
 
     if (duration === 0) {
       this.overlayVisible = false
+      this.resetDragState()
       this.syncRenderedState()
       return
     }
@@ -364,6 +403,7 @@ export class CVDrawer extends ReatomLitElement {
       if (this.open) return
 
       this.overlayVisible = false
+      this.resetDragState()
       this.syncRenderedState()
     }, duration)
   }
@@ -531,6 +571,125 @@ export class CVDrawer extends ReatomLitElement {
     this.lockScrollApplied = false
   }
 
+  private getDragElements(): {panel: HTMLElement | null; overlay: HTMLElement | null} {
+    return {
+      panel: this.shadowRoot?.querySelector('[part="panel"]') as HTMLElement | null,
+      overlay: this.shadowRoot?.querySelector('[part="overlay"]') as HTMLElement | null,
+    }
+  }
+
+  private resetDragState(): void {
+    this.dragPointerId = null
+    this.dragStartX = 0
+    this.dragStartY = 0
+    this.dragStartedAt = 0
+    this.dragMoved = false
+
+    const {panel, overlay} = this.getDragElements()
+    panel?.removeAttribute('data-dragging')
+    panel?.style.removeProperty('--cv-drawer-drag-offset-x')
+    panel?.style.removeProperty('--cv-drawer-drag-offset-y')
+    overlay?.removeAttribute('data-dragging')
+    overlay?.style.removeProperty('--cv-drawer-drag-overlay-opacity')
+  }
+
+  private finishDragInteraction(): void {
+    this.dragPointerId = null
+    this.dragStartedAt = 0
+    this.dragMoved = false
+
+    const {panel, overlay} = this.getDragElements()
+    panel?.removeAttribute('data-dragging')
+    overlay?.removeAttribute('data-dragging')
+  }
+
+  private isHorizontalPlacement(): boolean {
+    return this.placement === 'start' || this.placement === 'end'
+  }
+
+  private getClosingDistance(event: PointerEvent): number {
+    switch (this.placement) {
+      case 'start':
+        return this.dragStartX - event.clientX
+      case 'end':
+        return event.clientX - this.dragStartX
+      case 'top':
+        return this.dragStartY - event.clientY
+      case 'bottom':
+        return event.clientY - this.dragStartY
+      default:
+        return 0
+    }
+  }
+
+  private getVisualDragOffset(closingDistance: number): number {
+    const offset = Math.max(0, closingDistance)
+    return this.placement === 'start' || this.placement === 'top' ? -offset : offset
+  }
+
+  private getPanelDragSize(panel: HTMLElement | null): number {
+    if (!panel) return DRAG_CLOSE_DISTANCE_PX
+
+    const rect = panel.getBoundingClientRect()
+    const size = this.isHorizontalPlacement() ? rect.width : rect.height
+    return Math.max(size, DRAG_CLOSE_DISTANCE_PX)
+  }
+
+  private shouldCancelDragForScroll(event: PointerEvent): boolean {
+    if (this.dragMoved) return false
+
+    const mainDelta = this.isHorizontalPlacement()
+      ? Math.abs(event.clientX - this.dragStartX)
+      : Math.abs(event.clientY - this.dragStartY)
+    const crossDelta = this.isHorizontalPlacement()
+      ? Math.abs(event.clientY - this.dragStartY)
+      : Math.abs(event.clientX - this.dragStartX)
+
+    return crossDelta > DRAG_SCROLL_DOMINANCE_PX && crossDelta > mainDelta
+  }
+
+  private setDragOffset(closingDistance: number): void {
+    const {panel, overlay} = this.getDragElements()
+    const visualOffset = this.getVisualDragOffset(closingDistance)
+    const panelSize = this.getPanelDragSize(panel)
+    const progress = Math.min(Math.max(Math.max(0, closingDistance) / panelSize, 0), 1)
+    const overlayOpacity = Math.max(0.55, 1 - progress * 0.45)
+
+    if (this.isHorizontalPlacement()) {
+      panel?.style.setProperty('--cv-drawer-drag-offset-x', `${Math.round(visualOffset)}px`)
+      panel?.style.setProperty('--cv-drawer-drag-offset-y', '0px')
+    } else {
+      panel?.style.setProperty('--cv-drawer-drag-offset-x', '0px')
+      panel?.style.setProperty('--cv-drawer-drag-offset-y', `${Math.round(visualOffset)}px`)
+    }
+
+    overlay?.style.setProperty('--cv-drawer-drag-overlay-opacity', String(overlayOpacity))
+  }
+
+  private commitDragClose(): void {
+    if (!this.open) return
+
+    const previous = this.captureState()
+    this.model.actions.close()
+    this.applyInteractionResult(previous)
+  }
+
+  private trySetPointerCapture(target: HTMLElement | null, pointerId: number): void {
+    try {
+      target?.setPointerCapture?.(pointerId)
+    } catch {
+      // Synthetic PointerEvents used by browser tests do not always register an active pointer.
+    }
+  }
+
+  private tryReleasePointerCapture(target: HTMLElement | null, pointerId: number): void {
+    try {
+      target?.releasePointerCapture?.(pointerId)
+    } catch {
+      // Release is best-effort because the pointer may already be cancelled or synthetic.
+    }
+  }
+
   private focusInitialTarget(): void {
     const panelProps = this.model.contracts.getPanelProps()
     const requestedId = panelProps['data-initial-focus']
@@ -609,6 +768,74 @@ export class CVDrawer extends ReatomLitElement {
     this.applyInteractionResult(previous)
   }
 
+  private handlePanelPointerDown(event: PointerEvent) {
+    if (!this.open || !this.dragToClose) return
+    if (event.pointerType !== 'touch') return
+    if (event.isPrimary === false) return
+    if (typeof event.button === 'number' && event.button !== 0) return
+
+    this.dragPointerId = event.pointerId
+    this.dragStartX = event.clientX
+    this.dragStartY = event.clientY
+    this.dragStartedAt = performance.now()
+    this.dragMoved = false
+    this.setDragOffset(0)
+
+    const {panel, overlay} = this.getDragElements()
+    panel?.setAttribute('data-dragging', 'true')
+    overlay?.setAttribute('data-dragging', 'true')
+
+    const target = event.currentTarget as HTMLElement | null
+    this.trySetPointerCapture(target, event.pointerId)
+  }
+
+  private handlePanelPointerMove(event: PointerEvent) {
+    if (this.dragPointerId !== event.pointerId) return
+
+    if (this.shouldCancelDragForScroll(event)) {
+      const target = event.currentTarget as HTMLElement | null
+      this.tryReleasePointerCapture(target, event.pointerId)
+      this.resetDragState()
+      return
+    }
+
+    const closingDistance = Math.max(0, this.getClosingDistance(event))
+    this.dragMoved ||= closingDistance > DRAG_MOVE_EPSILON_PX
+    this.setDragOffset(closingDistance)
+
+    if (closingDistance > 0) {
+      event.preventDefault()
+    }
+  }
+
+  private handlePanelPointerUp(event: PointerEvent) {
+    if (this.dragPointerId !== event.pointerId) return
+
+    const target = event.currentTarget as HTMLElement | null
+    this.tryReleasePointerCapture(target, event.pointerId)
+
+    const elapsed = Math.max(1, performance.now() - this.dragStartedAt)
+    const closingDistance = Math.max(0, this.getClosingDistance(event))
+    const velocity = closingDistance / elapsed
+    const shouldClose =
+      closingDistance >= DRAG_CLOSE_DISTANCE_PX || velocity >= DRAG_CLOSE_VELOCITY_PX_PER_MS
+
+    if (shouldClose) {
+      this.finishDragInteraction()
+      this.commitDragClose()
+      return
+    }
+
+    this.resetDragState()
+  }
+
+  private handlePanelPointerCancel(event: PointerEvent) {
+    if (this.dragPointerId !== event.pointerId) return
+    const target = event.currentTarget as HTMLElement | null
+    this.tryReleasePointerCapture(target, event.pointerId)
+    this.resetDragState()
+  }
+
   protected override render() {
     const triggerProps = this.model.contracts.getTriggerProps()
     const overlayProps = this.model.contracts.getOverlayProps()
@@ -654,6 +881,10 @@ export class CVDrawer extends ReatomLitElement {
           data-initial-focus=${panelProps['data-initial-focus'] ?? nothing}
           part="panel"
           @keydown=${this.handlePanelKeyDown}
+          @pointerdown=${this.handlePanelPointerDown}
+          @pointermove=${this.handlePanelPointerMove}
+          @pointerup=${this.handlePanelPointerUp}
+          @pointercancel=${this.handlePanelPointerCancel}
         >
           <header part="header" ?hidden=${this.noHeader}>
             <h2 id=${titleProps.id} part="title">

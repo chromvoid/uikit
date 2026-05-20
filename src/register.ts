@@ -30,6 +30,8 @@ import {
   CVGridCell,
   CVGridColumn,
   CVGridRow,
+  CVGuidanceAnchor,
+  CVGuidancePanel,
   CVIcon,
   CVInput,
   CVLandmark,
@@ -115,6 +117,8 @@ export function registerUikit(): void {
   CVGridColumn.define()
   CVGridRow.define()
   CVGrid.define()
+  CVGuidanceAnchor.define()
+  CVGuidancePanel.define()
   CVIcon.define()
   CVInput.define()
   CVLandmark.define()

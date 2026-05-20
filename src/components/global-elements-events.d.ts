@@ -30,6 +30,8 @@ declare global {
     'cv-grid-cell': import('./cv-grid-cell').CVGridCell
     'cv-grid-column': import('./cv-grid-column').CVGridColumn
     'cv-grid-row': import('./cv-grid-row').CVGridRow
+    'cv-guidance-anchor': import('./cv-guidance-anchor').CVGuidanceAnchor
+    'cv-guidance-panel': import('./cv-guidance-panel').CVGuidancePanel
     'cv-icon': import('./cv-icon').CVIcon
     'cv-input': import('./cv-input').CVInput
     'cv-landmark': import('./cv-landmark').CVLandmark
@@ -115,6 +117,8 @@ declare global {
     'cv-execute': import('./cv-command-palette').CVCommandPaletteExecuteEvent
     'cv-exit-after': import('./cv-feed').CVFeedExitAfterEvent
     'cv-exit-before': import('./cv-feed').CVFeedExitBeforeEvent
+    'guidance-anchor-register': import('./cv-guidance-anchor').CVGuidanceAnchorRegisterEvent
+    'guidance-anchor-unregister': import('./cv-guidance-anchor').CVGuidanceAnchorUnregisterEvent
     'cv-focus':
       | import('./cv-input').CVInputFocusEvent
       | import('./cv-number').CVNumberFocusEvent

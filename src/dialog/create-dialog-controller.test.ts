@@ -140,6 +140,37 @@ describe('createDialogController', () => {
     }
   })
 
+  it('present skips managed focus when autoFocus is false', async () => {
+    const controller = createDialogController()
+    const element = document.createElement('div')
+    const button = document.createElement('button')
+    button.textContent = 'Focusable'
+    const focusSpy = vi.fn()
+    button.focus = focusSpy
+    element.append(button)
+
+    let resolveShow: ((value: string) => void) | undefined
+
+    const resultPromise = controller.present({
+      element,
+      title: 'Manual focus dialog',
+      autoFocus: false,
+      show: () =>
+        new Promise<string>((resolve) => {
+          resolveShow = resolve
+          element.dispatchEvent(new Event('cv-after-show', {bubbles: true}))
+        }),
+      close: () => {},
+    })
+
+    await new Promise((resolve) => window.setTimeout(resolve, 70))
+
+    expect(focusSpy).not.toHaveBeenCalled()
+
+    resolveShow?.('done')
+    await expect(resultPromise).resolves.toBe('done')
+  })
+
   it('showCustom resolves the provided result', async () => {
     const controller = createDialogController()
     let dialogRef: CVDialog | null = null
@@ -218,7 +249,7 @@ describe('createDialogController', () => {
 
   it('showCustom keeps cv-dialog as the default managed surface', async () => {
     const controller = createDialogController()
-    let dialogRef: HTMLElement | null = null
+    let dialogRef: HTMLElement | undefined
     let resolveDialog: ((value: string | null) => void) | undefined
 
     const resultPromise = controller.showCustom<string>(
@@ -232,7 +263,8 @@ describe('createDialogController', () => {
       },
     )
 
-    expect(dialogRef?.tagName.toLowerCase()).toBe('cv-dialog')
+    const dialog = dialogRef!
+    expect(dialog.tagName.toLowerCase()).toBe('cv-dialog')
     resolveDialog?.('done')
     await expect(resultPromise).resolves.toBe('done')
   })
@@ -242,7 +274,7 @@ describe('createDialogController', () => {
       () => document.createElement('test-managed-surface') as ManagedDialogSurfaceElement,
     )
     const controller = createDialogController({createCustomDialogElement})
-    let dialogRef: ManagedDialogSurfaceElement | null = null
+    let dialogRef: ManagedDialogSurfaceElement | undefined
     let resolveDialog: ((value: string | null) => void) | undefined
 
     const resultPromise = controller.showCustom<string>(
@@ -260,17 +292,18 @@ describe('createDialogController', () => {
     )
 
     expect(createCustomDialogElement).toHaveBeenCalledTimes(1)
-    expect(dialogRef?.tagName.toLowerCase()).toBe('test-managed-surface')
-    expect(dialogRef?.classList.contains('cv-managed-dialog')).toBe(true)
-    expect(dialogRef?.noHeader).toBe(true)
-    expect(dialogRef?.closable).toBe(false)
-    expect(dialogRef?.closeOnEscape).toBe(false)
-    expect(dialogRef?.closeOnOutsidePointer).toBe(false)
-    expect(dialogRef?.closeOnOutsideFocus).toBe(false)
-    expect(dialogRef?.style.getPropertyValue('--cv-dialog-width')).toBe('640px')
-    expect(dialogRef?.style.getPropertyValue('--adaptive-modal-width')).toBe('640px')
-    expect(dialogRef?.style.getPropertyValue('--adaptive-modal-z-index')).toBe('1100')
-    expect(dialogRef?.style.getPropertyValue('--cv-bottom-sheet-z-index')).toBe('1100')
+    const dialog = dialogRef!
+    expect(dialog.tagName.toLowerCase()).toBe('test-managed-surface')
+    expect(dialog.classList.contains('cv-managed-dialog')).toBe(true)
+    expect(dialog.noHeader).toBe(true)
+    expect(dialog.closable).toBe(false)
+    expect(dialog.closeOnEscape).toBe(false)
+    expect(dialog.closeOnOutsidePointer).toBe(false)
+    expect(dialog.closeOnOutsideFocus).toBe(false)
+    expect(dialog.style.getPropertyValue('--cv-dialog-width')).toBe('640px')
+    expect(dialog.style.getPropertyValue('--adaptive-modal-width')).toBe('640px')
+    expect(dialog.style.getPropertyValue('--adaptive-modal-z-index')).toBe('1100')
+    expect(dialog.style.getPropertyValue('--cv-bottom-sheet-z-index')).toBe('1100')
 
     resolveDialog?.('done')
     await expect(resultPromise).resolves.toBe('done')
@@ -312,11 +345,15 @@ describe('createDialogController', () => {
       )
 
       expect(dialogRef).not.toBeNull()
-      await settleDialog(dialogRef!)
+      const afterShow = new Promise((resolve) => {
+        dialogRef!.addEventListener('cv-after-show', resolve, {once: true})
+      })
 
       const focusTarget = dialogRef!.querySelector('#focus-target') as HTMLButtonElement
       const focusSpy = vi.fn()
       focusTarget.focus = focusSpy
+
+      await afterShow
       await new Promise((resolve) => window.setTimeout(resolve, 70))
 
       expect(focusSpy).toHaveBeenCalledTimes(1)
