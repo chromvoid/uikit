@@ -20,12 +20,23 @@ Button that copies a value to the system clipboard with three-state visual feedb
 
 ## Attributes
 
-| Attribute           | Type    | Default    | Description                                                                                                                                      |
-| ------------------- | ------- | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `value`             | String  | `''`       | Text to copy. Property also accepts `(() => Promise<string>)` for lazy/sensitive values (property-only, not reflected as attribute for security) |
-| `disabled`          | Boolean | `false`    | Prevents interaction                                                                                                                             |
-| `feedback-duration` | Number  | `1500`     | Milliseconds to show success/error feedback before reverting to idle                                                                             |
-| `size`              | String  | `"medium"` | Size: `small` \| `medium` \| `large`                                                                                                             |
+| Attribute           | Type    | Default         | Description                                                                                                                                      |
+| ------------------- | ------- | --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `value`             | String  | `''`            | Text to copy. Property also accepts `(() => Promise<string>)` for lazy/sensitive values (property-only, not reflected as attribute for security) |
+| `disabled`          | Boolean | `false`         | Prevents interaction                                                                                                                             |
+| `feedback-duration` | Number  | `1500`          | Milliseconds to show success/error feedback before reverting to idle                                                                             |
+| `size`              | String  | `"medium"`      | Size: `small` \| `medium` \| `large`                                                                                                             |
+| `appearance`        | String  | `"default"`     | Appearance: `default` \| `plain`                                                                                                                 |
+| `success-label`     | String  | `"Copied"`      | Text used for success `aria-label` and live-region feedback                                                                                      |
+| `error-label`       | String  | `"Copy failed"` | Text used for error `aria-label` and live-region feedback                                                                                        |
+| `aria-label`        | String  | unset           | Accessible label used while idle                                                                                                                 |
+
+Property-only options:
+
+| Property    | Type                                         | Description                                                                               |
+| ----------- | -------------------------------------------- | ----------------------------------------------------------------------------------------- |
+| `value`     | `string \| (() => Promise<string>)`          | Text or async getter to copy; never reflected as an attribute                             |
+| `clipboard` | `{ writeText(text: string): Promise<void> }` | Injectable clipboard adapter for app-specific clipboard policies such as domain auto-wipe |
 
 ## Sizes
 
@@ -55,12 +66,23 @@ Button that copies a value to the system clipboard with three-state visual feedb
 
 ## CSS Custom Properties
 
-| Property                         | Default                            | Description                            |
-| -------------------------------- | ---------------------------------- | -------------------------------------- |
-| `--cv-copy-button-size`          | `36px`                             | Overall button size (width and height) |
-| `--cv-copy-button-border-radius` | `var(--cv-radius-sm, 6px)`         | Border radius for button shape         |
-| `--cv-copy-button-success-color` | `var(--cv-color-success, #4ade80)` | Color applied during success state     |
-| `--cv-copy-button-error-color`   | `var(--cv-color-danger, #ff7d86)`  | Color applied during error state       |
+| Property                                    | Default                               | Description                            |
+| ------------------------------------------- | ------------------------------------- | -------------------------------------- |
+| `--cv-copy-button-size`                     | `36px`                                | Overall button size (width and height) |
+| `--cv-copy-button-border-radius`            | `var(--cv-radius-sm, 6px)`            | Border radius for button shape         |
+| `--cv-copy-button-success-color`            | `var(--cv-color-success, #4ade80)`    | Color applied during success state     |
+| `--cv-copy-button-error-color`              | `var(--cv-color-danger, #ff7d86)`     | Color applied during error state       |
+| `--cv-copy-button-background`               | `var(--cv-color-surface)`             | Base background                        |
+| `--cv-copy-button-border-color`             | `var(--cv-color-border)`              | Base border color                      |
+| `--cv-copy-button-color`                    | `var(--cv-color-text)`                | Base text/icon color                   |
+| `--cv-copy-button-hover-background`         | `--cv-copy-button-background`         | Hover background                       |
+| `--cv-copy-button-hover-border-color`       | `var(--cv-color-primary)`             | Hover border color                     |
+| `--cv-copy-button-hover-color`              | `--cv-copy-button-color`              | Hover text/icon color                  |
+| `--cv-copy-button-plain-background`         | `transparent`                         | Plain appearance background            |
+| `--cv-copy-button-plain-border-color`       | `transparent`                         | Plain appearance border                |
+| `--cv-copy-button-plain-hover-background`   | `--cv-copy-button-hover-background`   | Plain hover background                 |
+| `--cv-copy-button-plain-hover-border-color` | `--cv-copy-button-plain-border-color` | Plain hover border                     |
+| `--cv-copy-button-plain-hover-color`        | `--cv-copy-button-hover-color`        | Plain hover text/icon color            |
 
 Additionally, component styles depend on theme tokens through fallback values:
 
@@ -93,11 +115,15 @@ Additionally, component styles depend on theme tokens through fallback values:
 
 ### UIKit properties to headless actions
 
-| UIKit Property      | Direction      | Headless Binding                     |
-| ------------------- | -------------- | ------------------------------------ |
-| `disabled`          | attr -> action | `actions.setDisabled(value)`         |
-| `feedback-duration` | attr -> action | `actions.setFeedbackDuration(value)` |
-| `value`             | prop -> action | `actions.setValue(value)`            |
+| UIKit Property      | Direction            | Headless Binding                                    |
+| ------------------- | -------------------- | --------------------------------------------------- |
+| `disabled`          | attr -> action       | `actions.setDisabled(value)`                        |
+| `feedback-duration` | attr -> action       | `actions.setFeedbackDuration(value)`                |
+| `value`             | prop -> action       | `actions.setValue(value)`                           |
+| `clipboard`         | prop -> model option | Recreates the model with the injected adapter       |
+| `aria-label`        | attr -> model option | Recreates the model with the idle label             |
+| `success-label`     | attr -> model option | Recreates the model with localized success feedback |
+| `error-label`       | attr -> model option | Recreates the model with localized error feedback   |
 
 ### Headless state to DOM reflection
 
@@ -125,12 +151,16 @@ Additionally, component styles depend on theme tokens through fallback values:
 | `feedback-duration` | `feedbackDuration` | Numeric attribute, defaults to `1500`                      |
 | `disabled`          | `isDisabled`       | Boolean attribute                                          |
 | `aria-label`        | `ariaLabel`        | Standard ARIA labeling                                     |
+| `success-label`     | `successLabel`     | Localized success feedback label                           |
+| `error-label`       | `errorLabel`       | Localized error feedback label                             |
+| `clipboard`         | `clipboard`        | Property-only injectable clipboard adapter                 |
 
 ### UIKit-only concerns (not in headless)
 
 - Icon rendering via slotted content (`copy-icon`, `success-icon`, `error-icon` slots with default SVG icons)
 - CSS custom properties for sizing and colors (`--cv-copy-button-*`)
 - `size` attribute controlling icon/button dimensions
+- `appearance` attribute controlling default or plain visual treatment
 - `cv-copy` and `cv-error` custom events dispatched on the host element
 - Pulse/scale animation on copy activation
 
@@ -169,6 +199,13 @@ Events are dispatched by the UIKit adapter by providing `onCopy` and `onError` c
 
 <!-- Custom feedback duration (3 seconds) -->
 <cv-copy-button value="hello" feedback-duration="3000"></cv-copy-button>
+
+<!-- Domain-specific clipboard adapter and localized feedback -->
+<cv-copy-button
+  aria-label="Copy password"
+  success-label="Copied"
+  error-label="Failed to copy"
+></cv-copy-button>
 
 <!-- Custom icons via slots -->
 <cv-copy-button value="hello">

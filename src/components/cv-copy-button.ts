@@ -1,5 +1,6 @@
 import {
   createCopyButton,
+  type ClipboardAdapter,
   type CopyButtonModel,
   type CopyButtonValue,
 } from '@chromvoid/headless-ui/copy-button'
@@ -10,6 +11,10 @@ import {html} from '../reatom-lit/index.js'
 import {ReatomLitElement} from '../reatom-lit/ReatomLitElement'
 
 type CVCopyButtonSize = 'small' | 'medium' | 'large'
+type CVCopyButtonAppearance = 'default' | 'plain'
+
+const DEFAULT_SUCCESS_LABEL = 'Copied'
+const DEFAULT_ERROR_LABEL = 'Copy failed'
 
 export interface CVCopyButtonCopyDetail {
   value: string
@@ -76,9 +81,14 @@ export class CVCopyButton extends ReatomLitElement {
   static get properties() {
     return {
       value: {attribute: false},
+      clipboard: {attribute: false},
       disabled: {type: Boolean, reflect: true},
       feedbackDuration: {type: Number, reflect: true, attribute: 'feedback-duration'},
       size: {type: String, reflect: true},
+      appearance: {type: String, reflect: true},
+      successLabel: {type: String, attribute: 'success-label'},
+      errorLabel: {type: String, attribute: 'error-label'},
+      ariaLabel: {type: String, attribute: 'aria-label'},
     }
   }
 
@@ -86,19 +96,84 @@ export class CVCopyButton extends ReatomLitElement {
   declare disabled: boolean
   declare feedbackDuration: number
   declare size: CVCopyButtonSize
+  declare appearance: CVCopyButtonAppearance
 
-  private __clipboard?: {writeText(text: string): Promise<void>}
   private model!: CopyButtonModel
+  private clipboardAdapter?: ClipboardAdapter
+  private successText = DEFAULT_SUCCESS_LABEL
+  private errorText = DEFAULT_ERROR_LABEL
+  private idleAriaLabel: string | null = null
+
+  get clipboard(): ClipboardAdapter | undefined {
+    return this.clipboardAdapter
+  }
+
+  set clipboard(clip: ClipboardAdapter | undefined) {
+    const old = this.clipboardAdapter
+    if (old === clip) return
+
+    this.clipboardAdapter = clip
+    if (this.model) {
+      this.model = this._createModel()
+    }
+    this.requestUpdate('clipboard', old)
+  }
+
+  get successLabel(): string {
+    return this.successText
+  }
+
+  set successLabel(label: string | null | undefined) {
+    const old = this.successText
+    const next = label || DEFAULT_SUCCESS_LABEL
+    if (old === next) return
+
+    this.successText = next
+    if (this.model) {
+      this.model = this._createModel()
+    }
+    this.requestUpdate('successLabel', old)
+  }
+
+  get errorLabel(): string {
+    return this.errorText
+  }
+
+  set errorLabel(label: string | null | undefined) {
+    const old = this.errorText
+    const next = label || DEFAULT_ERROR_LABEL
+    if (old === next) return
+
+    this.errorText = next
+    if (this.model) {
+      this.model = this._createModel()
+    }
+    this.requestUpdate('errorLabel', old)
+  }
+
+  get ariaLabel(): string | null {
+    return this.idleAriaLabel
+  }
+
+  set ariaLabel(label: string | null | undefined) {
+    const old = this.idleAriaLabel
+    const next = label ?? null
+    if (old === next) return
+
+    this.idleAriaLabel = next
+    if (this.model) {
+      this.model = this._createModel()
+    }
+    this.requestUpdate('ariaLabel', old)
+  }
 
   /** @internal Overridable clipboard adapter for testing */
   get _clipboard() {
-    return this.__clipboard
+    return this.clipboard
   }
 
-  set _clipboard(clip: {writeText(text: string): Promise<void>} | undefined) {
-    this.__clipboard = clip
-    this.model = this._createModel()
-    this.requestUpdate()
+  set _clipboard(clip: ClipboardAdapter | undefined) {
+    this.clipboard = clip
   }
 
   constructor() {
@@ -107,6 +182,7 @@ export class CVCopyButton extends ReatomLitElement {
     this.disabled = false
     this.feedbackDuration = 1500
     this.size = 'medium'
+    this.appearance = 'default'
     this.model = this._createModel()
   }
 
@@ -127,9 +203,9 @@ export class CVCopyButton extends ReatomLitElement {
         width: var(--cv-copy-button-size);
         height: var(--cv-copy-button-size);
         border-radius: var(--cv-copy-button-border-radius);
-        border: 1px solid var(--cv-color-border, #2a3245);
-        background: var(--cv-color-surface, #141923);
-        color: var(--cv-color-text, #e8ecf6);
+        border: 1px solid var(--cv-copy-button-border-color, var(--cv-color-border, #2a3245));
+        background: var(--cv-copy-button-background, var(--cv-color-surface, #141923));
+        color: var(--cv-copy-button-color, var(--cv-color-text, #e8ecf6));
         cursor: pointer;
         user-select: none;
         padding: 0;
@@ -141,7 +217,12 @@ export class CVCopyButton extends ReatomLitElement {
       }
 
       [part='base']:hover {
-        border-color: var(--cv-color-primary, #65d7ff);
+        background: var(
+          --cv-copy-button-hover-background,
+          var(--cv-copy-button-background, var(--cv-color-surface, #141923))
+        );
+        border-color: var(--cv-copy-button-hover-border-color, var(--cv-color-primary, #65d7ff));
+        color: var(--cv-copy-button-hover-color, var(--cv-copy-button-color, var(--cv-color-text, #e8ecf6)));
       }
 
       [part='base']:focus-visible {
@@ -160,6 +241,14 @@ export class CVCopyButton extends ReatomLitElement {
         position: absolute;
         top: 0;
         left: 0;
+        opacity: 0;
+        pointer-events: none;
+        transform: scale(0.78);
+        filter: blur(2px);
+        transition:
+          opacity var(--cv-duration-fast, 120ms) var(--cv-easing-standard, ease),
+          transform var(--cv-duration-fast, 120ms) var(--cv-easing-decelerate, ease-out),
+          filter var(--cv-duration-fast, 120ms) var(--cv-easing-standard, ease);
       }
 
       [part='copy-icon'] svg,
@@ -195,10 +284,29 @@ export class CVCopyButton extends ReatomLitElement {
         pointer-events: none;
       }
 
-      /* --- status: idle --- */
-      :host([status='idle']) [part='success-icon'],
-      :host([status='idle']) [part='error-icon'] {
-        display: none;
+      :host([appearance='plain']) [part='base'] {
+        background: var(--cv-copy-button-plain-background, transparent);
+        border-color: var(--cv-copy-button-plain-border-color, transparent);
+      }
+
+      :host([appearance='plain']) [part='base']:hover {
+        background: var(
+          --cv-copy-button-plain-hover-background,
+          var(--cv-copy-button-hover-background, transparent)
+        );
+        border-color: var(
+          --cv-copy-button-plain-hover-border-color,
+          var(--cv-copy-button-plain-border-color, transparent)
+        );
+        color: var(--cv-copy-button-plain-hover-color, var(--cv-copy-button-hover-color, currentColor));
+      }
+
+      :host([status='idle']) [part='copy-icon'],
+      :host([status='success']) [part='success-icon'],
+      :host([status='error']) [part='error-icon'] {
+        opacity: 1;
+        transform: scale(1);
+        filter: blur(0);
       }
 
       /* --- status: success --- */
@@ -207,20 +315,10 @@ export class CVCopyButton extends ReatomLitElement {
         border-color: var(--cv-copy-button-success-color);
       }
 
-      :host([status='success']) [part='copy-icon'],
-      :host([status='success']) [part='error-icon'] {
-        display: none;
-      }
-
       /* --- status: error --- */
       :host([status='error']) [part='base'] {
         color: var(--cv-copy-button-error-color);
         border-color: var(--cv-copy-button-error-color);
-      }
-
-      :host([status='error']) [part='copy-icon'],
-      :host([status='error']) [part='success-icon'] {
-        display: none;
       }
 
       /* --- copying --- */
@@ -240,6 +338,16 @@ export class CVCopyButton extends ReatomLitElement {
       :host([size='large']) {
         --cv-copy-button-size: 42px;
       }
+
+      @media (prefers-reduced-motion: reduce) {
+        [part='copy-icon'],
+        [part='success-icon'],
+        [part='error-icon'] {
+          transform: none;
+          filter: none;
+          transition: opacity var(--cv-duration-fast, 120ms) var(--cv-easing-standard, ease);
+        }
+      }
     `,
   ]
 
@@ -254,7 +362,10 @@ export class CVCopyButton extends ReatomLitElement {
       value: this.value,
       isDisabled: this.disabled,
       feedbackDuration: this.feedbackDuration,
-      clipboard: this.__clipboard,
+      ariaLabel: this.ariaLabel ?? undefined,
+      successLabel: this.successLabel,
+      errorLabel: this.errorLabel,
+      clipboard: this.clipboard,
       onCopy: (value: string) => {
         this.dispatchEvent(
           new CustomEvent<CVCopyButtonCopyEvent['detail']>('cv-copy', {
@@ -330,7 +441,7 @@ export class CVCopyButton extends ReatomLitElement {
 
     const statusText = this.model.state.status()
     const statusAnnouncement =
-      statusText === 'success' ? 'Copied' : statusText === 'error' ? 'Copy failed' : nothing
+      statusText === 'success' ? this.successLabel : statusText === 'error' ? this.errorLabel : nothing
 
     return html`
       <div
@@ -343,25 +454,13 @@ export class CVCopyButton extends ReatomLitElement {
         @keydown=${this.handleKeyDown}
         @keyup=${this.handleKeyUp}
       >
-        <span
-          part="copy-icon"
-          aria-hidden=${copyIconProps['aria-hidden']}
-          .hidden=${copyIconProps.hidden ?? false}
-        >
+        <span part="copy-icon" aria-hidden=${copyIconProps['aria-hidden']}>
           <slot name="copy-icon">${copyIcon}</slot>
         </span>
-        <span
-          part="success-icon"
-          aria-hidden=${successIconProps['aria-hidden']}
-          .hidden=${successIconProps.hidden ?? false}
-        >
+        <span part="success-icon" aria-hidden=${successIconProps['aria-hidden']}>
           <slot name="success-icon">${successIcon}</slot>
         </span>
-        <span
-          part="error-icon"
-          aria-hidden=${errorIconProps['aria-hidden']}
-          .hidden=${errorIconProps.hidden ?? false}
-        >
+        <span part="error-icon" aria-hidden=${errorIconProps['aria-hidden']}>
           <slot name="error-icon">${errorIcon}</slot>
         </span>
         <span

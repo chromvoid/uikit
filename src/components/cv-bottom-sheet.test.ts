@@ -103,7 +103,15 @@ describe('cv-bottom-sheet', () => {
   it('maps sheet movement to cv-dialog content motion variables', () => {
     const cssText = stylesToText(CVBottomSheet.styles)
 
-    expect(cssText).toContain('--cv-dialog-content-transition-property: transform;')
+    expect(cssText).toContain('--cv-bottom-sheet-keyboard-sync-duration: var(--cv-duration-fast, 120ms);')
+    expect(cssText).toContain('--cv-bottom-sheet-keyboard-sync-easing: var(--cv-easing-standard, ease);')
+    expect(cssText).toContain('--cv-dialog-content-transition-property: transform, max-block-size;')
+    expect(cssText).toContain(
+      '--cv-dialog-transition-easing-open: var(--cv-easing-decelerate, cubic-bezier(0, 0, 0.2, 1));',
+    )
+    expect(cssText).toMatch(
+      /cv-dialog::part\(overlay\)\s*{[\s\S]*transition:\s*padding-block-end var\(--cv-bottom-sheet-keyboard-sync-duration\)[\s\S]*var\(--cv-bottom-sheet-keyboard-sync-easing\);/,
+    )
     expect(cssText).toContain(
       '--cv-dialog-transition-duration: var(--cv-bottom-sheet-dismiss-duration, 180ms);',
     )
@@ -131,6 +139,9 @@ describe('cv-bottom-sheet', () => {
     expect(cssText).toContain('@media (prefers-reduced-motion: reduce)')
     expect(cssText).toMatch(
       /@media \(prefers-reduced-motion: reduce\)[\s\S]*cv-dialog\s*{[\s\S]*--cv-dialog-transition-duration: 0ms;/,
+    )
+    expect(cssText).toMatch(
+      /@media \(prefers-reduced-motion: reduce\)[\s\S]*cv-dialog\s*{[\s\S]*--cv-bottom-sheet-keyboard-sync-duration: 0ms;/,
     )
   })
 

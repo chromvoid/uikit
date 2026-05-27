@@ -30,6 +30,11 @@ interface MenuItemRecord {
   element: CVMenuItem
 }
 
+interface PortalItemRecord {
+  id: string
+  element: CVMenuItem
+}
+
 const menuButtonKeysToPrevent = new Set([
   'ArrowUp',
   'ArrowDown',
@@ -72,6 +77,7 @@ export class CVMenuButton extends ReatomLitElement {
 
   private readonly idBase = `cv-menu-button-${++cvMenuButtonNonce}`
   private itemRecords: MenuItemRecord[] = []
+  private portalItemRecords: PortalItemRecord[] = []
   private itemListeners = new WeakMap<CVMenuItem, {click: EventListener; keydown: EventListener}>()
   private hasPrefixContent = false
   private hasLabelContent = false
@@ -79,6 +85,9 @@ export class CVMenuButton extends ReatomLitElement {
   private model?: MenuButtonModel
   private hasLayoutListeners = false
   private layoutFrame = -1
+  private portalRoot: HTMLDivElement | null = null
+  private readonly portalClickListener: EventListener = (event) => this.handlePortalClick(event)
+  private readonly portalKeydownListener: EventListener = (event) => this.handlePortalKeyDown(event as KeyboardEvent)
 
   constructor() {
     super()
@@ -280,6 +289,7 @@ export class CVMenuButton extends ReatomLitElement {
   override disconnectedCallback(): void {
     super.disconnectedCallback()
     this.detachItemListeners()
+    this.destroyPortal()
     this.syncOutsidePointerListener(true)
     this.toggleLayoutListeners(false)
     this.cancelLayoutFrame()
@@ -341,6 +351,7 @@ export class CVMenuButton extends ReatomLitElement {
       this.scheduleLayout()
     } else {
       this.cancelLayoutFrame()
+      this.destroyPortal()
       const menu = this.getMenuElement()
       if (menu) {
         this.clearInlineLayout(menu)
@@ -358,6 +369,33 @@ export class CVMenuButton extends ReatomLitElement {
 
   private getBaseElement(): HTMLElement | null {
     return this.shadowRoot?.querySelector('[part="base"]') as HTMLElement | null
+  }
+
+  private ensurePortalRoot(): HTMLDivElement | null {
+    const ownerDocument = this.ownerDocument
+    if (!ownerDocument?.body) return null
+
+    if (this.portalRoot?.isConnected) {
+      return this.portalRoot
+    }
+
+    const portal = ownerDocument.createElement('div')
+    portal.setAttribute('data-cv-menu-button-portal', this.idBase)
+    portal.addEventListener('click', this.portalClickListener)
+    portal.addEventListener('keydown', this.portalKeydownListener)
+    ownerDocument.body.append(portal)
+    this.portalRoot = portal
+    return portal
+  }
+
+  private destroyPortal(): void {
+    if (!this.portalRoot) return
+
+    this.portalRoot.removeEventListener('click', this.portalClickListener)
+    this.portalRoot.removeEventListener('keydown', this.portalKeydownListener)
+    this.portalRoot.remove()
+    this.portalRoot = null
+    this.portalItemRecords = []
   }
 
   private clearInlineLayout(menu: HTMLElement): void {
@@ -427,12 +465,59 @@ export class CVMenuButton extends ReatomLitElement {
     menu.style.visibility = 'visible'
   }
 
+  private applyPortalLayout(portal: HTMLElement, base: HTMLElement): void {
+    const baseRect = base.getBoundingClientRect()
+    const minWidth = Math.max(this.getMenuMinInlineSize(), Math.ceil(baseRect.width))
+
+    portal.style.position = 'fixed'
+    portal.style.minWidth = `${minWidth}px`
+    portal.style.top = '0px'
+    portal.style.left = '0px'
+    portal.style.bottom = 'auto'
+    portal.style.right = 'auto'
+    portal.style.transform = 'none'
+    portal.style.translate = 'none'
+    portal.style.visibility = 'hidden'
+
+    const menuRect = portal.getBoundingClientRect()
+    const viewportWidth = window.innerWidth
+    const viewportHeight = window.innerHeight
+    const gap = this.getMenuOffset()
+    const viewportPadding = 8
+
+    const spaceAbove = Math.max(0, baseRect.top - viewportPadding - gap)
+    const spaceBelow = Math.max(0, viewportHeight - baseRect.bottom - viewportPadding - gap)
+    const placeAbove = spaceBelow < menuRect.height + gap && spaceAbove > spaceBelow
+
+    let top = placeAbove ? baseRect.top - menuRect.height - gap : baseRect.bottom + gap
+    let left = baseRect.left
+
+    const maxLeft = Math.max(viewportPadding, viewportWidth - menuRect.width - viewportPadding)
+    const maxTop = Math.max(viewportPadding, viewportHeight - menuRect.height - viewportPadding)
+
+    left = Math.min(Math.max(left, viewportPadding), maxLeft)
+    top = Math.min(Math.max(top, viewportPadding), maxTop)
+
+    portal.style.position = 'fixed'
+    portal.style.top = `${top}px`
+    portal.style.left = `${left}px`
+    portal.style.bottom = 'auto'
+    portal.style.right = 'auto'
+    portal.style.transform = 'none'
+    portal.style.translate = 'none'
+    portal.style.visibility = 'visible'
+  }
+
   private syncMenuLayout(): void {
     const menu = this.getMenuElement()
     const base = this.getBaseElement()
     if (!menu || !base) return
 
     this.applyMenuLayout(menu, base)
+
+    if (this.portalRoot) {
+      this.applyPortalLayout(this.portalRoot, base)
+    }
   }
 
   private cancelLayoutFrame(): void {
@@ -623,23 +708,109 @@ export class CVMenuButton extends ReatomLitElement {
 
     for (const record of this.itemRecords) {
       const props = this.model.contracts.getItemProps(record.id)
-
-      record.element.id = props.id
-      record.element.setAttribute('role', props.role)
-      record.element.setAttribute('tabindex', props.tabindex)
-
-      if (props['aria-disabled']) {
-        record.element.setAttribute('aria-disabled', props['aria-disabled'])
-      } else {
-        record.element.removeAttribute('aria-disabled')
-      }
-
-      record.element.setAttribute('data-active', props['data-active'])
-      record.element.active = props['data-active'] === 'true'
-      record.element.selected = this.value === record.id
-      record.element.disabled = props['aria-disabled'] === 'true'
-      record.element.hidden = !this.open
+      this.applyItemElementState(record.element, props, this.value === record.id, !this.open)
     }
+
+    if (this.open) {
+      this.syncPortalElements()
+    } else {
+      this.destroyPortal()
+    }
+  }
+
+  private applyItemElementState(
+    element: CVMenuItem,
+    props: ReturnType<MenuButtonModel['contracts']['getItemProps']>,
+    selected: boolean,
+    hidden: boolean,
+  ): void {
+    element.id = props.id
+    element.setAttribute('role', props.role)
+    element.setAttribute('tabindex', props.tabindex)
+
+    if (props['aria-disabled']) {
+      element.setAttribute('aria-disabled', props['aria-disabled'])
+    } else {
+      element.removeAttribute('aria-disabled')
+    }
+
+    element.setAttribute('data-active', props['data-active'])
+    element.active = props['data-active'] === 'true'
+    element.selected = selected
+    element.disabled = props['aria-disabled'] === 'true'
+    element.hidden = hidden
+  }
+
+  private syncPortalElements(): void {
+    if (!this.open || !this.model) return
+
+    const portal = this.ensurePortalRoot()
+    if (!portal) return
+
+    const menu = this.getMenuElement()
+    this.applyPortalBaseState(portal, menu)
+
+    const fragment = this.ownerDocument.createDocumentFragment()
+    const nextPortalRecords: PortalItemRecord[] = []
+
+    for (const record of this.itemRecords) {
+      const clone = record.element.cloneNode(true) as CVMenuItem
+      const props = this.model.contracts.getItemProps(record.id)
+
+      clone.removeAttribute('slot')
+      clone.setAttribute('data-cv-menu-value', record.id)
+      clone.value = record.id
+      clone.className = record.element.className
+      this.applyItemElementState(clone, props, this.value === record.id, false)
+
+      fragment.append(clone)
+      nextPortalRecords.push({id: record.id, element: clone})
+    }
+
+    portal.replaceChildren(fragment)
+    this.portalItemRecords = nextPortalRecords
+
+    const base = this.getBaseElement()
+    if (base) {
+      this.applyPortalLayout(portal, base)
+    } else {
+      portal.style.visibility = 'hidden'
+    }
+  }
+
+  private applyPortalBaseState(portal: HTMLDivElement, menu: HTMLElement | null): void {
+    const source = menu ? getComputedStyle(menu) : null
+
+    portal.hidden = false
+    portal.setAttribute('role', menu?.getAttribute('role') ?? 'menu')
+    portal.setAttribute('tabindex', menu?.getAttribute('tabindex') ?? '-1')
+    portal.setAttribute('aria-label', menu?.getAttribute('aria-label') ?? this.ariaLabel ?? '')
+
+    portal.style.boxSizing = 'border-box'
+    portal.style.display = 'inline-grid'
+    portal.style.gap = source?.gap || '4px'
+    portal.style.alignContent = source?.alignContent || 'start'
+    portal.style.padding = source?.padding || '4px'
+    portal.style.background = source?.background || 'var(--cv-color-surface-elevated, #1d2432)'
+    portal.style.border = source?.border || '0px solid transparent'
+    portal.style.borderRadius = source?.borderRadius || 'var(--cv-radius-sm, 6px)'
+    portal.style.boxShadow = source?.boxShadow || ''
+    portal.style.color = source?.color || 'var(--cv-color-text, #e8ecf6)'
+    portal.style.font = source?.font || 'inherit'
+    portal.style.maxWidth = source?.maxWidth || 'calc(100vw - 16px)'
+    portal.style.maxHeight = source?.maxHeight || 'calc(100dvh - 16px)'
+    portal.style.overflowY = source?.overflowY || 'auto'
+    portal.style.pointerEvents = 'auto'
+    portal.style.zIndex = source?.zIndex || this.getMenuZIndex()
+    portal.style.setProperty('--cv-menu-item-gap', '10px')
+    portal.style.setProperty('--cv-menu-item-padding-block', '10px')
+    portal.style.setProperty('--cv-menu-item-padding-inline', '12px')
+    portal.style.setProperty('--cv-menu-item-border-radius', 'var(--cv-radius-1, 6px)')
+  }
+
+  private getMenuZIndex(): string {
+    const raw = getComputedStyle(this).getPropertyValue('--cv-menu-button-menu-z-index').trim()
+    return raw || '20'
   }
 
   private captureState() {
@@ -686,6 +857,12 @@ export class CVMenuButton extends ReatomLitElement {
 
     const activeId = this.model.state.activeId()
     if (!activeId) return
+
+    const activePortalRecord = this.portalItemRecords.find((record) => record.id === activeId)
+    if (activePortalRecord) {
+      activePortalRecord.element.focus()
+      return
+    }
 
     const activeRecord = this.itemRecords.find((record) => record.id === activeId)
     activeRecord?.element.focus()
@@ -745,10 +922,37 @@ export class CVMenuButton extends ReatomLitElement {
 
     const path = event.composedPath()
     if (path.includes(this)) return
+    if (this.portalRoot && path.includes(this.portalRoot)) return
 
     const previous = this.captureState()
     this.model.actions.handleOutsidePointer()
     this.applyInteractionResult(previous)
+  }
+
+  private getPortalItemIdFromEvent(event: Event): string | null {
+    for (const target of event.composedPath()) {
+      if (!(target instanceof HTMLElement)) continue
+      if (target === this.portalRoot) break
+      if (target.tagName.toLowerCase() !== CVMenuItem.elementName) continue
+
+      const id = target.dataset['cvMenuValue']?.trim()
+      if (id) return id
+    }
+
+    return null
+  }
+
+  private handlePortalClick(event: Event): void {
+    const id = this.getPortalItemIdFromEvent(event)
+    if (!id) return
+
+    event.preventDefault()
+    this.handleItemClick(id)
+  }
+
+  private handlePortalKeyDown(event: KeyboardEvent): void {
+    event.stopPropagation()
+    this.handleKeyDown(event)
   }
 
   private handleItemClick(id: string): void {

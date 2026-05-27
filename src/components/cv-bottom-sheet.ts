@@ -123,9 +123,11 @@ export class CVBottomSheet extends ReatomLitElement {
       --cv-dialog-overlay-color: var(--cv-bottom-sheet-overlay-color, var(--cv-color-overlay));
       --cv-dialog-padding-block: 0px;
       --cv-dialog-padding-inline: 0px;
-      --cv-dialog-content-transition-property: transform;
+      --cv-bottom-sheet-keyboard-sync-duration: var(--cv-duration-fast, 120ms);
+      --cv-bottom-sheet-keyboard-sync-easing: var(--cv-easing-standard, ease);
+      --cv-dialog-content-transition-property: transform, max-block-size;
       --cv-dialog-transition-duration: var(--cv-bottom-sheet-dismiss-duration, 180ms);
-      --cv-dialog-transition-easing-open: var(--cv-easing-standard, ease);
+      --cv-dialog-transition-easing-open: var(--cv-easing-decelerate, cubic-bezier(0, 0, 0.2, 1));
       --cv-dialog-transition-easing-close: var(--cv-easing-standard, ease);
       --cv-dialog-content-closed-transform: translateY(calc(100% + 32px));
       --cv-dialog-content-open-transform: translateY(var(--cv-bottom-sheet-drag-offset, 0px));
@@ -140,6 +142,8 @@ export class CVBottomSheet extends ReatomLitElement {
       padding-block-start: var(--cv-bottom-sheet-overlay-block-start);
       padding-block-end: var(--cv-bottom-sheet-overlay-block-end);
       padding-inline: var(--cv-bottom-sheet-inline-inset, 0px);
+      transition: padding-block-end var(--cv-bottom-sheet-keyboard-sync-duration)
+        var(--cv-bottom-sheet-keyboard-sync-easing);
     }
 
     cv-dialog::part(content) {
@@ -262,6 +266,7 @@ export class CVBottomSheet extends ReatomLitElement {
     @media (prefers-reduced-motion: reduce) {
       cv-dialog {
         --cv-bottom-sheet-dismiss-duration: 0ms;
+        --cv-bottom-sheet-keyboard-sync-duration: 0ms;
         --cv-dialog-transition-duration: 0ms;
       }
     }

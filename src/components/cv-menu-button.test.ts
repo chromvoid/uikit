@@ -83,6 +83,14 @@ function mockRect(element: HTMLElement, rect: {left: number; top: number; width:
   })
 }
 
+function getPortal() {
+  return document.body.querySelector('[data-cv-menu-button-portal]') as HTMLDivElement | null
+}
+
+function getPortalItem(value: string) {
+  return getPortal()?.querySelector(`cv-menu-item[value="${value}"]`) as CVMenuItem | null
+}
+
 afterEach(() => {
   vi.restoreAllMocks()
   if (initialInnerWidth) {
@@ -151,6 +159,48 @@ describe('cv-menu-button', () => {
     expect(changeCount).toBe(1)
   })
 
+  it('mirrors open menu items into a document portal and selects from the portal', async () => {
+    const {menu, trigger} = await mountMenuButton()
+    let changeCount = 0
+
+    menu.addEventListener('cv-change', () => {
+      changeCount += 1
+    })
+
+    trigger!.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+    await settle(menu)
+
+    const portal = getPortal()
+    expect(portal).not.toBeNull()
+    expect(getPortalItem('a')?.hidden).toBe(false)
+    expect(getPortalItem('b')?.disabled).toBe(true)
+
+    getPortalItem('c')!.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+    await settle(menu)
+
+    expect(menu.value).toBe('c')
+    expect(menu.open).toBe(false)
+    expect(changeCount).toBe(1)
+    expect(getPortal()).toBeNull()
+  })
+
+  it('ignores disabled portal items without closing the menu', async () => {
+    const {menu, trigger} = await mountMenuButton()
+    const onChange = vi.fn()
+    menu.addEventListener('cv-change', onChange as EventListener)
+
+    trigger!.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+    await settle(menu)
+
+    getPortalItem('b')!.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+    await settle(menu)
+
+    expect(menu.value).toBe('')
+    expect(menu.open).toBe(true)
+    expect(onChange).not.toHaveBeenCalled()
+    expect(getPortal()).not.toBeNull()
+  })
+
   it('closes on outside pointer', async () => {
     const {menu, trigger} = await mountMenuButton()
 
@@ -161,6 +211,53 @@ describe('cv-menu-button', () => {
     document.body.dispatchEvent(new MouseEvent('pointerdown', {bubbles: true}))
     await settle(menu)
 
+    expect(menu.open).toBe(false)
+  })
+
+  it('does not treat portal pointer events as outside clicks', async () => {
+    const {menu, trigger} = await mountMenuButton()
+
+    trigger!.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+    await settle(menu)
+    expect(menu.open).toBe(true)
+
+    getPortal()!.dispatchEvent(new MouseEvent('pointerdown', {bubbles: true, composed: true}))
+    await settle(menu)
+
+    expect(menu.open).toBe(true)
+  })
+
+  it('removes the portal on close and disconnect', async () => {
+    const {menu, trigger} = await mountMenuButton()
+
+    trigger!.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+    await settle(menu)
+    expect(getPortal()).not.toBeNull()
+
+    trigger!.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+    await settle(menu)
+    expect(getPortal()).toBeNull()
+
+    trigger!.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+    await settle(menu)
+    expect(getPortal()).not.toBeNull()
+
+    menu.remove()
+    await Promise.resolve()
+    expect(getPortal()).toBeNull()
+  })
+
+  it('supports keyboard selection from the portal', async () => {
+    const {menu, trigger} = await mountMenuButton()
+
+    trigger!.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+    await settle(menu)
+
+    getPortal()!.dispatchEvent(new KeyboardEvent('keydown', {key: 'ArrowDown', bubbles: true}))
+    getPortal()!.dispatchEvent(new KeyboardEvent('keydown', {key: 'Enter', bubbles: true}))
+    await settle(menu)
+
+    expect(menu.value).toBe('c')
     expect(menu.open).toBe(false)
   })
 
