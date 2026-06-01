@@ -87,7 +87,8 @@ export class CVMenuButton extends ReatomLitElement {
   private layoutFrame = -1
   private portalRoot: HTMLDivElement | null = null
   private readonly portalClickListener: EventListener = (event) => this.handlePortalClick(event)
-  private readonly portalKeydownListener: EventListener = (event) => this.handlePortalKeyDown(event as KeyboardEvent)
+  private readonly portalKeydownListener: EventListener = (event) =>
+    this.handlePortalKeyDown(event as KeyboardEvent)
 
   constructor() {
     super()
