@@ -22,7 +22,6 @@ const DRAG_DISMISS_DISTANCE_PX = 96
 const DRAG_DISMISS_VELOCITY_PX_PER_MS = 0.75
 const DRAG_DETENT_DISTANCE_PX = 64
 const DRAG_DETENT_VELOCITY_PX_PER_MS = 0.5
-const SHEET_DISMISS_ANIMATION_MS = 180
 const DETENT_ORDER: CVBottomSheetDetent[] = ['collapsed', 'middle', 'expanded']
 
 export class CVBottomSheet extends ReatomLitElement {
@@ -72,7 +71,6 @@ export class CVBottomSheet extends ReatomLitElement {
   private dragStartDetent: CVBottomSheetDetent = 'expanded'
   private dragMoved = false
   private suppressNextHandleClick = false
-  private dismissAnimationTimer: number | null = null
 
   constructor() {
     super()
@@ -123,9 +121,7 @@ export class CVBottomSheet extends ReatomLitElement {
       --cv-dialog-overlay-color: var(--cv-bottom-sheet-overlay-color, var(--cv-color-overlay));
       --cv-dialog-padding-block: 0px;
       --cv-dialog-padding-inline: 0px;
-      --cv-bottom-sheet-keyboard-sync-duration: var(--cv-duration-fast, 120ms);
-      --cv-bottom-sheet-keyboard-sync-easing: var(--cv-easing-standard, ease);
-      --cv-dialog-content-transition-property: transform, max-block-size;
+      --cv-dialog-content-transition-property: transform;
       --cv-dialog-transition-duration: var(--cv-bottom-sheet-dismiss-duration, 180ms);
       --cv-dialog-transition-easing-open: var(--cv-easing-decelerate, cubic-bezier(0, 0, 0.2, 1));
       --cv-dialog-transition-easing-close: var(--cv-easing-standard, ease);
@@ -142,8 +138,6 @@ export class CVBottomSheet extends ReatomLitElement {
       padding-block-start: var(--cv-bottom-sheet-overlay-block-start);
       padding-block-end: var(--cv-bottom-sheet-overlay-block-end);
       padding-inline: var(--cv-bottom-sheet-inline-inset, 0px);
-      transition: padding-block-end var(--cv-bottom-sheet-keyboard-sync-duration)
-        var(--cv-bottom-sheet-keyboard-sync-easing);
     }
 
     cv-dialog::part(content) {
@@ -220,10 +214,6 @@ export class CVBottomSheet extends ReatomLitElement {
       transition: none;
     }
 
-    cv-dialog.is-dismissing {
-      --cv-dialog-content-open-transform: translateY(calc(100% + 32px));
-    }
-
     cv-dialog::part(body) {
       min-block-size: 0;
       overflow: auto;
@@ -266,7 +256,6 @@ export class CVBottomSheet extends ReatomLitElement {
     @media (prefers-reduced-motion: reduce) {
       cv-dialog {
         --cv-bottom-sheet-dismiss-duration: 0ms;
-        --cv-bottom-sheet-keyboard-sync-duration: 0ms;
         --cv-dialog-transition-duration: 0ms;
       }
     }
@@ -280,7 +269,6 @@ export class CVBottomSheet extends ReatomLitElement {
   }
 
   override disconnectedCallback(): void {
-    this.clearDismissAnimationTimer()
     this.resetSheetDragState()
     super.disconnectedCallback()
   }
@@ -321,12 +309,6 @@ export class CVBottomSheet extends ReatomLitElement {
     return this.getEnabledDetents().indexOf(this.getResolvedDetent())
   }
 
-  private clearDismissAnimationTimer(): void {
-    if (this.dismissAnimationTimer === null) return
-    window.clearTimeout(this.dismissAnimationTimer)
-    this.dismissAnimationTimer = null
-  }
-
   private resetSheetDragState(): void {
     this.dragPointerId = null
     this.dragStartY = 0
@@ -335,7 +317,7 @@ export class CVBottomSheet extends ReatomLitElement {
     this.dragMoved = false
 
     const dialog = this.getDialogElement()
-    dialog?.classList.remove('is-dragging', 'is-dismissing')
+    dialog?.classList.remove('is-dragging')
     dialog?.style.removeProperty('--cv-bottom-sheet-drag-offset')
   }
 
@@ -381,23 +363,11 @@ export class CVBottomSheet extends ReatomLitElement {
     this.dispatchChange(detail)
   }
 
-  private animateSheetDismiss(): void {
-    if (this.dismissAnimationTimer !== null) return
-
+  private commitDragClose(): void {
     const dialog = this.getDialogElement()
-    if (!dialog) {
-      this.commitUserClose()
-      return
-    }
-
     this.dragPointerId = null
-    dialog.classList.remove('is-dragging')
-    dialog.style.removeProperty('--cv-bottom-sheet-drag-offset')
-    dialog.classList.add('is-dismissing')
-    this.dismissAnimationTimer = window.setTimeout(() => {
-      this.dismissAnimationTimer = null
-      this.commitUserClose()
-    }, SHEET_DISMISS_ANIMATION_MS)
+    dialog?.classList.remove('is-dragging')
+    this.commitUserClose()
   }
 
   private handleDialogInput(event: CustomEvent<CVBottomSheetEventDetail>): void {
@@ -417,7 +387,6 @@ export class CVBottomSheet extends ReatomLitElement {
   private handleDragPointerDown(event: PointerEvent): void {
     if (!this.open) return
     if (!this.dragToClose && !this.hasDetents()) return
-    if (this.dismissAnimationTimer !== null) return
     if (typeof event.button === 'number' && event.button !== 0) return
 
     this.dragPointerId = event.pointerId
@@ -479,7 +448,7 @@ export class CVBottomSheet extends ReatomLitElement {
       const nextDetent = this.getNextDetentForDrag(offset, velocity)
 
       if (nextDetent === null && this.dragToClose) {
-        this.animateSheetDismiss()
+        this.commitDragClose()
         return
       }
 
@@ -493,7 +462,7 @@ export class CVBottomSheet extends ReatomLitElement {
     const dismissOffset = Math.max(0, offset)
     const dismissVelocity = dismissOffset / elapsed
     if (dismissOffset >= DRAG_DISMISS_DISTANCE_PX || dismissVelocity >= DRAG_DISMISS_VELOCITY_PX_PER_MS) {
-      this.animateSheetDismiss()
+      this.commitDragClose()
       return
     }
 
@@ -523,6 +492,10 @@ export class CVBottomSheet extends ReatomLitElement {
     this.commitUserDetent(next)
   }
 
+  private handleDialogAfterHide(): void {
+    this.resetSheetDragState()
+  }
+
   protected override render() {
     const hasDetents = this.hasDetents()
     const dialogClass = [
@@ -548,6 +521,7 @@ export class CVBottomSheet extends ReatomLitElement {
         .closable=${this.closable}
         @cv-input=${this.handleDialogInput}
         @cv-change=${this.handleDialogChange}
+        @cv-after-hide=${this.handleDialogAfterHide}
       >
         <slot name="title" slot="title"></slot>
         <slot name="description" slot="description"></slot>

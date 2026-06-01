@@ -25,6 +25,10 @@ const getDialogOverlay = (el: CVBottomSheet) =>
 const getDialogContent = (el: CVBottomSheet) =>
   getDialog(el).shadowRoot!.querySelector('[part="content"]') as HTMLElement
 const getHandle = (el: CVBottomSheet) => el.shadowRoot!.querySelector('[part="handle"]') as HTMLElement | null
+const setDialogTransitionDuration = (el: CVBottomSheet, duration: string) => {
+  getDialogOverlay(el).style.transitionDuration = duration
+  getDialogContent(el).style.transitionDuration = duration
+}
 
 function stylesToText(styles: unknown): string {
   const values = Array.isArray(styles) ? styles : [styles]
@@ -100,18 +104,15 @@ describe('cv-bottom-sheet', () => {
     expect(cssText).toContain('block-size: var(--cv-bottom-sheet-detent-visible-height)')
   })
 
-  it('maps sheet movement to cv-dialog content motion variables', () => {
+  it('maps sheet movement to cv-dialog content motion variables without animating keyboard geometry', () => {
     const cssText = stylesToText(CVBottomSheet.styles)
 
-    expect(cssText).toContain('--cv-bottom-sheet-keyboard-sync-duration: var(--cv-duration-fast, 120ms);')
-    expect(cssText).toContain('--cv-bottom-sheet-keyboard-sync-easing: var(--cv-easing-standard, ease);')
-    expect(cssText).toContain('--cv-dialog-content-transition-property: transform, max-block-size;')
+    expect(cssText).toContain('--cv-dialog-content-transition-property: transform;')
+    expect(cssText).not.toContain('--cv-dialog-content-transition-property: transform, max-block-size;')
     expect(cssText).toContain(
       '--cv-dialog-transition-easing-open: var(--cv-easing-decelerate, cubic-bezier(0, 0, 0.2, 1));',
     )
-    expect(cssText).toMatch(
-      /cv-dialog::part\(overlay\)\s*{[\s\S]*transition:\s*padding-block-end var\(--cv-bottom-sheet-keyboard-sync-duration\)[\s\S]*var\(--cv-bottom-sheet-keyboard-sync-easing\);/,
-    )
+    expect(cssText).not.toMatch(/transition:\s*padding-block-end/)
     expect(cssText).toContain(
       '--cv-dialog-transition-duration: var(--cv-bottom-sheet-dismiss-duration, 180ms);',
     )
@@ -122,15 +123,13 @@ describe('cv-bottom-sheet', () => {
     expect(cssText).not.toContain('scale(')
   })
 
-  it('keeps detent and dismiss transforms in cv-dialog motion variables', () => {
+  it('keeps detent transforms in cv-dialog motion variables without a second dismiss class', () => {
     const cssText = stylesToText(CVBottomSheet.styles)
 
     expect(cssText).toMatch(
       /cv-dialog\.has-detents\s*{[\s\S]*--cv-dialog-content-open-transform:\s*translateY\(\s*calc\(var\(--cv-bottom-sheet-detent-offset,\s*0px\) \+ var\(--cv-bottom-sheet-drag-offset,\s*0px\)\)\s*\);/,
     )
-    expect(cssText).toMatch(
-      /cv-dialog\.is-dismissing\s*{[\s\S]*--cv-dialog-content-open-transform:\s*translateY\(calc\(100% \+ 32px\)\);/,
-    )
+    expect(cssText).not.toContain('is-dismissing')
   })
 
   it('keeps reduced-motion sheet displacement instant', () => {
@@ -139,9 +138,6 @@ describe('cv-bottom-sheet', () => {
     expect(cssText).toContain('@media (prefers-reduced-motion: reduce)')
     expect(cssText).toMatch(
       /@media \(prefers-reduced-motion: reduce\)[\s\S]*cv-dialog\s*{[\s\S]*--cv-dialog-transition-duration: 0ms;/,
-    )
-    expect(cssText).toMatch(
-      /@media \(prefers-reduced-motion: reduce\)[\s\S]*cv-dialog\s*{[\s\S]*--cv-bottom-sheet-keyboard-sync-duration: 0ms;/,
     )
   })
 
@@ -227,6 +223,7 @@ describe('cv-bottom-sheet', () => {
     const changes: unknown[] = []
     const handle = getHandle(el)!
     const dialog = getDialog(el)
+    setDialogTransitionDuration(el, '120ms')
     el.addEventListener('cv-change', (event) => changes.push((event as CustomEvent).detail))
 
     handle.dispatchEvent(createPointerEvent('pointerdown', {clientY: 0}))
@@ -236,13 +233,18 @@ describe('cv-bottom-sheet', () => {
 
     handle.dispatchEvent(createPointerEvent('pointerup', {clientY: 120}))
 
-    expect(dialog.classList.contains('is-dismissing')).toBe(true)
-    expect(el.open).toBe(true)
-
-    vi.advanceTimersByTime(180)
+    expect(dialog.classList.contains('is-dragging')).toBe(false)
+    expect(dialog.classList.contains('is-dismissing')).toBe(false)
+    expect(dialog.style.getPropertyValue('--cv-bottom-sheet-drag-offset')).toBe('120px')
+    expect(el.open).toBe(false)
+    expect(changes).toEqual([{open: false}])
     await settle(el)
 
-    expect(el.open).toBe(false)
+    expect(dialog.style.getPropertyValue('--cv-bottom-sheet-drag-offset')).toBe('120px')
+    vi.advanceTimersByTime(120)
+    await settle(el)
+
+    expect(dialog.style.getPropertyValue('--cv-bottom-sheet-drag-offset')).toBe('')
     expect(changes).toEqual([{open: false}])
   })
 
@@ -270,6 +272,7 @@ describe('cv-bottom-sheet', () => {
     const changes: unknown[] = []
     const handle = getHandle(el)!
     const dialog = getDialog(el)
+    setDialogTransitionDuration(el, '120ms')
     el.addEventListener('cv-change', (event) => changes.push((event as CustomEvent).detail))
 
     handle.dispatchEvent(createPointerEvent('pointerdown', {clientY: 0}))
@@ -363,13 +366,11 @@ describe('cv-bottom-sheet', () => {
     handle.dispatchEvent(createPointerEvent('pointermove', {clientY: 310}))
     handle.dispatchEvent(createPointerEvent('pointerup', {clientY: 310}))
 
-    expect(dialog.classList.contains('is-dismissing')).toBe(true)
-    expect(el.open).toBe(true)
-
-    vi.advanceTimersByTime(180)
-    await settle(el)
-
+    expect(dialog.classList.contains('is-dragging')).toBe(false)
+    expect(dialog.classList.contains('is-dismissing')).toBe(false)
+    expect(dialog.style.getPropertyValue('--cv-bottom-sheet-drag-offset')).toBe('100px')
     expect(el.open).toBe(false)
+    await settle(el)
     expect(changes).toEqual([
       {open: true, detent: 'middle'},
       {open: true, detent: 'collapsed'},
@@ -385,12 +386,18 @@ describe('cv-bottom-sheet', () => {
     el.addEventListener('cv-show', () => events.push('show'))
     el.addEventListener('cv-after-show', () => events.push('after-show'))
 
+    setDialogTransitionDuration(el, '120ms')
     el.open = true
     await settle(el)
 
     expect(events).toEqual(['show'])
 
-    vi.advanceTimersByTime(16)
+    vi.advanceTimersByTime(119)
+    await settle(el)
+
+    expect(events).toEqual(['show'])
+
+    vi.advanceTimersByTime(1)
     await settle(el)
 
     expect(events).toEqual(['show', 'after-show'])

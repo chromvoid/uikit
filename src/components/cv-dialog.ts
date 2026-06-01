@@ -79,7 +79,6 @@ export class CVDialog extends ReatomLitElement {
   private focusRestoreTarget: HTMLElement | null = null
   private portalVisible = false
   private presenceState: DialogPresenceState = 'closed'
-  private openAnimationFrame = 0
   private presenceAnimationTimeout = 0
   private pendingFocusRestoreTargetId: string | null = null
   private shouldAnimatePresence = false
@@ -494,11 +493,6 @@ export class CVDialog extends ReatomLitElement {
   }
 
   private clearPresenceAnimationQueue(): void {
-    if (this.openAnimationFrame) {
-      cancelAnimationFrame(this.openAnimationFrame)
-      this.openAnimationFrame = 0
-    }
-
     if (this.presenceAnimationTimeout) {
       window.clearTimeout(this.presenceAnimationTimeout)
       this.presenceAnimationTimeout = 0
@@ -506,27 +500,23 @@ export class CVDialog extends ReatomLitElement {
   }
 
   private startOpenPresenceTransition(): void {
-    this.openAnimationFrame = requestAnimationFrame(() => {
-      this.openAnimationFrame = 0
+    if (!this.open) return
 
-      if (!this.open) return
+    this.presenceState = 'open'
+    this.syncRenderedPresenceState()
 
-      this.presenceState = 'open'
-      this.syncRenderedPresenceState()
+    const duration = this.getPresenceTransitionDuration()
+    if (duration === 0) {
+      this.finishPresenceTransition(true)
+      return
+    }
 
-      const duration = this.getPresenceTransitionDuration()
-      if (duration === 0) {
-        this.finishPresenceTransition(true)
-        return
-      }
-
-      const token = this.lifecycleToken
-      this.presenceAnimationTimeout = window.setTimeout(() => {
-        this.presenceAnimationTimeout = 0
-        if (!this.open || token !== this.lifecycleToken) return
-        this.finishPresenceTransition(true)
-      }, duration)
-    })
+    const token = this.lifecycleToken
+    this.presenceAnimationTimeout = window.setTimeout(() => {
+      this.presenceAnimationTimeout = 0
+      if (!this.open || token !== this.lifecycleToken) return
+      this.finishPresenceTransition(true)
+    }, duration)
   }
 
   private startClosePresenceTransition(): void {

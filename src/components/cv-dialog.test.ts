@@ -333,12 +333,9 @@ describe('cv-dialog', () => {
       el.addEventListener('cv-hide', () => events.push('hide'))
       el.addEventListener('cv-after-hide', () => events.push('after-hide'))
 
+      setPresenceTransitionDuration(el, '120ms')
       el.open = true
       await settle(el)
-      setPresenceTransitionDuration(el, '120ms')
-      expect(events).toEqual(['show'])
-
-      await advancePresenceTimers(el, 16)
       expect(events).toEqual(['show'])
 
       await advancePresenceTimers(el, 119)
@@ -363,10 +360,9 @@ describe('cv-dialog', () => {
       opener.focus()
 
       const el = await createDialog()
+      setPresenceTransitionDuration(el, '120ms')
       el.open = true
       await settle(el)
-      setPresenceTransitionDuration(el, '120ms')
-      await advancePresenceTimers(el, 16)
       await advancePresenceTimers(el, 120)
 
       el.open = false
@@ -385,10 +381,9 @@ describe('cv-dialog', () => {
       opener.focus()
 
       const el = await createDialog()
+      setPresenceTransitionDuration(el, '120ms')
       el.open = true
       await settle(el)
-      setPresenceTransitionDuration(el, '120ms')
-      await advancePresenceTimers(el, 16)
       await advancePresenceTimers(el, 120)
 
       opener.remove()
@@ -440,13 +435,10 @@ describe('cv-dialog', () => {
         fired = true
       })
 
+      setPresenceTransitionDuration(el, '120ms')
       trigger.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
       await settle(el)
-      setPresenceTransitionDuration(el, '120ms')
 
-      expect(fired).toBe(false)
-
-      await advancePresenceTimers(el, 16)
       expect(fired).toBe(false)
 
       await advancePresenceTimers(el, 119)
@@ -489,14 +481,12 @@ describe('cv-dialog', () => {
       el.addEventListener('cv-hide', () => events.push('hide'))
       el.addEventListener('cv-after-hide', () => events.push('after-hide'))
 
+      setPresenceTransitionDuration(el, '0ms')
       el.open = true
       await settle(el)
-      setPresenceTransitionDuration(el, '0ms')
-      await advancePresenceTimers(el, 16)
 
       el.open = false
       await settle(el)
-      await advancePresenceTimers(el, 0)
 
       expect(events).toEqual(['show', 'after-show', 'hide', 'after-hide'])
     })
