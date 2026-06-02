@@ -546,6 +546,31 @@ describe('cv-combobox', () => {
       expect(combobox.value).toBe('js py')
     })
 
+    it('preserves a selected value when its option is added during slot rebuild', async () => {
+      const combobox = document.createElement('cv-combobox') as CVCombobox
+      combobox.multiple = true
+      document.body.append(combobox)
+      await settle(combobox)
+
+      const changes: string[] = []
+      combobox.addEventListener('cv-change', (event) => {
+        const detail = (event as unknown as CustomEvent<{selectedIds: string[]}>).detail
+        changes.push(detail.selectedIds.join(' '))
+      })
+
+      combobox.value = 'new-tag'
+      const option = document.createElement('cv-combobox-option') as CVComboboxOption
+      option.value = 'new-tag'
+      option.textContent = 'New Tag'
+      combobox.append(option)
+      await settle(combobox)
+
+      expect(combobox.value).toBe('new-tag')
+      expect(option.selected).toBe(true)
+      expect(combobox.shadowRoot?.querySelector('[part="tag-label"]')?.textContent?.trim()).toBe('New Tag')
+      expect(changes).not.toContain('')
+    })
+
     it('selected options have aria-selected="true" (headless contract)', async () => {
       const {combobox, options, input} = await mountMultiSelect()
 

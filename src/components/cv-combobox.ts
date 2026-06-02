@@ -285,9 +285,13 @@ export class CVCombobox extends ReatomLitElement {
         this.applyInteractionResult(previous)
       } else if (this.multiple) {
         // Multi-mode: parse space-delimited ids
-        const ids = next.split(/\s+/).filter(Boolean)
+        const ids = this.parseMultipleValueIds()
         const currentIds = this.model.state.selectedIds()
         if (ids.join(' ') !== currentIds.join(' ')) {
+          if (this.hasUnknownSelectedIds(ids)) {
+            return
+          }
+
           // Clear and re-select each id
           this.model.actions.clearSelection()
           for (const id of ids) {
@@ -362,6 +366,15 @@ export class CVCombobox extends ReatomLitElement {
     return fallback
   }
 
+  private parseMultipleValueIds(): string[] {
+    return this.value.trim().split(/\s+/).filter(Boolean)
+  }
+
+  private hasUnknownSelectedIds(ids: readonly string[]): boolean {
+    const enabledIds = new Set(this.optionRecords.filter((record) => !record.disabled).map((record) => record.id))
+    return ids.some((id) => !enabledIds.has(id))
+  }
+
   private resolveInitialSelected(optionElements: CVComboboxOption[]): string | null {
     const fromProperty = this.value.trim()
     if (fromProperty.length > 0) return fromProperty
@@ -383,7 +396,7 @@ export class CVCombobox extends ReatomLitElement {
       ? this.captureState()
       : {
           selectedId: this.resolveInitialSelected(optionElements),
-          selectedIds: this.multiple ? this.value.trim().split(/\s+/).filter(Boolean) : [],
+          selectedIds: this.multiple ? this.parseMultipleValueIds() : [],
           inputValue: this.inputValue,
           activeId: null,
           isOpen: this.open,
@@ -485,7 +498,7 @@ export class CVCombobox extends ReatomLitElement {
     let initialSelectedIds: string[] | undefined
 
     if (this.multiple) {
-      const prevIds = previousState.selectedIds ?? []
+      const prevIds = this.parseMultipleValueIds()
       initialSelectedIds = prevIds.filter((id) => enabledIds.has(id))
     } else {
       initialSelectedId =
