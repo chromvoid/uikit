@@ -6,7 +6,6 @@ export type {
   CustomDialogOptions,
   DialogController,
   DialogControllerAdapters,
-  DialogPriority,
   ManagedDialogOptions,
 } from './dialog/create-dialog-controller'
 export * from './reatom-lit/index'

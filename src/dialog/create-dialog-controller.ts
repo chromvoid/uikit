@@ -2,10 +2,7 @@ import {render, type TemplateResult} from 'lit'
 
 import {CVDialog} from '../components/cv-dialog'
 
-export type DialogPriority = 'polite' | 'assertive'
-
 export interface DialogControllerAdapters {
-  announce?: (message: string, priority?: DialogPriority) => void
   setInertExcept?: (element: HTMLElement) => void
   restoreInert?: () => void
   findFirstFocusable?: (container: Element) => HTMLElement | null
@@ -74,21 +71,21 @@ const STANDARD_FOCUSABLE_SELECTORS = [
 const INPUT_LIKE_COMPONENTS = ['cv-input', 'cv-number', 'cv-textarea', 'cv-select']
 
 const managedDialogStyles = `
-  :is(cv-dialog, adaptive-modal-surface).cv-managed-dialog::part(trigger) {
+  :is(cv-dialog, cv-bottom-sheet).cv-managed-dialog::part(trigger) {
     display: none;
   }
 
-  :is(cv-dialog, adaptive-modal-surface).cv-managed-dialog::part(content) {
+  :is(cv-dialog, cv-bottom-sheet).cv-managed-dialog::part(content) {
     gap: 0;
     padding: 0;
     overflow: hidden;
   }
 
-  :is(cv-dialog, adaptive-modal-surface).cv-managed-dialog::part(body) {
+  :is(cv-dialog, cv-bottom-sheet).cv-managed-dialog::part(body) {
     padding: 0;
   }
 
-  :is(cv-dialog, adaptive-modal-surface).cv-managed-dialog::part(footer) {
+  :is(cv-dialog, cv-bottom-sheet).cv-managed-dialog::part(footer) {
     display: block;
     padding: 0;
   }
@@ -249,7 +246,6 @@ export function createDialogController(adapters: DialogControllerAdapters = {}):
     const zIndex = getNextZIndex().toString()
     element.style.setProperty('--cv-dialog-z-index', zIndex)
     element.style.setProperty('--cv-bottom-sheet-z-index', zIndex)
-    element.style.setProperty('--adaptive-modal-z-index', zIndex)
   }
 
   const removeDialog = (element: HTMLElement) => {
@@ -284,9 +280,6 @@ export function createDialogController(adapters: DialogControllerAdapters = {}):
               firstFocusable.focus()
             }
           }, 50)
-        }
-        if (title) {
-          adapters.announce?.(title, 'assertive')
         }
       },
       {once: true},
@@ -332,7 +325,7 @@ export function createDialogController(adapters: DialogControllerAdapters = {}):
       }
 
       dialog.style.setProperty('--cv-dialog-width', sizeMap[options.size || 'm'])
-      dialog.style.setProperty('--adaptive-modal-width', sizeMap[options.size || 'm'])
+      dialog.style.setProperty('--cv-bottom-sheet-width', sizeMap[options.size || 'm'])
 
       if (!options.noHeader && options.title) {
         const title = document.createElement('span')
@@ -389,9 +382,6 @@ export function createDialogController(adapters: DialogControllerAdapters = {}):
         const firstFocusable = findFirstFocusable(dialog)
         if (firstFocusable) {
           setTimeout(() => firstFocusable.focus(), 50)
-        }
-        if (options.title) {
-          adapters.announce?.(options.title, 'assertive')
         }
       })
 

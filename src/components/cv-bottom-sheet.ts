@@ -125,7 +125,9 @@ export class CVBottomSheet extends ReatomLitElement {
       --cv-dialog-transition-duration: var(--cv-bottom-sheet-dismiss-duration, 180ms);
       --cv-dialog-transition-easing-open: var(--cv-easing-decelerate, cubic-bezier(0, 0, 0.2, 1));
       --cv-dialog-transition-easing-close: var(--cv-easing-standard, ease);
-      --cv-dialog-content-closed-transform: translateY(calc(100% + 32px));
+      --cv-dialog-content-closed-transform: translateY(
+        calc(100% + var(--cv-bottom-sheet-overlay-block-end) + 32px)
+      );
       --cv-dialog-content-open-transform: translateY(var(--cv-bottom-sheet-drag-offset, 0px));
     }
 
@@ -136,8 +138,10 @@ export class CVBottomSheet extends ReatomLitElement {
     cv-dialog::part(overlay) {
       place-items: end center;
       padding-block-start: var(--cv-bottom-sheet-overlay-block-start);
-      padding-block-end: var(--cv-bottom-sheet-overlay-block-end);
+      padding-block-end: 0px;
+      transform: translateY(calc(0px - var(--cv-bottom-sheet-overlay-block-end)));
       padding-inline: var(--cv-bottom-sheet-inline-inset, 0px);
+      transition: transform 0.12s ease;
     }
 
     cv-dialog::part(content) {
@@ -371,6 +375,7 @@ export class CVBottomSheet extends ReatomLitElement {
   }
 
   private handleDialogInput(event: CustomEvent<CVBottomSheetEventDetail>): void {
+    if (event.target !== event.currentTarget) return
     if (typeof event.detail.open !== 'boolean') return
     event.stopPropagation()
     this.open = event.detail.open
@@ -378,6 +383,7 @@ export class CVBottomSheet extends ReatomLitElement {
   }
 
   private handleDialogChange(event: CustomEvent<CVBottomSheetEventDetail>): void {
+    if (event.target !== event.currentTarget) return
     if (typeof event.detail.open !== 'boolean') return
     event.stopPropagation()
     this.open = event.detail.open

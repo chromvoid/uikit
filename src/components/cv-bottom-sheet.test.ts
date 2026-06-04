@@ -75,7 +75,9 @@ describe('cv-bottom-sheet', () => {
     expect(cssText).toContain(
       'var(--cv-bottom-sheet-keyboard-inset, var(--visual-viewport-bottom-inset, 0px))',
     )
-    expect(cssText).toContain('padding-block-end: var(--cv-bottom-sheet-overlay-block-end);')
+    expect(cssText).toContain(
+      'transform: translateY(calc(0px - var(--cv-bottom-sheet-overlay-block-end)));',
+    )
     expect(cssText).toContain('100dvh - var(--cv-bottom-sheet-overlay-block-start)')
   })
 
@@ -116,7 +118,7 @@ describe('cv-bottom-sheet', () => {
     expect(cssText).toContain(
       '--cv-dialog-transition-duration: var(--cv-bottom-sheet-dismiss-duration, 180ms);',
     )
-    expect(cssText).toContain('--cv-dialog-content-closed-transform: translateY(calc(100% + 32px));')
+    expect(cssText).toContain('calc(100% + var(--cv-bottom-sheet-overlay-block-end) + 32px)')
     expect(cssText).toContain(
       '--cv-dialog-content-open-transform: translateY(var(--cv-bottom-sheet-drag-offset, 0px));',
     )
@@ -294,6 +296,21 @@ describe('cv-bottom-sheet', () => {
     await settle(el)
 
     expect(el.open).toBe(true)
+  })
+
+  it('ignores slotted cv-change events even when they carry an open state', async () => {
+    const el = await createBottomSheet({open: true})
+    const button = document.createElement('button')
+    const changes: unknown[] = []
+    el.append(button)
+    el.addEventListener('cv-change', (event) => changes.push((event as CustomEvent).detail))
+    await settle(el)
+
+    button.dispatchEvent(new CustomEvent('cv-change', {detail: {open: false}, bubbles: true, composed: true}))
+    await settle(el)
+
+    expect(el.open).toBe(true)
+    expect(changes).toEqual([{open: false}])
   })
 
   it('hides the handle when show-handle is false', async () => {

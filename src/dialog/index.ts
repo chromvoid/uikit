@@ -3,6 +3,5 @@ export type {
   CustomDialogOptions,
   DialogController,
   DialogControllerAdapters,
-  DialogPriority,
   ManagedDialogOptions,
 } from './create-dialog-controller'

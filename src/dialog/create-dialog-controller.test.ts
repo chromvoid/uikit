@@ -56,12 +56,10 @@ describe('createDialogController', () => {
   })
 
   it('present uses optional adapters on open and cleanup', async () => {
-    const announceCalls: Array<[string, 'polite' | 'assertive' | undefined]> = []
     const inertTargets: HTMLElement[] = []
     let restoreCount = 0
 
     const controller = createDialogController({
-      announce: (message, priority) => announceCalls.push([message, priority]),
       setInertExcept: (element) => inertTargets.push(element),
       restoreInert: () => {
         restoreCount += 1
@@ -80,7 +78,6 @@ describe('createDialogController', () => {
       close: () => {},
     })
 
-    expect(announceCalls).toEqual([['Adapter dialog', 'assertive']])
     expect(inertTargets).toEqual([element])
     expect(restoreCount).toBe(1)
   })
@@ -301,8 +298,8 @@ describe('createDialogController', () => {
     expect(dialog.closeOnOutsidePointer).toBe(false)
     expect(dialog.closeOnOutsideFocus).toBe(false)
     expect(dialog.style.getPropertyValue('--cv-dialog-width')).toBe('640px')
-    expect(dialog.style.getPropertyValue('--adaptive-modal-width')).toBe('640px')
-    expect(dialog.style.getPropertyValue('--adaptive-modal-z-index')).toBe('1100')
+    expect(dialog.style.getPropertyValue('--cv-bottom-sheet-width')).toBe('640px')
+    expect(dialog.style.getPropertyValue('--cv-dialog-z-index')).toBe('1100')
     expect(dialog.style.getPropertyValue('--cv-bottom-sheet-z-index')).toBe('1100')
 
     resolveDialog?.('done')
@@ -404,7 +401,7 @@ describe('createDialogController', () => {
     const secondZIndex = Number(second.style.getPropertyValue('--cv-dialog-z-index'))
 
     expect(secondZIndex).toBeGreaterThan(firstZIndex)
-    expect(first.style.getPropertyValue('--adaptive-modal-z-index')).toBe(String(firstZIndex))
+    expect(first.style.getPropertyValue('--cv-dialog-z-index')).toBe(String(firstZIndex))
     expect(second.style.getPropertyValue('--cv-bottom-sheet-z-index')).toBe(String(secondZIndex))
     expect(controller.getActiveCount()).toBe(2)
 
