@@ -3,8 +3,6 @@ import {render, type TemplateResult} from 'lit'
 import {CVDialog} from '../components/cv-dialog'
 
 export interface DialogControllerAdapters {
-  setInertExcept?: (element: HTMLElement) => void
-  restoreInert?: () => void
   findFirstFocusable?: (container: Element) => HTMLElement | null
   createCustomDialogElement?: () => ManagedDialogSurfaceElement
 }
@@ -118,6 +116,68 @@ const managedDialogStyles = `
 let stylesInjected = false
 let lastDeepFocusedElement: HTMLElement | null = null
 let focusTrackerInstalled = false
+const managedInertStack: HTMLElement[] = []
+const managedInertElements = new Set<Element>()
+
+function restoreManagedInertElements(): void {
+  for (const element of managedInertElements) {
+    element.removeAttribute('inert')
+  }
+  managedInertElements.clear()
+}
+
+function removeManagedInertSurface(element: HTMLElement): void {
+  for (let index = managedInertStack.length - 1; index >= 0; index -= 1) {
+    if (managedInertStack[index] === element) {
+      managedInertStack.splice(index, 1)
+    }
+  }
+}
+
+function getTopManagedInertSurface(): HTMLElement | null {
+  for (let index = managedInertStack.length - 1; index >= 0; index -= 1) {
+    const element = managedInertStack[index]
+    if (element?.isConnected) {
+      return element
+    }
+    managedInertStack.splice(index, 1)
+  }
+
+  return null
+}
+
+function syncManagedInert(): void {
+  restoreManagedInertElements()
+  if (typeof document === 'undefined') return
+
+  const topSurface = getTopManagedInertSurface()
+  if (!topSurface) return
+
+  for (const element of Array.from(document.body.children)) {
+    if (element === topSurface || element.hasAttribute('inert')) continue
+
+    element.setAttribute('inert', '')
+    managedInertElements.add(element)
+  }
+}
+
+function activateManagedInertSurface(element: HTMLElement): void {
+  removeManagedInertSurface(element)
+  managedInertStack.push(element)
+  syncManagedInert()
+}
+
+function deactivateManagedInertSurface(element: HTMLElement): void {
+  removeManagedInertSurface(element)
+  syncManagedInert()
+}
+
+function deactivateManagedInertSurfaces(elements: Iterable<HTMLElement>): void {
+  for (const element of elements) {
+    removeManagedInertSurface(element)
+  }
+  syncManagedInert()
+}
 
 function injectStyles(): void {
   if (stylesInjected || typeof document === 'undefined') return
@@ -250,9 +310,9 @@ export function createDialogController(adapters: DialogControllerAdapters = {}):
 
   const removeDialog = (element: HTMLElement) => {
     activeDialogs.delete(element)
+    deactivateManagedInertSurface(element)
     if (activeDialogs.size === 0) {
       zIndexCounter = 1100
-      adapters.restoreInert?.()
     }
   }
 
@@ -272,7 +332,7 @@ export function createDialogController(adapters: DialogControllerAdapters = {}):
       'cv-after-show',
       () => {
         if (!activeDialogs.has(element)) return
-        adapters.setInertExcept?.(element)
+        activateManagedInertSurface(element)
         const firstFocusable = autoFocus ? findFirstFocusable(element) : null
         if (firstFocusable) {
           setTimeout(() => {
@@ -378,7 +438,7 @@ export function createDialogController(adapters: DialogControllerAdapters = {}):
       dialog.addEventListener('cv-after-show', () => {
         if (!activeDialogs.has(dialog)) return
         hasOpened = true
-        adapters.setInertExcept?.(dialog)
+        activateManagedInertSurface(dialog)
         const firstFocusable = findFirstFocusable(dialog)
         if (firstFocusable) {
           setTimeout(() => firstFocusable.focus(), 50)
@@ -414,10 +474,11 @@ export function createDialogController(adapters: DialogControllerAdapters = {}):
   }
 
   const closeAll = () => {
+    const dialogs = [...activeDialogs.keys()]
     activeDialogs.forEach((close) => close())
     activeDialogs.clear()
     zIndexCounter = 1100
-    adapters.restoreInert?.()
+    deactivateManagedInertSurfaces(dialogs)
   }
 
   const closeTop = (): boolean => {

@@ -55,31 +55,36 @@ describe('createDialogController', () => {
     expect(document.activeElement).toBe(restoreTarget)
   })
 
-  it('present uses optional adapters on open and cleanup', async () => {
-    const inertTargets: HTMLElement[] = []
-    let restoreCount = 0
-
-    const controller = createDialogController({
-      setInertExcept: (element) => inertTargets.push(element),
-      restoreInert: () => {
-        restoreCount += 1
-      },
-    })
-
+  it('present inerts body siblings and restores only managed inert attributes', async () => {
+    const controller = createDialogController()
+    const preservedInert = document.createElement('aside')
+    const appRoot = document.createElement('main')
     const element = document.createElement('div')
+    let resolveShow: ((value: string) => void) | undefined
 
-    await controller.present({
+    preservedInert.setAttribute('inert', '')
+    document.body.append(preservedInert, appRoot)
+
+    const resultPromise = controller.present({
       element,
-      title: 'Adapter dialog',
-      show: async () => {
-        element.dispatchEvent(new Event('cv-after-show', {bubbles: true}))
-        return 'ok'
-      },
+      title: 'Managed dialog',
+      show: () =>
+        new Promise<string>((resolve) => {
+          resolveShow = resolve
+          element.dispatchEvent(new Event('cv-after-show', {bubbles: true}))
+        }),
       close: () => {},
     })
 
-    expect(inertTargets).toEqual([element])
-    expect(restoreCount).toBe(1)
+    expect(preservedInert.hasAttribute('inert')).toBe(true)
+    expect(appRoot.hasAttribute('inert')).toBe(true)
+    expect(element.hasAttribute('inert')).toBe(false)
+
+    resolveShow?.('ok')
+    await expect(resultPromise).resolves.toBe('ok')
+
+    expect(preservedInert.hasAttribute('inert')).toBe(true)
+    expect(appRoot.hasAttribute('inert')).toBe(false)
   })
 
   it('present focuses the first focusable element after opening', async () => {
@@ -219,6 +224,42 @@ describe('createDialogController', () => {
     headerClose.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
 
     await expect(resultPromise).resolves.toBeNull()
+  })
+
+  it('showCustom inerts body siblings until after-hide cleanup', async () => {
+    const appRoot = document.createElement('main')
+    document.body.append(appRoot)
+
+    const createCustomDialogElement = vi.fn(
+      () => document.createElement('test-managed-surface') as ManagedDialogSurfaceElement,
+    )
+    const controller = createDialogController({createCustomDialogElement})
+    let dialogRef: ManagedDialogSurfaceElement | undefined
+    let resolveDialog: ((value: string | null) => void) | undefined
+
+    const resultPromise = controller.showCustom<string>(
+      {
+        title: 'Custom inert dialog',
+        content: 'Body',
+      },
+      (dialog, resolve) => {
+        dialogRef = dialog as ManagedDialogSurfaceElement
+        resolveDialog = resolve
+        dialog.dispatchEvent(new Event('cv-after-show', {bubbles: true}))
+      },
+    )
+
+    expect(appRoot.hasAttribute('inert')).toBe(true)
+    expect(dialogRef?.hasAttribute('inert')).toBe(false)
+
+    resolveDialog?.('done')
+    await expect(resultPromise).resolves.toBe('done')
+    expect(appRoot.hasAttribute('inert')).toBe(true)
+
+    dialogRef?.dispatchEvent(new Event('cv-after-hide'))
+
+    expect(appRoot.hasAttribute('inert')).toBe(false)
+    expect(controller.getActiveCount()).toBe(0)
   })
 
   it('showCustom cleans up if resolved before the dialog opens', async () => {
@@ -408,5 +449,81 @@ describe('createDialogController', () => {
     resolveFirst?.('first')
     resolveSecond?.('second')
     await Promise.all([firstPromise, secondPromise])
+  })
+
+  it('re-syncs inert to the previous managed surface when the top dialog closes', async () => {
+    const controller = createDialogController()
+    const appRoot = document.createElement('main')
+    const first = document.createElement('div')
+    const second = document.createElement('div')
+    let resolveFirst: ((value: string) => void) | undefined
+    let resolveSecond: ((value: string) => void) | undefined
+
+    document.body.append(appRoot)
+
+    const firstPromise = controller.present({
+      element: first,
+      title: 'First',
+      show: () =>
+        new Promise<string>((resolve) => {
+          resolveFirst = resolve
+          first.dispatchEvent(new Event('cv-after-show', {bubbles: true}))
+        }),
+      close: () => {},
+    })
+
+    const secondPromise = controller.present({
+      element: second,
+      title: 'Second',
+      show: () =>
+        new Promise<string>((resolve) => {
+          resolveSecond = resolve
+          second.dispatchEvent(new Event('cv-after-show', {bubbles: true}))
+        }),
+      close: () => {},
+    })
+
+    expect(appRoot.hasAttribute('inert')).toBe(true)
+    expect(first.hasAttribute('inert')).toBe(true)
+    expect(second.hasAttribute('inert')).toBe(false)
+
+    resolveSecond?.('second')
+    await expect(secondPromise).resolves.toBe('second')
+
+    expect(appRoot.hasAttribute('inert')).toBe(true)
+    expect(first.hasAttribute('inert')).toBe(false)
+
+    resolveFirst?.('first')
+    await expect(firstPromise).resolves.toBe('first')
+
+    expect(appRoot.hasAttribute('inert')).toBe(false)
+  })
+
+  it('closeAll restores managed inert state', async () => {
+    const controller = createDialogController()
+    const appRoot = document.createElement('main')
+    const element = document.createElement('div')
+    let resolveShow: ((value: string) => void) | undefined
+
+    document.body.append(appRoot)
+
+    const resultPromise = controller.present({
+      element,
+      title: 'Managed dialog',
+      show: () =>
+        new Promise<string>((resolve) => {
+          resolveShow = resolve
+          element.dispatchEvent(new Event('cv-after-show', {bubbles: true}))
+        }),
+      close: () => resolveShow?.('closed'),
+    })
+
+    expect(appRoot.hasAttribute('inert')).toBe(true)
+
+    controller.closeAll()
+
+    await expect(resultPromise).resolves.toBe('closed')
+    expect(appRoot.hasAttribute('inert')).toBe(false)
+    expect(controller.getActiveCount()).toBe(0)
   })
 })
