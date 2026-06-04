@@ -90,10 +90,24 @@ export class CVAlertDialog extends ReatomLitElement {
         place-items: center;
         background: var(--cv-alpha-black-62);
         padding: var(--cv-space-4, 16px);
+        opacity: 1;
+        transition:
+          opacity var(--cv-alert-dialog-transition-duration, var(--cv-duration-fast, 120ms))
+            var(--cv-easing-standard, ease),
+          display var(--cv-alert-dialog-transition-duration, var(--cv-duration-fast, 120ms))
+            allow-discrete;
+        transition-behavior: allow-discrete;
       }
 
       [part='overlay'][hidden] {
         display: none;
+        opacity: 0;
+      }
+
+      @starting-style {
+        [part='overlay']:not([hidden]) {
+          opacity: 0;
+        }
       }
 
       [part='content'] {
@@ -400,6 +414,7 @@ export class CVAlertDialog extends ReatomLitElement {
       <div
         id=${overlayProps.id}
         ?hidden=${overlayProps.hidden}
+        class="cv-u-discrete-presence"
         data-open=${overlayProps['data-open']}
         part="overlay"
         @mousedown=${this.handleOverlayPointerDown}

@@ -9,6 +9,10 @@ export const componentResetStyles = css`
     display: none !important;
   }
 
+  .cv-u-discrete-presence {
+    transition-behavior: allow-discrete;
+  }
+
   :host,
   *,
   *::before,

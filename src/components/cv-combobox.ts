@@ -223,6 +223,28 @@ export class CVCombobox extends ReatomLitElement {
         overflow: auto;
         padding: var(--cv-space-1, 4px);
         background: var(--cv-color-surface, #141923);
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+        transition:
+          opacity var(--cv-combobox-listbox-transition-duration, var(--cv-duration-fast, 120ms))
+            var(--cv-easing-standard, ease),
+          transform var(--cv-combobox-listbox-transition-duration, var(--cv-duration-fast, 120ms))
+            var(--cv-easing-standard, ease),
+          display var(--cv-combobox-listbox-transition-duration, var(--cv-duration-fast, 120ms))
+            allow-discrete;
+        transition-behavior: allow-discrete;
+      }
+
+      [part='listbox'][hidden] {
+        opacity: 0;
+        transform: translate3d(0, -2px, 0);
+      }
+
+      @starting-style {
+        [part='listbox']:not([hidden]) {
+          opacity: 0;
+          transform: translate3d(0, -2px, 0);
+        }
       }
 
       [part='group'] {
@@ -1003,7 +1025,7 @@ export class CVCombobox extends ReatomLitElement {
           aria-multiselectable=${listboxProps['aria-multiselectable'] ?? nothing}
           ?hidden=${!this.open}
           part="listbox"
-          class="cv-u-panel-shell"
+          class="cv-u-panel-shell cv-u-discrete-presence"
         >
           ${hasGroups ? this.renderListboxContent() : html`<slot @slotchange=${this.handleSlotChange}></slot>`}
         </div>

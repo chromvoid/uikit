@@ -73,6 +73,8 @@ describe('cv-dialog', () => {
       expect(stylesText).toContain('--cv-dialog-content-open-transform: translate3d(0, 0, 0) scale(1);')
       expect(stylesText).toMatch(/\.portal-shell[\s\S]*transition:[\s\S]*display[\s\S]*allow-discrete/)
       expect(stylesText).toMatch(/\.portal-shell[\s\S]*transition:[\s\S]*overlay[\s\S]*allow-discrete/)
+      expect(stylesText).toMatch(/\[part='overlay'\][\s\S]*transition:[\s\S]*display[\s\S]*allow-discrete/)
+      expect(stylesText).toMatch(/transition-behavior:\s*allow-discrete/)
       expect(stylesText).toMatch(
         /\[part='overlay'\]::before[\s\S]*background:\s*var\(--cv-dialog-overlay-color/,
       )

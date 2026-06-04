@@ -216,10 +216,29 @@ export class CVPopover extends ReatomLitElement {
         box-shadow: var(--cv-shadow-1, 0 2px 8px rgba(0, 0, 0, 0.24));
         color: var(--cv-color-text, #e8ecf6);
         margin: 0;
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+        transition:
+          opacity var(--cv-popover-transition-duration, var(--cv-duration-fast, 120ms))
+            var(--cv-easing-standard, ease),
+          transform var(--cv-popover-transition-duration, var(--cv-duration-fast, 120ms))
+            var(--cv-easing-standard, ease),
+          display var(--cv-popover-transition-duration, var(--cv-duration-fast, 120ms))
+            allow-discrete;
+        transition-behavior: allow-discrete;
       }
 
       [part='content'][hidden] {
         display: none;
+        opacity: 0;
+        transform: translate3d(0, -2px, 0);
+      }
+
+      @starting-style {
+        [part='content']:not([hidden]) {
+          opacity: 0;
+          transform: translate3d(0, -2px, 0);
+        }
       }
 
       [part='content']:focus-visible {
@@ -748,6 +767,7 @@ export class CVPopover extends ReatomLitElement {
           aria-labelledby=${contentProps['aria-labelledby'] ?? nothing}
           popover=${contentProps.popover ?? nothing}
           ?hidden=${contentProps.hidden ?? false}
+          class="cv-u-discrete-presence"
           data-placement=${this.placement}
           data-anchor=${this.anchor}
           data-trigger-mode=${this.triggerMode}

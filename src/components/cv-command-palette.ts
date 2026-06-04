@@ -128,10 +128,29 @@ export class CVCommandPalette extends ReatomLitElement {
         border: 1px solid var(--cv-color-border, #2a3245);
         background: var(--cv-color-surface-elevated, #1d2432);
         box-shadow: var(--cv-shadow-2, 0 8px 30px rgba(0, 0, 0, 0.35));
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+        transition:
+          opacity var(--cv-command-palette-transition-duration, var(--cv-duration-fast, 120ms))
+            var(--cv-easing-standard, ease),
+          transform var(--cv-command-palette-transition-duration, var(--cv-duration-fast, 120ms))
+            var(--cv-easing-standard, ease),
+          display var(--cv-command-palette-transition-duration, var(--cv-duration-fast, 120ms))
+            allow-discrete;
+        transition-behavior: allow-discrete;
       }
 
       [part='dialog'][hidden] {
         display: none;
+        opacity: 0;
+        transform: translate3d(0, -4px, 0);
+      }
+
+      @starting-style {
+        [part='dialog']:not([hidden]) {
+          opacity: 0;
+          transform: translate3d(0, -4px, 0);
+        }
       }
 
       [part='input'] {
@@ -674,6 +693,7 @@ export class CVCommandPalette extends ReatomLitElement {
           aria-modal=${dialogProps['aria-modal']}
           aria-label=${dialogProps['aria-label'] ?? nothing}
           ?hidden=${dialogProps.hidden}
+          class="cv-u-discrete-presence"
           part="dialog"
           @keydown=${this.handleDialogKeyDown}
         >

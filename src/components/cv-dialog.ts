@@ -203,6 +203,7 @@ export class CVDialog extends ReatomLitElement {
         transition:
           display var(--cv-dialog-transition-duration) allow-discrete,
           overlay var(--cv-dialog-transition-duration) allow-discrete;
+        transition-behavior: allow-discrete;
       }
 
       .portal-shell::backdrop {
@@ -229,6 +230,8 @@ export class CVDialog extends ReatomLitElement {
         padding-inline: var(--cv-dialog-overlay-padding-inline-start)
           var(--cv-dialog-overlay-padding-inline-end);
         overscroll-behavior: contain;
+        transition: display var(--cv-dialog-transition-duration) allow-discrete;
+        transition-behavior: allow-discrete;
       }
 
       [part='overlay']::before {
@@ -1072,6 +1075,7 @@ export class CVDialog extends ReatomLitElement {
     return html`
       <div
         id=${this.model.contracts.getOverlayProps().id}
+        class="cv-u-discrete-presence"
         data-open=${this.model.contracts.getOverlayProps()['data-open']}
         data-state=${this.presenceState}
         ?hidden=${!this.portalVisible}
@@ -1084,6 +1088,7 @@ export class CVDialog extends ReatomLitElement {
       >
         <section
           id=${contentProps.id}
+          class="cv-u-discrete-presence"
           role=${contentProps.role}
           tabindex=${contentProps.tabindex}
           aria-modal=${contentProps['aria-modal']}
@@ -1170,7 +1175,7 @@ export class CVDialog extends ReatomLitElement {
         this.modal
           ? html`
               <dialog
-                class="portal-shell"
+                class="portal-shell cv-u-discrete-presence"
                 data-state=${this.presenceState}
                 ?hidden=${!this.portalVisible}
                 @cancel=${this.handleNativeCancel}
@@ -1180,7 +1185,7 @@ export class CVDialog extends ReatomLitElement {
             `
           : html`
               <div
-                class="portal-shell popover-shell"
+                class="portal-shell popover-shell cv-u-discrete-presence"
                 popover="manual"
                 data-state=${this.presenceState}
                 ?hidden=${!this.portalVisible}

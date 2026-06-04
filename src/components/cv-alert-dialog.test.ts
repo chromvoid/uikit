@@ -2,6 +2,9 @@ import {afterEach, describe, expect, it} from 'vitest'
 
 import {CVAlertDialog} from './cv-alert-dialog'
 
+const stylesToText = () =>
+  (CVAlertDialog.styles as Array<{cssText?: string}>).map((style) => style.cssText ?? '').join('\n')
+
 const settle = async (element: CVAlertDialog) => {
   await element.updateComplete
   await Promise.resolve()
@@ -15,6 +18,13 @@ afterEach(() => {
 })
 
 describe('cv-alert-dialog', () => {
+  it('defines discrete display presence for overlay', () => {
+    const cssText = stylesToText()
+
+    expect(cssText).toMatch(/\[part='overlay'\][\s\S]*transition:[\s\S]*display[\s\S]*allow-discrete/)
+    expect(cssText).toMatch(/transition-behavior:\s*allow-discrete/)
+  })
+
   it('opens from trigger and closes from cancel button', async () => {
     CVAlertDialog.define()
 

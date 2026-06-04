@@ -5,6 +5,9 @@ import {CVDatePicker} from './cv-date-picker'
 
 CVDatePicker.define()
 
+const stylesToText = () =>
+  (CVDatePicker.styles as Array<{cssText?: string}>).map((style) => style.cssText ?? '').join('\n')
+
 const settle = async (element: CVDatePicker) => {
   await element.updateComplete
   await Promise.resolve()
@@ -63,6 +66,15 @@ afterEach(() => {
 })
 
 describe('cv-date-picker', () => {
+  describe('style contract', () => {
+    it('defines discrete display presence for dialog', () => {
+      const cssText = stylesToText()
+
+      expect(cssText).toMatch(/\[part='dialog'\][\s\S]*transition:[\s\S]*display[\s\S]*allow-discrete/)
+      expect(cssText).toMatch(/transition-behavior:\s*allow-discrete/)
+    })
+  })
+
   describe('shadow DOM structure', () => {
     it('renders core parts', async () => {
       const datePicker = await createDatePicker()

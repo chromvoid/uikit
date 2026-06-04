@@ -135,6 +135,7 @@ describe('ReatomLitElement styling contract', () => {
     const cssText = normalizeCss(getStyleText(BlockHostElement))
 
     expect(cssText).toContain(':host([hidden]), [hidden] { display: none !important; }')
+    expect(cssText).toContain('.cv-u-discrete-presence { transition-behavior: allow-discrete; }')
     expect(cssText).toContain('button, input, textarea, select { font: inherit; color: inherit; }')
     expect(cssText).toContain('a { color: inherit; text-decoration: none; }')
     expect(cssText).toContain(':focus-visible { outline-offset: 2px; }')

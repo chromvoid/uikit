@@ -170,10 +170,29 @@ export class CVDatePicker extends FormAssociatedReatomElement {
         border-radius: var(--cv-date-picker-border-radius, var(--cv-radius-md, 10px));
         border: 1px solid var(--cv-color-border, #2a3245);
         background: var(--cv-color-surface-elevated, #1d2432);
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+        transition:
+          opacity var(--cv-date-picker-transition-duration, var(--cv-duration-fast, 120ms))
+            var(--cv-easing-standard, ease),
+          transform var(--cv-date-picker-transition-duration, var(--cv-duration-fast, 120ms))
+            var(--cv-easing-standard, ease),
+          display var(--cv-date-picker-transition-duration, var(--cv-duration-fast, 120ms))
+            allow-discrete;
+        transition-behavior: allow-discrete;
       }
 
       [part='dialog'][hidden] {
         display: none;
+        opacity: 0;
+        transform: translate3d(0, -2px, 0);
+      }
+
+      @starting-style {
+        [part='dialog']:not([hidden]) {
+          opacity: 0;
+          transform: translate3d(0, -2px, 0);
+        }
       }
 
       [part='calendar-shell'] {
@@ -778,6 +797,7 @@ export class CVDatePicker extends FormAssociatedReatomElement {
           role=${dialogProps.role}
           tabindex=${dialogProps.tabindex}
           ?hidden=${dialogProps.hidden}
+          class="cv-u-discrete-presence"
           aria-modal=${dialogProps['aria-modal']}
           aria-label=${dialogProps['aria-label']}
           @keydown=${this.handleDialogKeyDown}

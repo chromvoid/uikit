@@ -75,9 +75,7 @@ describe('cv-bottom-sheet', () => {
     expect(cssText).toContain(
       'var(--cv-bottom-sheet-keyboard-inset, var(--visual-viewport-bottom-inset, 0px))',
     )
-    expect(cssText).toContain(
-      'transform: translateY(calc(0px - var(--cv-bottom-sheet-overlay-block-end)));',
-    )
+    expect(cssText).toContain('transform: translateY(calc(0px - var(--cv-bottom-sheet-overlay-block-end)));')
     expect(cssText).toContain('100dvh - var(--cv-bottom-sheet-overlay-block-start)')
   })
 
@@ -168,6 +166,17 @@ describe('cv-bottom-sheet', () => {
     expect(dialog.querySelector('slot:not([name])')).not.toBeNull()
     expect(dialog.querySelector('[slot="footer"]')).not.toBeNull()
     expect(dialog.getAttribute('exportparts')).toContain('content')
+  })
+
+  it('keeps the default header close icon when no header-close content is slotted', async () => {
+    const el = await createBottomSheet()
+    const dialog = getDialog(el)
+    const forwardedHeaderCloseSlot = dialog.querySelector(
+      'slot[name="header-close"][slot="header-close"]',
+    ) as HTMLSlotElement | null
+
+    expect(forwardedHeaderCloseSlot).not.toBeNull()
+    expect(forwardedHeaderCloseSlot!.querySelector('svg')).not.toBeNull()
   })
 
   it('forwards dialog properties to the underlying dialog', async () => {

@@ -83,6 +83,8 @@ describe('cv-drawer', () => {
       const cssText = stylesToText(CVDrawer.styles)
 
       expect(cssText).toContain('@media (prefers-reduced-motion: reduce)')
+      expect(cssText).toMatch(/\[part='overlay'\][\s\S]*transition:[\s\S]*display[\s\S]*allow-discrete/)
+      expect(cssText).toMatch(/transition-behavior:\s*allow-discrete/)
       expect(cssText).toMatch(
         /@media \(prefers-reduced-motion: reduce\)[\s\S]*\[part='overlay'\],[\s\S]*\[part='panel'\]\s*{[\s\S]*transition-duration: 0ms;/,
       )

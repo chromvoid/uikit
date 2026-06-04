@@ -6,6 +6,9 @@ import {CVComboboxOption} from './cv-combobox-option'
 CVComboboxOption.define()
 CVCombobox.define()
 
+const stylesToText = () =>
+  (CVCombobox.styles as Array<{cssText?: string}>).map((style) => style.cssText ?? '').join('\n')
+
 const settle = async (element: CVCombobox) => {
   await element.updateComplete
   await Promise.resolve()
@@ -165,6 +168,13 @@ afterEach(() => {
 })
 
 describe('cv-combobox', () => {
+  it('defines discrete display presence for listbox', () => {
+    const cssText = stylesToText()
+
+    expect(cssText).toMatch(/\[part='listbox'\][\s\S]*transition:[\s\S]*display[\s\S]*allow-discrete/)
+    expect(cssText).toMatch(/transition-behavior:\s*allow-discrete/)
+  })
+
   it('filters visible options from input text', async () => {
     const {combobox, options, input} = await mountCombobox()
 

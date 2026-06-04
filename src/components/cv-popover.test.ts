@@ -26,6 +26,9 @@ const getContent = (el: CVPopover) => el.shadowRoot!.querySelector('[part="conte
 
 const getArrow = (el: CVPopover) => el.shadowRoot!.querySelector('[part="arrow"]') as HTMLElement | null
 
+const stylesToText = () =>
+  (CVPopover.styles as Array<{cssText?: string}>).map((style) => style.cssText ?? '').join('\n')
+
 let restoreCssEnvironment: (() => void) | null = null
 
 const ensureCssSupports = () => {
@@ -153,6 +156,16 @@ afterEach(() => {
 })
 
 describe('cv-popover', () => {
+  describe('style contract', () => {
+    it('defines discrete display presence for content', () => {
+      const cssText = stylesToText()
+
+      expect(cssText).toMatch(/\[part='content'\][\s\S]*transition:[\s\S]*display[\s\S]*allow-discrete/)
+      expect(cssText).toMatch(/transition-behavior:\s*allow-discrete/)
+      expect(cssText).toMatch(/@starting-style[\s\S]*\[part='content'\]:not\(\[hidden\]\)/)
+    })
+  })
+
   // --- Shadow DOM structure ---
 
   describe('shadow DOM structure', () => {

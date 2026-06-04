@@ -208,6 +208,28 @@ export class CVSelect extends FormAssociatedReatomElement {
         gap: var(--cv-space-1, 4px);
         padding: var(--cv-space-1, 4px);
         background: var(--cv-color-surface-elevated, #1d2432);
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+        transition:
+          opacity var(--cv-select-listbox-transition-duration, var(--cv-duration-fast, 120ms))
+            var(--cv-easing-standard, ease),
+          transform var(--cv-select-listbox-transition-duration, var(--cv-duration-fast, 120ms))
+            var(--cv-easing-standard, ease),
+          display var(--cv-select-listbox-transition-duration, var(--cv-duration-fast, 120ms))
+            allow-discrete;
+        transition-behavior: allow-discrete;
+      }
+
+      [part='listbox'][hidden] {
+        opacity: 0;
+        transform: translate3d(0, -2px, 0);
+      }
+
+      @starting-style {
+        [part='listbox']:not([hidden]) {
+          opacity: 0;
+          transform: translate3d(0, -2px, 0);
+        }
       }
     `,
   ]
@@ -841,7 +863,7 @@ export class CVSelect extends FormAssociatedReatomElement {
           aria-activedescendant=${listboxProps['aria-activedescendant'] ?? nothing}
           ?hidden=${listboxProps.hidden}
           part="listbox"
-          class="cv-u-panel-shell"
+          class="cv-u-panel-shell cv-u-discrete-presence"
           @keydown=${this.handleListboxKeyDown}
         >
           <slot @slotchange=${this.handleSlotChange}></slot>

@@ -111,7 +111,10 @@ export class CVDrawer extends ReatomLitElement {
         contain: paint;
         background: var(--cv-drawer-overlay-color, var(--cv-color-overlay));
         opacity: var(--cv-drawer-overlay-closed-opacity, 1);
-        transition: opacity var(--cv-drawer-overlay-transition-duration, 0ms) ease;
+        transition:
+          opacity var(--cv-drawer-overlay-transition-duration, 0ms) ease,
+          display var(--cv-drawer-overlay-transition-duration, 0ms) allow-discrete;
+        transition-behavior: allow-discrete;
       }
 
       [part='overlay'][hidden] {
@@ -142,6 +145,7 @@ export class CVDrawer extends ReatomLitElement {
         transition:
           transform var(--cv-drawer-transition-duration, 250ms) ease,
           opacity var(--cv-drawer-transition-duration, 250ms) ease;
+        transition-behavior: allow-discrete;
       }
 
       [part='panel']:focus-visible {
@@ -864,6 +868,7 @@ export class CVDrawer extends ReatomLitElement {
         data-open=${overlayProps['data-open']}
         data-state=${this.renderState}
         ?hidden=${!this.overlayVisible}
+        class="cv-u-discrete-presence"
         part="overlay"
         @mousedown=${this.handleOverlayPointerDown}
         @click=${this.handleOverlayClick}
@@ -878,6 +883,7 @@ export class CVDrawer extends ReatomLitElement {
           data-placement=${panelProps['data-placement']}
           data-state=${this.renderState}
           data-initial-focus=${panelProps['data-initial-focus'] ?? nothing}
+          class="cv-u-discrete-presence"
           part="panel"
           @keydown=${this.handlePanelKeyDown}
           @pointerdown=${this.handlePanelPointerDown}

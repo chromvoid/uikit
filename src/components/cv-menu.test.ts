@@ -6,6 +6,9 @@ import {CVMenuItem} from './cv-menu-item'
 CVMenu.define()
 CVMenuItem.define()
 
+const stylesToText = () =>
+  (CVMenu.styles as Array<{cssText?: string}>).map((style) => style.cssText ?? '').join('\n')
+
 const settle = async (element: CVMenu) => {
   await element.updateComplete
   await Promise.resolve()
@@ -67,6 +70,15 @@ afterEach(() => {
 })
 
 describe('cv-menu', () => {
+  describe('style contract', () => {
+    it('defines discrete display presence for base', () => {
+      const cssText = stylesToText()
+
+      expect(cssText).toMatch(/\[part='base'\][\s\S]*transition:[\s\S]*display[\s\S]*allow-discrete/)
+      expect(cssText).toMatch(/transition-behavior:\s*allow-discrete/)
+    })
+  })
+
   // --- Shadow DOM structure ---
 
   describe('shadow DOM structure', () => {

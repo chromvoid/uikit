@@ -531,7 +531,19 @@ export class CVBottomSheet extends ReatomLitElement {
       >
         <slot name="title" slot="title"></slot>
         <slot name="description" slot="description"></slot>
-        <slot name="header-close" slot="header-close"></slot>
+        <slot name="header-close" slot="header-close"
+          ><svg
+            width="16"
+            height="16"
+            viewBox="0 0 16 16"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"
+          >
+            <line x1="4" y1="4" x2="12" y2="12" />
+            <line x1="12" y1="4" x2="4" y2="12" /></svg
+        ></slot>
         ${
           this.showHandle
             ? html`

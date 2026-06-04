@@ -90,10 +90,28 @@ export class CVMenu extends ReatomLitElement {
         max-height: var(--cv-menu-max-height, none);
         min-inline-size: var(--cv-menu-min-inline-size, 180px);
         overflow-y: auto;
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+        transition:
+          opacity var(--cv-menu-transition-duration, var(--cv-duration-fast, 120ms))
+            var(--cv-easing-standard, ease),
+          transform var(--cv-menu-transition-duration, var(--cv-duration-fast, 120ms))
+            var(--cv-easing-standard, ease),
+          display var(--cv-menu-transition-duration, var(--cv-duration-fast, 120ms)) allow-discrete;
+        transition-behavior: allow-discrete;
       }
 
       [part='base'][hidden] {
         display: none;
+        opacity: 0;
+        transform: translate3d(0, -2px, 0);
+      }
+
+      @starting-style {
+        [part='base']:not([hidden]) {
+          opacity: 0;
+          transform: translate3d(0, -2px, 0);
+        }
       }
     `,
   ]
@@ -500,6 +518,7 @@ export class CVMenu extends ReatomLitElement {
         tabindex=${menuProps.tabindex}
         aria-label=${menuProps['aria-label'] ?? nothing}
         ?hidden=${!this.open}
+        class="cv-u-discrete-presence"
         part="base"
         @keydown=${this.handleMenuKeyDown}
       >
