@@ -39,6 +39,36 @@ function getFocusRestoreTarget(): HTMLElement | null {
   return activeElement
 }
 
+function getIdSelector(id: string): string {
+  return `[id="${id.replace(/["\\]/g, '\\$&')}"]`
+}
+
+function findComposedElementById(root: ParentNode, id: string): HTMLElement | null {
+  const direct = root.querySelector?.(getIdSelector(id))
+  if (direct instanceof HTMLElement) return direct
+
+  const elements = Array.from(root.querySelectorAll?.('*') ?? [])
+  for (const element of elements) {
+    if (element.shadowRoot) {
+      const shadowMatch = findComposedElementById(element.shadowRoot, id)
+      if (shadowMatch) return shadowMatch
+    }
+
+    if (typeof HTMLSlotElement === 'undefined' || !(element instanceof HTMLSlotElement)) continue
+    for (const assigned of element.assignedElements({flatten: true})) {
+      if (assigned.id === id && assigned instanceof HTMLElement) return assigned
+      const assignedMatch = findComposedElementById(assigned, id)
+      if (assignedMatch) return assignedMatch
+      if (assigned.shadowRoot) {
+        const assignedShadowMatch = findComposedElementById(assigned.shadowRoot, id)
+        if (assignedShadowMatch) return assignedShadowMatch
+      }
+    }
+  }
+
+  return null
+}
+
 export class CVDialog extends ReatomLitElement {
   static elementName = 'cv-dialog'
 
@@ -857,8 +887,7 @@ export class CVDialog extends ReatomLitElement {
 
     if (requestedId) {
       const explicit =
-        (this.querySelector(`#${requestedId}`) as HTMLElement | null) ??
-        (this.shadowRoot?.querySelector(`#${requestedId}`) as HTMLElement | null)
+        findComposedElementById(this, requestedId) ?? findComposedElementById(this.renderRoot, requestedId)
       if (explicit) {
         explicit.focus()
         return

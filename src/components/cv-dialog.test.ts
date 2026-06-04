@@ -395,6 +395,37 @@ describe('cv-dialog', () => {
       await advancePresenceTimers(el, 120)
     })
 
+    it('focuses the requested initial target through a slotted composition boundary', async () => {
+      if (!customElements.get('cv-dialog-slotted-focus-fixture')) {
+        customElements.define(
+          'cv-dialog-slotted-focus-fixture',
+          class extends HTMLElement {
+            constructor() {
+              super()
+              this.attachShadow({mode: 'open'}).innerHTML = `
+                <cv-dialog open initial-focus-id="target">
+                  <slot></slot>
+                </cv-dialog>
+              `
+            }
+          },
+        )
+      }
+
+      const fixture = document.createElement('cv-dialog-slotted-focus-fixture')
+      const button = document.createElement('button')
+      button.id = 'target'
+      button.textContent = 'Initial target'
+      fixture.append(button)
+      document.body.append(fixture)
+
+      const dialog = fixture.shadowRoot!.querySelector('cv-dialog') as CVDialog
+      await settle(dialog)
+      await Promise.resolve()
+
+      expect(document.activeElement).toBe(button)
+    })
+
     it('cv-show fires when dialog begins to open', async () => {
       const el = await createDialog()
       const trigger = el.shadowRoot!.querySelector('[part="trigger"]') as HTMLElement
