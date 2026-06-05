@@ -215,8 +215,7 @@ export class CVSelect extends FormAssociatedReatomElement {
             var(--cv-easing-standard, ease),
           transform var(--cv-select-listbox-transition-duration, var(--cv-duration-fast, 120ms))
             var(--cv-easing-standard, ease),
-          display var(--cv-select-listbox-transition-duration, var(--cv-duration-fast, 120ms))
-            allow-discrete;
+          display var(--cv-select-listbox-transition-duration, var(--cv-duration-fast, 120ms)) allow-discrete;
         transition-behavior: allow-discrete;
       }
 

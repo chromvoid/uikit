@@ -393,7 +393,9 @@ export class CVCombobox extends ReatomLitElement {
   }
 
   private hasUnknownSelectedIds(ids: readonly string[]): boolean {
-    const enabledIds = new Set(this.optionRecords.filter((record) => !record.disabled).map((record) => record.id))
+    const enabledIds = new Set(
+      this.optionRecords.filter((record) => !record.disabled).map((record) => record.id),
+    )
     return ids.some((id) => !enabledIds.has(id))
   }
 

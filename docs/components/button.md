@@ -84,6 +84,7 @@ Interactive element that triggers an action or toggles a pressed state.
 | `pressed`  | Boolean | `false`     | Pressed state (only meaningful when `toggle` is `true`)       |
 | `loading`  | Boolean | `false`     | Shows spinner and blocks interaction                          |
 | `variant`  | String  | `"default"` | Visual variant: `default` \| `primary` \| `danger` \| `ghost` |
+| `preset`   | String  | —           | Semantic preset: `action-primary` \| `action-primary-subtle`  |
 | `outline`  | Boolean | `false`     | Outlined appearance (transparent background, visible border)  |
 | `pill`     | Boolean | `false`     | Fully rounded edges (`border-radius: 999px`)                  |
 | `size`     | String  | `"medium"`  | Size: `small` \| `medium` \| `large`                          |
@@ -109,6 +110,13 @@ Interactive element that triggers an action or toggles a pressed state.
 | `ghost`   | Transparent background and border                               |
 
 The `outline` boolean modifier can be combined with any variant to produce an outlined appearance (transparent background, visible border tinted by variant color).
+
+## Presets
+
+| Preset                  | Description                                           |
+| ----------------------- | ----------------------------------------------------- |
+| `action-primary`        | Strong primary action surface for form/footer actions |
+| `action-primary-subtle` | Softer primary action surface for inline edit actions |
 
 ## Sizes
 

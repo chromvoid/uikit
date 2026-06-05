@@ -94,8 +94,7 @@ export class CVAlertDialog extends ReatomLitElement {
         transition:
           opacity var(--cv-alert-dialog-transition-duration, var(--cv-duration-fast, 120ms))
             var(--cv-easing-standard, ease),
-          display var(--cv-alert-dialog-transition-duration, var(--cv-duration-fast, 120ms))
-            allow-discrete;
+          display var(--cv-alert-dialog-transition-duration, var(--cv-duration-fast, 120ms)) allow-discrete;
         transition-behavior: allow-discrete;
       }
 

@@ -48,10 +48,10 @@ export interface ManagedDialogSurfaceElement extends HTMLElement {
 }
 
 const sizeMap: Record<NonNullable<CustomDialogOptions['size']>, string> = {
-  s: '320px',
-  m: '480px',
-  l: '640px',
-  xl: '800px',
+  s: 'var(--cv-dialog-width-s)',
+  m: 'var(--cv-dialog-width-m)',
+  l: 'var(--cv-dialog-width-l)',
+  xl: 'var(--cv-dialog-width-xl)',
 }
 
 const STANDARD_FOCUSABLE_SELECTORS = [

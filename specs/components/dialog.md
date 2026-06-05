@@ -74,20 +74,24 @@ Modal or non-modal dialog overlay for presenting focused content, confirmations,
 
 ## CSS Custom Properties
 
-| Property                               | Default                              | Description                          |
-| -------------------------------------- | ------------------------------------ | ------------------------------------ |
-| `--cv-dialog-width`                    | `min(560px, calc(100vw - 32px))`     | Preferred dialog inline size         |
-| `--cv-dialog-max-height`               | `calc(100dvh - 32px)`                | Maximum block size before scrolling  |
-| `--cv-dialog-header-spacing`           | `var(--cv-space-4, 16px)`            | Header padding                       |
-| `--cv-dialog-body-spacing`             | `var(--cv-space-4, 16px)`            | Body padding                         |
-| `--cv-dialog-footer-spacing`           | `var(--cv-space-4, 16px)`            | Footer padding                       |
-| `--cv-dialog-overlay-color`            | `var(--cv-color-overlay)`            | Backdrop overlay color               |
-| `--cv-dialog-border-radius`            | `var(--cv-radius-lg, 14px)`          | Panel border radius                  |
-| `--cv-dialog-transition-duration`      | `var(--cv-duration-fast, 120ms)`     | Presence transition duration         |
-| `--cv-dialog-transition-easing-open`   | `var(--cv-easing-decelerate)`        | Opening transition easing            |
-| `--cv-dialog-transition-easing-close`  | `var(--cv-easing-accelerate)`        | Closing transition easing            |
-| `--cv-dialog-content-closed-transform` | `translate3d(0, 8px, 0) scale(0.98)` | Panel transform while closed/closing |
-| `--cv-dialog-content-open-transform`   | `translate3d(0, 0, 0) scale(1)`      | Panel transform while open           |
+| Property                               | Default                                                    | Description                          |
+| -------------------------------------- | ---------------------------------------------------------- | ------------------------------------ |
+| `--cv-dialog-width`                    | `var(--cv-dialog-width-m, min(560px, calc(100vw - 32px)))` | Preferred dialog inline size         |
+| `--cv-dialog-width-s`                  | app/theme provided                                         | Standard small dialog inline size    |
+| `--cv-dialog-width-m`                  | app/theme provided                                         | Standard medium dialog inline size   |
+| `--cv-dialog-width-l`                  | app/theme provided                                         | Standard large dialog inline size    |
+| `--cv-dialog-width-xl`                 | app/theme provided                                         | Standard extra-large dialog size     |
+| `--cv-dialog-max-height`               | `calc(100dvh - 32px)`                                      | Maximum block size before scrolling  |
+| `--cv-dialog-header-spacing`           | `var(--cv-space-4, 16px)`                                  | Header padding                       |
+| `--cv-dialog-body-spacing`             | `var(--cv-space-4, 16px)`                                  | Body padding                         |
+| `--cv-dialog-footer-spacing`           | `var(--cv-space-4, 16px)`                                  | Footer padding                       |
+| `--cv-dialog-overlay-color`            | `var(--cv-color-overlay)`                                  | Backdrop overlay color               |
+| `--cv-dialog-border-radius`            | `var(--cv-radius-lg, 14px)`                                | Panel border radius                  |
+| `--cv-dialog-transition-duration`      | `var(--cv-duration-fast, 120ms)`                           | Presence transition duration         |
+| `--cv-dialog-transition-easing-open`   | `var(--cv-easing-decelerate)`                              | Opening transition easing            |
+| `--cv-dialog-transition-easing-close`  | `var(--cv-easing-accelerate)`                              | Closing transition easing            |
+| `--cv-dialog-content-closed-transform` | `translate3d(0, 8px, 0) scale(0.98)`                       | Panel transform while closed/closing |
+| `--cv-dialog-content-open-transform`   | `translate3d(0, 0, 0) scale(1)`                            | Panel transform while open           |
 
 ## Visual States
 

@@ -139,6 +139,33 @@ cv-theme-provider[mode='dark'] {
   --cv-color-selected: hwb(186 0% 0% / 0.16);
   --cv-color-overlay: hwb(218 1.2% 94.5% / 0.72);
 
+  --cv-color-media-mini-surface: hwb(217 6.3% 86.7%);
+  --cv-color-media-mini-surface-start: hwb(215 7.8% 84.7%);
+  --cv-color-media-mini-surface-end: hwb(216 4.3% 89.8%);
+  --cv-color-media-mini-surface-deep: hwb(205 7.5% 83.1%);
+  --cv-color-media-mini-border: hwb(0 100% 0% / 0.06);
+  --cv-color-media-mini-border-hover: hwb(0 100% 0% / 0.11);
+  --cv-color-media-mini-text: hwb(210 95.7% 2%);
+  --cv-color-media-mini-text-secondary: hwb(213 60.4% 29%);
+  --cv-color-media-mini-text-muted: hwb(217 40% 49.8%);
+  --cv-color-media-mini-accent: hwb(185 15.3% 9%);
+  --cv-color-media-mini-accent-soft: hwb(185 15.3% 9% / 0.09);
+  --cv-color-media-mini-accent-muted: hwb(185 15.3% 9% / 0.12);
+  --cv-color-media-mini-accent-surface: hwb(185 15.3% 9% / 0.1);
+  --cv-color-media-mini-accent-surface-hover: hwb(185 15.3% 9% / 0.13);
+  --cv-color-media-mini-accent-border: hwb(185 15.3% 9% / 0.16);
+  --cv-color-media-mini-accent-border-strong: hwb(185 15.3% 9% / 0.38);
+  --cv-color-media-mini-accent-border-hover: hwb(185 15.3% 9% / 0.58);
+  --cv-color-media-mini-accent-line-end: hwb(185 15.3% 9% / 0.35);
+  --cv-color-media-mini-accent-glow-subtle: hwb(185 15.3% 9% / 0.06);
+  --cv-color-media-mini-accent-glow: hwb(185 15.3% 9% / 0.08);
+  --cv-color-media-mini-accent-glow-strong: hwb(185 15.3% 9% / 0.12);
+  --cv-color-media-mini-control-surface: hwb(0 100% 0% / 0.035);
+  --cv-color-media-mini-control-surface-hover: hwb(0 100% 0% / 0.055);
+  --cv-color-media-mini-track: hwb(0 100% 0% / 0.1);
+  --cv-color-media-mini-error-line-start: hwb(213 60.4% 29% / 0.58);
+  --cv-color-media-mini-error-line-end: hwb(217 40% 49.8% / 0.24);
+
   /* Alpha tokens */
   --cv-alpha-white-4: hwb(0 100% 0% / 0.04);
   --cv-alpha-white-5: hwb(0 100% 0% / 0.05);
@@ -162,6 +189,7 @@ cv-theme-provider[mode='dark'] {
   --cv-alpha-black-25: hwb(0 0% 100% / 0.25);
   --cv-alpha-black-28: hwb(0 0% 100% / 0.28);
   --cv-alpha-black-35: hwb(0 0% 100% / 0.35);
+  --cv-alpha-black-42: hwb(0 0% 100% / 0.42);
   --cv-alpha-black-50: hwb(0 0% 100% / 0.5);
   --cv-alpha-black-56: hwb(0 0% 100% / 0.56);
   --cv-alpha-black-62: hwb(0 0% 100% / 0.62);
@@ -273,6 +301,28 @@ cv-theme-provider[mode='dark'] {
     var(--cv-color-danger) 0%,
     var(--cv-color-warning) 100%
   );
+  --cv-gradient-media-mini-surface:
+    linear-gradient(180deg, var(--cv-alpha-white-4), transparent 34%),
+    linear-gradient(
+      180deg,
+      var(--cv-color-media-mini-surface-start) 0%,
+      var(--cv-color-media-mini-surface-end) 100%
+    );
+  --cv-gradient-media-mini-accent-line: linear-gradient(
+    180deg,
+    var(--cv-color-media-mini-accent) 0%,
+    var(--cv-color-media-mini-accent-line-end) 100%
+  );
+  --cv-gradient-media-mini-error-line: linear-gradient(
+    180deg,
+    var(--cv-color-media-mini-error-line-start) 0%,
+    var(--cv-color-media-mini-error-line-end) 100%
+  );
+  --cv-gradient-media-mini-fallback-tile: linear-gradient(
+    180deg,
+    var(--cv-color-media-mini-accent-surface) 0%,
+    var(--cv-color-media-mini-surface-deep) 100%
+  );
 
   --cv-space-1: 4px;
   --cv-space-2: 8px;
@@ -328,6 +378,11 @@ cv-theme-provider[mode='dark'] {
   --cv-shadow-xl: 0 24px 64px var(--cv-alpha-black-50);
   --cv-shadow-glow: 0 0 40px var(--cv-color-primary-ring);
   --cv-shadow-glass: 0 12px 36px var(--cv-alpha-black-25);
+  --cv-shadow-media-mini:
+    0 16px 40px var(--cv-alpha-black-42), 0 0 24px var(--cv-color-media-mini-accent-glow-subtle);
+  --cv-shadow-media-mini-menu: 0 16px 36px var(--cv-alpha-black-42);
+  --cv-shadow-media-mini-control:
+    inset 0 1px 0 var(--cv-color-media-mini-border), inset 0 -8px 22px hwb(185 15.3% 9% / 0.04);
   --cv-shadow-1: var(--cv-shadow-sm);
   --cv-shadow-2: var(--cv-shadow-md);
   --cv-shadow-3: var(--cv-shadow-lg);

@@ -6,6 +6,7 @@ import {html} from '../reatom-lit/index.js'
 import {ReatomLitElement} from '../reatom-lit/ReatomLitElement'
 
 let cvProgressNonce = 0
+type CVProgressTone = 'upload' | 'queued' | 'success' | 'danger' | 'warning'
 
 export class CVProgress extends ReatomLitElement {
   static elementName = 'cv-progress'
@@ -18,6 +19,7 @@ export class CVProgress extends ReatomLitElement {
       indeterminate: {type: Boolean, reflect: true},
       valueText: {type: String, attribute: 'value-text'},
       ariaLabel: {type: String, attribute: 'aria-label'},
+      tone: {type: String, reflect: true},
     }
   }
 
@@ -27,6 +29,7 @@ export class CVProgress extends ReatomLitElement {
   declare indeterminate: boolean
   declare valueText: string
   declare ariaLabel: string
+  declare tone: CVProgressTone | undefined
 
   private readonly idBase = `cv-progress-${++cvProgressNonce}`
   private model: ProgressModel
@@ -39,6 +42,7 @@ export class CVProgress extends ReatomLitElement {
     this.indeterminate = false
     this.valueText = ''
     this.ariaLabel = ''
+    this.tone = undefined
     this.model = this.createModel()
   }
 
@@ -86,6 +90,40 @@ export class CVProgress extends ReatomLitElement {
 
       :host([data-complete]) [part='indicator'] {
         background: var(--cv-gradient-progress-success, var(--cv-gradient-success));
+      }
+
+      :host([tone='upload']) {
+        --cv-progress-height: var(--cv-progress-upload-height, 6px);
+        --cv-progress-track-color: var(--cv-progress-upload-track-color, var(--cv-color-border));
+        --cv-progress-indicator-background: var(
+          --cv-progress-upload-indicator-background,
+          var(--cv-gradient-primary)
+        );
+      }
+
+      :host([tone='queued']) {
+        --cv-progress-indicator-background: var(
+          --cv-progress-tone-queued-background,
+          var(--cv-color-border-strong)
+        );
+      }
+
+      :host([tone='success']) {
+        --cv-progress-indicator-background: var(
+          --cv-progress-tone-success-background,
+          var(--cv-color-success)
+        );
+      }
+
+      :host([tone='danger']) {
+        --cv-progress-indicator-background: var(--cv-progress-tone-danger-background, var(--cv-color-danger));
+      }
+
+      :host([tone='warning']) {
+        --cv-progress-indicator-background: var(
+          --cv-progress-tone-warning-background,
+          var(--cv-color-warning)
+        );
       }
 
       @keyframes cv-progress-indeterminate {

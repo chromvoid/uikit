@@ -9,6 +9,7 @@ let cvInputNonce = 0
 
 type CVInputSize = 'small' | 'medium' | 'large'
 type CVInputVariant = 'outlined' | 'filled'
+type CVInputPreset = 'search-mobile'
 
 export interface CVInputValueDetail {
   value: string
@@ -44,6 +45,7 @@ export class CVInput extends FormAssociatedReatomElement {
       passwordToggle: {type: Boolean, reflect: true, attribute: 'password-toggle'},
       size: {type: String, reflect: true},
       variant: {type: String, reflect: true},
+      preset: {type: String, reflect: true},
       name: {type: String},
       autofocus: {type: Boolean, reflect: true},
       autocomplete: {type: String},
@@ -62,6 +64,7 @@ export class CVInput extends FormAssociatedReatomElement {
   declare passwordToggle: boolean
   declare size: CVInputSize
   declare variant: CVInputVariant
+  declare preset: CVInputPreset | undefined
   declare name: string
   declare autofocus: boolean
   declare autocomplete: string
@@ -86,6 +89,7 @@ export class CVInput extends FormAssociatedReatomElement {
     this.passwordToggle = false
     this.size = 'medium'
     this.variant = 'outlined'
+    this.preset = undefined
     this.name = ''
     this.autofocus = false
     this.autocomplete = ''
@@ -209,6 +213,35 @@ export class CVInput extends FormAssociatedReatomElement {
         --cv-input-height: 42px;
         --cv-input-padding-inline: var(--cv-space-4, 16px);
         --cv-input-font-size: var(--cv-font-size-md, 16px);
+      }
+
+      :host([preset='search-mobile']) {
+        --cv-input-height: var(--cv-input-search-mobile-height, 42px);
+        --cv-input-padding-inline: var(--cv-input-search-mobile-padding-inline, 14px);
+        --cv-input-font-size: var(--cv-input-search-mobile-font-size, 16px);
+        --cv-input-border-radius: var(--cv-input-search-mobile-border-radius, 14px);
+        --cv-input-background: var(--cv-input-search-mobile-background, var(--cv-color-surface-2));
+        --cv-input-border-color: var(--cv-input-search-mobile-border-color, var(--cv-color-border-glass));
+        --cv-input-placeholder-color: var(
+          --cv-input-search-mobile-placeholder-color,
+          var(--cv-color-text-muted)
+        );
+        --cv-input-icon-size: var(--cv-input-search-mobile-icon-size, 20px);
+      }
+
+      :host([preset='search-mobile']) [part='base'] {
+        box-shadow: var(
+          --cv-input-search-mobile-shadow,
+          inset 0 1px 2px var(--cv-alpha-black-10),
+          0 1px 0 var(--cv-alpha-white-4)
+        );
+      }
+
+      :host([preset='search-mobile']:hover) {
+        --cv-input-border-color: var(
+          --cv-input-search-mobile-border-color-hover,
+          var(--cv-color-primary-border)
+        );
       }
 
       /* --- disabled --- */

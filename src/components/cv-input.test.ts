@@ -125,6 +125,7 @@ describe('cv-input', () => {
       expect(el.passwordToggle).toBe(false)
       expect(el.size).toBe('medium')
       expect(el.variant).toBe('outlined')
+      expect(el.preset).toBeUndefined()
       expect(el.name).toBe('')
       expect(el.autofocus).toBe(false)
       expect(el.autocomplete).toBe('')
@@ -151,10 +152,11 @@ describe('cv-input', () => {
       expect(el.hasAttribute('password-toggle')).toBe(true)
     })
 
-    it('string attributes reflect: size, variant', async () => {
-      const el = await createInput({size: 'large', variant: 'filled'})
+    it('string attributes reflect: size, variant, preset', async () => {
+      const el = await createInput({size: 'large', variant: 'filled', preset: 'search-mobile'})
       expect(el.getAttribute('size')).toBe('large')
       expect(el.getAttribute('variant')).toBe('filled')
+      expect(el.getAttribute('preset')).toBe('search-mobile')
     })
 
     it('host reflects [focused] attribute when input is focused', async () => {

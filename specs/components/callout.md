@@ -21,6 +21,7 @@ Static supplementary content block that highlights important information using `
 | Attribute  | Type    | Default  | Description                                                                         |
 | ---------- | ------- | -------- | ----------------------------------------------------------------------------------- |
 | `variant`  | String  | `"info"` | Visual variant: `"info"` \| `"success"` \| `"warning"` \| `"danger"` \| `"neutral"` |
+| `density`  | String  | —        | Density preset: `compact` \| `dense`                                                |
 | `closable` | Boolean | `false`  | Renders a dismiss button and enables the `cv-close` event                           |
 | `open`     | Boolean | `true`   | Controls visibility of the callout                                                  |
 
@@ -33,6 +34,13 @@ Static supplementary content block that highlights important information using `
 | `warning` | Warning-tinted background and border using `--cv-color-warning` |
 | `danger`  | Danger-tinted background and border using `--cv-color-danger`   |
 | `neutral` | Muted style with surface background and border                  |
+
+## Densities
+
+| Density   | Description                                     |
+| --------- | ----------------------------------------------- |
+| `compact` | Reduced padding/radius for route-level callouts |
+| `dense`   | Smallest density for status and inline callouts |
 
 ## Slots
 

@@ -22,6 +22,7 @@ A read-only indicator that communicates determinate or indeterminate loading/com
 | `min`           | Number  | `0`     | Minimum boundary                                                                    |
 | `max`           | Number  | `100`   | Maximum boundary                                                                    |
 | `indeterminate` | Boolean | `false` | Switches to indeterminate (animated) mode                                           |
+| `tone`          | String  | —       | Semantic tone: `upload` \| `queued` \| `success` \| `danger` \| `warning`           |
 | `value-text`    | String  | —       | Static override for `aria-valuetext`; takes precedence over the percentage fallback |
 | `aria-label`    | String  | —       | Accessible label passed through to headless                                         |
 
@@ -38,6 +39,16 @@ A read-only indicator that communicates determinate or indeterminate loading/com
 | `base`      | `<div>`  | Outer track container with `role="progressbar"`          |
 | `indicator` | `<div>`  | Filled portion representing current progress             |
 | `label`     | `<span>` | Content overlay inside indicator; wraps the default slot |
+
+## Tones
+
+| Tone      | Description                      |
+| --------- | -------------------------------- |
+| `upload`  | Primary upload/transfer progress |
+| `queued`  | Muted queued progress            |
+| `success` | Success/completed progress       |
+| `danger`  | Failed/error progress            |
+| `warning` | Paused/warning progress          |
 
 ## CSS Custom Properties
 

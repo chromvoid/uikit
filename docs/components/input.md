@@ -84,6 +84,7 @@ Single-line text input control supporting text-like types, clearable behavior, a
 | `password-toggle` | Boolean     | `false`      | yes      | Shows a password visibility toggle (only effective when `type="password"`) |
 | `size`            | String      | `"medium"`   | yes      | Component size: `small` \| `medium` \| `large`                             |
 | `variant`         | String      | `"outlined"` | yes      | Visual variant: `outlined` \| `filled`                                     |
+| `preset`          | String      | —            | yes      | Semantic preset: `search-mobile`                                           |
 | `name`            | String      | `""`         | no       | Name for form association                                                  |
 
 ## Variants
@@ -100,6 +101,12 @@ Single-line text input control supporting text-like types, clearable behavior, a
 | `small`  | `30px`              | `var(--cv-space-2, 8px)`    | `var(--cv-font-size-sm, 13px)`   |
 | `medium` | `36px`              | `var(--cv-space-3, 12px)`   | `var(--cv-font-size-base, 14px)` |
 | `large`  | `42px`              | `var(--cv-space-4, 16px)`   | `var(--cv-font-size-md, 16px)`   |
+
+## Presets
+
+| Preset          | Description                                                                  |
+| --------------- | ---------------------------------------------------------------------------- |
+| `search-mobile` | Mobile search/input density with 42px height, 14px radius, and search tokens |
 
 ## Slots
 

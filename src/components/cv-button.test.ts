@@ -149,6 +149,7 @@ describe('cv-button', () => {
       expect(button.pressed).toBe(false)
       expect(button.loading).toBe(false)
       expect(button.variant).toBe('default')
+      expect(button.preset).toBeUndefined()
       expect(button.outline).toBe(false)
       expect(button.pill).toBe(false)
       expect(button.size).toBe('medium')
@@ -176,11 +177,17 @@ describe('cv-button', () => {
       expect(button.hasAttribute('pill')).toBe(true)
     })
 
-    it('string attributes reflect: variant, size, type', async () => {
-      const button = await createButton({variant: 'danger', size: 'large', type: 'submit'})
+    it('string attributes reflect: variant, size, type, preset', async () => {
+      const button = await createButton({
+        variant: 'danger',
+        size: 'large',
+        type: 'submit',
+        preset: 'action-primary',
+      })
       expect(button.getAttribute('variant')).toBe('danger')
       expect(button.getAttribute('size')).toBe('large')
       expect(button.getAttribute('type')).toBe('submit')
+      expect(button.getAttribute('preset')).toBe('action-primary')
     })
   })
 

@@ -262,7 +262,7 @@ export class CVDialog extends ReatomLitElement {
         position: relative;
         z-index: 1;
         box-sizing: border-box;
-        inline-size: var(--cv-dialog-width, min(560px, calc(100vw - 32px)));
+        inline-size: var(--cv-dialog-width, var(--cv-dialog-width-m, min(560px, calc(100vw - 32px))));
         max-inline-size: min(var(--cv-dialog-width, 100%), var(--cv-dialog-available-inline-size));
         max-block-size: min(
           var(--cv-dialog-max-height, var(--cv-dialog-available-block-size)),

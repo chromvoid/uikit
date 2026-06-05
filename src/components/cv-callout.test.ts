@@ -72,6 +72,7 @@ describe('cv-callout', () => {
     it('has correct defaults', async () => {
       const el = await createCallout()
       expect(el.variant).toBe('info')
+      expect(el.density).toBeUndefined()
       expect(el.closable).toBe(false)
       expect(el.open).toBe(true)
     })
@@ -94,6 +95,11 @@ describe('cv-callout', () => {
     it('string attribute reflects: variant', async () => {
       const el = await createCallout({variant: 'danger'})
       expect(el.getAttribute('variant')).toBe('danger')
+    })
+
+    it('string attribute reflects: density', async () => {
+      const el = await createCallout({density: 'compact'})
+      expect(el.getAttribute('density')).toBe('compact')
     })
 
     it('variant defaults to "info" on host attribute', async () => {

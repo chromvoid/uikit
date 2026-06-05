@@ -9,6 +9,7 @@ let cvButtonNonce = 0
 type CVButtonVariant = 'default' | 'primary' | 'danger' | 'ghost'
 type CVButtonSize = 'small' | 'medium' | 'large'
 type CVButtonType = 'button' | 'submit' | 'reset'
+type CVButtonPreset = 'action-primary' | 'action-primary-subtle'
 
 const passthroughAttributes = [
   'aria-controls',
@@ -47,6 +48,7 @@ export class CVButton extends FormAssociatedReatomElement {
       outline: {type: Boolean, reflect: true},
       pill: {type: Boolean, reflect: true},
       size: {type: String, reflect: true},
+      preset: {type: String, reflect: true},
       type: {type: String, reflect: true},
       unstyled: {type: Boolean, reflect: true},
       buttonTabIndex: {type: String, attribute: 'button-tabindex'},
@@ -65,6 +67,7 @@ export class CVButton extends FormAssociatedReatomElement {
   declare outline: boolean
   declare pill: boolean
   declare size: CVButtonSize
+  declare preset: CVButtonPreset | undefined
   declare type: CVButtonType
   declare unstyled: boolean
   declare buttonTabIndex: string | null
@@ -82,6 +85,7 @@ export class CVButton extends FormAssociatedReatomElement {
     this.outline = false
     this.pill = false
     this.size = 'medium'
+    this.preset = undefined
     this.type = 'button'
     this.unstyled = false
     this.buttonTabIndex = null
@@ -383,6 +387,86 @@ export class CVButton extends FormAssociatedReatomElement {
         --cv-button-padding-inline: var(--cv-space-4, 16px);
         --cv-button-padding-block: var(--cv-space-2, 8px);
         --cv-button-font-size: var(--cv-button-font-size-large, var(--cv-font-size-md, 16px));
+      }
+
+      :host([preset='action-primary']) {
+        --cv-button-background: var(--cv-button-action-primary-background, var(--cv-color-primary-dark));
+        --cv-button-background-hover: var(
+          --cv-button-action-primary-background-hover,
+          var(--cv-color-primary)
+        );
+        --cv-button-background-active: var(
+          --cv-button-action-primary-background-active,
+          var(--cv-color-primary-darker)
+        );
+        --cv-button-border-color: var(
+          --cv-button-action-primary-border-color,
+          var(--cv-color-primary-border-strong)
+        );
+        --cv-button-border-color-hover: var(
+          --cv-button-action-primary-border-color-hover,
+          var(--cv-color-primary-border-strong)
+        );
+        --cv-button-border-color-active: var(
+          --cv-button-action-primary-border-color-active,
+          var(--cv-color-primary-border-strong)
+        );
+        --cv-button-text-color: var(--cv-button-action-primary-text-color, var(--cv-color-on-primary));
+        --cv-button-text-color-hover: var(
+          --cv-button-action-primary-text-color-hover,
+          var(--cv-color-on-primary)
+        );
+        --cv-button-text-color-active: var(
+          --cv-button-action-primary-text-color-active,
+          var(--cv-color-on-primary)
+        );
+        --cv-button-focus-ring-color: var(
+          --cv-button-action-primary-focus-ring-color,
+          var(--cv-color-primary-ring)
+        );
+      }
+
+      :host([preset='action-primary-subtle']) {
+        --cv-button-background: var(
+          --cv-button-action-primary-subtle-background,
+          var(--cv-color-primary-surface-strong)
+        );
+        --cv-button-background-hover: var(
+          --cv-button-action-primary-subtle-background-hover,
+          var(--cv-color-primary-muted)
+        );
+        --cv-button-background-active: var(
+          --cv-button-action-primary-subtle-background-active,
+          var(--cv-color-primary-surface)
+        );
+        --cv-button-border-color: var(
+          --cv-button-action-primary-subtle-border-color,
+          var(--cv-color-primary-border-strong)
+        );
+        --cv-button-border-color-hover: var(
+          --cv-button-action-primary-subtle-border-color-hover,
+          var(--cv-color-primary-border-strong)
+        );
+        --cv-button-border-color-active: var(
+          --cv-button-action-primary-subtle-border-color-active,
+          var(--cv-color-primary-border-strong)
+        );
+        --cv-button-text-color: var(
+          --cv-button-action-primary-subtle-text-color,
+          var(--cv-color-text-strong)
+        );
+        --cv-button-text-color-hover: var(
+          --cv-button-action-primary-subtle-text-color-hover,
+          var(--cv-color-text-strongest)
+        );
+        --cv-button-text-color-active: var(
+          --cv-button-action-primary-subtle-text-color-active,
+          var(--cv-color-text-strongest)
+        );
+        --cv-button-focus-ring-color: var(
+          --cv-button-action-primary-subtle-focus-ring-color,
+          var(--cv-color-primary-ring)
+        );
       }
 
       /* --- spinner --- */

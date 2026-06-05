@@ -71,6 +71,7 @@ describe('cv-progress', () => {
       expect(el.value).toBe(0)
       expect(el.min).toBe(0)
       expect(el.max).toBe(100)
+      expect(el.tone).toBeUndefined()
       expect(el.indeterminate).toBe(false)
     })
   })
@@ -88,6 +89,11 @@ describe('cv-progress', () => {
       expect(el.getAttribute('value')).toBe('42')
       expect(el.getAttribute('min')).toBe('10')
       expect(el.getAttribute('max')).toBe('200')
+    })
+
+    it('string attribute reflects: tone', async () => {
+      const el = await createProgress({tone: 'upload'})
+      expect(el.getAttribute('tone')).toBe('upload')
     })
   })
 

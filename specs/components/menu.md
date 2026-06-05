@@ -337,6 +337,7 @@ Split-button mode (`[split]`):
 | `split`           | Boolean | `false`     | Enables split-button mode with separate action and dropdown areas |
 | `size`            | String  | `"medium"`  | Size: `small` \| `medium` \| `large`                              |
 | `variant`         | String  | `"default"` | Visual variant: `default` \| `primary` \| `danger` \| `ghost`     |
+| `preset`          | String  | —           | Semantic preset: `icon-overflow`                                  |
 | `close-on-select` | Boolean | `true`      | Close the menu after an item is selected                          |
 | `aria-label`      | String  | `""`        | Accessible label for the trigger/dropdown                         |
 
@@ -356,6 +357,12 @@ Split-button mode (`[split]`):
 | `primary` | Primary-tinted background and border   |
 | `danger`  | Danger-tinted background and border    |
 | `ghost`   | Transparent background and border      |
+
+#### Presets
+
+| Preset          | Description                                                            |
+| --------------- | ---------------------------------------------------------------------- |
+| `icon-overflow` | Zero-gap icon overflow trigger with standardized menu offset and width |
 
 #### Slots
 
@@ -392,6 +399,7 @@ Split-button mode (`[split]`):
 | `--cv-menu-button-font-size`            | `inherit`                  | Font size of button content           |
 | `--cv-menu-button-menu-offset`          | `var(--cv-space-1, 4px)`   | Gap between trigger and menu popup    |
 | `--cv-menu-button-menu-min-inline-size` | `max(180px, 100%)`         | Minimum inline size of the menu popup |
+| `--cv-menu-button-menu-max-inline-size` | `calc(100vw - 16px)`       | Maximum inline size of the menu popup |
 | `--cv-menu-button-menu-z-index`         | `20`                       | Z-index of the menu popup             |
 
 #### Events

@@ -48,6 +48,7 @@ const menuButtonKeysToPrevent = new Set([
 ])
 
 let cvMenuButtonNonce = 0
+type CVMenuButtonPreset = 'icon-overflow'
 
 export class CVMenuButton extends ReatomLitElement {
   static elementName = 'cv-menu-button'
@@ -61,6 +62,7 @@ export class CVMenuButton extends ReatomLitElement {
       split: {type: Boolean, reflect: true},
       size: {type: String, reflect: true},
       variant: {type: String, reflect: true},
+      preset: {type: String, reflect: true},
       closeOnSelect: {type: Boolean, attribute: 'close-on-select', reflect: true},
       ariaLabel: {type: String, attribute: 'aria-label'},
     }
@@ -72,6 +74,7 @@ export class CVMenuButton extends ReatomLitElement {
   declare split: boolean
   declare size: 'small' | 'medium' | 'large'
   declare variant: 'default' | 'primary' | 'danger' | 'ghost'
+  declare preset: CVMenuButtonPreset | undefined
   declare closeOnSelect: boolean
   declare ariaLabel: string
 
@@ -98,6 +101,7 @@ export class CVMenuButton extends ReatomLitElement {
     this.split = false
     this.size = 'medium'
     this.variant = 'default'
+    this.preset = undefined
     this.closeOnSelect = true
     this.ariaLabel = ''
   }
@@ -114,6 +118,7 @@ export class CVMenuButton extends ReatomLitElement {
         --cv-menu-button-gap: var(--cv-space-2, 8px);
         --cv-menu-button-font-size: inherit;
         --cv-menu-button-menu-offset: var(--cv-space-1, 4px);
+        --cv-menu-button-menu-align: start;
         --cv-menu-button-menu-min-inline-size: 180px;
         --cv-menu-button-menu-z-index: 20;
       }
@@ -219,6 +224,21 @@ export class CVMenuButton extends ReatomLitElement {
         --cv-menu-button-min-height: 42px;
         --cv-menu-button-padding-inline: var(--cv-space-4, 16px);
         --cv-menu-button-padding-block: var(--cv-space-2, 8px);
+      }
+
+      :host([preset='icon-overflow']) {
+        --cv-menu-button-gap: 0;
+        --cv-menu-button-padding-inline: 0;
+        --cv-menu-button-padding-block: 0;
+        --cv-menu-button-menu-offset: var(--cv-menu-button-icon-overflow-menu-offset, var(--cv-space-1, 4px));
+        --cv-menu-button-menu-min-inline-size: var(
+          --cv-menu-button-icon-overflow-menu-min-inline-size,
+          180px
+        );
+        --cv-menu-button-menu-max-inline-size: var(
+          --cv-menu-button-icon-overflow-menu-max-inline-size,
+          min(280px, calc(100vw - 16px))
+        );
       }
 
       /* --- variant: default --- */
@@ -423,6 +443,25 @@ export class CVMenuButton extends ReatomLitElement {
     return Number.isFinite(parsed) ? parsed : 180
   }
 
+  private getMenuInlineStart(baseRect: DOMRect, menuWidth: number, viewportWidth: number): number {
+    const rawAlign = getComputedStyle(this).getPropertyValue('--cv-menu-button-menu-align').trim()
+    const align = rawAlign === 'center' || rawAlign === 'end' ? rawAlign : 'start'
+    const viewportPadding = 8
+    const maxLeft = Math.max(viewportPadding, viewportWidth - menuWidth - viewportPadding)
+    const preferredLeft =
+      align === 'center'
+        ? baseRect.left + baseRect.width / 2 - menuWidth / 2
+        : align === 'end'
+          ? baseRect.right - menuWidth
+          : baseRect.left
+
+    return Math.min(Math.max(preferredLeft, viewportPadding), maxLeft)
+  }
+
+  private getMenuItemProperty(source: CSSStyleDeclaration | null, name: string, fallback: string): string {
+    return source?.getPropertyValue(name).trim() || getComputedStyle(this).getPropertyValue(name).trim() || fallback
+  }
+
   private applyMenuLayout(menu: HTMLElement, base: HTMLElement): void {
     const baseRect = base.getBoundingClientRect()
     const minWidth = Math.max(this.getMenuMinInlineSize(), Math.ceil(baseRect.width))
@@ -448,12 +487,10 @@ export class CVMenuButton extends ReatomLitElement {
     const placeAbove = spaceBelow < menuRect.height + gap && spaceAbove > spaceBelow
 
     let top = placeAbove ? baseRect.top - menuRect.height - gap : baseRect.bottom + gap
-    let left = baseRect.left
+    let left = this.getMenuInlineStart(baseRect, menuRect.width, viewportWidth)
 
-    const maxLeft = Math.max(viewportPadding, viewportWidth - menuRect.width - viewportPadding)
     const maxTop = Math.max(viewportPadding, viewportHeight - menuRect.height - viewportPadding)
 
-    left = Math.min(Math.max(left, viewportPadding), maxLeft)
     top = Math.min(Math.max(top, viewportPadding), maxTop)
 
     menu.style.position = 'absolute'
@@ -491,12 +528,10 @@ export class CVMenuButton extends ReatomLitElement {
     const placeAbove = spaceBelow < menuRect.height + gap && spaceAbove > spaceBelow
 
     let top = placeAbove ? baseRect.top - menuRect.height - gap : baseRect.bottom + gap
-    let left = baseRect.left
+    let left = this.getMenuInlineStart(baseRect, menuRect.width, viewportWidth)
 
-    const maxLeft = Math.max(viewportPadding, viewportWidth - menuRect.width - viewportPadding)
     const maxTop = Math.max(viewportPadding, viewportHeight - menuRect.height - viewportPadding)
 
-    left = Math.min(Math.max(left, viewportPadding), maxLeft)
     top = Math.min(Math.max(top, viewportPadding), maxTop)
 
     portal.style.position = 'fixed'
@@ -803,10 +838,19 @@ export class CVMenuButton extends ReatomLitElement {
     portal.style.overflowY = source?.overflowY || 'auto'
     portal.style.pointerEvents = 'auto'
     portal.style.zIndex = source?.zIndex || this.getMenuZIndex()
-    portal.style.setProperty('--cv-menu-item-gap', '10px')
-    portal.style.setProperty('--cv-menu-item-padding-block', '10px')
-    portal.style.setProperty('--cv-menu-item-padding-inline', '12px')
-    portal.style.setProperty('--cv-menu-item-border-radius', 'var(--cv-radius-1, 6px)')
+    portal.style.setProperty('--cv-menu-item-gap', this.getMenuItemProperty(source, '--cv-menu-item-gap', '10px'))
+    portal.style.setProperty(
+      '--cv-menu-item-padding-block',
+      this.getMenuItemProperty(source, '--cv-menu-item-padding-block', '10px'),
+    )
+    portal.style.setProperty(
+      '--cv-menu-item-padding-inline',
+      this.getMenuItemProperty(source, '--cv-menu-item-padding-inline', '12px'),
+    )
+    portal.style.setProperty(
+      '--cv-menu-item-border-radius',
+      this.getMenuItemProperty(source, '--cv-menu-item-border-radius', 'var(--cv-radius-1, 6px)'),
+    )
   }
 
   private getMenuZIndex(): string {

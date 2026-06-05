@@ -135,8 +135,7 @@ export class CVCommandPalette extends ReatomLitElement {
             var(--cv-easing-standard, ease),
           transform var(--cv-command-palette-transition-duration, var(--cv-duration-fast, 120ms))
             var(--cv-easing-standard, ease),
-          display var(--cv-command-palette-transition-duration, var(--cv-duration-fast, 120ms))
-            allow-discrete;
+          display var(--cv-command-palette-transition-duration, var(--cv-duration-fast, 120ms)) allow-discrete;
         transition-behavior: allow-discrete;
       }
 

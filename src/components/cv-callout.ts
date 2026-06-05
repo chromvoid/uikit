@@ -6,6 +6,7 @@ import {html} from '../reatom-lit/index.js'
 import {ReatomLitElement} from '../reatom-lit/ReatomLitElement'
 
 let cvCalloutNonce = 0
+type CVCalloutDensity = 'compact' | 'dense'
 
 export class CVCallout extends ReatomLitElement {
   static elementName = 'cv-callout'
@@ -13,12 +14,14 @@ export class CVCallout extends ReatomLitElement {
   static get properties() {
     return {
       variant: {type: String, reflect: true},
+      density: {type: String, reflect: true},
       closable: {type: Boolean, reflect: true},
       open: {type: Boolean, reflect: true},
     }
   }
 
   declare variant: CalloutVariant
+  declare density: CVCalloutDensity | undefined
   declare closable: boolean
   declare open: boolean
 
@@ -28,6 +31,7 @@ export class CVCallout extends ReatomLitElement {
   constructor() {
     super()
     this.variant = 'info'
+    this.density = undefined
     this.closable = false
     this.open = true
     this.model = createCallout({
@@ -161,6 +165,20 @@ export class CVCallout extends ReatomLitElement {
       :host([variant='neutral']) [part='base'] {
         border-color: var(--cv-callout-border-color, var(--cv-color-border, #2a3245));
         background: var(--cv-callout-background, var(--cv-color-surface-elevated, #1d2432));
+      }
+
+      :host([density='compact']) {
+        --cv-callout-padding-block: var(--cv-callout-compact-padding-block, var(--app-spacing-3, 12px));
+        --cv-callout-padding-inline: var(--cv-callout-compact-padding-inline, var(--app-spacing-3, 12px));
+        --cv-callout-border-radius: var(--cv-callout-compact-border-radius, var(--cv-radius-2, 10px));
+        --cv-callout-font-size: var(--cv-callout-compact-font-size, var(--cv-font-size-sm, 0.875rem));
+      }
+
+      :host([density='dense']) {
+        --cv-callout-padding-block: var(--cv-callout-dense-padding-block, var(--app-spacing-2, 8px));
+        --cv-callout-padding-inline: var(--cv-callout-dense-padding-inline, var(--app-spacing-3, 12px));
+        --cv-callout-border-radius: var(--cv-callout-dense-border-radius, var(--cv-radius-2, 10px));
+        --cv-callout-font-size: var(--cv-callout-dense-font-size, var(--cv-font-size-xs, 0.75rem));
       }
     `,
   ]

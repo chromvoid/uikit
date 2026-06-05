@@ -19,6 +19,7 @@ async function mountMenuButton(
     split?: boolean
     disabled?: boolean
     variant?: string
+    preset?: string
     size?: string
     content?: string
   } = {},
@@ -38,6 +39,9 @@ async function mountMenuButton(
   }
   if (params.variant) {
     menu.variant = params.variant as CVMenuButton['variant']
+  }
+  if (params.preset) {
+    menu.preset = params.preset as CVMenuButton['preset']
   }
   if (params.size) {
     menu.size = params.size as CVMenuButton['size']
@@ -315,6 +319,25 @@ describe('cv-menu-button', () => {
     expect(parseFloat(menuBox.style.top)).toBeCloseTo(40, 3)
   })
 
+  it('supports centered popup alignment', async () => {
+    const {menu, trigger, base, menuBox} = await mountMenuButton()
+    vi.spyOn(globalThis, 'requestAnimationFrame').mockImplementation((callback: FrameRequestCallback) => {
+      callback(0)
+      return 1
+    })
+    Object.defineProperty(window, 'innerWidth', {configurable: true, value: 400})
+    Object.defineProperty(window, 'innerHeight', {configurable: true, value: 480})
+    menu.style.setProperty('--cv-menu-button-menu-align', 'center')
+
+    mockRect(base!, {left: 140, top: 120, width: 40, height: 36})
+    mockRect(menuBox, {left: 0, top: 0, width: 180, height: 100})
+
+    trigger!.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+    await settle(menu)
+
+    expect(parseFloat(menuBox.style.left)).toBeCloseTo(-70, 3)
+  })
+
   it('uses the trigger width as the floor for popup min-width without stretching to the viewport', async () => {
     const {menu, trigger, base, menuBox} = await mountMenuButton()
     vi.spyOn(globalThis, 'requestAnimationFrame').mockImplementation((callback: FrameRequestCallback) => {
@@ -332,6 +355,16 @@ describe('cv-menu-button', () => {
 
     expect(menuBox.style.minWidth).toBe('240px')
     expect(parseFloat(menuBox.style.left)).toBeCloseTo(0, 3)
+  })
+
+  it('mirrors customized menu item gap into the portal', async () => {
+    const {menu, trigger} = await mountMenuButton()
+    menu.style.setProperty('--cv-menu-item-gap', '14px')
+
+    trigger!.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+    await settle(menu)
+
+    expect(getPortal()?.style.getPropertyValue('--cv-menu-item-gap')).toBe('14px')
   })
 
   describe('slots', () => {
@@ -521,6 +554,16 @@ describe('cv-menu-button', () => {
     it('defaults to default variant', async () => {
       const {menu} = await mountMenuButton()
       expect(menu.variant).toBe('default')
+    })
+
+    it('reflects preset attribute', async () => {
+      const {menu} = await mountMenuButton({preset: 'icon-overflow'})
+      expect(menu.getAttribute('preset')).toBe('icon-overflow')
+    })
+
+    it('defaults to no preset', async () => {
+      const {menu} = await mountMenuButton()
+      expect(menu.preset).toBeUndefined()
     })
   })
 

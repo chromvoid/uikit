@@ -338,8 +338,8 @@ describe('createDialogController', () => {
     expect(dialog.closeOnEscape).toBe(false)
     expect(dialog.closeOnOutsidePointer).toBe(false)
     expect(dialog.closeOnOutsideFocus).toBe(false)
-    expect(dialog.style.getPropertyValue('--cv-dialog-width')).toBe('640px')
-    expect(dialog.style.getPropertyValue('--cv-bottom-sheet-width')).toBe('640px')
+    expect(dialog.style.getPropertyValue('--cv-dialog-width')).toBe('var(--cv-dialog-width-l)')
+    expect(dialog.style.getPropertyValue('--cv-bottom-sheet-width')).toBe('var(--cv-dialog-width-l)')
     expect(dialog.style.getPropertyValue('--cv-dialog-z-index')).toBe('1100')
     expect(dialog.style.getPropertyValue('--cv-bottom-sheet-z-index')).toBe('1100')
 
