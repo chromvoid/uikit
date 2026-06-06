@@ -459,7 +459,11 @@ export class CVMenuButton extends ReatomLitElement {
   }
 
   private getMenuItemProperty(source: CSSStyleDeclaration | null, name: string, fallback: string): string {
-    return source?.getPropertyValue(name).trim() || getComputedStyle(this).getPropertyValue(name).trim() || fallback
+    return (
+      source?.getPropertyValue(name).trim() ||
+      getComputedStyle(this).getPropertyValue(name).trim() ||
+      fallback
+    )
   }
 
   private applyMenuLayout(menu: HTMLElement, base: HTMLElement): void {
@@ -838,7 +842,10 @@ export class CVMenuButton extends ReatomLitElement {
     portal.style.overflowY = source?.overflowY || 'auto'
     portal.style.pointerEvents = 'auto'
     portal.style.zIndex = source?.zIndex || this.getMenuZIndex()
-    portal.style.setProperty('--cv-menu-item-gap', this.getMenuItemProperty(source, '--cv-menu-item-gap', '10px'))
+    portal.style.setProperty(
+      '--cv-menu-item-gap',
+      this.getMenuItemProperty(source, '--cv-menu-item-gap', '10px'),
+    )
     portal.style.setProperty(
       '--cv-menu-item-padding-block',
       this.getMenuItemProperty(source, '--cv-menu-item-padding-block', '10px'),

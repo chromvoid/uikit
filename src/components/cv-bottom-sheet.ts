@@ -115,8 +115,9 @@ export class CVBottomSheet extends ReatomLitElement {
       --cv-bottom-sheet-available-height: max(
         0px,
         calc(
-          var(--cv-bottom-sheet-visible-viewport-block-size) - var(--cv-bottom-sheet-overlay-block-start) -
-            var(--cv-bottom-sheet-safe-bottom-inset)
+          var(--cv-bottom-sheet-visible-viewport-block-size) - var(
+              --cv-bottom-sheet-overlay-block-start
+            ) - var(--cv-bottom-sheet-safe-bottom-inset)
         )
       );
       --cv-dialog-z-index: var(--cv-bottom-sheet-z-index, 40);
