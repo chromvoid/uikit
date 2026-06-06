@@ -100,16 +100,24 @@ export class CVBottomSheet extends ReatomLitElement {
         var(--cv-bottom-sheet-safe-top, 16px),
         env(safe-area-inset-top, 0px)
       );
+      --cv-bottom-sheet-safe-bottom-inset: var(
+        --cv-bottom-sheet-safe-bottom,
+        var(--safe-area-bottom-active, var(--safe-area-bottom, env(safe-area-inset-bottom, 0px)))
+      );
+      --cv-bottom-sheet-keyboard-bottom-inset: var(
+        --cv-bottom-sheet-keyboard-inset,
+        var(--visual-viewport-bottom-inset, 0px)
+      );
+      --cv-bottom-sheet-visible-viewport-block-size: var(--visual-viewport-block-size, 100dvh);
       --cv-bottom-sheet-overlay-block-end: calc(
-        var(
-            --cv-bottom-sheet-safe-bottom,
-            var(--safe-area-bottom-active, var(--safe-area-bottom, env(safe-area-inset-bottom, 0px)))
-          ) +
-          var(--cv-bottom-sheet-keyboard-inset, var(--visual-viewport-bottom-inset, 0px))
+        var(--cv-bottom-sheet-safe-bottom-inset) + var(--cv-bottom-sheet-keyboard-bottom-inset)
       );
       --cv-bottom-sheet-available-height: max(
         0px,
-        calc(100dvh - var(--cv-bottom-sheet-overlay-block-start) - var(--cv-bottom-sheet-overlay-block-end))
+        calc(
+          var(--cv-bottom-sheet-visible-viewport-block-size) - var(--cv-bottom-sheet-overlay-block-start) -
+            var(--cv-bottom-sheet-safe-bottom-inset)
+        )
       );
       --cv-dialog-z-index: var(--cv-bottom-sheet-z-index, 40);
       --cv-dialog-width: var(--cv-bottom-sheet-width, 100%);

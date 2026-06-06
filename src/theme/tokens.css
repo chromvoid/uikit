@@ -218,6 +218,33 @@ cv-theme-provider[mode='dark'] {
     var(--cv-color-border-glass) 82%,
     transparent 100%
   );
+  --cv-gradient-scroll-edge-mask-block-end: linear-gradient(
+    to bottom,
+    var(--cv-color-text) 0%,
+    var(--cv-color-text) calc(100% - var(--cv-scroll-edge-mask-block-size, 88px)),
+    var(--cv-color-text-muted) calc(100% - var(--cv-scroll-edge-mask-soft-stop, 48px)),
+    var(--cv-color-text-subtle) calc(100% - var(--cv-scroll-edge-mask-subtle-stop, 22px)),
+    transparent 100%
+  );
+  --cv-gradient-scroll-edge-mask-block-start: linear-gradient(
+    to bottom,
+    transparent 0%,
+    var(--cv-color-text-subtle) var(--cv-scroll-edge-mask-subtle-stop, 22px),
+    var(--cv-color-text-muted) var(--cv-scroll-edge-mask-soft-stop, 48px),
+    var(--cv-color-text) var(--cv-scroll-edge-mask-block-size, 88px),
+    var(--cv-color-text) 100%
+  );
+  --cv-gradient-scroll-edge-mask-block-both: linear-gradient(
+    to bottom,
+    transparent 0%,
+    var(--cv-color-text-subtle) var(--cv-scroll-edge-mask-subtle-stop, 22px),
+    var(--cv-color-text-muted) var(--cv-scroll-edge-mask-soft-stop, 48px),
+    var(--cv-color-text) var(--cv-scroll-edge-mask-block-size, 88px),
+    var(--cv-color-text) calc(100% - var(--cv-scroll-edge-mask-block-size, 88px)),
+    var(--cv-color-text-muted) calc(100% - var(--cv-scroll-edge-mask-soft-stop, 48px)),
+    var(--cv-color-text-subtle) calc(100% - var(--cv-scroll-edge-mask-subtle-stop, 22px)),
+    transparent 100%
+  );
   --cv-gradient-transparency-canvas:
     linear-gradient(45deg, var(--cv-color-surface) 25%, transparent 25%),
     linear-gradient(-45deg, var(--cv-color-surface) 25%, transparent 25%),

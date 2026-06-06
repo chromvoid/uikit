@@ -72,11 +72,19 @@ describe('cv-bottom-sheet', () => {
     expect(cssText).toContain('--cv-bottom-sheet-overlay-block-end: calc(')
     expect(cssText).toContain('--safe-area-bottom-active')
     expect(cssText).toContain('--cv-bottom-sheet-keyboard-inset')
-    expect(cssText).toContain(
-      'var(--cv-bottom-sheet-keyboard-inset, var(--visual-viewport-bottom-inset, 0px))',
+    expect(cssText).toContain('--cv-bottom-sheet-safe-bottom-inset')
+    expect(cssText).toContain('--cv-bottom-sheet-keyboard-bottom-inset')
+    expect(cssText).toContain('--cv-bottom-sheet-visible-viewport-block-size')
+    expect(cssText).toContain('var(--visual-viewport-block-size, 100dvh)')
+    expect(cssText).toMatch(
+      /--cv-bottom-sheet-keyboard-bottom-inset:\s*var\(\s*--cv-bottom-sheet-keyboard-inset,\s*var\(--visual-viewport-bottom-inset,\s*0px\)\s*\);/,
     )
+    expect(cssText).toContain(
+      'var(--cv-bottom-sheet-safe-bottom-inset) + var(--cv-bottom-sheet-keyboard-bottom-inset)',
+    )
+    expect(cssText).toContain('var(--cv-bottom-sheet-visible-viewport-block-size)')
     expect(cssText).toContain('transform: translateY(calc(0px - var(--cv-bottom-sheet-overlay-block-end)));')
-    expect(cssText).toContain('100dvh - var(--cv-bottom-sheet-overlay-block-start)')
+    expect(cssText).toContain('var(--cv-bottom-sheet-safe-bottom-inset)')
   })
 
   it('keeps the sheet footer in a reserved grid row while the body scrolls', () => {

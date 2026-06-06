@@ -69,6 +69,10 @@ The underlying dialog exports `trigger`, `overlay`, `content`, `header`, `title`
 | `--cv-bottom-sheet-grabber-color`    | `var(--cv-color-border-strong)`   | Grabber color                    |
 | `--cv-bottom-sheet-dismiss-duration` | `180ms`                           | Drag dismiss transition duration |
 
+When available, the app-level `--visual-viewport-block-size` token supplies the visible viewport
+height used for sheet sizing while software keyboards are open. Keyboard clearance still flows
+through `--cv-bottom-sheet-keyboard-inset` / `--visual-viewport-bottom-inset`.
+
 `cv-bottom-sheet` composes with `cv-dialog` presence state by overriding dialog content motion variables. The sheet uses bottom-up `translateY(...)` transforms for open, close, drag, detent, and dismiss states instead of the centered dialog scale transform.
 
 ## Events
