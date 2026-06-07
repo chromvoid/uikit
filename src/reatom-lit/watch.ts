@@ -20,20 +20,26 @@ class AtomDirective extends AsyncDirective {
   }
 
   override disconnected() {
-    this.unsubscribe?.()
+    this.unsubscribeCurrent()
   }
 
-  subscribe() {
+  private unsubscribeCurrent() {
+    this.unsubscribe?.()
+    this.unsubscribe = undefined
+  }
+
+  private subscribe() {
     if (!this.target || !this.frame) return
 
+    this.unsubscribeCurrent()
     this.unsubscribe = this.frame.run(() => this.target!.subscribe((v: unknown) => this.setValue(v)))
   }
 
   render(target: AtomLike, frame: Frame) {
-    this.frame ??= frame
+    this.frame = frame
 
     if (this.target !== target) {
-      this.unsubscribe?.()
+      this.unsubscribeCurrent()
       this.target = target
 
       if (this.isConnected) {
@@ -41,7 +47,15 @@ class AtomDirective extends AsyncDirective {
       }
 
       Promise.resolve().then(() => {
-        this.frame!.run(() => this.setValue(target()))
+        if (!this.isConnected || this.target !== target || this.frame !== frame) {
+          return
+        }
+
+        frame.run(() => {
+          if (this.isConnected && this.target === target) {
+            this.setValue(target())
+          }
+        })
       })
     }
 

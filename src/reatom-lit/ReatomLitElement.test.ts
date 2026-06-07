@@ -76,6 +76,22 @@ class WatchPartHostElement extends ReatomLitElement {
   }
 }
 
+class WatchTargetSwitchHostElement extends ReatomLitElement {
+  static {
+    if (!customElements.get('test-reatom-watch-target-switch-host')) {
+      customElements.define('test-reatom-watch-target-switch-host', this)
+    }
+  }
+
+  readonly first$ = atom('first')
+  readonly second$ = atom('second')
+  useSecond = false
+
+  protected override render() {
+    return html`<span part="value">${watch(this.useSecond ? this.second$ : this.first$)}</span>`
+  }
+}
+
 class LifecycleBaseElement extends LitElement {
   connectedCalls = 0
   disconnectedCalls = 0
@@ -210,6 +226,21 @@ describe('ReatomLitElement reactive rendering contract', () => {
     expect(control?.checked).toBe(true)
     expect(control?.disabled).toBe(true)
     expect(element.renderCount).toBe(1)
+  })
+
+  it('ignores stale scheduled watch values after target replacement', async () => {
+    const element = document.createElement(
+      'test-reatom-watch-target-switch-host',
+    ) as WatchTargetSwitchHostElement
+    document.body.append(element)
+    await element.updateComplete
+
+    element.useSecond = true
+    element.requestUpdate()
+    await settle(element)
+
+    const value = element.shadowRoot?.querySelector('[part="value"]')
+    expect(value?.textContent?.trim()).toBe('second')
   })
 
   it('mounts and unmounts wrapped subscriptions while preserving base lifecycle hooks', async () => {
