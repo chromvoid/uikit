@@ -43,6 +43,7 @@ export class ReatomLitElement extends LitElement {
   private __frame: Frame
   private __abstractRender?: AbstractRender<PropertyValues | undefined, unknown>
   private __unmount?: Unsubscribe
+  private __hasRenderedWithReatom = false
   private [__aliased_event_dispatch] = false
 
   constructor() {
@@ -62,7 +63,14 @@ export class ReatomLitElement extends LitElement {
         return this.requestUpdate(__inner_update, 1)
       },
       name: 'ReatomElement',
+      abortOnUnmount: false,
     })
+  }
+
+  private __mountAbstractRender() {
+    if (!this.isConnected || this.__unmount || !this.__hasRenderedWithReatom) return
+
+    this.__unmount = this.__abstractRender!.mount()
   }
 
   protected override render(): TemplateResult | unknown {
@@ -73,6 +81,7 @@ export class ReatomLitElement extends LitElement {
     this.__initAbstractRender()
 
     const {result: value} = this.__abstractRender!.render(changedProperties)
+    this.__hasRenderedWithReatom = true
     const hadOwnRender = Object.prototype.hasOwnProperty.call(this, 'render')
     const ownRenderDescriptor = hadOwnRender ? Object.getOwnPropertyDescriptor(this, 'render') : undefined
 
@@ -92,12 +101,14 @@ export class ReatomLitElement extends LitElement {
         delete (this as unknown as {render?: unknown}).render
       }
     }
+
+    this.__mountAbstractRender()
   }
 
   override connectedCallback(): void {
     super.connectedCallback()
     this.__initAbstractRender()
-    this.__unmount = this.__abstractRender!.mount()
+    this.__mountAbstractRender()
   }
 
   override disconnectedCallback(): void {

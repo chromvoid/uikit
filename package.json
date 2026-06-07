@@ -125,7 +125,7 @@
   },
   "dependencies": {
     "@chromvoid/headless-ui": "0.1.1",
-    "@reatom/core": "^1000.15.0"
+    "@reatom/core": "^1001.0.0"
   },
   "devDependencies": {
     "@types/node": "^24.11.0",

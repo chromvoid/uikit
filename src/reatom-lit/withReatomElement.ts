@@ -16,6 +16,7 @@ export const withReatomElement = <T extends Constructor<LitElement>>(superClass:
     private __changedProps?: PropertyValues
     private __abstractRender: AbstractRender<PropertyValues | undefined, unknown>
     private __unmount?: Unsubscribe
+    private __hasRenderedWithReatom = false
 
     // oxlint-disable-next-line typescript-eslint/no-explicit-any -- TypeScript mixin constructors must use any[].
     constructor(...args: any[]) {
@@ -39,11 +40,20 @@ export const withReatomElement = <T extends Constructor<LitElement>>(superClass:
           return this.requestUpdate(__inner_update, 1)
         },
         name: 'ReatomElement',
+        abortOnUnmount: false,
       })
     }
 
+    private __mountAbstractRender() {
+      if (!this.isConnected || this.__unmount || !this.__hasRenderedWithReatom) return
+
+      this.__unmount = this.__abstractRender.mount()
+    }
+
     override render() {
-      return this.__abstractRender.render(this.__changedProps).result
+      const {result} = this.__abstractRender.render(this.__changedProps)
+      this.__hasRenderedWithReatom = true
+      return result
     }
 
     override shouldUpdate(_changedProperties: PropertyValues): boolean {
@@ -56,7 +66,12 @@ export const withReatomElement = <T extends Constructor<LitElement>>(superClass:
 
     override connectedCallback(): void {
       super.connectedCallback()
-      this.__unmount = this.__abstractRender.mount()
+      this.__mountAbstractRender()
+    }
+
+    override updated(changedProperties: PropertyValues): void {
+      super.updated(changedProperties)
+      this.__mountAbstractRender()
     }
 
     override disconnectedCallback(): void {

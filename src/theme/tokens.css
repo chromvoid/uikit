@@ -138,6 +138,12 @@ cv-theme-provider[mode='dark'] {
   --cv-color-active: hwb(186 0% 0% / 0.18);
   --cv-color-selected: hwb(186 0% 0% / 0.16);
   --cv-color-overlay: hwb(218 1.2% 94.5% / 0.72);
+  --cv-color-splash-bg: hwb(210 1.2% 97.3%);
+  --cv-color-splash-bg-start: hwb(214 2% 95.3%);
+  --cv-color-splash-bg-end: hwb(210 0.8% 98.4%);
+  --cv-color-splash-accent-glow: hwb(186 0% 0% / 0.025);
+  --cv-color-splash-grid-line: hwb(204 94.9% 3.1% / 0.018);
+  --cv-color-splash-grid-line-subtle: hwb(204 94.9% 3.1% / 0.014);
 
   --cv-color-media-mini-surface: hwb(217 6.3% 86.7%);
   --cv-color-media-mini-surface-start: hwb(215 7.8% 84.7%);
@@ -349,6 +355,22 @@ cv-theme-provider[mode='dark'] {
     180deg,
     var(--cv-color-media-mini-accent-surface) 0%,
     var(--cv-color-media-mini-surface-deep) 100%
+  );
+  --cv-gradient-splash-screen:
+    radial-gradient(circle at 50% 50%, var(--cv-color-splash-accent-glow), transparent 32%),
+    linear-gradient(
+      180deg,
+      var(--cv-color-splash-bg-start) 0%,
+      var(--cv-color-splash-bg) 52%,
+      var(--cv-color-splash-bg-end) 100%
+    );
+  --cv-gradient-splash-grid:
+    linear-gradient(var(--cv-color-splash-grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--cv-color-splash-grid-line-subtle) 1px, transparent 1px);
+  --cv-gradient-splash-grid-mask: radial-gradient(
+    circle at 50% 50%,
+    var(--cv-color-text-strongest) 0%,
+    transparent 72%
   );
 
   --cv-space-1: 4px;
