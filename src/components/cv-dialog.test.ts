@@ -82,7 +82,15 @@ describe('cv-dialog', () => {
       expect(stylesText).toMatch(
         /\[part='content'\][\s\S]*transition-property:\s*var\(--cv-dialog-content-transition-property/,
       )
-      expect(stylesText).toMatch(/@starting-style[\s\S]*\[part='overlay'\]\[data-state='open'\]::before/)
+      expect(stylesText).toMatch(
+        /\[part='content'\]\[data-state='opening'\],\s*\[part='content'\]\[data-state='open'\]\s*\{[\s\S]*opacity:\s*1;[\s\S]*transform:\s*var\(--cv-dialog-content-open-transform\);/,
+      )
+      expect(stylesText).toMatch(
+        /@starting-style[\s\S]*\[part='overlay'\]\[data-state='opening'\]::before,\s*\[part='overlay'\]\[data-state='open'\]::before/,
+      )
+      expect(stylesText).toMatch(
+        /@starting-style[\s\S]*\[part='content'\]\[data-state='opening'\],\s*\[part='content'\]\[data-state='open'\]/,
+      )
     })
 
     it('removes spatial dialog motion for reduced-motion users', () => {

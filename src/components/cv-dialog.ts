@@ -286,6 +286,7 @@ export class CVDialog extends ReatomLitElement {
         will-change: opacity, transform;
       }
 
+      [part='content'][data-state='opening'],
       [part='content'][data-state='open'] {
         opacity: 1;
         transform: var(--cv-dialog-content-open-transform);
@@ -381,10 +382,12 @@ export class CVDialog extends ReatomLitElement {
       }
 
       @starting-style {
+        [part='overlay'][data-state='opening']::before,
         [part='overlay'][data-state='open']::before {
           opacity: 0;
         }
 
+        [part='content'][data-state='opening'],
         [part='content'][data-state='open'] {
           opacity: 0;
           transform: var(--cv-dialog-content-closed-transform);
