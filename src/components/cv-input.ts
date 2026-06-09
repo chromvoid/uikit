@@ -7,6 +7,12 @@ import type {FormAssociatedValidity} from '../form-associated/withFormAssociated
 
 let cvInputNonce = 0
 
+function hasAssignedSlotContent(slot: HTMLSlotElement): boolean {
+  return slot
+    .assignedNodes({flatten: true})
+    .some((node) => node.nodeType === Node.ELEMENT_NODE || Boolean(node.textContent?.trim()))
+}
+
 type CVInputSize = 'small' | 'medium' | 'large'
 type CVInputVariant = 'outlined' | 'filled'
 type CVInputPreset = 'search-mobile'
@@ -76,6 +82,7 @@ export class CVInput extends FormAssociatedReatomElement {
   private defaultValue = ''
   private didCaptureDefaultValue = false
   private didAutoFocus = false
+  private hasLabelSlot = false
 
   constructor() {
     super()
@@ -171,6 +178,10 @@ export class CVInput extends FormAssociatedReatomElement {
       [part='form-control-label'] {
         display: block;
         margin-bottom: 5px;
+      }
+
+      [part='form-control-label'][hidden] {
+        display: none;
       }
 
       [part='form-control-help-text'] {
@@ -515,6 +526,14 @@ export class CVInput extends FormAssociatedReatomElement {
     this.requestUpdate()
   }
 
+  private handleLabelSlotChange(event: Event) {
+    const next = hasAssignedSlotContent(event.target as HTMLSlotElement)
+    if (this.hasLabelSlot === next) return
+
+    this.hasLabelSlot = next
+    this.requestUpdate()
+  }
+
   protected override render() {
     const inputProps = this.model.contracts.getInputProps()
     const clearButtonProps = this.model.contracts.getClearButtonProps()
@@ -526,7 +545,9 @@ export class CVInput extends FormAssociatedReatomElement {
       typeof this.maxlength === 'number' && Number.isFinite(this.maxlength) ? this.maxlength : null
 
     return html`
-      <span part="form-control-label"><slot name="label"></slot></span>
+      <span part="form-control-label" ?hidden=${!this.hasLabelSlot}>
+        <slot name="label" @slotchange=${this.handleLabelSlotChange}></slot>
+      </span>
       <div part="base" class="cv-u-control-shell">
         <span part="prefix" class="cv-u-icon-slot"><slot name="prefix"></slot></span>
         <input

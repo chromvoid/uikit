@@ -24,6 +24,8 @@ const getBase = (el: CVTextarea) => el.shadowRoot!.querySelector('[part="base"]'
 
 const getTextarea = (el: CVTextarea) =>
   el.shadowRoot!.querySelector('[part="textarea"]') as HTMLTextAreaElement
+const getLabel = (el: CVTextarea) =>
+  el.shadowRoot!.querySelector('[part="form-control-label"]') as HTMLElement
 
 const hasElementInternals =
   typeof (HTMLElement.prototype as {attachInternals?: unknown}).attachInternals === 'function'
@@ -52,10 +54,26 @@ describe('cv-textarea', () => {
 
     it('renders [part="form-control-label"] with slot[name="label"]', async () => {
       const el = await createTextarea()
-      const label = el.shadowRoot!.querySelector('[part="form-control-label"]')
+      const label = getLabel(el)
 
       expect(label).not.toBeNull()
       expect(label!.querySelector('slot[name="label"]')).not.toBeNull()
+    })
+
+    it('hides [part="form-control-label"] when the label slot is empty', async () => {
+      const el = await createTextarea()
+      expect(getLabel(el).hidden).toBe(true)
+    })
+
+    it('shows [part="form-control-label"] when the label slot has content', async () => {
+      const el = await createTextarea()
+      const labelContent = document.createElement('span')
+      labelContent.slot = 'label'
+      labelContent.textContent = 'Description'
+      el.append(labelContent)
+      await settle(el)
+
+      expect(getLabel(el).hidden).toBe(false)
     })
 
     it('renders [part="form-control-help-text"] with slot[name="help-text"]', async () => {

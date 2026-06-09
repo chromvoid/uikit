@@ -28,6 +28,8 @@ const getClearButton = (el: CVInput) => el.shadowRoot!.querySelector('[part="cle
 
 const getPasswordToggle = (el: CVInput) =>
   el.shadowRoot!.querySelector('[part="password-toggle"]') as HTMLElement
+const getLabel = (el: CVInput) =>
+  el.shadowRoot!.querySelector('[part="form-control-label"]') as HTMLElement
 
 afterEach(() => {
   document.body.innerHTML = ''
@@ -89,10 +91,26 @@ describe('cv-input', () => {
 
     it('renders [part="form-control-label"] containing slot[name="label"]', async () => {
       const el = await createInput()
-      const label = el.shadowRoot!.querySelector('[part="form-control-label"]')
+      const label = getLabel(el)
       expect(label).not.toBeNull()
       const slot = label!.querySelector('slot[name="label"]')
       expect(slot).not.toBeNull()
+    })
+
+    it('hides [part="form-control-label"] when the label slot is empty', async () => {
+      const el = await createInput()
+      expect(getLabel(el).hidden).toBe(true)
+    })
+
+    it('shows [part="form-control-label"] when the label slot has content', async () => {
+      const el = await createInput()
+      const labelContent = document.createElement('span')
+      labelContent.slot = 'label'
+      labelContent.textContent = 'Email'
+      el.append(labelContent)
+      await settle(el)
+
+      expect(getLabel(el).hidden).toBe(false)
     })
 
     it('renders [part="form-control-help-text"] containing slot[name="help-text"]', async () => {

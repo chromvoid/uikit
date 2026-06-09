@@ -25,6 +25,12 @@ export interface CVNumberEventMap {
 
 let cvNumberNonce = 0
 
+function hasAssignedSlotContent(slot: HTMLSlotElement): boolean {
+  return slot
+    .assignedNodes({flatten: true})
+    .some((node) => node.nodeType === Node.ELEMENT_NODE || Boolean(node.textContent?.trim()))
+}
+
 export class CVNumber extends FormAssociatedReatomElement {
   static elementName = 'cv-number'
   static override hostDisplay = 'inline-block' as const
@@ -75,6 +81,7 @@ export class CVNumber extends FormAssociatedReatomElement {
   private model!: NumberModel
   private modelInitialized = false
   private _valueOnFocus: number | null = null
+  private hasLabelSlot = false
 
   constructor() {
     super()
@@ -180,6 +187,10 @@ export class CVNumber extends FormAssociatedReatomElement {
 
       [part='form-control-label'] {
         display: block;
+      }
+
+      [part='form-control-label'][hidden] {
+        display: none;
       }
 
       [part='form-control-help-text'] {
@@ -564,6 +575,14 @@ export class CVNumber extends FormAssociatedReatomElement {
     // cv-clear event is dispatched by the onClear callback in createModel
   }
 
+  private handleLabelSlotChange(event: Event) {
+    const next = hasAssignedSlotContent(event.target as HTMLSlotElement)
+    if (this.hasLabelSlot === next) return
+
+    this.hasLabelSlot = next
+    this.requestUpdate()
+  }
+
   // --- Render ---
 
   protected override render() {
@@ -579,7 +598,9 @@ export class CVNumber extends FormAssociatedReatomElement {
     const displayValue = draftText !== null ? draftText : String(this.model.state.value())
 
     return html`
-      <span part="form-control-label"><slot name="label"></slot></span>
+      <span part="form-control-label" ?hidden=${!this.hasLabelSlot}>
+        <slot name="label" @slotchange=${this.handleLabelSlotChange}></slot>
+      </span>
       <div part="base" class="cv-u-control-shell">
         <span part="prefix" class="cv-u-icon-slot"><slot name="prefix"></slot></span>
         <input

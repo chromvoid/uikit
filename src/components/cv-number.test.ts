@@ -88,6 +88,22 @@ describe('cv-number', () => {
       expect(slot).not.toBeNull()
     })
 
+    it('hides [part="form-control-label"] when the label slot is empty', async () => {
+      const el = await createNumber()
+      expect(getLabel(el).hidden).toBe(true)
+    })
+
+    it('shows [part="form-control-label"] when the label slot has content', async () => {
+      const el = await createNumber()
+      const labelContent = document.createElement('span')
+      labelContent.slot = 'label'
+      labelContent.textContent = 'Quantity'
+      el.append(labelContent)
+      await settle(el)
+
+      expect(getLabel(el).hidden).toBe(false)
+    })
+
     it('renders [part="form-control-help-text"] containing slot[name="help-text"]', async () => {
       const el = await createNumber()
       const helpText = getHelpText(el)
