@@ -79,6 +79,7 @@ describe('cv-radio', () => {
       expect(radio.checked).toBe(false)
       expect(radio.active).toBe(false)
       expect(radio.size).toBe('medium')
+      expect(radio.variant).toBe('default')
     })
   })
 
@@ -96,10 +97,11 @@ describe('cv-radio', () => {
       expect(radio.hasAttribute('active')).toBe(true)
     })
 
-    it('string attributes reflect: value, size', async () => {
-      const radio = await createRadio({value: 'opt-1', size: 'large'})
+    it('string attributes reflect: value, size, variant', async () => {
+      const radio = await createRadio({value: 'opt-1', size: 'large', variant: 'segmented'})
       expect(radio.getAttribute('value')).toBe('opt-1')
       expect(radio.getAttribute('size')).toBe('large')
+      expect(radio.getAttribute('variant')).toBe('segmented')
     })
 
     it('boolean attributes absent when false', async () => {
@@ -235,6 +237,15 @@ describe('cv-radio', () => {
       radio.size = 'large'
       await settle(radio)
       expect(radio.getAttribute('size')).toBe('large')
+    })
+
+    it('changing variant at runtime updates attribute', async () => {
+      const radio = await createRadio()
+      expect(radio.getAttribute('variant')).toBe('default')
+
+      radio.variant = 'segmented'
+      await settle(radio)
+      expect(radio.getAttribute('variant')).toBe('segmented')
     })
   })
 })

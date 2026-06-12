@@ -98,6 +98,7 @@ declare global {
       | import('./cv-checkbox').CVCheckboxChangeEvent
       | import('./cv-input').CVInputChangeEvent
       | import('./cv-number').CVNumberChangeEvent
+      | import('./cv-radio-group').CVRadioGroupChangeEvent
       | import('./cv-select').CVSelectChangeEvent
       | import('./cv-sidebar').CVSidebarChangeEvent
       | import('./cv-slider').CVSliderChangeEvent
@@ -128,6 +129,7 @@ declare global {
     'cv-input':
       | import('./cv-checkbox').CVCheckboxInputEvent
       | import('./cv-input').CVInputInputEvent
+      | import('./cv-radio-group').CVRadioGroupInputEvent
       | import('./cv-select').CVSelectInputEvent
       | import('./cv-sidebar').CVSidebarInputEvent
       | import('./cv-slider').CVSliderInputEvent

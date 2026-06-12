@@ -911,4 +911,55 @@ describe('cv-input', () => {
       expect(formData.get('field')).toBeNull()
     })
   })
+
+  describe('host pointerdown keyboard continuity', () => {
+    const dispatchHostPointerDown = (el: CVInput, target: HTMLElement): PointerEvent => {
+      const event = new Event('pointerdown', {bubbles: true, composed: true, cancelable: true}) as PointerEvent
+      target.dispatchEvent(event)
+      return event
+    }
+
+    it('claims a label-area tap and focuses the inner input while another field is focused', async () => {
+      const other = document.createElement('input')
+      document.body.append(other)
+      other.focus()
+
+      const el = await createInput()
+      const event = dispatchHostPointerDown(el, getLabel(el))
+
+      expect(event.defaultPrevented).toBe(true)
+      expect(el.shadowRoot!.activeElement).toBe(getInput(el))
+    })
+
+    it('does not intercept when no editable element holds focus', async () => {
+      const el = await createInput()
+      const event = dispatchHostPointerDown(el, getLabel(el))
+
+      expect(event.defaultPrevented).toBe(false)
+      expect(el.shadowRoot!.activeElement).toBeNull()
+    })
+
+    it('does not intercept taps landing on the inner input itself', async () => {
+      const other = document.createElement('input')
+      document.body.append(other)
+      other.focus()
+
+      const el = await createInput()
+      const event = dispatchHostPointerDown(el, getInput(el))
+
+      expect(event.defaultPrevented).toBe(false)
+    })
+
+    it('does not intercept when disabled', async () => {
+      const other = document.createElement('input')
+      document.body.append(other)
+      other.focus()
+
+      const el = await createInput({disabled: true})
+      const event = dispatchHostPointerDown(el, getLabel(el))
+
+      expect(event.defaultPrevented).toBe(false)
+      expect(document.activeElement).toBe(other)
+    })
+  })
 })

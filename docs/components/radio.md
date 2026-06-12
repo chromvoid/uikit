@@ -46,6 +46,11 @@ This document is the UIKit surface contract for Radio Group.
   </cv-radio>
   <cv-radio value="other">Other option</cv-radio>
 </cv-radio-group>
+
+<cv-radio-group variant="segmented" value="login" aria-label="Entry type">
+  <cv-radio value="login">Login</cv-radio>
+  <cv-radio value="payment_card">Payment card</cv-radio>
+</cv-radio-group>
 ```
 
 ## Anatomy
@@ -58,12 +63,13 @@ This document is the UIKit surface contract for Radio Group.
 
 ## Attributes
 
-| Attribute     | Type    | Default        | Description                           |
-| ------------- | ------- | -------------- | ------------------------------------- |
-| `value`       | String  | `""`           | Value of the currently selected radio |
-| `orientation` | String  | `"horizontal"` | Layout: `horizontal` \| `vertical`    |
-| `disabled`    | Boolean | `false`        | Prevents interaction for all radios   |
-| `aria-label`  | String  | `""`           | Accessible label for the group        |
+| Attribute     | Type    | Default        | Description                                      |
+| ------------- | ------- | -------------- | ------------------------------------------------ |
+| `value`       | String  | `""`           | Value of the currently selected radio            |
+| `orientation` | String  | `"horizontal"` | Layout: `horizontal` \| `vertical`               |
+| `variant`     | String  | `"default"`    | Visual variant: `default` \| `segmented`         |
+| `disabled`    | Boolean | `false`        | Prevents interaction for all radios              |
+| `aria-label`  | String  | `""`           | Accessible label for the group                   |
 
 ## Slots
 
@@ -89,6 +95,7 @@ This document is the UIKit surface contract for Radio Group.
 | --------------------------------- | ------------------------------------ |
 | `:host([disabled])`               | All child radios are non-interactive |
 | `:host([orientation="vertical"])` | Items stacked vertically             |
+| `:host([variant="segmented"])`    | Segmented-control visual treatment   |
 
 ## Reactive State Mapping
 
@@ -100,6 +107,7 @@ This document is the UIKit surface contract for Radio Group.
 | `disabled`     | attr → action | `actions.setDisabled(value)`                                               |
 | `orientation`  | attr → option | passed as `orientation` in `createRadioGroup(options)`                     |
 | `aria-label`   | attr → option | passed as `ariaLabel` in `createRadioGroup(options)`                       |
+| `variant`      | attr → child  | reflected to child `cv-radio[variant]`; not part of headless state         |
 
 | Headless State       | Direction    | DOM Reflection                                               |
 | -------------------- | ------------ | ------------------------------------------------------------ |
@@ -140,13 +148,14 @@ Individual radio option within a radio group. Purely presentational — all stat
 
 #### Attributes
 
-| Attribute  | Type    | Default    | Description                                            |
-| ---------- | ------- | ---------- | ------------------------------------------------------ |
-| `value`    | String  | `""`       | Unique identifier for this radio option                |
-| `disabled` | Boolean | `false`    | Prevents interaction for this radio                    |
-| `checked`  | Boolean | `false`    | Whether this radio is selected (managed by group)      |
-| `active`   | Boolean | `false`    | Whether this radio has roving focus (managed by group) |
-| `size`     | String  | `"medium"` | Size: `small` \| `medium` \| `large`                   |
+| Attribute  | Type    | Default     | Description                                            |
+| ---------- | ------- | ----------- | ------------------------------------------------------ |
+| `value`    | String  | `""`        | Unique identifier for this radio option                |
+| `disabled` | Boolean | `false`     | Prevents interaction for this radio                    |
+| `checked`  | Boolean | `false`     | Whether this radio is selected (managed by group)      |
+| `active`   | Boolean | `false`     | Whether this radio has roving focus (managed by group) |
+| `size`     | String  | `"medium"`  | Size: `small` \| `medium` \| `large`                   |
+| `variant`  | String  | `"default"` | Visual variant: `default` \| `segmented`               |
 
 #### Sizes
 
@@ -191,6 +200,7 @@ Individual radio option within a radio group. Purely presentational — all stat
 | `:host(:focus-visible)` | Focus ring on the host element                  |
 | `:host([size="small"])` | Small size overrides                            |
 | `:host([size="large"])` | Large size overrides                            |
+| `:host([variant="segmented"])` | Button-like segmented radio without circular indicator |
 
 #### Events
 
@@ -206,5 +216,6 @@ None. All events are dispatched by the parent `cv-radio-group`.
 | Navigation          | arrow keys with wrapping, Home/End  | delegated to headless `handleKeyDown`             |
 | Description linkage | `describedBy` on `RadioGroupItem`   | `description` slot with `aria-describedby`        |
 | Size                | not applicable                      | `small` \| `medium` \| `large` on radio           |
+| Variant             | not applicable                      | `default` \| `segmented` visual variant           |
 | Orientation         | `orientation` option                | `orientation` attribute on group                  |
 | Events              | N/A (actions/state API)             | `cv-input` / `cv-change` with `{value, activeId}` |

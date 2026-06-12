@@ -1,6 +1,7 @@
 import {LitElement, css, html} from 'lit'
 
 export type CVRadioSize = 'small' | 'medium' | 'large'
+export type CVRadioVariant = 'default' | 'segmented'
 
 export class CVRadio extends LitElement {
   static elementName = 'cv-radio'
@@ -12,6 +13,7 @@ export class CVRadio extends LitElement {
       checked: {type: Boolean, reflect: true},
       active: {type: Boolean, reflect: true},
       size: {type: String, reflect: true},
+      variant: {type: String, reflect: true},
     }
   }
 
@@ -20,6 +22,7 @@ export class CVRadio extends LitElement {
   declare checked: boolean
   declare active: boolean
   declare size: CVRadioSize
+  declare variant: CVRadioVariant
 
   constructor() {
     super()
@@ -28,6 +31,7 @@ export class CVRadio extends LitElement {
     this.checked = false
     this.active = false
     this.size = 'medium'
+    this.variant = 'default'
   }
 
   static styles = [
@@ -113,6 +117,39 @@ export class CVRadio extends LitElement {
       :host(:focus-visible) .radio {
         outline: 2px solid var(--cv-color-primary, #65d7ff);
         outline-offset: 1px;
+      }
+
+      :host([variant='segmented']) .radio {
+        min-block-size: 34px;
+        padding: 0 var(--cv-space-3, 12px);
+        border: 1px solid transparent;
+        border-radius: var(--cv-radius-sm, 6px);
+        cursor: pointer;
+      }
+
+      :host([variant='segmented']) .indicator {
+        display: none;
+      }
+
+      :host([variant='segmented'][active]) .radio {
+        border-color: color-mix(
+          in oklab,
+          var(--cv-color-primary, #65d7ff) 48%,
+          var(--cv-color-border, #2a3245)
+        );
+      }
+
+      :host([variant='segmented'][checked]) .radio {
+        border-color: color-mix(
+          in oklab,
+          var(--cv-color-primary, #65d7ff) 64%,
+          var(--cv-color-border, #2a3245)
+        );
+        background: var(--cv-color-primary-surface);
+      }
+
+      :host([variant='segmented'][disabled]) .radio {
+        cursor: not-allowed;
       }
     `,
   ]

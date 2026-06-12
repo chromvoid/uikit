@@ -4,6 +4,7 @@ import type {PropertyValues} from 'lit'
 
 import {FormAssociatedReatomElement} from '../form-associated/FormAssociatedReatomElement'
 import type {FormAssociatedValidity} from '../form-associated/withFormAssociated'
+import {hasTextEditableFocus} from './focus-utils'
 
 let cvTextareaNonce = 0
 
@@ -221,6 +222,34 @@ export class CVTextarea extends FormAssociatedReatomElement {
     if (!this.didCaptureDefaultValue) {
       this.defaultValue = this.value
       this.didCaptureDefaultValue = true
+    }
+    this.addEventListener('pointerdown', this.handleHostPointerDown)
+  }
+
+  override disconnectedCallback(): void {
+    super.disconnectedCallback()
+    this.removeEventListener('pointerdown', this.handleHostPointerDown)
+  }
+
+  // A tap on the label/shell padding hits non-editable content, so the WebView
+  // hides the IME before focus reaches the inner textarea — a visible keyboard
+  // flash when moving between fields. Claim the tap and focus the textarea
+  // synchronously instead, so the IME sees an input-to-input transition.
+  // Only intercepts while some field already holds focus: with the keyboard
+  // down, the default flow must stay intact (a scroll gesture starting on the
+  // field must not pop the keyboard open).
+  private handleHostPointerDown = (event: PointerEvent): void => {
+    if (this.isEffectivelyDisabled()) return
+    if (!hasTextEditableFocus()) return
+
+    const textarea = this.shadowRoot?.querySelector('[part="textarea"]') as HTMLTextAreaElement | null
+    if (!textarea || event.composedPath().includes(textarea)) return
+
+    event.preventDefault()
+    try {
+      textarea.focus({preventScroll: true})
+    } catch {
+      textarea.focus()
     }
   }
 

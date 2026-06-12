@@ -19,6 +19,7 @@ async function mountContextMenu(
   params: {
     closeOnSelect?: boolean
     closeOnOutsidePointer?: boolean
+    closeOnScroll?: boolean
     ariaLabel?: string
   } = {},
 ) {
@@ -28,6 +29,9 @@ async function mountContextMenu(
   }
   if (params.closeOnOutsidePointer === false) {
     menu.closeOnOutsidePointer = false
+  }
+  if (params.closeOnScroll) {
+    menu.closeOnScroll = true
   }
   if (params.ariaLabel) {
     menu.ariaLabel = params.ariaLabel
@@ -121,6 +125,7 @@ describe('cv-context-menu', () => {
       expect(menu.anchorY).toBe(0)
       expect(menu.closeOnSelect).toBe(true)
       expect(menu.closeOnOutsidePointer).toBe(true)
+      expect(menu.closeOnScroll).toBe(false)
     })
   })
 
@@ -168,6 +173,11 @@ describe('cv-context-menu', () => {
     it('close-on-outside-pointer attribute reflects to DOM', async () => {
       const {menu} = await mountContextMenu()
       expect(menu.hasAttribute('close-on-outside-pointer')).toBe(true)
+    })
+
+    it('close-on-scroll attribute reflects to DOM when enabled', async () => {
+      const {menu} = await mountContextMenu({closeOnScroll: true})
+      expect(menu.hasAttribute('close-on-scroll')).toBe(true)
     })
   })
 
@@ -334,15 +344,15 @@ describe('cv-context-menu', () => {
       expect(menuBox.hidden).toBe(false)
     })
 
-    it('updates CSS custom properties for positioning', async () => {
+    it('updates host CSS custom properties for positioning without template inline style', async () => {
       const {menu, target, menuBox} = await mountContextMenu()
 
       target.dispatchEvent(new MouseEvent('contextmenu', {bubbles: true, clientX: 150, clientY: 250}))
       await settle(menu)
 
-      const style = menuBox.getAttribute('style') || ''
-      expect(style).toContain('150px')
-      expect(style).toContain('250px')
+      expect(menuBox.hasAttribute('style')).toBe(false)
+      expect(menu.style.getPropertyValue('--cv-context-menu-x')).toBe('150px')
+      expect(menu.style.getPropertyValue('--cv-context-menu-y')).toBe('250px')
     })
   })
 
@@ -633,6 +643,32 @@ describe('cv-context-menu', () => {
       expect(menu.open).toBe(true)
     })
 
+    it('closes on scroll when closeOnScroll=true', async () => {
+      const {menu, target} = await mountContextMenu({closeOnScroll: true})
+
+      target.dispatchEvent(new MouseEvent('contextmenu', {bubbles: true, clientX: 10, clientY: 10}))
+      await settle(menu)
+      expect(menu.open).toBe(true)
+
+      document.dispatchEvent(new Event('scroll'))
+      await settle(menu)
+
+      expect(menu.open).toBe(false)
+    })
+
+    it('keeps the menu open on scroll by default', async () => {
+      const {menu, target} = await mountContextMenu()
+
+      target.dispatchEvent(new MouseEvent('contextmenu', {bubbles: true, clientX: 10, clientY: 10}))
+      await settle(menu)
+      expect(menu.open).toBe(true)
+
+      document.dispatchEvent(new Event('scroll'))
+      await settle(menu)
+
+      expect(menu.open).toBe(true)
+    })
+
     it('closes on Escape key', async () => {
       const {menu, target, menuBox} = await mountContextMenu()
 
@@ -754,6 +790,32 @@ describe('cv-context-menu', () => {
       const {items} = await mountContextMenu()
       const enabledItem = items.find((item) => item.value === 'copy')!
       expect(enabledItem.hasAttribute('aria-disabled')).toBe(false)
+    })
+
+    it('ignores inert separators during item navigation', async () => {
+      const menu = document.createElement('cv-context-menu') as CVContextMenu
+      menu.innerHTML = `
+        <div slot="target">Right-click here</div>
+        <cv-menu-item value="copy">Copy</cv-menu-item>
+        <div role="separator" aria-hidden="true"></div>
+        <cv-menu-item value="paste">Paste</cv-menu-item>
+      `
+      document.body.append(menu)
+      await settle(menu)
+
+      const target = getTarget(menu)
+      const menuBox = getMenuBox(menu)
+      const items = Array.from(menu.querySelectorAll('cv-menu-item')) as CVMenuItem[]
+
+      target.dispatchEvent(new MouseEvent('contextmenu', {bubbles: true, clientX: 10, clientY: 10}))
+      await settle(menu)
+
+      menuBox.dispatchEvent(new KeyboardEvent('keydown', {key: 'ArrowDown', bubbles: true}))
+      menuBox.dispatchEvent(new KeyboardEvent('keydown', {key: 'ArrowDown', bubbles: true}))
+      await settle(menu)
+
+      expect(items).toHaveLength(2)
+      expect(items[1]!.active).toBe(true)
     })
   })
 

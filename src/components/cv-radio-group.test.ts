@@ -1,7 +1,7 @@
 import {afterEach, describe, expect, it} from 'vitest'
 
 import {CVRadio} from './cv-radio'
-import {CVRadioGroup} from './cv-radio-group'
+import {CVRadioGroup, type CVRadioGroupChangeEvent} from './cv-radio-group'
 
 const settle = async (element: CVRadioGroup) => {
   await element.updateComplete
@@ -44,6 +44,7 @@ describe('cv-radio-group', () => {
     const {group, radios} = await mountRadioGroup()
 
     expect(group.getAttribute('role')).toBeNull()
+    expect(group.variant).toBe('default')
     expect(radios[0]!.getAttribute('role')).toBe('radio')
     expect(radios[0]!.getAttribute('tabindex')).toBe('0')
     expect(radios[0]!.getAttribute('aria-checked')).toBe('false')
@@ -63,7 +64,7 @@ describe('cv-radio-group', () => {
     })
 
     group.addEventListener('cv-change', (event) => {
-      changeEvents.push((event as CustomEvent<{value: string | null; activeId: string | null}>).detail)
+      changeEvents.push((event as CVRadioGroupChangeEvent).detail)
     })
 
     radios[0]!.dispatchEvent(new KeyboardEvent('keydown', {key: 'ArrowRight', bubbles: true}))
@@ -73,6 +74,22 @@ describe('cv-radio-group', () => {
     expect((group.querySelector('cv-radio[value="c"]') as CVRadio).checked).toBe(true)
     expect(inputEvents.at(-1)).toEqual({value: 'c', activeId: 'c'})
     expect(changeEvents.at(-1)).toEqual({value: 'c', activeId: 'c'})
+  })
+
+  it('reflects segmented variant and propagates it to child radios without changing ARIA', async () => {
+    const {group, radios} = await mountRadioGroup()
+
+    group.variant = 'segmented'
+    await settle(group)
+
+    expect(group.getAttribute('variant')).toBe('segmented')
+    expect(radios.map((radio) => radio.getAttribute('variant'))).toEqual([
+      'segmented',
+      'segmented',
+      'segmented',
+    ])
+    expect(radios[0]!.getAttribute('role')).toBe('radio')
+    expect(radios[0]!.hasAttribute('aria-checked')).toBe(true)
   })
 
   it('selects on click and keeps single selection state', async () => {

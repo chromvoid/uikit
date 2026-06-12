@@ -7,11 +7,15 @@ import type {FormAssociatedValidity} from '../form-associated/withFormAssociated
 import {CVRadio} from './cv-radio'
 
 type CVRadioGroupOrientation = 'horizontal' | 'vertical'
+type CVRadioGroupVariant = 'default' | 'segmented'
 
 export interface CVRadioGroupEventDetail {
   value: string | null
   activeId: string | null
 }
+
+export type CVRadioGroupInputEvent = CustomEvent<CVRadioGroupEventDetail>
+export type CVRadioGroupChangeEvent = CustomEvent<CVRadioGroupEventDetail>
 
 interface RadioRecord {
   id: string
@@ -42,6 +46,7 @@ export class CVRadioGroup extends FormAssociatedReatomElement {
       name: {type: String},
       value: {type: String, reflect: true},
       orientation: {type: String, reflect: true},
+      variant: {type: String, reflect: true},
       disabled: {type: Boolean, reflect: true},
       required: {type: Boolean, reflect: true},
       ariaLabel: {type: String, attribute: 'aria-label'},
@@ -51,6 +56,7 @@ export class CVRadioGroup extends FormAssociatedReatomElement {
   declare name: string
   declare value: string
   declare orientation: CVRadioGroupOrientation
+  declare variant: CVRadioGroupVariant
   declare disabled: boolean
   declare required: boolean
   declare ariaLabel: string
@@ -67,6 +73,7 @@ export class CVRadioGroup extends FormAssociatedReatomElement {
     this.name = ''
     this.value = ''
     this.orientation = 'horizontal'
+    this.variant = 'default'
     this.disabled = false
     this.required = false
     this.ariaLabel = ''
@@ -93,6 +100,14 @@ export class CVRadioGroup extends FormAssociatedReatomElement {
       :host([orientation='vertical']) [part='base'] {
         display: inline-grid;
         justify-items: start;
+      }
+
+      :host([variant='segmented']) {
+        --cv-radio-group-gap: 2px;
+      }
+
+      :host([variant='segmented']) [part='base'] {
+        padding: 2px;
       }
 
       [part='base']:focus-visible {
@@ -187,6 +202,7 @@ export class CVRadioGroup extends FormAssociatedReatomElement {
       changedProperties.has('required') ||
       changedProperties.has('name') ||
       changedProperties.has('orientation') ||
+      changedProperties.has('variant') ||
       changedProperties.has('ariaLabel')
     ) {
       this.syncFormAssociatedState()
@@ -341,6 +357,7 @@ export class CVRadioGroup extends FormAssociatedReatomElement {
 
       record.element.checked = props['aria-checked'] === 'true'
       record.element.disabled = props['aria-disabled'] === 'true'
+      record.element.variant = this.variant
     }
   }
 

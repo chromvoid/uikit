@@ -56,6 +56,7 @@ export class CVContextMenu extends ReatomLitElement {
       ariaLabel: {type: String, attribute: 'aria-label'},
       closeOnSelect: {type: Boolean, attribute: 'close-on-select', reflect: true},
       closeOnOutsidePointer: {type: Boolean, attribute: 'close-on-outside-pointer', reflect: true},
+      closeOnScroll: {type: Boolean, attribute: 'close-on-scroll', reflect: true},
       anchorX: {type: Number, attribute: 'anchor-x', reflect: true},
       anchorY: {type: Number, attribute: 'anchor-y', reflect: true},
     }
@@ -66,6 +67,7 @@ export class CVContextMenu extends ReatomLitElement {
   declare ariaLabel: string
   declare closeOnSelect: boolean
   declare closeOnOutsidePointer: boolean
+  declare closeOnScroll: boolean
   declare anchorX: number
   declare anchorY: number
 
@@ -93,6 +95,7 @@ export class CVContextMenu extends ReatomLitElement {
     this.ariaLabel = ''
     this.closeOnSelect = true
     this.closeOnOutsidePointer = true
+    this.closeOnScroll = false
     this.anchorX = 0
     this.anchorY = 0
   }
@@ -148,13 +151,14 @@ export class CVContextMenu extends ReatomLitElement {
       this.rebuildModelFromSlot(false, false)
     }
 
-    this.syncOutsidePointerListener()
+    this.syncPositionProperties()
+    this.syncDocumentListeners()
   }
 
   override disconnectedCallback(): void {
     super.disconnectedCallback()
     this.detachItemListeners()
-    this.syncOutsidePointerListener(true)
+    this.syncDocumentListeners(true)
   }
 
   override willUpdate(changedProperties: PropertyValues): void {
@@ -214,7 +218,8 @@ export class CVContextMenu extends ReatomLitElement {
 
   override updated(changedProperties: PropertyValues): void {
     super.updated(changedProperties)
-    this.syncOutsidePointerListener()
+    this.syncPositionProperties()
+    this.syncDocumentListeners()
 
     if (!changedProperties.has('open') && !changedProperties.has('value')) {
       this.syncItemElements()
@@ -320,6 +325,7 @@ export class CVContextMenu extends ReatomLitElement {
     this.open = this.model.state.isOpen()
     this.anchorX = this.model.state.anchorX()
     this.anchorY = this.model.state.anchorY()
+    this.syncPositionProperties()
 
     if (requestRender) {
       this.requestUpdate()
@@ -431,6 +437,7 @@ export class CVContextMenu extends ReatomLitElement {
     this.open = next.open
     this.anchorX = next.anchorX
     this.anchorY = next.anchorY
+    this.syncPositionProperties()
     this.syncItemElements()
 
     const valueChanged = previous.value !== nextValue
@@ -468,12 +475,19 @@ export class CVContextMenu extends ReatomLitElement {
     }
   }
 
-  private syncOutsidePointerListener(forceOff = false): void {
-    const shouldListen = !forceOff && this.open
-    if (shouldListen) {
+  private syncDocumentListeners(forceOff = false): void {
+    const shouldListenOutsidePointer = !forceOff && this.open && this.closeOnOutsidePointer
+    if (shouldListenOutsidePointer) {
       document.addEventListener('pointerdown', this.handleDocumentPointerDown)
     } else {
       document.removeEventListener('pointerdown', this.handleDocumentPointerDown)
+    }
+
+    const shouldListenScroll = !forceOff && this.open && this.closeOnScroll
+    if (shouldListenScroll) {
+      document.addEventListener('scroll', this.handleDocumentScroll, true)
+    } else {
+      document.removeEventListener('scroll', this.handleDocumentScroll, true)
     }
   }
 
@@ -486,6 +500,19 @@ export class CVContextMenu extends ReatomLitElement {
     const previous = this.captureState()
     this.model.actions.handleOutsidePointer()
     this.applyInteractionResult(previous)
+  }
+
+  private handleDocumentScroll = () => {
+    if (!this.model || !this.model.state.isOpen()) return
+
+    const previous = this.captureState()
+    this.model.actions.close()
+    this.applyInteractionResult(previous)
+  }
+
+  private syncPositionProperties(): void {
+    this.style.setProperty('--cv-context-menu-x', `${this.anchorX}px`)
+    this.style.setProperty('--cv-context-menu-y', `${this.anchorY}px`)
   }
 
   private handleTargetContextMenu(event: MouseEvent) {
@@ -624,7 +651,6 @@ export class CVContextMenu extends ReatomLitElement {
         aria-label=${menuProps['aria-label'] ?? nothing}
         data-anchor-x=${menuProps['data-anchor-x']}
         data-anchor-y=${menuProps['data-anchor-y']}
-        style=${`--cv-context-menu-x:${this.anchorX}px; --cv-context-menu-y:${this.anchorY}px;`}
         ?hidden=${menuProps.hidden}
         part="menu"
         @keydown=${this.handleMenuKeyDown}

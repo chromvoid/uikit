@@ -3,6 +3,7 @@ import {css, html, nothing} from 'lit'
 import type {PropertyValues} from 'lit'
 
 import {FormAssociatedReatomElement} from '../form-associated/FormAssociatedReatomElement'
+import {hasTextEditableFocus} from './focus-utils'
 
 type CVNumberSize = 'small' | 'medium' | 'large'
 type CVNumberVariant = 'outlined' | 'filled'
@@ -429,6 +430,38 @@ export class CVNumber extends FormAssociatedReatomElement {
 
   get type(): string {
     return 'cv-number'
+  }
+
+  override connectedCallback(): void {
+    super.connectedCallback()
+    this.addEventListener('pointerdown', this.handleHostPointerDown)
+  }
+
+  override disconnectedCallback(): void {
+    super.disconnectedCallback()
+    this.removeEventListener('pointerdown', this.handleHostPointerDown)
+  }
+
+  // A tap on the label/shell padding hits non-editable content, so the WebView
+  // hides the IME before focus reaches the inner input — a visible keyboard
+  // flash when moving between fields. Claim the tap and focus the input
+  // synchronously instead, so the IME sees an input-to-input transition.
+  // Only intercepts while some field already holds focus: with the keyboard
+  // down, the default flow must stay intact (a scroll gesture starting on the
+  // field must not pop the keyboard open).
+  private handleHostPointerDown = (event: PointerEvent): void => {
+    if (this.isEffectivelyDisabled()) return
+    if (!hasTextEditableFocus()) return
+
+    const input = this.shadowRoot?.querySelector('[part="input"]') as HTMLInputElement | null
+    if (!input || event.composedPath().includes(input)) return
+
+    event.preventDefault()
+    try {
+      input.focus({preventScroll: true})
+    } catch {
+      input.focus()
+    }
   }
 
   override focus(options?: FocusOptions): void {
