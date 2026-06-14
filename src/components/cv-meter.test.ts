@@ -264,6 +264,104 @@ describe('cv-meter', () => {
     })
   })
 
+  // --- Range normalization corner cases ---
+
+  describe('range normalization corner cases', () => {
+    it('zero-width range (min === max) yields 0% width without division blowup', async () => {
+      const meter = await createMeter({value: 50, min: 50, max: 50})
+      expect(getIndicator(meter).style.getPropertyValue('--cv-meter-width')).toBe('0%')
+      expect(getBase(meter).getAttribute('aria-valuenow')).toBe('50')
+    })
+
+    it('swaps min and max when min > max', async () => {
+      const meter = await createMeter({value: 25, min: 100, max: 0})
+      expect(getBase(meter).getAttribute('aria-valuemin')).toBe('0')
+      expect(getBase(meter).getAttribute('aria-valuemax')).toBe('100')
+      expect(getIndicator(meter).style.getPropertyValue('--cv-meter-width')).toBe('25%')
+    })
+
+    it('clamps initial value below min up to min', async () => {
+      const meter = await createMeter({value: -5, min: 10, max: 100})
+      expect(getBase(meter).getAttribute('aria-valuenow')).toBe('10')
+    })
+
+    it('swaps low and high thresholds when low > high', async () => {
+      const low = await createMeter({value: 10, low: 80, high: 20})
+      expect(getIndicator(low).getAttribute('data-status')).toBe('low')
+
+      const high = await createMeter({value: 90, low: 80, high: 20})
+      expect(getIndicator(high).getAttribute('data-status')).toBe('high')
+    })
+
+    it('ignores non-finite thresholds', async () => {
+      const meter = await createMeter({value: 0, low: Infinity, high: NaN})
+      expect(getIndicator(meter).getAttribute('data-status')).toBe('normal')
+    })
+
+    it('sanitizes a NaN initial value to min (no NaN aria/width)', async () => {
+      const meter = await createMeter({value: NaN, min: 10, max: 100})
+      expect(getBase(meter).getAttribute('aria-valuenow')).toBe('10')
+      expect(getIndicator(meter).style.getPropertyValue('--cv-meter-width')).toBe('0%')
+    })
+
+    it('sanitizes a NaN value set after mount to min', async () => {
+      const meter = await createMeter({value: 50, min: 0, max: 100})
+      expect(getBase(meter).getAttribute('aria-valuenow')).toBe('50')
+
+      meter.value = NaN
+      await settle(meter)
+
+      expect(getBase(meter).getAttribute('aria-valuenow')).toBe('0')
+      expect(getIndicator(meter).style.getPropertyValue('--cv-meter-width')).toBe('0%')
+    })
+
+    it('sanitizes an Infinity value to min', async () => {
+      const meter = await createMeter({value: Infinity, min: 0, max: 100})
+      const valueNow = getBase(meter).getAttribute('aria-valuenow') ?? ''
+      expect(valueNow).not.toBe('Infinity')
+      expect(valueNow).toBe('0')
+    })
+  })
+
+  // --- Optimum region semantics (native <meter>-like) ---
+
+  describe('optimum region semantics', () => {
+    it('optimum above high marks the high region as optimum', async () => {
+      const meter = await createMeter({value: 90, low: 20, high: 80, optimum: 90})
+      expect(getIndicator(meter).getAttribute('data-status')).toBe('optimum')
+    })
+
+    it('optimum below low marks the low region as optimum', async () => {
+      const meter = await createMeter({value: 5, low: 20, high: 80, optimum: 10})
+      expect(getIndicator(meter).getAttribute('data-status')).toBe('optimum')
+    })
+
+    it('value outside the optimum region falls back to its own region status', async () => {
+      const meter = await createMeter({value: 10, low: 20, high: 80, optimum: 90})
+      expect(getIndicator(meter).getAttribute('data-status')).toBe('low')
+    })
+  })
+
+  // --- value-text lifecycle ---
+
+  describe('value-text lifecycle', () => {
+    it('clearing value-text removes aria-valuetext', async () => {
+      const meter = await createMeter({valueText: '75% used'})
+      expect(getBase(meter).getAttribute('aria-valuetext')).toBe('75% used')
+
+      meter.valueText = ''
+      await settle(meter)
+      expect(getBase(meter).hasAttribute('aria-valuetext')).toBe(false)
+    })
+
+    it('updating value-text recreates the model and re-renders aria-valuetext', async () => {
+      const meter = await createMeter({valueText: 'half'})
+      meter.valueText = 'three quarters'
+      await settle(meter)
+      expect(getBase(meter).getAttribute('aria-valuetext')).toBe('three quarters')
+    })
+  })
+
   // --- Default slot (label content) ---
 
   describe('default slot', () => {

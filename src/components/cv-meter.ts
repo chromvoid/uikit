@@ -117,15 +117,25 @@ export class CVMeter extends ReatomLitElement {
       return
     }
 
-    if (changedProperties.has('value') && this.model.state.value() !== this.value) {
-      this.model.actions.setValue(this.value)
+    if (changedProperties.has('value')) {
+      const nextValue = this.sanitizeValue(this.value)
+      if (this.model.state.value() !== nextValue) {
+        this.model.actions.setValue(nextValue)
+      }
     }
+  }
+
+  // A non-finite `value` (NaN/Infinity) must not reach the headless model:
+  // `clamp(NaN, …)` returns NaN, which would surface as aria-valuenow="NaN"
+  // and --cv-meter-width:NaN%. Coerce non-finite input to the range minimum.
+  private sanitizeValue(value: number): number {
+    return Number.isFinite(value) ? value : Math.min(this.min, this.max)
   }
 
   private createModel(): MeterModel {
     return createMeter({
       idBase: this.idBase,
-      value: this.value,
+      value: this.sanitizeValue(this.value),
       min: this.min,
       max: this.max,
       low: this.toFiniteOrUndefined(this.low),
