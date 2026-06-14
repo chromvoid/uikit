@@ -1,4 +1,5 @@
-import {css} from 'lit'
+import {atom, computed} from '@reatom/core'
+import {css, type PropertyValues} from 'lit'
 
 import {html} from '../reatom-lit/index.js'
 import {ReatomLitElement} from '../reatom-lit/ReatomLitElement'
@@ -23,6 +24,27 @@ const DRAG_DISMISS_VELOCITY_PX_PER_MS = 0.75
 const DRAG_DETENT_DISTANCE_PX = 64
 const DRAG_DETENT_VELOCITY_PX_PER_MS = 0.5
 const DETENT_ORDER: CVBottomSheetDetent[] = ['collapsed', 'middle', 'expanded']
+const openBottomSheets = new Set<HTMLElement>()
+
+export const cvBottomSheetOpenCount = atom(0, 'cvBottomSheet.openCount')
+export const cvAnyBottomSheetOpen = computed(
+  () => cvBottomSheetOpenCount() > 0,
+  'cvBottomSheet.anyOpen',
+)
+
+function syncOpenBottomSheetRegistry(sheet: HTMLElement, open: boolean): void {
+  const previousCount = openBottomSheets.size
+
+  if (open) {
+    openBottomSheets.add(sheet)
+  } else {
+    openBottomSheets.delete(sheet)
+  }
+
+  if (openBottomSheets.size !== previousCount) {
+    cvBottomSheetOpenCount.set(openBottomSheets.size)
+  }
+}
 
 export class CVBottomSheet extends ReatomLitElement {
   static elementName = 'cv-bottom-sheet'
@@ -281,9 +303,23 @@ export class CVBottomSheet extends ReatomLitElement {
     }
   }
 
+  override connectedCallback(): void {
+    super.connectedCallback()
+    syncOpenBottomSheetRegistry(this, this.open)
+  }
+
   override disconnectedCallback(): void {
+    syncOpenBottomSheetRegistry(this, false)
     this.resetSheetDragState()
     super.disconnectedCallback()
+  }
+
+  override updated(changedProperties: PropertyValues<this>): void {
+    super.updated(changedProperties)
+
+    if (changedProperties.has('open')) {
+      syncOpenBottomSheetRegistry(this, this.open)
+    }
   }
 
   private getDialogElement(): HTMLElement | null {

@@ -1,6 +1,6 @@
 import {afterEach, describe, expect, it, vi} from 'vitest'
 
-import {CVBottomSheet} from './cv-bottom-sheet'
+import {CVBottomSheet, cvAnyBottomSheetOpen, cvBottomSheetOpenCount} from './cv-bottom-sheet'
 import type {CVDialog} from './cv-dialog'
 
 CVBottomSheet.define()
@@ -212,11 +212,43 @@ describe('cv-bottom-sheet', () => {
     expect(dialog.closable).toBe(false)
   })
 
+  it('tracks open sheet presence across property changes and disconnect', async () => {
+    expect(cvBottomSheetOpenCount()).toBe(0)
+    expect(cvAnyBottomSheetOpen()).toBe(false)
+
+    const first = await createBottomSheet({open: true, closeOnOutsideFocus: false})
+    const second = await createBottomSheet({closeOnOutsideFocus: false})
+
+    expect(cvBottomSheetOpenCount()).toBe(1)
+    expect(cvAnyBottomSheetOpen()).toBe(true)
+
+    second.open = true
+    await settle(second)
+
+    expect(cvBottomSheetOpenCount()).toBe(2)
+
+    first.open = false
+    await settle(first)
+
+    expect(cvBottomSheetOpenCount()).toBe(1)
+    expect(cvAnyBottomSheetOpen()).toBe(true)
+
+    second.remove()
+    await Promise.resolve()
+
+    expect(cvBottomSheetOpenCount()).toBe(0)
+    expect(cvAnyBottomSheetOpen()).toBe(false)
+  })
+
   it('closes from backdrop click through dialog outside-pointer behavior', async () => {
     const el = await createBottomSheet({open: true})
     const changes: unknown[] = []
     el.addEventListener('cv-change', (event) => changes.push((event as CustomEvent).detail))
 
+    // A genuine backdrop dismissal is a press-and-release on the overlay: the
+    // dialog now tracks the mousedown origin so a text-selection drag released
+    // over the overlay does not close it. Mirror a real backdrop click.
+    getDialogOverlay(el).dispatchEvent(new MouseEvent('mousedown', {bubbles: true, composed: true}))
     getDialogOverlay(el).dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
     await settle(el)
 
@@ -410,6 +442,163 @@ describe('cv-bottom-sheet', () => {
       {open: true, detent: 'collapsed'},
       {open: false, detent: 'collapsed'},
     ])
+  })
+
+  it('filters invalid detent tokens and falls back to the lowest enabled detent', async () => {
+    const el = await createBottomSheet({
+      open: true,
+      detents: 'bogus middle, collapsed',
+      detent: 'expanded',
+    })
+    const dialog = getDialog(el)
+
+    expect(dialog.classList.contains('has-detents')).toBe(true)
+    expect(dialog.classList.contains('detent-collapsed')).toBe(true)
+    expect(dialog.classList.contains('detent-expanded')).toBe(false)
+  })
+
+  it('treats detents made only of invalid tokens as no detents', async () => {
+    const el = await createBottomSheet({open: true, detents: 'bogus, nope'})
+    const dialog = getDialog(el)
+
+    expect(dialog.classList.contains('has-detents')).toBe(false)
+  })
+
+  it('ignores non-primary-button drags', async () => {
+    const el = await createBottomSheet({open: true})
+    const changes: unknown[] = []
+    const handle = getHandle(el)!
+    const dialog = getDialog(el)
+    el.addEventListener('cv-change', (event) => changes.push((event as CustomEvent).detail))
+
+    handle.dispatchEvent(createPointerEvent('pointerdown', {clientY: 0, button: 1}))
+    handle.dispatchEvent(createPointerEvent('pointermove', {clientY: 200, button: 1}))
+    handle.dispatchEvent(createPointerEvent('pointerup', {clientY: 200, button: 1}))
+
+    expect(el.open).toBe(true)
+    expect(changes).toEqual([])
+    expect(dialog.style.getPropertyValue('--cv-bottom-sheet-drag-offset')).toBe('')
+  })
+
+  it('ignores handle drags while the sheet is closed', async () => {
+    const el = await createBottomSheet()
+    const handle = getHandle(el)!
+    const dialog = getDialog(el)
+
+    handle.dispatchEvent(createPointerEvent('pointerdown', {clientY: 0}))
+    handle.dispatchEvent(createPointerEvent('pointermove', {clientY: 200}))
+
+    expect(dialog.classList.contains('is-dragging')).toBe(false)
+    expect(dialog.style.getPropertyValue('--cv-bottom-sheet-drag-offset')).toBe('')
+  })
+
+  it('ignores pointer moves from a different pointer than the active drag', async () => {
+    const el = await createBottomSheet({open: true})
+    const handle = getHandle(el)!
+    const dialog = getDialog(el)
+
+    handle.dispatchEvent(createPointerEvent('pointerdown', {clientY: 0, pointerId: 1}))
+    handle.dispatchEvent(createPointerEvent('pointermove', {clientY: 150, pointerId: 2}))
+
+    expect(dialog.style.getPropertyValue('--cv-bottom-sheet-drag-offset')).toBe('0px')
+
+    handle.dispatchEvent(createPointerEvent('pointerup', {clientY: 0, pointerId: 1}))
+  })
+
+  it('clamps upward drags to zero offset when no detents are enabled', async () => {
+    const el = await createBottomSheet({open: true})
+    const changes: unknown[] = []
+    const handle = getHandle(el)!
+    const dialog = getDialog(el)
+    el.addEventListener('cv-change', (event) => changes.push((event as CustomEvent).detail))
+
+    handle.dispatchEvent(createPointerEvent('pointerdown', {clientY: 100}))
+    handle.dispatchEvent(createPointerEvent('pointermove', {clientY: 40}))
+
+    expect(dialog.style.getPropertyValue('--cv-bottom-sheet-drag-offset')).toBe('0px')
+
+    handle.dispatchEvent(createPointerEvent('pointerup', {clientY: 40}))
+
+    expect(el.open).toBe(true)
+    expect(changes).toEqual([])
+  })
+
+  it('dismisses below the distance threshold when the flick is fast enough', async () => {
+    vi.useFakeTimers()
+    const el = await createBottomSheet({open: true})
+    const changes: unknown[] = []
+    const handle = getHandle(el)!
+    el.addEventListener('cv-change', (event) => changes.push((event as CustomEvent).detail))
+
+    handle.dispatchEvent(createPointerEvent('pointerdown', {clientY: 0}))
+    handle.dispatchEvent(createPointerEvent('pointermove', {clientY: 80}))
+    handle.dispatchEvent(createPointerEvent('pointerup', {clientY: 80}))
+
+    expect(el.open).toBe(false)
+    expect(changes).toEqual([{open: false}])
+  })
+
+  it('resets drag state on pointercancel without closing', async () => {
+    const el = await createBottomSheet({open: true})
+    const changes: unknown[] = []
+    const handle = getHandle(el)!
+    const dialog = getDialog(el)
+    el.addEventListener('cv-change', (event) => changes.push((event as CustomEvent).detail))
+
+    handle.dispatchEvent(createPointerEvent('pointerdown', {clientY: 0}))
+    handle.dispatchEvent(createPointerEvent('pointermove', {clientY: 150}))
+    expect(dialog.classList.contains('is-dragging')).toBe(true)
+
+    handle.dispatchEvent(createPointerEvent('pointercancel', {clientY: 150}))
+
+    expect(el.open).toBe(true)
+    expect(changes).toEqual([])
+    expect(dialog.classList.contains('is-dragging')).toBe(false)
+    expect(dialog.style.getPropertyValue('--cv-bottom-sheet-drag-offset')).toBe('')
+  })
+
+  it('does not advance past the top detent on handle click', async () => {
+    const el = await createBottomSheet({
+      open: true,
+      detents: 'collapsed middle expanded',
+      detent: 'expanded',
+    })
+    const changes: unknown[] = []
+    el.addEventListener('cv-change', (event) => changes.push((event as CustomEvent).detail))
+
+    getHandle(el)!.click()
+    await settle(el)
+
+    expect(el.detent).toBe('expanded')
+    expect(changes).toEqual([])
+  })
+
+  it('suppresses the synthetic click that follows a detent drag', async () => {
+    vi.useFakeTimers()
+    const el = await createBottomSheet({
+      open: true,
+      detents: 'collapsed middle expanded',
+      detent: 'collapsed',
+    })
+    const handle = getHandle(el)!
+
+    handle.dispatchEvent(createPointerEvent('pointerdown', {clientY: 200}))
+    vi.advanceTimersByTime(1_000)
+    handle.dispatchEvent(createPointerEvent('pointermove', {clientY: 120}))
+    handle.dispatchEvent(createPointerEvent('pointerup', {clientY: 120}))
+    await settle(el)
+
+    expect(el.detent).toBe('middle')
+
+    handle.click()
+    await settle(el)
+
+    expect(el.detent).toBe('middle')
+
+    handle.click()
+    await settle(el)
+
+    expect(el.detent).toBe('expanded')
   })
 
   it('preserves dialog lifecycle events', async () => {

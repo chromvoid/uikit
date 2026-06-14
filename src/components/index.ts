@@ -5,7 +5,7 @@ export {CVAlert} from './cv-alert'
 export {CVBreadcrumb} from './cv-breadcrumb'
 export {CVBreadcrumbItem} from './cv-breadcrumb-item'
 export {CVBadge} from './cv-badge'
-export {CVBottomSheet} from './cv-bottom-sheet'
+export {CVBottomSheet, cvAnyBottomSheetOpen, cvBottomSheetOpenCount} from './cv-bottom-sheet'
 export type {
   CVBottomSheetChangeEvent,
   CVBottomSheetDetent,
