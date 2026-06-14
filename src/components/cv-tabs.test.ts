@@ -714,4 +714,275 @@ describe('cv-tabs', () => {
       expect(tabs.value).toBe('b')
     })
   })
+
+  // --- keyboard navigation corner cases ---
+
+  describe('keyboard navigation corner cases', () => {
+    it('ArrowRight skips disabled tabs and wraps to the first enabled tab', async () => {
+      const {tabs, tabElements} = await mountTabs()
+
+      // a -> b
+      tabElements[0]!.dispatchEvent(new KeyboardEvent('keydown', {key: 'ArrowRight', bubbles: true}))
+      await settle(tabs)
+      expect(tabs.value).toBe('b')
+
+      // b -> (skip disabled c) -> wrap to a
+      tabElements[1]!.dispatchEvent(new KeyboardEvent('keydown', {key: 'ArrowRight', bubbles: true}))
+      await settle(tabs)
+      expect(tabs.value).toBe('a')
+      expect(tabElements[2]!.selected).toBe(false)
+    })
+
+    it('ArrowLeft from the first tab wraps to the last enabled tab', async () => {
+      const {tabs, tabElements} = await mountTabs()
+
+      tabElements[0]!.dispatchEvent(new KeyboardEvent('keydown', {key: 'ArrowLeft', bubbles: true}))
+      await settle(tabs)
+
+      // c is disabled, so the last enabled tab is b
+      expect(tabs.value).toBe('b')
+    })
+
+    it('Home and End move to the first and last enabled tab', async () => {
+      const {tabs, tabElements} = await mountTabs()
+
+      tabElements[0]!.dispatchEvent(new KeyboardEvent('keydown', {key: 'End', bubbles: true}))
+      await settle(tabs)
+      expect(tabs.value).toBe('b')
+
+      tabElements[1]!.dispatchEvent(new KeyboardEvent('keydown', {key: 'Home', bubbles: true}))
+      await settle(tabs)
+      expect(tabs.value).toBe('a')
+    })
+
+    it('vertical orientation navigates with ArrowDown/ArrowUp', async () => {
+      const {tabs, tabElements} = await mountTabsWithMarkup(`
+        <cv-tab slot="nav" value="a" selected>Alpha</cv-tab>
+        <cv-tab slot="nav" value="b">Beta</cv-tab>
+
+        <cv-tab-panel tab="a">Panel A</cv-tab-panel>
+        <cv-tab-panel tab="b">Panel B</cv-tab-panel>
+      `)
+      tabs.orientation = 'vertical'
+      await settle(tabs)
+
+      tabElements[0]!.dispatchEvent(new KeyboardEvent('keydown', {key: 'ArrowDown', bubbles: true}))
+      await settle(tabs)
+      expect(tabs.value).toBe('b')
+
+      tabElements[1]!.dispatchEvent(new KeyboardEvent('keydown', {key: 'ArrowUp', bubbles: true}))
+      await settle(tabs)
+      expect(tabs.value).toBe('a')
+    })
+  })
+
+  // --- selection corner cases ---
+
+  describe('selection corner cases', () => {
+    it('clicking a disabled tab does not change selection or emit events', async () => {
+      const {tabs, tabElements} = await mountTabs()
+      let inputCount = 0
+      let changeCount = 0
+      tabs.addEventListener('cv-input', () => inputCount++)
+      tabs.addEventListener('cv-change', () => changeCount++)
+
+      tabElements[2]!.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+      await settle(tabs)
+
+      expect(tabs.value).toBe('a')
+      expect(tabElements[2]!.selected).toBe(false)
+      expect(inputCount).toBe(0)
+      expect(changeCount).toBe(0)
+    })
+
+    it('value attribute set before mount selects the matching tab', async () => {
+      CVTab.define()
+      CVTabPanel.define()
+      CVTabs.define()
+
+      const tabs = document.createElement('cv-tabs') as CVTabs
+      tabs.setAttribute('value', 'b')
+      tabs.innerHTML = `
+        <cv-tab slot="nav" value="a">Alpha</cv-tab>
+        <cv-tab slot="nav" value="b">Beta</cv-tab>
+
+        <cv-tab-panel tab="a">Panel A</cv-tab-panel>
+        <cv-tab-panel tab="b">Panel B</cv-tab-panel>
+      `
+      document.body.append(tabs)
+      await settle(tabs)
+
+      expect(tabs.value).toBe('b')
+      expect((tabs.querySelector('cv-tab[value="b"]') as CVTab).selected).toBe(true)
+      expect((tabs.querySelector('cv-tab-panel[tab="b"]') as CVTabPanel).hidden).toBe(false)
+    })
+
+    it('selected attribute on a disabled tab falls back to the first enabled tab', async () => {
+      const {tabs, tabElements} = await mountTabsWithMarkup(`
+        <cv-tab slot="nav" value="a">Alpha</cv-tab>
+        <cv-tab slot="nav" value="b" selected disabled>Beta</cv-tab>
+
+        <cv-tab-panel tab="a">Panel A</cv-tab-panel>
+        <cv-tab-panel tab="b">Panel B</cv-tab-panel>
+      `)
+
+      expect(tabs.value).toBe('a')
+      expect(tabElements[0]!.selected).toBe(true)
+      expect(tabElements[1]!.selected).toBe(false)
+    })
+  })
+
+  // --- batch 10 regression fixes ---
+
+  describe('null-safe attribute removal', () => {
+    it('removing aria-label does not throw on rebuild', async () => {
+      const {tabs} = await mountTabs()
+      tabs.setAttribute('aria-label', 'My tabs')
+      await settle(tabs)
+      tabs.removeAttribute('aria-label')
+
+      expect(() => {
+        tabs.orientation = 'vertical'
+      }).not.toThrow()
+      await settle(tabs)
+    })
+
+    it('removing value does not throw', async () => {
+      const {tabs} = await mountTabs()
+      tabs.setAttribute('value', 'b')
+      await settle(tabs)
+      expect(() => tabs.removeAttribute('value')).not.toThrow()
+      await settle(tabs)
+    })
+  })
+
+  describe('reconnect re-attaches listeners', () => {
+    it('tab clicks still work after the element is moved in the DOM', async () => {
+      const {tabs, tabElements} = await mountTabs()
+      const parent = document.createElement('div')
+      document.body.append(parent)
+
+      // Move (remove + append) without a slotchange.
+      tabs.remove()
+      parent.append(tabs)
+      await settle(tabs)
+
+      const changes: string[] = []
+      tabs.addEventListener('cv-change', (e) =>
+        changes.push((e as CustomEvent).detail.selectedTabId),
+      )
+
+      tabElements[1]!.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+      await settle(tabs)
+
+      expect(tabs.value).toBe('b')
+      expect(changes).toEqual(['b'])
+    })
+  })
+
+  describe('programmatic value is silent and does not steal focus', () => {
+    it('setting value programmatically does not emit cv-input/cv-change', async () => {
+      const {tabs} = await mountTabs()
+      let inputCount = 0
+      let changeCount = 0
+      tabs.addEventListener('cv-input', () => inputCount++)
+      tabs.addEventListener('cv-change', () => changeCount++)
+
+      tabs.value = 'b'
+      await settle(tabs)
+
+      expect(tabs.value).toBe('b')
+      expect(inputCount).toBe(0)
+      expect(changeCount).toBe(0)
+    })
+
+    it('setting value programmatically does not move focus', async () => {
+      const {tabs} = await mountTabs()
+      const outside = document.createElement('button')
+      document.body.append(outside)
+      outside.focus()
+
+      tabs.value = 'b'
+      await settle(tabs)
+
+      expect(document.activeElement).toBe(outside)
+    })
+
+    it('still emits cv-change on a real tab click', async () => {
+      const {tabs, tabElements} = await mountTabs()
+      let changeCount = 0
+      tabs.addEventListener('cv-change', () => changeCount++)
+
+      tabElements[1]!.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+      await settle(tabs)
+
+      expect(changeCount).toBe(1)
+    })
+  })
+
+  describe('pattern 9: value set before slotting', () => {
+    it('re-applies a value set before the tabs are connected/slotted', async () => {
+      CVTab.define()
+      CVTabPanel.define()
+      CVTabs.define()
+
+      const tabs = document.createElement('cv-tabs') as CVTabs
+      tabs.value = 'b'
+      document.body.append(tabs)
+      await settle(tabs)
+
+      // Tabs slotted in after the element is already connected.
+      tabs.innerHTML = `
+        <cv-tab slot="nav" value="a">Alpha</cv-tab>
+        <cv-tab slot="nav" value="b">Beta</cv-tab>
+        <cv-tab-panel tab="a">Panel A</cv-tab-panel>
+        <cv-tab-panel tab="b">Panel B</cv-tab-panel>
+      `
+      await settle(tabs)
+
+      expect(tabs.value).toBe('b')
+      expect((tabs.querySelector('cv-tab[value="b"]') as CVTab).selected).toBe(true)
+    })
+  })
+
+  describe('keyboard preventDefault is orientation-aware', () => {
+    it('does not preventDefault ArrowDown in horizontal orientation', async () => {
+      const {tabs} = await mountTabs()
+      const list = tabs.shadowRoot!.querySelector('[part="list"]') as HTMLElement
+
+      const event = new KeyboardEvent('keydown', {key: 'ArrowDown', bubbles: true, cancelable: true})
+      list.dispatchEvent(event)
+      await settle(tabs)
+
+      expect(event.defaultPrevented).toBe(false)
+    })
+
+    it('preventDefaults ArrowRight in horizontal orientation', async () => {
+      const {tabs} = await mountTabs()
+      const list = tabs.shadowRoot!.querySelector('[part="list"]') as HTMLElement
+
+      const event = new KeyboardEvent('keydown', {
+        key: 'ArrowRight',
+        bubbles: true,
+        cancelable: true,
+      })
+      list.dispatchEvent(event)
+      await settle(tabs)
+
+      expect(event.defaultPrevented).toBe(true)
+    })
+  })
+
+  describe('aria-controls only when a panel exists', () => {
+    it('omits aria-controls on a tab with no matching panel', async () => {
+      const {tabs} = await mountTabsWithMarkup(`
+        <cv-tab slot="nav" value="a">Alpha</cv-tab>
+        <cv-tab slot="nav" value="b">Beta</cv-tab>
+        <cv-tab-panel tab="a">Panel A</cv-tab-panel>
+      `)
+
+      const tabB = tabs.querySelector('cv-tab[value="b"]') as CVTab
+      expect(tabB.hasAttribute('aria-controls')).toBe(false)
+    })
+  })
 })

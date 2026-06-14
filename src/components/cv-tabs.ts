@@ -31,18 +31,6 @@ interface PendingCloseRequest {
   fallbackId: string | null
 }
 
-const tabsKeyboardKeys = new Set([
-  'ArrowUp',
-  'ArrowDown',
-  'ArrowLeft',
-  'ArrowRight',
-  'Home',
-  'End',
-  'Enter',
-  ' ',
-  'Spacebar',
-])
-
 let cvTabsNonce = 0
 
 export class CVTabs extends ReatomLitElement {
@@ -73,6 +61,10 @@ export class CVTabs extends ReatomLitElement {
   >()
   private model?: TabsModel
   private pendingCloseRequest: PendingCloseRequest | null = null
+  // Pattern 9: a `value` set declaratively before the tabs are slotted resolves
+  // against an empty model and is reset to ''. Remember the last explicitly
+  // requested value so a later slotchange can re-apply it.
+  private controlledValue: string | null = null
 
   constructor() {
     super()
@@ -162,7 +154,16 @@ export class CVTabs extends ReatomLitElement {
   override connectedCallback(): void {
     super.connectedCallback()
     if (!this.model) {
+      const declared = this.normalizeText(this.value)
+      if (declared.length > 0) {
+        this.controlledValue = declared
+      }
       this.rebuildModelFromSlot(false, false)
+    } else {
+      // Reconnect: disconnectedCallback detached the per-tab listeners and a
+      // move (remove + append) does not fire a slotchange, so re-attach them or
+      // tab clicks/keyboard would be permanently dead.
+      this.attachTabListeners()
     }
   }
 
@@ -184,13 +185,16 @@ export class CVTabs extends ReatomLitElement {
     }
 
     if (changedProperties.has('value') && this.model) {
-      const next = this.value.trim()
+      const next = this.normalizeText(this.value)
       if (next.length === 0) return
+      this.controlledValue = next
       if (this.model.state.selectedTabId() !== next) {
         const previousSelected = this.model.state.selectedTabId()
         const previousActive = this.model.state.activeTabId()
         this.model.actions.select(next)
-        this.applyInteractionResult(previousSelected, previousActive)
+        // Programmatic value writes are silent and must not steal focus,
+        // matching native form controls.
+        this.applyInteractionResult(previousSelected, previousActive, true)
       }
     }
   }
@@ -200,6 +204,12 @@ export class CVTabs extends ReatomLitElement {
     if (!changedProperties.has('value')) {
       this.syncTabElements()
     }
+  }
+
+  // Lit's String converter resolves a removed attribute to `null`, so guard
+  // against `null.trim()` TypeErrors when value / aria-label are removed.
+  private normalizeText(value: string | null | undefined): string {
+    return (value ?? '').trim()
   }
 
   private isNavTabElement(tab: CVTab): boolean {
@@ -241,7 +251,7 @@ export class CVTabs extends ReatomLitElement {
   }
 
   private resolveConfiguredValue(tabElements: CVTab[]): string | null {
-    const fromProperty = this.value.trim()
+    const fromProperty = this.normalizeText(this.value) || this.controlledValue || ''
     if (fromProperty.length > 0) {
       return fromProperty
     }
@@ -487,7 +497,13 @@ export class CVTabs extends ReatomLitElement {
       record.element.setAttribute('role', tabProps.role)
       record.element.setAttribute('tabindex', tabProps.tabindex)
       record.element.setAttribute('aria-selected', tabProps['aria-selected'])
-      record.element.setAttribute('aria-controls', tabProps['aria-controls'])
+      // Only reference a panel that actually exists; pointing aria-controls at a
+      // non-existent panel id is an a11y defect.
+      if (record.panel) {
+        record.element.setAttribute('aria-controls', tabProps['aria-controls'])
+      } else {
+        record.element.removeAttribute('aria-controls')
+      }
 
       if (tabProps['aria-disabled']) {
         record.element.setAttribute('aria-disabled', tabProps['aria-disabled'])
@@ -559,7 +575,11 @@ export class CVTabs extends ReatomLitElement {
     )
   }
 
-  private applyInteractionResult(previousSelected: string | null, previousActive: string | null): void {
+  private applyInteractionResult(
+    previousSelected: string | null,
+    previousActive: string | null,
+    silent = false,
+  ): void {
     if (!this.model) return
 
     this.syncTabElements()
@@ -570,6 +590,12 @@ export class CVTabs extends ReatomLitElement {
     const activeChanged = previousActive !== nextActive
 
     this.value = nextSelected ?? ''
+    if (nextSelected) {
+      this.controlledValue = nextSelected
+    }
+
+    // Programmatic writes neither emit events nor move focus.
+    if (silent) return
 
     if (!selectedChanged && !activeChanged) return
 
@@ -600,7 +626,16 @@ export class CVTabs extends ReatomLitElement {
   private handleTabsKeyDown(event: KeyboardEvent) {
     if (!this.model) return
 
-    if (tabsKeyboardKeys.has(event.key)) {
+    // Only intercept keys the model actually handles for the current
+    // orientation. In horizontal mode ArrowUp/Down are ignored by the model, so
+    // preventing their default would needlessly trap browser scrolling.
+    const isVertical = this.orientation === 'vertical'
+    const orientationArrows = isVertical
+      ? new Set(['ArrowUp', 'ArrowDown'])
+      : new Set(['ArrowLeft', 'ArrowRight'])
+    const otherKeys = new Set(['Home', 'End', 'Enter', ' ', 'Spacebar'])
+
+    if (orientationArrows.has(event.key) || otherKeys.has(event.key)) {
       event.preventDefault()
     }
 
