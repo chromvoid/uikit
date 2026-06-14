@@ -190,6 +190,11 @@ export class CVCommandPalette extends ReatomLitElement {
     super.connectedCallback()
     if (!this.model) {
       this.rebuildModelFromSlot(false, false)
+    } else {
+      // Reconnect: disconnectedCallback detached per-item click listeners but
+      // the model already exists, so a remove()+append() would leave commands
+      // inert (no slotchange fires). Reattach so clicks keep working.
+      this.attachItemListeners()
     }
 
     this.syncOutsidePointerListener()
@@ -236,9 +241,20 @@ export class CVCommandPalette extends ReatomLitElement {
       }
 
       if (normalized.length > 0 && normalized !== this.model.state.selectedId()) {
-        const previous = this.captureState()
-        this.model.actions.execute(normalized)
-        this.applyInteractionResult(previous)
+        const isKnown = this.itemRecords.some((record) => record.id === normalized)
+        if (!isKnown) {
+          // Unknown id can never become a valid selection; revert the property to
+          // the model's actual selection to avoid a permanent desync.
+          this.value = this.model.state.selectedId() ?? ''
+        } else {
+          // Programmatic writes must mirror selection only — they must NOT behave
+          // like an activation. Calling execute() would set lastExecutedId, fire
+          // cv-execute, and (with closeOnExecute) close the palette. Mirror the
+          // selection directly the same way the slot rebuild restores it.
+          const previous = this.captureState()
+          this.model.state.selectedId.set(normalized)
+          this.applyInteractionResult(previous)
+        }
       }
     }
 
@@ -340,7 +356,11 @@ export class CVCommandPalette extends ReatomLitElement {
       })),
       ariaLabel: this.ariaLabel || undefined,
       initialOpen: previous.open,
-      openShortcutKey: this.openShortcutKey,
+      // Headless compares event.key.toLowerCase() against the configured key
+      // without folding it, so pass the already-lowercased shortcut to keep the
+      // model's global-key handling consistent with the uikit listener (which
+      // also lowercases both sides).
+      openShortcutKey: this.openShortcutKey.toLowerCase(),
       closeOnExecute: this.closeOnExecute,
       closeOnOutsidePointer: this.closeOnOutsidePointer,
     })
@@ -620,6 +640,11 @@ export class CVCommandPalette extends ReatomLitElement {
 
   private handleItemClick(id: string): void {
     if (!this.model) return
+
+    // Guard against executing disabled commands: the headless execute() only
+    // checks that the id exists, not whether the command is disabled.
+    const record = this.itemRecords.find((item) => item.id === id)
+    if (!record || record.disabled) return
 
     const previous = this.captureState()
     this.model.contracts.getOptionProps(id).onClick()
