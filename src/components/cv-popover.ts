@@ -263,6 +263,13 @@ export class CVPopover extends ReatomLitElement {
   override connectedCallback(): void {
     super.connectedCallback()
     this.syncOutsideListeners()
+    // Re-attach layout (resize/scroll) listeners when reconnected while open;
+    // disconnectedCallback tears them down, and without this they would not
+    // come back until the next property change triggers updated().
+    if (this.model.state.isOpen() && !supportsNativeAnchoredAutoplacement()) {
+      this.toggleLayoutListeners(true)
+      this.scheduleLayout()
+    }
   }
 
   override disconnectedCallback(): void {
@@ -466,8 +473,25 @@ export class CVPopover extends ReatomLitElement {
     )
 
     if (!isOpen) {
-      this.restoreFocus()
+      // Match native popover semantics: only pull focus back to the trigger
+      // when focus is still inside the popover at close time. On a light
+      // dismiss caused by focus leaving (Tab out / outside focus), focus has
+      // already moved elsewhere and must be left where the user put it,
+      // otherwise keyboard users get yanked back and cannot tab past.
+      if (this.containsActiveElement()) {
+        this.restoreFocus()
+      }
     }
+  }
+
+  private containsActiveElement(): boolean {
+    let active: Element | null = document.activeElement
+    while (active) {
+      if (active === this) return true
+      const root = active.getRootNode()
+      active = root instanceof ShadowRoot ? root.host : null
+    }
+    return false
   }
 
   private restoreFocus(): void {
@@ -545,7 +569,16 @@ export class CVPopover extends ReatomLitElement {
 
   private handleContentKeyDown(event: KeyboardEvent) {
     if (event.key === 'Escape') {
-      event.preventDefault()
+      // Already consumed by a nested widget/popover — don't act again.
+      if (event.defaultPrevented) return
+      // Only swallow Escape (preventDefault/stopPropagation) when it actually
+      // closes this popover. With closeOnEscape=false the key must bubble to
+      // any ancestor (e.g. a parent dialog). When it does close us, stop here
+      // so a single Escape only dismisses the topmost popover in a stack.
+      if (this.closeOnEscape) {
+        event.preventDefault()
+        event.stopPropagation()
+      }
     }
 
     this.model.contracts.getContentProps().onKeyDown({key: event.key})

@@ -91,6 +91,93 @@ describe('cv-popover positioning helpers', () => {
     expect(resolved.top).toBe(460)
   })
 
+  it('maps side-only and start/end side placements to position-area syntax', () => {
+    expect(getPositionAreaForPlacement('left-start')).toBe('top left')
+    expect(getPositionAreaForPlacement('left-end')).toBe('bottom left')
+    expect(getPositionAreaForPlacement('right-start')).toBe('top right')
+    expect(getPositionAreaForPlacement('top-end')).toBe('top right')
+    expect(getPositionAreaForPlacement('top')).toBe('top center')
+  })
+
+  it('returns center-aligned fallbacks for side-only left placement', () => {
+    expect(getPlacementFallbacks('left')).toEqual(['left', 'right', 'bottom', 'top'])
+  })
+
+  it('centers vertically for side placements', () => {
+    const resolved = resolvePopoverPosition(
+      {
+        ...anchorRect,
+        left: 400,
+        right: 480,
+      },
+      panelRect,
+      'left',
+      8,
+      {
+        width: 800,
+        height: 600,
+        padding: 8,
+      },
+    )
+
+    expect(resolved.placement).toBe('left')
+    expect(resolved.left).toBe(252)
+    // anchor top 120 + (44 - 72) / 2 = 106
+    expect(resolved.top).toBe(106)
+  })
+
+  it('produces finite integer coordinates for a zero-size anchor', () => {
+    const resolved = resolvePopoverPosition(
+      {
+        left: 100,
+        top: 100,
+        right: 100,
+        bottom: 100,
+        width: 0,
+        height: 0,
+      },
+      panelRect,
+      'bottom',
+      8,
+      {
+        width: 800,
+        height: 600,
+        padding: 8,
+      },
+    )
+
+    expect(Number.isFinite(resolved.left)).toBe(true)
+    expect(Number.isFinite(resolved.top)).toBe(true)
+    expect(resolved.left).toBe(30)
+    expect(resolved.top).toBe(108)
+  })
+
+  it('rounds fractional anchor coordinates to integers', () => {
+    const resolved = resolvePopoverPosition(
+      {
+        left: 100.4,
+        top: 120.6,
+        right: 180.4,
+        bottom: 164.6,
+        width: 80,
+        height: 44,
+      },
+      panelRect,
+      'bottom-start',
+      8,
+      {
+        width: 800,
+        height: 600,
+        padding: 8,
+      },
+    )
+
+    expect(Number.isInteger(resolved.left)).toBe(true)
+    expect(Number.isInteger(resolved.top)).toBe(true)
+    expect(resolved.left).toBe(100)
+    expect(resolved.top).toBe(173)
+  })
+
   it('clamps the preferred placement into the viewport when nothing fully fits', () => {
     const resolved = resolvePopoverPosition(
       {

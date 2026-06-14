@@ -629,6 +629,75 @@ describe('cv-popover', () => {
     })
   })
 
+  // --- Open-state lifecycle corner cases ---
+
+  describe('open-state lifecycle corner cases', () => {
+    it('stays open when a dismiss-config property changes while open (model recreation)', async () => {
+      const el = await createPopover({open: true})
+      expect(getContent(el).hidden).toBe(false)
+
+      el.closeOnEscape = false
+      await settle(el)
+
+      expect(el.open).toBe(true)
+      expect(getContent(el).hidden).toBe(false)
+    })
+
+    it('repeated show() while open does not dispatch a second toggle', async () => {
+      const el = await createPopover({triggerMode: 'external'})
+      let toggleCount = 0
+      el.addEventListener('toggle', () => toggleCount++)
+
+      el.show()
+      await settle(el)
+      el.show()
+      await settle(el)
+
+      expect(el.open).toBe(true)
+      expect(toggleCount).toBe(1)
+    })
+
+    it('hide() when already closed dispatches no toggle events', async () => {
+      const el = await createPopover()
+      const events: string[] = []
+      el.addEventListener('beforetoggle', () => events.push('beforetoggle'))
+      el.addEventListener('toggle', () => events.push('toggle'))
+
+      el.hide()
+      await settle(el)
+
+      expect(events).toEqual([])
+    })
+
+    it('beforetoggle on close is not cancelable (preventDefault cannot keep it open)', async () => {
+      const el = await createPopover({open: true})
+      let cancelable: boolean | null = null
+
+      el.addEventListener('beforetoggle', (e) => {
+        cancelable = e.cancelable
+        e.preventDefault()
+      })
+
+      el.hide()
+      await settle(el)
+
+      expect(cancelable).toBe(false)
+      expect(el.open).toBe(false)
+    })
+
+    it('non-activation keys on the trigger do not open the popover', async () => {
+      const el = await createPopover()
+      const trigger = getTrigger(el)
+
+      trigger.dispatchEvent(new KeyboardEvent('keydown', {key: 'a', bubbles: true}))
+      await settle(el)
+      trigger.dispatchEvent(new KeyboardEvent('keydown', {key: 'ArrowUp', bubbles: true}))
+      await settle(el)
+
+      expect(el.open).toBe(false)
+    })
+  })
+
   // --- Outside dismiss behavior ---
 
   describe('outside dismiss behavior', () => {
@@ -721,6 +790,122 @@ describe('cv-popover', () => {
       await settle(el)
 
       expect(document.activeElement).toBe(source)
+    })
+  })
+
+  // --- Focus restoration scoping (native popover semantics) ---
+
+  describe('focus restoration scoping', () => {
+    it('does NOT pull focus back to the trigger when focus already moved outside (light dismiss)', async () => {
+      const el = await createPopover()
+      const outside = document.createElement('button')
+      document.body.append(outside)
+
+      // Open, then move focus outside the popover (e.g. Tab out). The ensuing
+      // outside-focus light dismiss must leave focus where the user put it.
+      el.open = true
+      await settle(el)
+
+      outside.focus()
+      expect(document.activeElement).toBe(outside)
+
+      document.body.dispatchEvent(new FocusEvent('focusin', {bubbles: true}))
+      await settle(el)
+
+      expect(el.open).toBe(false)
+      expect(document.activeElement).toBe(outside)
+    })
+
+    it('restores focus to the trigger on Escape when focus is inside the popover', async () => {
+      const el = await createPopover()
+      const trigger = getTrigger(el)
+
+      // Open via the trigger so the restore target is the rendered trigger.
+      trigger.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+      await settle(el)
+      expect(el.open).toBe(true)
+
+      const content = getContent(el)
+      content.focus()
+
+      content.dispatchEvent(new KeyboardEvent('keydown', {key: 'Escape', bubbles: true}))
+      await settle(el)
+
+      expect(el.open).toBe(false)
+      // The trigger lives in the shadow root, so document.activeElement is the
+      // host; the effective focus target is the shadow root's activeElement.
+      expect(el.shadowRoot!.activeElement).toBe(trigger)
+    })
+  })
+
+  // --- Nested popover Escape isolation ---
+
+  describe('nested popover Escape isolation', () => {
+    it('stops Escape propagation after closing so an ancestor handler does not also act', async () => {
+      const el = await createPopover({open: true})
+      const content = getContent(el)
+
+      // An ancestor (e.g. an outer popover/dialog) listens for the bubbling
+      // Escape. After the inner popover closes it must stop propagation so the
+      // single keystroke does not also dismiss the ancestor.
+      let ancestorSawEscape = false
+      document.body.addEventListener('keydown', (e) => {
+        if ((e as KeyboardEvent).key === 'Escape') ancestorSawEscape = true
+      })
+
+      content.dispatchEvent(
+        new KeyboardEvent('keydown', {key: 'Escape', bubbles: true, composed: true}),
+      )
+      await settle(el)
+
+      expect(el.open).toBe(false)
+      expect(ancestorSawEscape).toBe(false)
+    })
+
+    it('does not preventDefault on Escape when closeOnEscape=false', async () => {
+      const el = await createPopover({open: true, closeOnEscape: false})
+      const content = getContent(el)
+
+      const event = new KeyboardEvent('keydown', {key: 'Escape', bubbles: true, cancelable: true})
+      content.dispatchEvent(event)
+      await settle(el)
+
+      expect(el.open).toBe(true)
+      expect(event.defaultPrevented).toBe(false)
+    })
+
+    it('ignores Escape already consumed (defaultPrevented) upstream', async () => {
+      const el = await createPopover({open: true})
+      const content = getContent(el)
+
+      const event = new KeyboardEvent('keydown', {key: 'Escape', bubbles: true, cancelable: true})
+      event.preventDefault()
+      content.dispatchEvent(event)
+      await settle(el)
+
+      expect(el.open).toBe(true)
+    })
+  })
+
+  // --- Reconnect while open ---
+
+  describe('reconnect while open', () => {
+    it('re-attaches layout listeners after being moved in the DOM while open', async () => {
+      const addSpy = vi.spyOn(window, 'addEventListener')
+      const el = await createPopover({open: true})
+
+      const host = document.createElement('div')
+      document.body.append(host)
+
+      addSpy.mockClear()
+      el.remove()
+      host.append(el)
+      await settle(el)
+
+      const reattached = addSpy.mock.calls.some(
+        ([type]) => type === 'resize' || type === 'scroll',
+      )
+      expect(reattached).toBe(true)
     })
   })
 
