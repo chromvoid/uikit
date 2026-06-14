@@ -136,6 +136,22 @@ describe('cv-callout', () => {
       await settle(el)
       expect(base.getAttribute('data-variant')).toBe('success')
     })
+
+    it('keeps a valid data-variant when given an unknown variant', async () => {
+      const el = await createCallout({variant: 'success'})
+      const base = getBase(el)
+      expect(base.getAttribute('data-variant')).toBe('success')
+
+      el.variant = 'bogus' as never
+      await settle(el)
+      // headless rejects unknown variants, so data-variant stays valid
+      expect(base.getAttribute('data-variant')).toBe('success')
+      // ...and the rejected value must not be left reflected on the host:
+      // the component reverts the `variant` property/attribute to the
+      // validated value (Batch 2 callout #b).
+      expect(el.variant).toBe('success')
+      expect(el.getAttribute('variant')).toBe('success')
+    })
   })
 
   // --- Events ---
@@ -175,6 +191,34 @@ describe('cv-callout', () => {
       // No close button should exist, so no click possible
       const closeBtn = el.shadowRoot!.querySelector('[part="close-button"]')
       expect(closeBtn).toBeNull()
+      expect(handler).not.toHaveBeenCalled()
+    })
+
+    it('emits cv-close only once when close button is clicked twice', async () => {
+      const el = await createCallout({closable: true})
+      const handler = vi.fn()
+      el.addEventListener('cv-close', handler)
+
+      const closeBtn = el.shadowRoot!.querySelector('[part="close-button"]') as HTMLElement
+      closeBtn.click()
+      await settle(el)
+      closeBtn.click()
+      await settle(el)
+
+      expect(handler).toHaveBeenCalledTimes(1)
+      expect(el.open).toBe(false)
+    })
+
+    it('does not emit cv-close on programmatic open change', async () => {
+      const el = await createCallout({closable: true})
+      const handler = vi.fn()
+      el.addEventListener('cv-close', handler)
+
+      el.open = false
+      await settle(el)
+
+      expect(el.open).toBe(false)
+      expect(el.hasAttribute('open')).toBe(false)
       expect(handler).not.toHaveBeenCalled()
     })
   })
@@ -302,6 +346,34 @@ describe('cv-callout', () => {
       await settle(el)
       expect(el.open).toBe(true)
       expect(el.hasAttribute('open')).toBe(true)
+    })
+
+    it('can be created closed via open=false', async () => {
+      const el = await createCallout({open: false})
+      expect(el.open).toBe(false)
+      expect(el.hasAttribute('open')).toBe(false)
+    })
+
+    it('non-closable callout can be hidden and shown programmatically', async () => {
+      const el = await createCallout()
+      expect(el.closable).toBe(false)
+
+      // The model's open state is private; read it to assert the host and the
+      // model stay in sync. With the bug (close() used instead of setOpen()),
+      // close() is a no-op for a non-closable callout, so model.state.open()
+      // would remain true while the host is hidden via CSS (Batch 2 callout #a).
+      const modelOpen = () => (el as unknown as {model: {state: {open(): boolean}}}).model.state.open()
+      expect(modelOpen()).toBe(true)
+
+      el.open = false
+      await settle(el)
+      expect(el.hasAttribute('open')).toBe(false)
+      expect(modelOpen()).toBe(false)
+
+      el.open = true
+      await settle(el)
+      expect(el.hasAttribute('open')).toBe(true)
+      expect(modelOpen()).toBe(true)
     })
   })
 

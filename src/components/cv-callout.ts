@@ -194,19 +194,22 @@ export class CVCallout extends ReatomLitElement {
 
     if (changedProperties.has('variant')) {
       this.model.actions.setVariant(this.variant)
+      // The model rejects unknown variants (keeping the previous valid value).
+      // Keep the reflected host attribute consistent with the validated value
+      // instead of leaving an invalid variant on the host.
+      const validated = this.model.state.variant()
+      if (this.variant !== validated) {
+        this.variant = validated
+      }
     }
     if (changedProperties.has('closable')) {
       this.model.actions.setClosable(this.closable)
     }
     if (changedProperties.has('open')) {
-      if (this.open) {
-        this.model.actions.show()
-      } else {
-        // Only close via headless if closable, otherwise directly set state
-        if (this.model.state.closable()) {
-          this.model.actions.close()
-        }
-      }
+      // Keep model state in sync with the controlled `open` property. For a
+      // non-closable callout `close()` is a no-op, so use setOpen() directly to
+      // avoid model/host desync (host hidden via CSS but model.state.open() true).
+      this.model.actions.setOpen(this.open)
     }
   }
 
