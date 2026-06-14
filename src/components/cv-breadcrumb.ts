@@ -14,6 +14,10 @@ interface BreadcrumbItemRecord {
   element: CVBreadcrumbItem
 }
 
+// Tracks the generated host id assigned to a given item element so re-syncs do
+// not clobber a user-assigned `id` and so we never reassign past a user value.
+const generatedIdByElement = new WeakMap<CVBreadcrumbItem, string>()
+
 let cvBreadcrumbNonce = 0
 
 export class CVBreadcrumb extends ReatomLitElement {
@@ -76,7 +80,7 @@ export class CVBreadcrumb extends ReatomLitElement {
 
   override connectedCallback(): void {
     super.connectedCallback()
-    this.rebuildModelFromSlot(false, false, this.value.trim() || null)
+    this.rebuildModelFromSlot(false, false, this.value?.trim() || null)
   }
 
   override willUpdate(changedProperties: PropertyValues): void {
@@ -88,7 +92,7 @@ export class CVBreadcrumb extends ReatomLitElement {
     }
 
     if (changedProperties.has('value')) {
-      const normalized = this.value.trim()
+      const normalized = this.value?.trim() ?? ''
       if (this.value !== normalized) {
         this.value = normalized
       }
@@ -132,6 +136,29 @@ export class CVBreadcrumb extends ReatomLitElement {
     return '#'
   }
 
+  /**
+   * Derives the accessible label from the item's default-slot content only,
+   * excluding nodes assigned to the prefix/suffix/separator slots so a custom
+   * separator or icon does not leak into the model label.
+   */
+  private getItemLabel(item: CVBreadcrumbItem, index: number): string {
+    let label = ''
+    for (const node of Array.from(item.childNodes)) {
+      if (node.nodeType === Node.TEXT_NODE) {
+        label += node.textContent ?? ''
+        continue
+      }
+
+      if (node.nodeType === Node.ELEMENT_NODE) {
+        const slot = (node as Element).getAttribute('slot')
+        if (slot === 'prefix' || slot === 'suffix' || slot === 'separator') continue
+        label += node.textContent ?? ''
+      }
+    }
+
+    return label.trim() || item.value?.trim() || `item-${index + 1}`
+  }
+
   private rebuildModelFromSlot(
     preserveCurrent: boolean,
     requestRender = true,
@@ -142,7 +169,7 @@ export class CVBreadcrumb extends ReatomLitElement {
 
     this.itemRecords = itemElements.map((element, index) => ({
       id: this.ensureItemValue(element, index),
-      label: element.textContent?.trim() || element.value || `item-${index + 1}`,
+      label: this.getItemLabel(element, index),
       href: this.ensureItemHref(element),
       current: element.current,
       element,
@@ -176,7 +203,17 @@ export class CVBreadcrumb extends ReatomLitElement {
       const linkProps = this.model.contracts.getLinkProps(record.id)
       const separatorProps = this.model.contracts.getSeparatorProps(record.id)
 
-      record.element.id = itemProps.id
+      // Preserve a user-assigned id: only stamp the generated id when the host
+      // has no id, or still carries an id we generated earlier.
+      const currentId = record.element.id
+      const previousGenerated = generatedIdByElement.get(record.element)
+      if (!currentId || currentId === previousGenerated) {
+        if (record.element.id !== itemProps.id) {
+          record.element.id = itemProps.id
+        }
+        generatedIdByElement.set(record.element, itemProps.id)
+      }
+
       record.element.linkId = linkProps.id
       record.element.href = linkProps.href
       record.element.current = linkProps['aria-current'] === 'page'
