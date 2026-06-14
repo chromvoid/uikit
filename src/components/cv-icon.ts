@@ -297,6 +297,17 @@ export class CVIcon extends ReatomLitElement {
 
     if (changedProperties.has('name') && this.name && !this.src) {
       void this.loadSvg(CVIcon.getIconUrls(this.name))
+      return
+    }
+
+    // Clearing name/src back to empty must drop the previously-loaded markup,
+    // otherwise the stale icon keeps rendering. loadSvg is skipped for empty
+    // identifiers, so clear the cached markup explicitly here instead.
+    const nameCleared = changedProperties.has('name') && !this.name
+    const srcCleared = changedProperties.has('src') && !this.src
+    if ((nameCleared || srcCleared) && !this.name && !this.src && this.svgMarkup) {
+      this.loadVersion++
+      this.svgMarkup = ''
     }
   }
 
@@ -392,7 +403,10 @@ export class CVIcon extends ReatomLitElement {
     const slot = event.target as HTMLSlotElement
     const nodes = slot.assignedNodes({flatten: true})
     this.hasSlottedContent = nodes.some(
-      (node) => node.nodeType === Node.ELEMENT_NODE && (node as Element).tagName === 'SVG',
+      // SVG elements live in the SVG namespace and report a lowercase 'svg'
+      // tagName, so compare case-insensitively (an uppercase check never matched
+      // and slotted icons stayed hidden by the :not([data-slotted]) CSS rule).
+      (node) => node.nodeType === Node.ELEMENT_NODE && (node as Element).tagName.toLowerCase() === 'svg',
     )
 
     if (this.hasSlottedContent) {

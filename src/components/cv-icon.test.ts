@@ -204,6 +204,96 @@ describe('cv-icon', () => {
     expect(el.shadowRoot?.querySelector('svg[data-icon="image"]')).not.toBeNull()
   })
 
+  it('renders no svg when the icon name cannot be resolved', async () => {
+    const fetchMock = vi.fn(async () => ({
+      ok: false,
+      text: async () => '',
+    }))
+    vi.stubGlobal('fetch', fetchMock)
+
+    const el = await createIcon({name: 'definitely-not-an-icon'})
+
+    expect(fetchMock).toHaveBeenCalledWith('/assets/icons/lucide/definitely-not-an-icon.svg')
+    expect(el.shadowRoot?.querySelector('svg')).toBeNull()
+  })
+
+  it('replaces the rendered markup when the name changes', async () => {
+    const fetchMock = vi.fn(async (url: string) => ({
+      ok: true,
+      text: async () =>
+        url.endsWith('/x.svg')
+          ? '<svg data-icon="x" viewBox="0 0 24 24"></svg>'
+          : '<svg data-icon="search" viewBox="0 0 24 24"></svg>',
+    }))
+    vi.stubGlobal('fetch', fetchMock)
+
+    const el = await createIcon({name: 'search'})
+    await vi.waitFor(() => {
+      expect(el.shadowRoot?.querySelector('svg[data-icon="search"]')).not.toBeNull()
+    })
+
+    el.name = 'x'
+    await settle(el)
+    await vi.waitFor(() => {
+      expect(el.shadowRoot?.querySelector('svg[data-icon="x"]')).not.toBeNull()
+    })
+
+    expect(el.shadowRoot?.querySelector('svg[data-icon="search"]')).toBeNull()
+  })
+
+  it('is aria-hidden without a label and becomes exposed when a label is set later', async () => {
+    const fetchMock = vi.fn(async () => ({
+      ok: true,
+      text: async () => '<svg viewBox="0 0 24 24"></svg>',
+    }))
+    vi.stubGlobal('fetch', fetchMock)
+
+    const el = await createIcon({name: 'search'})
+    expect((el.shadowRoot!.querySelector('.icon') as HTMLElement).getAttribute('aria-hidden')).toBe('true')
+
+    el.label = 'Search'
+    await settle(el)
+
+    const wrapper = el.shadowRoot!.querySelector('.icon') as HTMLElement
+    expect(wrapper.getAttribute('aria-hidden')).toBe('false')
+    expect(wrapper.getAttribute('aria-label')).toBe('Search')
+  })
+
+  it('prefetch warms the cache so later renders reuse the fetched markup', async () => {
+    const fetchMock = vi.fn(async () => ({
+      ok: true,
+      text: async () => '<svg viewBox="0 0 24 24"></svg>',
+    }))
+    vi.stubGlobal('fetch', fetchMock)
+
+    CVIcon.prefetch('search')
+    await vi.waitFor(() => {
+      expect(testableCVIcon.svgCache.size).toBe(1)
+    })
+
+    await createIcon({name: 'search'})
+
+    expect(fetchMock).toHaveBeenCalledTimes(1)
+  })
+
+  it('shares one in-flight request across concurrently created icons', async () => {
+    const fetchMock = vi.fn(async () => ({
+      ok: true,
+      text: async () => '<svg viewBox="0 0 24 24"></svg>',
+    }))
+    vi.stubGlobal('fetch', fetchMock)
+
+    const first = document.createElement('cv-icon') as CVIcon
+    first.name = 'search'
+    const second = document.createElement('cv-icon') as CVIcon
+    second.name = 'search'
+    document.body.append(first, second)
+    await settle(first)
+    await settle(second)
+
+    expect(fetchMock).toHaveBeenCalledTimes(1)
+  })
+
   it('ignores successful non-SVG responses instead of rendering arbitrary markup', async () => {
     const fetchMock = vi.fn(async () => ({
       ok: true,
@@ -214,6 +304,65 @@ describe('cv-icon', () => {
     const el = await createIcon({name: 'check-lg'})
 
     expect(el.shadowRoot?.querySelector('chromvoid-app')).toBeNull()
+    expect(el.shadowRoot?.querySelector('svg')).toBeNull()
+  })
+
+  // --- regression: batch 5 audit fixes ---
+
+  it('marks data-slotted for a slotted SVG (namespaced lowercase tagName)', async () => {
+    const el = document.createElement('cv-icon') as CVIcon
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
+    el.append(svg)
+    document.body.append(el)
+    await settle(el)
+    // slotchange is async in some environments
+    await vi.waitFor(() => {
+      expect(el.hasAttribute('data-slotted')).toBe(true)
+    })
+  })
+
+  it('does not mark data-slotted for non-svg slotted content', async () => {
+    const el = document.createElement('cv-icon') as CVIcon
+    el.append(document.createElement('span'))
+    document.body.append(el)
+    await settle(el)
+    await Promise.resolve()
+    expect(el.hasAttribute('data-slotted')).toBe(false)
+  })
+
+  it('clears the rendered svg when the name is reset to empty', async () => {
+    const fetchMock = vi.fn(async () => ({
+      ok: true,
+      text: async () => '<svg data-icon="search" viewBox="0 0 24 24"></svg>',
+    }))
+    vi.stubGlobal('fetch', fetchMock)
+
+    const el = await createIcon({name: 'search'})
+    await vi.waitFor(() => {
+      expect(el.shadowRoot?.querySelector('svg[data-icon="search"]')).not.toBeNull()
+    })
+
+    el.name = ''
+    await settle(el)
+
+    expect(el.shadowRoot?.querySelector('svg')).toBeNull()
+  })
+
+  it('clears the rendered svg when src is reset to empty', async () => {
+    const fetchMock = vi.fn(async () => ({
+      ok: true,
+      text: async () => '<svg data-icon="raw" viewBox="0 0 24 24"></svg>',
+    }))
+    vi.stubGlobal('fetch', fetchMock)
+
+    const el = await createIcon({src: '/icons/raw.svg'})
+    await vi.waitFor(() => {
+      expect(el.shadowRoot?.querySelector('svg[data-icon="raw"]')).not.toBeNull()
+    })
+
+    el.src = ''
+    await settle(el)
+
     expect(el.shadowRoot?.querySelector('svg')).toBeNull()
   })
 })
