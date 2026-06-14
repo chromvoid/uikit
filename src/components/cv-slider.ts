@@ -231,6 +231,13 @@ export class CVSlider extends ReatomLitElement {
 
     if (changedProperties.has('value') && this.model.state.value() !== this.value) {
       this.model.actions.setValue(this.value)
+      // Back-sync the property to the clamped/snapped model value so that
+      // `slider.value = 200` (max 100) leaves `value === 100`, matching
+      // aria-valuenow and the spinbutton/multi-thumb behaviour.
+      const clamped = this.model.state.value()
+      if (this.value !== clamped) {
+        this.value = clamped
+      }
     }
   }
 
@@ -334,6 +341,16 @@ export class CVSlider extends ReatomLitElement {
   }
 
   private handleThumbKeyDown(event: KeyboardEvent) {
+    if (
+      this.disabled ||
+      event.defaultPrevented ||
+      event.altKey ||
+      event.ctrlKey ||
+      event.metaKey
+    ) {
+      return
+    }
+
     if (sliderKeyboardKeys.has(event.key)) {
       event.preventDefault()
     }

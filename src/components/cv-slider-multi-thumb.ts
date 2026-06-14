@@ -57,6 +57,8 @@ export class CVSliderMultiThumb extends ReatomLitElement {
   private model: SliderMultiThumbModel
   private draggingThumbIndex: number | null = null
   private dragValueChanged = false
+  private activePointerId: number | null = null
+  private dragAbortController: AbortController | null = null
 
   constructor() {
     super()
@@ -304,7 +306,13 @@ export class CVSliderMultiThumb extends ReatomLitElement {
     let nearestDistance = Number.POSITIVE_INFINITY
     for (const [index, value] of values.entries()) {
       const distance = Math.abs(value - pointerValue)
-      if (distance < nearestDistance) {
+      // Tie-break by drag direction so coincident thumbs don't stick: when the
+      // pointer is at or beyond the thumb's value, prefer the highest index (the
+      // thumb that can move right); otherwise prefer the lowest index.
+      const isCloser = distance < nearestDistance
+      const isTieTowardsHigher =
+        distance === nearestDistance && pointerValue >= value && index > nearestIndex
+      if (isCloser || isTieTowardsHigher) {
         nearestDistance = distance
         nearestIndex = index
       }
@@ -329,34 +337,68 @@ export class CVSliderMultiThumb extends ReatomLitElement {
     thumb?.focus()
   }
 
-  private handleTrackMouseDown(event: MouseEvent) {
-    if (this.disabled || event.button !== 0) return
+  private getPointerId(event: PointerEvent): number {
+    return Number.isFinite(event.pointerId) ? event.pointerId : 1
+  }
+
+  private resolveThumbIndexFromEvent(event: PointerEvent, pointerValue: number): number | null {
+    // A pointerdown that lands directly on a thumb must drag THAT thumb, even
+    // when several thumbs share a value. Thumbs are siblings of the track inside
+    // base, so a track-only listener would miss them entirely.
+    const path = event.composedPath()
+    for (const node of path) {
+      if (
+        node instanceof HTMLElement &&
+        node.getAttribute('part') === 'thumb' &&
+        node.hasAttribute('data-index')
+      ) {
+        const parsed = Number(node.getAttribute('data-index'))
+        if (Number.isInteger(parsed)) return parsed
+      }
+    }
+
+    return this.pickNearestThumbIndex(pointerValue)
+  }
+
+  private handleBasePointerDown(event: PointerEvent) {
+    if (this.disabled || event.isPrimary === false || event.button !== 0) return
 
     const pointerValue = this.pointerValueFromPosition(event.clientX, event.clientY)
     if (pointerValue == null) return
 
-    const index = this.pickNearestThumbIndex(pointerValue)
+    const index = this.resolveThumbIndexFromEvent(event, pointerValue)
     if (index == null) return
 
     event.preventDefault()
+    this.cleanupDragListeners()
     this.model.actions.setActiveThumb(index)
     this.draggingThumbIndex = index
+    this.activePointerId = this.getPointerId(event)
     this.dragValueChanged = this.updateValueFromPointer(index, event.clientX, event.clientY)
     this.focusThumb(index)
 
-    document.addEventListener('mousemove', this.handleDocumentMouseMove)
-    document.addEventListener('mouseup', this.handleDocumentMouseUp)
+    const controller = new AbortController()
+    this.dragAbortController = controller
+    document.addEventListener('pointermove', this.handleDocumentPointerMove, {
+      signal: controller.signal,
+    })
+    document.addEventListener('pointerup', this.handleDocumentPointerUp, {
+      signal: controller.signal,
+    })
+    document.addEventListener('pointercancel', this.handleDocumentPointerCancel, {
+      signal: controller.signal,
+    })
   }
 
-  private handleDocumentMouseMove = (event: MouseEvent) => {
-    if (this.draggingThumbIndex == null) return
+  private handleDocumentPointerMove = (event: PointerEvent) => {
+    if (this.draggingThumbIndex == null || this.getPointerId(event) !== this.activePointerId) return
 
     const changed = this.updateValueFromPointer(this.draggingThumbIndex, event.clientX, event.clientY)
     this.dragValueChanged = this.dragValueChanged || changed
   }
 
-  private handleDocumentMouseUp = (event: MouseEvent) => {
-    if (this.draggingThumbIndex == null) return
+  private handleDocumentPointerUp = (event: PointerEvent) => {
+    if (this.draggingThumbIndex == null || this.getPointerId(event) !== this.activePointerId) return
 
     const changed = this.updateValueFromPointer(this.draggingThumbIndex, event.clientX, event.clientY)
     this.dragValueChanged = this.dragValueChanged || changed
@@ -370,9 +412,18 @@ export class CVSliderMultiThumb extends ReatomLitElement {
     this.cleanupDragListeners()
   }
 
+  private handleDocumentPointerCancel = (event: PointerEvent) => {
+    if (this.getPointerId(event) !== this.activePointerId) return
+
+    this.draggingThumbIndex = null
+    this.dragValueChanged = false
+    this.cleanupDragListeners()
+  }
+
   private cleanupDragListeners(): void {
-    document.removeEventListener('mousemove', this.handleDocumentMouseMove)
-    document.removeEventListener('mouseup', this.handleDocumentMouseUp)
+    this.dragAbortController?.abort()
+    this.dragAbortController = null
+    this.activePointerId = null
   }
 
   private handleThumbFocus = (index: number) => {
@@ -381,6 +432,16 @@ export class CVSliderMultiThumb extends ReatomLitElement {
   }
 
   private handleThumbKeyDown = (index: number, event: KeyboardEvent) => {
+    if (
+      this.disabled ||
+      event.defaultPrevented ||
+      event.altKey ||
+      event.ctrlKey ||
+      event.metaKey
+    ) {
+      return
+    }
+
     if (sliderKeyboardKeys.has(event.key)) {
       event.preventDefault()
     }
@@ -396,7 +457,8 @@ export class CVSliderMultiThumb extends ReatomLitElement {
     const values = this.model.state.values()
     const min = this.model.state.min()
     const max = this.model.state.max()
-    const denominator = Math.max(max - min, 1)
+    const range = max - min
+    const denominator = range > 0 ? range : 1
     const percentages = values.map((value) => Math.max(0, Math.min(100, ((value - min) / denominator) * 100)))
     const rangeStart = percentages.length === 0 ? 0 : Math.min(...percentages)
     const rangeEnd = percentages.length === 0 ? 0 : Math.max(...percentages)
@@ -409,8 +471,9 @@ export class CVSliderMultiThumb extends ReatomLitElement {
         aria-disabled=${rootProps['aria-disabled'] ?? nothing}
         style=${`--cv-range-start:${rangeStart}%;--cv-range-size:${rangeSize}%;`}
         part="base"
+        @pointerdown=${this.handleBasePointerDown}
       >
-        <div id=${trackProps.id} data-orientation=${trackProps['data-orientation']} part="track" @mousedown=${this.handleTrackMouseDown}>
+        <div id=${trackProps.id} data-orientation=${trackProps['data-orientation']} part="track">
           <div part="range"></div>
         </div>
         ${values.map((_, index) => {
