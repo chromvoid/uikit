@@ -345,6 +345,44 @@ describe('cv-badge', () => {
       const base = getBase(badge)
       expect(base.getAttribute('aria-label')).toBe('New notifications')
     })
+
+    it('removing aria-label clears it from base', async () => {
+      const badge = await createBadge()
+      badge.setAttribute('aria-label', 'New notifications')
+      await settle(badge)
+      expect(getBase(badge).getAttribute('aria-label')).toBe('New notifications')
+
+      badge.removeAttribute('aria-label')
+      await settle(badge)
+      expect(getBase(badge).hasAttribute('aria-label')).toBe(false)
+    })
+
+    it('aria-label is forwarded for dynamic badges too', async () => {
+      const badge = await createBadge({dynamic: true})
+      badge.setAttribute('aria-label', '3 unread')
+      await settle(badge)
+      const base = getBase(badge)
+      expect(base.getAttribute('aria-label')).toBe('3 unread')
+      expect(base.getAttribute('role')).toBe('status')
+    })
+  })
+
+  // --- Dot + ARIA interplay ---
+
+  describe('dot mode ARIA interplay', () => {
+    it('dot badge keeps dynamic status semantics', async () => {
+      const badge = await createBadge({dot: true, dynamic: true})
+      const base = getBase(badge)
+      expect(base.getAttribute('role')).toBe('status')
+      expect(base.getAttribute('aria-live')).toBe('polite')
+    })
+
+    it('dot badge keeps decorative hiding semantics', async () => {
+      const badge = await createBadge({dot: true, decorative: true})
+      const base = getBase(badge)
+      expect(base.getAttribute('role')).toBe('presentation')
+      expect(base.getAttribute('aria-hidden')).toBe('true')
+    })
   })
 
   // --- Non-interactive invariant ---

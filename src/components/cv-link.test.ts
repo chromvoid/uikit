@@ -223,6 +223,23 @@ describe('cv-link', () => {
       await settle(link)
       expect(getBase(link).getAttribute('href')).toBe('/new')
     })
+
+    it('clearing href removes href from the inner anchor (placeholder link)', async () => {
+      const link = await createLink({href: '/old'})
+      expect(getBase(link).getAttribute('href')).toBe('/old')
+
+      link.href = ''
+      await settle(link)
+      expect(getBase(link).hasAttribute('href')).toBe(false)
+    })
+
+    it('removeAttribute("href") does not throw and clears the inner anchor', async () => {
+      const link = await createLink({href: '/old'})
+
+      link.removeAttribute('href')
+      await settle(link)
+      expect(getBase(link).hasAttribute('href')).toBe(false)
+    })
   })
 
   // --- Headless contract delegation ---

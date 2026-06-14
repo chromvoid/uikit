@@ -311,6 +311,62 @@ describe('cv-progress-ring', () => {
     })
   })
 
+  // --- Ring geometry ---
+
+  describe('ring geometry', () => {
+    const CIRCUMFERENCE = 2 * Math.PI * 45
+
+    it('indicator stroke-dasharray equals the ring circumference', async () => {
+      const el = await createProgressRing()
+      const indicator = el.shadowRoot!.querySelector('[part="indicator"]') as SVGCircleElement
+      expect(indicator.getAttribute('stroke-dasharray')).toBe(String(CIRCUMFERENCE))
+    })
+
+    it('stroke-dashoffset is 0 at 100%', async () => {
+      const el = await createProgressRing({value: 100, min: 0, max: 100})
+      const indicator = el.shadowRoot!.querySelector('[part="indicator"]') as SVGCircleElement
+      expect(indicator.getAttribute('style')).toContain('stroke-dashoffset: 0;')
+    })
+
+    it('stroke-dashoffset is full circumference at 0%', async () => {
+      const el = await createProgressRing({value: 0, min: 0, max: 100})
+      const indicator = el.shadowRoot!.querySelector('[part="indicator"]') as SVGCircleElement
+      expect(indicator.getAttribute('style')).toContain(`stroke-dashoffset: ${CIRCUMFERENCE};`)
+    })
+
+    it('uses a fixed 75% dashoffset in indeterminate mode', async () => {
+      const el = await createProgressRing({value: 50, indeterminate: true})
+      const indicator = el.shadowRoot!.querySelector('[part="indicator"]') as SVGCircleElement
+      expect(indicator.getAttribute('style')).toContain(`stroke-dashoffset: ${CIRCUMFERENCE * 0.75};`)
+    })
+
+    it('handles min === max without NaN in dashoffset (zero-span range)', async () => {
+      const el = await createProgressRing({value: 5, min: 5, max: 5})
+      const indicator = el.shadowRoot!.querySelector('[part="indicator"]') as SVGCircleElement
+      const style = indicator.getAttribute('style') ?? ''
+      expect(style).not.toContain('NaN')
+      // percentage is 0 for a zero-span range
+      expect(style).toContain(`stroke-dashoffset: ${CIRCUMFERENCE};`)
+    })
+
+    it('normalizes inverted range (min > max) by swapping bounds', async () => {
+      const el = await createProgressRing({value: 30, min: 100, max: 0})
+      const base = getBase(el)
+      expect(base.getAttribute('aria-valuemin')).toBe('0')
+      expect(base.getAttribute('aria-valuemax')).toBe('100')
+      expect(base.getAttribute('aria-valuenow')).toBe('30')
+    })
+
+    it('removing the value attribute resets to min without throwing', async () => {
+      const el = await createProgressRing({value: 40})
+      expect(getBase(el).getAttribute('aria-valuenow')).toBe('40')
+
+      el.removeAttribute('value')
+      await settle(el)
+      expect(getBase(el).getAttribute('aria-valuenow')).toBe('0')
+    })
+  })
+
   // --- Label slot ---
 
   describe('label slot', () => {

@@ -696,6 +696,58 @@ describe('cv-card', () => {
       expect(header.getAttribute('aria-expanded')).toBe('false')
       expect(body.hasAttribute('hidden')).toBe(true)
     })
+
+    it('preserves expanded state when expandable is toggled off and on', async () => {
+      const el = await createCard({expandable: true, expanded: true})
+      expect(getHeader(el).getAttribute('aria-expanded')).toBe('true')
+
+      el.expandable = false
+      await settle(el)
+      expect(el.expanded).toBe(true)
+      expect(getBody(el).hasAttribute('hidden')).toBe(false)
+
+      el.expandable = true
+      await settle(el)
+      expect(el.expanded).toBe(true)
+      expect(getHeader(el).getAttribute('aria-expanded')).toBe('true')
+      expect(getBody(el).hasAttribute('hidden')).toBe(false)
+    })
+
+    it('programmatic expanded change while disabled is honored without events', async () => {
+      const el = await createCard({expandable: true, disabled: true})
+      let inputCount = 0
+      let changeCount = 0
+      el.addEventListener('cv-input', () => inputCount++)
+      el.addEventListener('cv-change', () => changeCount++)
+
+      el.expanded = true
+      await settle(el)
+
+      expect(el.expanded).toBe(true)
+      expect(getHeader(el).getAttribute('aria-expanded')).toBe('true')
+      expect(getBody(el).hasAttribute('hidden')).toBe(false)
+      // header still disabled after the programmatic change
+      expect(getHeader(el).getAttribute('aria-disabled')).toBe('true')
+      expect(inputCount).toBe(0)
+      expect(changeCount).toBe(0)
+
+      // and user interaction remains blocked
+      getHeader(el).dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+      await settle(el)
+      expect(el.expanded).toBe(true)
+      expect(changeCount).toBe(0)
+    })
+
+    it('setting expanded on a non-expandable card does not reveal trigger semantics', async () => {
+      const el = await createCard()
+
+      el.expanded = true
+      await settle(el)
+
+      expect(el.expanded).toBe(true)
+      expect(getHeader(el).hasAttribute('aria-expanded')).toBe(false)
+      expect(getBody(el).hasAttribute('hidden')).toBe(false)
+    })
   })
 
   // --- Headless contract delegation ---

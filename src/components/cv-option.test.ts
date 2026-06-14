@@ -124,6 +124,27 @@ describe('cv-option', () => {
       const el = await createOption({active: false})
       expect(el.hasAttribute('active')).toBe(false)
     })
+
+    it('setting the value attribute updates the property', async () => {
+      const el = await createOption()
+      el.setAttribute('value', 'banana')
+      await settle(el)
+      expect(el.value).toBe('banana')
+    })
+
+    it('updating the value property updates the attribute dynamically', async () => {
+      const el = await createOption({value: 'apple'})
+      el.value = 'cherry'
+      await settle(el)
+      expect(el.getAttribute('value')).toBe('cherry')
+    })
+
+    it('selected, active and disabled states can coexist', async () => {
+      const el = await createOption({selected: true, active: true, disabled: true})
+      expect(el.hasAttribute('selected')).toBe(true)
+      expect(el.hasAttribute('active')).toBe(true)
+      expect(el.hasAttribute('disabled')).toBe(true)
+    })
   })
 
   // --- 4. Visual states ---

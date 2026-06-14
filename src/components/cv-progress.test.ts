@@ -264,6 +264,58 @@ describe('cv-progress', () => {
     })
   })
 
+  // --- Value clamping and range edge cases ---
+
+  describe('value clamping and range edge cases', () => {
+    it('clamps value to min when set below min', async () => {
+      const el = await createProgress({value: -10, min: 0, max: 100})
+      expect(getBase(el).getAttribute('aria-valuenow')).toBe('0')
+    })
+
+    it('clamps value to max when set above max', async () => {
+      const el = await createProgress({value: 250, min: 0, max: 100})
+      expect(getBase(el).getAttribute('aria-valuenow')).toBe('100')
+      const indicator = el.shadowRoot!.querySelector('[part="indicator"]') as HTMLElement
+      expect(indicator.getAttribute('style')).toContain('--cv-progress-width:100%')
+    })
+
+    it('handles min === max without NaN (zero-span range)', async () => {
+      const el = await createProgress({value: 5, min: 5, max: 5})
+      const base = getBase(el)
+      const indicator = el.shadowRoot!.querySelector('[part="indicator"]') as HTMLElement
+
+      expect(base.getAttribute('aria-valuetext')).toBe('0%')
+      expect(indicator.getAttribute('style')).toContain('--cv-progress-width:0%')
+      expect(indicator.getAttribute('style')).not.toContain('NaN')
+      // value >= max, so complete
+      expect(el.hasAttribute('data-complete')).toBe(true)
+    })
+
+    it('normalizes inverted range (min > max) by swapping bounds', async () => {
+      const el = await createProgress({value: 30, min: 100, max: 0})
+      const base = getBase(el)
+      expect(base.getAttribute('aria-valuemin')).toBe('0')
+      expect(base.getAttribute('aria-valuemax')).toBe('100')
+      expect(base.getAttribute('aria-valuenow')).toBe('30')
+    })
+
+    it('removing the value attribute resets to min without throwing', async () => {
+      const el = await createProgress({value: 40})
+      expect(getBase(el).getAttribute('aria-valuenow')).toBe('40')
+
+      el.removeAttribute('value')
+      await settle(el)
+      expect(getBase(el).getAttribute('aria-valuenow')).toBe('0')
+    })
+
+    it('rounds aria-valuetext percentage while keeping precise indicator width', async () => {
+      const el = await createProgress({value: 1, min: 0, max: 3})
+      expect(getBase(el).getAttribute('aria-valuetext')).toBe('33%')
+      const indicator = el.shadowRoot!.querySelector('[part="indicator"]') as HTMLElement
+      expect(indicator.getAttribute('style')).toContain('--cv-progress-width:33.3333%')
+    })
+  })
+
   // --- Headless contract delegation ---
 
   describe('headless contract delegation', () => {

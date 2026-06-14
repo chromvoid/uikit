@@ -216,6 +216,26 @@ describe('cv-landmark', () => {
       expect(base.getAttribute('aria-label')).toBe('Primary nav')
       expect(base.hasAttribute('aria-labelledby')).toBe(false)
     })
+
+    it('removes aria-label when label is cleared at runtime', async () => {
+      const el = await createLandmark({label: 'Nav'})
+      const base = getBase(el)
+      expect(base.getAttribute('aria-label')).toBe('Nav')
+
+      el.label = ''
+      await settle(el)
+      expect(base.hasAttribute('aria-label')).toBe(false)
+    })
+
+    it('preserves aria-label when type changes at runtime', async () => {
+      const el = await createLandmark({type: 'navigation', label: 'Nav'})
+      const base = getBase(el)
+
+      el.type = 'search'
+      await settle(el)
+      expect(base.getAttribute('role')).toBe('search')
+      expect(base.getAttribute('aria-label')).toBe('Nav')
+    })
   })
 
   // --- Headless contract delegation ---
