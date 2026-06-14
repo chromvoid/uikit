@@ -240,12 +240,19 @@ export class CVGrid extends ReatomLitElement {
       changedProperties.has('totalRowCount') ||
       changedProperties.has('totalColumnCount')
     ) {
-      this.rebuildModelFromSlot(true, false)
+      // When value/selectedValues are batched into the same update as a config
+      // prop, the model rebuild must seed from the new property values, not the
+      // pre-rebuild model snapshot — otherwise the requested value is silently
+      // dropped. Seed from properties whenever they changed in this batch.
+      const seedFromProperties =
+        changedProperties.has('value') || changedProperties.has('selectedValues')
+      this.rebuildModelFromSlot(!seedFromProperties, false)
       return
     }
 
     if (changedProperties.has('value')) {
-      const normalized = this.value.trim()
+      // removeAttribute('value') yields null via Lit's String converter; guard it.
+      const normalized = (this.value ?? '').trim()
       if (this.value !== normalized) {
         this.value = normalized
       }
@@ -257,14 +264,21 @@ export class CVGrid extends ReatomLitElement {
       if (nextCell && nextKey != null && nextKey !== modelActiveKey && this.validCellMap.has(nextKey)) {
         const previous = this.captureSnapshot()
         this.model.actions.setActiveCell(nextCell)
-        this.applyInteractionResult(previous)
+        // Programmatic property writes are silent, like native form controls.
+        this.applyInteractionResult(previous, false)
+      } else {
+        // Unknown/invalid key: keep the property in sync with the model rather
+        // than leaving a dangling value that points at no cell.
+        this.syncControlledValuesFromModel()
       }
     }
 
     if (changedProperties.has('selectedValues')) {
       const modelSelected = this.captureSnapshot().selectedKeys
       const normalized = [
-        ...new Set(this.selectedValues.map((value) => value.trim()).filter((value) => value.length > 0)),
+        ...new Set(
+          (this.selectedValues ?? []).map((value) => value.trim()).filter((value) => value.length > 0),
+        ),
       ]
       if (sameSetMembers(normalized, modelSelected)) {
         return
@@ -272,7 +286,8 @@ export class CVGrid extends ReatomLitElement {
 
       const previous = this.captureSnapshot()
       this.setSelectedValuesInModel(normalized)
-      this.applyInteractionResult(previous)
+      // Programmatic property writes are silent, like native form controls.
+      this.applyInteractionResult(previous, false)
     }
   }
 
@@ -356,9 +371,13 @@ export class CVGrid extends ReatomLitElement {
     const previous = preserveState
       ? this.captureSnapshot()
       : {
-          activeKey: this.value.trim() || null,
+          activeKey: (this.value ?? '').trim() || null,
           selectedKeys: [
-            ...new Set(this.selectedValues.map((value) => value.trim()).filter((value) => value.length > 0)),
+            ...new Set(
+              (this.selectedValues ?? [])
+                .map((value) => value.trim())
+                .filter((value) => value.length > 0),
+            ),
           ],
         }
 
@@ -421,6 +440,22 @@ export class CVGrid extends ReatomLitElement {
       }
     })
 
+    // Ragged rows: a row may omit a cell for some valid column. The headless
+    // grid models a full row x column matrix, so without intervention ArrowDown
+    // could land the active cell on a (rowId, colId) pair that has no DOM cell —
+    // every real cell then reports tabindex=-1 and the roving tabindex is lost.
+    // Treat each missing pair as a disabled cell so navigation skips over it.
+    for (const row of this.rowRecords) {
+      const presentColIds = new Set(
+        row.cells.filter((cell) => cell.valid).map((cell) => cell.colId),
+      )
+      for (const colId of validColumnIds) {
+        if (!presentColIds.has(colId)) {
+          disabledCells.push({rowId: row.id, colId})
+        }
+      }
+    }
+
     const initialActiveCell =
       previous.activeKey && this.validCellMap.has(previous.activeKey)
         ? this.cellFromKey(previous.activeKey)
@@ -432,8 +467,9 @@ export class CVGrid extends ReatomLitElement {
       .map((key) => this.cellFromKey(key))
       .filter((cell): cell is GridCellId => cell != null)
 
-    const normalizedAriaLabel = this.ariaLabel.trim()
-    const normalizedAriaLabelledBy = this.ariaLabelledBy.trim()
+    // removeAttribute('aria-label'/'aria-labelledby') yields null; guard it.
+    const normalizedAriaLabel = (this.ariaLabel ?? '').trim()
+    const normalizedAriaLabelledBy = (this.ariaLabelledBy ?? '').trim()
 
     this.model = createGrid({
       idBase: this.idBase,
@@ -590,11 +626,13 @@ export class CVGrid extends ReatomLitElement {
     )
   }
 
-  private applyInteractionResult(previous: GridSnapshot): void {
+  private applyInteractionResult(previous: GridSnapshot, emit = true): void {
     this.syncElementsFromModel()
 
     const next = this.captureSnapshot()
     this.syncControlledValuesFromModel()
+
+    if (!emit) return
 
     const activeChanged = previous.activeKey !== next.activeKey
     const selectionChanged = !sameSetMembers(previous.selectedKeys, next.selectedKeys)
@@ -664,6 +702,12 @@ export class CVGrid extends ReatomLitElement {
   }
 
   private handleGridKeyDown(event: KeyboardEvent) {
+    // Don't hijack browser shortcuts that pair Alt with arrows (history back/
+    // forward) — the grid never acts on Alt+Arrow, so neither preventDefault nor
+    // forward it to the model. Ctrl/Meta+Home/End remain handled (grid extremes).
+    if (event.altKey) return
+    if (event.defaultPrevented) return
+
     if (gridKeysToPrevent.has(event.key)) {
       event.preventDefault()
     }

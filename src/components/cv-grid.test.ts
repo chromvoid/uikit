@@ -1215,4 +1215,300 @@ describe('cv-grid', () => {
       expect(getBase(grid).getAttribute('aria-label')).toBe('Updated Label')
     })
   })
+
+  // --- corner cases ---
+
+  describe('corner cases', () => {
+    it('renders an empty grid without rows or columns', async () => {
+      const el = document.createElement('cv-grid') as CVGrid
+      el.ariaLabel = 'Empty'
+      document.body.append(el)
+      await settle(el)
+
+      expect(getBase(el).getAttribute('role')).toBe('grid')
+      expect(el.value).toBe('')
+      expect(getBase(el).getAttribute('aria-colcount')).toBe('0')
+      expect(getBase(el).getAttribute('aria-rowcount')).toBe('0')
+    })
+
+    it('keyboard navigation on an empty grid is a no-op', async () => {
+      const el = document.createElement('cv-grid') as CVGrid
+      el.ariaLabel = 'Empty'
+      document.body.append(el)
+      await settle(el)
+
+      const base = getBase(el)
+      let eventCount = 0
+      el.addEventListener('cv-input', () => eventCount++)
+
+      base.dispatchEvent(new KeyboardEvent('keydown', {key: 'ArrowDown', bubbles: true}))
+      base.dispatchEvent(new KeyboardEvent('keydown', {key: 'End', bubbles: true}))
+      await settle(el)
+
+      expect(el.value).toBe('')
+      expect(eventCount).toBe(0)
+    })
+
+    it('single-cell grid keeps the active cell on arrow navigation', async () => {
+      const el = document.createElement('cv-grid') as CVGrid
+      el.ariaLabel = 'Single'
+      el.append(createColumn('c1', 'Col 1'), createRow('r1', [createCell('c1', 'Only')]))
+      document.body.append(el)
+      await settle(el)
+
+      const base = getBase(el)
+      for (const key of ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight']) {
+        base.dispatchEvent(new KeyboardEvent('keydown', {key, bubbles: true}))
+      }
+      await settle(el)
+
+      expect(el.value).toBe('r1::c1')
+      expect(getGridCell(el, 'r1', 'c1').getAttribute('tabindex')).toBe('0')
+    })
+
+    it('PageDown clamps to the last row when page-size exceeds row count', async () => {
+      const grid = await createGrid({pageSize: 100})
+
+      getBase(grid).dispatchEvent(new KeyboardEvent('keydown', {key: 'PageDown', bubbles: true}))
+      await settle(grid)
+
+      expect(grid.value).toBe('r3::c1')
+    })
+
+    it('explicit row and column index values override aria indexes', async () => {
+      const el = document.createElement('cv-grid') as CVGrid
+      el.ariaLabel = 'Indexed'
+      el.append(
+        createColumn('c1', 'Col 1', {index: 4}),
+        createRow('r1', [createCell('c1', 'A1')], {index: 7}),
+      )
+      document.body.append(el)
+      await settle(el)
+
+      const row = el.querySelector('cv-grid-row[value="r1"]') as CVGridRow
+      const col = el.querySelector('cv-grid-column[value="c1"]') as CVGridColumn
+      expect(row.getAttribute('aria-rowindex')).toBe('7')
+      expect(col.getAttribute('aria-colindex')).toBe('4')
+      expect(getGridCell(el, 'r1', 'c1').getAttribute('aria-colindex')).toBe('4')
+    })
+
+    it('removing the active row moves the active cell to the first enabled cell', async () => {
+      const grid = await createGrid()
+      expect(grid.value).toBe('r1::c1')
+
+      const row1 = grid.querySelector('cv-grid-row[value="r1"]') as CVGridRow
+      row1.remove()
+      await settle(grid)
+
+      expect(grid.value).toBe('r2::c1')
+      expect(getGridCell(grid, 'r2', 'c1').getAttribute('data-active')).toBe('true')
+    })
+
+    it('setting value to a disabled cell key reverts to the current active cell', async () => {
+      const el = document.createElement('cv-grid') as CVGrid
+      el.ariaLabel = 'Disabled'
+      el.append(
+        createColumn('c1', 'Col 1'),
+        createColumn('c2', 'Col 2'),
+        createRow('r1', [createCell('c1', 'A1'), createCell('c2', 'A2', {disabled: true})]),
+      )
+      document.body.append(el)
+      await settle(el)
+      expect(el.value).toBe('r1::c1')
+
+      el.value = 'r1::c2'
+      await settle(el)
+
+      expect(el.value).toBe('r1::c1')
+      expect(getGridCell(el, 'r1', 'c1').getAttribute('data-active')).toBe('true')
+    })
+
+    it('clicking a cell with an unknown column is ignored', async () => {
+      const el = document.createElement('cv-grid') as CVGrid
+      el.ariaLabel = 'Invalid cell'
+      el.append(
+        createColumn('c1', 'Col 1'),
+        createRow('r1', [createCell('c1', 'Valid'), createCell('nonexistent', 'Invalid')]),
+      )
+      document.body.append(el)
+      await settle(el)
+
+      let eventCount = 0
+      el.addEventListener('cv-input', () => eventCount++)
+
+      const invalidCell = el.querySelector('cv-grid-cell[column="nonexistent"]') as CVGridCell
+      invalidCell.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+      await settle(el)
+
+      expect(eventCount).toBe(0)
+      expect(el.value).toBe('r1::c1')
+    })
+
+    it('cell click still works after the grid is detached and re-appended', async () => {
+      const grid = await createGrid()
+      const parent = grid.parentElement as HTMLElement
+
+      grid.remove()
+      parent.append(grid)
+      await settle(grid)
+
+      let eventCount = 0
+      grid.addEventListener('cv-input', () => eventCount++)
+
+      getGridCell(grid, 'r2', 'c2').dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+      await settle(grid)
+
+      expect(grid.value).toBe('r2::c2')
+      expect(eventCount).toBe(1)
+    })
+
+    it('cell click updates aria-activedescendant in aria-activedescendant mode', async () => {
+      const grid = await createGrid({focusStrategy: 'aria-activedescendant'})
+
+      getGridCell(grid, 'r2', 'c1').dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+      await settle(grid)
+
+      expect(getBase(grid).getAttribute('aria-activedescendant')).toContain('-cell-r2-c1')
+    })
+  })
+
+  // --- regression: batch 5 audit fixes ---
+
+  describe('regression (batch 5)', () => {
+    it('removeAttribute("value") does not throw and resyncs to the model', async () => {
+      const grid = await createGrid()
+      grid.value = 'r2::c2'
+      await settle(grid)
+      expect(grid.value).toBe('r2::c2')
+
+      grid.removeAttribute('value')
+      await settle(grid)
+
+      // No TypeError; value falls back to the model's active cell.
+      expect(grid.value).toBe('r2::c2')
+    })
+
+    it('removeAttribute("aria-label") does not throw', async () => {
+      const el = document.createElement('cv-grid') as CVGrid
+      el.setAttribute('aria-label', 'Declared Label')
+      el.append(createColumn('c1', 'Col 1'), createRow('r1', [createCell('c1', 'A1')]))
+      document.body.append(el)
+      await settle(el)
+      expect(getBase(el).getAttribute('aria-label')).toBe('Declared Label')
+
+      // Lit's String converter turns removeAttribute into a null property write.
+      el.removeAttribute('aria-label')
+      await settle(el)
+      // Falls back to the default "Grid" label without crashing.
+      expect(getBase(el).getAttribute('aria-label')).toBe('Grid')
+    })
+
+    it('removeAttribute("aria-labelledby") does not throw', async () => {
+      const el = document.createElement('cv-grid') as CVGrid
+      el.setAttribute('aria-labelledby', 'external-label')
+      el.append(createColumn('c1', 'Col 1'), createRow('r1', [createCell('c1', 'A1')]))
+      document.body.append(el)
+      await settle(el)
+
+      el.removeAttribute('aria-labelledby')
+      await settle(el)
+      expect(getBase(el).getAttribute('aria-label')).toBe('Grid')
+    })
+
+    it('programmatic value change does not emit cv-input or cv-change', async () => {
+      const grid = await createGrid()
+      let count = 0
+      grid.addEventListener('cv-input', () => count++)
+      grid.addEventListener('cv-change', () => count++)
+
+      grid.value = 'r2::c3'
+      await settle(grid)
+
+      expect(grid.value).toBe('r2::c3')
+      expect(count).toBe(0)
+    })
+
+    it('programmatic selectedValues change does not emit cv-input or cv-change', async () => {
+      const grid = await createGrid({selectionMode: 'multiple'})
+      let count = 0
+      grid.addEventListener('cv-input', () => count++)
+      grid.addEventListener('cv-change', () => count++)
+
+      grid.selectedValues = ['r1::c1', 'r2::c2']
+      await settle(grid)
+
+      expect(new Set(grid.selectedValues)).toEqual(new Set(['r1::c1', 'r2::c2']))
+      expect(count).toBe(0)
+    })
+
+    it('navigating into a ragged row (missing cell for the active column) keeps a valid roving cell', async () => {
+      const el = document.createElement('cv-grid') as CVGrid
+      el.ariaLabel = 'Ragged'
+      el.append(
+        createColumn('c1', 'Col 1'),
+        createColumn('c2', 'Col 2'),
+        createRow('r1', [createCell('c1', 'A1'), createCell('c2', 'A2')]),
+        createRow('r2', [createCell('c1', 'B1')]), // r2 omits c2
+      )
+      document.body.append(el)
+      await settle(el)
+
+      const base = getBase(el)
+      base.dispatchEvent(new KeyboardEvent('keydown', {key: 'ArrowRight', bubbles: true}))
+      await settle(el)
+      expect(el.value).toBe('r1::c2')
+
+      base.dispatchEvent(new KeyboardEvent('keydown', {key: 'ArrowDown', bubbles: true}))
+      await settle(el)
+
+      // The active cell must point at a cell that actually exists in the DOM.
+      const [rowId, colId] = el.value.split('::')
+      const active = getGridCell(el, rowId!, colId!)
+      expect(active).not.toBeNull()
+      expect(active.getAttribute('tabindex')).toBe('0')
+    })
+
+    it('Alt+Arrow is not intercepted (browser history shortcut passes through)', async () => {
+      const grid = await createGrid()
+      const base = getBase(grid)
+      expect(grid.value).toBe('r1::c1')
+
+      const event = new KeyboardEvent('keydown', {
+        key: 'ArrowRight',
+        altKey: true,
+        bubbles: true,
+        cancelable: true,
+      })
+      base.dispatchEvent(event)
+      await settle(grid)
+
+      expect(event.defaultPrevented).toBe(false)
+      expect(grid.value).toBe('r1::c1')
+    })
+
+    it('keydown already handled by a consumer is ignored', async () => {
+      const grid = await createGrid()
+      const base = getBase(grid)
+      base.addEventListener('keydown', (e) => e.preventDefault(), {capture: true})
+
+      base.dispatchEvent(new KeyboardEvent('keydown', {key: 'ArrowRight', bubbles: true, cancelable: true}))
+      await settle(grid)
+
+      expect(grid.value).toBe('r1::c1')
+    })
+
+    it('value batched with a config-prop change is not dropped', async () => {
+      const grid = await createGrid()
+      expect(grid.value).toBe('r1::c1')
+
+      // Change a config prop and value in the same update batch.
+      grid.selectionMode = 'multiple'
+      grid.value = 'r2::c3'
+      await settle(grid)
+
+      expect(getBase(grid).getAttribute('aria-multiselectable')).toBe('true')
+      expect(grid.value).toBe('r2::c3')
+      expect(getGridCell(grid, 'r2', 'c3').getAttribute('data-active')).toBe('true')
+    })
+  })
 })
