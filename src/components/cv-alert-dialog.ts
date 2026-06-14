@@ -4,6 +4,7 @@ import type {PropertyValues} from 'lit'
 
 import {html} from '../reatom-lit/index.js'
 import {ReatomLitElement} from '../reatom-lit/ReatomLitElement'
+import {acquireBodyScrollLock, releaseBodyScrollLock} from './scroll-lock'
 
 export interface CVAlertDialogEventDetail {
   open: boolean
@@ -44,7 +45,6 @@ export class CVAlertDialog extends ReatomLitElement {
   private readonly idBase = `cv-alert-dialog-${++cvAlertDialogNonce}`
   private model: AlertDialogModel
   private lockScrollApplied = false
-  private previousBodyOverflow = ''
 
   constructor() {
     super()
@@ -202,8 +202,18 @@ export class CVAlertDialog extends ReatomLitElement {
       changedProperties.has('ariaLabelledBy') ||
       changedProperties.has('ariaDescribedBy')
     ) {
-      const initialOpen = changedProperties.has('open') ? this.open : this.model.state.isOpen()
+      const previousOpen = this.model.state.isOpen()
+      const initialOpen = changedProperties.has('open') ? this.open : previousOpen
       this.model = this.createModel(initialOpen)
+
+      // A config change rebuilds the model; if `open` also changed in the same
+      // update the open transition would otherwise be swallowed. Emit it (but
+      // not on the initial render, where every property counts as "changed").
+      if (this.hasUpdated && changedProperties.has('open') && previousOpen !== this.open) {
+        const detail = {open: this.open}
+        this.dispatchInput(detail)
+        this.dispatchChange(detail)
+      }
       return
     }
 
@@ -303,14 +313,13 @@ export class CVAlertDialog extends ReatomLitElement {
     }
 
     if (this.lockScrollApplied) return
-    this.previousBodyOverflow = document.body.style.overflow
-    document.body.style.overflow = 'hidden'
+    acquireBodyScrollLock()
     this.lockScrollApplied = true
   }
 
   private releaseScrollLock(): void {
     if (!this.lockScrollApplied) return
-    document.body.style.overflow = this.previousBodyOverflow
+    releaseBodyScrollLock()
     this.lockScrollApplied = false
   }
 
@@ -319,9 +328,12 @@ export class CVAlertDialog extends ReatomLitElement {
     const requestedId = contentProps['data-initial-focus']
 
     if (requestedId) {
+      // Use an attribute selector so ids containing characters that need CSS
+      // escaping (`:`, `.`, leading digits, …) still resolve.
+      const selector = `[id="${requestedId.replace(/"/g, '\\"')}"]`
       const explicit =
-        (this.querySelector(`#${requestedId}`) as HTMLElement | null) ??
-        (this.shadowRoot?.querySelector(`#${requestedId}`) as HTMLElement | null)
+        (this.querySelector(selector) as HTMLElement | null) ??
+        (this.shadowRoot?.querySelector(selector) as HTMLElement | null)
       if (explicit) {
         explicit.focus()
         return
@@ -368,6 +380,9 @@ export class CVAlertDialog extends ReatomLitElement {
 
   private handleContentKeyDown(event: KeyboardEvent) {
     if (event.key === 'Escape') {
+      // Respect a nested widget that already consumed Escape, and never
+      // preventDefault / close when Escape dismissal is disabled.
+      if (event.defaultPrevented || !this.closeOnEscape) return
       event.preventDefault()
     }
 
@@ -400,6 +415,7 @@ export class CVAlertDialog extends ReatomLitElement {
 
     return html`
       <button
+        id="${this.idBase}-trigger"
         part="trigger"
         type="button"
         aria-haspopup="dialog"
