@@ -4,7 +4,7 @@ import type {PropertyValues} from 'lit'
 
 import {html} from '../reatom-lit/index.js'
 import {ReatomLitElement} from '../reatom-lit/ReatomLitElement'
-import {CVAccordionItem} from './cv-accordion-item'
+import {CVAccordionItem, type CVAccordionItemTriggerKeydownDetail} from './cv-accordion-item'
 
 export interface CVAccordionEventDetail {
   value: string | null
@@ -60,6 +60,16 @@ export class CVAccordion extends ReatomLitElement {
     {click: EventListener; focus: EventListener; keydown: EventListener}
   >()
   private readonly model: AccordionModel
+  /**
+   * Tracks the controlled value/expandedValues the consumer originally requested
+   * before any items were slotted. Used to re-apply the requested expansion once
+   * sections populate (the accordion may connect before its items are appended).
+   */
+  private requestedValue: string | null = null
+  private requestedExpandedValues: string[] | null = null
+  /** True once the originally-requested controlled value has been reconciled
+   * against a populated section list, so we stop re-applying it afterwards. */
+  private requestReconciled = false
 
   constructor() {
     super()
@@ -94,6 +104,12 @@ export class CVAccordion extends ReatomLitElement {
 
   override connectedCallback(): void {
     super.connectedCallback()
+    // Capture the controlled expansion the consumer requested before items were
+    // slotted, so a later slotchange can reconcile it once sections populate.
+    this.requestedValue = (this.value ?? '').trim() || null
+    this.requestedExpandedValues = this.expandedValues
+      ? this.expandedValues.map((value) => value.trim()).filter((value) => value.length > 0)
+      : null
     this.model.actions.setAllowMultiple(this.allowMultiple)
     this.model.actions.setAllowZeroExpanded(this.allowZeroExpanded)
     this.model.actions.setHeadingLevel(this.headingLevel)
@@ -135,16 +151,28 @@ export class CVAccordion extends ReatomLitElement {
     }
 
     if (changedProperties.has('value') && !this.allowMultiple) {
-      const previous = this.captureSnapshot()
-      const normalized = this.value.trim()
-      this.model.actions.setExpandedIds(normalized ? [normalized] : [])
-      this.applyInteractionResult(previous)
+      const normalized = (this.value ?? '').trim()
+      // Skip echoes of the model's own value written by syncControlledValuesFromModel.
+      if (normalized !== ((this.model.state.value() ?? '').trim() || '')) {
+        const previous = this.captureSnapshot()
+        this.requestedValue = normalized || null
+        this.model.actions.setExpandedIds(normalized ? [normalized] : [])
+        // Programmatic property writes are silent, like native form controls.
+        this.applyInteractionResult(previous, undefined, false)
+      }
     }
 
     if (changedProperties.has('expandedValues') && this.allowMultiple) {
-      const previous = this.captureSnapshot()
-      this.model.actions.setExpandedIds(this.expandedValues)
-      this.applyInteractionResult(previous)
+      const normalized = (this.expandedValues ?? [])
+        .map((value) => value.trim())
+        .filter((value) => value.length > 0)
+      // Skip echoes of the model's own expanded values.
+      if (!arraysEqual(normalized, this.model.state.expandedValues())) {
+        const previous = this.captureSnapshot()
+        this.requestedExpandedValues = normalized
+        this.model.actions.setExpandedIds(normalized)
+        this.applyInteractionResult(previous, undefined, false)
+      }
     }
   }
 
@@ -173,17 +201,25 @@ export class CVAccordion extends ReatomLitElement {
 
   private resolveConfiguredExpandedIds(itemRecords: AccordionItemRecord[]): string[] {
     if (this.allowMultiple) {
-      const fromProperty = this.expandedValues
+      const fromProperty = (this.expandedValues ?? [])
         .map((value) => value.trim())
         .filter((value) => value.length > 0)
 
       if (fromProperty.length > 0) return fromProperty
 
+      // Fall back to the originally-requested expansion (the property may have
+      // been wiped to [] when the accordion connected before its items).
+      if (this.requestedExpandedValues && this.requestedExpandedValues.length > 0) {
+        return this.requestedExpandedValues
+      }
+
       return itemRecords.filter((record) => record.element.expanded).map((record) => record.id)
     }
 
-    const fromValue = this.value.trim()
+    const fromValue = (this.value ?? '').trim()
     if (fromValue) return [fromValue]
+
+    if (this.requestedValue) return [this.requestedValue]
 
     const expandedRecord = itemRecords.find((record) => record.element.expanded)
     return expandedRecord ? [expandedRecord.id] : []
@@ -212,6 +248,23 @@ export class CVAccordion extends ReatomLitElement {
       if (expandedIds.length > 0) {
         this.model.actions.setExpandedIds(expandedIds)
       }
+    } else if (!this.requestReconciled && this.model.state.expandedValues().length === 0) {
+      // The accordion may have connected before its items were appended: the
+      // controlled value/expandedValues was resolved against an empty section
+      // list and wiped. Re-apply the originally-requested expansion the first
+      // time matching sections appear, so a controlled value survives late
+      // slotting. Only done once, so it never resurrects a user collapse.
+      const knownIds = new Set(this.itemRecords.map((record) => record.id))
+      const reapply = this.resolveConfiguredExpandedIds(this.itemRecords).filter((id) =>
+        knownIds.has(id),
+      )
+      if (reapply.length > 0) {
+        this.model.actions.setExpandedIds(reapply)
+      }
+    }
+
+    if (this.itemRecords.length > 0) {
+      this.requestReconciled = true
     }
 
     this.attachItemListeners()
@@ -242,7 +295,10 @@ export class CVAccordion extends ReatomLitElement {
       }
 
       const keydown = (event: Event) => {
-        this.handleItemTriggerKeyDown(record.id, event as CustomEvent<{key: string}>)
+        this.handleItemTriggerKeyDown(
+          record.id,
+          event as CustomEvent<CVAccordionItemTriggerKeydownDetail>,
+        )
       }
 
       record.element.addEventListener('cv-accordion-item-trigger-click', click)
@@ -260,6 +316,7 @@ export class CVAccordion extends ReatomLitElement {
 
       record.element.applyContracts({
         headerId: headerProps.id,
+        headingLevel: this.model.state.headingLevel(),
         trigger: {
           id: triggerProps.id,
           role: triggerProps.role,
@@ -329,7 +386,11 @@ export class CVAccordion extends ReatomLitElement {
     })
   }
 
-  private applyInteractionResult(previous: AccordionSnapshot, expandedIdToReveal?: string): void {
+  private applyInteractionResult(
+    previous: AccordionSnapshot,
+    expandedIdToReveal?: string,
+    emitEvents = true,
+  ): void {
     this.syncItemElements()
 
     const next = this.captureSnapshot()
@@ -347,7 +408,7 @@ export class CVAccordion extends ReatomLitElement {
       this.revealExpandedItem(expandedIdToReveal)
     }
 
-    if (!valuesChanged && !activeChanged) return
+    if (!emitEvents || (!valuesChanged && !activeChanged)) return
 
     const detail: CVAccordionEventDetail = {
       value: this.value || null,
@@ -377,8 +438,18 @@ export class CVAccordion extends ReatomLitElement {
     this.applyInteractionResult(previous)
   }
 
-  private handleItemTriggerKeyDown(id: string, event: CustomEvent<{key: string}>): void {
-    const {key} = event.detail
+  private handleItemTriggerKeyDown(
+    id: string,
+    event: CustomEvent<CVAccordionItemTriggerKeydownDetail>,
+  ): void {
+    const {key, ctrlKey, altKey, metaKey} = event.detail
+    // Let browser/OS shortcuts through: a held Ctrl/Alt/Meta means the keystroke
+    // is not accordion navigation (e.g. Ctrl+ArrowDown), so neither navigate nor
+    // preventDefault.
+    if (ctrlKey || altKey || metaKey) {
+      return
+    }
+
     if (accordionKeysToPrevent.has(key)) {
       event.preventDefault()
     }

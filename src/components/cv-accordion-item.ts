@@ -1,4 +1,5 @@
 import {LitElement, css, html, nothing} from 'lit'
+import {html as staticHtml, literal} from 'lit/static-html.js'
 
 interface CVAccordionItemTriggerState {
   id: string
@@ -18,12 +19,17 @@ interface CVAccordionItemPanelState {
 
 export interface CVAccordionItemContracts {
   headerId: string
+  headingLevel: number
   trigger: CVAccordionItemTriggerState
   panel: CVAccordionItemPanelState
 }
 
 export interface CVAccordionItemTriggerKeydownDetail {
   key: string
+  ctrlKey: boolean
+  altKey: boolean
+  metaKey: boolean
+  shiftKey: boolean
 }
 
 export type CVAccordionItemTriggerClickEvent = CustomEvent<null>
@@ -54,6 +60,7 @@ export class CVAccordionItem extends LitElement {
   declare active: boolean
 
   private headerId = ''
+  private headingLevel = 3
   private triggerState: CVAccordionItemTriggerState = {
     id: '',
     role: 'button',
@@ -153,6 +160,7 @@ export class CVAccordionItem extends LitElement {
 
   applyContracts(contracts: CVAccordionItemContracts): void {
     this.headerId = contracts.headerId
+    this.headingLevel = contracts.headingLevel
     this.triggerState = contracts.trigger
     this.panelState = contracts.panel
     this.expanded = contracts.trigger.ariaExpanded === 'true'
@@ -186,7 +194,13 @@ export class CVAccordionItem extends LitElement {
   private handleTriggerKeyDown(event: KeyboardEvent) {
     const dispatched = this.dispatchEvent(
       new CustomEvent<CVAccordionItemTriggerKeydownEvent['detail']>('cv-accordion-item-trigger-keydown', {
-        detail: {key: event.key},
+        detail: {
+          key: event.key,
+          ctrlKey: event.ctrlKey,
+          altKey: event.altKey,
+          metaKey: event.metaKey,
+          shiftKey: event.shiftKey,
+        },
         bubbles: true,
         composed: true,
         cancelable: true,
@@ -198,10 +212,28 @@ export class CVAccordionItem extends LitElement {
     }
   }
 
+  private static readonly headingTags = {
+    1: literal`h1`,
+    2: literal`h2`,
+    3: literal`h3`,
+    4: literal`h4`,
+    5: literal`h5`,
+    6: literal`h6`,
+  } as const
+
   protected override render() {
-    return html`
+    const level = Math.max(1, Math.min(6, Math.trunc(this.headingLevel) || 3)) as
+      | 1
+      | 2
+      | 3
+      | 4
+      | 5
+      | 6
+    const headingTag = CVAccordionItem.headingTags[level]
+
+    return staticHtml`
       <div part="base">
-        <h3 id=${this.headerId} part="header">
+        <${headingTag} id=${this.headerId} part="header">
           <button
             id=${this.triggerState.id}
             role=${this.triggerState.role}
@@ -219,7 +251,7 @@ export class CVAccordionItem extends LitElement {
             <slot name="trigger"></slot>
             <span part="trigger-icon" aria-hidden="true">▶</span>
           </button>
-        </h3>
+        </${headingTag}>
 
         <div
           id=${this.panelState.id}
