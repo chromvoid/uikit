@@ -6,8 +6,11 @@ export interface CVTreeItemToggleDetail {
 
 export type CVTreeItemToggleEvent = CustomEvent<CVTreeItemToggleDetail>
 
+export type CVTreeItemSlotchangeEvent = CustomEvent<null>
+
 export interface CVTreeItemEventMap {
   'cv-treeitem-toggle': CVTreeItemToggleEvent
+  'cv-treeitem-slotchange': CVTreeItemSlotchangeEvent
 }
 
 export class CVTreeItem extends LitElement {
@@ -136,6 +139,18 @@ export class CVTreeItem extends LitElement {
     }
   }
 
+  private handleChildrenSlotChange() {
+    // Forward nested slot changes so the host treeview can rebuild its model when a
+    // nested subtree is added/removed (the host's own default slot doesn't observe
+    // changes inside this item's "children" slot).
+    this.dispatchEvent(
+      new CustomEvent<CVTreeItemSlotchangeEvent['detail']>('cv-treeitem-slotchange', {
+        bubbles: true,
+        composed: true,
+      }),
+    )
+  }
+
   private handleToggleClick(event: MouseEvent) {
     event.preventDefault()
     event.stopPropagation()
@@ -167,7 +182,10 @@ export class CVTreeItem extends LitElement {
       </div>
 
       <div role="group" ?hidden=${!this.expanded} part="children">
-        <slot name="children"></slot>
+        <slot name="children" @slotchange=${this.handleChildrenSlotChange}></slot>
+        <!-- Catches nested treeitems appended without slot="children" yet so the host
+             treeview is notified and can rebuild (which assigns the proper slot). -->
+        <slot @slotchange=${this.handleChildrenSlotChange}></slot>
       </div>
     `
   }

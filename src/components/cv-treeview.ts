@@ -130,7 +130,7 @@ export class CVTreeview extends ReatomLitElement {
     }
 
     if (changedProperties.has('value') && this.selectionMode === 'single') {
-      const normalized = this.value.trim()
+      const normalized = (this.value ?? '').trim()
       if (this.value !== normalized) {
         this.value = normalized
       }
@@ -264,7 +264,16 @@ export class CVTreeview extends ReatomLitElement {
 
   private attachItemListeners(): void {
     for (const record of this.itemRecords) {
-      const click = () => {
+      const click = (event: Event) => {
+        // Click listeners live on every treeitem, but a click inside a nested item
+        // bubbles through its ancestors. Only the closest treeitem to the actual click
+        // target should handle it; otherwise an ancestor would steal the selection.
+        const path = event.composedPath()
+        const closestItem = path.find(
+          (node): node is CVTreeItem =>
+            node instanceof CVTreeItem && this.itemRecords.some((r) => r.element === node),
+        )
+        if (closestItem !== record.element) return
         this.handleItemClick(record.id)
       }
 
@@ -505,6 +514,7 @@ export class CVTreeview extends ReatomLitElement {
         aria-multiselectable=${treeProps['aria-multiselectable'] ?? nothing}
         part="base"
         @keydown=${this.handleTreeKeyDown}
+        @cv-treeitem-slotchange=${this.handleSlotChange}
       >
         <slot @slotchange=${this.handleSlotChange}></slot>
       </div>

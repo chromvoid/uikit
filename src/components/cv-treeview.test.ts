@@ -647,6 +647,128 @@ describe('cv-treeview', () => {
     })
   })
 
+  // --- programmatic value control ---
+
+  describe('programmatic value control', () => {
+    it('clearing value programmatically clears selection silently', async () => {
+      const tree = await createTree([createItem('a', 'A'), createItem('b', 'B')])
+
+      const itemB = tree.querySelector('cv-treeitem[value="b"]') as CVTreeItem
+      itemB.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+      await settle(tree)
+      expect(tree.value).toBe('b')
+
+      let eventCount = 0
+      tree.addEventListener('cv-input', () => eventCount++)
+      tree.addEventListener('cv-change', () => eventCount++)
+
+      tree.value = ''
+      await settle(tree)
+
+      expect(tree.value).toBe('')
+      expect(tree.values).toEqual([])
+      expect(itemB.selected).toBe(false)
+      expect(eventCount).toBe(0)
+    })
+
+    it('setting value to an unknown id keeps the previous selection', async () => {
+      const tree = await createTree([createItem('a', 'A'), createItem('b', 'B')])
+
+      const itemB = tree.querySelector('cv-treeitem[value="b"]') as CVTreeItem
+      itemB.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+      await settle(tree)
+      expect(tree.value).toBe('b')
+
+      tree.value = 'does-not-exist'
+      await settle(tree)
+
+      expect(tree.value).toBe('b')
+      expect(itemB.selected).toBe(true)
+    })
+  })
+
+  // --- deep nesting ARIA ---
+
+  describe('deep nesting ARIA', () => {
+    it('grandchild has aria-level=3 and sibling posinset/setsize within its level', async () => {
+      const grandchild1 = createItem('a1a', 'A1A')
+      const grandchild2 = createItem('a1b', 'A1B')
+      const child = createItem('a1', 'A1', {children: [grandchild1, grandchild2]})
+      const tree = await createTree([createItem('a', 'A', {children: [child]})])
+
+      tree.expandedValues = ['a', 'a1']
+      await settle(tree)
+
+      const itemA1a = tree.querySelector('cv-treeitem[value="a1a"]') as CVTreeItem
+      const itemA1b = tree.querySelector('cv-treeitem[value="a1b"]') as CVTreeItem
+
+      expect(itemA1a.getAttribute('aria-level')).toBe('3')
+      expect(itemA1a.getAttribute('aria-posinset')).toBe('1')
+      expect(itemA1a.getAttribute('aria-setsize')).toBe('2')
+      expect(itemA1b.getAttribute('aria-posinset')).toBe('2')
+      expect(itemA1b.getAttribute('aria-setsize')).toBe('2')
+      expect(itemA1a.hidden).toBe(false)
+    })
+  })
+
+  // --- multiple mode Space toggle ---
+
+  describe('multiple mode Space toggle', () => {
+    it('Space toggles selection of the active item off', async () => {
+      const tree = await createTree([createItem('a', 'A'), createItem('b', 'B')], {
+        selectionMode: 'multiple',
+      })
+
+      const itemA = tree.querySelector('cv-treeitem[value="a"]') as CVTreeItem
+      itemA.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+      await settle(tree)
+      expect(tree.values).toEqual(['a'])
+
+      dispatchKey(getBase(tree), ' ')
+      await settle(tree)
+
+      expect(tree.values).toEqual([])
+      expect(itemA.selected).toBe(false)
+    })
+  })
+
+  // --- dynamic subtree ---
+
+  describe('dynamic subtree', () => {
+    it('a dynamically appended root item becomes reachable via End', async () => {
+      const tree = await createTree([createItem('a', 'A'), createItem('b', 'B')])
+
+      tree.append(createItem('c', 'C'))
+      await settle(tree)
+
+      dispatchKey(getBase(tree), 'End')
+      await settle(tree)
+
+      const itemC = tree.querySelector('cv-treeitem[value="c"]') as CVTreeItem
+      expect(itemC.active).toBe(true)
+      expect(tree.value).toBe('c')
+    })
+  })
+
+  // --- reconnect behavior ---
+
+  describe('reconnect behavior', () => {
+    it('item click handling continues to work after detach and reattach', async () => {
+      const tree = await createTree([createItem('a', 'A'), createItem('b', 'B')])
+
+      tree.remove()
+      document.body.append(tree)
+      await settle(tree)
+
+      const itemB = tree.querySelector('cv-treeitem[value="b"]') as CVTreeItem
+      itemB.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+      await settle(tree)
+
+      expect(tree.value).toBe('b')
+      expect(itemB.selected).toBe(true)
+    })
+  })
+
   // --- slot rebuild state preservation ---
 
   describe('slot rebuild state preservation', () => {
@@ -671,8 +793,78 @@ describe('cv-treeview', () => {
       itemA1.remove()
       await settle(tree)
 
+      // Selection is preserved across the (now correctly triggered) nested rebuild.
       expect(tree.value).toBe('b')
-      expect(tree.expandedValues).toContain('a')
+      // 'a' lost its only child, so it is no longer a branch and cannot stay expanded.
+      expect(tree.expandedValues).not.toContain('a')
+    })
+  })
+
+  // --- regression: batch 11 ---
+
+  describe('regression — batch 11', () => {
+    it('clicking a nested treeitem selects only that item, not its ancestor', async () => {
+      const tree = await createTree([
+        createItem('a', 'A', {children: [createItem('a1', 'A1')]}),
+        createItem('b', 'B'),
+      ])
+
+      // Expand 'a' so 'a1' is visible/clickable.
+      tree.expandedValues = ['a']
+      await settle(tree)
+
+      const itemA1 = tree.querySelector('cv-treeitem[value="a1"]') as CVTreeItem
+      itemA1.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+      await settle(tree)
+
+      // Only the clicked nested item is selected — the bubbling click must not let the
+      // ancestor 'a' steal the selection.
+      expect(tree.value).toBe('a1')
+    })
+
+    it('removing the value attribute does not throw (null guard)', async () => {
+      const tree = await createTree([createItem('a', 'A'), createItem('b', 'B')])
+
+      expect(() => {
+        tree.removeAttribute('value')
+      }).not.toThrow()
+      await settle(tree)
+    })
+
+    it('adding a nested subtree triggers a rebuild (no phantom nodes / stale setsize)', async () => {
+      const tree = await createTree([
+        createItem('a', 'A', {children: [createItem('a1', 'A1')]}),
+      ])
+      tree.expandedValues = ['a']
+      await settle(tree)
+
+      const itemA = tree.querySelector('cv-treeitem[value="a"]') as CVTreeItem
+      const itemA1 = tree.querySelector('cv-treeitem[value="a1"]') as CVTreeItem
+      expect(itemA1.getAttribute('aria-setsize')).toBe('1')
+
+      // Add a second nested child; the host must rebuild and refresh aria-setsize.
+      const a2 = createItem('a2', 'A2')
+      itemA.append(a2)
+      await settle(tree)
+
+      const refreshedA1 = tree.querySelector('cv-treeitem[value="a1"]') as CVTreeItem
+      const refreshedA2 = tree.querySelector('cv-treeitem[value="a2"]') as CVTreeItem
+      expect(refreshedA2).not.toBeNull()
+      expect(refreshedA1.getAttribute('aria-setsize')).toBe('2')
+      expect(refreshedA2.getAttribute('aria-setsize')).toBe('2')
+    })
+
+    it('toggling a disabled branch does not expand it', async () => {
+      const tree = await createTree([
+        createItem('a', 'A', {disabled: true, children: [createItem('a1', 'A1')]}),
+      ])
+
+      const itemA = tree.querySelector('cv-treeitem[value="a"]') as CVTreeItem
+      const toggle = itemA.shadowRoot?.querySelector('[part="toggle"]') as HTMLButtonElement
+      toggle.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+      await settle(tree)
+
+      expect(tree.expandedValues).not.toContain('a')
     })
   })
 })
