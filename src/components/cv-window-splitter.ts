@@ -155,6 +155,14 @@ export class CVWindowSplitter extends ReatomLitElement {
   override willUpdate(changedProperties: PropertyValues): void {
     super.willUpdate(changedProperties)
 
+    // Removing the `orientation` attribute makes Lit's String converter yield
+    // `null`; fall back to the component default rather than letting the
+    // headless model default to 'horizontal' (which contradicts the component
+    // default 'vertical' and breaks the grid / silently flips the arrow axis).
+    if (changedProperties.has('orientation') && (this.orientation as unknown) == null) {
+      this.orientation = 'vertical'
+    }
+
     if (
       changedProperties.has('min') ||
       changedProperties.has('max') ||
@@ -167,11 +175,18 @@ export class CVWindowSplitter extends ReatomLitElement {
       changedProperties.has('ariaLabelledBy')
     ) {
       this.model = this.createModel()
+      // The rebuilt model clamps/snaps the seeded position; sync the property
+      // back so it never diverges from aria-valuenow (drag-detection relies on
+      // `this.position` reflecting the real model position).
+      this.position = this.model.state.position()
       return
     }
 
     if (changedProperties.has('position') && this.model.state.position() !== this.position) {
       this.model.actions.setPosition(this.position)
+      // Sync the property back when the model clamps (e.g. position=150, max=100
+      // → aria-valuenow 100). Without this the property and aria-valuenow desync.
+      this.position = this.model.state.position()
     }
   }
 
@@ -232,16 +247,22 @@ export class CVWindowSplitter extends ReatomLitElement {
   }
 
   private handleSeparatorKeyDown(event: KeyboardEvent) {
+    // Respect a consumer that already handled this keystroke, and ignore
+    // modifier combos (Ctrl/Meta/Alt + Arrow are browser/OS shortcuts).
+    if (event.defaultPrevented || event.ctrlKey || event.metaKey || event.altKey) {
+      return
+    }
+
     if (splitterKeysToPrevent.has(event.key)) {
       event.preventDefault()
     }
 
     const previousPosition = this.model.state.position()
     this.model.actions.handleKeyDown({key: event.key})
-    // Re-apply setPosition to trigger snap resolution if snap is configured
-    if (this.snap) {
-      this.model.actions.setPosition(this.model.state.position())
-    }
+    // NOTE: snap is intentionally NOT re-applied on keyboard stepping. Doing so
+    // dragged the position back to the snap point on every keystroke (threshold
+    // ≥ step), trapping keyboard users on a snap point and blocking Home/End
+    // from reaching min/max near a snap. Snap is applied only on pointer drag.
     this.syncFromModelAndEmit(previousPosition, true)
   }
 
@@ -279,9 +300,13 @@ export class CVWindowSplitter extends ReatomLitElement {
     const min = this.model.state.min()
     const max = this.model.state.max()
     const newPos = min + ratio * (max - min)
+    const previousPos = this.model.state.position()
     this.model.actions.setPosition(newPos)
     const pos = this.model.state.position()
     this.position = pos
+    // Suppress cv-input when the drag resolved to the same position (e.g. it
+    // snapped/clamped back onto the current value) — native controls stay quiet.
+    if (pos === previousPos) return
     this.dispatchEvent(new CustomEvent('cv-input', {detail: {position: pos}, bubbles: true, composed: true}))
   }
 

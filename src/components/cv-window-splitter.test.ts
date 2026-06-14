@@ -651,23 +651,96 @@ describe('cv-window-splitter', () => {
   //       These tests WILL FAIL (RED expected) until IMPL_UIKIT and IMPL_HEADLESS land.
 
   describe('snap', () => {
-    it('snaps to nearest snap point when within threshold (keyboard navigation)', async () => {
+    // REGRESSION (HIGH): snap must NOT pull keyboard stepping back to a snap
+    // point. Previously every keystroke re-applied setPosition() which re-snapped
+    // (threshold ≥ step), trapping the user. Keyboard moves must walk freely by
+    // step; snap is reserved for pointer drag.
+    it('keyboard stepping is not pulled back to a snap point', async () => {
       const el = await createSplitter({position: 0, min: 0, max: 100, step: 1, orientation: 'vertical'})
       const elAny = el as unknown as {snap: string; snapThreshold: number}
       elAny.snap = '25 50 75'
       elAny.snapThreshold = 12
       await settle(el)
 
-      // Press ArrowRight 20 times from position=0 to approach snap point at 25
-      // With snap threshold of 12, position 20 is within threshold of 25 and should snap
       const separator = getSeparator(el)
       for (let i = 0; i < 20; i++) {
         separator.dispatchEvent(new KeyboardEvent('keydown', {key: 'ArrowRight', bubbles: true}))
         await settle(el)
       }
 
-      // Position should have snapped to 25 since 20 is within the 12-unit threshold of 25
-      expect(el.position).toBe(25)
+      // 20 steps of 1 from 0 → 20. With the old bug, this snapped to 25.
+      expect(el.position).toBe(20)
+    })
+
+    it('ArrowRight from a snap point moves away by step (escapes the snap)', async () => {
+      const el = await createSplitter({
+        position: 25,
+        min: 0,
+        max: 100,
+        step: 5,
+        orientation: 'vertical',
+        snap: '25 50 75',
+        snapThreshold: 12,
+      } as Partial<CVWindowSplitter>)
+      const separator = getSeparator(el)
+
+      separator.dispatchEvent(new KeyboardEvent('keydown', {key: 'ArrowRight', bubbles: true}))
+      await settle(el)
+      // Without the fix the position was re-snapped back to 25.
+      expect(el.position).toBe(30)
+    })
+
+    it('ArrowLeft from a snap point moves away by step (escapes the snap)', async () => {
+      const el = await createSplitter({
+        position: 50,
+        min: 0,
+        max: 100,
+        step: 5,
+        orientation: 'vertical',
+        snap: '25 50 75',
+        snapThreshold: 12,
+      } as Partial<CVWindowSplitter>)
+      const separator = getSeparator(el)
+
+      separator.dispatchEvent(new KeyboardEvent('keydown', {key: 'ArrowLeft', bubbles: true}))
+      await settle(el)
+      expect(el.position).toBe(45)
+    })
+
+    it('Home reaches min even when min is near a snap point', async () => {
+      const el = await createSplitter({
+        position: 50,
+        min: 20,
+        max: 100,
+        step: 5,
+        orientation: 'vertical',
+        snap: '25 50 75',
+        snapThreshold: 12,
+      } as Partial<CVWindowSplitter>)
+      const separator = getSeparator(el)
+
+      separator.dispatchEvent(new KeyboardEvent('keydown', {key: 'Home', bubbles: true}))
+      await settle(el)
+      // min=20 is within 12 of snap point 25; the old re-snap pulled it to 25.
+      expect(el.position).toBe(20)
+    })
+
+    it('End reaches max even when max is near a snap point', async () => {
+      const el = await createSplitter({
+        position: 50,
+        min: 0,
+        max: 80,
+        step: 5,
+        orientation: 'vertical',
+        snap: '25 50 75',
+        snapThreshold: 12,
+      } as Partial<CVWindowSplitter>)
+      const separator = getSeparator(el)
+
+      separator.dispatchEvent(new KeyboardEvent('keydown', {key: 'End', bubbles: true}))
+      await settle(el)
+      // max=80 is within 12 of snap point 75; the old re-snap pulled it to 75.
+      expect(el.position).toBe(80)
     })
 
     it('snap attribute is reflected as a property', async () => {
@@ -837,6 +910,388 @@ describe('cv-window-splitter', () => {
       el.orientation = 'horizontal'
       await settle(el)
       expect(getBase(el).getAttribute('data-orientation')).toBe('horizontal')
+    })
+
+    it('position is preserved across orientation change (model rebuild)', async () => {
+      const el = await createSplitter({orientation: 'vertical', position: 30})
+      expect(getSeparator(el).getAttribute('aria-valuenow')).toBe('30')
+
+      el.orientation = 'horizontal'
+      await settle(el)
+      expect(el.position).toBe(30)
+      expect(getSeparator(el).getAttribute('aria-valuenow')).toBe('30')
+    })
+
+    it('setting ariaLabelledBy propagates to separator aria-labelledby', async () => {
+      const el = await createSplitter({ariaLabelledBy: 'splitter-label'})
+      expect(getSeparator(el).getAttribute('aria-labelledby')).toBe('splitter-label')
+    })
+  })
+
+  // ──────────────────────────────────────────────────────────────────────────
+  // 11. Range edge cases
+  // ──────────────────────────────────────────────────────────────────────────
+
+  describe('range edge cases', () => {
+    it('min === max does not crash and renders 0% primary size', async () => {
+      const el = await createSplitter({min: 50, max: 50, position: 50})
+      expect(getSeparator(el).getAttribute('aria-valuenow')).toBe('50')
+      expect(getBase(el).getAttribute('style')).toContain('--cv-window-splitter-primary-size:0%')
+    })
+
+    it('min > max is normalized (swapped) for aria range', async () => {
+      const el = await createSplitter({min: 80, max: 20, position: 50})
+      expect(getSeparator(el).getAttribute('aria-valuemin')).toBe('20')
+      expect(getSeparator(el).getAttribute('aria-valuemax')).toBe('80')
+    })
+
+    it('keyboard increment near max clamps to max', async () => {
+      const el = await createSplitter({orientation: 'vertical', position: 95, min: 0, max: 98, step: 5})
+      getSeparator(el).dispatchEvent(new KeyboardEvent('keydown', {key: 'ArrowRight', bubbles: true}))
+      await settle(el)
+      expect(el.position).toBe(98)
+      expect(getSeparator(el).getAttribute('aria-valuenow')).toBe('98')
+    })
+
+    it('fractional step does not accumulate float error', async () => {
+      const el = await createSplitter({orientation: 'vertical', position: 50, step: 0.1})
+      getSeparator(el).dispatchEvent(new KeyboardEvent('keydown', {key: 'ArrowRight', bubbles: true}))
+      await settle(el)
+      expect(el.position).toBe(50.1)
+    })
+  })
+
+  // ──────────────────────────────────────────────────────────────────────────
+  // 12. Keyboard edge cases
+  // ──────────────────────────────────────────────────────────────────────────
+
+  describe('keyboard edge cases', () => {
+    it('Enter is a no-op when fixed=false (no movement, no events)', async () => {
+      const el = await createSplitter({fixed: false, position: 50, min: 0, max: 100})
+      let inputCount = 0
+      let changeCount = 0
+      el.addEventListener('cv-input', () => inputCount++)
+      el.addEventListener('cv-change', () => changeCount++)
+
+      getSeparator(el).dispatchEvent(new KeyboardEvent('keydown', {key: 'Enter', bubbles: true}))
+      await settle(el)
+
+      expect(el.position).toBe(50)
+      expect(inputCount).toBe(0)
+      expect(changeCount).toBe(0)
+    })
+
+    it('arrow keydown is defaultPrevented', async () => {
+      const el = await createSplitter({orientation: 'vertical', position: 50})
+      const ev = new KeyboardEvent('keydown', {key: 'ArrowRight', bubbles: true, cancelable: true})
+      getSeparator(el).dispatchEvent(ev)
+      await settle(el)
+      expect(ev.defaultPrevented).toBe(true)
+    })
+
+    it('unrelated key is not defaultPrevented and does not move position', async () => {
+      const el = await createSplitter({orientation: 'vertical', position: 50})
+      const ev = new KeyboardEvent('keydown', {key: 'a', bubbles: true, cancelable: true})
+      getSeparator(el).dispatchEvent(ev)
+      await settle(el)
+      expect(ev.defaultPrevented).toBe(false)
+      expect(el.position).toBe(50)
+    })
+  })
+
+  // ──────────────────────────────────────────────────────────────────────────
+  // 13. Drag edge cases
+  // ──────────────────────────────────────────────────────────────────────────
+
+  describe('drag edge cases', () => {
+    const mockBaseRect = (el: CVWindowSplitter, rect: Partial<DOMRect> = {}) => {
+      const base = getBase(el)
+      base.getBoundingClientRect = () =>
+        ({
+          left: 0,
+          right: 200,
+          width: 200,
+          top: 0,
+          bottom: 200,
+          height: 200,
+          x: 0,
+          y: 0,
+          toJSON: () => {},
+          ...rect,
+        }) as DOMRect
+    }
+
+    const startDrag = async (el: CVWindowSplitter, clientX = 100, clientY = 100) => {
+      const separator = getSeparator(el)
+      separator.setPointerCapture = vi.fn()
+      separator.releasePointerCapture = vi.fn()
+      separator.dispatchEvent(
+        new PointerEvent('pointerdown', {pointerId: 1, clientX, clientY, bubbles: true}),
+      )
+      await settle(el)
+      return separator
+    }
+
+    it('non-primary button pointerdown does not start a drag', async () => {
+      const el = await createSplitter({orientation: 'vertical', position: 50})
+      const separator = getSeparator(el)
+      separator.setPointerCapture = vi.fn()
+      mockBaseRect(el)
+
+      separator.dispatchEvent(
+        new PointerEvent('pointerdown', {pointerId: 1, clientX: 100, button: 2, bubbles: true}),
+      )
+      await settle(el)
+
+      expect(separator.setPointerCapture).not.toHaveBeenCalled()
+      expect(separator.hasAttribute('data-dragging')).toBe(false)
+    })
+
+    it('pointermove on a zero-size container is a no-op (no crash, no events)', async () => {
+      const el = await createSplitter({orientation: 'vertical', position: 50})
+      mockBaseRect(el, {width: 0, right: 0, height: 0, bottom: 0})
+      let inputCount = 0
+      el.addEventListener('cv-input', () => inputCount++)
+
+      const separator = await startDrag(el)
+      separator.dispatchEvent(new PointerEvent('pointermove', {pointerId: 1, clientX: 150, bubbles: true}))
+      await settle(el)
+
+      expect(el.position).toBe(50)
+      expect(inputCount).toBe(0)
+    })
+
+    it('pointermove beyond the container edge clamps to max', async () => {
+      const el = await createSplitter({orientation: 'vertical', position: 50, min: 0, max: 100})
+      mockBaseRect(el)
+
+      const separator = await startDrag(el)
+      separator.dispatchEvent(new PointerEvent('pointermove', {pointerId: 1, clientX: 500, bubbles: true}))
+      await settle(el)
+
+      expect(el.position).toBe(100)
+    })
+
+    it('pointermove maps the container edge onto a custom min', async () => {
+      const el = await createSplitter({orientation: 'vertical', position: 50, min: 20, max: 80})
+      mockBaseRect(el)
+
+      const separator = await startDrag(el)
+      separator.dispatchEvent(new PointerEvent('pointermove', {pointerId: 1, clientX: 0, bubbles: true}))
+      await settle(el)
+
+      expect(el.position).toBe(20)
+    })
+
+    it('drag position snaps to step', async () => {
+      const el = await createSplitter({orientation: 'vertical', position: 50, step: 10})
+      mockBaseRect(el)
+
+      const separator = await startDrag(el)
+      separator.dispatchEvent(new PointerEvent('pointermove', {pointerId: 1, clientX: 95, bubbles: true}))
+      await settle(el)
+
+      // 95 / 200 → 47.5, snapped to nearest step of 10 → 50
+      expect(el.position).toBe(50)
+    })
+
+    it('horizontal orientation drag tracks clientY', async () => {
+      const el = await createSplitter({orientation: 'horizontal', position: 50, min: 0, max: 100})
+      mockBaseRect(el)
+
+      const separator = await startDrag(el, 100, 100)
+      separator.dispatchEvent(
+        new PointerEvent('pointermove', {pointerId: 1, clientX: 100, clientY: 150, bubbles: true}),
+      )
+      await settle(el)
+
+      expect(el.position).toBe(75)
+    })
+
+    it('no cv-change fires during pointermove (only on pointerup)', async () => {
+      const el = await createSplitter({orientation: 'vertical', position: 50, min: 0, max: 100})
+      mockBaseRect(el)
+      let changeCount = 0
+      el.addEventListener('cv-change', () => changeCount++)
+
+      const separator = await startDrag(el)
+      separator.dispatchEvent(new PointerEvent('pointermove', {pointerId: 1, clientX: 150, bubbles: true}))
+      await settle(el)
+      expect(changeCount).toBe(0)
+
+      separator.dispatchEvent(new PointerEvent('pointerup', {pointerId: 1, clientX: 150, bubbles: true}))
+      await settle(el)
+      expect(changeCount).toBe(1)
+    })
+
+    it('pointerup without movement emits no cv-change', async () => {
+      const el = await createSplitter({orientation: 'vertical', position: 50, min: 0, max: 100})
+      mockBaseRect(el)
+      let changeCount = 0
+      el.addEventListener('cv-change', () => changeCount++)
+
+      const separator = await startDrag(el)
+      separator.dispatchEvent(new PointerEvent('pointerup', {pointerId: 1, clientX: 100, bubbles: true}))
+      await settle(el)
+
+      expect(changeCount).toBe(0)
+    })
+
+    it('lostpointercapture mid-drag removes [data-dragging] and emits cv-change when moved', async () => {
+      const el = await createSplitter({orientation: 'vertical', position: 50, min: 0, max: 100})
+      mockBaseRect(el)
+      let changeCount = 0
+      el.addEventListener('cv-change', () => changeCount++)
+
+      const separator = await startDrag(el)
+      separator.dispatchEvent(new PointerEvent('pointermove', {pointerId: 1, clientX: 150, bubbles: true}))
+      await settle(el)
+      expect(separator.hasAttribute('data-dragging')).toBe(true)
+
+      separator.dispatchEvent(new PointerEvent('lostpointercapture', {pointerId: 1, bubbles: true}))
+      await settle(el)
+
+      expect(separator.hasAttribute('data-dragging')).toBe(false)
+      expect(changeCount).toBe(1)
+    })
+
+    it('snap applies during pointer drag', async () => {
+      const el = await createSplitter({
+        orientation: 'vertical',
+        position: 50,
+        min: 0,
+        max: 100,
+        snap: '25 50 75',
+        snapThreshold: 12,
+      })
+      mockBaseRect(el)
+
+      const separator = await startDrag(el)
+      // 40 / 200 → 20, within 12 of snap point 25 → snaps to 25
+      separator.dispatchEvent(new PointerEvent('pointermove', {pointerId: 1, clientX: 40, bubbles: true}))
+      await settle(el)
+
+      expect(el.position).toBe(25)
+    })
+
+    it('pointermove that resolves to the same position emits no cv-input', async () => {
+      const el = await createSplitter({orientation: 'vertical', position: 50, min: 0, max: 100, step: 10})
+      mockBaseRect(el)
+      let inputCount = 0
+      el.addEventListener('cv-input', () => inputCount++)
+
+      const separator = await startDrag(el)
+      // 95 / 200 → 47.5, snapped to step 10 → 50, identical to the current 50.
+      separator.dispatchEvent(new PointerEvent('pointermove', {pointerId: 1, clientX: 95, bubbles: true}))
+      await settle(el)
+
+      expect(el.position).toBe(50)
+      expect(inputCount).toBe(0)
+    })
+  })
+
+  // ──────────────────────────────────────────────────────────────────────────
+  // 14. Property / attribute sync regressions (batch 12)
+  // ──────────────────────────────────────────────────────────────────────────
+
+  describe('property/attribute sync', () => {
+    it('position is synced back to the clamped model value (no desync)', async () => {
+      const el = await createSplitter({min: 0, max: 100})
+      el.position = 150
+      await settle(el)
+      // Without the back-sync, the property stayed 150 while aria-valuenow was 100.
+      expect(el.position).toBe(100)
+      expect(getSeparator(el).getAttribute('aria-valuenow')).toBe('100')
+    })
+
+    it('position below min is synced back to the clamped model value', async () => {
+      const el = await createSplitter({min: 10, max: 100})
+      el.position = -50
+      await settle(el)
+      expect(el.position).toBe(10)
+      expect(getSeparator(el).getAttribute('aria-valuenow')).toBe('10')
+    })
+
+    it('removeAttribute("orientation") falls back to the component default "vertical"', async () => {
+      const el = document.createElement('cv-window-splitter') as CVWindowSplitter
+      el.setAttribute('orientation', 'horizontal')
+      document.body.append(el)
+      await settle(el)
+      expect(el.orientation).toBe('horizontal')
+
+      el.removeAttribute('orientation')
+      await settle(el)
+
+      // Old bug: orientation became null and the headless model defaulted to
+      // 'horizontal', contradicting the component default 'vertical'.
+      expect(el.orientation).toBe('vertical')
+      expect(getSeparator(el).getAttribute('aria-orientation')).toBe('vertical')
+      expect(getBase(el).getAttribute('data-orientation')).toBe('vertical')
+    })
+  })
+
+  // ──────────────────────────────────────────────────────────────────────────
+  // 15. Fixed-mode keyboard regressions (batch 12)
+  // ──────────────────────────────────────────────────────────────────────────
+
+  describe('fixed mode — Home/End', () => {
+    it('fixed=true: Home does not move the position', async () => {
+      const el = await createSplitter({fixed: true, position: 50, min: 0, max: 100})
+      getSeparator(el).dispatchEvent(new KeyboardEvent('keydown', {key: 'Home', bubbles: true}))
+      await settle(el)
+      expect(el.position).toBe(50)
+    })
+
+    it('fixed=true: End does not move the position', async () => {
+      const el = await createSplitter({fixed: true, position: 50, min: 0, max: 100})
+      getSeparator(el).dispatchEvent(new KeyboardEvent('keydown', {key: 'End', bubbles: true}))
+      await settle(el)
+      expect(el.position).toBe(50)
+    })
+  })
+
+  // ──────────────────────────────────────────────────────────────────────────
+  // 16. Keyboard modifier / defaultPrevented guards (batch 12)
+  // ──────────────────────────────────────────────────────────────────────────
+
+  describe('keyboard modifier guards', () => {
+    it('Ctrl+ArrowRight is ignored (no move, not prevented)', async () => {
+      const el = await createSplitter({orientation: 'vertical', position: 50, step: 5})
+      const ev = new KeyboardEvent('keydown', {
+        key: 'ArrowRight',
+        bubbles: true,
+        cancelable: true,
+        ctrlKey: true,
+      })
+      getSeparator(el).dispatchEvent(ev)
+      await settle(el)
+      expect(el.position).toBe(50)
+      expect(ev.defaultPrevented).toBe(false)
+    })
+
+    it('Meta+ArrowLeft is ignored', async () => {
+      const el = await createSplitter({orientation: 'vertical', position: 50, step: 5})
+      const ev = new KeyboardEvent('keydown', {key: 'ArrowLeft', bubbles: true, cancelable: true, metaKey: true})
+      getSeparator(el).dispatchEvent(ev)
+      await settle(el)
+      expect(el.position).toBe(50)
+    })
+
+    it('Alt+Home is ignored', async () => {
+      const el = await createSplitter({orientation: 'vertical', position: 50, min: 0, max: 100})
+      const ev = new KeyboardEvent('keydown', {key: 'Home', bubbles: true, cancelable: true, altKey: true})
+      getSeparator(el).dispatchEvent(ev)
+      await settle(el)
+      expect(el.position).toBe(50)
+    })
+
+    it('a keystroke already defaultPrevented by a consumer is not handled', async () => {
+      const el = await createSplitter({orientation: 'vertical', position: 50, step: 5})
+      const ev = new KeyboardEvent('keydown', {key: 'ArrowRight', bubbles: true, cancelable: true})
+      ev.preventDefault()
+      getSeparator(el).dispatchEvent(ev)
+      await settle(el)
+      expect(el.position).toBe(50)
     })
   })
 })
