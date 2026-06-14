@@ -30,23 +30,29 @@ function arraysEqual(left: readonly string[], right: readonly string[]): boolean
   return left.length === right.length && left.every((value, index) => value === right[index])
 }
 
-function shouldPreventDefaultForKey(event: Pick<KeyboardEvent, 'key' | 'ctrlKey' | 'metaKey'>): boolean {
+function shouldPreventDefaultForKey(
+  event: Pick<KeyboardEvent, 'key' | 'ctrlKey' | 'metaKey'>,
+  selectionMode: CVSelectionMode,
+  orientation: CVOrientation,
+): boolean {
+  // Ctrl/Cmd+A maps to SELECT_ALL only in multiple-selection mode. In single
+  // mode the model emits nothing, so swallowing the browser's select-all is
+  // user-hostile.
   if (event.key.toLowerCase() === 'a' && (event.ctrlKey || event.metaKey)) {
-    return true
+    return selectionMode === 'multiple'
   }
 
-  return [
-    'ArrowUp',
-    'ArrowDown',
-    'ArrowLeft',
-    'ArrowRight',
-    'Home',
-    'End',
-    'Enter',
-    ' ',
-    'Spacebar',
-    'Escape',
-  ].includes(event.key)
+  // Only intercept the arrow keys that match the listbox orientation; the model
+  // ignores the cross-axis arrows, so preventing their default (e.g. caret/page
+  // movement) would be a silent hijack.
+  if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
+    return orientation === 'vertical'
+  }
+  if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
+    return orientation === 'horizontal'
+  }
+
+  return ['Home', 'End', 'Enter', ' ', 'Spacebar', 'Escape'].includes(event.key)
 }
 
 export class CVListbox extends ReatomLitElement {
@@ -120,6 +126,11 @@ export class CVListbox extends ReatomLitElement {
     super.connectedCallback()
     if (!this.model) {
       this.rebuildModelFromSlot(false, false)
+    } else {
+      // Reconnect: disconnectedCallback detached the option listeners but the
+      // model survives, so a slotchange won't fire to re-attach them. Without
+      // this, option clicks/keydowns are dead after a remove()+append().
+      this.attachOptionListeners()
     }
   }
 
@@ -212,9 +223,17 @@ export class CVListbox extends ReatomLitElement {
   }
 
   private getInitialSelectedFromOptions(optionElements: CVOption[]): string[] {
-    return optionElements
-      .filter((option) => option.selected && !option.disabled)
-      .map((option, index) => this.ensureOptionValue(option, index))
+    const selected: string[] = []
+    // Use the option's index within the full list (not the filtered list) so the
+    // fallback value matches the id assigned during rebuildModelFromSlot.
+    // Mapping over the filtered array previously produced colliding fallbacks
+    // (e.g. two options both becoming `option-1`).
+    optionElements.forEach((option, index) => {
+      if (option.selected && !option.disabled) {
+        selected.push(this.ensureOptionValue(option, index))
+      }
+    })
+    return selected
   }
 
   private ensureOptionValue(option: CVOption, index: number): string {
@@ -432,7 +451,7 @@ export class CVListbox extends ReatomLitElement {
       return
     }
 
-    if (shouldPreventDefaultForKey(event)) {
+    if (shouldPreventDefaultForKey(event, this.selectionMode, this.orientation)) {
       event.preventDefault()
     }
 

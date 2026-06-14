@@ -205,6 +205,18 @@ describe('cv-listbox', () => {
       expect(getBase(el).hasAttribute('aria-activedescendant')).toBe(false)
     })
 
+    it('aria-activedescendant tracks the active option after navigation', async () => {
+      const el = await createListbox({focusStrategy: 'aria-activedescendant'})
+      const base = getBase(el)
+
+      base.dispatchEvent(new KeyboardEvent('keydown', {key: 'ArrowDown', bubbles: true}))
+      await settle(el)
+
+      const active = getActiveOption(el)
+      expect(active).not.toBeNull()
+      expect(base.getAttribute('aria-activedescendant')).toBe(active!.id)
+    })
+
     it('each cv-option has role="option"', async () => {
       const el = await createListbox()
       const options = getOptions(el)
@@ -403,6 +415,33 @@ describe('cv-listbox', () => {
       base.dispatchEvent(new KeyboardEvent('keydown', {key: 'ArrowLeft', bubbles: true}))
       await settle(el)
       expect(getActiveOption(el)?.value).toBe('a')
+    })
+
+    it('vertical arrow keys do not navigate in horizontal orientation', async () => {
+      const el = await createListbox({orientation: 'horizontal'})
+      const base = getBase(el)
+
+      base.dispatchEvent(new KeyboardEvent('keydown', {key: 'ArrowDown', bubbles: true}))
+      await settle(el)
+      expect(getActiveOption(el)?.value).toBe('a')
+    })
+  })
+
+  // --- Empty listbox ---
+
+  describe('empty listbox', () => {
+    it('keyboard interaction on a listbox without options is safe', async () => {
+      const el = await createListbox({}, '')
+      const base = getBase(el)
+
+      for (const key of ['ArrowDown', 'ArrowUp', 'Home', 'End', 'Enter', ' ', 'a']) {
+        base.dispatchEvent(new KeyboardEvent('keydown', {key, bubbles: true}))
+      }
+      await settle(el)
+
+      expect(el.value).toBeNull()
+      expect(el.selectedValues).toEqual([])
+      expect(base.hasAttribute('aria-activedescendant')).toBe(false)
     })
   })
 
@@ -627,6 +666,32 @@ describe('cv-listbox', () => {
       await settle(el)
       expect(el.selectedValues).toEqual([])
     })
+
+    it('programmatic value writes do not dispatch cv-input or cv-change', async () => {
+      const el = await createListbox()
+      let eventCount = 0
+      el.addEventListener('cv-input', () => eventCount++)
+      el.addEventListener('cv-change', () => eventCount++)
+
+      el.value = 'b'
+      await settle(el)
+      el.value = null
+      await settle(el)
+
+      expect(eventCount).toBe(0)
+    })
+
+    it('setting value to a disabled or unknown option id is a no-op', async () => {
+      const el = await createListbox()
+
+      el.value = 'c' // disabled
+      await settle(el)
+      expect(el.selectedValues).toEqual([])
+
+      el.value = 'zzz' // unknown
+      await settle(el)
+      expect(el.selectedValues).toEqual([])
+    })
   })
 
   // --- selectedValues property ---
@@ -684,6 +749,20 @@ describe('cv-listbox', () => {
       await settle(el)
 
       expect(el.selectedValues).toEqual(['a'])
+    })
+
+    it('repairs active option to first enabled when the active option is removed', async () => {
+      const el = await createListbox()
+      const base = getBase(el)
+
+      base.dispatchEvent(new KeyboardEvent('keydown', {key: 'ArrowDown', bubbles: true}))
+      await settle(el)
+      expect(getActiveOption(el)?.value).toBe('b')
+
+      el.querySelector('cv-option[value="b"]')!.remove()
+      await settle(el)
+
+      expect(getActiveOption(el)?.value).toBe('a')
     })
   })
 
@@ -859,6 +938,26 @@ describe('cv-listbox', () => {
       // c is disabled, should not be selected
       expect(el.selectedValues).not.toContain('c')
     })
+
+    it('Shift+ArrowUp extends selection backwards from the anchor', async () => {
+      const el = await createListbox({
+        selectionMode: 'multiple',
+        rangeSelection: true,
+      })
+      const base = getBase(el)
+
+      // Move to b and select it (anchor)
+      base.dispatchEvent(new KeyboardEvent('keydown', {key: 'ArrowDown', bubbles: true}))
+      base.dispatchEvent(new KeyboardEvent('keydown', {key: ' ', bubbles: true}))
+      await settle(el)
+      expect(el.selectedValues).toEqual(['b'])
+
+      base.dispatchEvent(new KeyboardEvent('keydown', {key: 'ArrowUp', shiftKey: true, bubbles: true}))
+      await settle(el)
+
+      expect(el.selectedValues).toContain('a')
+      expect(el.selectedValues).toContain('b')
+    })
   })
 
   // --- Typeahead ---
@@ -885,6 +984,46 @@ describe('cv-listbox', () => {
       const active = getActiveOption(el)
       // Active should not be the disabled "c" option
       expect(active?.value).not.toBe('c')
+    })
+
+    it('repeated same letter cycles through options sharing that prefix', async () => {
+      const el = await createListbox(
+        {},
+        `
+        <cv-option value="apple">Apple</cv-option>
+        <cv-option value="apricot">Apricot</cv-option>
+        <cv-option value="banana">Banana</cv-option>
+      `,
+      )
+      const base = getBase(el)
+
+      // Initial active is "apple"; the first "a" advances past it
+      base.dispatchEvent(new KeyboardEvent('keydown', {key: 'a', bubbles: true}))
+      await settle(el)
+      expect(getActiveOption(el)?.value).toBe('apricot')
+
+      // The second "a" wraps back to "apple"
+      base.dispatchEvent(new KeyboardEvent('keydown', {key: 'a', bubbles: true}))
+      await settle(el)
+      expect(getActiveOption(el)?.value).toBe('apple')
+    })
+
+    it('multi-letter query matches options by prefix', async () => {
+      const el = await createListbox(
+        {},
+        `
+        <cv-option value="apple">Apple</cv-option>
+        <cv-option value="banana">Banana</cv-option>
+        <cv-option value="blueberry">Blueberry</cv-option>
+      `,
+      )
+      const base = getBase(el)
+
+      base.dispatchEvent(new KeyboardEvent('keydown', {key: 'b', bubbles: true}))
+      base.dispatchEvent(new KeyboardEvent('keydown', {key: 'l', bubbles: true}))
+      await settle(el)
+
+      expect(getActiveOption(el)?.value).toBe('blueberry')
     })
   })
 
@@ -1043,6 +1182,147 @@ describe('cv-listbox', () => {
 
       // Should not crash, selection unchanged
       expect(el.selectedValues).toEqual([])
+    })
+  })
+
+  // --- Reconnect (remove + re-append keeps listeners) ---
+
+  describe('reconnect', () => {
+    it('option clicks still select after remove() + re-append()', async () => {
+      const el = await createListbox()
+
+      el.remove()
+      await settle(el)
+      document.body.append(el)
+      await settle(el)
+
+      const options = getOptions(el)
+      options[1]!.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+      await settle(el)
+
+      expect(el.value).toBe('b')
+    })
+
+    it('keyboard navigation still works after reconnect', async () => {
+      const el = await createListbox()
+
+      el.remove()
+      await settle(el)
+      document.body.append(el)
+      await settle(el)
+
+      const options = getOptions(el)
+      options[0]!.dispatchEvent(new KeyboardEvent('keydown', {key: 'ArrowDown', bubbles: true}))
+      await settle(el)
+
+      expect(getActiveOption(el)?.value).toBe('b')
+    })
+  })
+
+  // --- Auto-value uniqueness for selected options (no duplicate ids) ---
+
+  describe('selected option auto-value uniqueness', () => {
+    it('does not assign duplicate fallback values to multiple selected options', async () => {
+      const el = await createListbox(
+        {selectionMode: 'multiple'},
+        `
+        <cv-option>Lead</cv-option>
+        <cv-option selected>First</cv-option>
+        <cv-option selected>Second</cv-option>
+      `,
+      )
+      const options = getOptions(el)
+      const ids = options.map((opt) => opt.value)
+
+      // Each option must have a unique value (previously both selected options
+      // collided on "option-1").
+      expect(new Set(ids).size).toBe(ids.length)
+    })
+
+    it('selected options get unique aria-posinset values', async () => {
+      const el = await createListbox(
+        {selectionMode: 'multiple'},
+        `
+        <cv-option>Lead</cv-option>
+        <cv-option selected>First</cv-option>
+        <cv-option selected>Second</cv-option>
+      `,
+      )
+      const options = getOptions(el)
+      const positions = options.map((opt) => opt.getAttribute('aria-posinset'))
+      expect(new Set(positions).size).toBe(positions.length)
+    })
+
+    it('both selected options are independently aria-selected', async () => {
+      const el = await createListbox(
+        {selectionMode: 'multiple'},
+        `
+        <cv-option>Lead</cv-option>
+        <cv-option selected>First</cv-option>
+        <cv-option selected>Second</cv-option>
+      `,
+      )
+      expect(el.selectedValues.length).toBe(2)
+      expect(new Set(el.selectedValues).size).toBe(2)
+    })
+  })
+
+  // --- preventDefault is scoped by mode / orientation ---
+
+  describe('preventDefault scoping', () => {
+    it('does not preventDefault Ctrl+A in single-selection mode', async () => {
+      const el = await createListbox({selectionMode: 'single'})
+      const base = getBase(el)
+
+      const event = new KeyboardEvent('keydown', {key: 'a', ctrlKey: true, bubbles: true, cancelable: true})
+      base.dispatchEvent(event)
+      await settle(el)
+
+      expect(event.defaultPrevented).toBe(false)
+    })
+
+    it('preventDefaults Ctrl+A in multiple-selection mode', async () => {
+      const el = await createListbox({selectionMode: 'multiple'})
+      const base = getBase(el)
+
+      const event = new KeyboardEvent('keydown', {key: 'a', ctrlKey: true, bubbles: true, cancelable: true})
+      base.dispatchEvent(event)
+      await settle(el)
+
+      expect(event.defaultPrevented).toBe(true)
+    })
+
+    it('does not preventDefault vertical arrows in horizontal orientation', async () => {
+      const el = await createListbox({orientation: 'horizontal'})
+      const base = getBase(el)
+
+      const event = new KeyboardEvent('keydown', {key: 'ArrowDown', bubbles: true, cancelable: true})
+      base.dispatchEvent(event)
+      await settle(el)
+
+      expect(event.defaultPrevented).toBe(false)
+    })
+
+    it('preventDefaults horizontal arrows in horizontal orientation', async () => {
+      const el = await createListbox({orientation: 'horizontal'})
+      const base = getBase(el)
+
+      const event = new KeyboardEvent('keydown', {key: 'ArrowRight', bubbles: true, cancelable: true})
+      base.dispatchEvent(event)
+      await settle(el)
+
+      expect(event.defaultPrevented).toBe(true)
+    })
+
+    it('does not preventDefault horizontal arrows in vertical orientation', async () => {
+      const el = await createListbox({orientation: 'vertical'})
+      const base = getBase(el)
+
+      const event = new KeyboardEvent('keydown', {key: 'ArrowRight', bubbles: true, cancelable: true})
+      base.dispatchEvent(event)
+      await settle(el)
+
+      expect(event.defaultPrevented).toBe(false)
     })
   })
 })
