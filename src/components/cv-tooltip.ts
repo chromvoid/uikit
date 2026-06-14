@@ -57,6 +57,7 @@ export class CVTooltip extends ReatomLitElement {
   private model: TooltipModel
   private triggerTargets = new Set<HTMLElement>()
   private lastEmittedOpen = false
+  private _programmaticOpen = false
   private hasLayoutListeners = false
   private layoutFrame = -1
 
@@ -159,6 +160,14 @@ export class CVTooltip extends ReatomLitElement {
     this.toggleLayoutListeners(false)
     this.cancelLayoutFrame()
 
+    // Cancel any pending show/hide timers and reset the model so a later reconnect +
+    // hover honors showDelay instead of opening instantly (model/DOM desync).
+    this.model.actions.cancel()
+    if (this.model.state.isOpen()) {
+      this.model.actions.close()
+      this.lastEmittedOpen = false
+    }
+
     if (supportsNativePopover) {
       const content = this.getContentElement()
       if (content?.matches(':popover-open')) {
@@ -194,7 +203,12 @@ export class CVTooltip extends ReatomLitElement {
       } else {
         this.model.actions.close()
       }
+      // Programmatic open= writes are silent (match native form-control behavior).
+      // Sync lastEmittedOpen so updated() doesn't fire cv-input/cv-change afterwards.
+      this._programmaticOpen = true
       this.applyInteractionResult(previousOpen)
+      this.lastEmittedOpen = this.model.state.isOpen()
+      this._programmaticOpen = false
     }
   }
 
@@ -391,7 +405,7 @@ export class CVTooltip extends ReatomLitElement {
     this.disabled = this.model.state.isDisabled()
     this.syncTriggerAria()
 
-    if (previousOpen !== nextOpen) {
+    if (previousOpen !== nextOpen && !this._programmaticOpen) {
       this.emitOpenChange(nextOpen)
     }
   }
@@ -472,6 +486,9 @@ export class CVTooltip extends ReatomLitElement {
   }
 
   private handleKeyDown(event: KeyboardEvent) {
+    // Respect an already-handled Escape (e.g. consumed by an outer overlay).
+    if (event.key === 'Escape' && event.defaultPrevented) return
+
     const previousOpen = this.model.state.isOpen()
     this.model.contracts.getTriggerProps().onKeyDown({key: event.key})
     this.applyInteractionResult(previousOpen)

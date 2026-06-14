@@ -394,6 +394,63 @@ describe('cv-tooltip', () => {
   })
 
   // ===========================================================================
+  // 6b. Hover timer corner cases
+  // ===========================================================================
+
+  describe('hover timer corner cases', () => {
+    it('pointerleave before showDelay elapses cancels the pending open', async () => {
+      vi.useFakeTimers()
+      const {el, triggerWrap} = await mountTooltip({showDelay: 30, hideDelay: 0})
+
+      triggerWrap.dispatchEvent(new MouseEvent('pointerenter', {bubbles: true}))
+      vi.advanceTimersByTime(10)
+      triggerWrap.dispatchEvent(new MouseEvent('pointerleave', {bubbles: true}))
+
+      vi.advanceTimersByTime(500)
+      await settle(el)
+
+      expect(el.open).toBe(false)
+    })
+
+    it('pointerenter during hideDelay cancels the pending close', async () => {
+      vi.useFakeTimers()
+      const {el, triggerWrap} = await mountTooltip({showDelay: 0, hideDelay: 30})
+
+      triggerWrap.dispatchEvent(new MouseEvent('pointerenter', {bubbles: true}))
+      await settle(el)
+      expect(el.open).toBe(true)
+
+      triggerWrap.dispatchEvent(new MouseEvent('pointerleave', {bubbles: true}))
+      vi.advanceTimersByTime(10)
+      triggerWrap.dispatchEvent(new MouseEvent('pointerenter', {bubbles: true}))
+
+      vi.advanceTimersByTime(500)
+      await settle(el)
+
+      expect(el.open).toBe(true)
+    })
+
+    it('rapid hover cycles emit a single open transition', async () => {
+      vi.useFakeTimers()
+      const {el, triggerWrap} = await mountTooltip({showDelay: 30, hideDelay: 0})
+      const changes: boolean[] = []
+      el.addEventListener('cv-change', (e) => changes.push((e as CustomEvent).detail.open))
+
+      triggerWrap.dispatchEvent(new MouseEvent('pointerenter', {bubbles: true}))
+      vi.advanceTimersByTime(10)
+      triggerWrap.dispatchEvent(new MouseEvent('pointerleave', {bubbles: true}))
+      vi.advanceTimersByTime(5)
+      triggerWrap.dispatchEvent(new MouseEvent('pointerenter', {bubbles: true}))
+
+      vi.advanceTimersByTime(30)
+      await settle(el)
+
+      expect(el.open).toBe(true)
+      expect(changes).toEqual([true])
+    })
+  })
+
+  // ===========================================================================
   // 7. Focus trigger
   // ===========================================================================
 
@@ -567,6 +624,38 @@ describe('cv-tooltip', () => {
       expect(el.open).toBe(false)
     })
 
+    it('show() respects showDelay in manual mode', async () => {
+      vi.useFakeTimers()
+      const {el} = await mountTooltip({trigger: 'manual', showDelay: 20, hideDelay: 0})
+
+      el.show()
+      vi.advanceTimersByTime(19)
+      await settle(el)
+      expect(el.open).toBe(false)
+
+      vi.advanceTimersByTime(1)
+      await settle(el)
+      expect(el.open).toBe(true)
+    })
+
+    it('hide() respects hideDelay in manual mode', async () => {
+      vi.useFakeTimers()
+      const {el} = await mountTooltip({trigger: 'manual', showDelay: 0, hideDelay: 20})
+
+      el.show()
+      await settle(el)
+      expect(el.open).toBe(true)
+
+      el.hide()
+      vi.advanceTimersByTime(19)
+      await settle(el)
+      expect(el.open).toBe(true)
+
+      vi.advanceTimersByTime(1)
+      await settle(el)
+      expect(el.open).toBe(false)
+    })
+
     it('Escape still dismisses in manual mode', async () => {
       const {el, triggerWrap} = await mountTooltip({trigger: 'manual', showDelay: 0, hideDelay: 0})
 
@@ -718,6 +807,41 @@ describe('cv-tooltip', () => {
       triggerWrap.dispatchEvent(new KeyboardEvent('keydown', {key: 'ArrowDown', bubbles: true}))
       await settle(el)
       expect(el.open).toBe(true)
+    })
+
+    it('Escape while already closed emits no events', async () => {
+      const {el, triggerWrap} = await mountTooltip({showDelay: 0, hideDelay: 0})
+      let count = 0
+      el.addEventListener('cv-input', () => count++)
+      el.addEventListener('cv-change', () => count++)
+
+      triggerWrap.dispatchEvent(new KeyboardEvent('keydown', {key: 'Escape', bubbles: true}))
+      await settle(el)
+
+      expect(el.open).toBe(false)
+      expect(count).toBe(0)
+    })
+  })
+
+  // ===========================================================================
+  // 12b. Trigger slot changes
+  // ===========================================================================
+
+  describe('trigger slot changes', () => {
+    it('replacing the slotted trigger moves aria-describedby to the new element', async () => {
+      const {el, triggerEl, contentPart} = await mountTooltip({showDelay: 0, hideDelay: 0})
+      const contentId = contentPart.getAttribute('id')
+      expect(triggerEl.getAttribute('aria-describedby')).toBe(contentId)
+
+      const replacement = document.createElement('button')
+      replacement.slot = 'trigger'
+      replacement.textContent = 'New trigger'
+      triggerEl.remove()
+      el.append(replacement)
+      await settle(el)
+
+      expect(replacement.getAttribute('aria-describedby')).toBe(contentId)
+      expect(triggerEl.getAttribute('aria-describedby')).toBeNull()
     })
   })
 
@@ -890,6 +1014,73 @@ describe('cv-tooltip', () => {
 
       expect(contentPart.style.position).toBe('fixed')
       expect(contentPart.getAttribute('data-placement')).toBe('top')
+    })
+  })
+
+  describe('regression — batch 11', () => {
+    it('programmatic open= is silent (no cv-input/cv-change)', async () => {
+      const {el} = await mountTooltip({trigger: 'manual'})
+      let eventCount = 0
+      el.addEventListener('cv-input', () => eventCount++)
+      el.addEventListener('cv-change', () => eventCount++)
+
+      el.open = true
+      await settle(el)
+
+      expect(el.open).toBe(true)
+      expect(eventCount).toBe(0)
+
+      el.open = false
+      await settle(el)
+
+      expect(el.open).toBe(false)
+      expect(eventCount).toBe(0)
+    })
+
+    it('disconnect cancels pending show timer so reconnect+hover honors showDelay', async () => {
+      vi.useFakeTimers()
+      const {el, triggerWrap} = await mountTooltip({showDelay: 120, hideDelay: 80})
+      const modelState = () =>
+        (el as unknown as {model: {state: {isOpen: () => boolean}}}).model.state.isOpen()
+
+      // Begin hover (schedules show timer) then disconnect before it fires.
+      triggerWrap.dispatchEvent(new MouseEvent('pointerenter', {bubbles: true}))
+      el.remove()
+
+      // Advance past the original delay: a leaked timer would have opened the model.
+      vi.advanceTimersByTime(500)
+      expect(modelState()).toBe(false)
+    })
+
+    it('disconnect closes an open model (no model/DOM desync)', async () => {
+      const {el} = await mountTooltip({trigger: 'manual', open: true})
+      const modelState = () =>
+        (el as unknown as {model: {state: {isOpen: () => boolean}}}).model.state.isOpen()
+      expect(modelState()).toBe(true)
+
+      el.remove()
+      expect(modelState()).toBe(false)
+    })
+
+    it('Escape with defaultPrevented is ignored (does not close)', async () => {
+      const {el, triggerWrap} = await mountTooltip({trigger: 'manual', open: true})
+      expect(el.open).toBe(true)
+
+      const event = new KeyboardEvent('keydown', {key: 'Escape', bubbles: true, cancelable: true})
+      event.preventDefault()
+      triggerWrap.dispatchEvent(event)
+      await settle(el)
+
+      expect(el.open).toBe(true)
+    })
+
+    it('unhandled Escape still closes', async () => {
+      const {el, triggerWrap} = await mountTooltip({trigger: 'manual', open: true})
+
+      triggerWrap.dispatchEvent(new KeyboardEvent('keydown', {key: 'Escape', bubbles: true, cancelable: true}))
+      await settle(el)
+
+      expect(el.open).toBe(false)
     })
   })
 })
