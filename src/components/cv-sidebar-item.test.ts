@@ -60,6 +60,55 @@ describe('cv-sidebar-item', () => {
     expect(prevented).toBe(true)
   })
 
+  it('does not prevent clicks when enabled', async () => {
+    const el = await createItem({href: '#alpha'})
+    const anchor = el.shadowRoot!.querySelector('[part="base"]') as HTMLAnchorElement
+    let prevented = false
+
+    anchor.addEventListener('click', (event) => {
+      prevented = event.defaultPrevented
+    })
+
+    anchor.dispatchEvent(new MouseEvent('click', {bubbles: true, cancelable: true, composed: true}))
+    await settle(el)
+
+    expect(prevented).toBe(false)
+  })
+
+  it('restores href, focusability, and aria state when re-enabled', async () => {
+    const el = await createItem({href: '#alpha', disabled: true})
+    const anchor = el.shadowRoot!.querySelector('[part="base"]') as HTMLAnchorElement
+
+    expect(anchor.hasAttribute('href')).toBe(false)
+    expect(anchor.getAttribute('tabindex')).toBe('-1')
+
+    el.disabled = false
+    await settle(el)
+
+    expect(anchor.getAttribute('href')).toBe('#alpha')
+    expect(anchor.hasAttribute('aria-disabled')).toBe(false)
+    expect(anchor.hasAttribute('tabindex')).toBe(false)
+  })
+
+  it('omits aria-current when inactive and clears it when active is reset', async () => {
+    const el = await createItem({href: '#alpha', active: true})
+    const anchor = el.shadowRoot!.querySelector('[part="base"]') as HTMLAnchorElement
+    expect(anchor.getAttribute('aria-current')).toBe('location')
+
+    el.active = false
+    await settle(el)
+
+    expect(el.hasAttribute('active')).toBe(false)
+    expect(anchor.hasAttribute('aria-current')).toBe(false)
+  })
+
+  it('renders no href attribute when href is empty', async () => {
+    const el = await createItem()
+    const anchor = el.shadowRoot!.querySelector('[part="base"]') as HTMLAnchorElement
+
+    expect(anchor.hasAttribute('href')).toBe(false)
+  })
+
   it('keeps label content available in collapsed rail mode', async () => {
     const el = await createItem({href: '#alpha'})
     el.textContent = 'Threats'

@@ -2,6 +2,7 @@ import {afterAll, afterEach, beforeAll, describe, expect, it} from 'vitest'
 
 import {CVSidebar} from './cv-sidebar'
 import {CVSidebarItem} from './cv-sidebar-item'
+import {resetBodyScrollLockForTesting} from './scroll-lock'
 
 CVSidebar.define()
 CVSidebarItem.define()
@@ -129,6 +130,7 @@ const getBase = (el: CVSidebar) => el.shadowRoot!.querySelector('[part="panel"]'
 afterEach(() => {
   document.body.innerHTML = ''
   document.body.style.overflow = ''
+  resetBodyScrollLockForTesting()
   setViewportHeight(originalInnerHeight)
   setScrollY(originalScrollY)
   window.scrollTo = originalScrollTo
@@ -639,6 +641,25 @@ describe('cv-sidebar', () => {
       expect(document.body.style.overflow).toBe('')
     })
 
+    it('releases the body scroll lock when disconnected while the overlay is open', async () => {
+      const el = await createSidebar({mobile: true, overlayOpen: true})
+      await settle(el)
+      expect(document.body.style.overflow).toBe('hidden')
+
+      el.remove()
+      expect(document.body.style.overflow).toBe('')
+    })
+
+    it('does not lock body scroll for the desktop sidebar', async () => {
+      const el = await createSidebar()
+      await settle(el)
+      expect(document.body.style.overflow).toBe('')
+
+      el.collapsed = true
+      await settle(el)
+      expect(document.body.style.overflow).toBe('')
+    })
+
     it('outside pointer click closes overlay when closeOnOutsidePointer=true', async () => {
       const el = await createSidebar({mobile: true, overlayOpen: true})
       const overlay = el.shadowRoot!.querySelector('[part="overlay"]') as HTMLElement
@@ -681,6 +702,24 @@ describe('cv-sidebar', () => {
       await settle(el)
 
       expect(el.overlayOpen).toBe(true)
+    })
+
+    it('Escape on desktop does not change expanded state or emit events', async () => {
+      const el = await createSidebar()
+      const panel = getBase(el)
+      let inputCount = 0
+      let changeCount = 0
+
+      el.addEventListener('cv-input', () => inputCount++)
+      el.addEventListener('cv-change', () => changeCount++)
+
+      panel.dispatchEvent(new KeyboardEvent('keydown', {key: 'Escape', bubbles: true}))
+      await settle(el)
+
+      expect(el.expanded).toBe(true)
+      expect(el.collapsed).toBe(false)
+      expect(inputCount).toBe(0)
+      expect(changeCount).toBe(0)
     })
 
     it('Escape emits cv-input and cv-change with {overlayOpen: false}', async () => {
@@ -983,6 +1022,79 @@ describe('cv-sidebar', () => {
       expect(itemBeta.active).toBe(false)
     })
 
+    it('ignores items with non-hash or empty hrefs', async () => {
+      const el = await createSidebar({scrollspy: true})
+      const external = document.createElement('cv-sidebar-item') as CVSidebarItem
+      external.href = 'https://example.com/'
+      external.textContent = 'External'
+      const bareHash = document.createElement('cv-sidebar-item') as CVSidebarItem
+      bareHash.href = '#'
+      bareHash.textContent = 'Bare'
+      const empty = document.createElement('cv-sidebar-item') as CVSidebarItem
+      empty.textContent = 'Empty'
+      el.append(external, bareHash, empty)
+      await settle(el)
+
+      expect(el.activeId).toBeNull()
+      expect(external.active).toBe(false)
+      expect(bareHash.active).toBe(false)
+      expect(empty.active).toBe(false)
+    })
+
+    it('does not intercept modifier-key clicks on scrollspy links', async () => {
+      const target = document.createElement('section')
+      target.id = 'alpha'
+      const calls: ScrollIntoViewOptions[] = []
+      target.scrollIntoView = ((options?: ScrollIntoViewOptions) => {
+        calls.push(options ?? {})
+      }) as typeof target.scrollIntoView
+      document.body.append(target)
+
+      const el = await createSidebar({scrollspy: true})
+      const item = document.createElement('cv-sidebar-item') as CVSidebarItem
+      item.href = '#alpha'
+      item.textContent = 'Alpha'
+      el.append(item)
+      await settle(el)
+
+      const link = item.shadowRoot!.querySelector('a') as HTMLAnchorElement
+      const event = new MouseEvent('click', {
+        bubbles: true,
+        composed: true,
+        cancelable: true,
+        ctrlKey: true,
+      })
+      link.dispatchEvent(event)
+      await settle(el)
+
+      expect(event.defaultPrevented).toBe(false)
+      expect(calls).toEqual([])
+    })
+
+    it('does not intercept clicks on disabled scrollspy items', async () => {
+      const target = document.createElement('section')
+      target.id = 'alpha'
+      const calls: ScrollIntoViewOptions[] = []
+      target.scrollIntoView = ((options?: ScrollIntoViewOptions) => {
+        calls.push(options ?? {})
+      }) as typeof target.scrollIntoView
+      document.body.append(target)
+
+      const el = await createSidebar({scrollspy: true})
+      const item = document.createElement('cv-sidebar-item') as CVSidebarItem
+      item.href = '#alpha'
+      item.disabled = true
+      item.textContent = 'Alpha'
+      el.append(item)
+      await settle(el)
+
+      const link = item.shadowRoot!.querySelector('a') as HTMLAnchorElement
+      link.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true, cancelable: true}))
+      await settle(el)
+
+      expect(calls).toEqual([])
+    })
+
     it('propagates collapsed and mobile context to sidebar items', async () => {
       const el = await createSidebar({collapsed: true})
       const item = document.createElement('cv-sidebar-item') as CVSidebarItem
@@ -1166,6 +1278,95 @@ describe('cv-sidebar', () => {
       expect(el.activeId).toBe('disclosure')
       expect(itemAudit.active).toBe(false)
       expect(itemDisclosure.active).toBe(true)
+    })
+  })
+
+  describe('batch 9 regressions', () => {
+    it('does not throw when an item href is removed before a scrollspy refresh', async () => {
+      const section = document.createElement('section')
+      section.id = 'intro'
+      document.body.append(section)
+      setElementRect(section, 0, 400)
+
+      const el = await createSidebar({scrollspy: true})
+      const item = document.createElement('cv-sidebar-item') as CVSidebarItem
+      item.href = '#intro'
+      item.textContent = 'Intro'
+      el.append(item)
+      await settle(el)
+
+      // Removing the href reflects null onto the property; collecting scrollspy
+      // bindings must null-guard it instead of calling null.startsWith().
+      item.removeAttribute('href')
+      const collect = (el as unknown as {collectScrollspyBindings: () => unknown[]})
+        .collectScrollspyBindings
+      expect(() => collect.call(el)).not.toThrow()
+    })
+
+    it('resyncs expanded/collapsed props after a mobile→desktop roundtrip', async () => {
+      const el = await createSidebar()
+      await settle(el)
+
+      // Collapse on desktop, then roundtrip through mobile.
+      el.collapsed = true
+      await settle(el)
+      expect(el.expanded).toBe(false)
+
+      el.mobile = true
+      await settle(el)
+      el.mobile = false
+      await settle(el)
+
+      // Back on desktop the model resets to defaultExpanded (true); the host
+      // props must follow so the rail/toggle don't disagree with the model.
+      expect(el.expanded).toBe(true)
+      expect(el.collapsed).toBe(false)
+    })
+
+    it('does not preventDefault on Escape on desktop', async () => {
+      const el = await createSidebar()
+      const panel = getBase(el)
+
+      const event = new KeyboardEvent('keydown', {key: 'Escape', bubbles: true, cancelable: true})
+      panel.dispatchEvent(event)
+      await settle(el)
+
+      expect(event.defaultPrevented).toBe(false)
+    })
+
+    it('does not preventDefault on Escape when closeOnEscape is false', async () => {
+      const el = await createSidebar({mobile: true, overlayOpen: true, closeOnEscape: false})
+      const panel = getBase(el)
+
+      const event = new KeyboardEvent('keydown', {key: 'Escape', bubbles: true, cancelable: true})
+      panel.dispatchEvent(event)
+      await settle(el)
+
+      expect(event.defaultPrevented).toBe(false)
+      expect(el.overlayOpen).toBe(true)
+    })
+
+    it('clears stale active state on items when scrollspy is turned off', async () => {
+      const intro = document.createElement('section')
+      intro.id = 'intro'
+      document.body.append(intro)
+      setElementRect(intro, 0, 400)
+
+      const el = await createSidebar({scrollspy: true})
+      const item = document.createElement('cv-sidebar-item') as CVSidebarItem
+      item.href = '#intro'
+      item.textContent = 'Intro'
+      el.append(item)
+      await settle(el)
+
+      expect(item.active).toBe(true)
+
+      el.scrollspy = false
+      await settle(el)
+
+      // Disabling scrollspy must clear active=true before the bindings are
+      // dropped, otherwise the item keeps a stale active marker.
+      expect(item.active).toBe(false)
     })
   })
 })

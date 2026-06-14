@@ -4,6 +4,7 @@ import type {PropertyValues} from 'lit'
 
 import {html} from '../reatom-lit/index.js'
 import {ReatomLitElement} from '../reatom-lit/ReatomLitElement'
+import {acquireBodyScrollLock, releaseBodyScrollLock} from './scroll-lock'
 
 interface CVSidebarItemLike extends HTMLElement {
   href: string
@@ -51,8 +52,8 @@ function isSidebarItem(source: Element): source is CVSidebarItemLike {
   return source.tagName === 'CV-SIDEBAR-ITEM'
 }
 
-function isHashHref(href: string): boolean {
-  return href.startsWith('#') && href.length > 1
+function isHashHref(href: string | null | undefined): boolean {
+  return typeof href === 'string' && href.startsWith('#') && href.length > 1
 }
 
 function clamp(value: number, min: number, max: number): number {
@@ -109,7 +110,6 @@ export class CVSidebar extends ReatomLitElement {
   private readonly idBase = `cv-sidebar-${++cvSidebarNonce}`
   private model: SidebarModel
   private lockScrollApplied = false
-  private previousBodyOverflow = ''
   private lifecycleToken = 0
   private suppressLifecycleFromUpdate = false
   private mediaQuery: MediaQueryList | null = null
@@ -120,6 +120,7 @@ export class CVSidebar extends ReatomLitElement {
   private scrollspyRefreshToken = 0
   private scrollspyRecomputeFrame = 0
   private activeRevealToken = 0
+  private activeRevealFrame = 0
 
   constructor() {
     super()
@@ -303,6 +304,10 @@ export class CVSidebar extends ReatomLitElement {
     if (changedProperties.has('mobile')) {
       if (this.model.state.mobile() !== this.mobile) {
         this.model.actions.setMobile(this.mobile)
+        // Switching to desktop resets the model's expanded state to
+        // defaultExpanded; resync the host props so the rail/toggle don't
+        // disagree with the model after a mobile↔desktop roundtrip.
+        this.syncExpandedFromModel()
       }
     }
 
@@ -374,6 +379,7 @@ export class CVSidebar extends ReatomLitElement {
     this.mediaQueryHandler = (e: MediaQueryListEvent) => {
       this.mobile = e.matches
       this.model.actions.setMobile(e.matches)
+      this.syncExpandedFromModel()
     }
     mq.addEventListener('change', this.mediaQueryHandler)
     this.mobile = mq.matches
@@ -428,6 +434,17 @@ export class CVSidebar extends ReatomLitElement {
     )
   }
 
+  private syncExpandedFromModel(): void {
+    const modelExpanded = this.model.state.expanded()
+    if (this.expanded !== modelExpanded) {
+      this.suppressLifecycleFromUpdate = true
+      this.expanded = modelExpanded
+    }
+    if (this.collapsed !== !modelExpanded) {
+      this.collapsed = !modelExpanded
+    }
+  }
+
   private applyInteractionResult(previous: {expanded: boolean; overlayOpen: boolean}): void {
     const nextExpanded = this.model.state.expanded()
     const nextOverlayOpen = this.model.state.overlayOpen()
@@ -455,8 +472,7 @@ export class CVSidebar extends ReatomLitElement {
   private syncScrollLock(): void {
     const shouldLock = this.model.state.shouldLockScroll()
     if (shouldLock && !this.lockScrollApplied) {
-      this.previousBodyOverflow = document.body.style.overflow
-      document.body.style.overflow = 'hidden'
+      acquireBodyScrollLock()
       this.lockScrollApplied = true
     } else if (!shouldLock && this.lockScrollApplied) {
       this.releaseScrollLock()
@@ -465,7 +481,7 @@ export class CVSidebar extends ReatomLitElement {
 
   private releaseScrollLock(): void {
     if (!this.lockScrollApplied) return
-    document.body.style.overflow = this.previousBodyOverflow
+    releaseBodyScrollLock()
     this.lockScrollApplied = false
   }
 
@@ -508,9 +524,20 @@ export class CVSidebar extends ReatomLitElement {
   }
 
   private handlePanelKeyDown(event: KeyboardEvent) {
-    if (event.key === 'Escape') {
+    // Only swallow Escape when it will actually close the mobile overlay; on
+    // desktop, or when closeOnEscape is disabled, leave the event alone so it
+    // can reach the page/other handlers.
+    const willHandleEscape =
+      event.key === 'Escape' &&
+      !event.defaultPrevented &&
+      this.mobile &&
+      this.closeOnEscape &&
+      this.model.state.overlayOpen()
+
+    if (willHandleEscape) {
       event.preventDefault()
     }
+
     const previous = this.captureState()
     this.model.actions.handleKeyDown({key: event.key})
     this.applyInteractionResult(previous)
@@ -552,13 +579,18 @@ export class CVSidebar extends ReatomLitElement {
   }
 
   private refreshScrollspy(): void {
-    this.destroyScrollspy()
-    this.syncChildItemContext()
-
     if (!this.scrollspy) {
+      // Clear active state BEFORE the bindings are dropped, otherwise
+      // syncScrollspyActiveState iterates an empty list and leaves a stale
+      // active=true on the previously-active item.
       this.updateActiveId(null)
+      this.destroyScrollspy()
+      this.syncChildItemContext()
       return
     }
+
+    this.destroyScrollspy()
+    this.syncChildItemContext()
 
     this.scrollspyBindings = this.collectScrollspyBindings()
     this.syncScrollspyActiveState()
@@ -587,6 +619,7 @@ export class CVSidebar extends ReatomLitElement {
 
   private destroyScrollspy(): void {
     this.cancelScrollspyRecompute()
+    this.cancelActiveReveal()
     this.scrollspyObserver?.disconnect()
     this.scrollspyObserver = null
     this.scrollspyBindings = []
@@ -811,6 +844,12 @@ export class CVSidebar extends ReatomLitElement {
     this.scrollspyRecomputeFrame = 0
   }
 
+  private cancelActiveReveal(): void {
+    if (!this.activeRevealFrame) return
+    cancelAnimationFrame(this.activeRevealFrame)
+    this.activeRevealFrame = 0
+  }
+
   private updateActiveId(nextActiveId: string | null): void {
     if (this.scrollspyActiveId === nextActiveId) {
       this.syncScrollspyActiveState()
@@ -852,7 +891,9 @@ export class CVSidebar extends ReatomLitElement {
     if (!body) return
 
     const token = ++this.activeRevealToken
-    requestAnimationFrame(() => {
+    this.cancelActiveReveal()
+    this.activeRevealFrame = requestAnimationFrame(() => {
+      this.activeRevealFrame = 0
       if (token !== this.activeRevealToken) return
 
       const sourceRect = source.getBoundingClientRect()
