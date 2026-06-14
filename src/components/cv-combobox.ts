@@ -271,6 +271,11 @@ export class CVCombobox extends ReatomLitElement {
     super.connectedCallback()
     if (!this.model) {
       this.rebuildModelFromSlot(false, false)
+    } else {
+      // Reconnect: disconnectedCallback detached per-option listeners but the
+      // model already exists, so a remove()+append() would leave options inert
+      // (no slotchange fires). Reattach so clicks/hover keep working.
+      this.attachOptionListeners()
     }
 
     this.syncOutsidePointerListener()
@@ -311,6 +316,13 @@ export class CVCombobox extends ReatomLitElement {
         const currentIds = this.model.state.selectedIds()
         if (ids.join(' ') !== currentIds.join(' ')) {
           if (this.hasUnknownSelectedIds(ids)) {
+            // A disabled id can never become selectable, so revert the property
+            // to the model's actual selection to avoid a permanent desync. A
+            // merely-absent id may belong to an option added later (slot rebuild
+            // re-applies it), so leave the property untouched in that case.
+            if (this.hasDisabledSelectedIds(ids)) {
+              this.value = currentIds.join(' ')
+            }
             return
           }
 
@@ -397,6 +409,13 @@ export class CVCombobox extends ReatomLitElement {
       this.optionRecords.filter((record) => !record.disabled).map((record) => record.id),
     )
     return ids.some((id) => !enabledIds.has(id))
+  }
+
+  private hasDisabledSelectedIds(ids: readonly string[]): boolean {
+    const disabledIds = new Set(
+      this.optionRecords.filter((record) => record.disabled).map((record) => record.id),
+    )
+    return ids.some((id) => disabledIds.has(id))
   }
 
   private resolveInitialSelected(optionElements: CVComboboxOption[]): string | null {
@@ -781,7 +800,19 @@ export class CVCombobox extends ReatomLitElement {
   private handleKeyDown(event: KeyboardEvent) {
     if (!this.model) return
 
-    if (comboboxNavigationKeys.has(event.key) || event.key === ' ') {
+    // In editable mode the keystrokes land in a real text <input>: the user must
+    // be able to type a space and move the caret with Home/End. Only swallow the
+    // pure navigation keys (Arrows/Enter/Escape) for editable comboboxes; for
+    // select-only triggers all navigation keys are claimed.
+    const isEditable = this.type !== 'select-only'
+    const shouldPreventDefault = isEditable
+      ? event.key === 'ArrowUp' ||
+        event.key === 'ArrowDown' ||
+        event.key === 'Enter' ||
+        event.key === 'Escape'
+      : comboboxNavigationKeys.has(event.key) || event.key === ' '
+
+    if (shouldPreventDefault) {
       event.preventDefault()
     }
 

@@ -369,6 +369,189 @@ describe('cv-combobox', () => {
     expect(options[1]!.hidden).toBe(false)
   })
 
+  it('closes the popup on Escape from the input', async () => {
+    const {combobox, input} = await mountCombobox()
+
+    input.dispatchEvent(new FocusEvent('focus', {bubbles: true}))
+    await settle(combobox)
+    expect(combobox.open).toBe(true)
+
+    input.dispatchEvent(new KeyboardEvent('keydown', {key: 'Escape', bubbles: true}))
+    await settle(combobox)
+
+    expect(combobox.open).toBe(false)
+  })
+
+  it('filters case-insensitively', async () => {
+    const {combobox, options, input} = await mountCombobox()
+
+    input.value = 'BE'
+    input.dispatchEvent(new Event('input', {bubbles: true, composed: true}))
+    await settle(combobox)
+
+    expect(options[0]!.hidden).toBe(true)
+    expect(options[1]!.hidden).toBe(false)
+  })
+
+  it('treats regex-special characters in the query as literal text', async () => {
+    const combobox = document.createElement('cv-combobox') as CVCombobox
+    combobox.innerHTML = `
+      <cv-combobox-option value="cpp">C++ (lang)</cv-combobox-option>
+      <cv-combobox-option value="beta">Beta</cv-combobox-option>
+    `
+    document.body.append(combobox)
+    await settle(combobox)
+
+    const options = Array.from(combobox.querySelectorAll('cv-combobox-option')) as CVComboboxOption[]
+    const input = combobox.shadowRoot?.querySelector('[part="input"]') as HTMLInputElement
+
+    input.value = 'c++ ('
+    input.dispatchEvent(new Event('input', {bubbles: true, composed: true}))
+    await settle(combobox)
+
+    expect(combobox.open).toBe(true)
+    expect(options[0]!.hidden).toBe(false)
+    expect(options[1]!.hidden).toBe(true)
+  })
+
+  it('shows all options for a whitespace-only query', async () => {
+    const {combobox, options, input} = await mountCombobox()
+
+    input.value = '   '
+    input.dispatchEvent(new Event('input', {bubbles: true, composed: true}))
+    await settle(combobox)
+
+    expect(combobox.open).toBe(true)
+    expect(options[0]!.hidden).toBe(false)
+    expect(options[1]!.hidden).toBe(false)
+    expect(options[2]!.hidden).toBe(false)
+  })
+
+  it('keeps keyboard interaction safe when the filter matches nothing', async () => {
+    const {combobox, input} = await mountCombobox()
+
+    input.value = 'zzz'
+    input.dispatchEvent(new Event('input', {bubbles: true, composed: true}))
+    await settle(combobox)
+
+    input.dispatchEvent(new KeyboardEvent('keydown', {key: 'ArrowDown', bubbles: true}))
+    input.dispatchEvent(new KeyboardEvent('keydown', {key: 'Enter', bubbles: true}))
+    await settle(combobox)
+
+    expect(combobox.value).toBe('')
+    expect(input.getAttribute('aria-activedescendant')).toBeNull()
+  })
+
+  it('moves the active highlight to a visible option when the filter excludes it', async () => {
+    const {combobox, options, input} = await mountCombobox()
+
+    input.dispatchEvent(new FocusEvent('focus', {bubbles: true}))
+    await settle(combobox)
+
+    // Opening activates the first enabled option (Alpha).
+    expect(options[0]!.getAttribute('data-active')).toBe('true')
+
+    input.value = 'be'
+    input.dispatchEvent(new Event('input', {bubbles: true, composed: true}))
+    await settle(combobox)
+
+    expect(options[1]!.getAttribute('data-active')).toBe('true')
+    expect(input.getAttribute('aria-activedescendant')).toBe(options[1]!.id)
+  })
+
+  it('does not select a disabled option on click', async () => {
+    const {combobox, options, input} = await mountCombobox()
+    let changeCount = 0
+
+    combobox.addEventListener('cv-change', () => {
+      changeCount += 1
+    })
+
+    input.dispatchEvent(new FocusEvent('focus', {bubbles: true}))
+    await settle(combobox)
+
+    options[2]!.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+    await settle(combobox)
+
+    expect(combobox.value).toBe('')
+    expect(changeCount).toBe(0)
+    expect(combobox.open).toBe(true)
+  })
+
+  it('does not throw on outside pointerdown after disconnecting while open', async () => {
+    const {combobox, input} = await mountCombobox()
+
+    input.dispatchEvent(new FocusEvent('focus', {bubbles: true}))
+    await settle(combobox)
+    expect(combobox.open).toBe(true)
+
+    combobox.remove()
+
+    expect(() => {
+      document.body.dispatchEvent(new MouseEvent('pointerdown', {bubbles: true}))
+    }).not.toThrow()
+    expect(combobox.open).toBe(true)
+  })
+
+  it('reattaches option click listeners after remove() + append() (reconnect)', async () => {
+    const {combobox, options} = await mountCombobox()
+
+    // Move the element out of and back into the DOM without triggering a
+    // slotchange-driven rebuild.
+    combobox.remove()
+    document.body.append(combobox)
+    await settle(combobox)
+
+    const input = combobox.shadowRoot?.querySelector('[part="input"]') as HTMLInputElement
+    input.dispatchEvent(new FocusEvent('focus', {bubbles: true}))
+    await settle(combobox)
+
+    options[1]!.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+    await settle(combobox)
+
+    expect(combobox.value).toBe('b')
+    expect(options[1]!.selected).toBe(true)
+  })
+
+  it('does not preventDefault Space / Home / End in editable mode', async () => {
+    const {combobox, input} = await mountCombobox()
+
+    input.dispatchEvent(new FocusEvent('focus', {bubbles: true}))
+    await settle(combobox)
+
+    for (const key of [' ', 'Home', 'End']) {
+      const event = new KeyboardEvent('keydown', {key, bubbles: true, cancelable: true})
+      input.dispatchEvent(event)
+      expect(event.defaultPrevented).toBe(false)
+    }
+  })
+
+  it('still preventDefaults navigation keys in editable mode', async () => {
+    const {combobox, input} = await mountCombobox()
+
+    input.dispatchEvent(new FocusEvent('focus', {bubbles: true}))
+    await settle(combobox)
+
+    for (const key of ['ArrowDown', 'ArrowUp', 'Enter', 'Escape']) {
+      const event = new KeyboardEvent('keydown', {key, bubbles: true, cancelable: true})
+      input.dispatchEvent(event)
+      expect(event.defaultPrevented).toBe(true)
+    }
+  })
+
+  it('still preventDefaults Home / End / Space for select-only triggers', async () => {
+    const {combobox, trigger} = await mountSelectOnly()
+
+    trigger.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+    await settle(combobox)
+
+    for (const key of [' ', 'Home', 'End']) {
+      const event = new KeyboardEvent('keydown', {key, bubbles: true, cancelable: true})
+      trigger.dispatchEvent(event)
+      expect(event.defaultPrevented).toBe(true)
+    }
+  })
+
   // =============================================
   // NEW FEATURE TESTS
   // =============================================
@@ -492,6 +675,19 @@ describe('cv-combobox', () => {
       // All non-disabled options should be visible when open
       const visibleOptions = options.filter((o) => !o.hidden && !o.disabled)
       expect(visibleOptions.length).toBe(3)
+    })
+
+    it('type-to-select with no matching option keeps active and selection unchanged', async () => {
+      const {combobox, options, trigger} = await mountSelectOnly()
+
+      trigger.dispatchEvent(new KeyboardEvent('keydown', {key: 'Enter', bubbles: true}))
+      await settle(combobox)
+
+      trigger.dispatchEvent(new KeyboardEvent('keydown', {key: 'z', bubbles: true}))
+      await settle(combobox)
+
+      expect(options[0]!.getAttribute('data-active')).toBe('true')
+      expect(combobox.value).toBe('')
     })
 
     it('shows placeholder when no value selected', async () => {
@@ -736,6 +932,28 @@ describe('cv-combobox', () => {
       options[1]!.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
       await settle(combobox)
       expect(changeCount).toBe(2)
+    })
+
+    it('reverts the value property when a disabled id is assigned', async () => {
+      const combobox = document.createElement('cv-combobox') as CVCombobox
+      combobox.multiple = true
+      combobox.innerHTML = `
+        <cv-combobox-option value="js">JavaScript</cv-combobox-option>
+        <cv-combobox-option value="ts" disabled>TypeScript</cv-combobox-option>
+      `
+      document.body.append(combobox)
+      await settle(combobox)
+
+      // Establish a known valid selection first.
+      combobox.value = 'js'
+      await settle(combobox)
+      expect(combobox.value).toBe('js')
+
+      // Assigning a disabled id is rejected; the property must resync to the
+      // model's actual selection rather than retaining the bogus value.
+      combobox.value = 'ts'
+      await settle(combobox)
+      expect(combobox.value).toBe('js')
     })
   })
 
