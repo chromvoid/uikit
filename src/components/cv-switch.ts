@@ -182,6 +182,12 @@ export class CVSwitch extends FormAssociatedReatomElement {
       this.defaultChecked = this.checked
       this.didCaptureDefaultChecked = true
     }
+    this.addEventListener('click', this.handleHostClick)
+  }
+
+  override disconnectedCallback(): void {
+    super.disconnectedCallback()
+    this.removeEventListener('click', this.handleHostClick)
   }
 
   override willUpdate(changedProperties: PropertyValues): void {
@@ -293,6 +299,22 @@ export class CVSwitch extends FormAssociatedReatomElement {
     const previousValue = this.model.state.isOn()
     this.model.contracts.getSwitchProps().onClick()
     this.syncFromModelAndEmit(previousValue)
+  }
+
+  /**
+   * Host-level activation. Covers clicks that never reach the inner
+   * `[part="base"]` element: imperative `switch.click()` and assistive-tech
+   * activations both dispatch a click whose target is the host. Guarded against
+   * double-handling for clicks that pass through the inner base (which already
+   * has its own `@click=${handleClick}` listener).
+   */
+  private handleHostClick = (event: MouseEvent) => {
+    if (this.isEffectivelyDisabled()) return
+
+    const base = this.shadowRoot?.querySelector('[part="base"]')
+    if (base && event.composedPath().includes(base)) return
+
+    this.handleClick()
   }
 
   private handleKeyDown(event: KeyboardEvent) {

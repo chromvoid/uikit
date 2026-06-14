@@ -685,5 +685,141 @@ describe('cv-switch', () => {
 
       expect(sw.checkValidity()).toBe(true)
     })
+
+    it('formResetCallback restores the initial checked state without emitting events', async () => {
+      const sw = await createSwitch({checked: true})
+      let inputCount = 0
+      let changeCount = 0
+      sw.addEventListener('cv-input', () => inputCount++)
+      sw.addEventListener('cv-change', () => changeCount++)
+
+      getControl(sw).dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+      await settle(sw)
+      expect(sw.checked).toBe(false)
+      expect(changeCount).toBe(1)
+
+      sw.formResetCallback()
+      await settle(sw)
+
+      expect(sw.checked).toBe(true)
+      expect(getControl(sw).getAttribute('aria-checked')).toBe('true')
+      // Reset is silent, like native form controls
+      expect(inputCount).toBe(1)
+      expect(changeCount).toBe(1)
+    })
+  })
+
+  // --- 13. Corner cases ---
+
+  describe('corner cases', () => {
+    it('clicking the label area toggles the switch', async () => {
+      const sw = await createSwitchWithHTML('Enable sync')
+      const label = getBase(sw).querySelector('[part="label"]') as HTMLElement
+
+      label.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+      await settle(sw)
+
+      expect(sw.checked).toBe(true)
+    })
+
+    it('programmatic checked changes do not emit cv-input or cv-change', async () => {
+      const sw = await createSwitch()
+      let inputCount = 0
+      let changeCount = 0
+      sw.addEventListener('cv-input', () => inputCount++)
+      sw.addEventListener('cv-change', () => changeCount++)
+
+      sw.checked = true
+      await settle(sw)
+      sw.checked = false
+      await settle(sw)
+
+      expect(inputCount).toBe(0)
+      expect(changeCount).toBe(0)
+    })
+
+    it('legacy "Spacebar" key toggles checked', async () => {
+      const sw = await createSwitch()
+
+      getControl(sw).dispatchEvent(new KeyboardEvent('keydown', {key: 'Spacebar', bubbles: true}))
+      await settle(sw)
+
+      expect(sw.checked).toBe(true)
+    })
+
+    it('non-activation keys do not toggle checked', async () => {
+      const sw = await createSwitch()
+
+      getControl(sw).dispatchEvent(new KeyboardEvent('keydown', {key: 'a', bubbles: true}))
+      getControl(sw).dispatchEvent(new KeyboardEvent('keydown', {key: 'ArrowRight', bubbles: true}))
+      await settle(sw)
+
+      expect(sw.checked).toBe(false)
+    })
+
+    it('imperative host click() toggles the switch exactly once', async () => {
+      const sw = await createSwitch()
+      const changes: boolean[] = []
+      sw.addEventListener('cv-change', (e) => changes.push((e as CustomEvent).detail.checked))
+
+      // Dispatching a click whose target is the host (as `sw.click()` and AT
+      // activations do) must still toggle, and only once.
+      sw.click()
+      await settle(sw)
+
+      expect(sw.checked).toBe(true)
+      expect(changes).toEqual([true])
+    })
+
+    it('host click() is blocked when disabled', async () => {
+      const sw = await createSwitch({disabled: true})
+      let changeCount = 0
+      sw.addEventListener('cv-change', () => changeCount++)
+
+      sw.click()
+      await settle(sw)
+
+      expect(sw.checked).toBe(false)
+      expect(changeCount).toBe(0)
+    })
+
+    it('a real pointer click on the control toggles only once (no double-handling)', async () => {
+      const sw = await createSwitch()
+      const changes: boolean[] = []
+      sw.addEventListener('cv-change', (e) => changes.push((e as CustomEvent).detail.checked))
+
+      // A genuine click bubbles through [part="base"] AND reaches the host
+      // listener; the host guard must avoid toggling twice.
+      getControl(sw).dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+      await settle(sw)
+
+      expect(sw.checked).toBe(true)
+      expect(changes).toEqual([true])
+    })
+
+    it('modifier + Space/Enter does not toggle the switch', async () => {
+      const sw = await createSwitch()
+
+      getControl(sw).dispatchEvent(
+        new KeyboardEvent('keydown', {key: ' ', ctrlKey: true, bubbles: true}),
+      )
+      getControl(sw).dispatchEvent(
+        new KeyboardEvent('keydown', {key: 'Enter', metaKey: true, bubbles: true}),
+      )
+      await settle(sw)
+
+      expect(sw.checked).toBe(false)
+    })
+
+    it('a defaultPrevented Space keydown does not toggle the switch', async () => {
+      const sw = await createSwitch()
+
+      const event = new KeyboardEvent('keydown', {key: ' ', bubbles: true, cancelable: true})
+      event.preventDefault()
+      getControl(sw).dispatchEvent(event)
+      await settle(sw)
+
+      expect(sw.checked).toBe(false)
+    })
   })
 })
