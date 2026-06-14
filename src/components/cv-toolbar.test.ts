@@ -865,6 +865,131 @@ describe('cv-toolbar', () => {
     })
   })
 
+  // --- Pointer interaction ---
+
+  describe('pointer interaction', () => {
+    it('clicking an item makes it active and emits input and change', async () => {
+      const toolbar = await createToolbar([
+        {type: 'item', value: 'a', label: 'A'},
+        {type: 'item', value: 'b', label: 'B'},
+      ])
+      const changeDetails: Array<{activeId: string | null}> = []
+      toolbar.addEventListener('cv-change', (e) => changeDetails.push((e as CustomEvent).detail))
+
+      const itemB = toolbar.querySelector('cv-toolbar-item[value="b"]') as CVToolbarItem
+      itemB.dispatchEvent(new MouseEvent('click', {bubbles: true}))
+      await settle(toolbar)
+
+      expect(toolbar.value).toBe('b')
+      expect(itemB.active).toBe(true)
+      expect(changeDetails).toEqual([{activeId: 'b'}])
+    })
+
+    it('clicking a disabled item does not change the active item and emits no events', async () => {
+      const toolbar = await createToolbar([
+        {type: 'item', value: 'a', label: 'A'},
+        {type: 'item', value: 'b', label: 'B', disabled: true},
+      ])
+      let eventCount = 0
+      toolbar.addEventListener('cv-input', () => eventCount++)
+      toolbar.addEventListener('cv-change', () => eventCount++)
+
+      const itemB = toolbar.querySelector('cv-toolbar-item[value="b"]') as CVToolbarItem
+      itemB.dispatchEvent(new MouseEvent('click', {bubbles: true}))
+      await settle(toolbar)
+
+      expect(toolbar.value).toBe('a')
+      expect(itemB.active).toBe(false)
+      expect(eventCount).toBe(0)
+    })
+
+    it('focusing an item directly makes it the active item', async () => {
+      const toolbar = await createToolbar([
+        {type: 'item', value: 'a', label: 'A'},
+        {type: 'item', value: 'b', label: 'B'},
+      ])
+
+      const itemB = toolbar.querySelector('cv-toolbar-item[value="b"]') as CVToolbarItem
+      itemB.dispatchEvent(new FocusEvent('focus'))
+      await settle(toolbar)
+
+      expect(toolbar.value).toBe('b')
+      expect(itemB.tabIndex).toBe(0)
+    })
+  })
+
+  // --- Reconnect behavior ---
+
+  describe('reconnect behavior', () => {
+    it('keyboard navigation continues to work after detach and reattach', async () => {
+      const toolbar = await createToolbar([
+        {type: 'item', value: 'a', label: 'A'},
+        {type: 'item', value: 'b', label: 'B'},
+      ])
+      expect(toolbar.value).toBe('a')
+
+      toolbar.remove()
+      document.body.append(toolbar)
+      await settle(toolbar)
+
+      expect(toolbar.value).toBe('a')
+
+      await pressKey(toolbar, 'ArrowRight')
+      expect(toolbar.value).toBe('b')
+    })
+
+    it('item click handling continues to work after detach and reattach', async () => {
+      const toolbar = await createToolbar([
+        {type: 'item', value: 'a', label: 'A'},
+        {type: 'item', value: 'b', label: 'B'},
+      ])
+
+      toolbar.remove()
+      document.body.append(toolbar)
+      await settle(toolbar)
+
+      const itemB = toolbar.querySelector('cv-toolbar-item[value="b"]') as CVToolbarItem
+      itemB.dispatchEvent(new MouseEvent('click', {bubbles: true}))
+      await settle(toolbar)
+
+      expect(toolbar.value).toBe('b')
+    })
+  })
+
+  // --- Dynamic items ---
+
+  describe('dynamic items', () => {
+    it('a dynamically appended item becomes reachable via End', async () => {
+      const toolbar = await createToolbar([
+        {type: 'item', value: 'a', label: 'A'},
+        {type: 'item', value: 'b', label: 'B'},
+      ])
+
+      toolbar.append(createItem('c', 'C'))
+      await settle(toolbar)
+
+      await pressKey(toolbar, 'End')
+      expect(toolbar.value).toBe('c')
+    })
+
+    it('changing orientation at runtime preserves the active item', async () => {
+      const toolbar = await createToolbar([
+        {type: 'item', value: 'a', label: 'A'},
+        {type: 'item', value: 'b', label: 'B'},
+      ])
+      await pressKey(toolbar, 'ArrowRight')
+      expect(toolbar.value).toBe('b')
+
+      toolbar.orientation = 'vertical'
+      await settle(toolbar)
+
+      expect(toolbar.value).toBe('b')
+
+      await pressKey(toolbar, 'ArrowUp')
+      expect(toolbar.value).toBe('a')
+    })
+  })
+
   // --- Programmatic value change ---
 
   describe('programmatic value change', () => {
@@ -883,6 +1008,174 @@ describe('cv-toolbar', () => {
       const items = getItems(toolbar)
       expect(items.at(2)?.active).toBe(true)
       expect(items.at(0)?.active).toBe(false)
+    })
+
+    it('setting value to an unknown id reverts to the current active item', async () => {
+      const toolbar = await createToolbar([
+        {type: 'item', value: 'a', label: 'A'},
+        {type: 'item', value: 'b', label: 'B'},
+      ])
+      let eventCount = 0
+      toolbar.addEventListener('cv-input', () => eventCount++)
+      toolbar.addEventListener('cv-change', () => eventCount++)
+
+      toolbar.value = 'does-not-exist'
+      await settle(toolbar)
+
+      expect(toolbar.value).toBe('a')
+      expect(getItems(toolbar).at(0)?.active).toBe(true)
+      expect(eventCount).toBe(0)
+    })
+
+    it('setting value to a disabled item id is rejected', async () => {
+      const toolbar = await createToolbar([
+        {type: 'item', value: 'a', label: 'A'},
+        {type: 'item', value: 'b', label: 'B', disabled: true},
+      ])
+
+      toolbar.value = 'b'
+      await settle(toolbar)
+
+      expect(toolbar.value).toBe('a')
+      expect(getItems(toolbar).at(1)?.active).toBe(false)
+    })
+
+    it('programmatic value change is silent (no cv-input/cv-change)', async () => {
+      const toolbar = await createToolbar([
+        {type: 'item', value: 'a', label: 'A'},
+        {type: 'item', value: 'b', label: 'B'},
+        {type: 'item', value: 'c', label: 'C'},
+      ])
+      let eventCount = 0
+      toolbar.addEventListener('cv-input', () => eventCount++)
+      toolbar.addEventListener('cv-change', () => eventCount++)
+
+      toolbar.value = 'c'
+      await settle(toolbar)
+
+      expect(toolbar.value).toBe('c')
+      expect(getItems(toolbar).at(2)?.active).toBe(true)
+      expect(eventCount).toBe(0)
+    })
+
+    it('programmatic value change does not steal focus', async () => {
+      const toolbar = await createToolbar([
+        {type: 'item', value: 'a', label: 'A'},
+        {type: 'item', value: 'b', label: 'B'},
+      ])
+      let focusCount = 0
+      getItems(toolbar).at(1)?.addEventListener('focus', () => focusCount++)
+
+      toolbar.value = 'b'
+      await settle(toolbar)
+
+      expect(toolbar.value).toBe('b')
+      expect(focusCount).toBe(0)
+    })
+
+    it('removing the value attribute does not throw (null guard) and re-syncs', async () => {
+      const toolbar = await createToolbar([
+        {type: 'item', value: 'a', label: 'A'},
+        {type: 'item', value: 'b', label: 'B'},
+      ])
+
+      expect(() => {
+        toolbar.removeAttribute('value')
+      }).not.toThrow()
+      await settle(toolbar)
+
+      // active item is preserved; value resyncs to the model's active id
+      expect(toolbar.value).toBe('a')
+      expect(getItems(toolbar).at(0)?.active).toBe(true)
+    })
+
+    it('value set before items are slotted is re-applied after slotchange (pattern 9)', async () => {
+      const toolbar = document.createElement('cv-toolbar') as CVToolbar
+      toolbar.value = 'c'
+      document.body.append(toolbar)
+      await settle(toolbar)
+
+      // No items yet: controlled value is preserved, not wiped to the model fallback.
+      expect(toolbar.value).toBe('c')
+
+      toolbar.append(createItem('a', 'A'))
+      toolbar.append(createItem('b', 'B'))
+      toolbar.append(createItem('c', 'C'))
+      await settle(toolbar)
+
+      expect(toolbar.value).toBe('c')
+      expect(getItems(toolbar).at(2)?.active).toBe(true)
+    })
+  })
+
+  describe('modifier-aware keyboard navigation', () => {
+    it('Ctrl+ArrowRight does not navigate and is not preventDefaulted', async () => {
+      const toolbar = await createToolbar([
+        {type: 'item', value: 'a', label: 'A'},
+        {type: 'item', value: 'b', label: 'B'},
+      ])
+      expect(toolbar.value).toBe('a')
+
+      const base = getBase(toolbar)
+      const event = new KeyboardEvent('keydown', {key: 'ArrowRight', ctrlKey: true, bubbles: true, cancelable: true})
+      base.dispatchEvent(event)
+      await settle(toolbar)
+
+      expect(toolbar.value).toBe('a')
+      expect(event.defaultPrevented).toBe(false)
+    })
+
+    it('Meta+ArrowRight does not navigate', async () => {
+      const toolbar = await createToolbar([
+        {type: 'item', value: 'a', label: 'A'},
+        {type: 'item', value: 'b', label: 'B'},
+      ])
+
+      const base = getBase(toolbar)
+      const event = new KeyboardEvent('keydown', {key: 'ArrowRight', metaKey: true, bubbles: true, cancelable: true})
+      base.dispatchEvent(event)
+      await settle(toolbar)
+
+      expect(toolbar.value).toBe('a')
+      expect(event.defaultPrevented).toBe(false)
+    })
+
+    it('Alt+ArrowRight does not navigate', async () => {
+      const toolbar = await createToolbar([
+        {type: 'item', value: 'a', label: 'A'},
+        {type: 'item', value: 'b', label: 'B'},
+      ])
+
+      const base = getBase(toolbar)
+      const event = new KeyboardEvent('keydown', {key: 'ArrowRight', altKey: true, bubbles: true, cancelable: true})
+      base.dispatchEvent(event)
+      await settle(toolbar)
+
+      expect(toolbar.value).toBe('a')
+      expect(event.defaultPrevented).toBe(false)
+    })
+
+    it('unmodified ArrowRight still navigates and preventDefaults', async () => {
+      const toolbar = await createToolbar([
+        {type: 'item', value: 'a', label: 'A'},
+        {type: 'item', value: 'b', label: 'B'},
+      ])
+
+      const base = getBase(toolbar)
+      const event = new KeyboardEvent('keydown', {key: 'ArrowRight', bubbles: true, cancelable: true})
+      base.dispatchEvent(event)
+      await settle(toolbar)
+
+      expect(toolbar.value).toBe('b')
+      expect(event.defaultPrevented).toBe(true)
+    })
+  })
+
+  describe('static define', () => {
+    it('CVToolbar.define() also registers cv-toolbar-item', () => {
+      CVToolbar.define()
+      expect(customElements.get('cv-toolbar-item')).toBeTruthy()
+      expect(customElements.get('cv-toolbar-separator')).toBeTruthy()
     })
   })
 })

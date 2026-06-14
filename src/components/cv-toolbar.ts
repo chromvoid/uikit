@@ -95,6 +95,7 @@ export class CVToolbar extends ReatomLitElement {
     if (!customElements.get(this.elementName)) {
       customElements.define(this.elementName, this)
     }
+    CVToolbarItem.define()
     CVToolbarSeparator.define()
   }
 
@@ -121,11 +122,14 @@ export class CVToolbar extends ReatomLitElement {
     }
 
     if (changedProperties.has('value')) {
-      const next = this.value.trim()
+      const next = (this.value ?? '').trim()
       if (next && this.model.state.activeId() !== next) {
         const previous = this.model.state.activeId()
         this.model.actions.setActive(next)
-        this.applyInteractionResult(previous)
+        this.applyInteractionResult(previous, true)
+      } else if (!next && this.value !== '') {
+        // `value=''`/null no-op normalization: keep property in sync without desync.
+        this.value = this.model.state.activeId() ?? ''
       }
     }
   }
@@ -172,7 +176,12 @@ export class CVToolbar extends ReatomLitElement {
   private rebuildModelFromSlot(preserveState: boolean, requestRender = true): void {
     const itemElements = this.getItemElements()
     const separatorElements = this.getSeparatorElements()
-    const previousActiveId = preserveState ? this.model.state.activeId() : this.value.trim() || null
+    const controlledValue = (this.value ?? '').trim() || null
+    // When preserving state, fall back to the controlled value if the model has no
+    // active id yet (pattern 9: value was set before items were slotted).
+    const previousActiveId = preserveState
+      ? (this.model.state.activeId() ?? controlledValue)
+      : controlledValue
 
     this.detachItemListeners()
 
@@ -212,7 +221,15 @@ export class CVToolbar extends ReatomLitElement {
     this.attachItemListeners()
     this.syncItemElements()
     this.syncSeparatorElements()
-    this.value = this.model.state.activeId() ?? ''
+    const resolvedActiveId = this.model.state.activeId()
+    // Pattern 9: if a controlled value was requested but no matching item exists yet
+    // (e.g. connected before children slotted), preserve it so a later slotchange
+    // can re-apply it instead of silently wiping it to the model's fallback.
+    if (resolvedActiveId == null && controlledValue && itemElements.length === 0) {
+      this.value = controlledValue
+    } else {
+      this.value = resolvedActiveId ?? ''
+    }
 
     if (requestRender) {
       this.requestUpdate()
@@ -300,12 +317,16 @@ export class CVToolbar extends ReatomLitElement {
     activeRecord?.element.focus()
   }
 
-  private applyInteractionResult(previousActiveId: string | null): void {
+  private applyInteractionResult(previousActiveId: string | null, programmatic = false): void {
     this.syncItemElements()
 
     const nextActiveId = this.model.state.activeId()
     this.value = nextActiveId ?? ''
     if (nextActiveId === previousActiveId) return
+
+    // Programmatic writes (value=) must be silent and must not steal focus,
+    // matching native form-control behavior.
+    if (programmatic) return
 
     const detail = {activeId: nextActiveId}
     this.dispatchInput(detail)
@@ -320,12 +341,27 @@ export class CVToolbar extends ReatomLitElement {
   }
 
   private handleToolbarKeyDown(event: KeyboardEvent) {
-    if (toolbarKeysToPrevent.has(event.key)) {
-      event.preventDefault()
+    // Don't intercept browser shortcuts (Ctrl/Meta/Alt+Arrow etc.); the model only
+    // navigates on unmodified arrow/Home/End keys.
+    if (event.ctrlKey || event.metaKey || event.altKey) {
+      return
+    }
+
+    if (!toolbarKeysToPrevent.has(event.key)) {
+      return
     }
 
     const previous = this.model.state.activeId()
-    this.model.actions.handleKeyDown({key: event.key})
+    const handled = this.model.actions.handleKeyDown({
+      key: event.key,
+      ctrlKey: event.ctrlKey,
+      metaKey: event.metaKey,
+      altKey: event.altKey,
+      shiftKey: event.shiftKey,
+    })
+    if (handled) {
+      event.preventDefault()
+    }
     this.applyInteractionResult(previous)
   }
 
