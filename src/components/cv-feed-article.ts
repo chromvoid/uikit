@@ -1,4 +1,5 @@
 import {css} from 'lit'
+import type {PropertyValues} from 'lit'
 
 import {html} from '../reatom-lit/index.js'
 import {ReatomLitElement} from '../reatom-lit/ReatomLitElement'
@@ -54,9 +55,29 @@ export class CVFeedArticle extends ReatomLitElement {
     }
   }
 
+  override updated(changedProperties: PropertyValues): void {
+    super.updated(changedProperties)
+
+    // Notify the parent cv-feed when disabled changes after mount. slotchange
+    // does not fire for attribute-only mutations, so the parent would otherwise
+    // never learn the article became (un)disabled.
+    if (changedProperties.has('disabled') && changedProperties.get('disabled') !== undefined) {
+      this.dispatchEvent(
+        new CustomEvent('cv-feed-article-disabled-change', {
+          bubbles: true,
+          composed: true,
+        }),
+      )
+    }
+  }
+
   protected override render() {
+    // The host element carries role="article" (set by cv-feed along with
+    // aria-posinset/aria-setsize). A second role on the shadow base would
+    // produce a nested article in the a11y tree and double-count posinset/
+    // setsize, so the base is left as a presentational wrapper.
     return html`
-      <div part="base" role="article">
+      <div part="base">
         <slot></slot>
       </div>
     `

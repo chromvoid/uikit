@@ -275,12 +275,14 @@ describe('cv-feed', () => {
       expect(articles[2]!.getAttribute('tabindex')).toBe('-1')
     })
 
-    it('articles have role="article" on their base part', async () => {
+    it('articles expose role="article" on the host (not nested on the base part)', async () => {
       const feed = await createFeed()
       const articles = getArticles(feed)
       for (const article of articles) {
-        const base = getBase(article)
-        expect(base.getAttribute('role')).toBe('article')
+        // The host carries the article role; the shadow base must not duplicate
+        // it (nested role="article" would double-count in the a11y tree).
+        expect(article.getAttribute('role')).toBe('article')
+        expect(getBase(article).getAttribute('role')).toBeNull()
       }
     })
 
@@ -483,6 +485,121 @@ describe('cv-feed', () => {
     })
   })
 
+  // --- Keyboard edge cases ---
+
+  describe('keyboard edge cases', () => {
+    it('keyboard navigation on an empty feed is a no-op and does not throw', async () => {
+      const feed = await createEmptyFeed()
+      const base = getBase(feed)
+
+      expect(() => {
+        base.dispatchEvent(new KeyboardEvent('keydown', {key: 'PageDown', bubbles: true}))
+        base.dispatchEvent(new KeyboardEvent('keydown', {key: 'PageUp', bubbles: true}))
+        base.dispatchEvent(new KeyboardEvent('keydown', {key: 'End', ctrlKey: true, bubbles: true}))
+        base.dispatchEvent(new KeyboardEvent('keydown', {key: 'Home', ctrlKey: true, bubbles: true}))
+      }).not.toThrow()
+      await settle(feed)
+
+      expect(feed.empty).toBe(true)
+    })
+
+    it('PageDown and PageUp keep a single article active', async () => {
+      const feed = await createFeed({}, 1)
+      const base = getBase(feed)
+      const articles = getArticles(feed)
+
+      base.dispatchEvent(new KeyboardEvent('keydown', {key: 'PageDown', bubbles: true}))
+      await settle(feed)
+      expect(articles[0]!.getAttribute('data-active')).toBe('true')
+
+      base.dispatchEvent(new KeyboardEvent('keydown', {key: 'PageUp', bubbles: true}))
+      await settle(feed)
+      expect(articles[0]!.getAttribute('data-active')).toBe('true')
+      expect(articles[0]!.getAttribute('tabindex')).toBe('0')
+    })
+
+    it('Meta+End and Meta+Home dispatch exit events', async () => {
+      const feed = await createFeed()
+      const fired: string[] = []
+
+      feed.addEventListener('cv-exit-after', () => fired.push('after'))
+      feed.addEventListener('cv-exit-before', () => fired.push('before'))
+
+      const base = getBase(feed)
+      base.dispatchEvent(new KeyboardEvent('keydown', {key: 'End', metaKey: true, bubbles: true}))
+      base.dispatchEvent(new KeyboardEvent('keydown', {key: 'Home', metaKey: true, bubbles: true}))
+      await settle(feed)
+
+      expect(fired).toEqual(['after', 'before'])
+    })
+
+    it('prevents default only for handled feed keys', async () => {
+      const feed = await createFeed()
+      const base = getBase(feed)
+
+      const pageDown = new KeyboardEvent('keydown', {key: 'PageDown', bubbles: true, cancelable: true})
+      base.dispatchEvent(pageDown)
+      expect(pageDown.defaultPrevented).toBe(true)
+
+      const plainEnd = new KeyboardEvent('keydown', {key: 'End', bubbles: true, cancelable: true})
+      base.dispatchEvent(plainEnd)
+      expect(plainEnd.defaultPrevented).toBe(false)
+
+      const letter = new KeyboardEvent('keydown', {key: 'a', bubbles: true, cancelable: true})
+      base.dispatchEvent(letter)
+      expect(letter.defaultPrevented).toBe(false)
+    })
+  })
+
+  // --- State preservation across article changes ---
+
+  describe('state preservation across article changes', () => {
+    it('keeps busy state after articles are added', async () => {
+      const feed = await createFeed({busy: true} as Partial<CVFeed>)
+      expect(getBase(feed).getAttribute('aria-busy')).toBe('true')
+
+      const newArticle = document.createElement('cv-feed-article') as CVFeedArticle
+      newArticle.articleId = 'late-article'
+      newArticle.textContent = 'Late content'
+      feed.append(newArticle)
+      await settle(feed)
+
+      expect(getBase(feed).getAttribute('aria-busy')).toBe('true')
+      expect(feed.hasAttribute('busy')).toBe(true)
+    })
+
+    it('keeps the active article when the label changes', async () => {
+      const feed = await createFeed()
+      const base = getBase(feed)
+
+      base.dispatchEvent(new KeyboardEvent('keydown', {key: 'PageDown', bubbles: true}))
+      await settle(feed)
+      expect(getArticles(feed)[1]!.getAttribute('data-active')).toBe('true')
+
+      feed.label = 'Renamed feed'
+      await settle(feed)
+
+      const articles = getArticles(feed)
+      expect(articles[1]!.getAttribute('data-active')).toBe('true')
+      expect(articles[1]!.getAttribute('tabindex')).toBe('0')
+      expect(getBase(feed).getAttribute('aria-label')).toBe('Renamed feed')
+    })
+
+    it('returns to the empty state when all articles are removed', async () => {
+      const feed = await createFeed()
+      expect(feed.empty).toBe(false)
+
+      for (const article of getArticles(feed)) {
+        article.remove()
+      }
+      await settle(feed)
+
+      expect(feed.empty).toBe(true)
+      expect(feed.hasAttribute('empty')).toBe(true)
+      expect(feed.shadowRoot!.querySelector('slot[name="empty"]')).not.toBeNull()
+    })
+  })
+
   // --- Busy/loading state transitions ---
 
   describe('state transitions', () => {
@@ -638,18 +755,130 @@ describe('cv-feed', () => {
       expect(activeArticle).not.toBeUndefined()
     })
   })
+
+  describe('regression: batch 4 fixes', () => {
+    type ObserverCb = (entries: Array<{target: Element; isIntersecting: boolean}>) => void
+
+    class MockIntersectionObserver {
+      static instances: MockIntersectionObserver[] = []
+      cb: ObserverCb
+      targets = new Set<Element>()
+      constructor(cb: ObserverCb) {
+        this.cb = cb
+        MockIntersectionObserver.instances.push(this)
+      }
+      observe(target: Element) {
+        this.targets.add(target)
+      }
+      unobserve(target: Element) {
+        this.targets.delete(target)
+      }
+      disconnect() {
+        this.targets.clear()
+      }
+      trigger(target: Element) {
+        this.cb([{target, isIntersecting: true}])
+      }
+    }
+
+    let originalIO: typeof IntersectionObserver | undefined
+
+    const installObserverMock = () => {
+      originalIO = (globalThis as {IntersectionObserver?: typeof IntersectionObserver})
+        .IntersectionObserver
+      MockIntersectionObserver.instances = []
+      ;(globalThis as Record<string, unknown>)['IntersectionObserver'] = MockIntersectionObserver
+    }
+
+    const restoreObserverMock = () => {
+      if (originalIO) {
+        ;(globalThis as Record<string, unknown>)['IntersectionObserver'] = originalIO
+      } else {
+        delete (globalThis as Record<string, unknown>)['IntersectionObserver']
+      }
+    }
+
+    const latestObserver = () =>
+      MockIntersectionObserver.instances[MockIntersectionObserver.instances.length - 1]
+
+    afterEach(() => {
+      restoreObserverMock()
+    })
+
+    it('fires cv-load-more when the bottom sentinel intersects', async () => {
+      installObserverMock()
+      const feed = await createFeed()
+      const events: number[] = []
+      feed.addEventListener('cv-load-more', () => events.push(1))
+
+      const bottom = feed.shadowRoot!.querySelector('[part="sentinel-bottom"]')!
+      latestObserver()!.trigger(bottom)
+
+      expect(events.length).toBe(1)
+    })
+
+    it('fires cv-load-newer when the top sentinel intersects', async () => {
+      installObserverMock()
+      const feed = await createFeed()
+      const events: number[] = []
+      feed.addEventListener('cv-load-newer', () => events.push(1))
+
+      const top = feed.shadowRoot!.querySelector('[part="sentinel-top"]')!
+      latestObserver()!.trigger(top)
+
+      expect(events.length).toBe(1)
+    })
+
+    it('recreates the sentinel observer after reconnect', async () => {
+      installObserverMock()
+      const feed = await createFeed()
+
+      feed.remove()
+      document.body.append(feed)
+      await settle(feed)
+
+      const events: number[] = []
+      feed.addEventListener('cv-load-more', () => events.push(1))
+      const bottom = feed.shadowRoot!.querySelector('[part="sentinel-bottom"]')!
+      latestObserver()!.trigger(bottom)
+
+      expect(events.length).toBe(1)
+    })
+
+    it('propagates a post-mount disabled change on an article to the model', async () => {
+      const feed = await createFeed()
+      const articles = getArticles(feed)
+      const target = articles[1]!
+
+      target.disabled = true
+      await target.updateComplete
+      await settle(feed)
+
+      expect(target.getAttribute('aria-disabled')).toBe('true')
+
+      // A disabled article must be skipped by PageDown navigation.
+      const base = getBase(feed)
+      base.dispatchEvent(new KeyboardEvent('keydown', {key: 'PageDown', bubbles: true}))
+      await settle(feed)
+      base.dispatchEvent(new KeyboardEvent('keydown', {key: 'PageDown', bubbles: true}))
+      await settle(feed)
+
+      expect(target.getAttribute('data-active')).not.toBe('true')
+    })
+  })
 })
 
 // --- cv-feed-article ---
 
 describe('cv-feed-article', () => {
   describe('shadow DOM structure', () => {
-    it('renders [part="base"] with role="article"', async () => {
+    it('renders [part="base"] without a redundant role (role lives on the host)', async () => {
       const feed = await createFeed()
       const articles = getArticles(feed)
       const base = getBase(articles[0]!)
       expect(base).not.toBeNull()
-      expect(base.getAttribute('role')).toBe('article')
+      expect(base.getAttribute('role')).toBeNull()
+      expect(articles[0]!.getAttribute('role')).toBe('article')
     })
 
     it('renders default slot inside [part="base"]', async () => {
@@ -699,10 +928,11 @@ describe('cv-feed-article', () => {
   })
 
   describe('ARIA contract from parent', () => {
-    it('receives role="article" on [part="base"]', async () => {
+    it('receives role="article" on the host (not on [part="base"])', async () => {
       const feed = await createFeed()
       const articles = getArticles(feed)
-      expect(getBase(articles[0]!).getAttribute('role')).toBe('article')
+      expect(articles[0]!.getAttribute('role')).toBe('article')
+      expect(getBase(articles[0]!).getAttribute('role')).toBeNull()
     })
 
     it('receives tabindex based on active state', async () => {

@@ -47,6 +47,7 @@ export class CVFeed extends ReatomLitElement {
   private readonly idBase = `cv-feed-${++cvFeedNonce}`
   private model: FeedModel
   private observer: IntersectionObserver | null = null
+  private readonly handleArticleDisabledChangeBound = () => this.handleArticleDisabledChange()
 
   constructor() {
     super()
@@ -111,11 +112,19 @@ export class CVFeed extends ReatomLitElement {
 
   override connectedCallback(): void {
     super.connectedCallback()
+    this.addEventListener('cv-feed-article-disabled-change', this.handleArticleDisabledChangeBound)
     this.rebuildModel()
+    // Recreate the sentinel observer on reconnect; disconnectedCallback tears it
+    // down, and a plain re-attach may not schedule an update that would run
+    // setupObserver() via updated().
+    if (this.hasUpdated) {
+      this.setupObserver()
+    }
   }
 
   override disconnectedCallback(): void {
     super.disconnectedCallback()
+    this.removeEventListener('cv-feed-article-disabled-change', this.handleArticleDisabledChangeBound)
     this.destroyObserver()
   }
 
@@ -148,11 +157,37 @@ export class CVFeed extends ReatomLitElement {
     this.setupObserver()
   }
 
-  private createModel(articles: FeedArticle[]): FeedModel {
+  private createModel(articles: FeedArticle[], initialActiveArticleId?: string | null): FeedModel {
     return createFeed({
       idBase: this.idBase,
       articles,
       ariaLabel: this.label || undefined,
+      initialActiveArticleId,
+      // Wiring the load callbacks is what makes the headless `canLoadMore`/
+      // `canLoadNewer` gates true, so the sentinel IntersectionObserver can
+      // actually trigger infinite scroll. The consumer reacts to the dispatched
+      // events and appends/prepends articles via the slotted DOM, so the
+      // callbacks themselves return no inline articles.
+      onLoadMore: () => {
+        this.dispatchEvent(
+          new CustomEvent<CVFeedLoadMoreEvent['detail']>('cv-load-more', {
+            detail: {},
+            bubbles: true,
+            composed: true,
+          }),
+        )
+        return []
+      },
+      onLoadNewer: () => {
+        this.dispatchEvent(
+          new CustomEvent<CVFeedLoadNewerEvent['detail']>('cv-load-newer', {
+            detail: {},
+            bubbles: true,
+            composed: true,
+          }),
+        )
+        return []
+      },
     })
   }
 
@@ -172,12 +207,7 @@ export class CVFeed extends ReatomLitElement {
       disabled: el.disabled,
     }))
 
-    this.model = createFeed({
-      idBase: this.idBase,
-      articles,
-      ariaLabel: this.label || undefined,
-      initialActiveArticleId: previousActiveId,
-    })
+    this.model = this.createModel(articles, previousActiveId)
 
     // Restore state
     if (wasBusy) this.model.actions.setBusy(true)
@@ -221,6 +251,22 @@ export class CVFeed extends ReatomLitElement {
     this.empty = this.model.state.isEmpty()
   }
 
+  private tryGetArticleProps(articleId: string) {
+    if (!articleId) return null
+    try {
+      return this.model.contracts.getArticleProps(articleId)
+    } catch {
+      return null
+    }
+  }
+
+  private handleArticleDisabledChange(): void {
+    // A child article's disabled flag changed; rebuild so the model picks up the
+    // new disabled state (slotchange does not fire for attribute-only changes).
+    this.rebuildModel()
+    this.requestUpdate()
+  }
+
   private setupObserver(): void {
     this.destroyObserver()
 
@@ -236,26 +282,14 @@ export class CVFeed extends ReatomLitElement {
         for (const entry of entries) {
           if (!entry.isIntersecting) continue
 
+          // loadMore()/loadNewer() invoke the wired onLoadMore/onLoadNewer
+          // callbacks, which dispatch the cv-load-more/cv-load-newer events.
           if (entry.target === bottomSentinel && this.model.state.canLoadMore()) {
             this.model.actions.loadMore()
-            this.dispatchEvent(
-              new CustomEvent<CVFeedLoadMoreEvent['detail']>('cv-load-more', {
-                detail: {},
-                bubbles: true,
-                composed: true,
-              }),
-            )
           }
 
           if (entry.target === topSentinel && this.model.state.canLoadNewer()) {
             this.model.actions.loadNewer()
-            this.dispatchEvent(
-              new CustomEvent<CVFeedLoadNewerEvent['detail']>('cv-load-newer', {
-                detail: {},
-                bubbles: true,
-                composed: true,
-              }),
-            )
           }
         }
       },
@@ -313,10 +347,20 @@ export class CVFeed extends ReatomLitElement {
       disabled: el.disabled,
     }))
 
-    // Check if articles changed
+    // Check if articles changed — by id set/order OR by disabled flag, since a
+    // disabled attribute change on an existing article does not fire slotchange
+    // on its own but may arrive batched with other DOM mutations.
     const currentIds = this.model.state.articleIds()
     const newIds = articles.map((a) => a.id)
-    const changed = currentIds.length !== newIds.length || currentIds.some((id, i) => id !== newIds[i])
+    const idsChanged =
+      currentIds.length !== newIds.length || currentIds.some((id, i) => id !== newIds[i])
+    const disabledChanged = articles.some((article) => {
+      const props = this.tryGetArticleProps(article.id)
+      if (!props) return true
+      const modelDisabled = props['aria-disabled'] === 'true'
+      return modelDisabled !== Boolean(article.disabled)
+    })
+    const changed = idsChanged || disabledChanged
 
     if (changed) {
       const previousActiveId = this.model.state.activeArticleId()
@@ -324,12 +368,7 @@ export class CVFeed extends ReatomLitElement {
       const wasLoading = this.loading
       const hadError = this.error
 
-      this.model = createFeed({
-        idBase: this.idBase,
-        articles,
-        ariaLabel: this.label || undefined,
-        initialActiveArticleId: previousActiveId,
-      })
+      this.model = this.createModel(articles, previousActiveId)
 
       if (wasBusy) this.model.actions.setBusy(true)
       if (wasLoading) this.model.state.isLoading.set(true)
