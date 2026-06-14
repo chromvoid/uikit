@@ -113,6 +113,19 @@ export class CVDisclosure extends ReatomLitElement {
     }
   }
 
+  override connectedCallback(): void {
+    super.connectedCallback()
+    // `destroy()` on the previous disconnect unregistered this disclosure from
+    // its group registry without clearing the name atom, so a plain reconnect
+    // would leave group sibling-close logic broken. Force a re-registration by
+    // round-tripping the name through the model (the null step clears the atom
+    // so the subsequent set is not short-circuited as a no-op).
+    if (this.name) {
+      this.model.actions.setName(null)
+      this.model.actions.setName(this.name)
+    }
+  }
+
   override disconnectedCallback(): void {
     super.disconnectedCallback()
     this.model.actions.destroy()
@@ -144,6 +157,9 @@ export class CVDisclosure extends ReatomLitElement {
       // Sync back from headless
       this.open = this.model.state.isOpen()
       this.suppressEvents = false
+      // A programmatic open in a group closes sibling models; mirror that back
+      // onto the sibling hosts so their open prop/attr and panel stay in sync.
+      this.syncGroupedSiblings()
     }
   }
 

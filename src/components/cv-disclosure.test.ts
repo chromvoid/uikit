@@ -586,6 +586,103 @@ describe('cv-disclosure', () => {
       expect(el1.open).toBe(false)
       expect(el2.open).toBe(false)
     })
+
+    it('re-registers in the group registry after reconnect', async () => {
+      const el1 = await createDisclosure({name: 'reconnect-group', open: true} as Partial<CVDisclosure>)
+      const el2 = await createDisclosure({name: 'reconnect-group'} as Partial<CVDisclosure>)
+
+      // Move el1 out and back in (remove + append does not fire slotchange and
+      // previously left it unregistered from the group).
+      el1.remove()
+      document.body.append(el1)
+      await settle(el1)
+
+      // Opening el2 must still close el1 via the group registry.
+      getTrigger(el2).dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+      await settle(el2)
+      await settle(el1)
+
+      expect(el2.open).toBe(true)
+      expect(el1.open).toBe(false)
+    })
+
+    it('syncs sibling host state when a grouped disclosure is opened programmatically', async () => {
+      const el1 = await createDisclosure({name: 'prog-group', open: true} as Partial<CVDisclosure>)
+      const el2 = await createDisclosure({name: 'prog-group'} as Partial<CVDisclosure>)
+
+      // Programmatic open of el2 closes el1's model; the host open prop, attr
+      // and panel must all reflect the closed state.
+      el2.open = true
+      await settle(el2)
+      await settle(el1)
+
+      expect(el2.open).toBe(true)
+      expect(el1.open).toBe(false)
+      expect(el1.hasAttribute('open')).toBe(false)
+      expect(getPanel(el1).hasAttribute('hidden')).toBe(true)
+    })
+  })
+
+  // --- Rapid toggling ---
+
+  describe('rapid toggling', () => {
+    it('handles two immediate trigger clicks as open then close', async () => {
+      const el = await createDisclosure()
+      const changes: boolean[] = []
+      el.addEventListener('cv-change', (e) =>
+        changes.push((e as CustomEvent<{open: boolean}>).detail.open),
+      )
+
+      const trigger = getTrigger(el)
+      trigger.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+      trigger.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+      await settle(el)
+
+      expect(el.open).toBe(false)
+      expect(changes).toEqual([true, false])
+    })
+
+    it('keeps aria-expanded and panel hidden consistent after rapid keyboard toggles', async () => {
+      const el = await createDisclosure()
+      const trigger = getTrigger(el)
+
+      trigger.dispatchEvent(new KeyboardEvent('keydown', {key: 'Enter', bubbles: true}))
+      trigger.dispatchEvent(new KeyboardEvent('keydown', {key: 'Enter', bubbles: true}))
+      trigger.dispatchEvent(new KeyboardEvent('keydown', {key: 'Enter', bubbles: true}))
+      await settle(el)
+
+      expect(el.open).toBe(true)
+      expect(trigger.getAttribute('aria-expanded')).toBe('true')
+      expect(getPanel(el).hasAttribute('hidden')).toBe(false)
+    })
+  })
+
+  // --- Keyboard grouping ---
+
+  describe('keyboard grouping', () => {
+    it('opening via Enter closes open siblings in the same group', async () => {
+      const el1 = await createDisclosure({name: 'kbd-grp', open: true} as Partial<CVDisclosure>)
+      const el2 = await createDisclosure({name: 'kbd-grp'} as Partial<CVDisclosure>)
+
+      getTrigger(el2).dispatchEvent(new KeyboardEvent('keydown', {key: 'Enter', bubbles: true}))
+      await settle(el2)
+      await settle(el1)
+
+      expect(el2.open).toBe(true)
+      expect(el1.open).toBe(false)
+    })
+
+    it('opening via ArrowDown closes open siblings in the same group', async () => {
+      const el1 = await createDisclosure({name: 'arrow-grp', open: true} as Partial<CVDisclosure>)
+      const el2 = await createDisclosure({name: 'arrow-grp'} as Partial<CVDisclosure>)
+
+      getTrigger(el2).dispatchEvent(new KeyboardEvent('keydown', {key: 'ArrowDown', bubbles: true}))
+      await settle(el2)
+      await settle(el1)
+
+      expect(el2.open).toBe(true)
+      expect(el1.open).toBe(false)
+    })
   })
 
   // --- Headless contract delegation ---
