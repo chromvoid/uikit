@@ -130,6 +130,13 @@ export class CVCarousel extends ReatomLitElement {
     this.rebuildModelFromSlot(false, false)
   }
 
+  override disconnectedCallback(): void {
+    // Stop the self-rescheduling autoplay timer chain so it does not keep
+    // running (and rescheduling) after the element leaves the DOM.
+    this.model.actions.pause()
+    super.disconnectedCallback()
+  }
+
   override willUpdate(changedProperties: PropertyValues): void {
     super.willUpdate(changedProperties)
 
@@ -151,7 +158,7 @@ export class CVCarousel extends ReatomLitElement {
     }
 
     if (changedProperties.has('value')) {
-      const normalized = this.value.trim()
+      const normalized = this.value?.trim() ?? ''
       if (this.value !== normalized) {
         this.value = normalized
       }
@@ -227,6 +234,25 @@ export class CVCarousel extends ReatomLitElement {
     )
   }
 
+  private static readonly DEFAULT_AUTOPLAY_INTERVAL = 5000
+  private static readonly DEFAULT_VISIBLE_SLIDES = 1
+
+  // Guard against NaN/invalid numeric attributes: a non-numeric `visible-slides`
+  // would otherwise yield NaN → empty visibleSlideIndices → every slide
+  // (including the active one) hidden; a non-numeric `autoplay-interval` would
+  // feed setTimeout(NaN) → an effectively 0ms rotation loop.
+  private sanitizeVisibleSlides(): number {
+    const value = this.visibleSlides
+    if (!Number.isFinite(value) || value < 1) return CVCarousel.DEFAULT_VISIBLE_SLIDES
+    return Math.floor(value)
+  }
+
+  private sanitizeAutoplayInterval(): number {
+    const value = this.autoplayInterval
+    if (!Number.isFinite(value) || value < 1) return CVCarousel.DEFAULT_AUTOPLAY_INTERVAL
+    return value
+  }
+
   private ensureSlideValue(slide: CVCarouselSlide, index: number): string {
     const normalized = slide.value?.trim()
     if (normalized) return normalized
@@ -267,6 +293,11 @@ export class CVCarousel extends ReatomLitElement {
           ? activeIndexById
           : previous.activeIndex
 
+    // Stop the previous model's autoplay timer before replacing it, otherwise
+    // its self-rescheduling setTimeout chain keeps firing against an orphaned
+    // model (property-driven rebuilds would leak a live timer each time).
+    this.model.actions.pause()
+
     this.model = createCarousel({
       idBase: this.idBase,
       slides: this.slideRecords.map((slide) => ({
@@ -276,8 +307,8 @@ export class CVCarousel extends ReatomLitElement {
       ariaLabel: this.ariaLabel || undefined,
       ariaLabelledBy: this.ariaLabelledBy || undefined,
       autoplay: this.autoplay,
-      autoplayIntervalMs: this.autoplayInterval,
-      visibleSlides: this.visibleSlides,
+      autoplayIntervalMs: this.sanitizeAutoplayInterval(),
+      visibleSlides: this.sanitizeVisibleSlides(),
       initialActiveSlideIndex,
       initialPaused: previous.paused,
     })
@@ -389,6 +420,12 @@ export class CVCarousel extends ReatomLitElement {
   }
 
   private handleKeyDown(event: KeyboardEvent) {
+    // Ignore modifier combinations (e.g. Ctrl+Home, Alt+ArrowLeft) so browser
+    // shortcuts are not hijacked by the carousel.
+    if (event.ctrlKey || event.metaKey || event.altKey || event.shiftKey) {
+      return
+    }
+
     if (carouselKeysToPrevent.has(event.key)) {
       event.preventDefault()
     }
@@ -457,6 +494,12 @@ export class CVCarousel extends ReatomLitElement {
     } else {
       this.next()
     }
+  }
+
+  private handleSlidesPointerCancel() {
+    // Reset swipe tracking when the gesture is cancelled (e.g. pointer capture
+    // lost) so a stale isSwiping flag does not leak into the next interaction.
+    this.isSwiping = false
   }
 
   protected override render() {
@@ -528,6 +571,7 @@ export class CVCarousel extends ReatomLitElement {
           @pointerdown=${this.handleSlidesPointerDown}
           @pointermove=${this.handleSlidesPointerMove}
           @pointerup=${this.handleSlidesPointerUp}
+          @pointercancel=${this.handleSlidesPointerCancel}
         >
           <slot @slotchange=${this.handleSlotChange}></slot>
         </div>

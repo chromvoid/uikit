@@ -234,6 +234,16 @@ describe('cv-carousel', () => {
       expect(root.getAttribute('aria-live')).toBe('polite')
     })
 
+    it('[part="base"] switches aria-live to "polite" after manual navigation during autoplay', async () => {
+      const {carousel, root, next} = await mountCarousel({autoplay: true})
+      expect(root.getAttribute('aria-live')).toBe('off')
+
+      next.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+      await settle(carousel)
+
+      expect(root.getAttribute('aria-live')).toBe('polite')
+    })
+
     it('[part="slides"] has role="group"', async () => {
       const {slidesContainer} = await mountCarousel()
       expect(slidesContainer.getAttribute('role')).toBe('group')
@@ -440,6 +450,41 @@ describe('cv-carousel', () => {
       expect(carousel.activeIndex).toBe(2)
       expect(carousel.value).toBe('s3')
     })
+
+    it('next wraps from the last slide back to the first', async () => {
+      const {carousel, next} = await mountCarousel()
+
+      carousel.activeIndex = 2
+      await settle(carousel)
+
+      next.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+      await settle(carousel)
+
+      expect(carousel.activeIndex).toBe(0)
+      expect(carousel.value).toBe('s1')
+    })
+
+    it('prev wraps from the first slide to the last', async () => {
+      const {carousel, prev} = await mountCarousel()
+
+      prev.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+      await settle(carousel)
+
+      expect(carousel.activeIndex).toBe(2)
+      expect(carousel.value).toBe('s3')
+    })
+
+    it('setting value to an unknown slide id does not move the active slide', async () => {
+      const {carousel} = await mountCarousel()
+      let changeCount = 0
+      carousel.addEventListener('cv-change', () => changeCount++)
+
+      carousel.value = 'does-not-exist'
+      await settle(carousel)
+
+      expect(carousel.activeIndex).toBe(0)
+      expect(changeCount).toBe(0)
+    })
   })
 
   // --- Keyboard interaction ---
@@ -561,6 +606,44 @@ describe('cv-carousel', () => {
     })
   })
 
+  // --- Edge cases: slide counts ---
+
+  describe('slide count edge cases', () => {
+    it('renders without slides and ignores keyboard navigation', async () => {
+      const carousel = document.createElement('cv-carousel') as CVCarousel
+      document.body.append(carousel)
+      await settle(carousel)
+
+      const root = carousel.shadowRoot?.querySelector('[part="base"]') as HTMLElement
+      root.dispatchEvent(new KeyboardEvent('keydown', {key: 'End', bubbles: true}))
+      root.dispatchEvent(new KeyboardEvent('keydown', {key: 'ArrowRight', bubbles: true}))
+      await settle(carousel)
+
+      expect(carousel.activeIndex).toBe(0)
+      expect(carousel.value).toBe('')
+      expect(carousel.shadowRoot?.querySelectorAll('[part="indicator"]').length).toBe(0)
+    })
+
+    it('single slide: next() stays on the only slide and emits no change', async () => {
+      const carousel = document.createElement('cv-carousel') as CVCarousel
+      carousel.append(createSlide('only', 'Only slide'))
+      document.body.append(carousel)
+      await settle(carousel)
+
+      let changeCount = 0
+      carousel.addEventListener('cv-change', () => changeCount++)
+
+      carousel.next()
+      await settle(carousel)
+      carousel.prev()
+      await settle(carousel)
+
+      expect(carousel.activeIndex).toBe(0)
+      expect(carousel.value).toBe('only')
+      expect(changeCount).toBe(0)
+    })
+  })
+
   // --- Slot rebuild ---
 
   describe('slot rebuild', () => {
@@ -577,6 +660,22 @@ describe('cv-carousel', () => {
 
       expect(carousel.value).toBe('s2')
       expect((carousel.querySelector('cv-carousel-slide[value="s2"]') as CVCarouselSlide).active).toBe(true)
+    })
+
+    it('falls back to the slide at the same index when the active slide is removed', async () => {
+      const {carousel, indicators} = await mountCarousel()
+
+      indicators[1]!.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+      await settle(carousel)
+      expect(carousel.value).toBe('s2')
+
+      const slide2 = carousel.querySelector('cv-carousel-slide[value="s2"]') as CVCarouselSlide
+      slide2.remove()
+      await settle(carousel)
+
+      expect(carousel.activeIndex).toBe(1)
+      expect(carousel.value).toBe('s3')
+      expect((carousel.querySelector('cv-carousel-slide[value="s3"]') as CVCarouselSlide).active).toBe(true)
     })
   })
 
@@ -896,6 +995,137 @@ describe('cv-carousel-slide', () => {
       await slide.updateComplete
 
       expect(slide.hasAttribute('hidden')).toBe(true)
+    })
+  })
+
+  // --- Regression: Batch 2 fixes ---
+
+  describe('regression: autoplay timer teardown (Batch 2 #7)', () => {
+    it('stops the autoplay timer chain on disconnect', async () => {
+      vi.useFakeTimers()
+      const {carousel} = await mountCarousel({autoplay: true, autoplayInterval: 100})
+
+      vi.advanceTimersByTime(100)
+      await settle(carousel)
+      expect(carousel.activeIndex).toBe(1)
+
+      carousel.remove()
+
+      // No orphaned self-rescheduling timer should remain after removal.
+      expect(vi.getTimerCount()).toBe(0)
+
+      // Advancing further must not mutate the (detached) carousel.
+      vi.advanceTimersByTime(1000)
+      expect(carousel.activeIndex).toBe(1)
+    })
+
+    it('does not orphan the old model timer on property-driven rebuild', async () => {
+      vi.useFakeTimers()
+      const {carousel} = await mountCarousel({autoplay: true, autoplayInterval: 100})
+
+      // Property changes that trigger rebuildModelFromSlot.
+      carousel.ariaLabel = 'Gallery one'
+      await settle(carousel)
+      carousel.autoplayInterval = 200
+      await settle(carousel)
+      carousel.visibleSlides = 1
+      await settle(carousel)
+
+      // Exactly one live rotation timer (the current model's), no orphans.
+      expect(vi.getTimerCount()).toBe(1)
+    })
+  })
+
+  describe('regression: invalid numeric attributes (Batch 2 #9)', () => {
+    it('falls back to a single visible slide when visible-slides is non-numeric', async () => {
+      const carousel = document.createElement('cv-carousel') as CVCarousel
+      carousel.setAttribute('visible-slides', 'oops')
+      carousel.append(createSlide('s1', 'Slide 1'), createSlide('s2', 'Slide 2'))
+      document.body.append(carousel)
+      await settle(carousel)
+
+      const slides = Array.from(carousel.querySelectorAll('cv-carousel-slide')) as CVCarouselSlide[]
+      // Active slide must remain visible (not aria-hidden), not all-hidden via NaN.
+      expect(slides[0]!.getAttribute('aria-hidden')).toBe('false')
+      expect(slides[0]!.active).toBe(true)
+    })
+
+    it('falls back to default interval when autoplay-interval is non-numeric', async () => {
+      vi.useFakeTimers()
+      const carousel = document.createElement('cv-carousel') as CVCarousel
+      carousel.autoplay = true
+      carousel.setAttribute('autoplay-interval', 'nope')
+      carousel.append(createSlide('s1', 'Slide 1'), createSlide('s2', 'Slide 2'))
+      document.body.append(carousel)
+      await settle(carousel)
+
+      // Must NOT advance at ~0ms (which a setTimeout(NaN) would effectively do).
+      vi.advanceTimersByTime(100)
+      await settle(carousel)
+      expect(carousel.activeIndex).toBe(0)
+
+      // Advances at the default 5000ms fallback interval.
+      vi.advanceTimersByTime(5000)
+      await settle(carousel)
+      expect(carousel.activeIndex).toBe(1)
+    })
+  })
+
+  describe('regression: keyboard modifiers (Batch 2 #10)', () => {
+    it('ignores navigation keys when a modifier is held', async () => {
+      const {carousel, root} = await mountCarousel()
+
+      const before = carousel.activeIndex
+      const event = new KeyboardEvent('keydown', {key: 'End', bubbles: true, ctrlKey: true})
+      let prevented = false
+      Object.defineProperty(event, 'preventDefault', {
+        value: () => {
+          prevented = true
+        },
+      })
+      root.dispatchEvent(event)
+      await settle(carousel)
+
+      // Ctrl+End must not be hijacked.
+      expect(carousel.activeIndex).toBe(before)
+      expect(prevented).toBe(false)
+    })
+  })
+
+  describe('regression: removeAttribute("value") (Batch 2 #8)', () => {
+    it('does not throw when the value attribute is removed', async () => {
+      const {carousel} = await mountCarousel({value: 's2'})
+      expect(carousel.activeIndex).toBe(1)
+
+      expect(() => carousel.removeAttribute('value')).not.toThrow()
+      await settle(carousel)
+      // Clearing the value is a no-op for navigation: the active slide is kept.
+      expect(carousel.activeIndex).toBe(1)
+    })
+  })
+
+  describe('regression: pointercancel resets swipe (Batch 2 #11)', () => {
+    it('clears stale isSwiping after pointercancel so a later swipe still works', async () => {
+      const {carousel, slidesContainer} = await mountCarousel()
+
+      slidesContainer.dispatchEvent(
+        new PointerEvent('pointerdown', {clientX: 200, clientY: 100, bubbles: true}),
+      )
+      // Gesture cancelled (e.g. pointer capture lost) without pointerup.
+      slidesContainer.dispatchEvent(new PointerEvent('pointercancel', {bubbles: true}))
+      await settle(carousel)
+
+      // A fresh swipe should be recognized (not blocked, not acting on stale start).
+      slidesContainer.dispatchEvent(
+        new PointerEvent('pointerdown', {clientX: 200, clientY: 100, bubbles: true}),
+      )
+      slidesContainer.dispatchEvent(
+        new PointerEvent('pointerup', {clientX: 100, clientY: 100, bubbles: true}),
+      )
+      await settle(carousel)
+
+      // Left swipe → next slide.
+      expect(carousel.activeIndex).toBe(1)
     })
   })
 })
