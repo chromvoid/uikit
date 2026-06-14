@@ -707,10 +707,12 @@ export class CVButton extends FormAssociatedReatomElement {
   }
 
   private handleKeyUp(event: KeyboardEvent) {
-    if (event.key === ' ' || event.key === 'Spacebar') {
-      this.suppressKeyboardClick = true
-    }
-
+    // NOTE: Space activation is handled here via the headless model, which
+    // preventDefaults Space on keydown — so no native synthetic click follows.
+    // Setting suppressKeyboardClick here would therefore never be consumed and
+    // would swallow the next genuine programmatic `.click()` (detail 0). Only
+    // Enter produces a native synthetic click, so the suppress flag is set in
+    // handleKeyDown for that case alone.
     this.model.contracts.getButtonProps().onKeyUp(event)
   }
 

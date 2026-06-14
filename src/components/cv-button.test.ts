@@ -337,6 +337,32 @@ describe('cv-button', () => {
       expect(requestSubmitSpy).toHaveBeenCalledTimes(0)
     })
 
+    it('unknown type value behaves like type="button"', async () => {
+      const form = document.createElement('form')
+      const requestSubmitSpy = vi.fn()
+      const resetSpy = vi.fn()
+      Object.defineProperty(form, 'requestSubmit', {
+        value: requestSubmitSpy,
+        configurable: true,
+      })
+      Object.defineProperty(form, 'reset', {
+        value: resetSpy,
+        configurable: true,
+      })
+
+      const button = document.createElement('cv-button') as CVButton
+      button.setAttribute('type', 'banana')
+      form.append(button)
+      document.body.append(form)
+      await settle(button)
+
+      getBase(button).dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+      await settle(button)
+
+      expect(requestSubmitSpy).toHaveBeenCalledTimes(0)
+      expect(resetSpy).toHaveBeenCalledTimes(0)
+    })
+
     it('loading + type="reset" does not trigger form.reset', async () => {
       const form = document.createElement('form')
       const resetSpy = vi.fn()
@@ -562,6 +588,109 @@ describe('cv-button', () => {
     })
   })
 
+  describe('host-level activation', () => {
+    it('host.click() toggles pressed and emits input and change', async () => {
+      const button = await createButton({toggle: true})
+      const inputDetails: Array<{pressed: boolean; toggle: boolean}> = []
+      const changeDetails: Array<{pressed: boolean}> = []
+
+      button.addEventListener('cv-input', (e) => inputDetails.push((e as CustomEvent).detail))
+      button.addEventListener('cv-change', (e) => changeDetails.push((e as CustomEvent).detail))
+
+      button.click()
+      await settle(button)
+
+      expect(button.pressed).toBe(true)
+      expect(inputDetails).toEqual([{pressed: true, toggle: true}])
+      expect(changeDetails).toEqual([{pressed: true}])
+    })
+
+    it('host.click() does not activate when disabled', async () => {
+      const button = await createButton({toggle: true, disabled: true})
+      let inputCount = 0
+      button.addEventListener('cv-input', () => inputCount++)
+
+      button.click()
+      await settle(button)
+
+      expect(button.pressed).toBe(false)
+      expect(inputCount).toBe(0)
+    })
+
+    it('host.click() does not activate when loading', async () => {
+      const button = await createButton({toggle: true, loading: true})
+      let inputCount = 0
+      button.addEventListener('cv-input', () => inputCount++)
+
+      button.click()
+      await settle(button)
+
+      expect(button.pressed).toBe(false)
+      expect(inputCount).toBe(0)
+    })
+
+    it('host.click() with type="submit" calls requestSubmit', async () => {
+      const form = document.createElement('form')
+      const requestSubmitSpy = vi.fn()
+      Object.defineProperty(form, 'requestSubmit', {
+        value: requestSubmitSpy,
+        configurable: true,
+      })
+
+      const button = document.createElement('cv-button') as CVButton
+      button.type = 'submit'
+      form.append(button)
+      document.body.append(form)
+      await settle(button)
+
+      button.click()
+      await settle(button)
+
+      expect(requestSubmitSpy).toHaveBeenCalledTimes(1)
+    })
+  })
+
+  describe('attribute passthrough', () => {
+    it('forwards aria-label from host to the inner button', async () => {
+      const button = await createButton()
+      button.setAttribute('aria-label', 'Save document')
+      await settle(button)
+
+      expect(getBase(button).getAttribute('aria-label')).toBe('Save document')
+    })
+
+    it('removes forwarded aria-label from the inner button when host attribute is removed', async () => {
+      const button = await createButton()
+      button.setAttribute('aria-label', 'Save document')
+      await settle(button)
+      expect(getBase(button).getAttribute('aria-label')).toBe('Save document')
+
+      button.removeAttribute('aria-label')
+      await settle(button)
+      expect(getBase(button).hasAttribute('aria-label')).toBe(false)
+    })
+
+    it('forwards aria-expanded and aria-haspopup from host to the inner button', async () => {
+      const button = await createButton()
+      button.setAttribute('aria-haspopup', 'menu')
+      button.setAttribute('aria-expanded', 'true')
+      await settle(button)
+
+      const base = getBase(button)
+      expect(base.getAttribute('aria-haspopup')).toBe('menu')
+      expect(base.getAttribute('aria-expanded')).toBe('true')
+    })
+
+    it('button-tabindex attribute overrides the inner button tabindex', async () => {
+      const button = document.createElement('cv-button') as CVButton
+      button.setAttribute('button-tabindex', '-1')
+      document.body.append(button)
+      await settle(button)
+
+      expect(getBase(button).getAttribute('tabindex')).toBe('-1')
+    })
+  })
+
   describe('disabled state blocks activation', () => {
     it('toggle+disabled: click does not change pressed', async () => {
       const button = await createButton({toggle: true, disabled: true})
@@ -687,6 +816,25 @@ describe('cv-button', () => {
       expect(getBase(button).getAttribute('aria-pressed')).toBe('false')
     })
 
+    it('changing toggle at runtime preserves disabled state in the recreated model', async () => {
+      const button = await createButton({disabled: true})
+
+      button.toggle = true
+      await settle(button)
+
+      const base = getBase(button)
+      expect(base.getAttribute('aria-disabled')).toBe('true')
+      expect(base.getAttribute('tabindex')).toBe('-1')
+
+      let inputCount = 0
+      button.addEventListener('cv-input', () => inputCount++)
+      base.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+      await settle(button)
+
+      expect(button.pressed).toBe(false)
+      expect(inputCount).toBe(0)
+    })
+
     it('programmatic pressed change in toggle mode updates aria-pressed', async () => {
       const button = await createButton({toggle: true})
       expect(getBase(button).getAttribute('aria-pressed')).toBe('false')
@@ -698,6 +846,43 @@ describe('cv-button', () => {
       button.pressed = false
       await settle(button)
       expect(getBase(button).getAttribute('aria-pressed')).toBe('false')
+    })
+  })
+
+  // --- Regression: Batch 2 #4 ---
+
+  describe('regression: stale suppressKeyboardClick after Space (Batch 2 #4)', () => {
+    it('does not swallow a genuine programmatic click after Space activation', async () => {
+      const button = await createButton({toggle: true})
+      const base = getBase(button)
+
+      // Space activation: model preventDefaults Space on keydown, so no native
+      // synthetic click follows in a real browser.
+      base.dispatchEvent(new KeyboardEvent('keydown', {key: ' ', bubbles: true}))
+      base.dispatchEvent(new KeyboardEvent('keyup', {key: ' ', bubbles: true}))
+      await settle(button)
+      expect(button.pressed).toBe(true)
+
+      // A subsequent genuine programmatic click (detail === 0) must NOT be
+      // dropped by a stale suppress flag.
+      base.click()
+      await settle(button)
+      expect(button.pressed).toBe(false)
+    })
+
+    it('still suppresses the native synthetic click that follows Enter activation', async () => {
+      const button = await createButton({toggle: true})
+      const base = getBase(button)
+
+      // Enter activation calls press() via the headless keydown handler. The
+      // browser then synthesizes a native click (detail 0); that one click must
+      // be suppressed so activation does not double-fire.
+      base.dispatchEvent(new KeyboardEvent('keydown', {key: 'Enter', bubbles: true}))
+      base.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true, detail: 0}))
+      await settle(button)
+
+      // Single activation only.
+      expect(button.pressed).toBe(true)
     })
   })
 })
