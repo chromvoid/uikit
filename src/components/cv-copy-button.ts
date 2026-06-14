@@ -113,10 +113,22 @@ export class CVCopyButton extends ReatomLitElement {
     if (old === clip) return
 
     this.clipboardAdapter = clip
-    if (this.model) {
-      this.model = this._createModel()
-    }
+    this.maybeRebuildModel()
     this.requestUpdate('clipboard', old)
+  }
+
+  /**
+   * Recreate the model so a cosmetic/config setter takes effect — but never
+   * while feedback is on screen or a copy is in flight. Tearing down the model
+   * mid-feedback would reset a visible success/error to idle, orphan the pending
+   * revert timer, and let the replaced model fire late events. When the model is
+   * busy we defer: the in-flight model keeps its closure values, and the next
+   * idle rebuild (or reset) picks up the new ones.
+   */
+  private maybeRebuildModel(): void {
+    if (!this.model) return
+    if (this.model.state.status() !== 'idle' || this.model.state.isCopying()) return
+    this.model = this._createModel()
   }
 
   get successLabel(): string {
@@ -129,9 +141,7 @@ export class CVCopyButton extends ReatomLitElement {
     if (old === next) return
 
     this.successText = next
-    if (this.model) {
-      this.model = this._createModel()
-    }
+    this.maybeRebuildModel()
     this.requestUpdate('successLabel', old)
   }
 
@@ -145,9 +155,7 @@ export class CVCopyButton extends ReatomLitElement {
     if (old === next) return
 
     this.errorText = next
-    if (this.model) {
-      this.model = this._createModel()
-    }
+    this.maybeRebuildModel()
     this.requestUpdate('errorLabel', old)
   }
 
@@ -161,9 +169,7 @@ export class CVCopyButton extends ReatomLitElement {
     if (old === next) return
 
     this.idleAriaLabel = next
-    if (this.model) {
-      this.model = this._createModel()
-    }
+    this.maybeRebuildModel()
     this.requestUpdate('ariaLabel', old)
   }
 
@@ -355,6 +361,13 @@ export class CVCopyButton extends ReatomLitElement {
     if (!customElements.get(this.elementName)) {
       customElements.define(this.elementName, this)
     }
+  }
+
+  override disconnectedCallback(): void {
+    super.disconnectedCallback()
+    // Cancel any pending revert timer so a removed button does not fire feedback
+    // resets / events after it has left the DOM.
+    this.model?.actions.reset()
   }
 
   private _createModel(): CopyButtonModel {

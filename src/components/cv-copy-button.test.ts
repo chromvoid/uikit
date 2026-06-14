@@ -513,6 +513,91 @@ describe('cv-copy-button', () => {
       expect(el.getAttribute('status')).toBe('idle')
     })
 
+    it('falls back to the error state when no clipboard adapter is available', async () => {
+      // jsdom has no navigator.clipboard, and no adapter is injected here.
+      const el = await createCopyButton({value: 'no-clipboard'})
+      let errorCount = 0
+
+      el.addEventListener('cv-error', () => {
+        errorCount += 1
+      })
+
+      getBase(el).click()
+      await vi.advanceTimersByTimeAsync(0)
+      await settle(el)
+
+      expect(el.getAttribute('status')).toBe('error')
+      expect(errorCount).toBe(1)
+    })
+
+    it('reports error when the async value getter rejects', async () => {
+      const clip = {writeText: vi.fn().mockResolvedValue(undefined)}
+      const el = await createCopyButton({value: () => Promise.reject(new Error('boom'))})
+      setClipboard(el, clip)
+
+      let detail: unknown
+      el.addEventListener('cv-error', ((e: CustomEvent) => {
+        detail = e.detail
+      }) as EventListener)
+
+      getBase(el).click()
+      await vi.advanceTimersByTimeAsync(0)
+      await settle(el)
+
+      expect(clip.writeText).not.toHaveBeenCalled()
+      expect(el.getAttribute('status')).toBe('error')
+      expect(detail).toEqual({error: new Error('boom')})
+    })
+
+    it('resets the feedback timer on a rapid second copy', async () => {
+      const clip = {writeText: vi.fn().mockResolvedValue(undefined)}
+      const el = await createCopyButton({value: 'test'})
+      setClipboard(el, clip)
+
+      getBase(el).click()
+      await vi.advanceTimersByTimeAsync(0)
+      await settle(el)
+      expect(el.getAttribute('status')).toBe('success')
+
+      await vi.advanceTimersByTimeAsync(1000)
+      getBase(el).click()
+      await vi.advanceTimersByTimeAsync(0)
+      await settle(el)
+
+      // 1400ms after the second copy; the first copy's timer would have fired by now.
+      await vi.advanceTimersByTimeAsync(1400)
+      await settle(el)
+      expect(el.getAttribute('status')).toBe('success')
+
+      await vi.advanceTimersByTimeAsync(100)
+      await settle(el)
+      expect(el.getAttribute('status')).toBe('idle')
+    })
+
+    it('ignores additional clicks while a copy is in flight', async () => {
+      let resolveClip!: () => void
+      const clip = {
+        writeText: vi.fn().mockImplementation(
+          () =>
+            new Promise<void>((resolve) => {
+              resolveClip = resolve
+            }),
+        ),
+      }
+      const el = await createCopyButton({value: 'in-flight'})
+      setClipboard(el, clip)
+
+      getBase(el).click()
+      await settle(el)
+      getBase(el).click()
+      await settle(el)
+
+      expect(clip.writeText).toHaveBeenCalledTimes(1)
+
+      resolveClip()
+      await settle(el)
+    })
+
     it('error reverts to idle after feedbackDuration', async () => {
       const clip = {writeText: vi.fn().mockRejectedValue(new Error('fail'))}
       const el = await createCopyButton({value: 'test', feedbackDuration: 1000})
@@ -687,6 +772,75 @@ describe('cv-copy-button', () => {
       el.feedbackDuration = 3000
       await settle(el)
       expect(el.feedbackDuration).toBe(3000)
+    })
+  })
+
+  // ---------------------------------------------------------------------------
+  // Feedback lifecycle robustness
+  // ---------------------------------------------------------------------------
+  describe('feedback lifecycle', () => {
+    beforeEach(() => {
+      vi.useFakeTimers()
+    })
+
+    afterEach(() => {
+      vi.useRealTimers()
+    })
+
+    it('cancels the pending revert timer on disconnect', async () => {
+      const clip = {writeText: vi.fn().mockResolvedValue(undefined)}
+      const el = await createCopyButton({value: 'hello', feedbackDuration: 1500, clipboard: clip})
+
+      getBase(el).click()
+      await settle(el)
+      await vi.advanceTimersByTimeAsync(0)
+      await settle(el)
+      expect(el.getAttribute('status')).toBe('success')
+
+      // Remove the button while the revert timer is still pending.
+      el.remove()
+
+      // Advancing past the feedback duration must not throw or fire late work;
+      // disconnect should have reset the model and cleared the timer.
+      expect(() => vi.advanceTimersByTime(2000)).not.toThrow()
+      expect(vi.getTimerCount()).toBe(0)
+    })
+
+    it('does not tear down the model while success feedback is on screen', async () => {
+      const clip = {writeText: vi.fn().mockResolvedValue(undefined)}
+      const el = await createCopyButton({value: 'hello', feedbackDuration: 1500, clipboard: clip})
+
+      const errors: unknown[] = []
+      el.addEventListener('cv-error', ((e: CustomEvent) => {
+        errors.push(e.detail)
+      }) as EventListener)
+
+      getBase(el).click()
+      await settle(el)
+      await vi.advanceTimersByTimeAsync(0)
+      await settle(el)
+      expect(el.getAttribute('status')).toBe('success')
+
+      // A cosmetic setter change during feedback must not reset visible success
+      // back to idle or orphan the revert timer.
+      el.successLabel = 'Copied to clipboard'
+      el.ariaLabel = 'Copy value'
+      await settle(el)
+
+      expect(el.getAttribute('status')).toBe('success')
+
+      // The original revert timer still fires and returns to idle exactly once.
+      await vi.advanceTimersByTimeAsync(1500)
+      await settle(el)
+      expect(el.getAttribute('status')).toBe('idle')
+      expect(errors).toEqual([])
+    })
+
+    it('applies setter changes when the model is idle', async () => {
+      const el = await createCopyButton()
+      el.successLabel = 'Done'
+      await settle(el)
+      expect(el.successLabel).toBe('Done')
     })
   })
 })
