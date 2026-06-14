@@ -323,6 +323,47 @@ describe('cv-input', () => {
       expect(detail).toEqual({value: 'test'})
     })
 
+    it('dispatches cv-change on blur after Escape cleared the value', async () => {
+      const el = await createInput({clearable: true, value: 'hello'})
+      const details: Array<{value: string}> = []
+      el.addEventListener('cv-change', (e) => details.push((e as CustomEvent).detail))
+
+      const input = getInput(el)
+      input.dispatchEvent(new FocusEvent('focus', {bubbles: true}))
+      await settle(el)
+      input.dispatchEvent(new KeyboardEvent('keydown', {key: 'Escape', bubbles: true}))
+      await settle(el)
+      input.dispatchEvent(new FocusEvent('blur', {bubbles: true}))
+      await settle(el)
+
+      expect(details).toEqual([{value: ''}])
+    })
+
+    it('does NOT dispatch cv-change on blur when the value was changed and reverted', async () => {
+      const el = await createInput({value: 'hello'})
+      let changeFired = false
+      el.addEventListener('cv-change', () => {
+        changeFired = true
+      })
+
+      const input = getInput(el)
+      input.dispatchEvent(new FocusEvent('focus', {bubbles: true}))
+      await settle(el)
+
+      input.value = 'hellox'
+      input.dispatchEvent(new InputEvent('input', {bubbles: true}))
+      await settle(el)
+
+      input.value = 'hello'
+      input.dispatchEvent(new InputEvent('input', {bubbles: true}))
+      await settle(el)
+
+      input.dispatchEvent(new FocusEvent('blur', {bubbles: true}))
+      await settle(el)
+
+      expect(changeFired).toBe(false)
+    })
+
     it('cv-clear detail has shape { }', async () => {
       const el = await createInput({clearable: true, value: 'hello'})
       let detail: unknown
@@ -417,6 +458,14 @@ describe('cv-input', () => {
       const el = await createInput({maxlength: 12})
       const input = getInput(el)
       expect(input.getAttribute('maxlength')).toBe('12')
+    })
+
+    it('does not apply maxlength when the attribute is not numeric', async () => {
+      const el = await createInput()
+      el.setAttribute('maxlength', 'abc')
+      await settle(el)
+
+      expect(getInput(el).hasAttribute('maxlength')).toBe(false)
     })
 
     it('sets aria-invalid on native input when invalid', async () => {
@@ -520,6 +569,59 @@ describe('cv-input', () => {
 
       expect(event.defaultPrevented).toBe(true)
       expect(requestSubmitSpy).toHaveBeenCalledTimes(1)
+    })
+
+    it('Enter does not prevent default when there is no form', async () => {
+      const el = await createInput()
+      const input = getInput(el)
+      const event = new KeyboardEvent('keydown', {key: 'Enter', bubbles: true, cancelable: true})
+      input.dispatchEvent(event)
+      await settle(el)
+
+      expect(event.defaultPrevented).toBe(false)
+    })
+
+    it('Enter with a modifier key does not submit the form', async () => {
+      const el = await createInput()
+      const form = document.createElement('form')
+      const requestSubmitSpy = vi.spyOn(form, 'requestSubmit').mockImplementation(() => {})
+
+      form.append(el)
+      document.body.append(form)
+      await settle(el)
+
+      const input = getInput(el)
+      for (const modifier of ['shiftKey', 'altKey', 'ctrlKey', 'metaKey'] as const) {
+        const event = new KeyboardEvent('keydown', {
+          key: 'Enter',
+          bubbles: true,
+          cancelable: true,
+          [modifier]: true,
+        })
+        input.dispatchEvent(event)
+        expect(event.defaultPrevented).toBe(false)
+      }
+      await settle(el)
+
+      expect(requestSubmitSpy).not.toHaveBeenCalled()
+    })
+
+    it('already-handled Enter does not submit the form', async () => {
+      const el = await createInput()
+      const form = document.createElement('form')
+      const requestSubmitSpy = vi.spyOn(form, 'requestSubmit').mockImplementation(() => {})
+
+      form.append(el)
+      document.body.append(form)
+      await settle(el)
+
+      getBase(el).addEventListener('keydown', (e) => e.preventDefault(), {capture: true})
+
+      const input = getInput(el)
+      input.dispatchEvent(new KeyboardEvent('keydown', {key: 'Enter', bubbles: true, cancelable: true}))
+      await settle(el)
+
+      expect(requestSubmitSpy).not.toHaveBeenCalled()
     })
 
     it('clear button becomes hidden after value is cleared', async () => {
@@ -721,6 +823,22 @@ describe('cv-input', () => {
       const input = getInput(el)
       expect(input.getAttribute('tabindex')).toBe('0')
     })
+
+    it('native input event does not dispatch cv-input when readonly', async () => {
+      const el = await createInput({readonly: true, value: 'hello'})
+      let inputFired = false
+      el.addEventListener('cv-input', () => {
+        inputFired = true
+      })
+
+      const input = getInput(el)
+      input.value = 'changed'
+      input.dispatchEvent(new InputEvent('input', {bubbles: true}))
+      await settle(el)
+
+      expect(inputFired).toBe(false)
+      expect(el.value).toBe('hello')
+    })
   })
 
   // --- Headless contract delegation ---
@@ -909,6 +1027,154 @@ describe('cv-input', () => {
         return
       }
       expect(formData.get('field')).toBeNull()
+    })
+
+    it('formResetCallback restores the value captured at first connect', async () => {
+      const el = await createInput({value: 'initial'})
+
+      el.value = 'edited'
+      await settle(el)
+      expect(getInput(el).value).toBe('edited')
+
+      el.formResetCallback()
+      await settle(el)
+
+      expect(el.value).toBe('initial')
+      expect(getInput(el).value).toBe('initial')
+    })
+
+    it('formStateRestoreCallback restores a string state', async () => {
+      const el = await createInput()
+
+      el.formStateRestoreCallback('restored')
+      await settle(el)
+
+      expect(el.value).toBe('restored')
+      expect(getInput(el).value).toBe('restored')
+    })
+
+    it('formStateRestoreCallback ignores non-string state', async () => {
+      const el = await createInput({value: 'kept'})
+
+      el.formStateRestoreCallback(null)
+      await settle(el)
+
+      expect(el.value).toBe('kept')
+    })
+
+    it('checkValidity reports valueMissing for a required empty input', async () => {
+      const el = await createInput({required: true})
+
+      expect(el.checkValidity()).toBe(false)
+      expect(el.validationMessage).toBe('Please fill out this field.')
+
+      el.value = 'filled'
+      await settle(el)
+
+      expect(el.checkValidity()).toBe(true)
+    })
+
+    it('invalid property reports a customError', async () => {
+      const el = await createInput({invalid: true})
+
+      expect(el.checkValidity()).toBe(false)
+      expect(el.validationMessage).toBe('Invalid value')
+    })
+
+    it('willValidate is false when disabled', async () => {
+      const el = await createInput({disabled: true})
+      expect(el.willValidate).toBe(false)
+    })
+  })
+
+  describe('regression (batch 5)', () => {
+    it('removeAttribute("value") does not throw and clears filled state', async () => {
+      const el = document.createElement('cv-input') as CVInput
+      el.setAttribute('value', 'hello')
+      document.body.append(el)
+      await settle(el)
+      expect(el.hasAttribute('filled')).toBe(true)
+
+      // Lit's String converter turns removeAttribute into a null property write.
+      el.removeAttribute('value')
+      await settle(el)
+
+      // null is normalized to '' instead of crashing filled() with null.length.
+      expect(el.value).toBe('')
+      expect(el.hasAttribute('filled')).toBe(false)
+      expect(getInput(el).value).toBe('')
+    })
+
+    it('programmatic value assignment does not emit cv-input', async () => {
+      const el = await createInput()
+      let count = 0
+      el.addEventListener('cv-input', () => count++)
+
+      el.value = 'hello'
+      await settle(el)
+
+      expect(el.value).toBe('hello')
+      expect(getInput(el).value).toBe('hello')
+      expect(count).toBe(0)
+    })
+
+    it('formResetCallback does not emit cv-input', async () => {
+      const el = await createInput({value: 'initial'})
+      el.value = 'edited'
+      await settle(el)
+
+      let count = 0
+      el.addEventListener('cv-input', () => count++)
+
+      el.formResetCallback()
+      await settle(el)
+
+      expect(el.value).toBe('initial')
+      expect(count).toBe(0)
+    })
+
+    it('formStateRestoreCallback does not emit cv-input', async () => {
+      const el = await createInput()
+      let count = 0
+      el.addEventListener('cv-input', () => count++)
+
+      el.formStateRestoreCallback('restored')
+      await settle(el)
+
+      expect(el.value).toBe('restored')
+      expect(count).toBe(0)
+    })
+
+    it('Escape that clears the field calls preventDefault', async () => {
+      const el = await createInput({clearable: true, value: 'hello'})
+      const input = getInput(el)
+      const event = new KeyboardEvent('keydown', {key: 'Escape', bubbles: true, cancelable: true})
+      input.dispatchEvent(event)
+      await settle(el)
+
+      expect(el.value).toBe('')
+      expect(event.defaultPrevented).toBe(true)
+    })
+
+    it('Escape does not clear when already handled by a consumer', async () => {
+      const el = await createInput({clearable: true, value: 'hello'})
+      const input = getInput(el)
+      input.addEventListener('keydown', (e) => e.preventDefault(), {capture: true})
+
+      input.dispatchEvent(new KeyboardEvent('keydown', {key: 'Escape', bubbles: true, cancelable: true}))
+      await settle(el)
+
+      expect(el.value).toBe('hello')
+    })
+
+    it('Escape on an empty field does not call preventDefault (lets overlays close)', async () => {
+      const el = await createInput({clearable: true})
+      const input = getInput(el)
+      const event = new KeyboardEvent('keydown', {key: 'Escape', bubbles: true, cancelable: true})
+      input.dispatchEvent(event)
+      await settle(el)
+
+      expect(event.defaultPrevented).toBe(false)
     })
   })
 

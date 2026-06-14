@@ -1,6 +1,7 @@
 import {createNumber, type NumberModel} from '@chromvoid/headless-ui/number'
 import {css, html, nothing} from 'lit'
 import type {PropertyValues} from 'lit'
+import {live} from 'lit/directives/live.js'
 
 import {FormAssociatedReatomElement} from '../form-associated/FormAssociatedReatomElement'
 import {hasTextEditableFocus} from './focus-utils'
@@ -352,7 +353,18 @@ export class CVNumber extends FormAssociatedReatomElement {
       changedProperties.has('ariaLabelledBy') ||
       changedProperties.has('ariaDescribedBy')
     ) {
+      // Recreating the model drops the in-flight draft text and the `focused`
+      // flag. Preserve both so a config change (e.g. min/max) mid-edit does not
+      // wipe the user's typing or drop the focus ring while DOM focus is live.
+      const preservedDraft = this.model.state.draftText()
+      const preservedFocused = this.model.state.focused()
       this.model = this.createModel()
+      if (preservedDraft !== null) {
+        this.model.actions.setDraftText(preservedDraft)
+      }
+      if (preservedFocused) {
+        this.model.actions.setFocused(true)
+      }
       this.syncValueFromModel()
       this.syncFormAssociatedState()
       this.reflectHostAttributes()
@@ -527,6 +539,12 @@ export class CVNumber extends FormAssociatedReatomElement {
   }
 
   private handleNativeKeyDown(event: KeyboardEvent) {
+    // Respect upstream handling and avoid hijacking browser/OS shortcuts
+    // (e.g. Ctrl+ArrowUp, Cmd+Home). Modifier-laden navigation keys must fall
+    // through to the platform.
+    if (event.defaultPrevented) return
+    if (event.ctrlKey || event.metaKey || event.altKey) return
+
     const previousValue = this.model.state.value()
     this.model.actions.handleKeyDown(event)
     this.syncValueFromModel()
@@ -655,7 +673,9 @@ export class CVNumber extends FormAssociatedReatomElement {
           aria-describedby=${inputProps['aria-describedby'] ?? nothing}
           placeholder=${inputProps.placeholder ?? nothing}
           autocomplete=${inputProps.autocomplete}
-          .value=${displayValue}
+          ?disabled=${this.isEffectivelyDisabled()}
+          ?readonly=${this.readOnly}
+          .value=${live(displayValue)}
           @input=${this.handleNativeInput}
           @focus=${this.handleNativeFocus}
           @blur=${this.handleNativeBlur}

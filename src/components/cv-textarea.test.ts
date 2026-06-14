@@ -504,5 +504,158 @@ describe('cv-textarea', () => {
 
       expect(el.checkValidity()).toBe(true)
     })
+
+    it('formResetCallback restores the value captured at first connect without emitting events', async () => {
+      const el = await createTextarea({value: 'initial'})
+      let inputCount = 0
+      let changeCount = 0
+      el.addEventListener('cv-input', () => inputCount++)
+      el.addEventListener('cv-change', () => changeCount++)
+
+      el.value = 'edited'
+      await settle(el)
+      expect(getTextarea(el).value).toBe('edited')
+
+      el.formResetCallback()
+      await settle(el)
+
+      expect(el.value).toBe('initial')
+      expect(getTextarea(el).value).toBe('initial')
+      expect(inputCount).toBe(0)
+      expect(changeCount).toBe(0)
+    })
+
+    it('formStateRestoreCallback restores a string state', async () => {
+      const el = await createTextarea()
+
+      el.formStateRestoreCallback('restored')
+      await settle(el)
+
+      expect(el.value).toBe('restored')
+      expect(getTextarea(el).value).toBe('restored')
+    })
+  })
+
+  describe('corner cases', () => {
+    it('clears [filled] when value is emptied programmatically', async () => {
+      const el = await createTextarea({value: 'hello'})
+      expect(el.hasAttribute('filled')).toBe(true)
+
+      el.value = ''
+      await settle(el)
+
+      expect(el.hasAttribute('filled')).toBe(false)
+    })
+
+    it('Enter in submit mode does nothing without a parent form', async () => {
+      const el = await createTextarea({enterBehavior: 'submit'})
+      const textarea = getTextarea(el)
+      const event = new KeyboardEvent('keydown', {key: 'Enter', bubbles: true, cancelable: true})
+
+      textarea.dispatchEvent(event)
+
+      expect(event.defaultPrevented).toBe(false)
+    })
+
+    it('Ctrl+Enter and Meta+Enter keep newline behavior in submit mode', async () => {
+      const form = document.createElement('form')
+      const el = document.createElement('cv-textarea') as CVTextarea
+      el.enterBehavior = 'submit'
+      form.append(el)
+      document.body.append(form)
+      await settle(el)
+
+      const requestSubmitSpy = vi.spyOn(form, 'requestSubmit').mockImplementation(() => {})
+      const textarea = getTextarea(el)
+
+      const ctrlEvent = new KeyboardEvent('keydown', {
+        key: 'Enter',
+        ctrlKey: true,
+        bubbles: true,
+        cancelable: true,
+      })
+      textarea.dispatchEvent(ctrlEvent)
+      expect(ctrlEvent.defaultPrevented).toBe(false)
+
+      const metaEvent = new KeyboardEvent('keydown', {
+        key: 'Enter',
+        metaKey: true,
+        bubbles: true,
+        cancelable: true,
+      })
+      textarea.dispatchEvent(metaEvent)
+      expect(metaEvent.defaultPrevented).toBe(false)
+
+      expect(requestSubmitSpy).not.toHaveBeenCalled()
+    })
+
+    it('ignores negative or non-finite minlength/maxlength values', async () => {
+      const el = await createTextarea({minLength: -3, maxLength: Number.NaN})
+      const textarea = getTextarea(el)
+
+      expect(textarea.hasAttribute('minlength')).toBe(false)
+      expect(textarea.hasAttribute('maxlength')).toBe(false)
+    })
+
+    it('cv-change on blur reports the latest value after multiple inputs', async () => {
+      const el = await createTextarea()
+      const details: Array<{value: string}> = []
+      el.addEventListener('cv-change', (event: Event) => {
+        details.push((event as CustomEvent<{value: string}>).detail)
+      })
+
+      const textarea = getTextarea(el)
+      textarea.dispatchEvent(new FocusEvent('focus', {bubbles: true}))
+      await settle(el)
+
+      textarea.value = 'a'
+      textarea.dispatchEvent(new InputEvent('input', {bubbles: true}))
+      textarea.value = 'ab'
+      textarea.dispatchEvent(new InputEvent('input', {bubbles: true}))
+      await settle(el)
+
+      textarea.dispatchEvent(new FocusEvent('blur', {bubbles: true}))
+      await settle(el)
+
+      expect(details).toEqual([{value: 'ab'}])
+    })
+  })
+
+  // --- batch 10 regression fixes ---
+
+  describe('null-safe value removal', () => {
+    it('removing the value attribute does not throw and normalizes to empty', async () => {
+      const el = await createTextarea()
+      el.setAttribute('value', 'hello')
+      await settle(el)
+      expect(getTextarea(el).value).toBe('hello')
+
+      expect(() => el.removeAttribute('value')).not.toThrow()
+      await settle(el)
+
+      expect(el.value).toBe('')
+      expect(getTextarea(el).value).toBe('')
+    })
+  })
+
+  describe('live() binding for rejected input', () => {
+    it('reverts the native textarea when a listener rolls the value back', async () => {
+      const el = await createTextarea()
+      // Reject any input: keep value pinned to empty (simulating a controlled
+      // parent that rolls back the change).
+      el.addEventListener('cv-input', () => {
+        el.value = ''
+      })
+
+      const textarea = getTextarea(el)
+      textarea.value = 'forbidden'
+      textarea.dispatchEvent(new InputEvent('input', {bubbles: true}))
+      await settle(el)
+
+      // Without live(), Lit's dirty-check would leave 'forbidden' visible in the
+      // DOM even though the property is ''.
+      expect(el.value).toBe('')
+      expect(textarea.value).toBe('')
+    })
   })
 })

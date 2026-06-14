@@ -711,6 +711,31 @@ describe('cv-number', () => {
 
       expect(el.value).toBe(5)
     })
+
+    it('readOnly rejected text does not stay visible (display resyncs via live binding)', async () => {
+      const el = await createNumber({value: 5, readOnly: true})
+      const input = getInput(el)
+
+      input.value = '99'
+      input.dispatchEvent(new Event('input', {bubbles: true, composed: true}))
+      await settle(el)
+
+      // The model ignores the typed value while read-only; the visible input
+      // must snap back to the committed value rather than keep the typed text.
+      expect(el.value).toBe(5)
+      expect(input.value).toBe('5')
+    })
+
+    it('reflects native disabled attribute on the inner input', async () => {
+      const el = await createNumber({value: 5, disabled: true})
+      expect(getInput(el).hasAttribute('disabled')).toBe(true)
+    })
+
+    it('reflects native readonly attribute on the inner input', async () => {
+      const el = await createNumber({value: 5, readOnly: true})
+      expect(getInput(el).hasAttribute('readonly')).toBe(true)
+      expect(getInput(el).hasAttribute('disabled')).toBe(false)
+    })
   })
 
   // ---------------------------------------------------------------------------
@@ -853,6 +878,266 @@ describe('cv-number', () => {
 
       // No draft active — should display the formatted value
       expect(input.value).toBe('42')
+    })
+  })
+
+  // ---------------------------------------------------------------------------
+  // Model rebuild preserves in-flight draft and focus
+  // ---------------------------------------------------------------------------
+
+  describe('model rebuild preserves transient state', () => {
+    it('keeps the in-flight draft text when an immutable option (max) changes mid-edit', async () => {
+      const el = await createNumber({value: 5, max: 100})
+      const input = getInput(el)
+
+      input.dispatchEvent(new FocusEvent('focus', {bubbles: true}))
+      input.value = '12'
+      input.dispatchEvent(new Event('input', {bubbles: true, composed: true}))
+      await settle(el)
+      expect(input.value).toBe('12')
+
+      // Changing max recreates the headless model — the draft must survive.
+      el.max = 200
+      await settle(el)
+
+      expect(input.value).toBe('12')
+      expect(el.value).toBe(5)
+    })
+
+    it('keeps the focus ring (focused attribute) when an immutable option changes while focused', async () => {
+      const el = await createNumber({value: 5, min: 0})
+      const input = getInput(el)
+
+      input.dispatchEvent(new FocusEvent('focus', {bubbles: true}))
+      await settle(el)
+      expect(el.hasAttribute('focused')).toBe(true)
+
+      el.min = 1
+      await settle(el)
+
+      expect(el.hasAttribute('focused')).toBe(true)
+    })
+  })
+
+  // ---------------------------------------------------------------------------
+  // defaultValue normalization (clear button visibility)
+  // ---------------------------------------------------------------------------
+
+  describe('defaultValue normalization', () => {
+    it('clear button hides after clearing when defaultValue is below min', async () => {
+      // min=5, defaultValue=0 -> normalized default is 5. After clearing,
+      // value equals the normalized default so the clear button must hide.
+      const el = await createNumber({value: 12, min: 5, defaultValue: 0, clearable: true})
+      const clearBtn = getClearButton(el)
+      expect(clearBtn.hasAttribute('hidden')).toBe(false)
+
+      clearBtn.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+      await settle(el)
+
+      expect(el.value).toBe(5)
+      expect(clearBtn.hasAttribute('hidden')).toBe(true)
+    })
+  })
+
+  // ---------------------------------------------------------------------------
+  // Keydown modifiers / defaultPrevented
+  // ---------------------------------------------------------------------------
+
+  describe('keydown modifier and defaultPrevented handling', () => {
+    it('ignores ArrowUp when a modifier key is held (browser/OS shortcut)', async () => {
+      const el = await createNumber({value: 5, step: 1})
+
+      getInput(el).dispatchEvent(
+        new KeyboardEvent('keydown', {key: 'ArrowUp', ctrlKey: true, bubbles: true}),
+      )
+      await settle(el)
+
+      expect(el.value).toBe(5)
+    })
+
+    it('ignores a keydown that was already defaultPrevented upstream', async () => {
+      const el = await createNumber({value: 5, step: 1})
+      const event = new KeyboardEvent('keydown', {key: 'ArrowUp', bubbles: true, cancelable: true})
+      event.preventDefault()
+
+      getInput(el).dispatchEvent(event)
+      await settle(el)
+
+      expect(el.value).toBe(5)
+    })
+  })
+
+  // ---------------------------------------------------------------------------
+  // Value normalization corner cases
+  // ---------------------------------------------------------------------------
+
+  describe('value normalization corner cases', () => {
+    it('removing the value attribute keeps the previous committed value (no crash)', async () => {
+      const el = await createNumber({value: 7})
+
+      el.setAttribute('value', '12')
+      await settle(el)
+      expect(el.value).toBe(12)
+
+      el.removeAttribute('value')
+      await settle(el)
+      expect(el.value).toBe(12)
+    })
+
+    it('ignores a programmatic NaN value and restores the previous value', async () => {
+      const el = await createNumber({value: 7})
+
+      el.value = NaN
+      await settle(el)
+
+      expect(el.value).toBe(7)
+      expect(getInput(el).getAttribute('aria-valuenow')).toBe('7')
+    })
+
+    it('swaps min and max when min > max', async () => {
+      const el = await createNumber({value: 5, min: 10, max: 0})
+      const input = getInput(el)
+
+      expect(input.getAttribute('aria-valuemin')).toBe('0')
+      expect(input.getAttribute('aria-valuemax')).toBe('10')
+    })
+
+    it('sanitizes non-positive step to the default of 1', async () => {
+      const el = await createNumber({value: 5, step: -5})
+
+      getInput(el).dispatchEvent(new KeyboardEvent('keydown', {key: 'ArrowUp', bubbles: true}))
+      await settle(el)
+
+      expect(el.value).toBe(6)
+    })
+
+    it('snaps a fractional initial value to the step grid', async () => {
+      const el = await createNumber({value: 5.4, step: 1})
+      expect(el.value).toBe(5)
+    })
+  })
+
+  // ---------------------------------------------------------------------------
+  // Boundary and no-op event behavior
+  // ---------------------------------------------------------------------------
+
+  describe('boundary and no-op event behavior', () => {
+    it('ArrowUp at max does not dispatch cv-change', async () => {
+      const el = await createNumber({value: 10, max: 10, step: 1})
+      let changeCount = 0
+      el.addEventListener('cv-change', () => changeCount++)
+
+      getInput(el).dispatchEvent(new KeyboardEvent('keydown', {key: 'ArrowUp', bubbles: true}))
+      await settle(el)
+
+      expect(el.value).toBe(10)
+      expect(changeCount).toBe(0)
+    })
+
+    it('Home does nothing when min is not defined', async () => {
+      const el = await createNumber({value: 50})
+      let changeCount = 0
+      el.addEventListener('cv-change', () => changeCount++)
+
+      getInput(el).dispatchEvent(new KeyboardEvent('keydown', {key: 'Home', bubbles: true}))
+      await settle(el)
+
+      expect(el.value).toBe(50)
+      expect(changeCount).toBe(0)
+    })
+
+    it('Escape does nothing and is not prevented when not clearable', async () => {
+      const el = await createNumber({value: 42})
+      let clearCount = 0
+      el.addEventListener('cv-clear', () => clearCount++)
+
+      const event = new KeyboardEvent('keydown', {key: 'Escape', bubbles: true, cancelable: true})
+      getInput(el).dispatchEvent(event)
+      await settle(el)
+
+      expect(el.value).toBe(42)
+      expect(clearCount).toBe(0)
+      expect(event.defaultPrevented).toBe(false)
+    })
+  })
+
+  // ---------------------------------------------------------------------------
+  // Draft text corner cases
+  // ---------------------------------------------------------------------------
+
+  describe('draft text corner cases', () => {
+    it('invalid draft text reverts on blur without cv-change and resets the display', async () => {
+      const el = await createNumber({value: 5})
+      const input = getInput(el)
+      let changeCount = 0
+      el.addEventListener('cv-change', () => changeCount++)
+
+      input.dispatchEvent(new FocusEvent('focus', {bubbles: true}))
+      await settle(el)
+
+      input.value = 'abc'
+      input.dispatchEvent(new Event('input', {bubbles: true, composed: true}))
+      await settle(el)
+
+      input.dispatchEvent(new FocusEvent('blur', {bubbles: true}))
+      await settle(el)
+
+      expect(el.value).toBe(5)
+      expect(changeCount).toBe(0)
+      expect(input.value).toBe('5')
+    })
+
+    it('committing an emptied input clears to the default value and fires cv-clear', async () => {
+      const el = await createNumber({value: 5})
+      const input = getInput(el)
+      let clearCount = 0
+      el.addEventListener('cv-clear', () => clearCount++)
+
+      input.dispatchEvent(new FocusEvent('focus', {bubbles: true}))
+      await settle(el)
+
+      input.value = ''
+      input.dispatchEvent(new Event('input', {bubbles: true, composed: true}))
+      await settle(el)
+
+      input.dispatchEvent(new FocusEvent('blur', {bubbles: true}))
+      await settle(el)
+
+      expect(el.value).toBe(0)
+      expect(clearCount).toBe(1)
+    })
+  })
+
+  // ---------------------------------------------------------------------------
+  // Form association lifecycle
+  // ---------------------------------------------------------------------------
+
+  describe('form association lifecycle', () => {
+    it('formResetCallback restores the explicit defaultValue', async () => {
+      const el = await createNumber({value: 9, defaultValue: 3})
+
+      el.formResetCallback()
+      await settle(el)
+
+      expect(el.value).toBe(3)
+    })
+
+    it('formStateRestoreCallback restores a numeric string state', async () => {
+      const el = await createNumber({value: 5})
+
+      el.formStateRestoreCallback('17')
+      await settle(el)
+
+      expect(el.value).toBe(17)
+    })
+
+    it('formStateRestoreCallback ignores a non-numeric string state', async () => {
+      const el = await createNumber({value: 5})
+
+      el.formStateRestoreCallback('not-a-number')
+      await settle(el)
+
+      expect(el.value).toBe(5)
     })
   })
 

@@ -330,8 +330,19 @@ export class CVInput extends FormAssociatedReatomElement {
   override willUpdate(changedProperties: PropertyValues): void {
     super.willUpdate(changedProperties)
 
-    if (changedProperties.has('value') && this.model.state.value() !== this.value) {
-      this.model.actions.setValue(this.value)
+    if (changedProperties.has('value')) {
+      // removeAttribute('value') yields null via Lit's String converter; the
+      // headless setValue accepts it without normalization (null.length would
+      // throw in filled()). Normalize null -> '' here in the uikit layer.
+      const normalized = this.value ?? ''
+      if (this.value !== normalized) {
+        this.value = normalized
+      }
+      if (this.model.state.value() !== normalized) {
+        // Programmatic property writes are silent, like native form controls:
+        // set the atom directly instead of setValue() which fires onInput.
+        this.model.state.value.set(normalized)
+      }
     }
 
     if (changedProperties.has('type')) {
@@ -375,13 +386,16 @@ export class CVInput extends FormAssociatedReatomElement {
 
   protected override onFormReset(): void {
     this.value = this.defaultValue
-    this.model.actions.setValue(this.defaultValue)
+    // A native form reset is silent (no input event); set the atom directly so
+    // we don't emit cv-input from setValue's onInput callback.
+    this.model.state.value.set(this.defaultValue)
   }
 
   protected override onFormStateRestore(state: string | File | FormData | null): void {
     if (typeof state !== 'string') return
     this.value = state
-    this.model.actions.setValue(state)
+    // Restoring browser-saved state is silent too, like a native control.
+    this.model.state.value.set(state)
   }
 
   override focus(options?: FocusOptions): void {

@@ -1,6 +1,7 @@
 import {createTextarea, type TextareaModel, type TextareaResize} from '@chromvoid/headless-ui/textarea'
 import {css, html, nothing} from 'lit'
 import type {PropertyValues} from 'lit'
+import {live} from 'lit/directives/live.js'
 
 import {FormAssociatedReatomElement} from '../form-associated/FormAssociatedReatomElement'
 import type {FormAssociatedValidity} from '../form-associated/withFormAssociated'
@@ -256,8 +257,15 @@ export class CVTextarea extends FormAssociatedReatomElement {
   override willUpdate(changedProperties: PropertyValues): void {
     super.willUpdate(changedProperties)
 
-    if (changedProperties.has('value') && this.model.state.value() !== this.value) {
-      this.model.actions.setValue(this.value)
+    if (changedProperties.has('value')) {
+      // Lit's String converter resolves a removed `value` attribute to `null`;
+      // normalize to '' so headless `setValue(null)` never hits `null.length`.
+      if ((this.value as string | null) == null) {
+        this.value = ''
+      }
+      if (this.model.state.value() !== this.value) {
+        this.model.actions.setValue(this.value)
+      }
     }
 
     if (changedProperties.has('placeholder')) {
@@ -478,7 +486,7 @@ export class CVTextarea extends FormAssociatedReatomElement {
         <textarea
           part="textarea"
           id=${textareaProps.id}
-          .value=${this.model.state.value()}
+          .value=${live(this.model.state.value())}
           name=${this.name || nothing}
           tabindex=${textareaProps.tabindex}
           rows=${textareaProps.rows}
