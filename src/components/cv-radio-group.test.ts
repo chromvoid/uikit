@@ -138,6 +138,122 @@ describe('cv-radio-group', () => {
     expect((group.querySelector('cv-radio[value="c"]') as CVRadio).checked).toBe(true)
   })
 
+  // --- Keyboard navigation corner cases ---
+
+  describe('keyboard navigation corner cases', () => {
+    it('ArrowRight wraps from the last enabled radio to the first', async () => {
+      const {group, radios} = await mountRadioGroup()
+
+      radios[2]!.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+      await settle(group)
+      expect(group.value).toBe('c')
+
+      radios[2]!.dispatchEvent(new KeyboardEvent('keydown', {key: 'ArrowRight', bubbles: true}))
+      await settle(group)
+      expect(group.value).toBe('a')
+    })
+
+    it('ArrowLeft wraps from the first enabled radio to the last, skipping disabled', async () => {
+      const {group, radios} = await mountRadioGroup()
+
+      radios[0]!.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+      await settle(group)
+      expect(group.value).toBe('a')
+
+      radios[0]!.dispatchEvent(new KeyboardEvent('keydown', {key: 'ArrowLeft', bubbles: true}))
+      await settle(group)
+      expect(group.value).toBe('c')
+    })
+
+    it('Home selects the first enabled radio and End selects the last', async () => {
+      const {group, radios} = await mountRadioGroup()
+
+      radios[0]!.dispatchEvent(new KeyboardEvent('keydown', {key: 'End', bubbles: true}))
+      await settle(group)
+      expect(group.value).toBe('c')
+
+      radios[2]!.dispatchEvent(new KeyboardEvent('keydown', {key: 'Home', bubbles: true}))
+      await settle(group)
+      expect(group.value).toBe('a')
+    })
+
+    it('Space selects the currently active radio', async () => {
+      const {group, radios} = await mountRadioGroup()
+      expect(group.value).toBe('')
+
+      radios[0]!.dispatchEvent(new KeyboardEvent('keydown', {key: ' ', bubbles: true}))
+      await settle(group)
+      expect(group.value).toBe('a')
+    })
+  })
+
+  // --- Initial checked attribute ---
+
+  describe('initial checked attribute', () => {
+    it('uses the checked radio as the initial group value and roving tabindex target', async () => {
+      CVRadio.define()
+      CVRadioGroup.define()
+
+      const group = document.createElement('cv-radio-group') as CVRadioGroup
+      group.innerHTML = `
+        <cv-radio value="a">Alpha</cv-radio>
+        <cv-radio value="c" checked>Gamma</cv-radio>
+      `
+      document.body.append(group)
+      await settle(group)
+
+      const radios = Array.from(group.querySelectorAll('cv-radio')) as CVRadio[]
+      expect(group.value).toBe('c')
+      expect(radios[0]!.getAttribute('tabindex')).toBe('-1')
+      expect(radios[1]!.getAttribute('tabindex')).toBe('0')
+      expect(radios[1]!.checked).toBe(true)
+    })
+  })
+
+  // --- Programmatic value writes ---
+
+  describe('programmatic value writes', () => {
+    it('setting value checks the target radio and unchecks the previous one', async () => {
+      const {group, radios} = await mountRadioGroup()
+
+      radios[0]!.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+      await settle(group)
+      expect(radios[0]!.checked).toBe(true)
+
+      group.value = 'c'
+      await settle(group)
+      expect(radios[0]!.checked).toBe(false)
+      expect(radios[2]!.checked).toBe(true)
+    })
+
+    it('clearing value unchecks all radios', async () => {
+      const {group, radios} = await mountRadioGroup()
+
+      radios[0]!.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+      await settle(group)
+      expect(radios[0]!.checked).toBe(true)
+
+      group.value = ''
+      await settle(group)
+      expect(radios.every((radio) => !radio.checked)).toBe(true)
+      expect(group.value).toBe('')
+    })
+  })
+
+  // --- Disabled radio interaction guard ---
+
+  describe('disabled radio interaction guard', () => {
+    it('clicking a disabled radio does not select it', async () => {
+      const {group, radios} = await mountRadioGroup()
+
+      radios[1]!.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+      await settle(group)
+
+      expect(group.value).toBe('')
+      expect(radios[1]!.checked).toBe(false)
+    })
+  })
+
   // --- ARIA attributes originate from headless contracts ---
 
   describe('headless contract delegation', () => {
@@ -262,6 +378,179 @@ describe('cv-radio-group', () => {
       // The radio with description should have aria-describedby linking to description element
       expect(radioWithDesc.hasAttribute('aria-describedby')).toBe(true)
     })
+
+    it('aria-describedby IDREF resolves to a real element (no dangling reference)', async () => {
+      CVRadio.define()
+      CVRadioGroup.define()
+
+      const group = document.createElement('cv-radio-group') as CVRadioGroup
+      group.innerHTML = `
+        <cv-radio value="with-desc">
+          Primary option
+          <span slot="description">Additional details</span>
+        </cv-radio>
+        <cv-radio value="other">Other option</cv-radio>
+      `
+      document.body.append(group)
+      await settle(group)
+
+      const radioWithDesc = group.querySelector('cv-radio[value="with-desc"]') as CVRadio
+      const describedById = radioWithDesc.getAttribute('aria-describedby')
+      expect(describedById).toBeTruthy()
+
+      // The referenced id must exist as a real element in the radio's light DOM,
+      // otherwise the IDREF is dangling and screen readers announce nothing.
+      const target = radioWithDesc.querySelector(`#${describedById}`)
+      expect(target).not.toBeNull()
+      expect(target!.getAttribute('slot')).toBe('description')
+      expect(target!.textContent).toContain('Additional details')
+    })
+  })
+
+  // --- Batch 8 regression: null value attribute ---
+
+  describe('null value guard', () => {
+    it('removeAttribute("value") does not throw and clears selection', async () => {
+      const {group, radios} = await mountRadioGroup()
+
+      radios[0]!.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+      await settle(group)
+      expect(group.value).toBe('a')
+
+      // Lit's String converter yields `null` for a removed attribute; the
+      // willUpdate path must not call `null.trim()`.
+      expect(() => {
+        group.removeAttribute('value')
+      }).not.toThrow()
+      await settle(group)
+
+      expect(group.value).toBe('')
+      expect(radios.every((radio) => !radio.checked)).toBe(true)
+    })
+  })
+
+  // --- Batch 8 regression: reconnect keeps clicks alive ---
+
+  describe('reconnect', () => {
+    it('radio clicks still select after remove() + append()', async () => {
+      const {group, radios} = await mountRadioGroup()
+
+      radios[0]!.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+      await settle(group)
+      expect(group.value).toBe('a')
+
+      group.remove()
+      document.body.append(group)
+      await settle(group)
+
+      // Click listeners must be re-attached on reconnect (the model survives, so the
+      // rebuild that would re-wire them is skipped).
+      radios[2]!.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+      await settle(group)
+
+      expect(group.value).toBe('c')
+      expect(radios[2]!.checked).toBe(true)
+    })
+  })
+
+  // --- Batch 8 regression: programmatic value is silent ---
+
+  describe('programmatic value is silent', () => {
+    it('setting value does not emit cv-input or cv-change', async () => {
+      const {group} = await mountRadioGroup()
+      const events: string[] = []
+      group.addEventListener('cv-input', () => events.push('cv-input'))
+      group.addEventListener('cv-change', () => events.push('cv-change'))
+
+      group.value = 'c'
+      await settle(group)
+
+      expect(events).toEqual([])
+      expect(group.value).toBe('c')
+    })
+  })
+
+  // --- Batch 8 regression: disabled-target value reverts ---
+
+  describe('value targeting a disabled radio', () => {
+    it('reverts the property to the model value instead of keeping a stale string', async () => {
+      const {group, radios} = await mountRadioGroup()
+
+      radios[0]!.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+      await settle(group)
+      expect(group.value).toBe('a')
+
+      // 'b' is disabled; the model rejects it and the property must not stay 'b'.
+      group.value = 'b'
+      await settle(group)
+
+      expect(group.value).toBe('a')
+      expect(radios[1]!.checked).toBe(false)
+    })
+  })
+
+  // --- Batch 8 regression: direct radio.checked notifies the group ---
+
+  describe('direct radio.checked reconciliation', () => {
+    it('setting radio.checked = true notifies the group and unchecks the previous radio', async () => {
+      const {group, radios} = await mountRadioGroup()
+
+      radios[0]!.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+      await settle(group)
+      expect(radios[0]!.checked).toBe(true)
+
+      const changes: Array<{value: string | null}> = []
+      group.addEventListener('cv-change', (event) => {
+        changes.push((event as CVRadioGroupChangeEvent).detail)
+      })
+
+      radios[2]!.checked = true
+      // MutationObserver delivers asynchronously.
+      await settle(group)
+      await settle(group)
+
+      expect(group.value).toBe('c')
+      // No two radios checked at once.
+      expect(radios.filter((radio) => radio.checked)).toHaveLength(1)
+      expect(radios[0]!.checked).toBe(false)
+      expect(radios[2]!.checked).toBe(true)
+      expect(changes.at(-1)?.value).toBe('c')
+    })
+  })
+
+  // --- Batch 8 regression: modifier-aware keydown ---
+
+  describe('keydown modifier guard', () => {
+    it('does not preventDefault or stopPropagation for modifier combos', async () => {
+      const {group, radios} = await mountRadioGroup()
+
+      const event = new KeyboardEvent('keydown', {
+        key: 'ArrowRight',
+        ctrlKey: true,
+        bubbles: true,
+        cancelable: true,
+      })
+      radios[0]!.dispatchEvent(event)
+      await settle(group)
+
+      // Ctrl+ArrowRight is a browser shortcut: it must not be hijacked.
+      expect(event.defaultPrevented).toBe(false)
+      expect(group.value).toBe('')
+    })
+
+    it('lets non-navigation keys bubble (no stopPropagation)', async () => {
+      const {group, radios} = await mountRadioGroup()
+
+      let bubbled = false
+      group.addEventListener('keydown', () => {
+        bubbled = true
+      })
+
+      radios[0]!.dispatchEvent(new KeyboardEvent('keydown', {key: 'a', bubbles: true}))
+      await settle(group)
+
+      expect(bubbled).toBe(true)
+    })
   })
 
   describe('form association', () => {
@@ -309,6 +598,52 @@ describe('cv-radio-group', () => {
       await settle(group)
 
       expect(group.checkValidity()).toBe(true)
+    })
+
+    it('becomes invalid again when a required group value is cleared programmatically', async () => {
+      CVRadio.define()
+      CVRadioGroup.define()
+
+      const group = document.createElement('cv-radio-group') as CVRadioGroup
+      group.required = true
+      group.innerHTML = `
+        <cv-radio value="a" checked>Alpha</cv-radio>
+        <cv-radio value="b">Beta</cv-radio>
+      `
+      document.body.append(group)
+      await settle(group)
+
+      expect(group.checkValidity()).toBe(true)
+
+      group.value = ''
+      await settle(group)
+      expect(group.checkValidity()).toBe(false)
+    })
+
+    it('form reset restores the default checked radio', async () => {
+      CVRadio.define()
+      CVRadioGroup.define()
+
+      const group = document.createElement('cv-radio-group') as CVRadioGroup
+      group.innerHTML = `
+        <cv-radio value="a" checked>Alpha</cv-radio>
+        <cv-radio value="b">Beta</cv-radio>
+      `
+      document.body.append(group)
+      await settle(group)
+      expect(group.value).toBe('a')
+
+      const radios = Array.from(group.querySelectorAll('cv-radio')) as CVRadio[]
+      radios[1]!.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+      await settle(group)
+      expect(group.value).toBe('b')
+
+      group.formResetCallback()
+      await settle(group)
+
+      expect(group.value).toBe('a')
+      expect(radios[0]!.checked).toBe(true)
+      expect(radios[1]!.checked).toBe(false)
     })
   })
 })

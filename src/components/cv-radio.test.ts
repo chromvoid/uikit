@@ -248,4 +248,28 @@ describe('cv-radio', () => {
       expect(radio.getAttribute('variant')).toBe('segmented')
     })
   })
+
+  // --- Attribute → property sync ---
+
+  describe('attribute to property sync', () => {
+    it('setting and removing the checked attribute updates the property', async () => {
+      const radio = await createRadio()
+
+      radio.setAttribute('checked', '')
+      await settle(radio)
+      expect(radio.checked).toBe(true)
+
+      radio.removeAttribute('checked')
+      await settle(radio)
+      expect(radio.checked).toBe(false)
+    })
+
+    it('setting the value attribute updates the property', async () => {
+      const radio = await createRadio()
+
+      radio.setAttribute('value', 'from-attr')
+      await settle(radio)
+      expect(radio.value).toBe('from-attr')
+    })
+  })
 })

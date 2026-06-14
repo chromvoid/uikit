@@ -67,6 +67,8 @@ export class CVRadioGroup extends FormAssociatedReatomElement {
   private model?: RadioGroupModel
   private defaultValue = ''
   private didCaptureDefaultValue = false
+  private checkedObserver?: MutationObserver
+  private reconcilingChecked = false
 
   constructor() {
     super()
@@ -131,6 +133,12 @@ export class CVRadioGroup extends FormAssociatedReatomElement {
     super.connectedCallback()
     if (!this.model) {
       this.rebuildModelFromSlot(false, false)
+    } else {
+      // Reconnect: disconnectedCallback() detached the per-radio listeners, but the
+      // model survives, so connectedCallback skips the rebuild that would re-attach
+      // them. Without this, clicks on radios are dead after a move in the DOM
+      // (keyboard appears to work only because keydown bubbles to the shadow base).
+      this.attachRadioListeners()
     }
     if (!this.didCaptureDefaultValue) {
       this.defaultValue = this.model?.state.value() ?? ''
@@ -142,6 +150,7 @@ export class CVRadioGroup extends FormAssociatedReatomElement {
   override disconnectedCallback(): void {
     super.disconnectedCallback()
     this.detachRadioListeners()
+    this.checkedObserver?.disconnect()
   }
 
   override willUpdate(changedProperties: PropertyValues): void {
@@ -158,7 +167,7 @@ export class CVRadioGroup extends FormAssociatedReatomElement {
     }
 
     if (changedProperties.has('value') && this.model) {
-      const next = this.value.trim()
+      const next = (this.value ?? '').trim()
       if (next.length === 0) {
         this.restoreValue(null)
         this.syncFormAssociatedState()
@@ -169,6 +178,9 @@ export class CVRadioGroup extends FormAssociatedReatomElement {
         this.radioRecords.filter((record) => !record.disabled).map((record) => record.id),
       )
       if (!enabledIds.has(next)) {
+        // Value targets an unknown/disabled radio: the model rejects it, so revert
+        // the property to the model's value instead of leaving a stale string.
+        this.value = this.model.state.value() ?? ''
         this.syncFormAssociatedState()
         return
       }
@@ -177,7 +189,8 @@ export class CVRadioGroup extends FormAssociatedReatomElement {
         const previousValue = this.model.state.value()
         const previousActive = this.model.state.activeId()
         this.model.actions.select(next)
-        this.applyInteractionResult(previousValue, previousActive)
+        // Programmatic value writes must be silent, matching native form controls.
+        this.applyInteractionResult(previousValue, previousActive, true)
       }
     }
 
@@ -225,7 +238,7 @@ export class CVRadioGroup extends FormAssociatedReatomElement {
   }
 
   private resolveConfiguredValue(radios: CVRadio[]): string | null {
-    const propertyValue = this.value.trim()
+    const propertyValue = (this.value ?? '').trim()
     if (propertyValue.length > 0) {
       return propertyValue
     }
@@ -314,14 +327,70 @@ export class CVRadioGroup extends FormAssociatedReatomElement {
       }
 
       const keydown = (event: Event) => {
-        event.stopPropagation()
-        this.handleGroupKeyDown(event as KeyboardEvent)
+        const keyboardEvent = event as KeyboardEvent
+        const hasModifier =
+          keyboardEvent.ctrlKey || keyboardEvent.metaKey || keyboardEvent.altKey
+        // Only swallow navigation keys we own; let everything else (modifier combos,
+        // typing, parent shortcuts) bubble normally.
+        if (!hasModifier && radioGroupNavigationKeys.has(keyboardEvent.key)) {
+          event.stopPropagation()
+        }
+        this.handleGroupKeyDown(keyboardEvent)
       }
 
       record.element.addEventListener('click', click)
       record.element.addEventListener('keydown', keydown)
       this.radioListeners.set(record.element, {click, keydown})
     }
+
+    this.observeCheckedAttribute()
+  }
+
+  private observeCheckedAttribute(): void {
+    if (!this.checkedObserver) {
+      this.checkedObserver = new MutationObserver((mutations) => {
+        this.handleCheckedMutations(mutations)
+      })
+    }
+    this.checkedObserver.disconnect()
+    for (const record of this.radioRecords) {
+      this.checkedObserver.observe(record.element, {
+        attributes: true,
+        attributeFilter: ['checked'],
+      })
+    }
+  }
+
+  private handleCheckedMutations(mutations: MutationRecord[]): void {
+    if (this.reconcilingChecked || !this.model) return
+
+    // A consumer set `radio.checked = true` directly, bypassing the group model.
+    // Without reconciling, two radios stay visually checked at once. Adopt the most
+    // recent enabled radio that was turned on as the group's selection and notify.
+    let target: string | null = null
+    for (const mutation of mutations) {
+      const radio = mutation.target as CVRadio
+      if (!radio.checked) continue
+      const record = this.radioRecords.find((entry) => entry.element === radio)
+      if (record && !record.disabled) {
+        target = record.id
+      }
+    }
+
+    if (target === null || this.model.state.value() === target) {
+      // Keep DOM consistent even when no model change is needed.
+      this.reconcilingChecked = true
+      this.syncRadioElements()
+      this.reconcilingChecked = false
+      return
+    }
+
+    const previousValue = this.model.state.value()
+    const previousActive = this.model.state.activeId()
+    this.reconcilingChecked = true
+    this.model.actions.select(target)
+    this.applyInteractionResult(previousValue, previousActive)
+    this.reconcilingChecked = false
   }
 
   private syncRadioElements(): void {
@@ -341,8 +410,15 @@ export class CVRadioGroup extends FormAssociatedReatomElement {
         record.element.removeAttribute('aria-disabled')
       }
 
-      if (props['aria-describedby']) {
-        record.element.setAttribute('aria-describedby', props['aria-describedby'])
+      // Only wire aria-describedby when the description target actually exists.
+      // The headless contract returns an IDREF (`${idBase}-radio-${id}-desc`) but
+      // never creates the element; we adopt that id onto the slotted description so
+      // the reference is not dangling.
+      const describedById = props['aria-describedby']
+      const descriptionEl = record.element.querySelector('[slot="description"]')
+      if (describedById && descriptionEl) {
+        descriptionEl.id = describedById
+        record.element.setAttribute('aria-describedby', describedById)
       } else {
         record.element.removeAttribute('aria-describedby')
       }
@@ -390,7 +466,11 @@ export class CVRadioGroup extends FormAssociatedReatomElement {
     )
   }
 
-  private applyInteractionResult(previousValue: string | null, previousActive: string | null): void {
+  private applyInteractionResult(
+    previousValue: string | null,
+    previousActive: string | null,
+    silent = false,
+  ): void {
     if (!this.model) return
 
     this.syncRadioElements()
@@ -403,7 +483,7 @@ export class CVRadioGroup extends FormAssociatedReatomElement {
     this.value = nextValue ?? ''
     this.syncFormAssociatedState()
 
-    if (!valueChanged && !activeChanged) return
+    if (silent || (!valueChanged && !activeChanged)) return
 
     const detail: CVRadioGroupEventDetail = {
       value: nextValue,
@@ -432,9 +512,15 @@ export class CVRadioGroup extends FormAssociatedReatomElement {
   private handleGroupKeyDown(event: KeyboardEvent) {
     if (!this.model) return
 
-    if (radioGroupNavigationKeys.has(event.key)) {
-      event.preventDefault()
+    // Don't hijack browser/parent shortcuts (e.g. Ctrl+ArrowDown, Cmd+Space) or
+    // keys the radio group doesn't act on. Only navigation keys without modifiers
+    // are handled and prevented.
+    const hasModifier = event.ctrlKey || event.metaKey || event.altKey
+    if (hasModifier || !radioGroupNavigationKeys.has(event.key)) {
+      return
     }
+
+    event.preventDefault()
 
     const previousValue = this.model.state.value()
     const previousActive = this.model.state.activeId()
