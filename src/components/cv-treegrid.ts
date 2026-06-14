@@ -176,7 +176,7 @@ export class CVTreegrid extends ReatomLitElement {
     }
 
     if (changedProperties.has('value')) {
-      const value = this.parseCellValue(this.value.trim())
+      const value = this.parseCellValue((this.value ?? '').trim())
       const next = value ?? null
       if (next && !sameCellId(next, this.model.state.activeCellId())) {
         const previous = this.captureSnapshot()
@@ -323,7 +323,7 @@ export class CVTreegrid extends ReatomLitElement {
   private rebuildModelFromSlot(preserveState: boolean, requestUpdate = true): void {
     const fallbackSelection = this.normalizeRowIds(this.selectedValues)
     const fallbackExpanded = this.normalizeExpandedValues(this.expandedValues)
-    const fallbackActive = this.parseCellValue(this.value.trim())
+    const fallbackActive = this.parseCellValue((this.value ?? '').trim())
     const previous = preserveState
       ? this.captureSnapshot()
       : {
@@ -344,10 +344,25 @@ export class CVTreegrid extends ReatomLitElement {
 
     const validCells = this.cellRecords.filter((record) => record.valid)
 
+    // Ragged rows: a row may be missing a cell for some column. The headless model
+    // builds a full Cartesian (row × column) grid, so ArrowDown into a row that lacks
+    // the active column's cell would leave roving tabindex on a non-existent element.
+    // Mark every (row, col) pair that has no rendered valid cell as disabled so
+    // keyboard navigation skips it (same fix as cv-grid).
+    const presentCellKeys = new Set(validCells.map((cell) => cellKey(cell.rowId, cell.colId)))
+    const missingCells: Array<{rowId: string; colId: string}> = []
+    for (const row of this.rowRecords) {
+      for (const column of this.columnRecords) {
+        if (!presentCellKeys.has(cellKey(row.id, column.id))) {
+          missingCells.push({rowId: row.id, colId: column.id})
+        }
+      }
+    }
+
     const nextActive = previous.activeCellId
       ? previous.activeCellId
-      : this.value.trim()
-        ? this.parseCellValue(this.value)
+      : (this.value ?? '').trim()
+        ? this.parseCellValue(this.value ?? '')
         : null
 
     const selectedFromState =
@@ -362,9 +377,12 @@ export class CVTreegrid extends ReatomLitElement {
         disabled: column.disabled,
         cellRole: column.cellRole,
       })),
-      disabledCells: validCells
-        .filter((cell) => cell.disabled)
-        .map((cell) => ({rowId: cell.rowId, colId: cell.colId})),
+      disabledCells: [
+        ...validCells
+          .filter((cell) => cell.disabled)
+          .map((cell) => ({rowId: cell.rowId, colId: cell.colId})),
+        ...missingCells,
+      ],
       selectionMode: this.selectionMode,
       ariaLabel: this.ariaLabel || undefined,
       ariaLabelledBy: this.ariaLabelledBy || undefined,
@@ -594,7 +612,7 @@ export class CVTreegrid extends ReatomLitElement {
 
   private getEventDetail(): CVTreegridEventDetail {
     return {
-      value: this.value.trim() || null,
+      value: (this.value ?? '').trim() || null,
       activeCell: this.model.state.activeCellId(),
       selectedValues: [...this.model.state.selectedRowIds()],
       expandedValues: [...this.model.state.expandedRowIds()],
@@ -644,7 +662,9 @@ export class CVTreegrid extends ReatomLitElement {
       }
     }
 
-    if (activeChanged) {
+    // Programmatic writes (value=/selectedValues=/expandedValues=) must not steal focus,
+    // matching native form-control behavior.
+    if (activeChanged && !this._programmaticChange) {
       this.focusActiveCell()
     }
   }
@@ -758,6 +778,12 @@ export class CVTreegrid extends ReatomLitElement {
 
   private handleTreegridKeyDown(event: KeyboardEvent) {
     if (!keysToPrevent.has(event.key)) {
+      return
+    }
+
+    // Alt+Arrow (and Alt+Home/End) are browser-reserved and ignored by the model;
+    // don't preventDefault or forward them so native shortcuts keep working.
+    if (event.altKey) {
       return
     }
 

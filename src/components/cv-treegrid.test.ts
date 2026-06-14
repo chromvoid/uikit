@@ -722,6 +722,172 @@ describe('cv-treegrid', () => {
     })
   })
 
+  // --- grid-level Home/End (Ctrl) ---
+
+  describe('grid-level Home/End (Ctrl)', () => {
+    it('Ctrl+Home moves to the first cell of the first visible row', async () => {
+      const grid = await createTreegrid({ariaLabel: 'Test'})
+      grid.append(
+        createColumn('name', 'Name'),
+        createColumn('size', 'Size'),
+        createRow('r1', [createCell('name', 'A'), createCell('size', '1KB')]),
+        createRow('r2', [createCell('name', 'B'), createCell('size', '2KB')]),
+      )
+      await settle(grid)
+
+      getBase(grid).dispatchEvent(new KeyboardEvent('keydown', {key: 'ArrowDown', bubbles: true}))
+      await settle(grid)
+      getBase(grid).dispatchEvent(new KeyboardEvent('keydown', {key: 'End', bubbles: true}))
+      await settle(grid)
+      expect(grid.value).toBe('r2::size')
+
+      getBase(grid).dispatchEvent(new KeyboardEvent('keydown', {key: 'Home', ctrlKey: true, bubbles: true}))
+      await settle(grid)
+      expect(grid.value).toBe('r1::name')
+    })
+
+    it('Ctrl+End moves to the last cell of the last visible row', async () => {
+      const grid = await createTreegrid({ariaLabel: 'Test'})
+      grid.append(
+        createColumn('name', 'Name'),
+        createColumn('size', 'Size'),
+        createRow('r1', [createCell('name', 'A'), createCell('size', '1KB')]),
+        createRow('r2', [createCell('name', 'B'), createCell('size', '2KB')]),
+      )
+      await settle(grid)
+
+      expect(grid.value).toBe('r1::name')
+      getBase(grid).dispatchEvent(new KeyboardEvent('keydown', {key: 'End', ctrlKey: true, bubbles: true}))
+      await settle(grid)
+      expect(grid.value).toBe('r2::size')
+    })
+  })
+
+  // --- active cell invariants ---
+
+  describe('active cell invariants', () => {
+    it('programmatically collapsing the ancestor of the active row moves the active cell to that ancestor', async () => {
+      const grid = await createTreegrid({ariaLabel: 'Test'})
+      grid.append(
+        createColumn('name', 'Name'),
+        createRow('r1', [createCell('name', 'A')], {
+          children: [createRow('r1a', [createCell('name', 'A1')])],
+        }),
+      )
+      await settle(grid)
+
+      getBase(grid).dispatchEvent(new KeyboardEvent('keydown', {key: 'ArrowRight', bubbles: true}))
+      await settle(grid)
+      getBase(grid).dispatchEvent(new KeyboardEvent('keydown', {key: 'ArrowRight', bubbles: true}))
+      await settle(grid)
+      expect(grid.value).toBe('r1a::name')
+
+      grid.expandedValues = []
+      await settle(grid)
+
+      expect(grid.value).toBe('r1::name')
+      const childRow = grid.querySelector('cv-treegrid-row[value="r1a"]') as CVTreegridRow
+      expect(childRow.hidden).toBe(true)
+    })
+
+    it('removing the row that owns the active cell falls back to the first enabled cell', async () => {
+      const grid = await createTreegrid({ariaLabel: 'Test'})
+      const row2 = createRow('r2', [createCell('name', 'B')])
+      grid.append(createColumn('name', 'Name'), createRow('r1', [createCell('name', 'A')]), row2)
+      await settle(grid)
+
+      const cell2 = row2.querySelector('cv-treegrid-cell') as CVTreegridCell
+      cell2.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+      await settle(grid)
+      expect(grid.value).toBe('r2::name')
+
+      row2.remove()
+      await settle(grid)
+
+      expect(grid.value).toBe('r1::name')
+    })
+  })
+
+  // --- nested set ARIA ---
+
+  describe('nested set ARIA', () => {
+    it('sibling child rows get aria-posinset/aria-setsize within their own level', async () => {
+      const grid = await createTreegrid({ariaLabel: 'Test'})
+      grid.append(
+        createColumn('name', 'Name'),
+        createRow('r1', [createCell('name', 'A')], {
+          children: [
+            createRow('r1a', [createCell('name', 'A1')]),
+            createRow('r1b', [createCell('name', 'A2')]),
+          ],
+        }),
+        createRow('r2', [createCell('name', 'B')]),
+      )
+      await settle(grid)
+
+      const root1 = grid.querySelector('cv-treegrid-row[value="r1"]') as CVTreegridRow
+      const root2 = grid.querySelector('cv-treegrid-row[value="r2"]') as CVTreegridRow
+      const childA = grid.querySelector('cv-treegrid-row[value="r1a"]') as CVTreegridRow
+      const childB = grid.querySelector('cv-treegrid-row[value="r1b"]') as CVTreegridRow
+
+      expect(root1.getAttribute('aria-posinset')).toBe('1')
+      expect(root1.getAttribute('aria-setsize')).toBe('2')
+      expect(root2.getAttribute('aria-posinset')).toBe('2')
+      expect(root2.getAttribute('aria-setsize')).toBe('2')
+
+      expect(childA.getAttribute('aria-posinset')).toBe('1')
+      expect(childA.getAttribute('aria-setsize')).toBe('2')
+      expect(childB.getAttribute('aria-posinset')).toBe('2')
+      expect(childB.getAttribute('aria-setsize')).toBe('2')
+    })
+  })
+
+  // --- reconnect behavior ---
+
+  describe('reconnect behavior', () => {
+    it('keyboard interaction continues to work after detach and reattach', async () => {
+      const grid = await createTreegrid({ariaLabel: 'Test'})
+      grid.append(
+        createColumn('name', 'Name'),
+        createRow('r1', [createCell('name', 'A')]),
+        createRow('r2', [createCell('name', 'B')]),
+      )
+      await settle(grid)
+      expect(grid.value).toBe('r1::name')
+
+      grid.remove()
+      document.body.append(grid)
+      await settle(grid)
+
+      getBase(grid).dispatchEvent(new KeyboardEvent('keydown', {key: 'ArrowDown', bubbles: true}))
+      await settle(grid)
+      expect(grid.value).toBe('r2::name')
+    })
+
+    it('cell click handling continues to work after detach and reattach', async () => {
+      const grid = await createTreegrid({ariaLabel: 'Test'})
+      grid.append(
+        createColumn('name', 'Name'),
+        createRow('r1', [createCell('name', 'A')]),
+        createRow('r2', [createCell('name', 'B')]),
+      )
+      await settle(grid)
+
+      grid.remove()
+      document.body.append(grid)
+      await settle(grid)
+
+      const cell2 = grid.querySelector(
+        'cv-treegrid-row[value="r2"] cv-treegrid-cell[column="name"]',
+      ) as CVTreegridCell
+      cell2.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+      await settle(grid)
+
+      expect(grid.value).toBe('r2::name')
+      expect(grid.selectedValues).toContain('r2')
+    })
+  })
+
   // --- selection behavior ---
 
   describe('selection behavior', () => {
@@ -744,6 +910,32 @@ describe('cv-treegrid', () => {
         getBase(grid).dispatchEvent(new KeyboardEvent('keydown', {key: 'Enter', bubbles: true}))
         await settle(grid)
         expect(grid.selectedValues).toEqual(['r2'])
+      })
+
+      it('clicking a cell activates it and selects its row with one input and one change event', async () => {
+        const grid = await createTreegrid({ariaLabel: 'Test', selectionMode: 'single'})
+        grid.append(
+          createColumn('name', 'Name'),
+          createRow('r1', [createCell('name', 'A')]),
+          createRow('r2', [createCell('name', 'B')]),
+        )
+        await settle(grid)
+
+        let inputCount = 0
+        let changeCount = 0
+        grid.addEventListener('cv-input', () => inputCount++)
+        grid.addEventListener('cv-change', () => changeCount++)
+
+        const cell2 = grid.querySelector(
+          'cv-treegrid-row[value="r2"] cv-treegrid-cell[column="name"]',
+        ) as CVTreegridCell
+        cell2.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+        await settle(grid)
+
+        expect(grid.value).toBe('r2::name')
+        expect(grid.selectedValues).toEqual(['r2'])
+        expect(inputCount).toBe(1)
+        expect(changeCount).toBe(1)
       })
 
       it('programmatic selectedValues replaces selection (single mode)', async () => {
@@ -789,6 +981,24 @@ describe('cv-treegrid', () => {
         await settle(grid)
         expect(grid.selectedValues).toContain('r1')
         expect(grid.selectedValues).toContain('r2')
+      })
+
+      it('Ctrl+Enter toggles selection off for an already-selected row', async () => {
+        const grid = await createTreegrid({ariaLabel: 'Test', selectionMode: 'multiple'})
+        grid.append(createColumn('name', 'Name'), createRow('r1', [createCell('name', 'A')]))
+        await settle(grid)
+
+        getBase(grid).dispatchEvent(
+          new KeyboardEvent('keydown', {key: 'Enter', ctrlKey: true, bubbles: true}),
+        )
+        await settle(grid)
+        expect(grid.selectedValues).toEqual(['r1'])
+
+        getBase(grid).dispatchEvent(
+          new KeyboardEvent('keydown', {key: 'Enter', ctrlKey: true, bubbles: true}),
+        )
+        await settle(grid)
+        expect(grid.selectedValues).toEqual([])
       })
 
       it('programmatic selectedValues replaces (not accumulates) in multiple mode', async () => {
@@ -1245,6 +1455,96 @@ describe('cv-treegrid', () => {
       expect(grid.expandedValues).toEqual([])
       // r2 still exists, state preserved
       expect(grid.value).toBe('r2::name')
+    })
+  })
+
+  // --- regression: batch 11 ---
+
+  describe('regression — batch 11', () => {
+    it('ragged rows: ArrowDown into a row missing the active column keeps a valid active cell', async () => {
+      const grid = await createTreegrid({ariaLabel: 'Test'})
+      grid.append(
+        createColumn('name', 'Name'),
+        createColumn('size', 'Size'),
+        // r1 has both columns; r2 is ragged (only the "name" column).
+        createRow('r1', [createCell('name', 'A'), createCell('size', '1KB')]),
+        createRow('r2', [createCell('name', 'B')]),
+      )
+      await settle(grid)
+
+      // Move active cell to the "size" column on r1.
+      grid.value = 'r1::size'
+      await settle(grid)
+      expect(grid.value).toBe('r1::size')
+
+      // ArrowDown into r2 — r2 has no "size" cell. Navigation must not leave the
+      // active cell on a non-existent (r2,size) pair.
+      getBase(grid).dispatchEvent(new KeyboardEvent('keydown', {key: 'ArrowDown', bubbles: true}))
+      await settle(grid)
+
+      // The model treats (r2,size) as disabled, so the active cell stays at a real,
+      // rendered cell rather than vanishing.
+      expect(grid.value).not.toBe('r2::size')
+      expect(grid.value.length).toBeGreaterThan(0)
+
+      // The active cell maps to an actually-rendered, non-hidden cell element.
+      const activeCell = Array.from(grid.querySelectorAll('cv-treegrid-cell')).find(
+        (cell) => (cell as CVTreegridCell).active,
+      ) as CVTreegridCell | undefined
+      expect(activeCell).toBeTruthy()
+      expect(activeCell?.hidden).toBe(false)
+    })
+
+    it('removing the value attribute does not throw (null guard)', async () => {
+      const grid = await createTreegrid({ariaLabel: 'Test'})
+      grid.append(
+        createColumn('name', 'Name'),
+        createRow('r1', [createCell('name', 'A')]),
+      )
+      await settle(grid)
+
+      expect(() => {
+        grid.removeAttribute('value')
+      }).not.toThrow()
+      await settle(grid)
+    })
+
+    it('Alt+ArrowDown does not navigate and is not preventDefaulted', async () => {
+      const grid = await createTreegrid({ariaLabel: 'Test'})
+      grid.append(
+        createColumn('name', 'Name'),
+        createRow('r1', [createCell('name', 'A')]),
+        createRow('r2', [createCell('name', 'B')]),
+      )
+      await settle(grid)
+      expect(grid.value).toBe('r1::name')
+
+      const event = new KeyboardEvent('keydown', {key: 'ArrowDown', altKey: true, bubbles: true, cancelable: true})
+      getBase(grid).dispatchEvent(event)
+      await settle(grid)
+
+      expect(grid.value).toBe('r1::name')
+      expect(event.defaultPrevented).toBe(false)
+    })
+
+    it('programmatic value change does not steal focus', async () => {
+      const grid = await createTreegrid({ariaLabel: 'Test'})
+      grid.append(
+        createColumn('name', 'Name'),
+        createRow('r1', [createCell('name', 'A')]),
+        createRow('r2', [createCell('name', 'B')]),
+      )
+      await settle(grid)
+
+      const cells = grid.querySelectorAll('cv-treegrid-cell')
+      let focusCount = 0
+      cells[1]?.addEventListener('focus', () => focusCount++)
+
+      grid.value = 'r2::name'
+      await settle(grid)
+
+      expect(grid.value).toBe('r2::name')
+      expect(focusCount).toBe(0)
     })
   })
 })
