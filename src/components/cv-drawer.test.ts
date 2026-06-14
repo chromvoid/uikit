@@ -1,6 +1,7 @@
 import {afterEach, describe, expect, it, vi} from 'vitest'
 
 import {CVDrawer} from './cv-drawer'
+import {resetBodyScrollLockForTesting} from './scroll-lock'
 
 CVDrawer.define()
 
@@ -540,7 +541,7 @@ describe('cv-drawer', () => {
       expect(el.open).toBe(false)
     })
 
-    it('overlay click closes the drawer', async () => {
+    it('overlay press-and-release closes the drawer', async () => {
       const el = await createDrawer()
       const trigger = el.shadowRoot!.querySelector('[part="trigger"]') as HTMLElement
 
@@ -548,14 +549,17 @@ describe('cv-drawer', () => {
       await settle(el)
       expect(el.open).toBe(true)
 
+      // A genuine backdrop dismissal is a press-and-release on the overlay:
+      // mousedown records the origin, click confirms it.
       const overlay = el.shadowRoot!.querySelector('[part="overlay"]') as HTMLElement
       overlay.dispatchEvent(new MouseEvent('mousedown', {bubbles: true}))
+      overlay.dispatchEvent(new MouseEvent('click', {bubbles: true}))
       await settle(el)
 
       expect(el.open).toBe(false)
     })
 
-    it('overlay click event closes the drawer without relying on mousedown', async () => {
+    it('does not close on an overlay click without a preceding overlay mousedown', async () => {
       const el = await createDrawer()
       const trigger = el.shadowRoot!.querySelector('[part="trigger"]') as HTMLElement
 
@@ -563,11 +567,13 @@ describe('cv-drawer', () => {
       await settle(el)
       expect(el.open).toBe(true)
 
+      // A text-selection drag started inside the panel and released over the
+      // overlay produces a click with no overlay mousedown — must not dismiss.
       const overlay = el.shadowRoot!.querySelector('[part="overlay"]') as HTMLElement
       overlay.dispatchEvent(new MouseEvent('click', {bubbles: true}))
       await settle(el)
 
-      expect(el.open).toBe(false)
+      expect(el.open).toBe(true)
     })
 
     it('trigger click toggles open state', async () => {
@@ -715,6 +721,126 @@ describe('cv-drawer', () => {
     })
   })
 
+  describe('drag-to-close guards', () => {
+    it('ignores non-primary touch pointers', async () => {
+      const el = await createDrawer({open: true, placement: 'start', dragToClose: true})
+      const panel = getPanel(el)
+
+      panel.dispatchEvent(
+        createPointerEvent('pointerdown', {clientX: 240, clientY: 40, isPrimary: false}),
+      )
+      expect(panel.getAttribute('data-dragging')).toBeNull()
+
+      panel.dispatchEvent(createPointerEvent('pointermove', {clientX: 80, clientY: 40, isPrimary: false}))
+      panel.dispatchEvent(createPointerEvent('pointerup', {clientX: 80, clientY: 40, isPrimary: false}))
+      await settle(el)
+
+      expect(el.open).toBe(true)
+      expect(panel.style.getPropertyValue('--cv-drawer-drag-offset-x')).toBe('')
+    })
+
+    it('ignores pointermove events from a different pointer id', async () => {
+      const el = await createDrawer({open: true, placement: 'start', dragToClose: true})
+      const panel = getPanel(el)
+
+      panel.dispatchEvent(createPointerEvent('pointerdown', {clientX: 240, clientY: 40, pointerId: 1}))
+      panel.dispatchEvent(createPointerEvent('pointermove', {clientX: 80, clientY: 40, pointerId: 2}))
+
+      expect(panel.style.getPropertyValue('--cv-drawer-drag-offset-x')).toBe('0px')
+
+      panel.dispatchEvent(createPointerEvent('pointerup', {clientX: 240, clientY: 40, pointerId: 1}))
+      await settle(el)
+
+      expect(el.open).toBe(true)
+    })
+
+    it('cancels the drag when cross-axis movement dominates (scroll gesture)', async () => {
+      const el = await createDrawer({open: true, placement: 'start', dragToClose: true})
+      const panel = getPanel(el)
+
+      panel.dispatchEvent(createPointerEvent('pointerdown', {clientX: 240, clientY: 40}))
+      panel.dispatchEvent(createPointerEvent('pointermove', {clientX: 236, clientY: 90}))
+
+      expect(panel.getAttribute('data-dragging')).toBeNull()
+      expect(panel.style.getPropertyValue('--cv-drawer-drag-offset-x')).toBe('')
+
+      panel.dispatchEvent(createPointerEvent('pointerup', {clientX: 120, clientY: 90}))
+      await settle(el)
+
+      expect(el.open).toBe(true)
+    })
+
+    it('closes on a fast flick below the distance threshold', async () => {
+      const now = vi.spyOn(performance, 'now')
+      now.mockReturnValueOnce(0).mockReturnValueOnce(40)
+
+      const el = await createDrawer({open: true, placement: 'start', dragToClose: true})
+      const panel = getPanel(el)
+
+      panel.dispatchEvent(createPointerEvent('pointerdown', {clientX: 240, clientY: 40}))
+      panel.dispatchEvent(createPointerEvent('pointermove', {clientX: 200, clientY: 40}))
+      panel.dispatchEvent(createPointerEvent('pointerup', {clientX: 200, clientY: 40}))
+      await settle(el)
+
+      expect(el.open).toBe(false)
+    })
+
+    it('pointercancel resets the drag without closing', async () => {
+      const el = await createDrawer({open: true, placement: 'start', dragToClose: true})
+      const panel = getPanel(el)
+
+      panel.dispatchEvent(createPointerEvent('pointerdown', {clientX: 240, clientY: 40}))
+      panel.dispatchEvent(createPointerEvent('pointermove', {clientX: 180, clientY: 40}))
+      expect(panel.getAttribute('data-dragging')).toBe('true')
+
+      panel.dispatchEvent(createPointerEvent('pointercancel', {clientX: 180, clientY: 40}))
+      await settle(el)
+
+      expect(el.open).toBe(true)
+      expect(panel.getAttribute('data-dragging')).toBeNull()
+      expect(panel.style.getPropertyValue('--cv-drawer-drag-offset-x')).toBe('')
+    })
+
+    it('applies the vertical drag offset for bottom placement', async () => {
+      const el = await createDrawer({open: true, placement: 'bottom', dragToClose: true})
+      const panel = getPanel(el)
+
+      panel.dispatchEvent(createPointerEvent('pointerdown', {clientX: 40, clientY: 100}))
+      panel.dispatchEvent(createPointerEvent('pointermove', {clientX: 40, clientY: 160}))
+
+      expect(panel.getAttribute('data-dragging')).toBe('true')
+      expect(panel.style.getPropertyValue('--cv-drawer-drag-offset-y')).toBe('60px')
+      expect(panel.style.getPropertyValue('--cv-drawer-drag-offset-x')).toBe('0px')
+
+      panel.dispatchEvent(createPointerEvent('pointercancel', {clientX: 40, clientY: 160}))
+      await settle(el)
+      expect(el.open).toBe(true)
+    })
+  })
+
+  describe('overlay interaction guards', () => {
+    it('does not close when mousedown originates inside the panel', async () => {
+      const el = await createDrawer({open: true})
+      const panel = getPanel(el)
+
+      panel.dispatchEvent(new MouseEvent('mousedown', {bubbles: true}))
+      await settle(el)
+
+      expect(el.open).toBe(true)
+    })
+
+    it('does not close on overlay pointer events when closeOnOutsidePointer=false', async () => {
+      const el = await createDrawer({closeOnOutsidePointer: false, open: true})
+      const overlay = getOverlay(el)
+
+      overlay.dispatchEvent(new MouseEvent('mousedown', {bubbles: true}))
+      overlay.dispatchEvent(new MouseEvent('click', {bubbles: true}))
+      await settle(el)
+
+      expect(el.open).toBe(true)
+    })
+  })
+
   // --- Keyboard interaction ---
 
   describe('keyboard interaction', () => {
@@ -745,6 +871,43 @@ describe('cv-drawer', () => {
       panel.dispatchEvent(new KeyboardEvent('keydown', {key: 'Escape', bubbles: true}))
       await settle(el)
 
+      expect(el.open).toBe(true)
+    })
+
+    it('does not preventDefault Escape when closeOnEscape=false', async () => {
+      const el = await createDrawer({closeOnEscape: false})
+      const trigger = el.shadowRoot!.querySelector('[part="trigger"]') as HTMLElement
+
+      trigger.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+      await settle(el)
+      expect(el.open).toBe(true)
+
+      const panel = getPanel(el)
+      const event = new KeyboardEvent('keydown', {key: 'Escape', bubbles: true, cancelable: true})
+      panel.dispatchEvent(event)
+      await settle(el)
+
+      // With Escape-to-close disabled the drawer must let the key bubble up to a
+      // parent overlay instead of swallowing it via preventDefault.
+      expect(event.defaultPrevented).toBe(false)
+      expect(el.open).toBe(true)
+    })
+
+    it('ignores Escape already handled by a nested widget (defaultPrevented)', async () => {
+      const el = await createDrawer()
+      const trigger = el.shadowRoot!.querySelector('[part="trigger"]') as HTMLElement
+
+      trigger.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+      await settle(el)
+      expect(el.open).toBe(true)
+
+      const panel = getPanel(el)
+      const event = new KeyboardEvent('keydown', {key: 'Escape', bubbles: true, cancelable: true})
+      event.preventDefault()
+      panel.dispatchEvent(event)
+      await settle(el)
+
+      // A nested widget already consumed Escape; the drawer must not also close.
       expect(el.open).toBe(true)
     })
 
@@ -882,6 +1045,37 @@ describe('cv-drawer', () => {
 
       el.remove()
       expect(document.body.style.overflow).toBe('')
+    })
+
+    it('keeps body scroll locked while a second modal drawer is still open', async () => {
+      resetBodyScrollLockForTesting()
+      document.body.style.overflow = ''
+
+      // closeOnOutsideFocus is disabled so the two overlays do not dismiss one
+      // another; this case isolates the reentrant body scroll-lock contract.
+      const first = await createDrawer({closeOnOutsideFocus: false})
+      const second = await createDrawer({closeOnOutsideFocus: false})
+
+      const firstTrigger = first.shadowRoot!.querySelector('[part="trigger"]') as HTMLElement
+      const secondTrigger = second.shadowRoot!.querySelector('[part="trigger"]') as HTMLElement
+
+      firstTrigger.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+      await settle(first)
+      secondTrigger.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+      await settle(second)
+      expect(document.body.style.overflow).toBe('hidden')
+
+      // Closing the first overlay must not unlock scrolling while the second is open.
+      getPanel(first).dispatchEvent(new KeyboardEvent('keydown', {key: 'Escape', bubbles: true}))
+      await settle(first)
+      expect(document.body.style.overflow).toBe('hidden')
+
+      // Only once the last overlay closes is the original overflow restored.
+      getPanel(second).dispatchEvent(new KeyboardEvent('keydown', {key: 'Escape', bubbles: true}))
+      await settle(second)
+      expect(document.body.style.overflow).toBe('')
+
+      resetBodyScrollLockForTesting()
     })
   })
 

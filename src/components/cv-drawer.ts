@@ -4,12 +4,18 @@ import type {PropertyValues} from 'lit'
 
 import {html} from '../reatom-lit/index.js'
 import {ReatomLitElement} from '../reatom-lit/ReatomLitElement'
+import {acquireBodyScrollLock, releaseBodyScrollLock} from './scroll-lock.js'
 
 export interface CVDrawerEventDetail {
   open: boolean
 }
 
 let cvDrawerNonce = 0
+
+function getIdSelector(id: string): string {
+  return `[id="${id.replace(/["\\]/g, '\\$&')}"]`
+}
+
 const DRAG_CLOSE_DISTANCE_PX = 96
 const DRAG_CLOSE_VELOCITY_PX_PER_MS = 0.75
 const DRAG_SCROLL_DOMINANCE_PX = 18
@@ -47,7 +53,6 @@ export class CVDrawer extends ReatomLitElement {
   private readonly idBase = `cv-drawer-${++cvDrawerNonce}`
   private model: DrawerModel
   private lockScrollApplied = false
-  private previousBodyOverflow = ''
   private suppressLifecycleFromUpdate = false
   private lifecycleToken = 0
   private overlayVisible = false
@@ -60,6 +65,7 @@ export class CVDrawer extends ReatomLitElement {
   private dragStartY = 0
   private dragStartedAt = 0
   private dragMoved = false
+  private overlayPointerDownOnSelf = false
 
   constructor() {
     super()
@@ -541,7 +547,7 @@ export class CVDrawer extends ReatomLitElement {
 
     const restoreTargetId = this.model.state.restoreTargetId()
     if (restoreTargetId && previous.restoreTargetId !== restoreTargetId) {
-      const trigger = this.shadowRoot?.querySelector(`[id="${restoreTargetId}"]`) as HTMLElement | null
+      const trigger = this.shadowRoot?.querySelector(getIdSelector(restoreTargetId)) as HTMLElement | null
       trigger?.focus()
     }
   }
@@ -563,15 +569,14 @@ export class CVDrawer extends ReatomLitElement {
 
     if (this.lockScrollApplied) return
 
-    this.previousBodyOverflow = document.body.style.overflow
-    document.body.style.overflow = 'hidden'
+    acquireBodyScrollLock()
     this.lockScrollApplied = true
   }
 
   private releaseScrollLock(): void {
     if (!this.lockScrollApplied) return
 
-    document.body.style.overflow = this.previousBodyOverflow
+    releaseBodyScrollLock()
     this.lockScrollApplied = false
   }
 
@@ -699,9 +704,10 @@ export class CVDrawer extends ReatomLitElement {
     const requestedId = panelProps['data-initial-focus']
 
     if (requestedId) {
+      const selector = getIdSelector(requestedId)
       const explicit =
-        (this.querySelector(`#${requestedId}`) as HTMLElement | null) ??
-        (this.shadowRoot?.querySelector(`#${requestedId}`) as HTMLElement | null)
+        (this.querySelector(selector) as HTMLElement | null) ??
+        (this.shadowRoot?.querySelector(selector) as HTMLElement | null)
       if (explicit) {
         explicit.focus()
         return
@@ -740,15 +746,18 @@ export class CVDrawer extends ReatomLitElement {
   }
 
   private handleOverlayPointerDown(event: MouseEvent) {
-    if (event.target !== event.currentTarget) return
-
-    const previous = this.captureState()
-    this.model.contracts.getOverlayProps().onPointerDownOutside()
-    this.applyInteractionResult(previous)
+    // Remember whether the pointer sequence started on the overlay itself.
+    // A drag that begins inside the panel and is released over the overlay
+    // must not dismiss the drawer.
+    this.overlayPointerDownOnSelf = event.target === event.currentTarget
   }
 
   private handleOverlayClick(event: MouseEvent) {
+    const startedOnSelf = this.overlayPointerDownOnSelf
+    this.overlayPointerDownOnSelf = false
+
     if (event.target !== event.currentTarget) return
+    if (!startedOnSelf) return
     if (!this.open) return
 
     const previous = this.captureState()
@@ -758,6 +767,9 @@ export class CVDrawer extends ReatomLitElement {
 
   private handlePanelKeyDown(event: KeyboardEvent) {
     if (event.key === 'Escape') {
+      // Respect a nested widget that already handled Escape, and never
+      // preventDefault when Escape-to-close is disabled.
+      if (event.defaultPrevented || !this.closeOnEscape) return
       event.preventDefault()
     }
 
