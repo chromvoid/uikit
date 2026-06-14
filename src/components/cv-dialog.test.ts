@@ -1,6 +1,7 @@
 import {afterEach, describe, expect, it, vi} from 'vitest'
 
 import {CVDialog} from './cv-dialog'
+import {resetBodyScrollLockForTesting} from './scroll-lock'
 
 CVDialog.define()
 
@@ -39,6 +40,7 @@ const advancePresenceTimers = async (el: CVDialog, ms: number) => {
 afterEach(() => {
   document.body.innerHTML = ''
   document.body.style.overflow = ''
+  resetBodyScrollLockForTesting()
   vi.useRealTimers()
 })
 
@@ -681,6 +683,7 @@ describe('cv-dialog', () => {
 
       const overlay = el.shadowRoot!.querySelector('[part="overlay"]') as HTMLElement
       overlay.dispatchEvent(new MouseEvent('mousedown', {bubbles: true}))
+      overlay.dispatchEvent(new MouseEvent('click', {bubbles: true}))
       await settle(el)
 
       expect(el.open).toBe(false)
@@ -799,6 +802,30 @@ describe('cv-dialog', () => {
       expect(el.open).toBe(true)
     })
 
+    it('does not preventDefault Escape when closeOnEscape=false', async () => {
+      const el = await createDialog({closeOnEscape: false, open: true})
+      const content = getContent(el)
+
+      const event = new KeyboardEvent('keydown', {key: 'Escape', bubbles: true, cancelable: true})
+      content.dispatchEvent(event)
+      await settle(el)
+
+      expect(event.defaultPrevented).toBe(false)
+      expect(el.open).toBe(true)
+    })
+
+    it('ignores Escape already handled by a nested widget (defaultPrevented)', async () => {
+      const el = await createDialog({open: true})
+      const content = getContent(el)
+
+      const event = new KeyboardEvent('keydown', {key: 'Escape', bubbles: true, cancelable: true})
+      event.preventDefault()
+      content.dispatchEvent(event)
+      await settle(el)
+
+      expect(el.open).toBe(true)
+    })
+
     it('trigger Enter key opens dialog', async () => {
       const el = await createDialog()
       const trigger = el.shadowRoot!.querySelector('[part="trigger"]') as HTMLElement
@@ -817,6 +844,141 @@ describe('cv-dialog', () => {
       await settle(el)
 
       expect(el.open).toBe(true)
+    })
+  })
+
+  describe('overlay interaction guards', () => {
+    it('does not close when mousedown originates inside the content', async () => {
+      const el = await createDialog({open: true})
+
+      getContent(el).dispatchEvent(new MouseEvent('mousedown', {bubbles: true}))
+      await settle(el)
+
+      expect(el.open).toBe(true)
+    })
+
+    it('does not close when a drag starts inside the content and is released over the overlay', async () => {
+      const el = await createDialog({open: true})
+
+      // Pointer sequence begins inside the content (e.g. text selection)...
+      getContent(el).dispatchEvent(new MouseEvent('mousedown', {bubbles: true}))
+      // ...and the click is reported on the overlay because the pointer was
+      // dragged out and released over the backdrop.
+      getOverlay(el).dispatchEvent(new MouseEvent('click', {bubbles: true}))
+      await settle(el)
+
+      expect(el.open).toBe(true)
+    })
+
+    it('closes only when the pointer sequence both starts and ends on the overlay', async () => {
+      const el = await createDialog({open: true})
+
+      getOverlay(el).dispatchEvent(new MouseEvent('mousedown', {bubbles: true}))
+      getOverlay(el).dispatchEvent(new MouseEvent('click', {bubbles: true}))
+      await settle(el)
+
+      expect(el.open).toBe(false)
+    })
+
+    it('does not close on overlay mousedown when closeOnOutsidePointer=false', async () => {
+      const el = await createDialog({closeOnOutsidePointer: false, open: true})
+
+      getOverlay(el).dispatchEvent(new MouseEvent('mousedown', {bubbles: true}))
+      getOverlay(el).dispatchEvent(new MouseEvent('click', {bubbles: true}))
+      await settle(el)
+
+      expect(el.open).toBe(true)
+    })
+  })
+
+  describe('nested dialogs', () => {
+    it('does not dismiss an open dialog when focus moves into a stacked dialog', async () => {
+      const first = await createDialog({open: true})
+      const second = await createDialog({open: true})
+
+      // Simulate focus entering the second (stacked) dialog's content.
+      const secondContent = getContent(second)
+      const focusEvent = new FocusEvent('focusin', {bubbles: true, composed: true})
+      Object.defineProperty(focusEvent, 'composedPath', {
+        value: () => [secondContent, getOverlay(second), second, document.body, document],
+      })
+      document.dispatchEvent(focusEvent)
+      await settle(first)
+      await settle(second)
+
+      expect(first.open).toBe(true)
+      expect(second.open).toBe(true)
+    })
+
+    it('still dismisses on genuine outside focus to an unrelated element', async () => {
+      const el = await createDialog({open: true})
+      const outside = document.createElement('button')
+      document.body.append(outside)
+
+      const focusEvent = new FocusEvent('focusin', {bubbles: true, composed: true})
+      Object.defineProperty(focusEvent, 'composedPath', {
+        value: () => [outside, document.body, document],
+      })
+      document.dispatchEvent(focusEvent)
+      await settle(el)
+
+      expect(el.open).toBe(false)
+    })
+  })
+
+  describe('native cancel handling', () => {
+    it('closes on native dialog cancel and prevents the default close', async () => {
+      const el = await createDialog({open: true})
+      const shell = getModalShell(el)!
+
+      const event = new Event('cancel', {cancelable: true})
+      shell.dispatchEvent(event)
+      await settle(el)
+
+      expect(el.open).toBe(false)
+      expect(event.defaultPrevented).toBe(true)
+    })
+
+    it('does not close on native cancel when closeOnEscape=false', async () => {
+      const el = await createDialog({closeOnEscape: false, open: true})
+      const shell = getModalShell(el)!
+
+      shell.dispatchEvent(new Event('cancel', {cancelable: true}))
+      await settle(el)
+
+      expect(el.open).toBe(true)
+    })
+  })
+
+  describe('open/close racing', () => {
+    it('collapses an open immediately followed by close into a no-op', async () => {
+      const el = await createDialog()
+      const events: string[] = []
+
+      el.addEventListener('cv-show', () => events.push('show'))
+      el.addEventListener('cv-hide', () => events.push('hide'))
+      el.addEventListener('cv-after-show', () => events.push('after-show'))
+      el.addEventListener('cv-after-hide', () => events.push('after-hide'))
+
+      el.open = true
+      el.open = false
+      await settle(el)
+
+      expect(el.open).toBe(false)
+      expect(getOverlay(el).hidden).toBe(true)
+      expect(events).toEqual([])
+    })
+  })
+
+  describe('initial focus fallback', () => {
+    it('focuses the dialog content when no initial-focus-id is set', async () => {
+      const el = await createDialog()
+
+      el.open = true
+      await settle(el)
+      await Promise.resolve()
+
+      expect(el.shadowRoot!.activeElement).toBe(getContent(el))
     })
   })
 
@@ -1001,6 +1163,23 @@ describe('cv-dialog', () => {
       expect(document.body.style.overflow).toBe('hidden')
 
       el.remove()
+      expect(document.body.style.overflow).toBe('')
+    })
+
+    it('keeps body scroll locked while a second modal dialog is still open', async () => {
+      const first = await createDialog({open: true})
+      const second = await createDialog({open: true})
+
+      expect(document.body.style.overflow).toBe('hidden')
+
+      // Closing the topmost overlay must not unlock scrolling under the first.
+      second.open = false
+      await settle(second)
+      expect(document.body.style.overflow).toBe('hidden')
+
+      // Body overflow only restores once the last lock releases.
+      first.open = false
+      await settle(first)
       expect(document.body.style.overflow).toBe('')
     })
   })

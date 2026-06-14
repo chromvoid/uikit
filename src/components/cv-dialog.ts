@@ -3,6 +3,7 @@ import {css, nothing, type PropertyValues} from 'lit'
 
 import {html} from '../reatom-lit/index.js'
 import {ReatomLitElement} from '../reatom-lit/ReatomLitElement'
+import {acquireBodyScrollLock, releaseBodyScrollLock} from './scroll-lock.js'
 
 export interface CVDialogEventDetail {
   open: boolean
@@ -17,6 +18,11 @@ type DialogPresenceState = 'closed' | 'opening' | 'open' | 'closing'
 
 let cvDialogNonce = 0
 let hasWarnedAboutTriggerSlot = false
+
+// Stack of currently-open dialogs in open order. Only the topmost dialog
+// reacts to outside-focus dismissal, so opening/closing a stacked dialog does
+// not cascade-close the dialogs beneath it.
+const openDialogStack: CVDialog[] = []
 
 function getDeepActiveElement(): HTMLElement | null {
   let activeElement = document.activeElement
@@ -103,7 +109,6 @@ export class CVDialog extends ReatomLitElement {
   private readonly idBase = `cv-dialog-${++cvDialogNonce}`
   private model: DialogModel
   private lockScrollApplied = false
-  private previousBodyOverflow = ''
   private suppressLifecycleFromUpdate = false
   private lifecycleToken = 0
   private focusRestoreTarget: HTMLElement | null = null
@@ -113,6 +118,7 @@ export class CVDialog extends ReatomLitElement {
   private pendingFocusRestoreTargetId: string | null = null
   private shouldAnimatePresence = false
   private suppressNextNativeCancel = false
+  private overlayPointerDownOnSelf = false
   private lastTouchClientY = 0
   private readonly handleDocumentFocusInBound = (event: FocusEvent) => this.handleDocumentFocusIn(event)
 
@@ -861,10 +867,26 @@ export class CVDialog extends ReatomLitElement {
   private syncOutsideFocusListener(forceOff = false): void {
     const shouldListen = !forceOff && this.open
     if (shouldListen) {
+      this.pushOntoOpenStack()
       document.addEventListener('focusin', this.handleDocumentFocusInBound)
     } else {
+      this.removeFromOpenStack()
       document.removeEventListener('focusin', this.handleDocumentFocusInBound)
     }
+  }
+
+  private pushOntoOpenStack(): void {
+    if (openDialogStack.includes(this)) return
+    openDialogStack.push(this)
+  }
+
+  private removeFromOpenStack(): void {
+    const index = openDialogStack.indexOf(this)
+    if (index >= 0) openDialogStack.splice(index, 1)
+  }
+
+  private isTopmostOpenDialog(): boolean {
+    return openDialogStack[openDialogStack.length - 1] === this
   }
 
   private syncScrollLock(): void {
@@ -875,15 +897,14 @@ export class CVDialog extends ReatomLitElement {
 
     if (this.lockScrollApplied) return
 
-    this.previousBodyOverflow = document.body.style.overflow
-    document.body.style.overflow = 'hidden'
+    acquireBodyScrollLock()
     this.lockScrollApplied = true
   }
 
   private releaseScrollLock(): void {
     if (!this.lockScrollApplied) return
 
-    document.body.style.overflow = this.previousBodyOverflow
+    releaseBodyScrollLock()
     this.lockScrollApplied = false
   }
 
@@ -973,13 +994,34 @@ export class CVDialog extends ReatomLitElement {
   private handleDocumentFocusIn(event: FocusEvent) {
     if (!this.open) return
 
+    // Only the topmost open dialog reacts to outside focus. Otherwise opening
+    // a stacked dialog B focuses its content, which would dismiss the
+    // underlying dialog A — and restoring focus to A's trigger would in turn
+    // dismiss B. With a stack, a dialog beneath another open dialog never
+    // treats focus changes as outside-focus dismissals.
+    if (!this.isTopmostOpenDialog()) return
+
     const path = event.composedPath()
     const overlay = this.getPortalOverlay()
     if (path.includes(this) || (overlay && path.includes(overlay))) return
 
+    // Also ignore focus moving into another open cv-dialog (a stacked overlay
+    // that has not yet registered as topmost when this handler runs).
+    if (this.focusTargetBelongsToOpenDialog(path)) return
+
     const previous = this.captureState()
     this.model.actions.handleOutsideFocus()
     this.applyInteractionResult(previous)
+  }
+
+  private focusTargetBelongsToOpenDialog(path: EventTarget[]): boolean {
+    for (const node of path) {
+      if (node instanceof CVDialog && node !== this && node.open) {
+        return true
+      }
+    }
+
+    return false
   }
 
   private handleTriggerClick() {
@@ -1000,8 +1042,19 @@ export class CVDialog extends ReatomLitElement {
     this.applyInteractionResult(previous)
   }
 
-  private handleOverlayPointerDown(event: MouseEvent) {
+  private handleOverlayMouseDown(event: MouseEvent) {
+    // Remember whether the pointer sequence started on the overlay itself
+    // (not inside the dialog content). A drag that begins inside the content
+    // and is released over the overlay must not dismiss the dialog.
+    this.overlayPointerDownOnSelf = event.target === event.currentTarget
+  }
+
+  private handleOverlayClick(event: MouseEvent) {
+    const startedOnSelf = this.overlayPointerDownOnSelf
+    this.overlayPointerDownOnSelf = false
+
     if (event.target !== event.currentTarget) return
+    if (!startedOnSelf) return
 
     const previous = this.captureState()
     this.model.contracts.getOverlayProps().onPointerDownOutside()
@@ -1039,6 +1092,10 @@ export class CVDialog extends ReatomLitElement {
 
   private handleContentKeyDown(event: KeyboardEvent) {
     if (event.key === 'Escape') {
+      // Respect a nested widget that already handled Escape, and never
+      // hijack the key (preventDefault + suppress native cancel) when
+      // Escape-to-close is disabled.
+      if (event.defaultPrevented || !this.closeOnEscape) return
       event.preventDefault()
       this.suppressNextNativeCancel = true
     }
@@ -1083,8 +1140,8 @@ export class CVDialog extends ReatomLitElement {
         data-state=${this.presenceState}
         ?hidden=${!this.portalVisible}
         part="overlay"
-        @mousedown=${this.handleOverlayPointerDown}
-        @click=${this.handleOverlayPointerDown}
+        @mousedown=${this.handleOverlayMouseDown}
+        @click=${this.handleOverlayClick}
         @touchstart=${this.handleOverlayTouchStart}
         @touchmove=${this.handleOverlayTouchMove}
         @wheel=${this.handleOverlayWheel}
