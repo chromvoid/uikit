@@ -56,6 +56,18 @@ const selectKeysToPrevent = new Set([
   'Tab',
 ])
 
+// Keys the trigger acts on while CLOSED. Tab/Escape are intentionally excluded so
+// they reach the focus order / parent dialog instead of being a keyboard trap.
+const triggerKeysToPrevent = new Set([
+  'ArrowUp',
+  'ArrowDown',
+  'Home',
+  'End',
+  'Enter',
+  ' ',
+  'Spacebar',
+])
+
 function arraysEqual(left: readonly string[], right: readonly string[]): boolean {
   return left.length === right.length && left.every((value, index) => value === right[index])
 }
@@ -278,7 +290,7 @@ export class CVSelect extends FormAssociatedReatomElement {
     }
 
     if (changedProperties.has('value')) {
-      const next = this.value.trim()
+      const next = (this.value ?? '').trim()
       const previous = this.captureState()
 
       if (this.selectionMode === 'single') {
@@ -289,13 +301,14 @@ export class CVSelect extends FormAssociatedReatomElement {
         }
       }
 
-      this.applyInteractionResult(previous)
+      // Programmatic writes are silent, matching native form controls.
+      this.applyInteractionResult(previous, true)
     }
 
     if (changedProperties.has('selectedValues') && this.selectionMode === 'multiple') {
       const previous = this.captureState()
       this.setSelectedIdsInModel(this.selectedValues)
-      this.applyInteractionResult(previous)
+      this.applyInteractionResult(previous, true)
     }
 
     if (changedProperties.has('open') && this.model.state.isOpen() !== this.open) {
@@ -305,7 +318,7 @@ export class CVSelect extends FormAssociatedReatomElement {
       } else {
         this.model.actions.close()
       }
-      this.applyInteractionResult(previous)
+      this.applyInteractionResult(previous, true)
     }
 
     if (
@@ -418,7 +431,7 @@ export class CVSelect extends FormAssociatedReatomElement {
     )
 
     if (this.selectionMode === 'single') {
-      const fromValue = this.value.trim()
+      const fromValue = (this.value ?? '').trim()
       if (fromValue && selectableIds.has(fromValue)) {
         return [fromValue]
       }
@@ -446,7 +459,7 @@ export class CVSelect extends FormAssociatedReatomElement {
     }
 
     if (normalized.size === 0) {
-      const fromValue = this.value.trim()
+      const fromValue = (this.value ?? '').trim()
       if (fromValue && selectableIds.has(fromValue)) {
         normalized.add(fromValue)
       }
@@ -464,6 +477,7 @@ export class CVSelect extends FormAssociatedReatomElement {
   }
 
   private rebuildModelFromSlot(preserveState: boolean, requestRender = true): void {
+    const knownOptionIds = new Set(this.optionRecords.map((record) => record.id))
     const structure = this.parseStructure()
 
     const previous = preserveState
@@ -482,7 +496,38 @@ export class CVSelect extends FormAssociatedReatomElement {
     const selectableIds = new Set(
       this.optionRecords.filter((record) => !record.disabled).map((record) => record.id),
     )
-    const initialSelectedIds = previous.selectedIds.filter((id) => selectableIds.has(id))
+    let initialSelectedIds = previous.selectedIds.filter((id) => selectableIds.has(id))
+
+    // Accordion pattern: a controlled `value`/`selectedValues`/`selected` set before
+    // the options were slotted resolved against an empty option list and got wiped.
+    // When preserving state leaves nothing selected, re-resolve the controlled value
+    // against the now-available options so it is not lost forever.
+    if (preserveState && initialSelectedIds.length === 0) {
+      initialSelectedIds = this.resolveInitialSelectedFromOptions(structure.options)
+    }
+
+    // Honor the `selected` attribute on options added after mount (native <select>
+    // applies a freshly added selected <option>). Only newly slotted options qualify
+    // so existing selection isn't overridden by stale attributes.
+    if (preserveState) {
+      const freshlySelected = this.optionRecords
+        .filter(
+          (record) =>
+            !knownOptionIds.has(record.id) &&
+            !record.disabled &&
+            record.element.selected &&
+            selectableIds.has(record.id),
+        )
+        .map((record) => record.id)
+
+      if (freshlySelected.length > 0) {
+        if (this.selectionMode === 'multiple') {
+          initialSelectedIds = [...new Set([...initialSelectedIds, ...freshlySelected])]
+        } else {
+          initialSelectedIds = [freshlySelected[freshlySelected.length - 1]!]
+        }
+      }
+    }
 
     this.model = createSelect({
       idBase: this.idBase,
@@ -520,9 +565,17 @@ export class CVSelect extends FormAssociatedReatomElement {
     )
     const normalized = [...new Set(ids)].filter((id) => allowed.has(id))
 
+    // model.actions.select() honours closeOnSelect (default true), which would close
+    // an open dropdown on a programmatic selectedValues write. Preserve open state.
+    const wasOpen = this.model.state.isOpen()
+
     this.model.actions.clear()
     for (const id of normalized) {
       this.model.actions.select(id)
+    }
+
+    if (wasOpen && !this.model.state.isOpen()) {
+      this.model.actions.open()
     }
   }
 
@@ -622,7 +675,7 @@ export class CVSelect extends FormAssociatedReatomElement {
     trigger?.focus()
   }
 
-  private applyInteractionResult(previous: SelectSnapshot): void {
+  private applyInteractionResult(previous: SelectSnapshot, silent = false): void {
     const next = this.captureState()
 
     this.syncStateFromModel()
@@ -631,7 +684,7 @@ export class CVSelect extends FormAssociatedReatomElement {
     const activeChanged = previous.activeId !== next.activeId
     const openChanged = previous.isOpen !== next.isOpen
 
-    if (selectedChanged || activeChanged || openChanged) {
+    if (!silent && (selectedChanged || activeChanged || openChanged)) {
       const detail: CVSelectEventDetail = {
         value: next.selectedIds[0] ?? null,
         values: [...next.selectedIds],
@@ -645,7 +698,7 @@ export class CVSelect extends FormAssociatedReatomElement {
       }
     }
 
-    if (previous.isOpen && !next.isOpen) {
+    if (!silent && previous.isOpen && !next.isOpen) {
       this.focusTrigger()
     }
   }
@@ -718,8 +771,17 @@ export class CVSelect extends FormAssociatedReatomElement {
 
   private syncStateFromModel(): void {
     const selectedIds = this.model.state.selectedIds()
-    this.value = selectedIds[0] ?? ''
-    this.selectedValues = [...selectedIds]
+
+    // Accordion pattern: if a controlled value was set before any options were
+    // slotted, the empty-option model has nothing selected. Don't clobber the
+    // declared value/selectedValues to empty — keep them so the value survives
+    // until the options arrive and a preserving rebuild can re-apply it.
+    const hasOptions = this.optionRecords.length > 0
+    if (hasOptions || selectedIds.length > 0) {
+      this.value = selectedIds[0] ?? ''
+      this.selectedValues = [...selectedIds]
+    }
+
     this.open = this.model.state.isOpen()
     this.syncOptionElements()
     this.syncFormAssociatedState()
@@ -758,7 +820,14 @@ export class CVSelect extends FormAssociatedReatomElement {
   }
 
   private handleTriggerKeyDown(event: KeyboardEvent) {
-    if (selectKeysToPrevent.has(event.key)) {
+    // When the listbox is open the trigger forwards Escape/Tab to close it, so those
+    // are legitimately prevented. When closed, only the open/toggle keys are owned;
+    // Tab and Escape must pass through (focus order / parent dialog).
+    const isOpen = this.model.state.isOpen()
+    const shouldPrevent = isOpen
+      ? selectKeysToPrevent.has(event.key)
+      : triggerKeysToPrevent.has(event.key)
+    if (shouldPrevent) {
       event.preventDefault()
     }
     const previous = this.captureState()

@@ -689,6 +689,70 @@ describe('cv-select', () => {
     })
   })
 
+  // --- Typeahead ---
+
+  describe('typeahead', () => {
+    it('typing a character in the open listbox moves the active option to the match', async () => {
+      const el = await createSelect()
+      getTrigger(el).dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+      await settle(el)
+
+      getListbox(el).dispatchEvent(new KeyboardEvent('keydown', {key: 'b', bubbles: true}))
+      await settle(el)
+
+      const activedescendant = getTrigger(el).getAttribute('aria-activedescendant')
+      expect(activedescendant).toBeTruthy()
+      const beta = el.querySelector('cv-select-option[value="b"]') as CVSelectOption
+      expect(beta.id).toBe(activedescendant)
+
+      getListbox(el).dispatchEvent(new KeyboardEvent('keydown', {key: 'Enter', bubbles: true}))
+      await settle(el)
+      expect(el.value).toBe('b')
+    })
+  })
+
+  // --- Initial selected attribute ---
+
+  describe('initial selected attribute', () => {
+    it('uses an option with the selected attribute as initial value', async () => {
+      const el = await createSelect(
+        {},
+        `
+          <cv-select-option value="a">Alpha</cv-select-option>
+          <cv-select-option value="b" selected>Beta</cv-select-option>
+        `,
+      )
+
+      expect(el.value).toBe('b')
+      expect(getTrigger(el).textContent).toContain('Beta')
+    })
+  })
+
+  // --- Programmatic value writes ---
+
+  describe('programmatic value writes', () => {
+    it('ignores programmatic value set to a disabled option and keeps current selection', async () => {
+      const el = await createSelect({value: 'a'})
+      expect(el.value).toBe('a')
+
+      el.value = 'c'
+      await settle(el)
+
+      expect(el.value).toBe('a')
+      const optionC = el.querySelector('cv-select-option[value="c"]') as CVSelectOption
+      expect(optionC.selected).toBe(false)
+    })
+
+    it('dedupes and filters disabled ids from programmatic selectedValues in multiple mode', async () => {
+      const el = await createSelect({selectionMode: 'multiple'})
+
+      el.selectedValues = ['a', 'a', 'c', 'b']
+      await settle(el)
+
+      expect(el.selectedValues).toEqual(['a', 'b'])
+    })
+  })
+
   // --- State preservation ---
 
   describe('state preservation', () => {
@@ -707,6 +771,30 @@ describe('cv-select', () => {
 
       expect(el.value).toBe('b')
       expect((el.querySelector('cv-select-option[value="b"]') as CVSelectOption).selected).toBe(true)
+    })
+
+    it('preserves selection and option interactivity across disconnect/reconnect', async () => {
+      const el = await createSelect()
+      getTrigger(el).dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+      await settle(el)
+
+      getOptions(el)[0]!.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+      await settle(el)
+      expect(el.value).toBe('a')
+
+      el.remove()
+      document.body.append(el)
+      await settle(el)
+
+      expect(el.value).toBe('a')
+
+      // Options must stay clickable after reconnect
+      getTrigger(el).dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+      await settle(el)
+      getOptions(el)[1]!.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+      await settle(el)
+
+      expect(el.value).toBe('b')
     })
   })
 
@@ -822,6 +910,18 @@ describe('cv-select', () => {
 
       expect(el.open).toBe(false)
     })
+
+    it('trigger shows placeholder again after clearing', async () => {
+      const el = await createSelect({clearable: true, placeholder: 'Pick one', value: 'a'})
+      expect(getTrigger(el).textContent).toContain('Alpha')
+
+      const clearBtn = getClearButton(el)!
+      clearBtn.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+      await settle(el)
+
+      expect(el.value).toBe('')
+      expect(getTrigger(el).textContent).toContain('Pick one')
+    })
   })
 
   // --- Size variants ---
@@ -879,6 +979,146 @@ describe('cv-select', () => {
     })
   })
 
+  // --- Batch 8 regression ---
+
+  describe('null value guard', () => {
+    it('removeAttribute("value") does not throw and clears selection', async () => {
+      const el = await createSelect({value: 'a'})
+      expect(el.value).toBe('a')
+
+      // Lit's String converter yields `null`; willUpdate must not call `null.trim()`.
+      expect(() => {
+        el.removeAttribute('value')
+      }).not.toThrow()
+      await settle(el)
+
+      expect(el.value).toBe('')
+    })
+  })
+
+  describe('keyboard trap (closed trigger)', () => {
+    it('does not preventDefault Tab on a closed trigger (lets focus move on)', async () => {
+      const el = await createSelect()
+      expect(el.open).toBe(false)
+
+      const event = new KeyboardEvent('keydown', {key: 'Tab', bubbles: true, cancelable: true})
+      getTrigger(el).dispatchEvent(event)
+      await settle(el)
+
+      expect(event.defaultPrevented).toBe(false)
+      expect(el.open).toBe(false)
+    })
+
+    it('does not preventDefault Escape on a closed trigger (lets it reach a parent dialog)', async () => {
+      const el = await createSelect()
+      expect(el.open).toBe(false)
+
+      const event = new KeyboardEvent('keydown', {key: 'Escape', bubbles: true, cancelable: true})
+      getTrigger(el).dispatchEvent(event)
+      await settle(el)
+
+      expect(event.defaultPrevented).toBe(false)
+    })
+
+    it('still preventDefaults Escape on the trigger while open', async () => {
+      const el = await createSelect()
+      getTrigger(el).dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+      await settle(el)
+      expect(el.open).toBe(true)
+
+      const event = new KeyboardEvent('keydown', {key: 'Escape', bubbles: true, cancelable: true})
+      getTrigger(el).dispatchEvent(event)
+      await settle(el)
+
+      expect(event.defaultPrevented).toBe(true)
+    })
+  })
+
+  describe('controlled value before slotting (accordion pattern)', () => {
+    it('re-applies a value set before options are slotted', async () => {
+      const el = document.createElement('cv-select') as CVSelect
+      // value set while there are no options yet
+      el.value = 'b'
+      document.body.append(el)
+      await settle(el)
+
+      // options arrive after mount
+      el.innerHTML = `
+        <cv-select-option value="a">Alpha</cv-select-option>
+        <cv-select-option value="b">Beta</cv-select-option>
+      `
+      await settle(el)
+      await settle(el)
+
+      expect(el.value).toBe('b')
+      expect((el.querySelector('cv-select-option[value="b"]') as CVSelectOption).selected).toBe(true)
+    })
+  })
+
+  describe('programmatic writes are silent', () => {
+    it('setting value does not emit cv-input or cv-change', async () => {
+      const el = await createSelect()
+      const events: string[] = []
+      el.addEventListener('cv-input', () => events.push('cv-input'))
+      el.addEventListener('cv-change', () => events.push('cv-change'))
+
+      el.value = 'a'
+      await settle(el)
+
+      expect(events).toEqual([])
+      expect(el.value).toBe('a')
+    })
+
+    it('setting open does not emit events', async () => {
+      const el = await createSelect()
+      const events: string[] = []
+      el.addEventListener('cv-input', () => events.push('cv-input'))
+      el.addEventListener('cv-change', () => events.push('cv-change'))
+
+      el.open = true
+      await settle(el)
+
+      expect(events).toEqual([])
+      expect(el.open).toBe(true)
+    })
+  })
+
+  describe('option added after mount with selected attribute', () => {
+    it('honors a freshly slotted selected option', async () => {
+      const el = await createSelect(
+        {},
+        `<cv-select-option value="a">Alpha</cv-select-option>`,
+      )
+      expect(el.value).toBe('')
+
+      const added = document.createElement('cv-select-option') as CVSelectOption
+      added.value = 'b'
+      added.textContent = 'Beta'
+      added.setAttribute('selected', '')
+      el.append(added)
+      await settle(el)
+      await settle(el)
+
+      expect(el.value).toBe('b')
+      expect((el.querySelector('cv-select-option[value="b"]') as CVSelectOption).selected).toBe(true)
+    })
+  })
+
+  describe('programmatic selectedValues keeps open multi-select open', () => {
+    it('does not close the dropdown when selectedValues is set while open', async () => {
+      const el = await createSelect({selectionMode: 'multiple', closeOnSelect: false})
+      getTrigger(el).dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+      await settle(el)
+      expect(el.open).toBe(true)
+
+      el.selectedValues = ['a', 'b']
+      await settle(el)
+
+      expect(el.open).toBe(true)
+      expect(el.selectedValues).toEqual(['a', 'b'])
+    })
+  })
+
   describe('form association', () => {
     it('declares formAssociated for the custom element', () => {
       expect(CVSelect.formAssociated).toBe(true)
@@ -912,6 +1152,44 @@ describe('cv-select', () => {
       await settle(el)
 
       expect(el.checkValidity()).toBe(true)
+    })
+
+    it('becomes invalid again when a required select is cleared programmatically', async () => {
+      const el = await createSelect(
+        {required: true},
+        `
+          <cv-select-option value="a" selected>Alpha</cv-select-option>
+          <cv-select-option value="b">Beta</cv-select-option>
+        `,
+      )
+
+      expect(el.checkValidity()).toBe(true)
+
+      el.value = ''
+      await settle(el)
+      expect(el.checkValidity()).toBe(false)
+    })
+
+    it('form reset restores the default selection from the selected attribute', async () => {
+      const el = await createSelect(
+        {},
+        `
+          <cv-select-option value="a" selected>Alpha</cv-select-option>
+          <cv-select-option value="b">Beta</cv-select-option>
+        `,
+      )
+      expect(el.value).toBe('a')
+
+      el.value = 'b'
+      await settle(el)
+      expect(el.value).toBe('b')
+
+      el.formResetCallback()
+      await settle(el)
+
+      expect(el.value).toBe('a')
+      expect((el.querySelector('cv-select-option[value="a"]') as CVSelectOption).selected).toBe(true)
+      expect((el.querySelector('cv-select-option[value="b"]') as CVSelectOption).selected).toBe(false)
     })
   })
 })
