@@ -48,6 +48,64 @@ describe('cv-checkbox', () => {
     expect(changeEvents).toEqual([{checked: true, indeterminate: false, value: true}])
   })
 
+  it('toggles on imperative host click()', async () => {
+    CVCheckbox.define()
+
+    const checkbox = document.createElement('cv-checkbox') as CVCheckbox
+    const changes: boolean[] = []
+    checkbox.addEventListener('cv-change', (event) => {
+      changes.push((event as CustomEvent<{checked: boolean}>).detail.checked)
+    })
+    document.body.append(checkbox)
+    await settle(checkbox)
+
+    checkbox.click()
+    await settle(checkbox)
+
+    expect(checkbox.checked).toBe(true)
+    expect(changes).toEqual([true])
+  })
+
+  it('toggles on a host-targeted click (label association) without double-handling base clicks', async () => {
+    CVCheckbox.define()
+
+    const checkbox = document.createElement('cv-checkbox') as CVCheckbox
+    const changes: boolean[] = []
+    checkbox.addEventListener('cv-change', (event) => {
+      changes.push((event as CustomEvent<{checked: boolean}>).detail.checked)
+    })
+    document.body.append(checkbox)
+    await settle(checkbox)
+
+    // A label-association click dispatches a click whose target is the host.
+    checkbox.dispatchEvent(new MouseEvent('click', {bubbles: false, composed: true}))
+    await settle(checkbox)
+    expect(checkbox.checked).toBe(true)
+    expect(changes).toEqual([true])
+
+    // A click that passes through the inner [part="base"] must toggle exactly
+    // once (the host handler must not double-handle it).
+    const base = checkbox.shadowRoot?.querySelector('[part="base"]') as HTMLElement
+    base.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+    await settle(checkbox)
+    expect(checkbox.checked).toBe(false)
+    expect(changes).toEqual([true, false])
+  })
+
+  it('does not toggle on host click() when disabled', async () => {
+    CVCheckbox.define()
+
+    const checkbox = document.createElement('cv-checkbox') as CVCheckbox
+    checkbox.disabled = true
+    document.body.append(checkbox)
+    await settle(checkbox)
+
+    checkbox.click()
+    await settle(checkbox)
+
+    expect(checkbox.checked).toBe(false)
+  })
+
   it('toggles on Space keyboard and reflects aria-checked', async () => {
     CVCheckbox.define()
 
@@ -165,6 +223,70 @@ describe('cv-checkbox', () => {
     expect(base.getAttribute('aria-label')).toBe('Select renamed item')
   })
 
+  it('toggles back to unchecked on a second click and emits both transitions', async () => {
+    CVCheckbox.define()
+
+    const checkbox = document.createElement('cv-checkbox') as CVCheckbox
+    const values: Array<boolean | 'mixed'> = []
+
+    checkbox.addEventListener('cv-change', (event) => {
+      values.push((event as CustomEvent<{value: boolean | 'mixed'}>).detail.value)
+    })
+
+    document.body.append(checkbox)
+    await settle(checkbox)
+
+    const base = checkbox.shadowRoot?.querySelector('[part="base"]') as HTMLElement
+    base.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+    await settle(checkbox)
+    base.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+    await settle(checkbox)
+
+    expect(checkbox.checked).toBe(false)
+    expect(values).toEqual([true, false])
+  })
+
+  it('does not emit input/change events on programmatic state changes', async () => {
+    CVCheckbox.define()
+
+    const checkbox = document.createElement('cv-checkbox') as CVCheckbox
+    let eventCount = 0
+
+    checkbox.addEventListener('cv-input', () => {
+      eventCount += 1
+    })
+    checkbox.addEventListener('cv-change', () => {
+      eventCount += 1
+    })
+
+    document.body.append(checkbox)
+    await settle(checkbox)
+
+    checkbox.checked = true
+    await settle(checkbox)
+    checkbox.indeterminate = true
+    await settle(checkbox)
+
+    const base = checkbox.shadowRoot?.querySelector('[part="base"]') as HTMLElement
+
+    expect(eventCount).toBe(0)
+    expect(base.getAttribute('aria-checked')).toBe('mixed')
+  })
+
+  it('does not toggle on Enter keydown', async () => {
+    CVCheckbox.define()
+
+    const checkbox = document.createElement('cv-checkbox') as CVCheckbox
+    document.body.append(checkbox)
+    await settle(checkbox)
+
+    const base = checkbox.shadowRoot?.querySelector('[part="base"]') as HTMLElement
+    base.dispatchEvent(new KeyboardEvent('keydown', {key: 'Enter', bubbles: true}))
+    await settle(checkbox)
+
+    expect(checkbox.checked).toBe(false)
+  })
+
   describe('form association', () => {
     it('declares formAssociated for the custom element', () => {
       expect(CVCheckbox.formAssociated).toBe(true)
@@ -206,6 +328,59 @@ describe('cv-checkbox', () => {
       await settle(checkbox)
 
       expect(checkbox.checkValidity()).toBe(true)
+    })
+
+    it('treats required indeterminate checkbox as invalid even when checked', async () => {
+      CVCheckbox.define()
+
+      const checkbox = document.createElement('cv-checkbox') as CVCheckbox
+      checkbox.required = true
+      checkbox.checked = true
+      checkbox.indeterminate = true
+      document.body.append(checkbox)
+      await settle(checkbox)
+
+      expect(checkbox.checkValidity()).toBe(false)
+    })
+
+    it('restores captured default state on form reset callback', async () => {
+      CVCheckbox.define()
+
+      const checkbox = document.createElement('cv-checkbox') as CVCheckbox
+      checkbox.checked = true
+      document.body.append(checkbox)
+      await settle(checkbox)
+
+      const base = checkbox.shadowRoot?.querySelector('[part="base"]') as HTMLElement
+      base.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+      await settle(checkbox)
+      expect(checkbox.checked).toBe(false)
+
+      checkbox.formResetCallback()
+      await settle(checkbox)
+
+      expect(checkbox.checked).toBe(true)
+      expect(checkbox.indeterminate).toBe(false)
+    })
+
+    it('applies restored state on form state restore callback', async () => {
+      CVCheckbox.define()
+
+      const checkbox = document.createElement('cv-checkbox') as CVCheckbox
+      checkbox.indeterminate = true
+      document.body.append(checkbox)
+      await settle(checkbox)
+
+      checkbox.formStateRestoreCallback('on')
+      await settle(checkbox)
+
+      expect(checkbox.checked).toBe(true)
+      expect(checkbox.indeterminate).toBe(false)
+
+      checkbox.formStateRestoreCallback(null)
+      await settle(checkbox)
+
+      expect(checkbox.checked).toBe(false)
     })
   })
 })
