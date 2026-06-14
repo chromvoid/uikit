@@ -107,6 +107,7 @@ export class CVTable extends ReatomLitElement {
   private rowRecords: TableRowRecord[] = []
   private columnListeners = new WeakMap<CVTableColumn, {click: EventListener; keydown: EventListener}>()
   private rowListeners = new WeakMap<CVTableRow, EventListener>()
+  private childObserver: MutationObserver | null = null
   private model: TableModel
 
   constructor() {
@@ -205,12 +206,43 @@ export class CVTable extends ReatomLitElement {
   override connectedCallback(): void {
     super.connectedCallback()
     this.rebuildModelFromSlot(false, false)
+    this.observeChildren()
   }
 
   override disconnectedCallback(): void {
     super.disconnectedCallback()
+    this.childObserver?.disconnect()
+    this.childObserver = null
     this.detachColumnListeners()
     this.detachRowListeners()
+  }
+
+  /**
+   * Rows / columns added after the first render WITHOUT an explicit `slot`
+   * attribute never get auto-assigned to a named slot until a slotchange fires,
+   * and a slotchange on a named slot only fires once the element already carries
+   * that slot — a chicken-and-egg deadlock. Observe direct children so that
+   * late-added cv-table-row / cv-table-column elements (and removals) trigger a
+   * rebuild which assigns their slot and registers them in the model.
+   */
+  private observeChildren(): void {
+    if (this.childObserver) return
+
+    this.childObserver = new MutationObserver((mutations) => {
+      const touchesTableChild = mutations.some((mutation) =>
+        [...mutation.addedNodes, ...mutation.removedNodes].some((node) => {
+          if (!(node instanceof Element)) return false
+          const tag = node.tagName.toLowerCase()
+          return tag === CVTableColumn.elementName || tag === CVTableRow.elementName
+        }),
+      )
+
+      if (touchesTableChild) {
+        this.rebuildModelFromSlot(true, true)
+      }
+    })
+
+    this.childObserver.observe(this, {childList: true})
   }
 
   override willUpdate(changedProperties: PropertyValues): void {
@@ -230,7 +262,7 @@ export class CVTable extends ReatomLitElement {
     }
 
     if (changedProperties.has('sortColumn') || changedProperties.has('sortDirection')) {
-      const nextSortColumn = this.sortColumn.trim() || null
+      const nextSortColumn = this.normalizeText(this.sortColumn) || null
       const nextSortDirection = this.normalizeSortDirection(this.sortDirection)
 
       const current = this.captureSortState()
@@ -238,14 +270,15 @@ export class CVTable extends ReatomLitElement {
         return
       }
 
-      const previous = current
       if (!nextSortColumn || nextSortDirection === 'none') {
         this.model.actions.clearSort()
       } else {
         this.model.actions.sortBy(nextSortColumn, nextSortDirection)
       }
 
-      this.applySortInteraction(previous)
+      // Programmatic property/attribute writes are silent, matching native
+      // form controls (user interactions go through handleColumnClick/KeyDown).
+      this.applySortInteraction(current, true)
     }
   }
 
@@ -255,6 +288,13 @@ export class CVTable extends ReatomLitElement {
     if (!changedProperties.has('sortColumn') && !changedProperties.has('sortDirection')) {
       this.syncElementsFromModel()
     }
+  }
+
+  // Lit's String converter resolves a removed attribute to `null`, so guard
+  // against `null.trim()` TypeErrors when sort-column / aria-label /
+  // aria-labelledby are removed at runtime.
+  private normalizeText(value: string | null | undefined): string {
+    return (value ?? '').trim()
   }
 
   private normalizeSortDirection(value: string): TableSortDirection {
@@ -334,12 +374,27 @@ export class CVTable extends ReatomLitElement {
   }
 
   private rebuildModelFromSlot(preserveSort: boolean, requestRender = true): void {
-    const previousSort = preserveSort
-      ? this.captureSortState()
-      : {
-          sortColumnId: this.sortColumn.trim() || null,
-          sortDirection: this.normalizeSortDirection(this.sortDirection),
-        }
+    // Pattern 9: a `sort-column` set declaratively (or via property) before the
+    // columns are slotted resolves against an empty model, so when preserving
+    // from the model returns null, fall back to the declared property values.
+    const declaredSort = {
+      sortColumnId: this.normalizeText(this.sortColumn) || null,
+      sortDirection: this.normalizeSortDirection(this.sortDirection),
+    }
+    let previousSort: TableSortSnapshot
+    if (preserveSort) {
+      const captured = this.captureSortState()
+      previousSort = captured.sortColumnId ? captured : declaredSort
+    } else {
+      previousSort = declaredSort
+    }
+
+    // Preserve selection & focus across a model rebuild (config-prop change,
+    // late row/column registration, slotchange). createTable would otherwise
+    // silently reset both with no cv-selection-change.
+    const previousSelectedRowIds = Array.from(this.model.state.selectedRowIds())
+    const previousFocusedRowIndex = this.model.state.focusedRowIndex()
+    const previousFocusedColumnIndex = this.model.state.focusedColumnIndex()
 
     this.detachColumnListeners()
     this.detachRowListeners()
@@ -382,8 +437,11 @@ export class CVTable extends ReatomLitElement {
       previousSort.sortColumnId && columnIds.has(previousSort.sortColumnId) ? previousSort.sortColumnId : null
     const initialSortDirection = initialSortColumnId ? previousSort.sortDirection : 'none'
 
-    const normalizedLabel = this.ariaLabel.trim()
-    const normalizedLabelledBy = this.ariaLabelledBy.trim()
+    const normalizedLabel = this.normalizeText(this.ariaLabel)
+    const normalizedLabelledBy = this.normalizeText(this.ariaLabelledBy)
+
+    const currentRowIds = new Set(this.rowRecords.map((row) => row.id))
+    const preservedSelectedRowIds = previousSelectedRowIds.filter((id) => currentRowIds.has(id))
 
     this.model = createTable({
       idBase: this.idBase,
@@ -401,6 +459,9 @@ export class CVTable extends ReatomLitElement {
       ariaLabelledBy: normalizedLabelledBy || undefined,
       initialSortColumnId,
       initialSortDirection,
+      initialSelectedRowIds: preservedSelectedRowIds,
+      initialFocusedRowIndex: previousFocusedRowIndex,
+      initialFocusedColumnIndex: previousFocusedColumnIndex,
       selectable: this.selectable || false,
       interactive: this.interactive,
       pageSize: this.pageSize > 0 ? this.pageSize : 10,
@@ -535,8 +596,11 @@ export class CVTable extends ReatomLitElement {
 
     const ctrlOrMeta = event.ctrlKey || event.metaKey
     const isCtrlA = (event.key === 'a' || event.key === 'A') && ctrlOrMeta
+    // Only intercept Ctrl/Cmd+A (select-all) when multi-selection is active;
+    // otherwise let the browser handle it.
+    const isSelectAll = isCtrlA && this.selectable === 'multi'
 
-    if (navigationKeys.has(event.key) || isCtrlA) {
+    if (navigationKeys.has(event.key) || isSelectAll) {
       event.preventDefault()
     }
 
@@ -574,7 +638,13 @@ export class CVTable extends ReatomLitElement {
       record.element.slot = 'columns'
       record.element.setAttribute('role', headerProps.role)
       record.element.setAttribute('aria-colindex', String(headerProps['aria-colindex']))
-      record.element.setAttribute('aria-sort', headerProps['aria-sort'] ?? 'none')
+      // aria-sort is only meaningful on sortable columns; non-sortable columns
+      // must not advertise aria-sort="none".
+      if (record.sortable) {
+        record.element.setAttribute('aria-sort', headerProps['aria-sort'] ?? 'none')
+      } else {
+        record.element.removeAttribute('aria-sort')
+      }
       record.element.sortDirection = headerProps['aria-sort'] ?? 'none'
       record.element.sortable = record.sortable
 
@@ -677,11 +747,15 @@ export class CVTable extends ReatomLitElement {
     )
   }
 
-  private applySortInteraction(previous: TableSortSnapshot): void {
+  private applySortInteraction(previous: TableSortSnapshot, silent = false): void {
     this.syncElementsFromModel()
 
     const next = this.captureSortState()
     this.syncControlledValuesFromModel()
+
+    if (silent) {
+      return
+    }
 
     if (previous.sortColumnId === next.sortColumnId && previous.sortDirection === next.sortDirection) {
       return

@@ -994,4 +994,344 @@ describe('cv-table', () => {
       )
     })
   })
+
+  // --- corner cases ---
+
+  describe('corner cases', () => {
+    it('renders without errors when the table has no columns or rows', async () => {
+      const table = document.createElement('cv-table') as CVTable
+      table.ariaLabel = 'Empty'
+      document.body.append(table)
+      await settle(table)
+
+      const base = getBase(table)
+      expect(base).not.toBeNull()
+      expect(base.getAttribute('aria-colcount')).toBe('0')
+      expect(base.getAttribute('aria-rowcount')).toBe('0')
+    })
+
+    it('total-row-count and total-column-count override aria counts', async () => {
+      const table = await createTable({totalRowCount: 100, totalColumnCount: 8})
+      const base = getBase(table)
+
+      expect(base.getAttribute('aria-rowcount')).toBe('100')
+      expect(base.getAttribute('aria-colcount')).toBe('8')
+    })
+
+    it('clicking a selected row in multi mode deselects it', async () => {
+      const table = await createTable({selectable: 'multi'})
+      const row1 = table.querySelector('cv-table-row[value="row1"]') as CVTableRow
+
+      row1.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+      await settle(table)
+      expect(row1.getAttribute('aria-selected')).toBe('true')
+
+      row1.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+      await settle(table)
+      expect(row1.getAttribute('aria-selected')).toBe('false')
+      expect(row1.selected).toBe(false)
+    })
+
+    it('Space toggles selection of the focused row in interactive selectable table', async () => {
+      const table = await createTable({interactive: true, selectable: 'multi'})
+      const base = getBase(table)
+      const row1 = table.querySelector('cv-table-row[value="row1"]') as CVTableRow
+
+      let detail: unknown
+      table.addEventListener('cv-selection-change', (event) => {
+        detail = (event as CustomEvent).detail
+      })
+
+      base.dispatchEvent(new KeyboardEvent('keydown', {key: ' ', bubbles: true}))
+      await settle(table)
+
+      expect(row1.getAttribute('aria-selected')).toBe('true')
+      expect(detail).toEqual(
+        expect.objectContaining({selectedRowIds: expect.arrayContaining(['row1'])}),
+      )
+    })
+
+    it('Ctrl+A selects all rows in interactive multi-select table', async () => {
+      const table = await createTable({interactive: true, selectable: 'multi'})
+      const base = getBase(table)
+
+      base.dispatchEvent(new KeyboardEvent('keydown', {key: 'a', ctrlKey: true, bubbles: true}))
+      await settle(table)
+
+      const rows = table.querySelectorAll('cv-table-row')
+      for (const row of rows) {
+        expect(row.getAttribute('aria-selected')).toBe('true')
+      }
+    })
+
+    it('PageDown clamps focus to the last row', async () => {
+      const table = await createTable({interactive: true})
+      const base = getBase(table)
+
+      base.dispatchEvent(new KeyboardEvent('keydown', {key: 'PageDown', bubbles: true}))
+      await settle(table)
+
+      const cells = table.querySelectorAll('cv-table-cell')
+      // Two rows, two columns: cell at (last row, first column) is index 2
+      expect(cells.item(2)?.getAttribute('tabindex')).toBe('0')
+    })
+
+    it('sorting another column resets aria-sort on the previously sorted column', async () => {
+      const table = document.createElement('cv-table') as CVTable
+      table.ariaLabel = 'Test'
+      const name = createColumn('name', 'Name', {sortable: true})
+      const status = createColumn('status', 'Status', {sortable: true})
+      table.append(
+        name,
+        status,
+        createRow('r1', [createCell('name', 'Alice'), createCell('status', 'active')]),
+      )
+      document.body.append(table)
+      await settle(table)
+
+      name.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+      await settle(table)
+      expect(name.getAttribute('aria-sort')).toBe('ascending')
+
+      status.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+      await settle(table)
+
+      expect(name.getAttribute('aria-sort')).toBe('none')
+      expect(status.getAttribute('aria-sort')).toBe('ascending')
+      expect(table.sortColumn).toBe('status')
+      expect(table.sortDirection).toBe('ascending')
+    })
+
+    it('preserves sort state when page-size changes', async () => {
+      const table = await createTable()
+      const nameCol = table.querySelector('cv-table-column[value="name"]') as CVTableColumn
+
+      nameCol.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+      await settle(table)
+      expect(table.sortColumn).toBe('name')
+
+      table.pageSize = 25
+      await settle(table)
+
+      expect(table.sortColumn).toBe('name')
+      expect(table.sortDirection).toBe('ascending')
+      expect(nameCol.getAttribute('aria-sort')).toBe('ascending')
+    })
+
+    it('clicking a row does nothing when selectable is not set', async () => {
+      const table = await createTable()
+      const row1 = table.querySelector('cv-table-row[value="row1"]') as CVTableRow
+      let selectionEvents = 0
+      table.addEventListener('cv-selection-change', () => selectionEvents++)
+
+      row1.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+      await settle(table)
+
+      expect(row1.hasAttribute('aria-selected')).toBe(false)
+      expect(selectionEvents).toBe(0)
+    })
+  })
+
+  // --- batch 10 regression fixes ---
+
+  describe('null-safe attribute removal', () => {
+    it('removing sort-column does not throw and clears sort', async () => {
+      const table = await createTable()
+      const nameCol = table.querySelector('cv-table-column[value="name"]') as CVTableColumn
+
+      nameCol.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+      await settle(table)
+      expect(table.sortColumn).toBe('name')
+
+      expect(() => table.removeAttribute('sort-column')).not.toThrow()
+      await settle(table)
+      expect(table.sortColumn).toBe('')
+    })
+
+    it('removing aria-label does not throw on rebuild', async () => {
+      const table = await createTable()
+      // Set then remove the attribute (Lit String converter yields null).
+      table.setAttribute('aria-label', 'Some table')
+      await settle(table)
+      table.removeAttribute('aria-label')
+
+      // Force a rebuild by changing a config prop.
+      expect(() => {
+        table.pageSize = 5
+      }).not.toThrow()
+      await settle(table)
+
+      const base = getBase(table)
+      // Falls back to default accessible name when label removed.
+      expect(base.getAttribute('aria-label')).toBe('Table')
+    })
+
+    it('removing aria-labelledby does not throw on rebuild', async () => {
+      const table = await createTable({ariaLabelledBy: 'external-id', ariaLabel: ''})
+      table.setAttribute('aria-labelledby', 'external-id')
+      await settle(table)
+      table.removeAttribute('aria-labelledby')
+      expect(() => {
+        table.pageSize = 7
+      }).not.toThrow()
+      await settle(table)
+    })
+  })
+
+  describe('late row/column registration', () => {
+    it('registers a row appended after first render (no explicit slot attribute)', async () => {
+      const table = await createTable({selectable: 'multi'})
+
+      const newRow = createRow('row3', [
+        createCell('name', 'Carol'),
+        createCell('email', 'carol@example.com'),
+      ])
+      table.append(newRow)
+      await settle(table)
+
+      // The late row got assigned to the rows slot and registered in the model.
+      expect(newRow.slot).toBe('rows')
+      expect(newRow.getAttribute('role')).toBe('row')
+
+      // And it is wired up: clicking it selects it.
+      const selections: string[][] = []
+      table.addEventListener('cv-selection-change', (e) =>
+        selections.push((e as CustomEvent).detail.selectedRowIds),
+      )
+      newRow.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+      await settle(table)
+
+      expect(newRow.getAttribute('aria-selected')).toBe('true')
+      expect(selections.at(-1)).toContain('row3')
+    })
+
+    it('registers a column appended after first render', async () => {
+      const table = await createTable()
+
+      const newCol = createColumn('status', 'Status', {sortable: true})
+      table.append(newCol)
+      await settle(table)
+
+      expect(newCol.slot).toBe('columns')
+      expect(newCol.getAttribute('role')).toBe('columnheader')
+    })
+
+    it('drops a removed row from the model', async () => {
+      const table = await createTable()
+      const row2 = table.querySelector('cv-table-row[value="row2"]') as CVTableRow
+
+      row2.remove()
+      await settle(table)
+
+      expect(table.querySelectorAll('cv-table-row').length).toBe(1)
+    })
+  })
+
+  describe('selection & focus survive model rebuild', () => {
+    it('keeps selection when page-size changes', async () => {
+      const table = await createTable({selectable: 'multi'})
+      const row1 = table.querySelector('cv-table-row[value="row1"]') as CVTableRow
+
+      row1.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+      await settle(table)
+      expect(row1.getAttribute('aria-selected')).toBe('true')
+
+      let selectionEvents = 0
+      table.addEventListener('cv-selection-change', () => selectionEvents++)
+
+      table.pageSize = 50
+      await settle(table)
+
+      expect(row1.getAttribute('aria-selected')).toBe('true')
+      // A silent rebuild must not fire a spurious selection-change.
+      expect(selectionEvents).toBe(0)
+    })
+
+    it('keeps selection when a new row is appended', async () => {
+      const table = await createTable({selectable: 'multi'})
+      const row1 = table.querySelector('cv-table-row[value="row1"]') as CVTableRow
+
+      row1.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+      await settle(table)
+      expect(row1.getAttribute('aria-selected')).toBe('true')
+
+      table.append(
+        createRow('row3', [createCell('name', 'Carol'), createCell('email', 'carol@example.com')]),
+      )
+      await settle(table)
+
+      expect(row1.getAttribute('aria-selected')).toBe('true')
+    })
+  })
+
+  describe('programmatic sort writes are silent', () => {
+    it('does not emit cv-input/cv-change when sortColumn is set programmatically', async () => {
+      const table = await createTable()
+      let inputs = 0
+      let changes = 0
+      table.addEventListener('cv-input', () => inputs++)
+      table.addEventListener('cv-change', () => changes++)
+
+      table.sortColumn = 'name'
+      table.sortDirection = 'ascending'
+      await settle(table)
+
+      const nameCol = table.querySelector('cv-table-column[value="name"]') as CVTableColumn
+      expect(nameCol.getAttribute('aria-sort')).toBe('ascending')
+      expect(inputs).toBe(0)
+      expect(changes).toBe(0)
+    })
+
+    it('still emits cv-change on a real column-header click', async () => {
+      const table = await createTable()
+      let changes = 0
+      table.addEventListener('cv-change', () => changes++)
+
+      const nameCol = table.querySelector('cv-table-column[value="name"]') as CVTableColumn
+      nameCol.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+      await settle(table)
+
+      expect(changes).toBe(1)
+    })
+  })
+
+  describe('non-sortable columns and Ctrl+A', () => {
+    it('non-sortable columns do not expose aria-sort', async () => {
+      const table = await createTable()
+      const emailCol = table.querySelector('cv-table-column[value="email"]') as CVTableColumn
+      expect(emailCol.hasAttribute('aria-sort')).toBe(false)
+    })
+
+    it('does not preventDefault Ctrl+A when not multi-selectable', async () => {
+      const table = await createTable({interactive: true, selectable: 'single'})
+      const base = getBase(table)
+
+      const event = new KeyboardEvent('keydown', {
+        key: 'a',
+        ctrlKey: true,
+        bubbles: true,
+        cancelable: true,
+      })
+      base.dispatchEvent(event)
+      await settle(table)
+
+      expect(event.defaultPrevented).toBe(false)
+    })
+
+    it('preventDefaults Ctrl+A when multi-selectable', async () => {
+      const table = await createTable({interactive: true, selectable: 'multi'})
+      const base = getBase(table)
+
+      const event = new KeyboardEvent('keydown', {
+        key: 'a',
+        ctrlKey: true,
+        bubbles: true,
+        cancelable: true,
+      })
+      base.dispatchEvent(event)
+      await settle(table)
+
+      expect(event.defaultPrevented).toBe(true)
+    })
+  })
 })
