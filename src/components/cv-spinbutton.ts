@@ -1,6 +1,7 @@
 import {createSpinbutton, type SpinbuttonModel} from '@chromvoid/headless-ui/spinbutton'
 import {css, html, nothing} from 'lit'
 import type {PropertyValues} from 'lit'
+import {live} from 'lit/directives/live.js'
 
 import {FormAssociatedReatomElement} from '../form-associated/FormAssociatedReatomElement'
 import type {FormAssociatedValidity} from '../form-associated/withFormAssociated'
@@ -211,14 +212,17 @@ export class CVSpinbutton extends FormAssociatedReatomElement {
   protected override onFormReset(): void {
     this.customValidityMessage = ''
     this.draftValue = null
-    this.setValue(this.initialValueSnapshot)
+    // Native form reset restores a control's value even when it is disabled or
+    // read-only; the model's `setValue` is gated by `canMutate()`, so route
+    // reset/restore through a force-path that bypasses the gate.
+    this.forceModelValue(this.initialValueSnapshot)
   }
 
   protected override onFormStateRestore(state: string | File | FormData | null): void {
     if (typeof state !== 'string') return
     const parsed = Number(state)
     if (!Number.isFinite(parsed)) return
-    this.setValue(parsed)
+    this.forceModelValue(parsed)
   }
 
   get type(): string {
@@ -377,6 +381,29 @@ export class CVSpinbutton extends FormAssociatedReatomElement {
     this.dispatchChange(detail)
   }
 
+  /**
+   * Writes a value into the model even when the control is disabled/read-only.
+   * The headless `setValue` action is gated by `canMutate()`; native reset and
+   * form-state restoration must still update a disabled control, so we briefly
+   * lift the gate, write, then restore the effective disabled/read-only state.
+   */
+  private forceModelValue(value: number): void {
+    const previousValue = this.model.state.value()
+    const wasDisabled = this.model.state.isDisabled()
+    const wasReadOnly = this.model.state.isReadOnly()
+
+    if (wasDisabled) this.model.actions.setDisabled(false)
+    if (wasReadOnly) this.model.actions.setReadOnly(false)
+
+    this.model.actions.setValue(value)
+
+    if (wasDisabled) this.model.actions.setDisabled(true)
+    if (wasReadOnly) this.model.actions.setReadOnly(true)
+
+    this.draftValue = null
+    this.syncFromModelAndMaybeEmit(previousValue, false)
+  }
+
   private applyProgrammaticMutation(mutate: () => void): void {
     const previousValue = this.model.state.value()
     mutate()
@@ -390,6 +417,15 @@ export class CVSpinbutton extends FormAssociatedReatomElement {
     return Math.max(normalized, 1)
   }
 
+  private seedModelFromDraft(): void {
+    if (this.draftValue == null) return
+    const trimmed = this.draftValue.trim()
+    if (trimmed === '') return
+    const parsed = Number(trimmed)
+    if (!Number.isFinite(parsed)) return
+    this.model.actions.setValue(parsed)
+  }
+
   private commitDraftFromInput(emitEvents: boolean): void {
     const source = this.draftValue ?? this.inputElement?.value ?? String(this.model.state.value())
     const trimmed = source.trim()
@@ -397,6 +433,9 @@ export class CVSpinbutton extends FormAssociatedReatomElement {
       this.draftValue = null
       this.syncValueFromModel()
       this.syncFormAssociatedState()
+      // Force a re-render so live() snaps the visible text back to the committed
+      // value even when the model value is unchanged.
+      this.requestUpdate()
       return
     }
 
@@ -405,6 +444,7 @@ export class CVSpinbutton extends FormAssociatedReatomElement {
       this.draftValue = null
       this.syncValueFromModel()
       this.syncFormAssociatedState()
+      this.requestUpdate()
       return
     }
 
@@ -491,6 +531,10 @@ export class CVSpinbutton extends FormAssociatedReatomElement {
     if (!spinbuttonKeysToPrevent.has(event.key)) return
 
     event.preventDefault()
+    // Native <input type=number> steps from the currently typed (uncommitted)
+    // draft, not the last committed value. Seed the model from a valid draft
+    // before stepping so e.g. typing "70" then ArrowUp yields 71, not (committed)+1.
+    this.seedModelFromDraft()
     const previousValue = this.model.state.value()
     this.model.contracts.getSpinbuttonProps().onKeyDown(event)
     this.draftValue = null
@@ -536,7 +580,7 @@ export class CVSpinbutton extends FormAssociatedReatomElement {
           ?readonly=${this.readOnly}
           inputmode="decimal"
           part="input"
-          .value=${displayValue}
+          .value=${live(displayValue)}
           @input=${this.handleInput}
           @blur=${this.handleInputBlur}
           @keydown=${this.handleSpinbuttonKeyDown}

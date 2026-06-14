@@ -206,6 +206,206 @@ describe('cv-spinbutton', () => {
     })
   })
 
+  describe('keyboard interaction', () => {
+    it('steps with ArrowUp/ArrowDown and emits input/change', async () => {
+      const el = await createSpinbutton({value: 4, min: 0, max: 10, step: 2})
+      const input = getInput(el)
+      const inputDetails: Array<{value: number}> = []
+      const changeDetails: Array<{value: number}> = []
+
+      el.addEventListener('cv-input', (event) => {
+        inputDetails.push((event as unknown as CustomEvent<{value: number}>).detail)
+      })
+      el.addEventListener('cv-change', (event) => {
+        changeDetails.push((event as unknown as CustomEvent<{value: number}>).detail)
+      })
+
+      input.dispatchEvent(new KeyboardEvent('keydown', {key: 'ArrowUp', bubbles: true}))
+      await settle(el)
+      expect(el.value).toBe(6)
+
+      input.dispatchEvent(new KeyboardEvent('keydown', {key: 'ArrowDown', bubbles: true}))
+      input.dispatchEvent(new KeyboardEvent('keydown', {key: 'ArrowDown', bubbles: true}))
+      await settle(el)
+
+      expect(el.value).toBe(2)
+      expect(inputDetails).toEqual([{value: 6}, {value: 4}, {value: 2}])
+      expect(changeDetails).toEqual([{value: 6}, {value: 4}, {value: 2}])
+    })
+
+    it('jumps with PageUp/PageDown using the large step', async () => {
+      const el = await createSpinbutton({value: 50, min: 0, max: 100, largeStep: 25})
+      const input = getInput(el)
+
+      input.dispatchEvent(new KeyboardEvent('keydown', {key: 'PageUp', bubbles: true}))
+      await settle(el)
+      expect(el.value).toBe(75)
+
+      input.dispatchEvent(new KeyboardEvent('keydown', {key: 'PageDown', bubbles: true}))
+      input.dispatchEvent(new KeyboardEvent('keydown', {key: 'PageDown', bubbles: true}))
+      await settle(el)
+      expect(el.value).toBe(25)
+    })
+
+    it('jumps to bounds with Home/End when min/max are set', async () => {
+      const el = await createSpinbutton({value: 5, min: 1, max: 9})
+      const input = getInput(el)
+
+      input.dispatchEvent(new KeyboardEvent('keydown', {key: 'Home', bubbles: true}))
+      await settle(el)
+      expect(el.value).toBe(1)
+
+      input.dispatchEvent(new KeyboardEvent('keydown', {key: 'End', bubbles: true}))
+      await settle(el)
+      expect(el.value).toBe(9)
+    })
+
+    it('blocks keyboard stepping when readOnly without emitting events', async () => {
+      const el = await createSpinbutton({value: 5, readOnly: true})
+      const input = getInput(el)
+      let inputCount = 0
+      let changeCount = 0
+
+      el.addEventListener('cv-input', () => inputCount++)
+      el.addEventListener('cv-change', () => changeCount++)
+
+      input.dispatchEvent(new KeyboardEvent('keydown', {key: 'ArrowUp', bubbles: true}))
+      await settle(el)
+
+      expect(el.value).toBe(5)
+      expect(inputCount).toBe(0)
+      expect(changeCount).toBe(0)
+    })
+  })
+
+  describe('range and parsing corner cases', () => {
+    it('clamps at max without wrapping around', async () => {
+      const el = await createSpinbutton({value: 10, min: 0, max: 10})
+      let inputCount = 0
+      el.addEventListener('cv-input', () => inputCount++)
+
+      getIncrement(el).dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+      getInput(el).dispatchEvent(new KeyboardEvent('keydown', {key: 'ArrowUp', bubbles: true}))
+      await settle(el)
+
+      expect(el.value).toBe(10)
+      expect(inputCount).toBe(0)
+    })
+
+    it('normalizes a swapped min/max range', async () => {
+      const el = await createSpinbutton({value: 5, min: 10, max: 0})
+      const input = getInput(el)
+
+      expect(input.getAttribute('aria-valuemin')).toBe('0')
+      expect(input.getAttribute('aria-valuemax')).toBe('10')
+
+      input.dispatchEvent(new KeyboardEvent('keydown', {key: 'End', bubbles: true}))
+      await settle(el)
+      expect(el.value).toBe(10)
+    })
+
+    it('avoids floating point drift with fractional steps', async () => {
+      const el = await createSpinbutton({value: 0, step: 0.1})
+
+      el.stepUp(3)
+      await settle(el)
+
+      expect(el.value).toBe(0.3)
+      expect(getInput(el).getAttribute('aria-valuenow')).toBe('0.3')
+    })
+
+    it('commits exponent notation typed input', async () => {
+      const el = await createSpinbutton({value: 0})
+      const input = getInput(el)
+
+      input.value = '1e2'
+      input.dispatchEvent(new Event('input', {bubbles: true, composed: true}))
+      input.dispatchEvent(new KeyboardEvent('keydown', {key: 'Enter', bubbles: true}))
+      await settle(el)
+
+      expect(el.value).toBe(100)
+    })
+
+    it('commits negative typed input', async () => {
+      const el = await createSpinbutton({value: 0})
+      const input = getInput(el)
+
+      input.value = '-3'
+      input.dispatchEvent(new Event('input', {bubbles: true, composed: true}))
+      input.dispatchEvent(new FocusEvent('blur', {bubbles: true}))
+      await settle(el)
+
+      expect(el.value).toBe(-3)
+    })
+
+    it('keeps prior value and stays silent for non-numeric text on blur', async () => {
+      const el = await createSpinbutton({value: 5})
+      const input = getInput(el)
+      let inputCount = 0
+      let changeCount = 0
+
+      el.addEventListener('cv-input', () => inputCount++)
+      el.addEventListener('cv-change', () => changeCount++)
+
+      input.value = '12abc'
+      input.dispatchEvent(new Event('input', {bubbles: true, composed: true}))
+      input.dispatchEvent(new FocusEvent('blur', {bubbles: true}))
+      await settle(el)
+
+      expect(el.value).toBe(5)
+      expect(inputCount).toBe(0)
+      expect(changeCount).toBe(0)
+    })
+
+    it('keeps prior value and stays silent for an emptied input on blur', async () => {
+      const el = await createSpinbutton({value: 5})
+      const input = getInput(el)
+      let inputCount = 0
+
+      el.addEventListener('cv-input', () => inputCount++)
+
+      input.value = ''
+      input.dispatchEvent(new Event('input', {bubbles: true, composed: true}))
+      input.dispatchEvent(new FocusEvent('blur', {bubbles: true}))
+      await settle(el)
+
+      expect(el.value).toBe(5)
+      expect(inputCount).toBe(0)
+    })
+
+    it('emits a single input/change pair when blur commits a new value', async () => {
+      const el = await createSpinbutton({value: 0})
+      const input = getInput(el)
+      const inputDetails: Array<{value: number}> = []
+      const changeDetails: Array<{value: number}> = []
+
+      el.addEventListener('cv-input', (event) => {
+        inputDetails.push((event as unknown as CustomEvent<{value: number}>).detail)
+      })
+      el.addEventListener('cv-change', (event) => {
+        changeDetails.push((event as unknown as CustomEvent<{value: number}>).detail)
+      })
+
+      input.value = '7'
+      input.dispatchEvent(new Event('input', {bubbles: true, composed: true}))
+      input.dispatchEvent(new FocusEvent('blur', {bubbles: true}))
+      await settle(el)
+
+      expect(inputDetails).toEqual([{value: 7}])
+      expect(changeDetails).toEqual([{value: 7}])
+    })
+
+    it('ignores increment/decrement clicks when readOnly', async () => {
+      const el = await createSpinbutton({value: 5, readOnly: true})
+
+      getIncrement(el).dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+      getDecrement(el).dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+      await settle(el)
+
+      expect(el.value).toBe(5)
+    })
+  })
+
   describe('imperative API', () => {
     it('supports step/page methods and set/get value', async () => {
       const el = await createSpinbutton({value: 10, step: 2, largeStep: 20})
@@ -303,6 +503,75 @@ describe('cv-spinbutton', () => {
       el.formResetCallback()
       await settle(el)
       expect(el.value).toBe(4)
+    })
+
+    it('restores the initial value on reset even when disabled', async () => {
+      if (!supportsFormAssociated) return
+
+      const form = document.createElement('form')
+      const el = document.createElement('cv-spinbutton') as CVSpinbutton
+      el.value = 4
+      form.append(el)
+      document.body.append(form)
+      await settle(el)
+
+      el.setValue(9)
+      await settle(el)
+      expect(el.value).toBe(9)
+
+      el.disabled = true
+      await settle(el)
+
+      el.formResetCallback()
+      await settle(el)
+      // Native disabled inputs are still restored by a form reset; the model's
+      // canMutate() gate must be bypassed for reset.
+      expect(el.value).toBe(4)
+    })
+
+    it('restores form state even when disabled', async () => {
+      if (!supportsFormAssociated) return
+
+      const el = await createSpinbutton({value: 4})
+      el.disabled = true
+      await settle(el)
+
+      el.formStateRestoreCallback('12')
+      await settle(el)
+      expect(el.value).toBe(12)
+    })
+  })
+
+  describe('batch 9 regressions', () => {
+    it('resyncs the displayed text after an invalid commit', async () => {
+      const el = await createSpinbutton({value: 5})
+      const input = getInput(el)
+
+      input.value = 'abc'
+      input.dispatchEvent(new Event('input', {bubbles: true}))
+      await settle(el)
+
+      input.dispatchEvent(new Event('blur', {bubbles: true}))
+      await settle(el)
+
+      // value/aria stay correct, and the visible text must snap back to it
+      // rather than leaving the rejected "abc" in the field forever.
+      expect(el.value).toBe(5)
+      expect(input.value).toBe('5')
+    })
+
+    it('steps arrow keys from the typed draft, like native number inputs', async () => {
+      const el = await createSpinbutton({value: 5, step: 1})
+      const input = getInput(el)
+
+      input.value = '70'
+      input.dispatchEvent(new Event('input', {bubbles: true}))
+      await settle(el)
+
+      input.dispatchEvent(new KeyboardEvent('keydown', {key: 'ArrowUp', bubbles: true}))
+      await settle(el)
+
+      expect(el.value).toBe(71)
     })
   })
 })
