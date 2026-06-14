@@ -205,6 +205,78 @@ describe('cv-menu-button', () => {
     expect(getPortal()).not.toBeNull()
   })
 
+  it('syncs trigger aria-expanded with open state', async () => {
+    const {menu, trigger} = await mountMenuButton()
+
+    expect(trigger!.getAttribute('aria-expanded')).toBe('false')
+
+    trigger!.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+    await settle(menu)
+    expect(trigger!.getAttribute('aria-expanded')).toBe('true')
+
+    trigger!.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+    await settle(menu)
+    expect(trigger!.getAttribute('aria-expanded')).toBe('false')
+  })
+
+  it('Escape closes the menu and restores focus to the trigger', async () => {
+    const {menu, trigger} = await mountMenuButton()
+
+    trigger!.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+    await settle(menu)
+    expect(menu.open).toBe(true)
+
+    trigger!.dispatchEvent(new KeyboardEvent('keydown', {key: 'Escape', bubbles: true}))
+    await settle(menu)
+
+    expect(menu.open).toBe(false)
+    expect(menu.shadowRoot!.activeElement).toBe(trigger)
+  })
+
+  it('Tab closes the open menu', async () => {
+    const {menu, trigger} = await mountMenuButton()
+
+    trigger!.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+    await settle(menu)
+    expect(menu.open).toBe(true)
+
+    trigger!.dispatchEvent(new KeyboardEvent('keydown', {key: 'Tab', bubbles: true}))
+    await settle(menu)
+
+    expect(menu.open).toBe(false)
+  })
+
+  it('Enter on closed trigger opens the menu and activates the first enabled item', async () => {
+    const {menu, trigger} = await mountMenuButton({
+      content: `
+        Actions
+        <cv-menu-item slot="menu" value="a" disabled>Alpha</cv-menu-item>
+        <cv-menu-item slot="menu" value="b">Beta</cv-menu-item>
+      `,
+    })
+
+    trigger!.dispatchEvent(new KeyboardEvent('keydown', {key: 'Enter', bubbles: true}))
+    await settle(menu)
+
+    expect(menu.open).toBe(true)
+    const activePortalItem = getPortal()?.querySelector('cv-menu-item[data-active="true"]') as CVMenuItem | null
+    expect(activePortalItem?.value).toBe('b')
+  })
+
+  it('typeahead in the open menu activates the matching item for selection', async () => {
+    const {menu, trigger} = await mountMenuButton()
+
+    trigger!.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+    await settle(menu)
+
+    trigger!.dispatchEvent(new KeyboardEvent('keydown', {key: 'g', bubbles: true}))
+    trigger!.dispatchEvent(new KeyboardEvent('keydown', {key: 'Enter', bubbles: true}))
+    await settle(menu)
+
+    expect(menu.value).toBe('c')
+    expect(menu.open).toBe(false)
+  })
+
   it('closes on outside pointer', async () => {
     const {menu, trigger} = await mountMenuButton()
 
@@ -576,6 +648,102 @@ describe('cv-menu-button', () => {
     it('defaults to medium size', async () => {
       const {menu} = await mountMenuButton()
       expect(menu.size).toBe('medium')
+    })
+  })
+
+  // --- removeAttribute('value') null guard ---
+
+  describe('removeAttribute("value") null guard', () => {
+    it('does not throw when value attribute is removed', async () => {
+      const {menu} = await mountMenuButton()
+      menu.setAttribute('value', 'a')
+      await settle(menu)
+
+      expect(() => menu.removeAttribute('value')).not.toThrow()
+      await settle(menu)
+      expect(menu.value).toBe('')
+    })
+  })
+
+  // --- Reconnect (inline item listeners re-attach) ---
+
+  describe('reconnect', () => {
+    it('inline item clicks still select after remove() + re-append()', async () => {
+      const {menu, items} = await mountMenuButton({closeOnSelect: false})
+
+      menu.remove()
+      await settle(menu)
+      document.body.append(menu)
+      await settle(menu)
+
+      // Open so the inline items are interactive, then click an inline item.
+      menu.open = true
+      await settle(menu)
+
+      const inlineItems = Array.from(menu.querySelectorAll('cv-menu-item')) as CVMenuItem[]
+      inlineItems[0]!.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+      await settle(menu)
+
+      expect(menu.value).toBe('a')
+      void items
+    })
+  })
+
+  // --- Programmatic value write while open keeps menu open ---
+
+  describe('programmatic value write while open', () => {
+    it('setting value while the menu is open does not close it', async () => {
+      const {menu, trigger} = await mountMenuButton({closeOnSelect: true})
+
+      trigger!.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+      await settle(menu)
+      expect(menu.open).toBe(true)
+
+      menu.value = 'a'
+      await settle(menu)
+
+      expect(menu.value).toBe('a')
+      expect(menu.open).toBe(true)
+    })
+  })
+
+  // --- Programmatic value='' clears stale selection ---
+
+  describe('programmatic value clearing', () => {
+    it('setting value to "" clears the selected item state', async () => {
+      const {menu, trigger} = await mountMenuButton({closeOnSelect: false})
+
+      trigger!.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+      await settle(menu)
+
+      menu.value = 'a'
+      await settle(menu)
+      expect((menu.querySelector('cv-menu-item[value="a"]') as CVMenuItem).selected).toBe(true)
+
+      menu.value = ''
+      await settle(menu)
+
+      expect(menu.value).toBe('')
+      expect((menu.querySelector('cv-menu-item[value="a"]') as CVMenuItem).selected).toBe(false)
+    })
+  })
+
+  // --- Tab lets focus leave (no keyboard trap) ---
+
+  describe('Tab key', () => {
+    it('Tab on the open menu does not preventDefault (focus can leave)', async () => {
+      const {menu, trigger} = await mountMenuButton()
+
+      trigger!.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+      await settle(menu)
+      expect(menu.open).toBe(true)
+
+      const event = new KeyboardEvent('keydown', {key: 'Tab', bubbles: true, cancelable: true})
+      trigger!.dispatchEvent(event)
+      await settle(menu)
+
+      expect(event.defaultPrevented).toBe(false)
+      expect(menu.open).toBe(false)
     })
   })
 })

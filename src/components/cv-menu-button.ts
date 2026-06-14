@@ -302,6 +302,12 @@ export class CVMenuButton extends ReatomLitElement {
     this.syncContentParts()
     if (!this.model) {
       this.rebuildModelFromSlot(false, false)
+    } else {
+      // Reconnect: disconnectedCallback detached the inline item listeners but
+      // the model survives, so no slotchange fires to re-attach them. Without
+      // this, inline menu item clicks are dead after a remove()+append()
+      // (portal items work since they are rebuilt on open, masking the bug).
+      this.attachItemListeners()
     }
 
     this.syncOutsidePointerListener()
@@ -331,16 +337,36 @@ export class CVMenuButton extends ReatomLitElement {
     if (!this.model) return
 
     if (changedProperties.has('value')) {
-      const next = this.value.trim()
-      if (next.length > 0 && this.value !== next) {
+      // removeAttribute('value') yields null via Lit's String converter; guard
+      // against null.trim() and normalize back to a string.
+      const next = (this.value ?? '').trim()
+      if (this.value !== next) {
         this.value = next
       }
 
-      if (next.length > 0) {
+      if (next.length === 0) {
+        // Programmatically clearing the value must drop the stale selection
+        // instead of leaving the old item marked selected/aria-selected. The
+        // selection is tracked component-side via this.value; rebuild with no
+        // initial value so the previously-selected item is de-selected.
+        const previousValue = (changedProperties.get('value') as string | null | undefined)?.trim()
+        if (previousValue) {
+          const previous = this.captureState()
+          this.rebuildModelFromSlot(true, false, true)
+          this.applyInteractionResult(previous, null)
+        }
+      } else {
         const record = this.itemRecords.find((item) => item.id === next)
         if (record && !record.disabled) {
           const previous = this.captureState()
+          const wasOpen = this.model.state.isOpen()
           this.model.actions.select(next)
+          // A programmatic value write routes through select + closeOnSelect and
+          // would otherwise close an open menu. Mirror cv-menu's re-open guard so
+          // setting the value does not collapse the open menu.
+          if (wasOpen && !this.model.state.isOpen()) {
+            this.model.actions.open()
+          }
           this.applyInteractionResult(previous, next)
         }
       }
@@ -649,12 +675,20 @@ export class CVMenuButton extends ReatomLitElement {
     return fallback
   }
 
-  private rebuildModelFromSlot(preserveState: boolean, requestRender = true): void {
+  private rebuildModelFromSlot(
+    preserveState: boolean,
+    requestRender = true,
+    forceClearSelection = false,
+  ): void {
     const itemElements = this.getItemElements()
 
     const previous = preserveState
       ? this.captureState()
       : {activeId: null, open: this.open, value: this.value || null}
+
+    if (forceClearSelection) {
+      previous.value = null
+    }
     this.detachItemListeners()
 
     this.itemRecords = itemElements.map((element, index) => {
@@ -867,7 +901,7 @@ export class CVMenuButton extends ReatomLitElement {
 
   private captureState() {
     return {
-      value: this.value.trim() || null,
+      value: (this.value ?? '').trim() || null,
       activeId: this.model?.state.activeId() ?? null,
       open: this.model?.state.isOpen() ?? this.open,
       restoreTargetId: this.model?.state.restoreTargetId() ?? null,
@@ -1041,7 +1075,10 @@ export class CVMenuButton extends ReatomLitElement {
   private handleKeyDown(event: KeyboardEvent) {
     if (!this.model) return
 
-    if (menuButtonKeysToPrevent.has(event.key)) {
+    // Tab must move focus out of the menu. The headless model already closes the
+    // menu on Tab, but preventDefaulting it here trapped keyboard focus inside.
+    // Let the browser perform the default Tab focus move (no preventDefault).
+    if (event.key !== 'Tab' && menuButtonKeysToPrevent.has(event.key)) {
       event.preventDefault()
     }
 
