@@ -227,6 +227,18 @@ describe('cv-menu-item', () => {
       const checkmark = item.shadowRoot!.querySelector('[part="checkmark"]')
       expect(checkmark).not.toBeNull()
     })
+
+    it('normal type does not render checkmark part', async () => {
+      const item = await createItem()
+      expect(item.shadowRoot!.querySelector('[part="checkmark"]')).toBeNull()
+    })
+
+    it('radio type renders checkmark part even when unchecked', async () => {
+      const item = await createItem()
+      asTestableMenuItem(item).type = 'radio'
+      await settle(item)
+      expect(item.shadowRoot!.querySelector('[part="checkmark"]')).not.toBeNull()
+    })
   })
 
   // --- Submenu ---
@@ -247,6 +259,20 @@ describe('cv-menu-item', () => {
       const submenuIcon = item.shadowRoot!.querySelector('[part="submenu-icon"]')
       // submenu-icon may not exist yet (RED state expected)
       expect(submenuIcon).not.toBeNull()
+    })
+
+    it('hasSubmenu and submenu-icon reset when submenu content is removed', async () => {
+      const item = await createItemWithSlots(
+        'Share<cv-menu slot="submenu"><cv-menu-item value="email">Email</cv-menu-item></cv-menu>',
+      )
+      expect(item.hasSubmenu).toBe(true)
+
+      item.querySelector('cv-menu')!.remove()
+      await settle(item)
+
+      expect(item.hasSubmenu).toBe(false)
+      expect(item.hasAttribute('has-submenu')).toBe(false)
+      expect(item.shadowRoot!.querySelector('[part="submenu-icon"]')).toBeNull()
     })
   })
 

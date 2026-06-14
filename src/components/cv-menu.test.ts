@@ -1,9 +1,11 @@
 import {afterEach, describe, expect, it} from 'vitest'
 
 import {CVMenu} from './cv-menu'
+import {CVMenuGroup} from './cv-menu-group'
 import {CVMenuItem} from './cv-menu-item'
 
 CVMenu.define()
+CVMenuGroup.define()
 CVMenuItem.define()
 
 const stylesToText = () =>
@@ -344,6 +346,26 @@ describe('cv-menu', () => {
 
       expect(items[2]!.getAttribute('data-active')).toBe('true')
     })
+
+    it('keyboard interaction is safe when all items are disabled', async () => {
+      const menu = document.createElement('cv-menu') as CVMenu
+      menu.open = true
+      menu.innerHTML = `
+        <cv-menu-item value="a" disabled>Alpha</cv-menu-item>
+        <cv-menu-item value="b" disabled>Beta</cv-menu-item>
+      `
+      document.body.append(menu)
+      await settle(menu)
+
+      const root = menu.shadowRoot!.querySelector('[part="base"]') as HTMLElement
+      for (const key of ['ArrowDown', 'ArrowUp', 'Home', 'End', 'Enter']) {
+        root.dispatchEvent(new KeyboardEvent('keydown', {key, bubbles: true}))
+      }
+      await settle(menu)
+
+      expect(menu.value).toBe('')
+      expect(menu.querySelector('cv-menu-item[data-active="true"]')).toBeNull()
+    })
   })
 
   // --- Typeahead ---
@@ -375,6 +397,33 @@ describe('cv-menu', () => {
       const activeItem = items.find((item) => item.getAttribute('data-active') === 'true')
       expect(activeItem).not.toBeUndefined()
       expect(activeItem!.value).toMatch(/^a/)
+    })
+
+    it('repeated same letter cycles through items sharing that prefix', async () => {
+      const {menu, root, items} = await mountMenuWithManyItems({open: true})
+
+      // Initial active is "apple"; the first "a" advances past it
+      root.dispatchEvent(new KeyboardEvent('keydown', {key: 'a', bubbles: true}))
+      await settle(menu)
+      let activeItem = items.find((item) => item.getAttribute('data-active') === 'true')
+      expect(activeItem?.value).toBe('apricot')
+
+      // The second "a" wraps back to "apple"
+      root.dispatchEvent(new KeyboardEvent('keydown', {key: 'a', bubbles: true}))
+      await settle(menu)
+      activeItem = items.find((item) => item.getAttribute('data-active') === 'true')
+      expect(activeItem?.value).toBe('apple')
+    })
+
+    it('multi-letter query matches items by prefix', async () => {
+      const {menu, root, items} = await mountMenuWithManyItems({open: true})
+
+      root.dispatchEvent(new KeyboardEvent('keydown', {key: 'b', bubbles: true}))
+      root.dispatchEvent(new KeyboardEvent('keydown', {key: 'l', bubbles: true}))
+      await settle(menu)
+
+      const activeItem = items.find((item) => item.getAttribute('data-active') === 'true')
+      expect(activeItem?.value).toBe('blueberry')
     })
   })
 
@@ -502,6 +551,30 @@ describe('cv-menu', () => {
       expect(menu.open).toBe(false)
     })
 
+    it('does not close on pointerdown inside the menu', async () => {
+      const {menu, items} = await mountMenu({open: true})
+
+      items[0]!.dispatchEvent(new MouseEvent('pointerdown', {bubbles: true, composed: true}))
+      await settle(menu)
+
+      expect(menu.open).toBe(true)
+    })
+
+    it('Escape close dispatches cv-input with open=false', async () => {
+      const {menu, root} = await mountMenu({open: true})
+      let detail: {open: boolean} | undefined
+
+      menu.addEventListener('cv-input', (e) => {
+        detail = (e as CustomEvent<{open: boolean}>).detail
+      })
+
+      root.dispatchEvent(new KeyboardEvent('keydown', {key: 'Escape', bubbles: true}))
+      await settle(menu)
+
+      expect(menu.open).toBe(false)
+      expect(detail?.open).toBe(false)
+    })
+
     it('[open] attribute reflects on host', async () => {
       const {menu} = await mountMenu({open: true})
       expect(menu.hasAttribute('open')).toBe(true)
@@ -571,6 +644,165 @@ describe('cv-menu', () => {
 
       expect(menu.value).toBe('c')
       expect((menu.querySelector('cv-menu-item[value="c"]') as CVMenuItem).selected).toBe(true)
+    })
+
+    it('clears value when the selected item is removed', async () => {
+      const {menu, items} = await mountMenu({open: true, closeOnSelect: false})
+
+      items[0]!.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+      await settle(menu)
+      expect(menu.value).toBe('a')
+
+      items[0]!.remove()
+      await settle(menu)
+
+      expect(menu.value).toBe('')
+    })
+  })
+
+  // --- Checkable items via cv-menu-group ---
+
+  describe('checkable items via cv-menu-group', () => {
+    const mountCheckableMenu = async (groupHtml: string) => {
+      const menu = document.createElement('cv-menu') as CVMenu
+      menu.open = true
+      menu.innerHTML = groupHtml
+      document.body.append(menu)
+      await settle(menu)
+      const items = Array.from(menu.querySelectorAll('cv-menu-item')) as CVMenuItem[]
+      return {menu, items}
+    }
+
+    it('checkbox group item toggles aria-checked without closing or setting value', async () => {
+      const {menu, items} = await mountCheckableMenu(`
+        <cv-menu-group type="checkbox" label="View">
+          <cv-menu-item value="x">X</cv-menu-item>
+        </cv-menu-group>
+      `)
+
+      expect(items[0]!.getAttribute('role')).toBe('menuitemcheckbox')
+
+      items[0]!.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+      await settle(menu)
+      expect(items[0]!.getAttribute('aria-checked')).toBe('true')
+      expect(items[0]!.checked).toBe(true)
+      expect(menu.open).toBe(true)
+      expect(menu.value).toBe('')
+
+      items[0]!.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+      await settle(menu)
+      expect(items[0]!.getAttribute('aria-checked')).toBe('false')
+    })
+
+    it('labeled radio group checks exclusively', async () => {
+      const {menu, items} = await mountCheckableMenu(`
+        <cv-menu-group type="radio" label="Sort">
+          <cv-menu-item value="x">X</cv-menu-item>
+          <cv-menu-item value="y">Y</cv-menu-item>
+        </cv-menu-group>
+      `)
+
+      expect(items[0]!.getAttribute('role')).toBe('menuitemradio')
+
+      items[0]!.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+      await settle(menu)
+      items[1]!.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+      await settle(menu)
+
+      expect(items[0]!.getAttribute('aria-checked')).toBe('false')
+      expect(items[1]!.getAttribute('aria-checked')).toBe('true')
+      expect(menu.open).toBe(true)
+      expect(menu.value).toBe('')
+    })
+  })
+
+  // --- removeAttribute('value') null guard ---
+
+  describe('removeAttribute("value") null guard', () => {
+    it('does not throw when value attribute is removed', async () => {
+      const {menu} = await mountMenu({open: true, closeOnSelect: false})
+      menu.setAttribute('value', 'a')
+      await settle(menu)
+      expect(menu.value).toBe('a')
+
+      expect(() => menu.removeAttribute('value')).not.toThrow()
+      await settle(menu)
+
+      // Should normalize to empty string and clear selection, not crash.
+      expect(menu.value).toBe('')
+    })
+  })
+
+  // --- Programmatic value='' clears selection (no resurrection) ---
+
+  describe('programmatic value clearing', () => {
+    it('setting value to "" clears the model selection', async () => {
+      const {menu, items} = await mountMenu({open: true, closeOnSelect: false})
+
+      items[0]!.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+      await settle(menu)
+      expect(menu.value).toBe('a')
+
+      menu.value = ''
+      await settle(menu)
+
+      expect(menu.value).toBe('')
+      expect((menu.querySelector('cv-menu-item[value="a"]') as CVMenuItem).selected).toBe(false)
+    })
+
+    it('cleared value is not resurrected by a subsequent interaction', async () => {
+      const {menu, items} = await mountMenu({open: true, closeOnSelect: false})
+
+      items[0]!.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+      await settle(menu)
+      expect(menu.value).toBe('a')
+
+      menu.value = ''
+      await settle(menu)
+
+      // An unrelated interaction (focus / keyboard navigation) must not bring
+      // back the old selection.
+      const root = menu.shadowRoot?.querySelector('[part="base"]') as HTMLElement
+      root.dispatchEvent(new KeyboardEvent('keydown', {key: 'ArrowDown', bubbles: true}))
+      await settle(menu)
+
+      expect(menu.value).toBe('')
+    })
+  })
+
+  // --- Tab closes the menu (no keyboard trap) ---
+
+  describe('Tab key', () => {
+    it('Tab closes the open menu and does not preventDefault', async () => {
+      const {menu, root} = await mountMenu({open: true})
+      expect(menu.open).toBe(true)
+
+      const event = new KeyboardEvent('keydown', {key: 'Tab', bubbles: true, cancelable: true})
+      root.dispatchEvent(event)
+      await settle(menu)
+
+      expect(menu.open).toBe(false)
+      // Focus must be allowed to move out of the menu.
+      expect(event.defaultPrevented).toBe(false)
+    })
+  })
+
+  // --- Reconnect (remove + re-append keeps item listeners) ---
+
+  describe('reconnect', () => {
+    it('item clicks still select after remove() + re-append()', async () => {
+      const {menu} = await mountMenu({open: true, closeOnSelect: false})
+
+      menu.remove()
+      await settle(menu)
+      document.body.append(menu)
+      await settle(menu)
+
+      const items = Array.from(menu.querySelectorAll('cv-menu-item')) as CVMenuItem[]
+      items[0]!.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+      await settle(menu)
+
+      expect(menu.value).toBe('a')
     })
   })
 })
