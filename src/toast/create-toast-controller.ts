@@ -12,6 +12,8 @@ export interface CVToastController {
   clear(): void
   pause(): void
   resume(): void
+  /** Updates the max number of visible toasts in place (live toasts/timers preserved). */
+  setMaxVisible(value: number): void
 }
 
 export function createToastController(options: CreateToastOptions = {}): CVToastController {
@@ -24,5 +26,6 @@ export function createToastController(options: CreateToastOptions = {}): CVToast
     clear: () => model.actions.clear(),
     pause: () => model.actions.pause(),
     resume: () => model.actions.resume(),
+    setMaxVisible: (value) => model.actions.setMaxVisible(value),
   }
 }

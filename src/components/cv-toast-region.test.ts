@@ -1,5 +1,6 @@
 import {afterEach, describe, expect, it, vi} from 'vitest'
 
+import {createToastController} from '../toast/create-toast-controller'
 import {CVToastRegion} from './cv-toast-region'
 
 const settle = async (region: CVToastRegion) => {
@@ -183,6 +184,64 @@ describe('cv-toast-region', () => {
 
       expect(getToastItems(region)).toHaveLength(2)
     })
+
+    it('changing maxVisible keeps live toasts and the same controller (no recreate)', async () => {
+      const region = await mountRegion()
+      const controllerBefore = region.controller
+
+      const a = region.controller.push({message: 'A', durationMs: 0})
+      const b = region.controller.push({message: 'B', durationMs: 0})
+      await settle(region)
+      expect(getToastItems(region)).toHaveLength(2)
+
+      const closed: string[] = []
+      region.addEventListener('cv-close', (event) => {
+        closed.push((event as CustomEvent<{id: string}>).detail.id)
+      })
+
+      region.maxVisible = 5
+      await settle(region)
+
+      // Same controller object, no toasts wiped, no spurious cv-close.
+      expect(region.controller).toBe(controllerBefore)
+      expect(region.controller.model.state.items().map((item) => item.id)).toEqual([b, a])
+      expect(getToastItems(region)).toHaveLength(2)
+      expect(closed).toEqual([])
+    })
+
+    it('honors a declarative max-visible attribute set before first update', async () => {
+      CVToastRegion.define()
+      const region = document.createElement('cv-toast-region') as CVToastRegion
+      region.setAttribute('max-visible', '5')
+      document.body.append(region)
+      await settle(region)
+
+      expect(region.maxVisible).toBe(5)
+      expect(region.controller.model.state.maxVisible()).toBe(5)
+
+      for (const message of ['A', 'B', 'C', 'D', 'E']) {
+        region.controller.push({message, durationMs: 0})
+      }
+      await settle(region)
+
+      expect(getToastItems(region)).toHaveLength(5)
+    })
+
+    it('increasing maxVisible reveals queued toasts', async () => {
+      const region = await mountRegion()
+      region.maxVisible = 2
+      await settle(region)
+
+      region.controller.push({message: 'A', durationMs: 0})
+      region.controller.push({message: 'B', durationMs: 0})
+      region.controller.push({message: 'C', durationMs: 0})
+      await settle(region)
+      expect(getToastItems(region)).toHaveLength(2)
+
+      region.maxVisible = 3
+      await settle(region)
+      expect(getToastItems(region)).toHaveLength(3)
+    })
   })
 
   // --- Region ARIA structure ---
@@ -192,6 +251,121 @@ describe('cv-toast-region', () => {
       const region = await mountRegion()
       const base = region.shadowRoot?.querySelector('[part="base"]') as HTMLElement
       expect(base.getAttribute('aria-atomic')).toBe('false')
+    })
+  })
+
+  // --- Overflow queueing ---
+
+  describe('overflow queueing', () => {
+    it('keeps overflow toasts queued and reveals them after a visible toast is dismissed', async () => {
+      const region = await mountRegion()
+
+      const first = region.controller.push({message: 'A', durationMs: 0})
+      region.controller.push({message: 'B', durationMs: 0})
+      region.controller.push({message: 'C', durationMs: 0})
+      const newest = region.controller.push({message: 'D', durationMs: 0})
+      await settle(region)
+
+      // default maxVisible is 3; newest toasts are shown first, oldest is queued
+      expect(getToastItems(region)).toHaveLength(3)
+      expect(region.controller.model.state.items()).toHaveLength(4)
+      const visibleIds = region.controller.model.state.visibleItems().map((item) => item.id)
+      expect(visibleIds).not.toContain(first)
+
+      region.controller.dismiss(newest)
+      await settle(region)
+
+      expect(getToastItems(region)).toHaveLength(3)
+      const visibleAfter = region.controller.model.state.visibleItems().map((item) => item.id)
+      expect(visibleAfter).toContain(first)
+    })
+  })
+
+  // --- Dismiss all ---
+
+  describe('dismiss all', () => {
+    it('clear() emits a cv-close event for every dismissed toast', async () => {
+      const region = await mountRegion()
+
+      const closed: string[] = []
+      region.addEventListener('cv-close', (event) => {
+        closed.push((event as CustomEvent<{id: string}>).detail.id)
+      })
+
+      const first = region.controller.push({message: 'One', durationMs: 0})
+      const second = region.controller.push({message: 'Two', durationMs: 0})
+      await settle(region)
+
+      region.controller.clear()
+      await settle(region)
+
+      expect(closed).toHaveLength(2)
+      expect(closed).toContain(first)
+      expect(closed).toContain(second)
+    })
+  })
+
+  // --- Pause/resume corner cases ---
+
+  describe('pause/resume corner cases', () => {
+    it('a toast pushed while paused does not start its timer until resume', async () => {
+      vi.useFakeTimers()
+
+      const region = await mountRegion()
+      region.controller.pause()
+
+      region.controller.push({message: 'Held', durationMs: 50})
+      await settle(region)
+
+      vi.advanceTimersByTime(500)
+      await settle(region)
+      expect(getToastItems(region)).toHaveLength(1)
+
+      region.controller.resume()
+      vi.advanceTimersByTime(50)
+      await settle(region)
+      expect(getToastItems(region)).toHaveLength(0)
+    })
+
+    it('a persistent toast (durationMs 0) survives pause/resume cycles', async () => {
+      vi.useFakeTimers()
+
+      const region = await mountRegion()
+      region.controller.push({message: 'Sticky', durationMs: 0})
+      await settle(region)
+
+      region.controller.pause()
+      region.controller.resume()
+      vi.advanceTimersByTime(60_000)
+      await settle(region)
+
+      expect(getToastItems(region)).toHaveLength(1)
+    })
+  })
+
+  // --- Controller replacement ---
+
+  describe('controller replacement', () => {
+    it('renders toasts from a newly assigned controller without emitting spurious close events', async () => {
+      const region = await mountRegion()
+
+      let closeCount = 0
+      region.addEventListener('cv-close', () => closeCount++)
+
+      region.controller.push({message: 'Old', durationMs: 0})
+      await settle(region)
+      expect(getToastItems(region)).toHaveLength(1)
+
+      region.controller = createToastController({maxVisible: 3})
+      await settle(region)
+
+      // old controller's toast disappears from DOM, but no cv-close is emitted
+      expect(getToastItems(region)).toHaveLength(0)
+      expect(closeCount).toBe(0)
+
+      region.controller.push({message: 'New', durationMs: 0})
+      await settle(region)
+      expect(getToastItems(region)).toHaveLength(1)
     })
   })
 

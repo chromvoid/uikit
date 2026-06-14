@@ -115,9 +115,14 @@ export class CVToastRegion extends ReatomLitElement {
   override willUpdate(changedProperties: PropertyValues): void {
     super.willUpdate(changedProperties)
 
-    if (changedProperties.has('maxVisible') && changedProperties.get('maxVisible') !== undefined) {
-      this.controller = createToastController({maxVisible: this.maxVisible})
-      this.previousToastIds = new Set()
+    if (changedProperties.has('maxVisible')) {
+      // Update the controller in place rather than recreating it: recreating would wipe
+      // all live toasts (without cv-close), orphan their timers, and drop a
+      // user-supplied controller. This also honors a declarative `max-visible` attribute
+      // set before the first update (changedProperties.get is undefined on first update).
+      if (this.controller.model.state.maxVisible() !== this.maxVisible) {
+        this.controller.setMaxVisible(this.maxVisible)
+      }
     }
   }
 

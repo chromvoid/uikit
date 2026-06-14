@@ -131,4 +131,64 @@ describe('cv-toast', () => {
     expect(closeBubbles).toBe(true)
     expect(closeComposed).toBe(true)
   })
+
+  it('does not render the progress indicator when durationMs is not positive', async () => {
+    const zero = await createToast({progress: true, durationMs: 0})
+    expect(zero.shadowRoot!.querySelector('[part="progress"]')).toBeNull()
+
+    const negative = await createToast({progress: true, durationMs: -100})
+    expect(negative.shadowRoot!.querySelector('[part="progress"]')).toBeNull()
+  })
+
+  it('clamps a negative durationMs to 0ms in the progress duration custom property', async () => {
+    const el = await createToast({durationMs: -500})
+    expect(el.style.getPropertyValue('--cv-toast-progress-duration').trim()).toBe('0ms')
+  })
+
+  it('updates role when level changes at runtime', async () => {
+    const el = await createToast({level: 'info'})
+    expect(getBase(el).getAttribute('role')).toBe('status')
+
+    el.level = 'error'
+    await settle(el)
+    expect(getBase(el).getAttribute('role')).toBe('alert')
+
+    el.level = 'loading'
+    await settle(el)
+    expect(getBase(el).getAttribute('role')).toBe('status')
+  })
+
+  it('invokes the matching handler for each action button', async () => {
+    const first = vi.fn()
+    const second = vi.fn()
+    const el = await createToast({
+      actions: [
+        {label: 'Undo', onClick: first},
+        {label: 'Retry', onClick: second},
+      ],
+    })
+
+    const buttons = el.shadowRoot!.querySelectorAll('[part="action"]')
+    expect(buttons).toHaveLength(2)
+    ;(buttons[1] as HTMLButtonElement).click()
+
+    expect(first).not.toHaveBeenCalled()
+    expect(second).toHaveBeenCalledOnce()
+  })
+
+  it('survives an action without an onClick handler', async () => {
+    const el = await createToast({actions: [{label: 'Noop'}]})
+    const button = el.shadowRoot!.querySelector('[part="action"]') as HTMLButtonElement
+
+    expect(() => button.click()).not.toThrow()
+  })
+
+  it('paused attribute reflects to the host', async () => {
+    const el = await createToast({paused: true})
+    expect(el.hasAttribute('paused')).toBe(true)
+
+    el.paused = false
+    await settle(el)
+    expect(el.hasAttribute('paused')).toBe(false)
+  })
 })
