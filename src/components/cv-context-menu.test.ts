@@ -344,6 +344,24 @@ describe('cv-context-menu', () => {
       expect(menuBox.hidden).toBe(false)
     })
 
+    it('moves to new coordinates when right-clicking again while open', async () => {
+      const {menu, target, menuBox} = await mountContextMenu()
+
+      target.dispatchEvent(new MouseEvent('contextmenu', {bubbles: true, clientX: 10, clientY: 20}))
+      await settle(menu)
+      expect(menu.open).toBe(true)
+
+      target.dispatchEvent(new MouseEvent('contextmenu', {bubbles: true, clientX: 300, clientY: 400}))
+      await settle(menu)
+
+      expect(menu.open).toBe(true)
+      expect(menu.anchorX).toBe(300)
+      expect(menu.anchorY).toBe(400)
+      expect(menu.style.getPropertyValue('--cv-context-menu-x')).toBe('300px')
+      expect(menu.style.getPropertyValue('--cv-context-menu-y')).toBe('400px')
+      expect(menuBox.hidden).toBe(false)
+    })
+
     it('updates host CSS custom properties for positioning without template inline style', async () => {
       const {menu, target, menuBox} = await mountContextMenu()
 
@@ -493,6 +511,30 @@ describe('cv-context-menu', () => {
       await settle(menu)
 
       expect(menu.open).toBe(false)
+    })
+
+    it('re-arms the first ArrowDown to the first item after close and reopen', async () => {
+      const {menu, target, menuBox, items} = await mountContextMenu()
+
+      target.dispatchEvent(new MouseEvent('contextmenu', {bubbles: true, clientX: 10, clientY: 10}))
+      await settle(menu)
+
+      menuBox.dispatchEvent(new KeyboardEvent('keydown', {key: 'ArrowDown', bubbles: true}))
+      menuBox.dispatchEvent(new KeyboardEvent('keydown', {key: 'ArrowDown', bubbles: true}))
+      await settle(menu)
+      expect(items[1]!.active).toBe(true)
+
+      menuBox.dispatchEvent(new KeyboardEvent('keydown', {key: 'Escape', bubbles: true}))
+      await settle(menu)
+      expect(menu.open).toBe(false)
+
+      target.dispatchEvent(new MouseEvent('contextmenu', {bubbles: true, clientX: 10, clientY: 10}))
+      await settle(menu)
+
+      menuBox.dispatchEvent(new KeyboardEvent('keydown', {key: 'ArrowDown', bubbles: true}))
+      await settle(menu)
+
+      expect(items[0]!.active).toBe(true)
     })
 
     it('Tab closes the menu', async () => {
@@ -922,6 +964,40 @@ describe('cv-context-menu', () => {
       await settle(menu)
 
       expect(items[1]!.selected).toBe(true)
+    })
+
+    it('clearing the value to empty string re-derives item.selected', async () => {
+      const {menu, items} = await mountContextMenu()
+
+      menu.value = 'paste'
+      await settle(menu)
+      expect(items[1]!.selected).toBe(true)
+
+      menu.value = ''
+      await settle(menu)
+
+      expect(items[0]!.selected).toBe(false)
+      expect(items[1]!.selected).toBe(false)
+    })
+
+    it('reattaches item click listeners after remove() + append() (reconnect)', async () => {
+      const {menu} = await mountContextMenu()
+
+      menu.remove()
+      document.body.append(menu)
+      await settle(menu)
+
+      const target = menu.shadowRoot?.querySelector('[part="target"]') as HTMLElement
+      const items = Array.from(menu.querySelectorAll('cv-menu-item')) as CVMenuItem[]
+
+      target.dispatchEvent(new MouseEvent('contextmenu', {bubbles: true, clientX: 10, clientY: 10}))
+      await settle(menu)
+
+      items[0]!.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+      await settle(menu)
+
+      expect(menu.value).toBe('copy')
+      expect(menu.open).toBe(false)
     })
   })
 })

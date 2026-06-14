@@ -149,6 +149,11 @@ export class CVContextMenu extends ReatomLitElement {
     super.connectedCallback()
     if (!this.model) {
       this.rebuildModelFromSlot(false, false)
+    } else {
+      // Reconnect: disconnectedCallback detached per-item click listeners but
+      // the model already exists, so a remove()+append() would leave menu items
+      // inert (no slotchange fires). Reattach so clicks keep working.
+      this.attachItemListeners()
     }
 
     this.syncPositionProperties()
@@ -199,6 +204,14 @@ export class CVContextMenu extends ReatomLitElement {
       }
 
       const oldValue = (changedProperties.get('value') as string | undefined)?.trim() || null
+
+      if (normalized.length === 0) {
+        // Clearing the value: the model holds no selection state for context
+        // menus, so re-derive item.selected from the (now empty) value. updated()
+        // skips syncItemElements whenever value changed, so do it here.
+        this.syncItemElements()
+        return
+      }
 
       if (normalized.length > 0 && normalized !== (oldValue ?? '')) {
         const previous = this.captureState()
