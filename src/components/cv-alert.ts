@@ -95,6 +95,13 @@ export class CVAlert extends ReatomLitElement {
     ) {
       const state = this.captureState()
       this.model = this.createModel(state.message, state.visible)
+      // Rebuilding the model with `initialVisible` seeds the visible state but
+      // never schedules an auto-dismiss timer (only `show()` does). If the alert
+      // was visible with a pending auto-dismiss, re-arm it through `show()` so a
+      // reconfigured alert still dismisses instead of staying up forever.
+      if (state.visible && this.durationMs > 0) {
+        this.model.actions.show(state.message)
+      }
       this.syncFromModel(false)
     }
   }

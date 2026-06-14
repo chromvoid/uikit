@@ -73,6 +73,103 @@ describe('cv-alert', () => {
     expect(alert.hasAttribute('visible')).toBe(false)
   })
 
+  it('restarts the dismiss timer when show is called again', async () => {
+    vi.useFakeTimers()
+    CVAlert.define()
+
+    const alert = document.createElement('cv-alert') as CVAlert
+    alert.durationMs = 50
+    document.body.append(alert)
+    await settle(alert)
+
+    alert.show('First')
+    await settle(alert)
+
+    vi.advanceTimersByTime(40)
+    await settle(alert)
+    alert.show('Second')
+    await settle(alert)
+
+    vi.advanceTimersByTime(40)
+    await settle(alert)
+    expect(alert.hasAttribute('visible')).toBe(true)
+
+    vi.advanceTimersByTime(10)
+    await settle(alert)
+    expect(alert.hasAttribute('visible')).toBe(false)
+  })
+
+  it('does not resurrect a hidden alert from a stale dismiss timer', async () => {
+    vi.useFakeTimers()
+    CVAlert.define()
+
+    const alert = document.createElement('cv-alert') as CVAlert
+    alert.durationMs = 50
+    const changeValues: boolean[] = []
+    alert.addEventListener('cv-change', (event) => {
+      changeValues.push((event as unknown as CustomEvent<{visible: boolean}>).detail.visible)
+    })
+    document.body.append(alert)
+    await settle(alert)
+
+    alert.show('Going away')
+    await settle(alert)
+    alert.hide()
+    await settle(alert)
+
+    vi.advanceTimersByTime(100)
+    await settle(alert)
+
+    expect(alert.hasAttribute('visible')).toBe(false)
+    expect(changeValues).toEqual([true, false])
+  })
+
+  it('treats non-positive durationMs as no auto-dismiss', async () => {
+    vi.useFakeTimers()
+    CVAlert.define()
+
+    const alert = document.createElement('cv-alert') as CVAlert
+    alert.durationMs = -5
+    document.body.append(alert)
+    await settle(alert)
+
+    alert.show('Sticky')
+    await settle(alert)
+
+    vi.advanceTimersByTime(10_000)
+    await settle(alert)
+
+    expect(alert.hasAttribute('visible')).toBe(true)
+  })
+
+  it('emits cv-input without cv-change when only the message updates', async () => {
+    CVAlert.define()
+
+    const alert = document.createElement('cv-alert') as CVAlert
+    const inputMessages: string[] = []
+    const changeValues: boolean[] = []
+
+    alert.addEventListener('cv-input', (event) => {
+      inputMessages.push((event as unknown as CustomEvent<{message: string}>).detail.message)
+    })
+    alert.addEventListener('cv-change', (event) => {
+      changeValues.push((event as unknown as CustomEvent<{visible: boolean}>).detail.visible)
+    })
+
+    document.body.append(alert)
+    await settle(alert)
+
+    alert.show('First')
+    await settle(alert)
+    alert.show('Second')
+    await settle(alert)
+
+    const message = alert.shadowRoot?.querySelector('[part="message"]') as HTMLElement
+    expect(message.textContent).toContain('Second')
+    expect(inputMessages).toEqual(['First', 'Second'])
+    expect(changeValues).toEqual([true])
+  })
+
   it('passes aria-live and aria-atomic overrides to live-region contract', async () => {
     CVAlert.define()
 
@@ -107,5 +204,30 @@ describe('cv-alert', () => {
     const message = alert.shadowRoot?.querySelector('[part="message"]') as HTMLElement
     expect(alert.hasAttribute('visible')).toBe(true)
     expect(message.textContent).toContain('Persistent warning')
+  })
+
+  it('keeps the auto-dismiss alive when reconfiguring while a timer is pending', async () => {
+    vi.useFakeTimers()
+    CVAlert.define()
+
+    const alert = document.createElement('cv-alert') as CVAlert
+    alert.durationMs = 100
+    document.body.append(alert)
+    await settle(alert)
+
+    alert.show('Temporary')
+    await settle(alert)
+    expect(alert.hasAttribute('visible')).toBe(true)
+
+    // Reconfiguring rebuilds the model; the pending auto-dismiss must be
+    // rescheduled rather than silently dropped (otherwise the alert is stuck).
+    alert.ariaLive = 'polite'
+    await settle(alert)
+    expect(alert.hasAttribute('visible')).toBe(true)
+
+    vi.advanceTimersByTime(100)
+    await settle(alert)
+
+    expect(alert.hasAttribute('visible')).toBe(false)
   })
 })
