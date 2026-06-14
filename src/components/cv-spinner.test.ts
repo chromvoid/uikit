@@ -110,6 +110,20 @@ describe('cv-spinner', () => {
       await settle(spinner)
       expect(getBase(spinner).getAttribute('aria-label')).toBe('Please wait')
     })
+
+    it('setting the label attribute updates the property and aria-label', async () => {
+      const spinner = await createSpinner()
+      spinner.setAttribute('label', 'Syncing')
+      await settle(spinner)
+
+      expect(spinner.label).toBe('Syncing')
+      expect(getBase(spinner).getAttribute('aria-label')).toBe('Syncing')
+    })
+
+    it('reflects the label property to the host attribute', async () => {
+      const spinner = await createSpinner({label: 'Uploading'})
+      expect(spinner.getAttribute('label')).toBe('Uploading')
+    })
   })
 
   // --- Headless contract delegation ---
@@ -132,6 +146,15 @@ describe('cv-spinner', () => {
 
       // After setLabel action, getSpinnerProps() should return updated aria-label
       expect(getBase(spinner).getAttribute('aria-label')).toBe('Uploading')
+    })
+  })
+
+  // --- Reduced motion ---
+
+  describe('reduced motion', () => {
+    it('ships a prefers-reduced-motion fallback for the spin animation', async () => {
+      const cssText = (CVSpinner.styles as {cssText: string}[]).map((s) => s.cssText).join('\n')
+      expect(cssText).toContain('prefers-reduced-motion: reduce')
     })
   })
 })

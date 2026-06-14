@@ -66,6 +66,12 @@ export class CVSpinner extends ReatomLitElement {
           transform: rotate(360deg);
         }
       }
+
+      @media (prefers-reduced-motion: reduce) {
+        [part='indicator'] {
+          animation-duration: calc(var(--cv-spinner-speed, 600ms) * 4);
+        }
+      }
     `,
   ]
 
