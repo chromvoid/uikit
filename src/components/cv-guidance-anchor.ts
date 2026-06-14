@@ -64,6 +64,13 @@ export class CVGuidanceAnchor extends ReatomLitElement {
     super.connectedCallback()
     const root = this.getRootNode()
     this.unregisterEventTarget = root instanceof ShadowRoot ? root.host : (this.parentNode ?? root)
+    // Force a fresh registration on every (re)connect. disconnectedCallback
+    // already dispatched the unregister, so the registry no longer knows about
+    // this anchor — but metadata may have changed while detached (recorded in
+    // registeredDetail without a listener). Clearing the cached detail prevents
+    // dispatchRegister's key-match early-return from leaving the reconnected
+    // anchor in the DOM but unregistered.
+    this.registeredDetail = null
     this.dispatchRegister()
   }
 

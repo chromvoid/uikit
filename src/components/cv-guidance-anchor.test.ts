@@ -178,6 +178,119 @@ describe('cv-guidance-anchor', () => {
     expect(details[0]?.element).not.toBe(button)
   })
 
+  it('does not register when required metadata is incomplete', async () => {
+    const details = getRegisterDetails()
+    await createGuidanceAnchor({
+      anchorId: 'files.create-or-upload',
+      surface: 'files',
+    })
+
+    expect(details).toEqual([])
+  })
+
+  it('registers once required metadata becomes complete after connect', async () => {
+    const details = getRegisterDetails()
+    const el = await createGuidanceAnchor({
+      anchorId: 'files.create-or-upload',
+      surface: 'files',
+    })
+    expect(details).toEqual([])
+
+    el.owner = 'files'
+    await settle(el)
+
+    expect(details).toEqual([
+      {
+        anchorId: 'files.create-or-upload',
+        surface: 'files',
+        owner: 'files',
+        element: el,
+      },
+    ])
+  })
+
+  it('does not dispatch unregister on disconnect when never registered', async () => {
+    const unregisterDetails = getUnregisterDetails()
+    const el = await createGuidanceAnchor({anchorId: 'files.create-or-upload'})
+
+    el.remove()
+
+    expect(unregisterDetails).toEqual([])
+  })
+
+  it('re-registers when detached and re-appended with unchanged metadata', async () => {
+    const el = await createGuidanceAnchor({
+      anchorId: 'vault.create-item',
+      surface: 'vault',
+      owner: 'password-manager',
+    })
+
+    const details = getRegisterDetails()
+    el.remove()
+    document.body.append(el)
+    await settle(el)
+
+    expect(details).toHaveLength(1)
+    expect(details[0]).toMatchObject({
+      anchorId: 'vault.create-item',
+      surface: 'vault',
+      owner: 'password-manager',
+      element: el,
+    })
+  })
+
+  it('re-registers with the new metadata when changed while detached, then reconnected', async () => {
+    const el = await createGuidanceAnchor({
+      anchorId: 'vault.create-item',
+      surface: 'vault',
+      owner: 'password-manager',
+    })
+
+    // Detach, then mutate metadata while detached. The detached dispatchRegister
+    // records the new detail but no registry listener observes it.
+    el.remove()
+    el.anchorId = 'vault.edit-item'
+    await settle(el)
+
+    const details = getRegisterDetails()
+    document.body.append(el)
+    await settle(el)
+
+    // Reconnect must re-register with the current (mutated) metadata, otherwise
+    // the anchor lives in the DOM but is invisible to the guidance registry.
+    expect(details).toHaveLength(1)
+    expect(details[0]).toMatchObject({
+      anchorId: 'vault.edit-item',
+      surface: 'vault',
+      owner: 'password-manager',
+      element: el,
+    })
+  })
+
+  it('dispatches unregister through the shadow host when removed from a shadow root', async () => {
+    const host = document.createElement('div')
+    const shadowRoot = host.attachShadow({mode: 'open'})
+    document.body.append(host)
+    const unregisterDetails = getUnregisterDetails()
+
+    const el = document.createElement('cv-guidance-anchor') as CVGuidanceAnchor
+    el.anchorId = 'settings.backup'
+    el.surface = 'settings'
+    el.owner = 'settings'
+    shadowRoot.append(el)
+    await settle(el)
+
+    el.remove()
+
+    expect(unregisterDetails).toHaveLength(1)
+    expect(unregisterDetails[0]).toMatchObject({
+      anchorId: 'settings.backup',
+      surface: 'settings',
+      owner: 'settings',
+      element: el,
+    })
+  })
+
   it('keeps UIKit primitive free of app-layer imports', () => {
     const imports = [
       'apps/webview',

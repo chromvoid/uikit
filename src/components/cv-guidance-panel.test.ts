@@ -145,6 +145,37 @@ describe('cv-guidance-panel', () => {
     expect(el.hasAttribute('has-icon')).toBe(false)
   })
 
+  it('clears has-icon when the slotted icon content is removed', async () => {
+    const el = await createGuidancePanel()
+    const icon = document.createElement('span')
+    icon.slot = 'icon'
+    icon.textContent = 'i'
+    el.append(icon)
+    await settle(el)
+
+    expect(el.hasIcon).toBe(true)
+    expect(el.hasAttribute('has-icon')).toBe(true)
+
+    icon.remove()
+    await settle(el)
+
+    expect(el.hasIcon).toBe(false)
+    expect(el.hasAttribute('has-icon')).toBe(false)
+  })
+
+  it('updates data-variant and data-density when changed at runtime', async () => {
+    const el = await createGuidancePanel()
+
+    el.variant = 'warning'
+    el.density = 'compact'
+    await settle(el)
+
+    expect(getBase(el).getAttribute('data-variant')).toBe('warning')
+    expect(getBase(el).getAttribute('data-density')).toBe('compact')
+    expect(el.getAttribute('variant')).toBe('warning')
+    expect(el.getAttribute('density')).toBe('compact')
+  })
+
   it('uses top-level host selectors for density and variant states', () => {
     const cssText = stylesToText(CVGuidancePanel.styles)
 
