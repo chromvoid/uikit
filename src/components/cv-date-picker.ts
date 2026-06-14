@@ -314,8 +314,12 @@ export class CVDatePicker extends FormAssociatedReatomElement {
     super.willUpdate(changedProperties)
 
     if (changedProperties.has('ariaLabel') || changedProperties.has('closeOnEscape')) {
-      this.rebuildModel()
-      return
+      // A config-driven rebuild must not swallow a value change batched in the
+      // same update. Seed the rebuilt model with the new external value when it
+      // changed (otherwise rebuildModel's host-state sync would clobber it back
+      // to the old committed value), and fall through to re-apply other pending
+      // changes instead of early-returning.
+      this.rebuildModel(changedProperties.has('value') ? (this.value ?? '') : undefined)
     }
 
     if (changedProperties.has('disabled') && this.model.state.disabled() !== this.disabled) {
@@ -414,8 +418,9 @@ export class CVDatePicker extends FormAssociatedReatomElement {
     })
   }
 
-  private rebuildModel(): void {
-    const currentValue = this.model.state.committedValue() ?? this.value
+  private rebuildModel(seedValue?: string): void {
+    const currentValue =
+      seedValue !== undefined ? seedValue : (this.model.state.committedValue() ?? this.value)
     const isOpen = this.model.state.isOpen()
 
     this.model = this.createModel(currentValue)
@@ -427,13 +432,13 @@ export class CVDatePicker extends FormAssociatedReatomElement {
     this.syncHostStateFromModel()
   }
 
-  private toNullable(value: string): string | null {
-    const trimmed = value.trim()
+  private toNullable(value: string | null | undefined): string | null {
+    const trimmed = (value ?? '').trim()
     return trimmed.length > 0 ? trimmed : null
   }
 
   private syncModelFromExternalValue(): void {
-    const nextValue = this.value.trim()
+    const nextValue = (this.value ?? '').trim()
     const committedValue = this.model.state.committedValue() ?? ''
     if (nextValue === committedValue) return
 
@@ -697,7 +702,7 @@ export class CVDatePicker extends FormAssociatedReatomElement {
       }
     }
 
-    if (this.required && this.value.length === 0) {
+    if (this.required && (this.value ?? '').length === 0) {
       return {
         flags: {valueMissing: true},
         message: 'Please fill out this field.',

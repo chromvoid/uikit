@@ -299,6 +299,268 @@ describe('cv-date-picker', () => {
     })
   })
 
+  describe('date validation corner cases', () => {
+    it('flags impossible calendar dates as invalid without committing', async () => {
+      const datePicker = await createDatePicker()
+      const input = getInput(datePicker)
+
+      input.value = '2027-02-29T10:00' // 2027 is not a leap year
+      input.dispatchEvent(new Event('input', {bubbles: true, composed: true}))
+      dispatchKeyDown(input, 'Enter')
+      await settle(datePicker)
+
+      expect(datePicker.value).toBe('')
+      expect(datePicker.inputInvalid).toBe(true)
+      expect(input.getAttribute('aria-invalid')).toBe('true')
+    })
+
+    it('accepts February 29 on a leap year', async () => {
+      const datePicker = await createDatePicker()
+      const input = getInput(datePicker)
+
+      input.value = '2028-02-29T10:00'
+      input.dispatchEvent(new Event('input', {bubbles: true, composed: true}))
+      dispatchKeyDown(input, 'Enter')
+      await settle(datePicker)
+
+      expect(datePicker.value).toBe('2028-02-29T10:00')
+      expect(datePicker.inputInvalid).toBe(false)
+    })
+
+    it('keeps partial typed dates uncommitted and marked invalid', async () => {
+      const datePicker = await createDatePicker()
+      const input = getInput(datePicker)
+
+      input.value = '2026-01'
+      input.dispatchEvent(new Event('input', {bubbles: true, composed: true}))
+      dispatchKeyDown(input, 'Enter')
+      await settle(datePicker)
+
+      expect(datePicker.value).toBe('')
+      expect(datePicker.inputInvalid).toBe(true)
+    })
+
+    it('commits date-only input with midnight time', async () => {
+      const datePicker = await createDatePicker()
+      const input = getInput(datePicker)
+
+      input.value = '2026-03-05'
+      input.dispatchEvent(new Event('input', {bubbles: true, composed: true}))
+      dispatchKeyDown(input, 'Enter')
+      await settle(datePicker)
+
+      expect(datePicker.value).toBe('2026-03-05T00:00')
+    })
+  })
+
+  describe('month navigation at year boundaries', () => {
+    const getCurrentMonthDays = (element: CVDatePicker) =>
+      getCalendarDays(element).filter((day) => day.getAttribute('data-month') === 'current')
+
+    it('navigates from January back to December of the previous year', async () => {
+      const datePicker = await createDatePicker({value: '2026-01-15T10:00'})
+      dispatchKeyDown(getInput(datePicker), 'ArrowDown')
+      await settle(datePicker)
+
+      const prevButton = datePicker.shadowRoot!.querySelector(
+        '[part="month-nav-button"][data-dir="prev"]',
+      ) as HTMLButtonElement
+      prevButton.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+      await settle(datePicker)
+
+      const currentDays = getCurrentMonthDays(datePicker)
+      expect(currentDays[0]!.getAttribute('data-date')).toBe('2025-12-01')
+      expect(currentDays).toHaveLength(31)
+    })
+
+    it('navigates from December forward to January of the next year', async () => {
+      const datePicker = await createDatePicker({value: '2025-12-15T10:00'})
+      dispatchKeyDown(getInput(datePicker), 'ArrowDown')
+      await settle(datePicker)
+
+      const nextButton = datePicker.shadowRoot!.querySelector(
+        '[part="month-nav-button"][data-dir="next"]',
+      ) as HTMLButtonElement
+      nextButton.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+      await settle(datePicker)
+
+      const currentDays = getCurrentMonthDays(datePicker)
+      expect(currentDays[0]!.getAttribute('data-date')).toBe('2026-01-01')
+      expect(currentDays).toHaveLength(31)
+    })
+
+    it('moves a year back while preserving the month via the year nav button', async () => {
+      const datePicker = await createDatePicker({value: '2026-03-10T10:00'})
+      dispatchKeyDown(getInput(datePicker), 'ArrowDown')
+      await settle(datePicker)
+
+      const yearPrev = datePicker.shadowRoot!.querySelector(
+        '[part="year-nav-button"][data-dir="prev"]',
+      ) as HTMLButtonElement
+      yearPrev.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+      await settle(datePicker)
+
+      const currentDays = getCurrentMonthDays(datePicker)
+      expect(currentDays[0]!.getAttribute('data-date')).toBe('2025-03-01')
+    })
+
+    it('PageUp on the grid crosses the year boundary into December', async () => {
+      const datePicker = await createDatePicker({value: '2026-01-15T10:00'})
+      dispatchKeyDown(getInput(datePicker), 'ArrowDown')
+      await settle(datePicker)
+
+      dispatchKeyDown(getCalendarGrid(datePicker), 'PageUp')
+      await settle(datePicker)
+
+      const currentDays = getCurrentMonthDays(datePicker)
+      expect(currentDays[0]!.getAttribute('data-date')).toBe('2025-12-01')
+    })
+
+    it('Shift+PageDown on the grid moves to the same month of the next year', async () => {
+      const datePicker = await createDatePicker({value: '2026-01-15T10:00'})
+      dispatchKeyDown(getInput(datePicker), 'ArrowDown')
+      await settle(datePicker)
+
+      dispatchKeyDown(getCalendarGrid(datePicker), 'PageDown', {shiftKey: true})
+      await settle(datePicker)
+
+      const currentDays = getCurrentMonthDays(datePicker)
+      expect(currentDays[0]!.getAttribute('data-date')).toBe('2027-01-01')
+    })
+  })
+
+  describe('min/max bounds', () => {
+    it('disables out-of-range days in the calendar grid', async () => {
+      const datePicker = await createDatePicker({
+        value: '2026-01-15T10:00',
+        min: '2026-01-10T00:00',
+        max: '2026-01-20T23:59',
+      })
+      dispatchKeyDown(getInput(datePicker), 'ArrowDown')
+      await settle(datePicker)
+
+      const dayByDate = (date: string) =>
+        getCalendarDays(datePicker).find((day) => day.getAttribute('data-date') === date)!
+
+      expect(dayByDate('2026-01-09').disabled).toBe(true)
+      expect(dayByDate('2026-01-09').getAttribute('aria-disabled')).toBe('true')
+      expect(dayByDate('2026-01-10').disabled).toBe(false)
+      expect(dayByDate('2026-01-20').disabled).toBe(false)
+      expect(dayByDate('2026-01-21').disabled).toBe(true)
+    })
+
+    it('rejects committing a typed value below min', async () => {
+      const datePicker = await createDatePicker({min: '2026-01-10T00:00'})
+      const input = getInput(datePicker)
+
+      input.value = '2026-01-05T10:00'
+      input.dispatchEvent(new Event('input', {bubbles: true, composed: true}))
+      dispatchKeyDown(input, 'Enter')
+      await settle(datePicker)
+
+      expect(datePicker.value).toBe('')
+      expect(datePicker.inputInvalid).toBe(true)
+    })
+
+    it('does not move keyboard focus beyond the max date', async () => {
+      const datePicker = await createDatePicker({
+        value: '2026-01-20T10:00',
+        max: '2026-01-20T23:59',
+      })
+      dispatchKeyDown(getInput(datePicker), 'ArrowDown')
+      await settle(datePicker)
+
+      dispatchKeyDown(getCalendarGrid(datePicker), 'ArrowRight')
+      await settle(datePicker)
+
+      const focusedDay = getCalendarDays(datePicker).find(
+        (day) => day.getAttribute('tabindex') === '0',
+      )
+      expect(focusedDay?.getAttribute('data-date')).toBe('2026-01-20')
+    })
+  })
+
+  describe('commit semantics', () => {
+    it('does not emit cv-change when Enter commits an unchanged value', async () => {
+      const datePicker = await createDatePicker({value: '2026-01-10T12:30'})
+      let changeCount = 0
+      datePicker.addEventListener('cv-change', () => changeCount++)
+
+      dispatchKeyDown(getInput(datePicker), 'Enter')
+      await settle(datePicker)
+
+      expect(datePicker.value).toBe('2026-01-10T12:30')
+      expect(changeCount).toBe(0)
+    })
+
+    it('reverts the draft selection on Cancel without emitting cv-change', async () => {
+      const datePicker = await createDatePicker({value: '2026-01-10T12:30'})
+      let changeCount = 0
+      datePicker.addEventListener('cv-change', () => changeCount++)
+
+      dispatchKeyDown(getInput(datePicker), 'ArrowDown')
+      await settle(datePicker)
+
+      const otherDay = getCalendarDays(datePicker).find(
+        (day) => day.getAttribute('data-date') === '2026-01-15',
+      )!
+      otherDay.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+      getCancelButton(datePicker).dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+      await settle(datePicker)
+
+      expect(datePicker.value).toBe('2026-01-10T12:30')
+      expect(changeCount).toBe(0)
+    })
+
+    it('Escape on the input closes the open dialog', async () => {
+      const datePicker = await createDatePicker()
+      const input = getInput(datePicker)
+
+      dispatchKeyDown(input, 'ArrowDown')
+      await settle(datePicker)
+      expect(datePicker.open).toBe(true)
+
+      dispatchKeyDown(input, 'Escape')
+      await settle(datePicker)
+      expect(datePicker.open).toBe(false)
+    })
+
+    it('hides the clear button until a value is committed', async () => {
+      const datePicker = await createDatePicker()
+      expect(getClearButton(datePicker).hidden).toBe(true)
+
+      datePicker.value = '2026-01-05T10:00'
+      await settle(datePicker)
+      expect(getClearButton(datePicker).hidden).toBe(false)
+    })
+  })
+
+  describe('timezone-independent day math', () => {
+    it('marks the committed midnight day as selected in UTC mode', async () => {
+      const datePicker = await createDatePicker({timeZone: 'utc', value: '2026-01-01T00:00'})
+      dispatchKeyDown(getInput(datePicker), 'ArrowDown')
+      await settle(datePicker)
+
+      const selectedDays = getCalendarDays(datePicker).filter(
+        (day) => day.getAttribute('aria-selected') === 'true',
+      )
+      expect(selectedDays).toHaveLength(1)
+      expect(selectedDays[0]!.getAttribute('data-date')).toBe('2026-01-01')
+    })
+
+    it('marks the committed midnight day as selected in local mode', async () => {
+      const datePicker = await createDatePicker({value: '2026-01-01T00:00'})
+      dispatchKeyDown(getInput(datePicker), 'ArrowDown')
+      await settle(datePicker)
+
+      const selectedDays = getCalendarDays(datePicker).filter(
+        (day) => day.getAttribute('aria-selected') === 'true',
+      )
+      expect(selectedDays).toHaveLength(1)
+      expect(selectedDays[0]!.getAttribute('data-date')).toBe('2026-01-01')
+    })
+  })
+
   describe('headless contract delegation', () => {
     it('keeps active descendant wiring inside rendered day cells', async () => {
       const datePicker = await createDatePicker()
@@ -313,6 +575,80 @@ describe('cv-date-picker', () => {
       }
 
       expect(input.getAttribute('aria-controls')).toBe(getDialog(datePicker).id)
+    })
+  })
+
+  describe('regression: batch 4 fixes', () => {
+    it('does not throw when value/min/max attributes are removed', async () => {
+      const datePicker = await createDatePicker({value: '2026-01-15T10:00'})
+      datePicker.setAttribute('min', '2026-01-10')
+      datePicker.setAttribute('max', '2026-01-20')
+      await settle(datePicker)
+
+      // removeAttribute makes the String-typed property null; the model sync
+      // path must not call null.trim().
+      datePicker.removeAttribute('min')
+      datePicker.removeAttribute('max')
+      datePicker.removeAttribute('value')
+      await expect(settle(datePicker)).resolves.toBeUndefined()
+
+      expect(datePicker.value).toBe('')
+    })
+
+    it('keeps a value set in the same update that changes ariaLabel', async () => {
+      const datePicker = await createDatePicker({value: '2026-01-10T12:30'})
+
+      // Batch a config-rebuild prop (ariaLabel) with a value change. Before the
+      // fix the early-return after rebuildModel() reverted the new value.
+      datePicker.ariaLabel = 'Pick a date'
+      datePicker.value = '2026-02-05T09:15'
+      await settle(datePicker)
+
+      expect(datePicker.value).toBe('2026-02-05T09:15')
+      expect(getInput(datePicker).value).toBe('2026-02-05T09:15')
+    })
+
+    it('keeps a value set in the same update that changes closeOnEscape', async () => {
+      const datePicker = await createDatePicker({value: '2026-01-10T12:30'})
+
+      datePicker.closeOnEscape = false
+      datePicker.value = '2026-03-03T08:00'
+      await settle(datePicker)
+
+      expect(datePicker.value).toBe('2026-03-03T08:00')
+    })
+
+    it('allows applying a draft when max is a date-only string', async () => {
+      const datePicker = await createDatePicker({
+        value: '2026-06-15T10:00',
+        max: '2026-06-15',
+      })
+      dispatchKeyDown(getInput(datePicker), 'ArrowDown')
+      await settle(datePicker)
+
+      // The max day is selectable in the grid; Apply must also be enabled for a
+      // draft on that day (raw-string compare would disable it).
+      expect(getApplyButton(datePicker).disabled).toBe(false)
+    })
+
+    it('classifies year-boundary spillover days with the correct prev/next month', async () => {
+      const datePicker = await createDatePicker({value: '2026-01-15T10:00'})
+      dispatchKeyDown(getInput(datePicker), 'ArrowDown')
+      await settle(datePicker)
+
+      const dayByDate = (date: string) =>
+        getCalendarDays(datePicker).find((day) => day.getAttribute('data-date') === date)
+
+      // December 2025 days leading into January 2026 must be 'prev', not 'next'.
+      const dec31 = dayByDate('2025-12-31')
+      if (dec31) {
+        expect(dec31.getAttribute('data-month')).toBe('prev')
+      }
+      // February 2026 days trailing January must be 'next'.
+      const feb1 = dayByDate('2026-02-01')
+      if (feb1) {
+        expect(feb1.getAttribute('data-month')).toBe('next')
+      }
     })
   })
 
