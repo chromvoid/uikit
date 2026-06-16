@@ -49,6 +49,30 @@ export type {
 export {CVGuidancePanel} from './cv-guidance-panel'
 export type {GuidancePanelDensity, GuidancePanelVariant} from './cv-guidance-panel'
 export {CVIcon} from './cv-icon'
+export {CVImageViewer} from './cv-image-viewer'
+export type {
+  CVImageViewerAction,
+  CVImageViewerActionDetail,
+  CVImageViewerActionEvent,
+  CVImageViewerChangeEvent,
+  CVImageViewerCloseDetail,
+  CVImageViewerCloseEvent,
+  CVImageViewerCloseReason,
+  CVImageViewerEventMap,
+  CVImageViewerImageErrorDetail,
+  CVImageViewerImageErrorEvent,
+  CVImageViewerInputEvent,
+  CVImageViewerItem,
+  CVImageViewerLayout,
+  CVImageViewerNavigationDetail,
+  CVImageViewerNavigationDirection,
+  CVImageViewerNavigationSource,
+  CVImageViewerPrimeDetail,
+  CVImageViewerPrimeEvent,
+  CVImageViewerThumbnailMetricsDetail,
+  CVImageViewerThumbnailMetricsEvent,
+  CVImageViewerThumbnailWindow,
+} from './cv-image-viewer'
 export {CVInput} from './cv-input'
 export type {
   CVAccordionItemEventMap,

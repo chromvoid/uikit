@@ -66,6 +66,7 @@ export const componentGroups = [
     items: [
       {name: 'cv-bottom-sheet', slug: 'bottom-sheet', spec: 'bottom-sheet'},
       {name: 'cv-dialog', slug: 'dialog', spec: 'dialog'},
+      {name: 'cv-image-viewer', slug: 'image-viewer', spec: 'image-viewer'},
       {name: 'cv-guidance-anchor', slug: 'guidance-anchor', spec: 'guidance-anchor'},
       {name: 'cv-guidance-panel', slug: 'guidance-panel', spec: 'guidance-panel'},
       {name: 'cv-popover', slug: 'popover', spec: 'popover'},

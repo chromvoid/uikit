@@ -33,6 +33,7 @@ import {
   CVGuidanceAnchor,
   CVGuidancePanel,
   CVIcon,
+  CVImageViewer,
   CVInput,
   CVLandmark,
   CVLink,
@@ -120,6 +121,7 @@ export function registerUikit(): void {
   CVGuidanceAnchor.define()
   CVGuidancePanel.define()
   CVIcon.define()
+  CVImageViewer.define()
   CVInput.define()
   CVLandmark.define()
   CVOption.define()

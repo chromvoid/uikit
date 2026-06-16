@@ -33,6 +33,7 @@ declare global {
     'cv-guidance-anchor': import('./cv-guidance-anchor').CVGuidanceAnchor
     'cv-guidance-panel': import('./cv-guidance-panel').CVGuidancePanel
     'cv-icon': import('./cv-icon').CVIcon
+    'cv-image-viewer': import('./cv-image-viewer').CVImageViewer
     'cv-input': import('./cv-input').CVInput
     'cv-landmark': import('./cv-landmark').CVLandmark
     'cv-link': import('./cv-link').CVLink
@@ -89,6 +90,7 @@ declare global {
     'cv-accordion-item-trigger-keydown': import('./cv-accordion-item').CVAccordionItemTriggerKeydownEvent
     'cv-action':
       | import('./cv-alert-dialog').CVAlertDialogActionEvent
+      | import('./cv-image-viewer').CVImageViewerActionEvent
       | import('./cv-menu-button').CVMenuButtonActionEvent
     'cv-blur':
       | import('./cv-input').CVInputBlurEvent
@@ -96,6 +98,7 @@ declare global {
       | import('./cv-textarea').CVTextareaBlurEvent
     'cv-change':
       | import('./cv-checkbox').CVCheckboxChangeEvent
+      | import('./cv-image-viewer').CVImageViewerChangeEvent
       | import('./cv-input').CVInputChangeEvent
       | import('./cv-number').CVNumberChangeEvent
       | import('./cv-radio-group').CVRadioGroupChangeEvent
@@ -110,6 +113,7 @@ declare global {
       | import('./cv-input').CVInputClearEvent
       | import('./cv-number').CVNumberClearEvent
     'cv-close':
+      | import('./cv-image-viewer').CVImageViewerCloseEvent
       | import('./cv-tab').CVTabCloseEvent
       | import('./cv-toast').CVToastCloseEvent
       | import('./cv-toast-region').CVToastRegionCloseEvent
@@ -128,6 +132,7 @@ declare global {
     'cv-grid-row-slotchange': import('./cv-grid-row').CVGridRowSlotchangeEvent
     'cv-input':
       | import('./cv-checkbox').CVCheckboxInputEvent
+      | import('./cv-image-viewer').CVImageViewerInputEvent
       | import('./cv-input').CVInputInputEvent
       | import('./cv-radio-group').CVRadioGroupInputEvent
       | import('./cv-select').CVSelectInputEvent
@@ -137,9 +142,12 @@ declare global {
       | import('./cv-textarea').CVTextareaInputEvent
     'cv-load-more': import('./cv-feed').CVFeedLoadMoreEvent
     'cv-load-newer': import('./cv-feed').CVFeedLoadNewerEvent
+    'cv-image-error': import('./cv-image-viewer').CVImageViewerImageErrorEvent
+    'cv-prime': import('./cv-image-viewer').CVImageViewerPrimeEvent
     'cv-selection-change': import('./cv-table').CVTableSelectionChangeEvent
     'cv-scrollspy-change': import('./cv-sidebar').CVSidebarScrollspyChangeEvent
     'cv-table-row-slotchange': import('./cv-table-row').CVTableRowSlotchangeEvent
+    'cv-thumbnail-metrics': import('./cv-image-viewer').CVImageViewerThumbnailMetricsEvent
     'cv-treegrid-row-slotchange': import('./cv-treegrid-row').CVTreegridRowSlotchangeEvent
     'cv-treeitem-toggle': import('./cv-treeitem').CVTreeItemToggleEvent
   }

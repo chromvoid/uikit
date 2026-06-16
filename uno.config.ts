@@ -24,6 +24,7 @@ export default defineConfig({
     'border',
     'border-border',
     'border-collapse',
+    'backdrop-filter',
     'border-inline',
     'columns-2',
     'columns-3',

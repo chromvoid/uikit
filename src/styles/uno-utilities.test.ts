@@ -70,5 +70,6 @@ describe('Uno utility generation', () => {
     expect(css).not.toContain('.columns-2{')
     expect(css).not.toContain('.transition{')
     expect(css).not.toContain('.tabular-nums{')
+    expect(css).not.toContain('.backdrop-filter{')
   }, 15_000)
 })
