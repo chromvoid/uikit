@@ -13,6 +13,8 @@ import {
   CVCarousel,
   CVCarouselSlide,
   CVCheckbox,
+  CVChip,
+  CVChipGroup,
   CVCombobox,
   CVComboboxGroup,
   CVComboboxOption,
@@ -20,10 +22,13 @@ import {
   CVCommandPalette,
   CVContextMenu,
   CVCopyButton,
+  CVDateTimePicker,
   CVDatePicker,
   CVDialog,
   CVDisclosure,
+  CVDropzone,
   CVDrawer,
+  CVEmptyState,
   CVFeed,
   CVFeedArticle,
   CVGrid,
@@ -35,6 +40,7 @@ import {
   CVIcon,
   CVImageViewer,
   CVInput,
+  CVKbd,
   CVLandmark,
   CVLink,
   CVListbox,
@@ -46,6 +52,7 @@ import {
   CVMeter,
   CVNumber,
   CVOption,
+  CVOperationQueue,
   CVPopover,
   CVProgress,
   CVProgressRing,
@@ -54,12 +61,16 @@ import {
   CVSelect,
   CVSelectGroup,
   CVSelectOption,
+  CVShortcut,
   CVSidebar,
   CVSidebarItem,
   CVSlider,
   CVSliderMultiThumb,
+  CVSkeleton,
   CVSpinbutton,
   CVSpinner,
+  CVStatusIndicator,
+  CVStatusPill,
   CVSwitch,
   CVTab,
   CVTabPanel,
@@ -69,8 +80,10 @@ import {
   CVTableRow,
   CVTabs,
   CVTextarea,
+  CVTimePicker,
   CVToast,
   CVToastRegion,
+  CVTaskList,
   CVToolbar,
   CVToolbarItem,
   CVToolbarSeparator,
@@ -102,16 +115,21 @@ export function registerUikit(): void {
   CVCarouselSlide.define()
   CVCarousel.define()
   CVCheckbox.define()
+  CVChip.define()
+  CVChipGroup.define()
   CVCommandItem.define()
   CVCommandPalette.define()
   CVComboboxGroup.define()
   CVComboboxOption.define()
   CVCombobox.define()
   CVContextMenu.define()
+  CVDateTimePicker.define()
   CVDatePicker.define()
   CVDialog.define()
   CVDisclosure.define()
+  CVDropzone.define()
   CVDrawer.define()
+  CVEmptyState.define()
   CVFeedArticle.define()
   CVFeed.define()
   CVGridCell.define()
@@ -123,6 +141,7 @@ export function registerUikit(): void {
   CVIcon.define()
   CVImageViewer.define()
   CVInput.define()
+  CVKbd.define()
   CVLandmark.define()
   CVOption.define()
   CVListboxGroup.define()
@@ -134,6 +153,7 @@ export function registerUikit(): void {
   CVMenuButton.define()
   CVMeter.define()
   CVNumber.define()
+  CVOperationQueue.define()
   CVPopover.define()
   CVProgress.define()
   CVProgressRing.define()
@@ -142,12 +162,16 @@ export function registerUikit(): void {
   CVSelectOption.define()
   CVSelectGroup.define()
   CVSelect.define()
+  CVShortcut.define()
   CVSidebarItem.define()
   CVSidebar.define()
   CVSlider.define()
   CVSliderMultiThumb.define()
+  CVSkeleton.define()
   CVSpinbutton.define()
   CVSpinner.define()
+  CVStatusIndicator.define()
+  CVStatusPill.define()
   CVSwitch.define()
   CVTableCell.define()
   CVTableColumn.define()
@@ -157,8 +181,10 @@ export function registerUikit(): void {
   CVTabPanel.define()
   CVTabs.define()
   CVTextarea.define()
+  CVTimePicker.define()
   CVToast.define()
   CVToastRegion.define()
+  CVTaskList.define()
   CVToolbarSeparator.define()
   CVToolbarItem.define()
   CVToolbar.define()

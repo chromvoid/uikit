@@ -155,18 +155,18 @@ interface CVContextMenuEventDetail {
 
 ## ARIA Contract
 
-| Element | Attribute       | Value                            |
-| ------- | --------------- | -------------------------------- |
-| menu    | `role`          | `menu`                           |
-| menu    | `tabindex`      | `-1`                             |
-| menu    | `aria-label`    | optional label text              |
-| menu    | `hidden`        | reflects `!open`                 |
-| menu    | `data-anchor-x` | string of `anchorX`              |
-| menu    | `data-anchor-y` | string of `anchorY`              |
-| target  | `id`            | `{idBase}-target`                |
-| item    | `role`          | from headless item props         |
-| item    | `tabindex`      | `-1`                             |
-| item    | `aria-disabled` | present when disabled            |
+| Element | Attribute       | Value               |
+| ------- | --------------- | ------------------- |
+| menu    | `role`          | `menu`              |
+| menu    | `tabindex`      | `-1`                |
+| menu    | `aria-label`    | optional label text |
+| menu    | `hidden`        | reflects `!open`    |
+| menu    | `data-anchor-x` | string of `anchorX` |
+| menu    | `data-anchor-y` | string of `anchorY` |
+| target  | `id`            | `{idBase}-target`   |
+| item    | `role`          | from `cv-menu-item` headless item props |
+| item    | `tabindex`      | `-1`                |
+| item    | `aria-disabled` | present when disabled |
 
 ## Reactive State Mapping
 

@@ -108,7 +108,7 @@
     "check:exports": "npm run build && node ./scripts/check-package-exports.mjs",
     "check:pack": "npm pack --dry-run",
     "docs:prepare": "node ./scripts/prepare-docs.mjs",
-    "docs:build": "npm run docs:prepare && npm run build && vitepress build docs",
+    "docs:build": "npm run docs:prepare && npm run build && node ./scripts/build-docs.mjs",
     "docs:dev": "npm run docs:prepare && npm run build && vitepress dev docs",
     "docs:preview": "npm run docs:prepare && vitepress preview docs",
     "demo": "npm run docs:dev -- --open",
