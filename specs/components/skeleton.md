@@ -1,0 +1,56 @@
+# cv-skeleton
+
+Generic loading placeholder for blocks, text rows, and circular media.
+
+## Anatomy
+
+```
+<cv-skeleton> (host)
+└── <span part="base" role="status">
+    └── <span part="line"> ...one or more...
+```
+
+Decorative skeletons replace status semantics with `aria-hidden="true"`.
+
+## Attributes
+
+| Attribute    | Type    | Default     | Description                                 |
+| ------------ | ------- | ----------- | ------------------------------------------- |
+| `variant`    | String  | `"block"`   | `"block"`, `"text"`, or `"circle"`          |
+| `lines`      | Number  | `1`         | Number of text lines, clamped to at least 1 |
+| `animated`   | Boolean | `true`      | Enables shimmer animation                   |
+| `decorative` | Boolean | `false`     | Hides the skeleton from assistive tech      |
+| `label`      | String  | `"Loading"` | Accessible label when not decorative        |
+
+## Slots
+
+None.
+
+## CSS Parts
+
+| Part   | Description                    |
+| ------ | ------------------------------ |
+| `base` | Root semantic wrapper          |
+| `line` | Individual placeholder segment |
+
+## CSS Custom Properties
+
+| Property                        | Description             |
+| ------------------------------- | ----------------------- |
+| `--cv-skeleton-inline-size`     | Host inline size        |
+| `--cv-skeleton-block-size`      | Host block size         |
+| `--cv-skeleton-line-gap`        | Gap between text lines  |
+| `--cv-skeleton-line-block-size` | Block size of each line |
+| `--cv-skeleton-size`            | Circle size             |
+
+## Events
+
+None. The component is presentational.
+
+## Usage
+
+```html
+<cv-skeleton label="Loading file list"></cv-skeleton>
+<cv-skeleton variant="text" lines="3"></cv-skeleton>
+<cv-skeleton variant="circle" decorative></cv-skeleton>
+```
