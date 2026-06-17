@@ -1,0 +1,62 @@
+# cv-task-list
+
+Slotted shell for task rows.
+
+The component provides structure and busy/empty semantics only. Consumers own task data, progress math, formatting, retry, cancel, and row behavior.
+
+## Anatomy
+
+```
+<cv-task-list> (host)
+└── <section part="base" aria-label="Tasks">
+    ├── <div part="header">
+    ├── <div part="list" role="list">
+    │   └── <slot>
+    ├── <div part="empty"> optional
+    └── <div part="footer">
+```
+
+## Attributes
+
+| Attribute | Type    | Default         | Description                                |
+| --------- | ------- | --------------- | ------------------------------------------ |
+| `label`   | String  | `"Tasks"`       | Accessible label for the task list shell   |
+| `busy`    | Boolean | `false`         | Sets `aria-busy`                           |
+| `empty`   | Boolean | `false`         | Renders empty slot instead of default rows |
+| `density` | String  | `"comfortable"` | `"comfortable"` or `"compact"`             |
+
+## Slots
+
+| Slot        | Description         |
+| ----------- | ------------------- |
+| `header`    | Header content      |
+| `(default)` | Task rows           |
+| `empty`     | Empty state content |
+| `footer`    | Footer content      |
+
+## CSS Parts
+
+| Part     | Description              |
+| -------- | ------------------------ |
+| `base`   | Root section             |
+| `header` | Header slot wrapper      |
+| `list`   | Default row list wrapper |
+| `empty`  | Empty slot wrapper       |
+| `footer` | Footer slot wrapper      |
+
+## Events
+
+None.
+
+## Usage
+
+```html
+<cv-task-list label="Uploads" busy>
+  <div role="listitem">Uploading photo.jpg</div>
+  <div role="listitem">Uploading notes.pdf</div>
+</cv-task-list>
+
+<cv-task-list empty>
+  <cv-empty-state slot="empty" headline="No tasks"></cv-empty-state>
+</cv-task-list>
+```
