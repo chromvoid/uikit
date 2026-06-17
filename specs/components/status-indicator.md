@@ -1,0 +1,56 @@
+# cv-status-indicator
+
+Inline status marker with optional label and suffix content.
+
+## Anatomy
+
+```
+<cv-status-indicator> (host)
+└── <span part="base" role="status">
+    ├── <span part="marker">
+    ├── <span part="icon">
+    │   └── <slot name="icon">
+    ├── <span part="label">
+    │   └── <slot>
+    └── <span part="suffix">
+        └── <slot name="suffix">
+```
+
+## Attributes
+
+| Attribute    | Type    | Default     | Description                                                                 |
+| ------------ | ------- | ----------- | --------------------------------------------------------------------------- |
+| `tone`       | String  | `"neutral"` | `"neutral"`, `"primary"`, `"info"`, `"success"`, `"warning"`, or `"danger"` |
+| `size`       | String  | `"medium"`  | `"small"`, `"medium"`, or `"large"`                                         |
+| `pulse`      | Boolean | `false`     | Enables marker pulse animation                                              |
+| `decorative` | Boolean | `false`     | Uses `aria-hidden="true"` instead of status semantics                       |
+
+## Slots
+
+| Slot        | Description                  |
+| ----------- | ---------------------------- |
+| `(default)` | Optional text label          |
+| `icon`      | Optional leading icon        |
+| `suffix`    | Optional trailing decoration |
+
+## CSS Parts
+
+| Part     | Description          |
+| -------- | -------------------- |
+| `base`   | Root status wrapper  |
+| `marker` | Colored status dot   |
+| `icon`   | Icon slot wrapper    |
+| `label`  | Default slot wrapper |
+| `suffix` | Suffix slot wrapper  |
+
+## Events
+
+None. The component is display-only.
+
+## Usage
+
+```html
+<cv-status-indicator tone="success">Synced</cv-status-indicator>
+<cv-status-indicator tone="warning" pulse>Pending</cv-status-indicator>
+<cv-status-indicator decorative tone="danger"></cv-status-indicator>
+```
