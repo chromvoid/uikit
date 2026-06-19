@@ -10,6 +10,11 @@ const settle = async (element: CVTooltip) => {
   await element.updateComplete
 }
 
+const stylesToText = () =>
+  (CVTooltip.styles as Array<{cssText?: string}>)
+    .map((style) => style.cssText ?? '')
+    .join('\n')
+
 const createTooltip = async (attrs?: Partial<CVTooltip>) => {
   const el = document.createElement('cv-tooltip') as CVTooltip
   if (attrs) Object.assign(el, attrs)
@@ -86,6 +91,14 @@ describe('cv-tooltip', () => {
       const base = getBase(el)
       const content = base.querySelector('[part="content"]')
       expect(content).not.toBeNull()
+    })
+
+    it('wraps long content inside the tooltip max width', () => {
+      const cssText = stylesToText()
+
+      expect(cssText).toMatch(/\[part='content'\]\s*{[\s\S]*max-inline-size:/)
+      expect(cssText).toMatch(/\[part='content'\]\s*{[\s\S]*white-space:\s*normal;/)
+      expect(cssText).toMatch(/\[part='content'\]\s*{[\s\S]*overflow-wrap:\s*anywhere;/)
     })
 
     it('renders slot[name="trigger"] inside [part="trigger"]', async () => {
