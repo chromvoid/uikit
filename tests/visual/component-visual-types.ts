@@ -18,6 +18,7 @@ export type UikitVisualCase = {
   }
   clipSelector?: string
   diagnosticsIgnoredSelectors?: readonly string[]
+  requiredSelectors?: readonly string[]
   fullPage?: boolean
 }
 

@@ -56,6 +56,7 @@ function diagnosticSeverity(metadata: Record<string, unknown>): 'error' | 'warni
         horizontalOverflow?: unknown[]
         clippedText?: unknown[]
         outsideStage?: unknown[]
+        stageViewportOverflow?: unknown
       }
     | undefined
 
@@ -66,7 +67,8 @@ function diagnosticSeverity(metadata: Record<string, unknown>): 'error' | 'warni
   if (
     diagnostics?.horizontalOverflow?.length ||
     diagnostics?.clippedText?.length ||
-    diagnostics?.outsideStage?.length
+    diagnostics?.outsideStage?.length ||
+    diagnostics?.stageViewportOverflow
   ) {
     return 'warning'
   }

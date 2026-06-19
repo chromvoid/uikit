@@ -1,4 +1,6 @@
-import {describe, expect, it} from 'vitest'
+import fs from 'node:fs'
+
+import {beforeAll, describe, expect, it} from 'vitest'
 import type {Page} from 'playwright'
 
 import {
@@ -9,7 +11,7 @@ import {
 } from './component-visual-types'
 import {visualCases} from './component-visual-cases'
 import {collectStageDiagnostics} from './support/diagnostics'
-import {assertUikitVisualSnapshot} from './support/visual-snapshot'
+import {assertUikitVisualSnapshot, UIKIT_VISUAL_ARTIFACT_ROOT} from './support/visual-snapshot'
 
 const STAGE_SELECTOR = '#uikit-visual-stage'
 
@@ -38,6 +40,12 @@ function getVisualGlobals(): UikitVisualGlobals {
   return globalThis as UikitVisualGlobals
 }
 
+beforeAll(() => {
+  if (process.env.UIKIT_VISUAL_AUDIT !== '1') return
+
+  fs.rmSync(UIKIT_VISUAL_ARTIFACT_ROOT, {recursive: true, force: true})
+})
+
 async function applyInteraction(visualCase: UikitVisualCase): Promise<void> {
   const page = getVisualGlobals().__UIKIT_VISUAL_PAGE__
   const interaction = visualCase.interaction
@@ -57,6 +65,19 @@ async function applyInteraction(visualCase: UikitVisualCase): Promise<void> {
 
   if (interaction.click) {
     await page.locator(interaction.click).first().click()
+  }
+}
+
+async function assertRequiredSelectors(visualCase: UikitVisualCase): Promise<void> {
+  const page = getVisualGlobals().__UIKIT_VISUAL_PAGE__
+  for (const selector of visualCase.requiredSelectors ?? []) {
+    const locator = page.locator(selector).first()
+    await locator.waitFor({state: 'visible', timeout: 1_000}).catch((error: unknown) => {
+      const detail = error instanceof Error ? error.message : String(error)
+      throw new Error(
+        `${visualCase.id} required selector is not visible: ${selector}\n${detail}`,
+      )
+    })
   }
 }
 
@@ -80,9 +101,11 @@ describe('UIKit visual snapshots', () => {
       }
 
       await applyInteraction(visualCase)
+      await assertRequiredSelectors(visualCase)
 
       const diagnostics = await collectStageDiagnostics(page, STAGE_SELECTOR, {
         checkOutsideStage: !visualCase.fullPage,
+        checkViewportClip: !visualCase.fullPage,
         ignoredSelectors: visualCase.diagnosticsIgnoredSelectors ?? [],
       })
       expect(diagnostics.emptyStage).toBe(false)

@@ -71,6 +71,12 @@
         width: min(560px, calc(100vw - 88px));
         min-height: 260px;
       }
+      .visual-overlay-frame--wide {
+        width: min(680px, calc(100vw - 88px));
+      }
+      .visual-overlay-frame--tall {
+        min-height: 430px;
+      }
       .visual-overlay-row {
         display: flex;
         flex-wrap: wrap;
@@ -95,9 +101,13 @@
         display: grid;
         place-items: center;
         min-height: 88px;
+        min-width: 180px;
         padding: 14px;
         border: 1px dashed var(--cv-color-border-strong);
         border-radius: 8px;
+      }
+      .visual-demo-box--wide {
+        min-width: 260px;
       }
       .visual-long-text {
         max-width: 260px;
@@ -138,6 +148,14 @@
       .visual-splitter-frame {
         width: min(720px, 80vw);
         height: 260px;
+      }
+      cv-checkbox[data-visual-state='hover']::part(indicator) {
+        border-color: var(--cv-color-primary);
+        background: var(--cv-color-primary-surface);
+      }
+      cv-checkbox[data-visual-state='focus']::part(base) {
+        outline: 2px solid var(--cv-color-primary);
+        outline-offset: 2px;
       }
     </style>
   </head>
