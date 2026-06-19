@@ -215,7 +215,6 @@ export type {CVSkeletonVariant} from './cv-skeleton'
 export {CVSpinbutton} from './cv-spinbutton'
 export {CVSpinner} from './cv-spinner'
 export {CVStatusIndicator} from './cv-status-indicator'
-export {CVStatusPill} from './cv-status-pill'
 export type {CVStatusSize, CVStatusTone} from './cv-status-indicator'
 export {CVSwitch} from './cv-switch'
 export {CVTableCell} from './cv-table-cell'
@@ -258,18 +257,7 @@ export type {
 } from './cv-code-input'
 export {CVField} from './cv-field'
 export {CVFieldset} from './cv-fieldset'
-export {CVInputGroup} from './cv-input-group'
 export {CVPagination} from './cv-pagination'
 export type {CVPaginationChangeDetail, CVPaginationChangeEvent} from './cv-pagination'
-export {CVPresence} from './cv-presence'
-export type {
-  CVPresenceAfterEnterEvent,
-  CVPresenceAfterExitEvent,
-  CVPresenceEnterEvent,
-  CVPresenceExitEvent,
-} from './cv-presence'
-export {CVScrollArea} from './cv-scroll-area'
-export {CVSeparator} from './cv-separator'
 export {CVStep, type CVStepStatus} from './cv-step'
 export {CVSteps, type CVStepSelectDetail} from './cv-steps'
-export {CVVisuallyHidden} from './cv-visually-hidden'

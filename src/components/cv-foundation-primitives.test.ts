@@ -4,25 +4,15 @@ import {CVButtonGroup} from './cv-button-group'
 import {CVField} from './cv-field'
 import {CVFieldset} from './cv-fieldset'
 import {CVInput} from './cv-input'
-import {CVInputGroup} from './cv-input-group'
-import {CVPresence} from './cv-presence'
-import {CVScrollArea} from './cv-scroll-area'
-import {CVSeparator} from './cv-separator'
 import {CVStep} from './cv-step'
 import {CVSteps, type CVStepSelectDetail} from './cv-steps'
-import {CVVisuallyHidden} from './cv-visually-hidden'
 
 CVButtonGroup.define()
 CVField.define()
 CVFieldset.define()
 CVInput.define()
-CVInputGroup.define()
-CVPresence.define()
-CVScrollArea.define()
-CVSeparator.define()
 CVStep.define()
 CVSteps.define()
-CVVisuallyHidden.define()
 
 const settle = async (element: {updateComplete: Promise<unknown>}) => {
   await element.updateComplete
@@ -56,6 +46,11 @@ describe('foundation primitives', () => {
     expect(input.getAttribute('aria-labelledby')).toContain('label')
     expect(input.getAttribute('aria-describedby')).toContain('description')
     expect(input.getAttribute('aria-describedby')).toContain('error')
+
+    const nativeInput = input.shadowRoot!.querySelector('[part="input"]') as HTMLInputElement
+    expect(nativeInput.getAttribute('aria-labelledby')).toContain('label')
+    expect(nativeInput.getAttribute('aria-describedby')).toContain('description')
+    expect(nativeInput.getAttribute('aria-describedby')).toContain('error')
   })
 
   it('cv-steps marks current step and emits selection events when selectable', async () => {
@@ -86,18 +81,10 @@ describe('foundation primitives', () => {
     const tags = [
       'cv-button-group',
       'cv-fieldset',
-      'cv-input-group',
-      'cv-presence',
-      'cv-scroll-area',
-      'cv-separator',
-      'cv-visually-hidden',
     ] as const
 
     for (const tag of tags) {
       const element = document.createElement(tag)
-      if (tag === 'cv-presence') {
-        ;(element as CVPresence).present = true
-      }
       document.body.append(element)
       await settle(element as unknown as {updateComplete: Promise<unknown>})
       expect(element.shadowRoot).not.toBeNull()

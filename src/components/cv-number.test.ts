@@ -22,9 +22,6 @@ const getBase = (el: CVNumber) => el.shadowRoot!.querySelector('[part="base"]') 
 const getInput = (el: CVNumber) => el.shadowRoot!.querySelector('[part="input"]') as HTMLInputElement
 const getPrefix = (el: CVNumber) => el.shadowRoot!.querySelector('[part="prefix"]') as HTMLElement
 const getSuffix = (el: CVNumber) => el.shadowRoot!.querySelector('[part="suffix"]') as HTMLElement
-const getLabel = (el: CVNumber) => el.shadowRoot!.querySelector('[part="form-control-label"]') as HTMLElement
-const getHelpText = (el: CVNumber) =>
-  el.shadowRoot!.querySelector('[part="form-control-help-text"]') as HTMLElement
 const getClearButton = (el: CVNumber) => el.shadowRoot!.querySelector('[part="clear-button"]') as HTMLElement
 const getStepper = (el: CVNumber) => el.shadowRoot!.querySelector('[part="stepper"]') as HTMLElement
 const getIncrement = (el: CVNumber) => el.shadowRoot!.querySelector('[part="increment"]') as HTMLButtonElement
@@ -76,40 +73,6 @@ describe('cv-number', () => {
       expect(suffix).not.toBeNull()
       expect(suffix.tagName.toLowerCase()).toBe('span')
       const slot = suffix.querySelector('slot[name="suffix"]')
-      expect(slot).not.toBeNull()
-    })
-
-    it('renders [part="form-control-label"] containing slot[name="label"]', async () => {
-      const el = await createNumber()
-      const label = getLabel(el)
-      expect(label).not.toBeNull()
-      expect(label.tagName.toLowerCase()).toBe('span')
-      const slot = label.querySelector('slot[name="label"]')
-      expect(slot).not.toBeNull()
-    })
-
-    it('hides [part="form-control-label"] when the label slot is empty', async () => {
-      const el = await createNumber()
-      expect(getLabel(el).hidden).toBe(true)
-    })
-
-    it('shows [part="form-control-label"] when the label slot has content', async () => {
-      const el = await createNumber()
-      const labelContent = document.createElement('span')
-      labelContent.slot = 'label'
-      labelContent.textContent = 'Quantity'
-      el.append(labelContent)
-      await settle(el)
-
-      expect(getLabel(el).hidden).toBe(false)
-    })
-
-    it('renders [part="form-control-help-text"] containing slot[name="help-text"]', async () => {
-      const el = await createNumber()
-      const helpText = getHelpText(el)
-      expect(helpText).not.toBeNull()
-      expect(helpText.tagName.toLowerCase()).toBe('span')
-      const slot = helpText.querySelector('slot[name="help-text"]')
       expect(slot).not.toBeNull()
     })
 
@@ -270,6 +233,17 @@ describe('cv-number', () => {
       el.value = 99
       await settle(el)
       expect(getInput(el).getAttribute('aria-valuenow')).toBe('99')
+    })
+
+    it('passes aria-labelledby and aria-describedby through to the native spinbutton', async () => {
+      const el = await createNumber()
+      el.setAttribute('aria-labelledby', 'field-label')
+      el.setAttribute('aria-describedby', 'field-description field-error')
+      await settle(el)
+
+      const input = getInput(el)
+      expect(input.getAttribute('aria-labelledby')).toBe('field-label')
+      expect(input.getAttribute('aria-describedby')).toBe('field-description field-error')
     })
   })
 

@@ -1,6 +1,6 @@
 # cv-textarea
 
-Multi-line text input with form-field chrome, native textarea semantics, and headless state delegation.
+Multi-line text input with native textarea semantics and headless state delegation.
 
 **Headless:** [`createTextarea`](https://github.com/chromvoid/headless-ui/blob/main/specs/components/textarea.md)
 
@@ -8,12 +8,8 @@ Multi-line text input with form-field chrome, native textarea semantics, and hea
 
 ```
 <cv-textarea> (host)
-├── <span part="form-control-label">
-│   └── <slot name="label">
-├── <div part="base">
-│   └── <textarea part="textarea"></textarea>
-└── <span part="form-control-help-text">
-    └── <slot name="help-text">
+└── <div part="base">
+    └── <textarea part="textarea"></textarea>
 ```
 
 ## Attributes
@@ -33,6 +29,8 @@ Multi-line text input with form-field chrome, native textarea semantics, and hea
 | `size`        | String  | `"medium"`   | yes      | Component size: `small` \| `medium` \| `large`     |
 | `variant`     | String  | `"outlined"` | yes      | Visual variant: `outlined` \| `filled`             |
 | `name`        | String  | `""`         | no       | Native textarea form field name                    |
+| `aria-labelledby` | String | `""`      | no       | ID reference passed to the native textarea         |
+| `aria-describedby` | String | `""`     | no       | Description/error ID reference passed to the native textarea |
 
 ## Variants
 
@@ -51,21 +49,16 @@ Multi-line text input with form-field chrome, native textarea semantics, and hea
 
 ## Slots
 
-| Slot        | Description                                            |
-| ----------- | ------------------------------------------------------ |
-| `label`     | Optional label content above the textarea              |
-| `help-text` | Optional helper or description text below the textarea |
+`cv-textarea` has no content slots. Wrap it in `cv-field` for labels, descriptions, and errors.
 
 > The native `<textarea>` is not slottable. There is no default slot.
 
 ## CSS Parts
 
-| Part                     | Element      | Description                        |
-| ------------------------ | ------------ | ---------------------------------- |
-| `base`                   | `<div>`      | Wrapper around the native textarea |
-| `textarea`               | `<textarea>` | Native multi-line text control     |
-| `form-control-label`     | `<span>`     | Wrapper around `label` slot        |
-| `form-control-help-text` | `<span>`     | Wrapper around `help-text` slot    |
+| Part       | Element      | Description                        |
+| ---------- | ------------ | ---------------------------------- |
+| `base`     | `<div>`      | Wrapper around the native textarea |
+| `textarea` | `<textarea>` | Native multi-line text control     |
 
 ## CSS Custom Properties
 
@@ -132,6 +125,7 @@ Multi-line text input with form-field chrome, native textarea semantics, and hea
 ### Contract props spreading
 
 - `contracts.getTextareaProps()` is spread onto `[part="textarea"]` to apply `id`, `aria-disabled`, `aria-readonly`, `aria-required`, `placeholder`, `disabled`, `readonly`, `required`, `tabindex`, `rows`, `cols`, `minlength`, and `maxlength`.
+- Host `aria-labelledby` and `aria-describedby` are passed through to the native `<textarea>`, typically from `cv-field`.
 
 ### Event wiring
 
@@ -155,10 +149,11 @@ UIKit does not own ARIA computation, disabled/readonly guards, or filled-state d
 ```html
 <cv-textarea placeholder="Write a comment"></cv-textarea>
 
-<cv-textarea required rows="6">
+<cv-field required>
   <span slot="label">Comment</span>
-  <span slot="help-text">Be specific and concise.</span>
-</cv-textarea>
+  <cv-textarea required rows="6"></cv-textarea>
+  <span slot="description">Be specific and concise.</span>
+</cv-field>
 
 <cv-textarea variant="filled" size="small" resize="none"></cv-textarea>
 

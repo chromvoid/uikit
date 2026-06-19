@@ -9,12 +9,6 @@ import {hasTextEditableFocus} from './focus-utils'
 
 let cvTextareaNonce = 0
 
-function hasAssignedSlotContent(slot: HTMLSlotElement): boolean {
-  return slot
-    .assignedNodes({flatten: true})
-    .some((node) => node.nodeType === Node.ELEMENT_NODE || Boolean(node.textContent?.trim()))
-}
-
 type CVTextareaSize = 'small' | 'medium' | 'large'
 type CVTextareaVariant = 'outlined' | 'filled'
 type CVTextareaEnterBehavior = 'newline' | 'submit'
@@ -55,6 +49,8 @@ export class CVTextarea extends FormAssociatedReatomElement {
       enterBehavior: {type: String, reflect: true, attribute: 'enter-behavior'},
       name: {type: String},
       invalid: {type: Boolean, reflect: true},
+      ariaLabelledBy: {type: String, attribute: 'aria-labelledby'},
+      ariaDescribedBy: {type: String, attribute: 'aria-describedby'},
     }
   }
 
@@ -73,12 +69,13 @@ export class CVTextarea extends FormAssociatedReatomElement {
   declare enterBehavior: CVTextareaEnterBehavior
   declare name: string
   declare invalid: boolean
+  declare ariaLabelledBy: string
+  declare ariaDescribedBy: string
 
   private model: TextareaModel
   private valueOnFocus = ''
   private defaultValue = ''
   private didCaptureDefaultValue = false
-  private hasLabelSlot = false
 
   constructor() {
     super()
@@ -97,6 +94,8 @@ export class CVTextarea extends FormAssociatedReatomElement {
     this.enterBehavior = 'newline'
     this.name = ''
     this.invalid = false
+    this.ariaLabelledBy = ''
+    this.ariaDescribedBy = ''
     this.model = this.createModel()
   }
 
@@ -152,19 +151,6 @@ export class CVTextarea extends FormAssociatedReatomElement {
 
       [part='textarea']::placeholder {
         color: var(--cv-textarea-placeholder-color);
-      }
-
-      [part='form-control-label'] {
-        display: block;
-        margin-bottom: 5px;
-      }
-
-      [part='form-control-label'][hidden] {
-        display: none;
-      }
-
-      [part='form-control-help-text'] {
-        display: block;
       }
 
       :host([variant='outlined']) [part='base'] {
@@ -243,7 +229,7 @@ export class CVTextarea extends FormAssociatedReatomElement {
     this.removeEventListener('pointerdown', this.handleHostPointerDown)
   }
 
-  // A tap on the label/shell padding hits non-editable content, so the WebView
+  // A tap on the shell padding hits non-editable content, so the WebView
   // hides the IME before focus reaches the inner textarea — a visible keyboard
   // flash when moving between fields. Claim the tap and focus the textarea
   // synchronously instead, so the IME sees an input-to-input transition.
@@ -485,21 +471,10 @@ export class CVTextarea extends FormAssociatedReatomElement {
     form.requestSubmit()
   }
 
-  private handleLabelSlotChange(event: Event) {
-    const next = hasAssignedSlotContent(event.target as HTMLSlotElement)
-    if (this.hasLabelSlot === next) return
-
-    this.hasLabelSlot = next
-    this.requestUpdate()
-  }
-
   protected override render() {
     const textareaProps = this.model.contracts.getTextareaProps()
 
     return html`
-      <span part="form-control-label" ?hidden=${!this.hasLabelSlot}>
-        <slot name="label" @slotchange=${this.handleLabelSlotChange}></slot>
-      </span>
       <div part="base">
         <textarea
           part="textarea"
@@ -513,6 +488,8 @@ export class CVTextarea extends FormAssociatedReatomElement {
           aria-readonly=${textareaProps['aria-readonly'] ?? nothing}
           aria-required=${textareaProps['aria-required'] ?? nothing}
           aria-invalid=${this.invalid ? 'true' : nothing}
+          aria-labelledby=${this.ariaLabelledBy || nothing}
+          aria-describedby=${this.ariaDescribedBy || nothing}
           placeholder=${textareaProps.placeholder ?? nothing}
           ?disabled=${textareaProps.disabled}
           ?readonly=${textareaProps.readonly}
@@ -525,7 +502,6 @@ export class CVTextarea extends FormAssociatedReatomElement {
           @keydown=${this.handleNativeKeyDown}
         ></textarea>
       </div>
-      <span part="form-control-help-text"><slot name="help-text"></slot></span>
     `
   }
 }

@@ -12,11 +12,12 @@ Single-line text input control supporting text-like types, clearable behavior, a
 <!-- Basic text input -->
 <cv-input placeholder="Enter text"></cv-input>
 
-<!-- With label and help text -->
-<cv-input>
+<!-- With label and help text through cv-field -->
+<cv-field>
   <span slot="label">Username</span>
-  <span slot="help-text">Enter your username</span>
-</cv-input>
+  <cv-input></cv-input>
+  <span slot="description">Enter your username</span>
+</cv-field>
 
 <!-- Clearable -->
 <cv-input clearable value="Hello world"></cv-input>
@@ -40,9 +41,10 @@ Single-line text input control supporting text-like types, clearable behavior, a
 <cv-input readonly value="Read only value"></cv-input>
 
 <!-- Email type, required -->
-<cv-input type="email" required placeholder="Email address">
+<cv-field required>
   <span slot="label">Email</span>
-</cv-input>
+  <cv-input type="email" required placeholder="Email address"></cv-input>
+</cv-field>
 
 <!-- Large size, outlined variant with custom clear icon -->
 <cv-input size="large" clearable>
@@ -54,20 +56,16 @@ Single-line text input control supporting text-like types, clearable behavior, a
 
 ```
 <cv-input> (host)
-├── <span part="form-control-label">
-│   └── <slot name="label">
-├── <div part="base">
-│   ├── <span part="prefix">
-│   │   └── <slot name="prefix">
-│   ├── <input part="input" />
-│   ├── <span part="clear-button">
-│   │   └── <slot name="clear-icon">×</slot>
-│   ├── <span part="password-toggle">
-│   │   └── <slot name="show-password-icon|hide-password-icon">
-│   └── <span part="suffix">
-│       └── <slot name="suffix">
-└── <span part="form-control-help-text">
-    └── <slot name="help-text">
+└── <div part="base">
+    ├── <span part="prefix">
+    │   └── <slot name="prefix">
+    ├── <input part="input" />
+    ├── <span part="clear-button">
+    │   └── <slot name="clear-icon">×</slot>
+    ├── <span part="password-toggle">
+    │   └── <slot name="show-password-icon|hide-password-icon">
+    └── <span part="suffix">
+        └── <slot name="suffix">
 ```
 
 ## Attributes
@@ -86,6 +84,8 @@ Single-line text input control supporting text-like types, clearable behavior, a
 | `variant`         | String      | `"outlined"` | yes      | Visual variant: `outlined` \| `filled`                                     |
 | `preset`          | String      | —            | yes      | Semantic preset: `search-mobile`                                           |
 | `name`            | String      | `""`         | no       | Name for form association                                                  |
+| `aria-labelledby` | String      | `""`         | no       | ID reference passed to the native input                                    |
+| `aria-describedby`| String      | `""`         | no       | Description/error ID reference passed to the native input                  |
 
 ## Variants
 
@@ -117,23 +117,19 @@ Single-line text input control supporting text-like types, clearable behavior, a
 | `clear-icon`         | Custom icon for the clear button (default: `×`)    |
 | `show-password-icon` | Custom icon for the "show password" state          |
 | `hide-password-icon` | Custom icon for the "hide password" state          |
-| `label`              | Label text displayed above or beside the input     |
-| `help-text`          | Help or description text displayed below the input |
 
 > **Note:** The native `<input>` element is not slottable. There is no default slot.
 
 ## CSS Parts
 
-| Part                     | Element   | Description                         |
-| ------------------------ | --------- | ----------------------------------- |
-| `base`                   | `<div>`   | Outermost wrapper element           |
-| `input`                  | `<input>` | The native input element            |
-| `prefix`                 | `<span>`  | Wrapper around the `prefix` slot    |
-| `suffix`                 | `<span>`  | Wrapper around the `suffix` slot    |
-| `clear-button`           | `<span>`  | The clear button wrapper            |
-| `password-toggle`        | `<span>`  | The password toggle button wrapper  |
-| `form-control-label`     | `<span>`  | Wrapper around the `label` slot     |
-| `form-control-help-text` | `<span>`  | Wrapper around the `help-text` slot |
+| Part              | Element   | Description                        |
+| ----------------- | --------- | ---------------------------------- |
+| `base`            | `<div>`   | Outermost wrapper element          |
+| `input`           | `<input>` | The native input element           |
+| `prefix`          | `<span>`  | Wrapper around the `prefix` slot   |
+| `suffix`          | `<span>`  | Wrapper around the `suffix` slot   |
+| `clear-button`    | `<span>`  | The clear button wrapper           |
+| `password-toggle` | `<span>`  | The password toggle button wrapper |
 
 ## CSS Custom Properties
 
@@ -221,6 +217,7 @@ Additionally, component styles depend on theme tokens through fallback values:
 ### Contract props spreading
 
 - `contracts.getInputProps()` is spread onto the `[part="input"]` native `<input>` element to apply `id`, `type`, `aria-disabled`, `aria-readonly`, `aria-required`, `placeholder`, `disabled`, `readonly`, `tabindex`, and `autocomplete`.
+- Host `aria-labelledby` and `aria-describedby` are passed through to the native `<input>`, typically from `cv-field`.
 - `contracts.getClearButtonProps()` is spread onto the `[part="clear-button"]` element to apply `role`, `aria-label`, `tabindex`, `hidden`, and `aria-hidden`.
 - `contracts.getPasswordToggleProps()` is spread onto the `[part="password-toggle"]` element to apply `role`, `aria-label`, `aria-pressed`, `tabindex`, `hidden`, and `aria-hidden`.
 

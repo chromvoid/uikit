@@ -28,8 +28,6 @@ const getClearButton = (el: CVInput) => el.shadowRoot!.querySelector('[part="cle
 
 const getPasswordToggle = (el: CVInput) =>
   el.shadowRoot!.querySelector('[part="password-toggle"]') as HTMLElement
-const getLabel = (el: CVInput) =>
-  el.shadowRoot!.querySelector('[part="form-control-label"]') as HTMLElement
 
 afterEach(() => {
   document.body.innerHTML = ''
@@ -87,38 +85,6 @@ describe('cv-input', () => {
       const el = await createInput({type: 'password', passwordToggle: true})
       const toggle = getPasswordToggle(el)
       expect(toggle).not.toBeNull()
-    })
-
-    it('renders [part="form-control-label"] containing slot[name="label"]', async () => {
-      const el = await createInput()
-      const label = getLabel(el)
-      expect(label).not.toBeNull()
-      const slot = label!.querySelector('slot[name="label"]')
-      expect(slot).not.toBeNull()
-    })
-
-    it('hides [part="form-control-label"] when the label slot is empty', async () => {
-      const el = await createInput()
-      expect(getLabel(el).hidden).toBe(true)
-    })
-
-    it('shows [part="form-control-label"] when the label slot has content', async () => {
-      const el = await createInput()
-      const labelContent = document.createElement('span')
-      labelContent.slot = 'label'
-      labelContent.textContent = 'Email'
-      el.append(labelContent)
-      await settle(el)
-
-      expect(getLabel(el).hidden).toBe(false)
-    })
-
-    it('renders [part="form-control-help-text"] containing slot[name="help-text"]', async () => {
-      const el = await createInput()
-      const helpText = el.shadowRoot!.querySelector('[part="form-control-help-text"]')
-      expect(helpText).not.toBeNull()
-      const slot = helpText!.querySelector('slot[name="help-text"]')
-      expect(slot).not.toBeNull()
     })
 
     it('does NOT render a default (unnamed) slot', async () => {
@@ -472,6 +438,17 @@ describe('cv-input', () => {
       const el = await createInput({invalid: true})
       const input = getInput(el)
       expect(input.getAttribute('aria-invalid')).toBe('true')
+    })
+
+    it('passes aria-labelledby and aria-describedby through to the native input', async () => {
+      const el = await createInput()
+      el.setAttribute('aria-labelledby', 'field-label')
+      el.setAttribute('aria-describedby', 'field-description field-error')
+      await settle(el)
+
+      const input = getInput(el)
+      expect(input.getAttribute('aria-labelledby')).toBe('field-label')
+      expect(input.getAttribute('aria-describedby')).toBe('field-description field-error')
     })
 
     it('clear button has role="button"', async () => {
@@ -1185,13 +1162,13 @@ describe('cv-input', () => {
       return event
     }
 
-    it('claims a label-area tap and focuses the inner input while another field is focused', async () => {
+    it('claims a shell tap and focuses the inner input while another field is focused', async () => {
       const other = document.createElement('input')
       document.body.append(other)
       other.focus()
 
       const el = await createInput()
-      const event = dispatchHostPointerDown(el, getLabel(el))
+      const event = dispatchHostPointerDown(el, getBase(el))
 
       expect(event.defaultPrevented).toBe(true)
       expect(el.shadowRoot!.activeElement).toBe(getInput(el))
@@ -1199,7 +1176,7 @@ describe('cv-input', () => {
 
     it('does not intercept when no editable element holds focus', async () => {
       const el = await createInput()
-      const event = dispatchHostPointerDown(el, getLabel(el))
+      const event = dispatchHostPointerDown(el, getBase(el))
 
       expect(event.defaultPrevented).toBe(false)
       expect(el.shadowRoot!.activeElement).toBeNull()
@@ -1222,7 +1199,7 @@ describe('cv-input', () => {
       other.focus()
 
       const el = await createInput({disabled: true})
-      const event = dispatchHostPointerDown(el, getLabel(el))
+      const event = dispatchHostPointerDown(el, getBase(el))
 
       expect(event.defaultPrevented).toBe(false)
       expect(document.activeElement).toBe(other)

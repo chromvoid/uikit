@@ -44,7 +44,6 @@ import {
   CVIcon,
   CVImageViewer,
   CVInput,
-  CVInputGroup,
   CVKbd,
   CVLandmark,
   CVLink,
@@ -60,7 +59,6 @@ import {
   CVOperationQueue,
   CVPagination,
   CVPopover,
-  CVPresence,
   CVProgress,
   CVProgressRing,
   CVRadio,
@@ -69,8 +67,6 @@ import {
   CVSelectGroup,
   CVSelectOption,
   CVShortcut,
-  CVScrollArea,
-  CVSeparator,
   CVSidebar,
   CVSidebarItem,
   CVSlider,
@@ -79,7 +75,6 @@ import {
   CVSpinbutton,
   CVSpinner,
   CVStatusIndicator,
-  CVStatusPill,
   CVStep,
   CVSteps,
   CVSwitch,
@@ -99,7 +94,6 @@ import {
   CVToolbarItem,
   CVToolbarSeparator,
   CVTooltip,
-  CVVisuallyHidden,
   CVTreegrid,
   CVTreegridCell,
   CVTreegridColumn,
@@ -157,7 +151,6 @@ export function registerUikit(): void {
   CVIcon.define()
   CVImageViewer.define()
   CVInput.define()
-  CVInputGroup.define()
   CVKbd.define()
   CVLandmark.define()
   CVOption.define()
@@ -173,7 +166,6 @@ export function registerUikit(): void {
   CVOperationQueue.define()
   CVPagination.define()
   CVPopover.define()
-  CVPresence.define()
   CVProgress.define()
   CVProgressRing.define()
   CVRadio.define()
@@ -182,8 +174,6 @@ export function registerUikit(): void {
   CVSelectGroup.define()
   CVSelect.define()
   CVShortcut.define()
-  CVScrollArea.define()
-  CVSeparator.define()
   CVSidebarItem.define()
   CVSidebar.define()
   CVSlider.define()
@@ -192,7 +182,6 @@ export function registerUikit(): void {
   CVSpinbutton.define()
   CVSpinner.define()
   CVStatusIndicator.define()
-  CVStatusPill.define()
   CVStep.define()
   CVSteps.define()
   CVSwitch.define()
@@ -212,7 +201,6 @@ export function registerUikit(): void {
   CVToolbarItem.define()
   CVToolbar.define()
   CVTooltip.define()
-  CVVisuallyHidden.define()
   CVTreegridColumn.define()
   CVTreegridCell.define()
   CVTreegridRow.define()

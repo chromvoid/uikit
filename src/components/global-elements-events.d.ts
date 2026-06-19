@@ -44,7 +44,6 @@ declare global {
     'cv-icon': import('./cv-icon').CVIcon
     'cv-image-viewer': import('./cv-image-viewer').CVImageViewer
     'cv-input': import('./cv-input').CVInput
-    'cv-input-group': import('./cv-input-group').CVInputGroup
     'cv-kbd': import('./cv-kbd').CVKbd
     'cv-landmark': import('./cv-landmark').CVLandmark
     'cv-link': import('./cv-link').CVLink
@@ -60,7 +59,6 @@ declare global {
     'cv-operation-queue': import('./cv-operation-queue').CVOperationQueue
     'cv-pagination': import('./cv-pagination').CVPagination
     'cv-popover': import('./cv-popover').CVPopover
-    'cv-presence': import('./cv-presence').CVPresence
     'cv-progress': import('./cv-progress').CVProgress
     'cv-progress-ring': import('./cv-progress-ring').CVProgressRing
     'cv-radio': import('./cv-radio').CVRadio
@@ -69,8 +67,6 @@ declare global {
     'cv-select-group': import('./cv-select-group').CVSelectGroup
     'cv-select-option': import('./cv-select-option').CVSelectOption
     'cv-shortcut': import('./cv-shortcut').CVShortcut
-    'cv-scroll-area': import('./cv-scroll-area').CVScrollArea
-    'cv-separator': import('./cv-separator').CVSeparator
     'cv-sidebar': import('./cv-sidebar').CVSidebar
     'cv-sidebar-item': import('./cv-sidebar-item').CVSidebarItem
     'cv-slider': import('./cv-slider').CVSlider
@@ -79,7 +75,6 @@ declare global {
     'cv-spinbutton': import('./cv-spinbutton').CVSpinbutton
     'cv-spinner': import('./cv-spinner').CVSpinner
     'cv-status-indicator': import('./cv-status-indicator').CVStatusIndicator
-    'cv-status-pill': import('./cv-status-pill').CVStatusPill
     'cv-step': import('./cv-step').CVStep
     'cv-steps': import('./cv-steps').CVSteps
     'cv-switch': import('./cv-switch').CVSwitch
@@ -99,7 +94,6 @@ declare global {
     'cv-toolbar-item': import('./cv-toolbar-item').CVToolbarItem
     'cv-toolbar-separator': import('./cv-toolbar-separator').CVToolbarSeparator
     'cv-tooltip': import('./cv-tooltip').CVTooltip
-    'cv-visually-hidden': import('./cv-visually-hidden').CVVisuallyHidden
     'cv-treegrid': import('./cv-treegrid').CVTreegrid
     'cv-treegrid-cell': import('./cv-treegrid-cell').CVTreegridCell
     'cv-treegrid-column': import('./cv-treegrid-column').CVTreegridColumn
@@ -176,10 +170,6 @@ declare global {
     'cv-load-more': import('./cv-feed').CVFeedLoadMoreEvent
     'cv-load-newer': import('./cv-feed').CVFeedLoadNewerEvent
     'cv-complete': import('./cv-code-input').CVCodeInputCompleteEvent
-    'cv-enter': import('./cv-presence').CVPresenceEnterEvent
-    'cv-after-enter': import('./cv-presence').CVPresenceAfterEnterEvent
-    'cv-exit': import('./cv-presence').CVPresenceExitEvent
-    'cv-after-exit': import('./cv-presence').CVPresenceAfterExitEvent
     'cv-image-error': import('./cv-image-viewer').CVImageViewerImageErrorEvent
     'cv-page-change': import('./cv-pagination').CVPaginationChangeEvent
     'cv-prime': import('./cv-image-viewer').CVImageViewerPrimeEvent

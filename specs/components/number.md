@@ -1,6 +1,6 @@
 # cv-number
 
-Numeric input field with optional stepper controls, clearable behavior, and form-field chrome (label, help-text, prefix/suffix slots).
+Numeric input field with optional stepper controls, clearable behavior, and prefix/suffix slots.
 
 **Headless:** [`createNumber`](https://github.com/chromvoid/headless-ui/blob/main/specs/components/number.md)
 
@@ -8,21 +8,17 @@ Numeric input field with optional stepper controls, clearable behavior, and form
 
 ```
 <cv-number> (host)
-├── <span part="form-control-label">
-│   └── <slot name="label">
-├── <div part="base">
-│   ├── <span part="prefix">
-│   │   └── <slot name="prefix">
-│   ├── <input part="input" role="spinbutton" inputmode="decimal">
-│   ├── <span part="clear-button" role="button">       ← conditional on showClearButton
-│   │   └── <slot name="clear-icon">×</slot>
-│   ├── <span part="stepper">                           ← conditional on stepper
-│   │   ├── <button part="increment" type="button">
-│   │   └── <button part="decrement" type="button">
-│   └── <span part="suffix">
-│       └── <slot name="suffix">
-└── <span part="form-control-help-text">
-    └── <slot name="help-text">
+└── <div part="base">
+    ├── <span part="prefix">
+    │   └── <slot name="prefix">
+    ├── <input part="input" role="spinbutton" inputmode="decimal">
+    ├── <span part="clear-button" role="button">       ← conditional on showClearButton
+    │   └── <slot name="clear-icon">×</slot>
+    ├── <span part="stepper">                           ← conditional on stepper
+    │   ├── <button part="increment" type="button">
+    │   └── <button part="decrement" type="button">
+    └── <span part="suffix">
+        └── <slot name="suffix">
 ```
 
 ## Attributes
@@ -70,25 +66,21 @@ Numeric input field with optional stepper controls, clearable behavior, and form
 | `prefix`     | Content rendered before the input (e.g., currency symbol icon) |
 | `suffix`     | Content rendered after the stepper controls (e.g., unit label) |
 | `clear-icon` | Custom icon for the clear button (default: `×`)                |
-| `label`      | Label text displayed above the input                           |
-| `help-text`  | Help or description text displayed below the input             |
 
 > **Note:** The native `<input>` element is not slottable. There is no default slot.
 
 ## CSS Parts
 
-| Part                     | Element    | Description                                                        |
-| ------------------------ | ---------- | ------------------------------------------------------------------ |
-| `base`                   | `<div>`    | Outermost wrapper element containing input and controls            |
-| `input`                  | `<input>`  | The native input element with `role="spinbutton"`                  |
-| `prefix`                 | `<span>`   | Wrapper around the `prefix` slot                                   |
-| `suffix`                 | `<span>`   | Wrapper around the `suffix` slot                                   |
-| `clear-button`           | `<span>`   | The clear button wrapper (conditionally visible)                   |
-| `stepper`                | `<span>`   | Wrapper around increment/decrement buttons (conditionally visible) |
-| `increment`              | `<button>` | Increment stepper button                                           |
-| `decrement`              | `<button>` | Decrement stepper button                                           |
-| `form-control-label`     | `<span>`   | Wrapper around the `label` slot                                    |
-| `form-control-help-text` | `<span>`   | Wrapper around the `help-text` slot                                |
+| Part           | Element    | Description                                                        |
+| -------------- | ---------- | ------------------------------------------------------------------ |
+| `base`         | `<div>`    | Outermost wrapper element containing input and controls            |
+| `input`        | `<input>`  | The native input element with `role="spinbutton"`                  |
+| `prefix`       | `<span>`   | Wrapper around the `prefix` slot                                   |
+| `suffix`       | `<span>`   | Wrapper around the `suffix` slot                                   |
+| `clear-button` | `<span>`   | The clear button wrapper (conditionally visible)                   |
+| `stepper`      | `<span>`   | Wrapper around increment/decrement buttons (conditionally visible) |
+| `increment`    | `<button>` | Increment stepper button                                           |
+| `decrement`    | `<button>` | Decrement stepper button                                           |
 
 ## CSS Custom Properties
 
@@ -225,11 +217,12 @@ UIKit does not own value management, clamping, snapping, draft commit logic, or 
 <!-- Basic number input -->
 <cv-number value="0" placeholder="Enter a number"></cv-number>
 
-<!-- With label and help text -->
-<cv-number>
+<!-- With label and help text through cv-field -->
+<cv-field>
   <span slot="label">Quantity</span>
-  <span slot="help-text">Enter a value between 1 and 100</span>
-</cv-number>
+  <cv-number></cv-number>
+  <span slot="description">Enter a value between 1 and 100</span>
+</cv-field>
 
 <!-- With min, max, and step -->
 <cv-number value="5" min="0" max="100" step="5" large-step="25"></cv-number>
@@ -259,9 +252,10 @@ UIKit does not own value management, clamping, snapping, draft commit logic, or 
 <cv-number read-only value="100"></cv-number>
 
 <!-- Required with label -->
-<cv-number required>
+<cv-field required>
   <span slot="label">Age</span>
-</cv-number>
+  <cv-number required></cv-number>
+</cv-field>
 
 <!-- With accessible label -->
 <cv-number aria-label="Quantity" value="1" min="1" max="99" stepper></cv-number>

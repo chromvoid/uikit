@@ -240,22 +240,6 @@ export const actionsFeedbackCases: readonly UikitVisualCase[] = [
     `,
   }),
   visualCase({
-    id: 'cv-status-pill/states',
-    component: 'cv-status-pill',
-    title: 'Status pill tones, sizes, pulse, and long label states',
-    states: ['neutral', 'primary', 'success', 'warning', 'danger', 'small', 'large', 'pulse', 'long-label'],
-    html: `
-      <div class="visual-row">
-        <cv-status-pill tone="neutral">Neutral</cv-status-pill>
-        <cv-status-pill tone="primary">Primary</cv-status-pill>
-        <cv-status-pill tone="success" pulse>Synced</cv-status-pill>
-        <cv-status-pill tone="warning" size="small">Queued</cv-status-pill>
-        <cv-status-pill tone="danger" size="large">Blocked</cv-status-pill>
-        <cv-status-pill class="visual-long-text" tone="info">Long status pill label that wraps pressure</cv-status-pill>
-      </div>
-    `,
-  }),
-  visualCase({
     id: 'cv-kbd/states',
     component: 'cv-kbd',
     title: 'Keyboard token sizes and tones',

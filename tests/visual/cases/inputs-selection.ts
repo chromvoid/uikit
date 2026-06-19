@@ -16,6 +16,8 @@ export const inputsSelectionCases: readonly UikitVisualCase[] = [
       'invalid',
       'clearable',
       'password-toggle',
+      'prefix',
+      'suffix',
       'long-value',
     ],
     interaction: {focus: 'cv-input[data-visual-id="focus"]'},
@@ -30,6 +32,10 @@ export const inputsSelectionCases: readonly UikitVisualCase[] = [
         <cv-input invalid value="Invalid value"></cv-input>
         <cv-input clearable value="Clearable"></cv-input>
         <cv-input type="password" password-toggle value="secret-value"></cv-input>
+        <cv-input value="chromvoid.app">
+          <span slot="prefix">https://</span>
+          <span slot="suffix">.onion</span>
+        </cv-input>
         <cv-input data-visual-id="focus" class="visual-long-text" value="Focused long value with wrapping pressure"></cv-input>
       </div>
     `,
@@ -78,27 +84,6 @@ export const inputsSelectionCases: readonly UikitVisualCase[] = [
           <cv-switch disabled>Telemetry</cv-switch>
           <cv-switch disabled checked>Backups</cv-switch>
         </cv-fieldset>
-      </div>
-    `,
-  }),
-  visualCase({
-    id: 'cv-input-group/states',
-    component: 'cv-input-group',
-    title: 'Input group prefix, suffix, actions, disabled child, and long content',
-    states: ['prefix', 'suffix', 'actions', 'long-content'],
-    html: `
-      <div class="visual-grid">
-        <cv-input-group>
-          <span slot="prefix">https://</span>
-          <cv-input value="chromvoid.app"></cv-input>
-          <span slot="suffix">.onion</span>
-          <cv-button slot="actions" size="small">Check</cv-button>
-        </cv-input-group>
-        <cv-input-group>
-          <span slot="prefix">Key</span>
-          <cv-input disabled value="Disabled grouped input"></cv-input>
-          <cv-copy-button slot="actions" value="key"></cv-copy-button>
-        </cv-input-group>
       </div>
     `,
   }),
