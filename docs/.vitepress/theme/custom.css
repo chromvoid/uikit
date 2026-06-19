@@ -55,7 +55,11 @@
     linear-gradient(180deg, rgba(16, 25, 39, 0.96), rgba(8, 15, 24, 0.94)),
     radial-gradient(circle at top left, rgba(116, 215, 255, 0.14), transparent 44%);
   --docs-border: color-mix(in oklch, var(--cv-color-border, #2a3245) 72%, rgba(151, 218, 255, 0.12));
-  --docs-border-strong: color-mix(in oklch, var(--cv-color-primary, #65d7ff) 42%, var(--cv-color-border, #2a3245));
+  --docs-border-strong: color-mix(
+    in oklch,
+    var(--cv-color-primary, #65d7ff) 42%,
+    var(--cv-color-border, #2a3245)
+  );
   --docs-text-muted: var(--cv-color-text-muted, rgba(190, 206, 226, 0.82));
   --docs-ring: color-mix(in oklch, var(--cv-color-primary, #65d7ff) 72%, white 28%);
   --docs-shadow: 0 20px 58px rgba(2, 9, 20, 0.34);
@@ -1117,6 +1121,120 @@ cv-card.live-demo-card::part(footer) {
   margin: 12px 0;
 }
 
+.live-demo-preview:has(.input-demo-grid),
+.live-demo-preview:has(.field-demo-grid),
+.live-demo-preview:has(.fieldset-demo-grid) {
+  display: block;
+}
+
+.input-demo-grid,
+.field-demo-grid,
+.fieldset-demo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+  gap: 18px;
+  inline-size: 100%;
+}
+
+.input-demo-cell {
+  display: grid;
+  align-content: start;
+  gap: 6px;
+  min-inline-size: 0;
+}
+
+.input-demo-label,
+.field-demo-grid cv-field::part(label) {
+  color: var(--cv-color-text-muted, #9aa6bf);
+  font-family: var(--vp-font-family-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.input-demo-cell > cv-input,
+.field-demo-grid cv-input,
+.field-demo-grid cv-textarea {
+  inline-size: 100%;
+  min-inline-size: 0;
+}
+
+.field-demo-grid cv-field {
+  inline-size: 100%;
+  min-inline-size: 0;
+  align-content: start;
+  --cv-field-gap: 6px;
+  --cv-field-meta-font-size: 0.74rem;
+}
+
+.field-demo-grid cv-field::part(description) {
+  color: var(--docs-text-muted);
+}
+
+.field-demo-grid cv-field[orientation='horizontal'] {
+  grid-column: 1 / -1;
+}
+
+.fieldset-demo-grid cv-fieldset {
+  inline-size: 100%;
+  min-inline-size: 0;
+  --cv-fieldset-gap: 10px;
+  --cv-fieldset-field-gap: 10px;
+}
+
+.fieldset-demo-grid cv-field,
+.fieldset-demo-grid cv-input,
+.fieldset-demo-grid cv-select {
+  inline-size: 100%;
+  min-inline-size: 0;
+}
+
+.fieldset-demo-grid cv-fieldset[orientation='horizontal'] {
+  grid-column: 1 / -1;
+}
+
+.input-demo-grid [slot='prefix'],
+.input-demo-grid [slot='suffix'],
+.input-demo-grid [slot='clear-icon'] {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-inline-size: 1em;
+  color: var(--cv-color-text-muted, #9aa6bf);
+  font-family: var(--vp-font-family-mono);
+  font-size: 0.86em;
+  line-height: 1;
+}
+
+.toast-demo-surface {
+  position: relative;
+  display: grid;
+  align-content: start;
+  gap: 16px;
+  inline-size: min(100%, 720px);
+  min-block-size: 220px;
+  overflow: hidden;
+  padding: 16px;
+  border: 1px solid rgba(103, 150, 188, 0.22);
+  border-radius: 14px;
+  background:
+    linear-gradient(180deg, rgba(9, 16, 25, 0.82), rgba(7, 12, 20, 0.9)),
+    radial-gradient(circle at 88% 18%, rgba(101, 215, 255, 0.08), transparent 34%);
+}
+
+.toast-demo-surface .example-row {
+  margin: 0;
+  padding-inline-end: min(340px, 48%);
+}
+
+.toast-demo-surface cv-toast-region {
+  --cv-toast-region-position: absolute;
+  --cv-toast-region-inset: 16px;
+  --cv-toast-region-width: min(320px, calc(100% - 32px));
+  --cv-toast-region-max-width: calc(100% - 32px);
+  --cv-toast-region-z-index: 1;
+}
+
 .component-card cv-listbox,
 .component-card cv-progress,
 .component-card cv-meter,
@@ -1160,6 +1278,16 @@ cv-card.live-demo-card {
     radial-gradient(circle at top left, rgba(125, 214, 255, 0.08), transparent 34%);
 }
 
+.live-demo-preview:has(.toast-demo-surface) {
+  display: block;
+}
+
+.live-demo-preview cv-card.card-demo-media-card {
+  flex: 0 1 400px;
+  max-inline-size: 100%;
+  --cv-card-media-aspect-ratio: 3 / 1;
+}
+
 .live-demo-preview cv-accordion,
 .live-demo-preview cv-tabs,
 .live-demo-preview cv-alert,
@@ -1170,7 +1298,8 @@ cv-card.live-demo-card {
 .live-demo-preview cv-disclosure,
 .live-demo-preview cv-breadcrumb,
 .live-demo-preview cv-carousel,
-.live-demo-preview cv-feed {
+.live-demo-preview cv-feed,
+.live-demo-preview cv-task-list {
   inline-size: 100%;
 }
 
@@ -1250,6 +1379,14 @@ cv-disclosure.live-demo-source pre {
 @media (max-width: 640px) {
   body::before {
     opacity: 0.36;
+  }
+
+  .toast-demo-surface {
+    padding-block-start: 136px;
+  }
+
+  .toast-demo-surface .example-row {
+    padding-inline-end: 0;
   }
 
   .VPHome .VPHero .main::before {
