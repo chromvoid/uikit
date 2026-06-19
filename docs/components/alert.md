@@ -9,11 +9,25 @@ Passive live-region message that announces important updates without taking focu
 ## Usage
 
 ```html
-<cv-alert id="saved-alert"></cv-alert>
+<div class="example-row">
+  <cv-button id="save-settings" variant="primary">Save settings</cv-button>
+  <cv-button id="hide-alert">Hide alert</cv-button>
+</div>
+
+<cv-alert id="saved-alert" aria-live="polite" duration-ms="4000"></cv-alert>
 
 <script type="module">
   const alert = document.getElementById('saved-alert')
-  alert.show('Configuration saved successfully')
+  const saveButton = document.getElementById('save-settings')
+  const hideButton = document.getElementById('hide-alert')
+
+  saveButton.addEventListener('click', () => {
+    alert.show('Settings saved. The live region announced the update.')
+  })
+
+  hideButton.addEventListener('click', () => {
+    alert.hide()
+  })
 </script>
 ```
 
