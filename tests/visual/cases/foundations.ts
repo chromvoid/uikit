@@ -63,22 +63,23 @@ export const foundationCases: readonly UikitVisualCase[] = [
   visualCase({
     id: 'cv-card/states',
     component: 'cv-card',
-    title: 'Card variants, expandable content, and disabled state',
-    states: ['elevated', 'outlined', 'filled', 'expanded', 'disabled', 'long-content'],
+    title: 'Card variants with media and expanded disclosure',
+    states: ['elevated', 'outlined-media', 'filled-expanded', 'long-content'],
     html: `
       <div class="visual-grid">
         <cv-card variant="elevated">
-          <span slot="header">Elevated</span>
+          <span slot="header">Security report</span>
           <p class="visual-long-text">Default card body with text that wraps over multiple lines.</p>
           <cv-button slot="footer" size="small">Open</cv-button>
         </cv-card>
-        <cv-card variant="outlined" expandable expanded>
-          <span slot="header">Expanded outline</span>
-          <p>Expandable card body is visible and keeps footer spacing stable.</p>
+        <cv-card variant="outlined">
+          <img slot="image" alt="" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 640 360'%3E%3Crect width='640' height='360' fill='%23070b12'/%3E%3Cpath d='M92 248 220 132 324 196 448 104 548 168' fill='none' stroke='%2300e5ff' stroke-width='18' stroke-linecap='round' stroke-linejoin='round'/%3E%3Ccircle cx='448' cy='104' r='28' fill='%23b388ff'/%3E%3C/svg%3E" />
+          <span slot="header">Media card</span>
+          <p>Outlined card with a stable local media area.</p>
         </cv-card>
-        <cv-card variant="filled" expandable disabled>
-          <span slot="header">Disabled filled</span>
-          <p>Disabled expandable card should render without active affordance.</p>
+        <cv-card variant="filled" expandable expanded>
+          <span slot="header">Compatibility disclosure</span>
+          <p>Expandable fallback remains available while new flows use disclosure primitives.</p>
         </cv-card>
       </div>
     `,

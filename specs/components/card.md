@@ -48,6 +48,8 @@ Variants are CSS-only concerns and carry no headless state. They are mutually ex
 | `(default)` | Main body content of the card                            |
 | `footer`    | Card footer content (actions, metadata)                  |
 
+Direct slotted flow text (`p`, `ul`, `ol`) in the body and footer inherits the card section typography and has block margins reset so card spacing controls the vertical rhythm.
+
 ## CSS Parts
 
 | Part        | Element  | Description                                                               |
@@ -61,16 +63,28 @@ Variants are CSS-only concerns and carry no headless state. They are mutually ex
 
 ## CSS Custom Properties
 
-| Property                         | Default                                                          | Description                                            |
-| -------------------------------- | ---------------------------------------------------------------- | ------------------------------------------------------ |
-| `--cv-card-padding`              | `var(--cv-space-4, 16px)`                                        | Inner padding for card sections (header, body, footer) |
-| `--cv-card-border-radius`        | `var(--cv-radius-md, 8px)`                                       | Border radius of the card                              |
-| `--cv-card-border-color`         | `var(--cv-color-border, #2a3245)`                                | Border color (primarily for `outlined` variant)        |
-| `--cv-card-background`           | `var(--cv-color-surface, #141923)`                               | Background color of the card                           |
-| `--cv-card-shadow`               | `0 1px 3px rgba(0, 0, 0, 0.24)`                                  | Box shadow (primarily for `elevated` variant)          |
-| `--cv-card-gap`                  | `var(--cv-space-0, 0px)`                                         | Spacing between card sections                          |
-| `--cv-card-indicator-size`       | `var(--cv-space-4, 16px)`                                        | Size of the expand/collapse indicator icon             |
-| `--cv-card-indicator-transition` | `var(--cv-duration-fast, 120ms) var(--cv-easing-standard, ease)` | Transition for indicator rotation                      |
+| Property                         | Default                                                               | Description                                            |
+| -------------------------------- | --------------------------------------------------------------------- | ------------------------------------------------------ |
+| `--cv-card-padding`              | `var(--cv-space-4, 16px)`                                             | Inner padding for card sections (header, body, footer) |
+| `--cv-card-border-radius`        | `var(--cv-radius-md, 8px)`                                            | Border radius of the card                              |
+| `--cv-card-border-color`         | `var(--cv-color-border, #2a3245)`                                     | Border color (primarily for `outlined` variant)        |
+| `--cv-card-background`           | `var(--cv-color-surface, #141923)`                                    | Background color of the card                           |
+| `--cv-card-shadow`               | `0 1px 3px rgba(0, 0, 0, 0.24)`                                       | Box shadow (primarily for `elevated` variant)          |
+| `--cv-card-gap`                  | `var(--cv-space-0, 0px)`                                              | Spacing between card sections                          |
+| `--cv-card-media-aspect-ratio`   | `16 / 9`                                                              | Aspect ratio for slotted image media                   |
+| `--cv-card-header-color`         | `var(--cv-color-text-strong, #f5f7fc)`                                | Header text color                                      |
+| `--cv-card-header-font-family`   | `var(--cv-font-family-display, var(--cv-font-family-body, inherit))`  | Header font family                                     |
+| `--cv-card-header-font-size`     | `var(--cv-font-size-md, 1rem)`                                        | Header text size                                       |
+| `--cv-card-header-font-weight`   | `var(--cv-font-weight-semibold, 600)`                                 | Header text weight                                     |
+| `--cv-card-header-line-height`   | `1.25`                                                                | Header line height                                     |
+| `--cv-card-body-color`           | `var(--cv-color-text-muted, #9aa6bf)`                                 | Body text color                                        |
+| `--cv-card-body-font-size`       | `var(--cv-font-size-sm, 0.875rem)`                                    | Body text size                                         |
+| `--cv-card-body-line-height`     | `1.6`                                                                 | Body line height                                       |
+| `--cv-card-footer-color`         | `var(--cv-color-text-secondary, var(--cv-color-text-muted, #9aa6bf))` | Footer text color                                      |
+| `--cv-card-footer-font-size`     | `var(--cv-font-size-sm, 0.875rem)`                                    | Footer text size                                       |
+| `--cv-card-footer-line-height`   | `1.35`                                                                | Footer line height                                     |
+| `--cv-card-indicator-size`       | `var(--cv-space-4, 16px)`                                             | Size of the expand/collapse indicator icon             |
+| `--cv-card-indicator-transition` | `var(--cv-duration-fast, 120ms) var(--cv-easing-standard, ease)`      | Transition for indicator rotation                      |
 
 Additionally, component styles depend on theme tokens through fallback values:
 
@@ -143,50 +157,41 @@ Events only fire when `expandable` is `true` and the state change is triggered b
 ## Usage
 
 ```html
-<!-- Static elevated card (default) -->
+<!-- Basic elevated card -->
 <cv-card>
-  <span slot="header">Card Title</span>
-  Main body content goes here.
-  <span slot="footer">Footer actions</span>
+  <span slot="header">Security report</span>
+  <p>Last scan completed successfully. No vault integrity issues were found.</p>
+  <div slot="footer">
+    <cv-button size="small">Open report</cv-button>
+  </div>
 </cv-card>
 
-<!-- Outlined card with image -->
-<cv-card variant="outlined">
-  <img slot="image" src="hero.jpg" alt="Hero image" />
-  <span slot="header">Article Title</span>
-  Article preview text.
+<!-- Outlined media card -->
+<cv-card class="card-demo-media-card" variant="outlined">
+  <img slot="image" src="../images/card-preview.svg" alt="Encrypted workspace preview" />
+  <span slot="header">Encrypted workspace</span>
+  <p>Use the image slot for local product media, diagrams, or previews.</p>
 </cv-card>
 
-<!-- Filled card -->
+<!-- Filled status card -->
 <cv-card variant="filled">
-  <span slot="header">Settings</span>
-  Configuration content.
+  <span slot="header">Sync settings</span>
+  <p>Device keys are synchronized across trusted sessions.</p>
+  <div slot="footer">
+    <cv-badge variant="success">Healthy</cv-badge>
+  </div>
 </cv-card>
+```
 
-<!-- Expandable card (collapsed by default) -->
+## Disclosure Guidance
+
+Use `cv-card` for static grouped content. For a single reveal/hide interaction, prefer
+`cv-disclosure`; for multiple related sections, prefer `cv-accordion`. `cv-card expandable`
+remains compatible for existing surfaces, but it is not the preferred pattern for new disclosure UI.
+
+```html
 <cv-card expandable>
-  <span slot="header">Expandable Section</span>
-  This content is hidden until the header is clicked.
-</cv-card>
-
-<!-- Expandable card (expanded by default) -->
-<cv-card expandable expanded>
-  <span slot="header">Details</span>
-  This content is visible on initial render.
-  <span slot="footer">Last updated: today</span>
-</cv-card>
-
-<!-- Expandable card (disabled) -->
-<cv-card expandable disabled>
-  <span slot="header">Locked Section</span>
-  This content cannot be toggled by the user.
-</cv-card>
-
-<!-- Expandable card with image and all slots -->
-<cv-card expandable variant="outlined">
-  <img slot="image" src="preview.jpg" alt="Preview" />
-  <span slot="header">Full Example</span>
-  Body content with detailed information.
-  <span slot="footer">Action buttons here</span>
+  <span slot="header">Compatibility disclosure</span>
+  <p>This fallback keeps existing expandable cards working while new flows use disclosure primitives.</p>
 </cv-card>
 ```

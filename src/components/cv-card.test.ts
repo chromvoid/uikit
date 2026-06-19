@@ -18,6 +18,15 @@ const createCard = async (attrs?: Partial<CVCard>) => {
   return el
 }
 
+const createCardWithMarkup = async (markup: string, attrs?: Partial<CVCard>) => {
+  const el = document.createElement('cv-card') as CVCard
+  if (attrs) Object.assign(el, attrs)
+  el.innerHTML = markup
+  document.body.append(el)
+  await settle(el)
+  return el
+}
+
 const getBase = (el: CVCard) => el.shadowRoot!.querySelector('[part="base"]') as HTMLElement
 
 const getHeader = (el: CVCard) => el.shadowRoot!.querySelector('[part="header"]') as HTMLElement
@@ -75,6 +84,31 @@ describe('cv-card', () => {
       expect(footer).not.toBeNull()
       const slot = footer.querySelector('slot[name="footer"]')
       expect(slot).not.toBeNull()
+    })
+
+    it('keeps empty optional section parts hidden', async () => {
+      const el = await createCard()
+      expect(getImage(el).hasAttribute('hidden')).toBe(true)
+      expect(getHeader(el).hasAttribute('hidden')).toBe(true)
+      expect(getFooter(el).hasAttribute('hidden')).toBe(true)
+    })
+
+    it('reveals optional sections when their slots have content', async () => {
+      const el = await createCardWithMarkup(`
+        <img slot="image" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'/%3E" alt="" />
+        <span slot="header">Card title</span>
+        Body content
+        <span slot="footer">Footer content</span>
+      `)
+
+      expect(getImage(el).hasAttribute('hidden')).toBe(false)
+      expect(getHeader(el).hasAttribute('hidden')).toBe(false)
+      expect(getFooter(el).hasAttribute('hidden')).toBe(false)
+    })
+
+    it('keeps the header visible for expandable cards without header content', async () => {
+      const el = await createCard({expandable: true})
+      expect(getHeader(el).hasAttribute('hidden')).toBe(false)
     })
 
     it('does NOT render [part="indicator"] when not expandable', async () => {
