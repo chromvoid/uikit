@@ -57,6 +57,8 @@ export class CVChip extends ReatomLitElement {
     css`
       :host {
         display: inline-flex;
+        min-inline-size: 0;
+        max-inline-size: 100%;
         vertical-align: middle;
       }
 
@@ -65,6 +67,8 @@ export class CVChip extends ReatomLitElement {
         align-items: center;
         justify-content: center;
         gap: var(--cv-chip-gap, var(--cv-space-1, 4px));
+        min-inline-size: 0;
+        max-inline-size: 100%;
         min-block-size: var(--cv-chip-block-size, 2rem);
         padding-inline: var(--cv-chip-padding-inline, var(--cv-space-2, 8px));
         border: 1px solid var(--cv-chip-border-color, var(--cv-color-border, #2a3245));
@@ -76,6 +80,8 @@ export class CVChip extends ReatomLitElement {
         line-height: 1;
         cursor: pointer;
         user-select: none;
+        overflow: hidden;
+        white-space: nowrap;
       }
 
       :host([pill]) [part='base'] {
@@ -112,6 +118,15 @@ export class CVChip extends ReatomLitElement {
         display: inline-flex;
         align-items: center;
         justify-content: center;
+        flex: 0 0 auto;
+      }
+
+      [part='label'] {
+        display: block;
+        min-inline-size: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
 
       [part='remove-button'] {

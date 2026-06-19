@@ -22,12 +22,30 @@ const createChip = async (attrs?: Partial<CVChip>, text = 'Chip') => {
 const getBase = (element: CVChip) => element.shadowRoot!.querySelector('[part="base"]') as HTMLElement
 const getRemoveButton = (element: CVChip) =>
   element.shadowRoot!.querySelector('[part="remove-button"]') as HTMLButtonElement | null
+const getStylesText = () =>
+  (CVChip.styles as Array<{cssText?: string}>).map((style) => style.cssText ?? '').join('\n')
 
 afterEach(() => {
   document.body.innerHTML = ''
 })
 
 describe('cv-chip', () => {
+  describe('style contract', () => {
+    it('keeps long labels single-line inside constrained chips', () => {
+      const stylesText = getStylesText()
+
+      expect(stylesText).toMatch(/\[part='base'\]\s*{[\s\S]*min-inline-size:\s*0;/)
+      expect(stylesText).toMatch(/\[part='base'\]\s*{[\s\S]*overflow:\s*hidden;/)
+      expect(stylesText).toMatch(/\[part='base'\]\s*{[\s\S]*white-space:\s*nowrap;/)
+      expect(stylesText).toMatch(/\[part='label'\]\s*{[\s\S]*min-inline-size:\s*0;/)
+      expect(stylesText).toMatch(/\[part='label'\]\s*{[\s\S]*overflow:\s*hidden;/)
+      expect(stylesText).toMatch(/\[part='label'\]\s*{[\s\S]*text-overflow:\s*ellipsis;/)
+      expect(stylesText).toMatch(/\[part='label'\]\s*{[\s\S]*white-space:\s*nowrap;/)
+      expect(stylesText).toContain("[part='remove-button']")
+      expect(stylesText).toContain('flex: 0 0 auto;')
+    })
+  })
+
   it('renders action chip parts and accessibility state', async () => {
     const element = await createChip({value: 'alpha', selected: true, removable: true})
     const base = getBase(element)
