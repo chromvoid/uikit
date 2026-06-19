@@ -26,6 +26,8 @@ const createItem = (value: string, label: string, content: string) => {
 
 const getTrigger = (item: CVAccordionItem) =>
   item.shadowRoot?.querySelector('[part="trigger"]') as HTMLButtonElement
+const getPanel = (item: CVAccordionItem) =>
+  item.shadowRoot?.querySelector('[part="panel"]') as HTMLElement
 
 afterEach(() => {
   vi.restoreAllMocks()
@@ -33,6 +35,12 @@ afterEach(() => {
 })
 
 describe('cv-accordion', () => {
+  it('defines its item dependency from the host define method', () => {
+    CVAccordion.define()
+
+    expect(customElements.get(CVAccordionItem.elementName)).toBe(CVAccordionItem)
+  })
+
   it('toggles sections in single mode and emits change', async () => {
     CVAccordionItem.define()
     CVAccordion.define()
@@ -170,11 +178,14 @@ describe('cv-accordion', () => {
     accordion.append(itemA, itemB, itemC)
     document.body.append(accordion)
     await settle(accordion)
+    await Promise.all([itemA.updateComplete, itemB.updateComplete, itemC.updateComplete])
 
     expect(accordion.expandedValues).toEqual(['a', 'c'])
     expect(itemA.expanded).toBe(true)
     expect(itemB.expanded).toBe(false)
     expect(itemC.expanded).toBe(true)
+    expect(getPanel(itemA).hidden).toBe(false)
+    expect(getPanel(itemC).hidden).toBe(false)
 
     accordion.expandedValues = ['b']
     await settle(accordion)
@@ -410,16 +421,38 @@ describe('cv-accordion', () => {
     // resolved against an empty section list and wiped).
     document.body.append(accordion)
     await settle(accordion)
-    expect(accordion.value).toBe('')
+    expect(accordion.value).toBe('b')
 
     const itemA = createItem('a', 'A', 'Panel A')
     const itemB = createItem('b', 'B', 'Panel B')
     accordion.append(itemA, itemB)
     await settle(accordion)
+    await itemB.updateComplete
 
     expect(accordion.value).toBe('b')
     expect(itemB.expanded).toBe(true)
     expect(itemA.expanded).toBe(false)
+    expect(getPanel(itemB).hidden).toBe(false)
+  })
+
+  it('honors an initially expanded slotted item on the first stable render', async () => {
+    CVAccordionItem.define()
+    CVAccordion.define()
+
+    const accordion = document.createElement('cv-accordion') as CVAccordion
+    const itemA = createItem('a', 'A', 'Panel A')
+    const itemB = createItem('b', 'B', 'Panel B')
+    itemB.expanded = true
+
+    accordion.append(itemA, itemB)
+    document.body.append(accordion)
+    await settle(accordion)
+    await itemB.updateComplete
+
+    expect(accordion.value).toBe('b')
+    expect(accordion.expandedValues).toEqual(['b'])
+    expect(itemB.expanded).toBe(true)
+    expect(getPanel(itemB).hidden).toBe(false)
   })
 
   it('re-applies controlled expandedValues set before items are appended', async () => {

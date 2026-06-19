@@ -97,6 +97,7 @@ export class CVAccordion extends ReatomLitElement {
   ]
 
   static define() {
+    CVAccordionItem.define()
     if (!customElements.get(this.elementName)) {
       customElements.define(this.elementName, this)
     }
@@ -104,6 +105,7 @@ export class CVAccordion extends ReatomLitElement {
 
   override connectedCallback(): void {
     super.connectedCallback()
+    CVAccordionItem.define()
     // Capture the controlled expansion the consumer requested before items were
     // slotted, so a later slotchange can reconcile it once sections populate.
     this.requestedValue = (this.value ?? '').trim() || null
@@ -115,6 +117,12 @@ export class CVAccordion extends ReatomLitElement {
     this.model.actions.setHeadingLevel(this.headingLevel)
     this.model.actions.setAriaLabel(this.ariaLabel || undefined)
     this.syncFromSlot(false)
+    void customElements.whenDefined(CVAccordionItem.elementName).then(() => {
+      if (!this.isConnected) return
+      customElements.upgrade(this)
+      this.syncFromSlot(true)
+      this.requestUpdate()
+    })
   }
 
   override disconnectedCallback(): void {
@@ -186,17 +194,30 @@ export class CVAccordion extends ReatomLitElement {
 
   private getItemElements(): CVAccordionItem[] {
     return Array.from(this.children).filter(
-      (element): element is CVAccordionItem => element.tagName.toLowerCase() === CVAccordionItem.elementName,
+      (element): element is CVAccordionItem =>
+        element.tagName.toLowerCase() === CVAccordionItem.elementName &&
+        typeof (element as CVAccordionItem).applyContracts === 'function',
     )
   }
 
   private ensureItemValue(item: CVAccordionItem, index: number): string {
-    const normalized = item.value?.trim()
-    if (normalized) return normalized
+    const normalized = item.value?.trim() || item.getAttribute('value')?.trim()
+    if (normalized) {
+      item.value = normalized
+      return normalized
+    }
 
     const fallback = `section-${index + 1}`
     item.value = fallback
     return fallback
+  }
+
+  private isItemDisabled(item: CVAccordionItem): boolean {
+    return item.disabled || item.hasAttribute('disabled')
+  }
+
+  private isItemExpanded(item: CVAccordionItem): boolean {
+    return item.expanded || item.hasAttribute('expanded')
   }
 
   private resolveConfiguredExpandedIds(itemRecords: AccordionItemRecord[]): string[] {
@@ -213,7 +234,7 @@ export class CVAccordion extends ReatomLitElement {
         return this.requestedExpandedValues
       }
 
-      return itemRecords.filter((record) => record.element.expanded).map((record) => record.id)
+      return itemRecords.filter((record) => this.isItemExpanded(record.element)).map((record) => record.id)
     }
 
     const fromValue = (this.value ?? '').trim()
@@ -221,7 +242,7 @@ export class CVAccordion extends ReatomLitElement {
 
     if (this.requestedValue) return [this.requestedValue]
 
-    const expandedRecord = itemRecords.find((record) => record.element.expanded)
+    const expandedRecord = itemRecords.find((record) => this.isItemExpanded(record.element))
     return expandedRecord ? [expandedRecord.id] : []
   }
 
@@ -232,7 +253,7 @@ export class CVAccordion extends ReatomLitElement {
 
     this.itemRecords = itemElements.map((element, index) => ({
       id: this.ensureItemValue(element, index),
-      disabled: element.disabled,
+      disabled: this.isItemDisabled(element),
       element,
     }))
 
@@ -336,6 +357,8 @@ export class CVAccordion extends ReatomLitElement {
   }
 
   private syncControlledValuesFromModel(): void {
+    if (this.itemRecords.length === 0 && !this.requestReconciled) return
+
     this.expandedValues = this.model.state.expandedValues()
     this.value = this.model.state.value() ?? ''
   }
