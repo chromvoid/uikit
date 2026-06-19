@@ -20,7 +20,7 @@ Visual container that groups related content into a cohesive unit, with an optio
 
 <!-- Outlined media card -->
 <cv-card class="card-demo-media-card" variant="outlined">
-  <img slot="image" src="../images/card-preview.svg" alt="Encrypted workspace preview" />
+  <img slot="image" src="../images/card-preview.png" alt="Abstract encrypted landscape preview" />
   <span slot="header">Encrypted workspace</span>
   <p>Use the image slot for local product media, diagrams, or previews.</p>
 </cv-card>
