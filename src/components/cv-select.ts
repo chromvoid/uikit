@@ -58,15 +58,7 @@ const selectKeysToPrevent = new Set([
 
 // Keys the trigger acts on while CLOSED. Tab/Escape are intentionally excluded so
 // they reach the focus order / parent dialog instead of being a keyboard trap.
-const triggerKeysToPrevent = new Set([
-  'ArrowUp',
-  'ArrowDown',
-  'Home',
-  'End',
-  'Enter',
-  ' ',
-  'Spacebar',
-])
+const triggerKeysToPrevent = new Set(['ArrowUp', 'ArrowDown', 'Home', 'End', 'Enter', ' ', 'Spacebar'])
 
 function arraysEqual(left: readonly string[], right: readonly string[]): boolean {
   return left.length === right.length && left.every((value, index) => value === right[index])
@@ -92,6 +84,7 @@ export class CVSelect extends FormAssociatedReatomElement {
       required: {type: Boolean, reflect: true},
       clearable: {type: Boolean, reflect: true},
       size: {type: String, reflect: true},
+      invalid: {type: Boolean, reflect: true},
     }
   }
 
@@ -107,6 +100,7 @@ export class CVSelect extends FormAssociatedReatomElement {
   declare required: boolean
   declare clearable: boolean
   declare size: 'small' | 'medium' | 'large'
+  declare invalid: boolean
 
   private readonly idBase = `cv-select-${++cvSelectNonce}`
   private optionRecords: SelectOptionRecord[] = []
@@ -130,6 +124,7 @@ export class CVSelect extends FormAssociatedReatomElement {
     this.required = false
     this.clearable = false
     this.size = 'medium'
+    this.invalid = false
     this.model = createSelect({
       options: [],
       idBase: this.idBase,
@@ -177,6 +172,10 @@ export class CVSelect extends FormAssociatedReatomElement {
       [part='trigger']:focus-visible {
         outline: 2px solid var(--cv-color-primary, #65d7ff);
         outline-offset: 1px;
+      }
+
+      :host([invalid]) [part='trigger'] {
+        border-color: var(--cv-color-danger, #ef4444);
       }
 
       :host([size='small']) {
@@ -327,6 +326,7 @@ export class CVSelect extends FormAssociatedReatomElement {
       changedProperties.has('open') ||
       changedProperties.has('disabled') ||
       changedProperties.has('required') ||
+      changedProperties.has('invalid') ||
       changedProperties.has('name')
     ) {
       this.syncFormAssociatedState()
@@ -755,6 +755,13 @@ export class CVSelect extends FormAssociatedReatomElement {
   }
 
   protected override getFormAssociatedValidity(): FormAssociatedValidity {
+    if (this.invalid) {
+      return {
+        flags: {customError: true},
+        message: 'Invalid value',
+      }
+    }
+
     if (this.required && this.model.state.selectedIds().length === 0) {
       return {
         flags: {valueMissing: true},
@@ -824,9 +831,7 @@ export class CVSelect extends FormAssociatedReatomElement {
     // are legitimately prevented. When closed, only the open/toggle keys are owned;
     // Tab and Escape must pass through (focus order / parent dialog).
     const isOpen = this.model.state.isOpen()
-    const shouldPrevent = isOpen
-      ? selectKeysToPrevent.has(event.key)
-      : triggerKeysToPrevent.has(event.key)
+    const shouldPrevent = isOpen ? selectKeysToPrevent.has(event.key) : triggerKeysToPrevent.has(event.key)
     if (shouldPrevent) {
       event.preventDefault()
     }
@@ -896,6 +901,7 @@ export class CVSelect extends FormAssociatedReatomElement {
           aria-label=${triggerProps['aria-label'] ?? nothing}
           aria-disabled=${triggerProps['aria-disabled'] ?? nothing}
           aria-required=${triggerProps['aria-required'] ?? nothing}
+          aria-invalid=${this.invalid ? 'true' : nothing}
           data-selected-id=${triggerProps['data-selected-id'] ?? nothing}
           data-selected-label=${triggerProps['data-selected-label'] ?? nothing}
           part="trigger"

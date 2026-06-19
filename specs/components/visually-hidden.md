@@ -1,0 +1,15 @@
+# cv-visually-hidden
+
+Accessibility utility that visually hides content while keeping it available to assistive tech.
+
+**Headless:** None (UIKit-only component)
+
+## Attributes
+
+| Attribute   | Type    | Default | Description                             |
+| ----------- | ------- | ------- | --------------------------------------- |
+| `focusable` | Boolean | `false` | Reveals slotted content on focus-within |
+
+## Boundary
+
+Use for accessible labels or descriptions, not as a layout hiding primitive.

@@ -79,6 +79,7 @@ export class CVCombobox extends ReatomLitElement {
       matchMode: {type: String, attribute: 'match-mode', reflect: true},
       placeholder: {type: String},
       ariaLabel: {type: String, attribute: 'aria-label'},
+      invalid: {type: Boolean, reflect: true},
     }
   }
 
@@ -95,6 +96,7 @@ export class CVCombobox extends ReatomLitElement {
   declare matchMode: ComboboxMatchMode
   declare placeholder: string
   declare ariaLabel: string
+  declare invalid: boolean
 
   private readonly idBase = `cv-combobox-${++cvComboboxNonce}`
   private optionRecords: ComboboxOptionRecord[] = []
@@ -117,6 +119,7 @@ export class CVCombobox extends ReatomLitElement {
     this.matchMode = 'includes'
     this.placeholder = ''
     this.ariaLabel = ''
+    this.invalid = false
   }
 
   static styles = [
@@ -156,6 +159,10 @@ export class CVCombobox extends ReatomLitElement {
 
       [part='input']:focus-visible {
         outline: none;
+      }
+
+      :host([invalid]) [part='input-wrapper'] {
+        border-color: var(--cv-color-danger, #ef4444);
       }
 
       [part='trigger'] {
@@ -1017,6 +1024,7 @@ export class CVCombobox extends ReatomLitElement {
                   aria-controls=${inputProps['aria-controls']}
                   aria-activedescendant=${inputProps['aria-activedescendant'] ?? nothing}
                   aria-label=${inputProps['aria-label'] ?? nothing}
+                  aria-invalid=${this.invalid ? 'true' : nothing}
                   part="trigger"
                   class="cv-u-row cv-u-fill"
                   @click=${this.handleInputClick}
@@ -1036,6 +1044,7 @@ export class CVCombobox extends ReatomLitElement {
                   aria-autocomplete=${inputProps['aria-autocomplete'] ?? nothing}
                   aria-activedescendant=${inputProps['aria-activedescendant'] ?? nothing}
                   aria-label=${inputProps['aria-label'] ?? nothing}
+                  aria-invalid=${this.invalid ? 'true' : nothing}
                   .value=${this.inputValue}
                   placeholder=${this.placeholder}
                   part="input"

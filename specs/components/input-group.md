@@ -1,0 +1,27 @@
+# cv-input-group
+
+Visual grouping for one input-like control with prefix, suffix, and action slots.
+
+**Headless:** None (UIKit-only component)
+
+## Anatomy
+
+```text
+<cv-input-group>
+├── <span part="prefix"><slot name="prefix"></slot></span>
+├── <span part="control"><slot></slot></span>
+├── <span part="suffix"><slot name="suffix"></slot></span>
+└── <span part="actions"><slot name="actions"></slot></span>
+```
+
+## Attributes
+
+| Attribute  | Type      | Default | Description                      |
+| ---------- | --------- | ------- | -------------------------------- | ---------------- | ------------ |
+| `size`     | `small    | medium  | large`                           | `medium`         | Density hint |
+| `variant`  | `outlined | filled` | `outlined`                       | Visual treatment |
+| `attached` | Boolean   | `false` | Removes gaps for joined controls |
+
+## Boundary
+
+No value, validation, or focus state is owned by this component.

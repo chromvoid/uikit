@@ -9,6 +9,7 @@ declare global {
     'cv-breadcrumb': import('./cv-breadcrumb').CVBreadcrumb
     'cv-breadcrumb-item': import('./cv-breadcrumb-item').CVBreadcrumbItem
     'cv-button': import('./cv-button').CVButton
+    'cv-button-group': import('./cv-button-group').CVButtonGroup
     'cv-card': import('./cv-card').CVCard
     'cv-carousel': import('./cv-carousel').CVCarousel
     'cv-carousel-slide': import('./cv-carousel-slide').CVCarouselSlide
@@ -18,6 +19,7 @@ declare global {
     'cv-combobox': import('./cv-combobox').CVCombobox
     'cv-combobox-group': import('./cv-combobox-group').CVComboboxGroup
     'cv-combobox-option': import('./cv-combobox-option').CVComboboxOption
+    'cv-code-input': import('./cv-code-input').CVCodeInput
     'cv-command-item': import('./cv-command-item').CVCommandItem
     'cv-command-palette': import('./cv-command-palette').CVCommandPalette
     'cv-context-menu': import('./cv-context-menu').CVContextMenu
@@ -31,6 +33,8 @@ declare global {
     'cv-empty-state': import('./cv-empty-state').CVEmptyState
     'cv-feed': import('./cv-feed').CVFeed
     'cv-feed-article': import('./cv-feed-article').CVFeedArticle
+    'cv-field': import('./cv-field').CVField
+    'cv-fieldset': import('./cv-fieldset').CVFieldset
     'cv-grid': import('./cv-grid').CVGrid
     'cv-grid-cell': import('./cv-grid-cell').CVGridCell
     'cv-grid-column': import('./cv-grid-column').CVGridColumn
@@ -40,6 +44,7 @@ declare global {
     'cv-icon': import('./cv-icon').CVIcon
     'cv-image-viewer': import('./cv-image-viewer').CVImageViewer
     'cv-input': import('./cv-input').CVInput
+    'cv-input-group': import('./cv-input-group').CVInputGroup
     'cv-kbd': import('./cv-kbd').CVKbd
     'cv-landmark': import('./cv-landmark').CVLandmark
     'cv-link': import('./cv-link').CVLink
@@ -53,7 +58,9 @@ declare global {
     'cv-number': import('./cv-number').CVNumber
     'cv-option': import('./cv-option').CVOption
     'cv-operation-queue': import('./cv-operation-queue').CVOperationQueue
+    'cv-pagination': import('./cv-pagination').CVPagination
     'cv-popover': import('./cv-popover').CVPopover
+    'cv-presence': import('./cv-presence').CVPresence
     'cv-progress': import('./cv-progress').CVProgress
     'cv-progress-ring': import('./cv-progress-ring').CVProgressRing
     'cv-radio': import('./cv-radio').CVRadio
@@ -62,6 +69,8 @@ declare global {
     'cv-select-group': import('./cv-select-group').CVSelectGroup
     'cv-select-option': import('./cv-select-option').CVSelectOption
     'cv-shortcut': import('./cv-shortcut').CVShortcut
+    'cv-scroll-area': import('./cv-scroll-area').CVScrollArea
+    'cv-separator': import('./cv-separator').CVSeparator
     'cv-sidebar': import('./cv-sidebar').CVSidebar
     'cv-sidebar-item': import('./cv-sidebar-item').CVSidebarItem
     'cv-slider': import('./cv-slider').CVSlider
@@ -71,6 +80,8 @@ declare global {
     'cv-spinner': import('./cv-spinner').CVSpinner
     'cv-status-indicator': import('./cv-status-indicator').CVStatusIndicator
     'cv-status-pill': import('./cv-status-pill').CVStatusPill
+    'cv-step': import('./cv-step').CVStep
+    'cv-steps': import('./cv-steps').CVSteps
     'cv-switch': import('./cv-switch').CVSwitch
     'cv-tab': import('./cv-tab').CVTab
     'cv-tab-panel': import('./cv-tab-panel').CVTabPanel
@@ -88,6 +99,7 @@ declare global {
     'cv-toolbar-item': import('./cv-toolbar-item').CVToolbarItem
     'cv-toolbar-separator': import('./cv-toolbar-separator').CVToolbarSeparator
     'cv-tooltip': import('./cv-tooltip').CVTooltip
+    'cv-visually-hidden': import('./cv-visually-hidden').CVVisuallyHidden
     'cv-treegrid': import('./cv-treegrid').CVTreegrid
     'cv-treegrid-cell': import('./cv-treegrid-cell').CVTreegridCell
     'cv-treegrid-column': import('./cv-treegrid-column').CVTreegridColumn
@@ -113,6 +125,7 @@ declare global {
       | import('./cv-chip-group').CVChipGroupChangeEvent
       | import('./cv-checkbox').CVCheckboxChangeEvent
       | import('./cv-image-viewer').CVImageViewerChangeEvent
+      | import('./cv-code-input').CVCodeInputChangeEvent
       | import('./cv-input').CVInputChangeEvent
       | import('./cv-number').CVNumberChangeEvent
       | import('./cv-radio-group').CVRadioGroupChangeEvent
@@ -150,6 +163,7 @@ declare global {
     'cv-input':
       | import('./cv-chip-group').CVChipGroupInputEvent
       | import('./cv-checkbox').CVCheckboxInputEvent
+      | import('./cv-code-input').CVCodeInputInputEvent
       | import('./cv-image-viewer').CVImageViewerInputEvent
       | import('./cv-input').CVInputInputEvent
       | import('./cv-radio-group').CVRadioGroupInputEvent
@@ -161,7 +175,13 @@ declare global {
       | import('./cv-time-picker').CVTimePickerInputEvent
     'cv-load-more': import('./cv-feed').CVFeedLoadMoreEvent
     'cv-load-newer': import('./cv-feed').CVFeedLoadNewerEvent
+    'cv-complete': import('./cv-code-input').CVCodeInputCompleteEvent
+    'cv-enter': import('./cv-presence').CVPresenceEnterEvent
+    'cv-after-enter': import('./cv-presence').CVPresenceAfterEnterEvent
+    'cv-exit': import('./cv-presence').CVPresenceExitEvent
+    'cv-after-exit': import('./cv-presence').CVPresenceAfterExitEvent
     'cv-image-error': import('./cv-image-viewer').CVImageViewerImageErrorEvent
+    'cv-page-change': import('./cv-pagination').CVPaginationChangeEvent
     'cv-prime': import('./cv-image-viewer').CVImageViewerPrimeEvent
     'cv-selection-change': import('./cv-table').CVTableSelectionChangeEvent
     'cv-scrollspy-change': import('./cv-sidebar').CVSidebarScrollspyChangeEvent
@@ -169,6 +189,7 @@ declare global {
     'cv-thumbnail-metrics': import('./cv-image-viewer').CVImageViewerThumbnailMetricsEvent
     'cv-treegrid-row-slotchange': import('./cv-treegrid-row').CVTreegridRowSlotchangeEvent
     'cv-treeitem-toggle': import('./cv-treeitem').CVTreeItemToggleEvent
+    'cv-step-select': CustomEvent<import('./cv-steps').CVStepSelectDetail>
   }
 }
 

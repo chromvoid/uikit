@@ -1,0 +1,31 @@
+# cv-steps
+
+Controlled progress display for step-based flows.
+
+**Headless:** None (UIKit-only component)
+
+## Anatomy
+
+```text
+<cv-steps>
+└── <ol part="base">
+    └── <slot> ← cv-step children
+```
+
+## Attributes
+
+| Attribute     | Type        | Default   | Description                  |
+| ------------- | ----------- | --------- | ---------------------------- | ---------------- |
+| `current`     | String      | `""`      | Current step value           |
+| `orientation` | `horizontal | vertical` | `horizontal`                 | Layout direction |
+| `selectable`  | Boolean     | `false`   | Allows step selection events |
+
+## Child: cv-step
+
+Attrs: `value`, `status="pending|current|complete|error"`, `disabled`.
+
+## Events
+
+| Event            | Detail      |
+| ---------------- | ----------- |
+| `cv-step-select` | `{ value }` |

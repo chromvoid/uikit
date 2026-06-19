@@ -4,6 +4,7 @@ import type {PropertyValues} from 'lit'
 import {live} from 'lit/directives/live.js'
 
 import {FormAssociatedReatomElement} from '../form-associated/FormAssociatedReatomElement'
+import type {FormAssociatedValidity} from '../form-associated/withFormAssociated'
 import {hasTextEditableFocus} from './focus-utils'
 
 type CVNumberSize = 'small' | 'medium' | 'large'
@@ -54,6 +55,7 @@ export class CVNumber extends FormAssociatedReatomElement {
       placeholder: {type: String},
       size: {type: String, reflect: true},
       variant: {type: String, reflect: true},
+      invalid: {type: Boolean, reflect: true},
       ariaLabel: {type: String, attribute: 'aria-label'},
       ariaLabelledBy: {type: String, attribute: 'aria-labelledby'},
       ariaDescribedBy: {type: String, attribute: 'aria-describedby'},
@@ -75,6 +77,7 @@ export class CVNumber extends FormAssociatedReatomElement {
   declare placeholder: string
   declare size: CVNumberSize
   declare variant: CVNumberVariant
+  declare invalid: boolean
   declare ariaLabel: string
   declare ariaLabelledBy: string
   declare ariaDescribedBy: string
@@ -102,6 +105,7 @@ export class CVNumber extends FormAssociatedReatomElement {
     this.placeholder = ''
     this.size = 'medium'
     this.variant = 'outlined'
+    this.invalid = false
     this.ariaLabel = ''
     this.ariaLabelledBy = ''
     this.ariaDescribedBy = ''
@@ -216,6 +220,14 @@ export class CVNumber extends FormAssociatedReatomElement {
         box-shadow: var(--cv-number-focus-ring);
       }
 
+      :host([invalid]) [part='base'] {
+        border-color: var(--cv-color-danger, #ef4444);
+      }
+
+      :host([invalid][focused]) [part='base'] {
+        box-shadow: 0 0 0 2px var(--cv-color-danger-border-strong);
+      }
+
       /* --- sizes --- */
       :host([size='small']) {
         --cv-number-height: 30px;
@@ -286,6 +298,17 @@ export class CVNumber extends FormAssociatedReatomElement {
   protected override getFormAssociatedValue(): string | File | FormData | null {
     if (!this.modelInitialized) return String(this.value)
     return String(this.model.state.value())
+  }
+
+  protected override getFormAssociatedValidity(): FormAssociatedValidity {
+    if (this.invalid) {
+      return {
+        flags: {customError: true},
+        message: 'Invalid value',
+      }
+    }
+
+    return {flags: {}}
   }
 
   private toFiniteOrUndefined(value: number | undefined | null): number | undefined {
@@ -668,6 +691,7 @@ export class CVNumber extends FormAssociatedReatomElement {
           aria-disabled=${inputProps['aria-disabled'] ?? nothing}
           aria-readonly=${inputProps['aria-readonly'] ?? nothing}
           aria-required=${inputProps['aria-required'] ?? nothing}
+          aria-invalid=${this.invalid ? 'true' : nothing}
           aria-label=${inputProps['aria-label'] ?? nothing}
           aria-labelledby=${inputProps['aria-labelledby'] ?? nothing}
           aria-describedby=${inputProps['aria-describedby'] ?? nothing}

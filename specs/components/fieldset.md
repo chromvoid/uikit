@@ -1,0 +1,29 @@
+# cv-fieldset
+
+Grouped form wrapper using native fieldset/legend semantics.
+
+**Headless:** None (UIKit-only component)
+
+## Anatomy
+
+```text
+<cv-fieldset>
+└── <fieldset part="base">
+    ├── <legend part="legend"><slot name="legend"></slot></legend>
+    ├── <div part="description"><slot name="description"></slot></div>
+    ├── <div part="fields"><slot></slot></div>
+    └── <div part="error"><slot name="error"></slot></div>
+```
+
+## Attributes
+
+| Attribute     | Type      | Default     | Description                      |
+| ------------- | --------- | ----------- | -------------------------------- | ------------------ | ------------ |
+| `disabled`    | Boolean   | `false`     | Disables grouped native controls |
+| `invalid`     | Boolean   | `false`     | Marks the group invalid          |
+| `orientation` | `vertical | horizontal` | `vertical`                       | Layout orientation |
+| `size`        | `small    | medium      | large`                           | `medium`           | Density hint |
+
+## Boundary
+
+`cv-fieldset` does not own field values or validation logic.

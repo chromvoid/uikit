@@ -1,0 +1,22 @@
+# cv-pagination
+
+Page navigation with bounded previous/next actions and current-page announcement.
+
+**Headless:** [`createPagination`](https://github.com/chromvoid/headless-ui/blob/main/specs/components/pagination.md)
+
+## Attributes
+
+| Attribute        | Type    | Default | Description             |
+| ---------------- | ------- | ------- | ----------------------- |
+| `page`           | Number  | `1`     | Current page            |
+| `page-count`     | Number  | `1`     | Total pages             |
+| `sibling-count`  | Number  | `1`     | Adjacent visible pages  |
+| `boundary-count` | Number  | `1`     | Start/end visible pages |
+| `disabled`       | Boolean | `false` | Blocks navigation       |
+| `compact`        | Boolean | `false` | Compact rendering hint  |
+
+## Events
+
+| Event            | Detail     |
+| ---------------- | ---------- |
+| `cv-page-change` | `{ page }` |

@@ -54,6 +54,7 @@ export class CVTextarea extends FormAssociatedReatomElement {
       variant: {type: String, reflect: true},
       enterBehavior: {type: String, reflect: true, attribute: 'enter-behavior'},
       name: {type: String},
+      invalid: {type: Boolean, reflect: true},
     }
   }
 
@@ -71,6 +72,7 @@ export class CVTextarea extends FormAssociatedReatomElement {
   declare variant: CVTextareaVariant
   declare enterBehavior: CVTextareaEnterBehavior
   declare name: string
+  declare invalid: boolean
 
   private model: TextareaModel
   private valueOnFocus = ''
@@ -94,6 +96,7 @@ export class CVTextarea extends FormAssociatedReatomElement {
     this.variant = 'outlined'
     this.enterBehavior = 'newline'
     this.name = ''
+    this.invalid = false
     this.model = this.createModel()
   }
 
@@ -176,6 +179,14 @@ export class CVTextarea extends FormAssociatedReatomElement {
 
       :host([focused]) [part='base'] {
         box-shadow: var(--cv-textarea-focus-ring);
+      }
+
+      :host([invalid]) [part='base'] {
+        border-color: var(--cv-color-danger, #ef4444);
+      }
+
+      :host([invalid][focused]) [part='base'] {
+        box-shadow: 0 0 0 2px var(--cv-color-danger-border-strong);
       }
 
       :host([size='small']) {
@@ -368,6 +379,13 @@ export class CVTextarea extends FormAssociatedReatomElement {
   }
 
   protected override getFormAssociatedValidity(): FormAssociatedValidity {
+    if (this.invalid) {
+      return {
+        flags: {customError: true},
+        message: 'Invalid value',
+      }
+    }
+
     if (this.required && this.model.state.value().length === 0) {
       return {
         flags: {valueMissing: true},
@@ -494,6 +512,7 @@ export class CVTextarea extends FormAssociatedReatomElement {
           aria-disabled=${textareaProps['aria-disabled'] ?? nothing}
           aria-readonly=${textareaProps['aria-readonly'] ?? nothing}
           aria-required=${textareaProps['aria-required'] ?? nothing}
+          aria-invalid=${this.invalid ? 'true' : nothing}
           placeholder=${textareaProps.placeholder ?? nothing}
           ?disabled=${textareaProps.disabled}
           ?readonly=${textareaProps.readonly}

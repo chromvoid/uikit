@@ -1,0 +1,14 @@
+# cv-separator
+
+Structural divider between UI regions or menu/list groups.
+
+**Headless:** None (UIKit-only component)
+
+## Attributes
+
+| Attribute     | Type        | Default   | Description                         |
+| ------------- | ----------- | --------- | ----------------------------------- | ----------------- |
+| `orientation` | `horizontal | vertical` | `horizontal`                        | Divider direction |
+| `decorative`  | Boolean     | `true`    | Hides separator from assistive tech |
+
+When `decorative=false`, the base element has `role="separator"` and `aria-orientation`.

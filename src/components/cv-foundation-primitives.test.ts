@@ -1,0 +1,106 @@
+import {afterEach, describe, expect, it} from 'vitest'
+
+import {CVButtonGroup} from './cv-button-group'
+import {CVField} from './cv-field'
+import {CVFieldset} from './cv-fieldset'
+import {CVInput} from './cv-input'
+import {CVInputGroup} from './cv-input-group'
+import {CVPresence} from './cv-presence'
+import {CVScrollArea} from './cv-scroll-area'
+import {CVSeparator} from './cv-separator'
+import {CVStep} from './cv-step'
+import {CVSteps, type CVStepSelectDetail} from './cv-steps'
+import {CVVisuallyHidden} from './cv-visually-hidden'
+
+CVButtonGroup.define()
+CVField.define()
+CVFieldset.define()
+CVInput.define()
+CVInputGroup.define()
+CVPresence.define()
+CVScrollArea.define()
+CVSeparator.define()
+CVStep.define()
+CVSteps.define()
+CVVisuallyHidden.define()
+
+const settle = async (element: {updateComplete: Promise<unknown>}) => {
+  await element.updateComplete
+  await Promise.resolve()
+  await element.updateComplete
+}
+
+afterEach(() => {
+  document.body.innerHTML = ''
+})
+
+describe('foundation primitives', () => {
+  it('cv-field propagates required, disabled, invalid, and descriptions to the slotted control', async () => {
+    const field = document.createElement('cv-field') as CVField
+    field.required = true
+    field.disabled = true
+    field.invalid = true
+    field.innerHTML = `
+      <span slot="label">Code</span>
+      <cv-input></cv-input>
+      <span slot="description">Use the recovery code.</span>
+      <span slot="error">Invalid code.</span>
+    `
+    document.body.append(field)
+    await settle(field)
+
+    const input = field.querySelector('cv-input') as CVInput
+    expect(input.required).toBe(true)
+    expect(input.disabled).toBe(true)
+    expect(input.invalid).toBe(true)
+    expect(input.getAttribute('aria-labelledby')).toContain('label')
+    expect(input.getAttribute('aria-describedby')).toContain('description')
+    expect(input.getAttribute('aria-describedby')).toContain('error')
+  })
+
+  it('cv-steps marks current step and emits selection events when selectable', async () => {
+    const steps = document.createElement('cv-steps') as CVSteps
+    steps.current = 'two'
+    steps.selectable = true
+    steps.innerHTML = `
+      <cv-step value="one">One</cv-step>
+      <cv-step value="two">Two</cv-step>
+    `
+    document.body.append(steps)
+    await settle(steps)
+
+    const stepOne = steps.querySelector('cv-step[value="one"]') as CVStep
+    const stepTwo = steps.querySelector('cv-step[value="two"]') as CVStep
+    const selections: CVStepSelectDetail[] = []
+    steps.addEventListener('cv-step-select', (event) => {
+      selections.push((event as CustomEvent<CVStepSelectDetail>).detail)
+    })
+
+    expect(stepTwo.status).toBe('current')
+    stepOne.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+    await settle(steps)
+    expect(selections).toEqual([{value: 'one'}])
+  })
+
+  it('utility primitives render their structural parts', async () => {
+    const tags = [
+      'cv-button-group',
+      'cv-fieldset',
+      'cv-input-group',
+      'cv-presence',
+      'cv-scroll-area',
+      'cv-separator',
+      'cv-visually-hidden',
+    ] as const
+
+    for (const tag of tags) {
+      const element = document.createElement(tag)
+      if (tag === 'cv-presence') {
+        ;(element as CVPresence).present = true
+      }
+      document.body.append(element)
+      await settle(element as unknown as {updateComplete: Promise<unknown>})
+      expect(element.shadowRoot).not.toBeNull()
+    }
+  })
+})
