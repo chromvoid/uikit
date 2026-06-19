@@ -1,0 +1,29 @@
+{
+  "suite": "cv-date-time-picker",
+  "name": "cv-date-time-picker/open-light-default",
+  "viewport": "default",
+  "clipSelector": "#uikit-visual-stage",
+  "fullPage": false,
+  "threshold": 0.12,
+  "maxDiffRatio": 0.003,
+  "auditMode": true,
+  "updateMode": false,
+  "caseId": "cv-date-time-picker/open",
+  "component": "cv-date-time-picker",
+  "diagnostics": {
+    "emptyStage": false,
+    "horizontalOverflow": [],
+    "clippedText": [],
+    "outsideStage": [],
+    "stageViewportOverflow": null
+  },
+  "states": [
+    "open",
+    "calendar-dialog",
+    "time-inputs"
+  ],
+  "theme": "light",
+  "title": "Date-time picker open dialog with time controls",
+  "status": "missing-baseline",
+  "baselinePath": "/srv/projects/chromvoid/packages/uikit/tests/visual/__visual-baselines__/cv-date-time-picker/cv-date-time-picker-open-light-default.png"
+}

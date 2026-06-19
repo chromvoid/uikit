@@ -1,0 +1,28 @@
+{
+  "suite": "cv-date-picker",
+  "name": "cv-date-picker/open-dark-default",
+  "viewport": "default",
+  "clipSelector": "#uikit-visual-stage",
+  "fullPage": false,
+  "threshold": 0.12,
+  "maxDiffRatio": 0.003,
+  "auditMode": true,
+  "updateMode": false,
+  "caseId": "cv-date-picker/open",
+  "component": "cv-date-picker",
+  "diagnostics": {
+    "emptyStage": false,
+    "horizontalOverflow": [],
+    "clippedText": [],
+    "outsideStage": [],
+    "stageViewportOverflow": null
+  },
+  "states": [
+    "open",
+    "calendar-dialog"
+  ],
+  "theme": "dark",
+  "title": "Date picker open calendar dialog state",
+  "status": "missing-baseline",
+  "baselinePath": "/srv/projects/chromvoid/packages/uikit/tests/visual/__visual-baselines__/cv-date-picker/cv-date-picker-open-dark-default.png"
+}

@@ -14,7 +14,8 @@
     "emptyStage": false,
     "horizontalOverflow": [],
     "clippedText": [],
-    "outsideStage": []
+    "outsideStage": [],
+    "stageViewportOverflow": null
   },
   "states": [
     "expanded-branch",

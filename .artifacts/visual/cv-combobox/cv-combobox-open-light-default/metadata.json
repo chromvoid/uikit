@@ -1,0 +1,29 @@
+{
+  "suite": "cv-combobox",
+  "name": "cv-combobox/open-light-default",
+  "viewport": "default",
+  "clipSelector": "#uikit-visual-stage",
+  "fullPage": false,
+  "threshold": 0.12,
+  "maxDiffRatio": 0.003,
+  "auditMode": true,
+  "updateMode": false,
+  "caseId": "cv-combobox/open",
+  "component": "cv-combobox",
+  "diagnostics": {
+    "emptyStage": false,
+    "horizontalOverflow": [],
+    "clippedText": [],
+    "outsideStage": [],
+    "stageViewportOverflow": null
+  },
+  "states": [
+    "open",
+    "grouped",
+    "select-only"
+  ],
+  "theme": "light",
+  "title": "Combobox open grouped listbox state",
+  "status": "missing-baseline",
+  "baselinePath": "/srv/projects/chromvoid/packages/uikit/tests/visual/__visual-baselines__/cv-combobox/cv-combobox-open-light-default.png"
+}

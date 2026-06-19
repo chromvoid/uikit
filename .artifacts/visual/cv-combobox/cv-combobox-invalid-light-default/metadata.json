@@ -1,0 +1,28 @@
+{
+  "suite": "cv-combobox",
+  "name": "cv-combobox/invalid-light-default",
+  "viewport": "default",
+  "clipSelector": "#uikit-visual-stage",
+  "fullPage": false,
+  "threshold": 0.12,
+  "maxDiffRatio": 0.003,
+  "auditMode": true,
+  "updateMode": false,
+  "caseId": "cv-combobox/invalid",
+  "component": "cv-combobox",
+  "diagnostics": {
+    "emptyStage": false,
+    "horizontalOverflow": [],
+    "clippedText": [],
+    "outsideStage": [],
+    "stageViewportOverflow": null
+  },
+  "states": [
+    "invalid",
+    "typed-value"
+  ],
+  "theme": "light",
+  "title": "Combobox invalid typed value state",
+  "status": "missing-baseline",
+  "baselinePath": "/srv/projects/chromvoid/packages/uikit/tests/visual/__visual-baselines__/cv-combobox/cv-combobox-invalid-light-default.png"
+}

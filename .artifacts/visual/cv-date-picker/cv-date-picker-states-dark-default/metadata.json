@@ -2,8 +2,8 @@
   "suite": "cv-date-picker",
   "name": "cv-date-picker/states-dark-default",
   "viewport": "default",
-  "clipSelector": null,
-  "fullPage": true,
+  "clipSelector": "#uikit-visual-stage",
+  "fullPage": false,
   "threshold": 0.12,
   "maxDiffRatio": 0.003,
   "auditMode": true,
@@ -14,11 +14,11 @@
     "emptyStage": false,
     "horizontalOverflow": [],
     "clippedText": [],
-    "outsideStage": []
+    "outsideStage": [],
+    "stageViewportOverflow": null
   },
   "states": [
     "value",
-    "open",
     "disabled",
     "readonly",
     "invalid",
@@ -26,7 +26,7 @@
     "large"
   ],
   "theme": "dark",
-  "title": "Date picker value, open calendar, disabled, readonly, invalid, and size states",
+  "title": "Date picker value, disabled, readonly, invalid, and size states",
   "status": "missing-baseline",
   "baselinePath": "/srv/projects/chromvoid/packages/uikit/tests/visual/__visual-baselines__/cv-date-picker/cv-date-picker-states-dark-default.png"
 }

@@ -13,33 +13,9 @@
   "diagnostics": {
     "emptyStage": false,
     "horizontalOverflow": [],
-    "clippedText": [
-      {
-        "selector": "div.visual-row",
-        "text": "68%\n        24%",
-        "scrollWidth": 278,
-        "clientWidth": 278,
-        "scrollHeight": 84,
-        "clientHeight": 80
-      },
-      {
-        "selector": "cv-progress-ring",
-        "text": "68%",
-        "scrollWidth": 80,
-        "clientWidth": 80,
-        "scrollHeight": 84,
-        "clientHeight": 80
-      },
-      {
-        "selector": "cv-progress-ring",
-        "text": "24%",
-        "scrollWidth": 80,
-        "clientWidth": 80,
-        "scrollHeight": 84,
-        "clientHeight": 80
-      }
-    ],
-    "outsideStage": []
+    "clippedText": [],
+    "outsideStage": [],
+    "stageViewportOverflow": null
   },
   "states": [
     "determinate",

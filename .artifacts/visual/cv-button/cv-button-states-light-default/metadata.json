@@ -12,24 +12,10 @@
   "component": "cv-button",
   "diagnostics": {
     "emptyStage": false,
-    "horizontalOverflow": [
-      {
-        "selector": "cv-button.visual-long-text",
-        "scrollWidth": 337,
-        "clientWidth": 260
-      }
-    ],
-    "clippedText": [
-      {
-        "selector": "cv-button.visual-long-text",
-        "text": "A long label that must not overflow the button shell",
-        "scrollWidth": 337,
-        "clientWidth": 260,
-        "scrollHeight": 37,
-        "clientHeight": 37
-      }
-    ],
-    "outsideStage": []
+    "horizontalOverflow": [],
+    "clippedText": [],
+    "outsideStage": [],
+    "stageViewportOverflow": null
   },
   "states": [
     "default",

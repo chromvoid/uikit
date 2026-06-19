@@ -1,0 +1,29 @@
+{
+  "suite": "cv-combobox",
+  "name": "cv-combobox/closed-dark-default",
+  "viewport": "default",
+  "clipSelector": "#uikit-visual-stage",
+  "fullPage": false,
+  "threshold": 0.12,
+  "maxDiffRatio": 0.003,
+  "auditMode": true,
+  "updateMode": false,
+  "caseId": "cv-combobox/closed",
+  "component": "cv-combobox",
+  "diagnostics": {
+    "emptyStage": false,
+    "horizontalOverflow": [],
+    "clippedText": [],
+    "outsideStage": [],
+    "stageViewportOverflow": null
+  },
+  "states": [
+    "editable",
+    "select-only",
+    "clearable"
+  ],
+  "theme": "dark",
+  "title": "Combobox editable, select-only, and clearable closed states",
+  "status": "missing-baseline",
+  "baselinePath": "/srv/projects/chromvoid/packages/uikit/tests/visual/__visual-baselines__/cv-combobox/cv-combobox-closed-dark-default.png"
+}

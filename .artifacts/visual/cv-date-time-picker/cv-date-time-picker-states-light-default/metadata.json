@@ -2,8 +2,8 @@
   "suite": "cv-date-time-picker",
   "name": "cv-date-time-picker/states-light-default",
   "viewport": "default",
-  "clipSelector": null,
-  "fullPage": true,
+  "clipSelector": "#uikit-visual-stage",
+  "fullPage": false,
   "threshold": 0.12,
   "maxDiffRatio": 0.003,
   "auditMode": true,
@@ -14,11 +14,11 @@
     "emptyStage": false,
     "horizontalOverflow": [],
     "clippedText": [],
-    "outsideStage": []
+    "outsideStage": [],
+    "stageViewportOverflow": null
   },
   "states": [
     "value",
-    "open",
     "hour-cycle-12",
     "hour-cycle-24",
     "invalid",
@@ -26,7 +26,7 @@
     "large"
   ],
   "theme": "light",
-  "title": "Date-time picker value, open dialog, 12h/24h, invalid, disabled, and size states",
+  "title": "Date-time picker value, 12h/24h, invalid, disabled, and size states",
   "status": "missing-baseline",
   "baselinePath": "/srv/projects/chromvoid/packages/uikit/tests/visual/__visual-baselines__/cv-date-time-picker/cv-date-time-picker-states-light-default.png"
 }

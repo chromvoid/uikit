@@ -1,0 +1,29 @@
+{
+  "suite": "cv-tooltip",
+  "name": "cv-tooltip/long-content-dark-default",
+  "viewport": "default",
+  "clipSelector": "#uikit-visual-stage",
+  "fullPage": false,
+  "threshold": 0.12,
+  "maxDiffRatio": 0.003,
+  "auditMode": true,
+  "updateMode": false,
+  "caseId": "cv-tooltip/long-content",
+  "component": "cv-tooltip",
+  "diagnostics": {
+    "emptyStage": false,
+    "horizontalOverflow": [],
+    "clippedText": [],
+    "outsideStage": [],
+    "stageViewportOverflow": null
+  },
+  "states": [
+    "open",
+    "long-content",
+    "compact-width"
+  ],
+  "theme": "dark",
+  "title": "Tooltip long content state",
+  "status": "missing-baseline",
+  "baselinePath": "/srv/projects/chromvoid/packages/uikit/tests/visual/__visual-baselines__/cv-tooltip/cv-tooltip-long-content-dark-default.png"
+}

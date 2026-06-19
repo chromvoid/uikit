@@ -1,0 +1,28 @@
+{
+  "suite": "cv-tooltip",
+  "name": "cv-tooltip/disabled-light-default",
+  "viewport": "default",
+  "clipSelector": "#uikit-visual-stage",
+  "fullPage": false,
+  "threshold": 0.12,
+  "maxDiffRatio": 0.003,
+  "auditMode": true,
+  "updateMode": false,
+  "caseId": "cv-tooltip/disabled",
+  "component": "cv-tooltip",
+  "diagnostics": {
+    "emptyStage": false,
+    "horizontalOverflow": [],
+    "clippedText": [],
+    "outsideStage": [],
+    "stageViewportOverflow": null
+  },
+  "states": [
+    "disabled",
+    "trigger"
+  ],
+  "theme": "light",
+  "title": "Tooltip disabled trigger state",
+  "status": "missing-baseline",
+  "baselinePath": "/srv/projects/chromvoid/packages/uikit/tests/visual/__visual-baselines__/cv-tooltip/cv-tooltip-disabled-light-default.png"
+}
