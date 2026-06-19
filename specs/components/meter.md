@@ -35,6 +35,8 @@ Graphical display of a numeric value within a known range, such as disk usage or
 | ----------- | -------------------------------------------------- |
 | `(default)` | Custom label content rendered inside the indicator |
 
+Use `value-text` for meaningful spoken text; the default slot is visual label content only.
+
 ## CSS Parts
 
 | Part        | Element  | Description                                            |
@@ -45,14 +47,19 @@ Graphical display of a numeric value within a known range, such as disk usage or
 
 ## CSS Custom Properties
 
-| Property                         | Default                            | Description                                         |
-| -------------------------------- | ---------------------------------- | --------------------------------------------------- |
-| `--cv-meter-height`              | `10px`                             | Block size of the meter track                       |
-| `--cv-meter-border-radius`       | `999px`                            | Border radius of the track and indicator            |
-| `--cv-meter-transition-duration` | `var(--cv-duration-normal, 220ms)` | Transition duration for indicator width             |
-| `--cv-meter-optimum-color`       | `var(--cv-color-success, #6ef7c8)` | Indicator color when status is `optimum`            |
-| `--cv-meter-suboptimum-color`    | `var(--cv-color-warning, #ffbe65)` | Indicator color when status is `low` (sub-optimum)  |
-| `--cv-meter-danger-color`        | `var(--cv-color-danger, #ff7a8a)`  | Indicator color when status is `high` (danger zone) |
+| Property                         | Default                            | Description                                                                         |
+| -------------------------------- | ---------------------------------- | ----------------------------------------------------------------------------------- |
+| `--cv-meter-height`              | `10px`                             | Block size of the meter track                                                       |
+| `--cv-meter-labeled-height`      | `18px`                             | Default track height when label content is present and `--cv-meter-height` is unset |
+| `--cv-meter-border-radius`       | `999px`                            | Border radius of the track and indicator                                            |
+| `--cv-meter-label-color`         | `var(--cv-color-text, #e8ecf6)`    | Text color for the label slot content                                               |
+| `--cv-meter-label-font-size`     | Calculated from track height       | Font size for the label slot content                                                |
+| `--cv-meter-transition-duration` | `var(--cv-duration-normal, 220ms)` | Transition duration for indicator width                                             |
+| `--cv-meter-optimum-color`       | `var(--cv-color-success, #6ef7c8)` | Indicator color when status is `optimum`                                            |
+| `--cv-meter-suboptimum-color`    | `var(--cv-color-warning, #ffbe65)` | Indicator color when status is `low` (sub-optimum)                                  |
+| `--cv-meter-danger-color`        | `var(--cv-color-danger, #ff7a8a)`  | Indicator color when status is `high` (danger zone)                                 |
+
+- The visual label is hidden when the effective track height is below `14px`; meter value remains exposed through ARIA.
 
 Additionally, component styles depend on theme tokens through fallback values:
 

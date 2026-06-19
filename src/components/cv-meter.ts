@@ -58,16 +58,22 @@ export class CVMeter extends ReatomLitElement {
     css`
       :host {
         display: block;
+        --cv-meter-effective-height: var(--cv-meter-height, 10px);
+      }
+
+      :host(:not(:empty)) {
+        --cv-meter-effective-height: var(--cv-meter-height, var(--cv-meter-labeled-height, 18px));
       }
 
       [part='base'] {
         position: relative;
         inline-size: 100%;
-        block-size: var(--cv-meter-height, 10px);
+        block-size: var(--cv-meter-effective-height);
         border-radius: var(--cv-meter-border-radius, 999px);
         border: 1px solid var(--cv-color-border, #2a3245);
         background: var(--cv-color-surface, #141923);
         overflow: hidden;
+        container-type: size;
       }
 
       [part='indicator'] {
@@ -77,6 +83,42 @@ export class CVMeter extends ReatomLitElement {
         background: var(--cv-gradient-progress-primary, var(--cv-gradient-primary));
         transition: inline-size var(--cv-meter-transition-duration, var(--cv-duration-normal, 220ms))
           var(--cv-easing-standard, ease);
+        position: relative;
+      }
+
+      [part='label'] {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        max-inline-size: 100%;
+        overflow: hidden;
+        color: var(--cv-meter-label-color, var(--cv-color-text, #e8ecf6));
+        font-size: var(
+          --cv-meter-label-font-size,
+          min(var(--cv-font-size-xs, 0.75rem), max(0px, calc(var(--cv-meter-effective-height) - 3px)))
+        );
+        line-height: 1;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        pointer-events: none;
+      }
+
+      [part='label'] slot {
+        line-height: inherit;
+      }
+
+      ::slotted(*) {
+        color: inherit;
+        font-size: inherit;
+        line-height: inherit;
+      }
+
+      @container (max-height: 13px) {
+        [part='label'] {
+          display: none;
+        }
       }
 
       [part='indicator'][data-status='low'] {
