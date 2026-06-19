@@ -64,6 +64,10 @@ function arraysEqual(left: readonly string[], right: readonly string[]): boolean
   return left.length === right.length && left.every((value, index) => value === right[index])
 }
 
+function isSelectedOption(option: CVSelectOption): boolean {
+  return option.selected || option.hasAttribute('selected')
+}
+
 let cvSelectNonce = 0
 
 export class CVSelect extends FormAssociatedReatomElement {
@@ -353,8 +357,11 @@ export class CVSelect extends FormAssociatedReatomElement {
   }
 
   private ensureOptionValue(option: CVSelectOption, index: number): string {
-    const normalized = option.value?.trim()
-    if (normalized) return normalized
+    const normalized = option.value?.trim() || option.getAttribute('value')?.trim()
+    if (normalized) {
+      option.value = normalized
+      return normalized
+    }
 
     const fallback = `option-${index + 1}`
     option.value = fallback
@@ -392,7 +399,7 @@ export class CVSelect extends FormAssociatedReatomElement {
           options.push({
             id,
             label: option.textContent?.trim() || id,
-            disabled: option.disabled,
+            disabled: option.disabled || option.hasAttribute('disabled'),
             element: option,
             groupId,
           })
@@ -415,7 +422,7 @@ export class CVSelect extends FormAssociatedReatomElement {
         options.push({
           id,
           label: option.textContent?.trim() || id,
-          disabled: option.disabled,
+          disabled: option.disabled || option.hasAttribute('disabled'),
           element: option,
           groupId: null,
         })
@@ -442,7 +449,7 @@ export class CVSelect extends FormAssociatedReatomElement {
       }
 
       for (const record of optionRecords) {
-        if (record.element.selected && !record.disabled) {
+        if (isSelectedOption(record.element) && !record.disabled) {
           return [record.id]
         }
       }
@@ -467,7 +474,7 @@ export class CVSelect extends FormAssociatedReatomElement {
 
     if (normalized.size === 0) {
       for (const record of optionRecords) {
-        if (record.element.selected && !record.disabled) {
+        if (isSelectedOption(record.element) && !record.disabled) {
           normalized.add(record.id)
         }
       }
@@ -515,7 +522,7 @@ export class CVSelect extends FormAssociatedReatomElement {
           (record) =>
             !knownOptionIds.has(record.id) &&
             !record.disabled &&
-            record.element.selected &&
+            isSelectedOption(record.element) &&
             selectableIds.has(record.id),
         )
         .map((record) => record.id)

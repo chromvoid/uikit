@@ -751,6 +751,18 @@ describe('cv-select', () => {
 
       expect(el.selectedValues).toEqual(['a', 'b'])
     })
+
+    it('renders multiple selected labels after programmatic selectedValues write', async () => {
+      const el = await createSelect({selectionMode: 'multiple', clearable: true})
+
+      el.selectedValues = ['a', 'b']
+      await settle(el)
+
+      expect(el.value).toBe('a')
+      expect(el.selectedValues).toEqual(['a', 'b'])
+      expect(getTrigger(el).textContent).toContain('Alpha, Beta')
+      expect(getClearButton(el)).not.toBeNull()
+    })
   })
 
   // --- State preservation ---

@@ -229,7 +229,9 @@ export class CVListbox extends ReatomLitElement {
     // Mapping over the filtered array previously produced colliding fallbacks
     // (e.g. two options both becoming `option-1`).
     optionElements.forEach((option, index) => {
-      if (option.selected && !option.disabled) {
+      const isSelected = option.selected || option.hasAttribute('selected')
+      const disabled = option.disabled || option.hasAttribute('disabled')
+      if (isSelected && !disabled) {
         selected.push(this.ensureOptionValue(option, index))
       }
     })
@@ -237,8 +239,11 @@ export class CVListbox extends ReatomLitElement {
   }
 
   private ensureOptionValue(option: CVOption, index: number): string {
-    const normalized = option.value?.trim()
-    if (normalized) return normalized
+    const normalized = option.value?.trim() || option.getAttribute('value')?.trim()
+    if (normalized) {
+      option.value = normalized
+      return normalized
+    }
 
     const fallback = `option-${index + 1}`
     option.value = fallback
@@ -260,7 +265,7 @@ export class CVListbox extends ReatomLitElement {
     this.optionRecords = optionElements.map((element, index) => {
       const id = this.ensureOptionValue(element, index)
       const label = element.textContent?.trim() || id
-      const disabled = element.disabled
+      const disabled = element.disabled || element.hasAttribute('disabled')
       const groupId = optionGroupMap.get(element)
 
       return {
