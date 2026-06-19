@@ -212,10 +212,11 @@ export class CVPopover extends ReatomLitElement {
         padding: var(--cv-popover-padding, var(--cv-space-3, 12px));
         border-radius: var(--cv-popover-border-radius, var(--cv-radius-md, 10px));
         border: 1px solid var(--cv-color-border, #2a3245);
-        background: var(--cv-popover-arrow-background, var(--cv-color-primary, #65d7ff));
+        background: var(--cv-color-surface-elevated, #1d2432);
         box-shadow: var(--cv-shadow-1, 0 2px 8px rgba(0, 0, 0, 0.24));
         color: var(--cv-color-text, #e8ecf6);
         margin: 0;
+        overflow: visible;
         opacity: 1;
         transform: translate3d(0, 0, 0);
         transition:
@@ -247,13 +248,12 @@ export class CVPopover extends ReatomLitElement {
 
       [part='arrow'] {
         position: absolute;
-        z-index: 1;
+        z-index: -1;
         display: block;
-        inline-size: var(--cv-popover-arrow-size, 10px);
-        block-size: var(--cv-popover-arrow-size, 10px);
-        background: var(--cv-color-surface-elevated, #1d2432);
-        border-block-start: 1px solid var(--cv-color-border-strong, #3d4a5f);
-        border-inline-start: 1px solid var(--cv-color-border-strong, #3d4a5f);
+        inline-size: var(--cv-popover-arrow-size, 12px);
+        block-size: var(--cv-popover-arrow-size, 12px);
+        background: var(--cv-popover-arrow-background, var(--cv-color-surface-elevated, #1d2432));
+        border: 1px solid var(--cv-popover-arrow-border-color, var(--cv-color-border-strong, #3d4a5f));
         transform: rotate(45deg);
         pointer-events: none;
       }
