@@ -113,6 +113,18 @@ describe('cv-drawer', () => {
       expect(header.tagName).toBe('HEADER')
     })
 
+    it('lays out header text and close control in a stable grid', () => {
+      const cssText = stylesToText(CVDrawer.styles)
+
+      expect(cssText).toMatch(
+        /\[part='header'\]\s*{[\s\S]*grid-template-columns:\s*minmax\(0,\s*1fr\) auto;/,
+      )
+      expect(cssText).toMatch(/\[part='header-close'\]\s*{[\s\S]*grid-column:\s*2;/)
+      expect(cssText).toMatch(/\[part='header-close'\]\s*{[\s\S]*align-self:\s*start;/)
+      expect(cssText).toMatch(/\[part='title'\]\s*{[\s\S]*grid-column:\s*1;/)
+      expect(cssText).toMatch(/\[part='description'\]\s*{[\s\S]*grid-column:\s*1;/)
+    })
+
     it('renders [part="title"] as an <h2> with slot[name="title"]', async () => {
       const el = await createDrawer()
       const title = el.shadowRoot!.querySelector('[part="title"]') as HTMLElement

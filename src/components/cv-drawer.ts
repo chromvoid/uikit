@@ -234,21 +234,29 @@ export class CVDrawer extends ReatomLitElement {
 
       [part='header'] {
         display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        align-items: start;
         gap: var(--cv-space-1, 4px);
         padding: var(--cv-drawer-header-spacing, var(--cv-space-4, 16px));
       }
 
       [part='title'] {
+        grid-column: 1;
         margin: 0;
         font-size: 1.05rem;
       }
 
       [part='description'] {
+        grid-column: 1;
         margin: 0;
         color: var(--cv-color-text-muted, #9aa6bf);
       }
 
       [part='header-close'] {
+        grid-column: 2;
+        grid-row: 1 / span 2;
+        justify-self: end;
+        align-self: start;
         display: inline-flex;
         align-items: center;
         justify-content: center;
