@@ -1,8 +1,9 @@
-import {css, html, nothing} from 'lit'
+import {css, html, nothing, type PropertyValues} from 'lit'
 
 import {ReatomLitElement} from '../reatom-lit/ReatomLitElement'
 
 type CVButtonGroupOrientation = 'horizontal' | 'vertical'
+type CVButtonGroupPosition = 'first' | 'middle' | 'last' | 'only'
 type CVButtonGroupSize = 'small' | 'medium' | 'large'
 
 export class CVButtonGroup extends ReatomLitElement {
@@ -21,6 +22,8 @@ export class CVButtonGroup extends ReatomLitElement {
   declare attached: boolean
   declare size: CVButtonGroupSize
   declare ariaLabel: string
+
+  private groupedButtons = new Set<HTMLElement>()
 
   constructor() {
     super()
@@ -61,8 +64,60 @@ export class CVButtonGroup extends ReatomLitElement {
   protected override render() {
     return html`
       <div part="base" role="group" aria-label=${this.ariaLabel || nothing}>
-        <slot></slot>
+        <slot @slotchange=${this.handleSlotChange}></slot>
       </div>
     `
+  }
+
+  protected override updated(changedProperties: PropertyValues<this>) {
+    super.updated(changedProperties)
+    if (changedProperties.has('attached') || changedProperties.has('orientation')) {
+      this.syncButtonShape()
+    }
+  }
+
+  override disconnectedCallback() {
+    this.clearButtonShape()
+    super.disconnectedCallback()
+  }
+
+  private handleSlotChange() {
+    this.syncButtonShape()
+  }
+
+  private syncButtonShape() {
+    this.clearButtonShape()
+
+    if (!this.attached) return
+
+    const slot = this.shadowRoot?.querySelector('slot')
+    const buttons =
+      slot
+        ?.assignedElements({flatten: true})
+        .filter((element): element is HTMLElement => element.localName === 'cv-button') ?? []
+    const orientation = this.orientation === 'vertical' ? 'vertical' : 'horizontal'
+
+    buttons.forEach((button, index) => {
+      const position = this.getButtonPosition(index, buttons.length)
+      button.setAttribute('data-cv-button-group-position', position)
+      button.setAttribute('data-cv-button-group-orientation', orientation)
+      this.groupedButtons.add(button)
+    })
+  }
+
+  private getButtonPosition(index: number, count: number): CVButtonGroupPosition {
+    if (count === 1) return 'only'
+    if (index === 0) return 'first'
+    if (index === count - 1) return 'last'
+    return 'middle'
+  }
+
+  private clearButtonShape() {
+    for (const button of this.groupedButtons) {
+      button.removeAttribute('data-cv-button-group-position')
+      button.removeAttribute('data-cv-button-group-orientation')
+    }
+
+    this.groupedButtons.clear()
   }
 }

@@ -78,10 +78,7 @@ describe('foundation primitives', () => {
   })
 
   it('utility primitives render their structural parts', async () => {
-    const tags = [
-      'cv-button-group',
-      'cv-fieldset',
-    ] as const
+    const tags = ['cv-button-group', 'cv-fieldset'] as const
 
     for (const tag of tags) {
       const element = document.createElement(tag)
@@ -89,5 +86,42 @@ describe('foundation primitives', () => {
       await settle(element as unknown as {updateComplete: Promise<unknown>})
       expect(element.shadowRoot).not.toBeNull()
     }
+  })
+
+  it('cv-button-group marks attached buttons by position and orientation', async () => {
+    const group = document.createElement('cv-button-group') as CVButtonGroup
+    group.attached = true
+    group.innerHTML = `
+      <cv-button>Unlock</cv-button>
+      <cv-button>Lock</cv-button>
+      <cv-button>Wipe</cv-button>
+    `
+    document.body.append(group)
+    await settle(group)
+
+    const buttons = [...group.querySelectorAll('cv-button')]
+    expect(buttons.map((button) => button.getAttribute('data-cv-button-group-position'))).toEqual([
+      'first',
+      'middle',
+      'last',
+    ])
+    expect(buttons.map((button) => button.getAttribute('data-cv-button-group-orientation'))).toEqual([
+      'horizontal',
+      'horizontal',
+      'horizontal',
+    ])
+
+    group.orientation = 'vertical'
+    await settle(group)
+    expect(buttons.map((button) => button.getAttribute('data-cv-button-group-orientation'))).toEqual([
+      'vertical',
+      'vertical',
+      'vertical',
+    ])
+
+    group.attached = false
+    await settle(group)
+    expect(buttons.every((button) => !button.hasAttribute('data-cv-button-group-position'))).toBe(true)
+    expect(buttons.every((button) => !button.hasAttribute('data-cv-button-group-orientation'))).toBe(true)
   })
 })

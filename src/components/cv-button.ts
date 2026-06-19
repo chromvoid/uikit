@@ -349,6 +349,54 @@ export class CVButton extends FormAssociatedReatomElement {
         --cv-button-border-radius: 999px;
       }
 
+      :host([data-cv-button-group-position]) {
+        position: relative;
+      }
+
+      :host([data-cv-button-group-position]:hover),
+      :host([data-cv-button-group-position]:focus-within),
+      :host([data-cv-button-group-position][pressed]) {
+        z-index: 1;
+      }
+
+      :host([data-cv-button-group-position='middle']) [part='base'] {
+        border-radius: 0;
+      }
+
+      :host([data-cv-button-group-position='only']) [part='base'] {
+        border-radius: var(--cv-button-border-radius);
+      }
+
+      :host([data-cv-button-group-orientation='horizontal'][data-cv-button-group-position='first'])
+        [part='base'] {
+        border-radius: var(--cv-button-border-radius) 0 0 var(--cv-button-border-radius);
+      }
+
+      :host([data-cv-button-group-orientation='horizontal'][data-cv-button-group-position='last'])
+        [part='base'] {
+        border-radius: 0 var(--cv-button-border-radius) var(--cv-button-border-radius) 0;
+      }
+
+      :host([data-cv-button-group-orientation='horizontal'][data-cv-button-group-position='middle']),
+      :host([data-cv-button-group-orientation='horizontal'][data-cv-button-group-position='last']) {
+        margin-inline-start: -1px;
+      }
+
+      :host([data-cv-button-group-orientation='vertical'][data-cv-button-group-position='first'])
+        [part='base'] {
+        border-radius: var(--cv-button-border-radius) var(--cv-button-border-radius) 0 0;
+      }
+
+      :host([data-cv-button-group-orientation='vertical'][data-cv-button-group-position='last'])
+        [part='base'] {
+        border-radius: 0 0 var(--cv-button-border-radius) var(--cv-button-border-radius);
+      }
+
+      :host([data-cv-button-group-orientation='vertical'][data-cv-button-group-position='middle']),
+      :host([data-cv-button-group-orientation='vertical'][data-cv-button-group-position='last']) {
+        margin-block-start: -1px;
+      }
+
       /* --- hover --- */
       [part='base']:hover:not(:disabled) {
         background: var(--cv-button-background-hover);
