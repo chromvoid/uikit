@@ -34,6 +34,23 @@ describe('cv-task-list', () => {
     expect(element.shadowRoot!.querySelector('slot:not([name])')).not.toBeNull()
   })
 
+  it('hides optional header and footer wrappers until their slots are assigned', async () => {
+    const element = await createTaskList()
+
+    expect(element.shadowRoot!.querySelector('[part="header"]')?.hasAttribute('hidden')).toBe(true)
+    expect(element.shadowRoot!.querySelector('[part="footer"]')?.hasAttribute('hidden')).toBe(true)
+  })
+
+  it('shows header and footer wrappers when their slots are assigned', async () => {
+    const element = await createTaskList(
+      undefined,
+      '<strong slot="header">Import tasks</strong><span slot="footer">2 of 4 complete</span>',
+    )
+
+    expect(element.shadowRoot!.querySelector('[part="header"]')?.hasAttribute('hidden')).toBe(false)
+    expect(element.shadowRoot!.querySelector('[part="footer"]')?.hasAttribute('hidden')).toBe(false)
+  })
+
   it('renders empty slot instead of list when empty', async () => {
     const element = await createTaskList({empty: true}, '<span slot="empty">Nothing queued</span>')
 

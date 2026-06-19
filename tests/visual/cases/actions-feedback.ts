@@ -301,21 +301,47 @@ export const actionsFeedbackCases: readonly UikitVisualCase[] = [
     id: 'cv-task-list/states',
     component: 'cv-task-list',
     title: 'Task list comfortable, compact, busy, and empty states',
-    states: ['comfortable', 'compact', 'busy', 'empty', 'footer'],
+    states: ['comfortable', 'compact', 'busy', 'empty', 'progress', 'actions', 'footer'],
     html: `
       <div class="visual-grid">
-        <cv-task-list label="Tasks">
-          <strong slot="header">Import tasks</strong>
-          <div class="visual-list-row" role="listitem"><span>Validate archive</span><cv-badge variant="success">Done</cv-badge></div>
-          <div class="visual-list-row" role="listitem"><span>Encrypt payload</span><cv-badge variant="primary">Running</cv-badge></div>
-          <span slot="footer">2 of 4 complete</span>
+        <cv-task-list label="Secure import queue" busy>
+          <strong slot="header">Secure import queue</strong>
+          <cv-badge slot="header" variant="primary" pulse>Running</cv-badge>
+          <div role="listitem">
+            <div>
+              <strong>Encrypt vault-export.zip</strong><br>
+              <span>72% - chunk 18 of 25</span>
+              <cv-progress value="72" value-text="72%" aria-label="Encrypt vault-export.zip progress"></cv-progress>
+            </div>
+            <cv-badge variant="primary">Running</cv-badge>
+          </div>
+          <div role="listitem">
+            <div>
+              <strong>Verify metadata manifest</strong><br>
+              <span>Checksums match</span>
+            </div>
+            <cv-badge variant="success">Done</cv-badge>
+          </div>
+          <div role="listitem">
+            <div>
+              <strong>Upload encrypted backup</strong><br>
+              <span>Waiting for network</span>
+            </div>
+            <cv-button size="small" variant="ghost">Cancel</cv-button>
+          </div>
+          <span slot="footer">2 active / 1 queued / updated now</span>
         </cv-task-list>
-        <cv-task-list label="Compact tasks" density="compact" busy>
-          <strong slot="header">Compact queue</strong>
-          <div class="visual-list-row" role="listitem"><span>Upload chunk</span><cv-badge>Queued</cv-badge></div>
+        <cv-task-list label="Compact sync queue" density="compact">
+          <strong slot="header">Compact sync queue</strong>
+          <div role="listitem"><span>Rotate local key shard</span><cv-badge variant="warning">Queued</cv-badge></div>
+          <div role="listitem"><span>Publish audit marker</span><cv-badge variant="success">Done</cv-badge></div>
         </cv-task-list>
-        <cv-task-list label="Empty tasks" empty>
-          <span slot="empty">No pending tasks.</span>
+        <cv-task-list label="Empty task queue" empty>
+          <cv-empty-state
+            slot="empty"
+            headline="No queued tasks"
+            description="New imports and exports will appear here."
+          ></cv-empty-state>
         </cv-task-list>
       </div>
     `,

@@ -2,20 +2,63 @@
 
 # cv-task-list
 
-Slotted shell for task rows.
+Slotted shell for task rows with panel, busy, empty, header, footer, and density styling.
 
-The component provides structure and busy/empty semantics only. Consumers own task data, progress math, formatting, retry, cancel, and row behavior.
+The component provides task-list structure, accessible busy/empty semantics, and baseline styling for direct slotted `role="listitem"` rows. Consumers still own task data, progress math, formatting, retry, cancel, and custom row behavior.
 
 ## Usage
 
 ```html
-<cv-task-list label="Uploads" busy>
-  <div role="listitem">Uploading photo.jpg</div>
-  <div role="listitem">Uploading notes.pdf</div>
+<cv-task-list label="Secure import queue" busy>
+  <strong slot="header">Secure import queue</strong>
+  <cv-badge slot="header" variant="primary" pulse>Running</cv-badge>
+
+  <div role="listitem">
+    <div>
+      <strong>Encrypt vault-export.zip</strong><br />
+      <span>72% - chunk 18 of 25</span>
+      <cv-progress value="72" value-text="72%" aria-label="Encrypt vault-export.zip progress"></cv-progress>
+    </div>
+    <cv-badge variant="primary">Running</cv-badge>
+  </div>
+
+  <div role="listitem">
+    <div>
+      <strong>Verify metadata manifest</strong><br />
+      <span>Checksums match</span>
+    </div>
+    <cv-badge variant="success">Done</cv-badge>
+  </div>
+
+  <div role="listitem">
+    <div>
+      <strong>Upload encrypted backup</strong><br />
+      <span>Waiting for network</span>
+    </div>
+    <cv-button size="small" variant="ghost">Cancel</cv-button>
+  </div>
+
+  <span slot="footer">2 active / 1 queued / updated now</span>
 </cv-task-list>
 
-<cv-task-list empty>
-  <cv-empty-state slot="empty" headline="No tasks"></cv-empty-state>
+<cv-task-list label="Compact sync queue" density="compact">
+  <strong slot="header">Compact sync queue</strong>
+  <div role="listitem">
+    <span>Rotate local key shard</span>
+    <cv-badge variant="warning">Queued</cv-badge>
+  </div>
+  <div role="listitem">
+    <span>Publish audit marker</span>
+    <cv-badge variant="success">Done</cv-badge>
+  </div>
+</cv-task-list>
+
+<cv-task-list label="Empty task queue" empty>
+  <cv-empty-state
+    slot="empty"
+    headline="No queued tasks"
+    description="New imports and exports will appear here."
+  ></cv-empty-state>
 </cv-task-list>
 ```
 
@@ -24,11 +67,11 @@ The component provides structure and busy/empty semantics only. Consumers own ta
 ```
 <cv-task-list> (host)
 └── <section part="base" aria-label="Tasks">
-    ├── <div part="header">
+    ├── <div part="header"> optional
     ├── <div part="list" role="list">
     │   └── <slot>
     ├── <div part="empty"> optional
-    └── <div part="footer">
+    └── <div part="footer"> optional
 ```
 
 ## Attributes
@@ -58,6 +101,31 @@ The component provides structure and busy/empty semantics only. Consumers own ta
 | `list`   | Default row list wrapper |
 | `empty`  | Empty slot wrapper       |
 | `footer` | Footer slot wrapper      |
+
+## CSS Custom Properties
+
+| Property                              | Default                                 | Description                    |
+| ------------------------------------- | --------------------------------------- | ------------------------------ |
+| `--cv-task-list-gap`                  | `var(--cv-space-3, 12px)`               | Gap between shell regions      |
+| `--cv-task-list-padding`              | `var(--cv-space-4, 16px)`               | Root section padding           |
+| `--cv-task-list-radius`               | `var(--cv-radius-md, 10px)`             | Root section radius            |
+| `--cv-task-list-background`           | `var(--cv-color-surface-2, #181f2b)`    | Root section background        |
+| `--cv-task-list-border`               | `1px solid var(--cv-color-border, ...)` | Root section border            |
+| `--cv-task-list-row-gap`              | `var(--cv-space-2, 8px)`                | Gap between rows               |
+| `--cv-task-list-row-padding-block`    | `var(--cv-space-3, 12px)`               | Row block padding              |
+| `--cv-task-list-row-padding-inline`   | `var(--cv-space-3, 12px)`               | Row inline padding             |
+| `--cv-task-list-row-radius`           | `var(--cv-radius-sm, 6px)`              | Row radius                     |
+| `--cv-task-list-row-background`       | `var(--cv-color-surface-glass-subtle)`  | Direct `role="listitem"` rows  |
+| `--cv-task-list-empty-min-block-size` | `96px`                                  | Minimum empty-state block size |
+
+## Visual States
+
+| Selector                     | Description                                              |
+| ---------------------------- | -------------------------------------------------------- |
+| `:host([busy])`              | Sets `aria-busy="true"` and shows a restrained scan line |
+| `:host([empty])`             | Renders `slot="empty"` instead of the default list       |
+| `:host([density="compact"])` | Reduces shell and row spacing                            |
+| `[role="listitem"]:hover`    | Emphasizes direct slotted task rows                      |
 
 ## Events
 
