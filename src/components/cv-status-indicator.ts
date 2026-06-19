@@ -39,6 +39,9 @@ export class CVStatusIndicator extends ReatomLitElement {
         --cv-status-marker-size: 0.625rem;
         --cv-status-gap: var(--cv-space-1, 4px);
         --cv-status-color: var(--cv-color-border-strong, #4c5870);
+        --cv-status-font-size: var(--cv-font-size-xs, 12px);
+        --cv-status-line-height: 1.2;
+        --cv-status-min-block-size: 1.2em;
       }
 
       :host([size='small']) {
@@ -74,7 +77,10 @@ export class CVStatusIndicator extends ReatomLitElement {
         align-items: center;
         gap: var(--cv-status-gap);
         min-inline-size: 0;
+        min-block-size: var(--cv-status-min-block-size);
         color: var(--cv-status-color);
+        font-size: var(--cv-status-font-size);
+        line-height: var(--cv-status-line-height);
       }
 
       [part='marker'] {
@@ -93,8 +99,8 @@ export class CVStatusIndicator extends ReatomLitElement {
       [part='label'] {
         min-inline-size: 0;
         color: var(--cv-status-label-color, var(--cv-color-text, #e8ecf6));
-        font-size: var(--cv-status-font-size, var(--cv-font-size-xs, 12px));
-        line-height: 1.2;
+        font-size: inherit;
+        line-height: inherit;
       }
 
       [part='icon'],
