@@ -26,6 +26,8 @@
     "invalid",
     "clearable",
     "password-toggle",
+    "prefix",
+    "suffix",
     "long-value"
   ],
   "theme": "dark",

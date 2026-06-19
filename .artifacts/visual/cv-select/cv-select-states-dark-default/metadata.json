@@ -2,8 +2,8 @@
   "suite": "cv-select",
   "name": "cv-select/states-dark-default",
   "viewport": "default",
-  "clipSelector": null,
-  "fullPage": true,
+  "clipSelector": "#uikit-visual-stage",
+  "fullPage": false,
   "threshold": 0.12,
   "maxDiffRatio": 0.003,
   "auditMode": true,
@@ -13,29 +13,11 @@
   "diagnostics": {
     "emptyStage": false,
     "horizontalOverflow": [],
-    "clippedText": [
-      {
-        "selector": "div.visual-stack",
-        "text": "Personal vault\n            Work vault\n            Archive vault\n          \n          \n            Notes\n            File",
-        "scrollWidth": 278,
-        "clientWidth": 278,
-        "scrollHeight": 336,
-        "clientHeight": 233
-      },
-      {
-        "selector": "cv-select",
-        "text": "Sync now\n            Export",
-        "scrollWidth": 260,
-        "clientWidth": 260,
-        "scrollHeight": 140,
-        "clientHeight": 37
-      }
-    ],
+    "clippedText": [],
     "outsideStage": []
   },
   "states": [
     "closed",
-    "open",
     "grouped",
     "multiple",
     "clearable",
@@ -45,7 +27,7 @@
     "large"
   ],
   "theme": "dark",
-  "title": "Select closed, open, grouped, multiple, clearable, invalid, disabled, and sizes",
+  "title": "Select closed, grouped, multiple, clearable, invalid, disabled, and sizes",
   "status": "missing-baseline",
   "baselinePath": "/srv/projects/chromvoid/packages/uikit/tests/visual/__visual-baselines__/cv-select/cv-select-states-dark-default.png"
 }

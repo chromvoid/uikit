@@ -1,0 +1,29 @@
+{
+  "suite": "cv-popover",
+  "name": "cv-popover/right-placement-light-default",
+  "viewport": "default",
+  "clipSelector": "#uikit-visual-stage",
+  "fullPage": false,
+  "threshold": 0.12,
+  "maxDiffRatio": 0.003,
+  "auditMode": true,
+  "updateMode": false,
+  "caseId": "cv-popover/right-placement",
+  "component": "cv-popover",
+  "diagnostics": {
+    "emptyStage": false,
+    "horizontalOverflow": [],
+    "clippedText": [],
+    "outsideStage": []
+  },
+  "states": [
+    "open",
+    "right-placement",
+    "trigger",
+    "compact-content"
+  ],
+  "theme": "light",
+  "title": "Popover open right placement with compact content",
+  "status": "missing-baseline",
+  "baselinePath": "/srv/projects/chromvoid/packages/uikit/tests/visual/__visual-baselines__/cv-popover/cv-popover-right-placement-light-default.png"
+}

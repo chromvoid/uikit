@@ -12,13 +12,7 @@
   "component": "cv-progress-ring",
   "diagnostics": {
     "emptyStage": false,
-    "horizontalOverflow": [
-      {
-        "selector": "cv-progress-ring",
-        "scrollWidth": 83,
-        "clientWidth": 80
-      }
-    ],
+    "horizontalOverflow": [],
     "clippedText": [
       {
         "selector": "div.visual-row",

@@ -12,23 +12,8 @@
   "component": "cv-field",
   "diagnostics": {
     "emptyStage": false,
-    "horizontalOverflow": [
-      {
-        "selector": "cv-field",
-        "scrollWidth": 201,
-        "clientWidth": 185
-      }
-    ],
-    "clippedText": [
-      {
-        "selector": "cv-field",
-        "text": "Disabled field\n          \n          Horizontal field layout.",
-        "scrollWidth": 201,
-        "clientWidth": 185,
-        "scrollHeight": 89,
-        "clientHeight": 89
-      }
-    ],
+    "horizontalOverflow": [],
+    "clippedText": [],
     "outsideStage": []
   },
   "states": [

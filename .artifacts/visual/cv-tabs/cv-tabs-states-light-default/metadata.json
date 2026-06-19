@@ -12,36 +12,8 @@
   "component": "cv-tabs",
   "diagnostics": {
     "emptyStage": false,
-    "horizontalOverflow": [
-      {
-        "selector": "div.visual-grid",
-        "scrollWidth": 425,
-        "clientWidth": 404
-      },
-      {
-        "selector": "cv-tabs",
-        "scrollWidth": 217,
-        "clientWidth": 196
-      }
-    ],
-    "clippedText": [
-      {
-        "selector": "div.visual-grid",
-        "text": "Overview\n          Activity\n          Disabled\n          Overview panel with key workspace metrics.\n          Activity p",
-        "scrollWidth": 425,
-        "clientWidth": 404,
-        "scrollHeight": 229,
-        "clientHeight": 229
-      },
-      {
-        "selector": "cv-tabs",
-        "text": "Settings\n          Members\n          \n            Vertical panel content validates side-by-side tab and panel layout.\n  ",
-        "scrollWidth": 217,
-        "clientWidth": 196,
-        "scrollHeight": 229,
-        "clientHeight": 229
-      }
-    ],
+    "horizontalOverflow": [],
+    "clippedText": [],
     "outsideStage": []
   },
   "states": [

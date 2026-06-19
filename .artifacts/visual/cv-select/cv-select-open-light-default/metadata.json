@@ -1,0 +1,27 @@
+{
+  "suite": "cv-select",
+  "name": "cv-select/open-light-default",
+  "viewport": "default",
+  "clipSelector": "#uikit-visual-stage",
+  "fullPage": false,
+  "threshold": 0.12,
+  "maxDiffRatio": 0.003,
+  "auditMode": true,
+  "updateMode": false,
+  "caseId": "cv-select/open",
+  "component": "cv-select",
+  "diagnostics": {
+    "emptyStage": false,
+    "horizontalOverflow": [],
+    "clippedText": [],
+    "outsideStage": []
+  },
+  "states": [
+    "open",
+    "grouped"
+  ],
+  "theme": "light",
+  "title": "Select open grouped listbox state",
+  "status": "missing-baseline",
+  "baselinePath": "/srv/projects/chromvoid/packages/uikit/tests/visual/__visual-baselines__/cv-select/cv-select-open-light-default.png"
+}
