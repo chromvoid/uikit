@@ -103,6 +103,7 @@ export class CVCombobox extends ReatomLitElement {
   private groupRecords: ComboboxGroupRecord[] = []
   private optionListeners = new WeakMap<CVComboboxOption, {click: EventListener; mouseenter: EventListener}>()
   private model?: ComboboxModel
+  private requestedValue: string | null = null
 
   constructor() {
     super()
@@ -137,6 +138,7 @@ export class CVCombobox extends ReatomLitElement {
       }
 
       [part='input-wrapper'] {
+        position: relative;
         flex-wrap: wrap;
         gap: var(--cv-space-1, 4px);
         min-block-size: 36px;
@@ -144,6 +146,10 @@ export class CVCombobox extends ReatomLitElement {
         border: 1px solid var(--cv-combobox-border-color);
         border-radius: var(--cv-combobox-border-radius);
         background: var(--cv-combobox-background);
+      }
+
+      [part='input-wrapper'][data-has-clear='true'] {
+        padding-inline-end: calc(var(--cv-space-2, 8px) + 20px);
       }
 
       [part='input'] {
@@ -155,6 +161,14 @@ export class CVCombobox extends ReatomLitElement {
         color: var(--cv-color-text, #e8ecf6);
         outline: none;
         padding: 0;
+      }
+
+      [part='input'][data-compact='true'] {
+        flex: 0 0 1px;
+        block-size: 1px;
+        inline-size: 1px;
+        min-block-size: 1px;
+        min-inline-size: 1px;
       }
 
       [part='input']:focus-visible {
@@ -187,14 +201,24 @@ export class CVCombobox extends ReatomLitElement {
       [part='tags'] {
         flex-wrap: wrap;
         gap: var(--cv-space-1, 4px);
+        min-inline-size: 0;
       }
 
       [part='tag'] {
         gap: var(--cv-space-1, 4px);
-        padding: 2px var(--cv-space-2, 8px);
+        min-inline-size: 0;
+        max-inline-size: 100%;
+        padding: 2px max(var(--cv-space-1, 4px), calc(var(--cv-space-2, 8px) - 2px));
         border-radius: var(--cv-radius-sm, 6px);
         background: var(--cv-color-primary-ring);
         font-size: 0.85em;
+      }
+
+      [part='tag-label'] {
+        min-inline-size: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
 
       [part='tag-remove'] {
@@ -218,6 +242,13 @@ export class CVCombobox extends ReatomLitElement {
         color: var(--cv-color-text-muted, #9aa6bf);
         cursor: pointer;
         padding: 0 var(--cv-space-1, 4px);
+      }
+
+      [part='input-wrapper'][data-has-clear='true'] [part='clear-button'] {
+        position: absolute;
+        inset-block-start: 50%;
+        inset-inline-end: var(--cv-space-2, 8px);
+        transform: translateY(-50%);
       }
 
       [part='expand-icon'] {
@@ -269,6 +300,8 @@ export class CVCombobox extends ReatomLitElement {
   ]
 
   static define() {
+    CVComboboxGroup.define()
+    CVComboboxOption.define()
     if (!customElements.get(this.elementName)) {
       customElements.define(this.elementName, this)
     }
@@ -276,6 +309,8 @@ export class CVCombobox extends ReatomLitElement {
 
   override connectedCallback(): void {
     super.connectedCallback()
+    this.syncInitialAttributeState()
+    this.requestedValue = this.value.trim() || this.getAttribute('value')?.trim() || this.requestedValue
     if (!this.model) {
       this.rebuildModelFromSlot(false, false)
     } else {
@@ -292,6 +327,44 @@ export class CVCombobox extends ReatomLitElement {
     super.disconnectedCallback()
     this.detachOptionListeners()
     this.syncOutsidePointerListener(true)
+  }
+
+  override attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null): void {
+    super.attributeChangedCallback(name, oldValue, newValue)
+
+    if (name === 'value') {
+      const normalized = newValue?.trim()
+      if (normalized) {
+        this.requestedValue = normalized
+      }
+    }
+  }
+
+  private syncInitialAttributeState(): void {
+    const valueAttribute = this.getAttribute('value')?.trim()
+    if (!this.value.trim() && valueAttribute) {
+      this.value = valueAttribute
+    }
+
+    const inputValueAttribute = this.getAttribute('input-value')
+    if (!this.inputValue && inputValueAttribute != null) {
+      this.inputValue = inputValueAttribute
+    }
+
+    const typeAttribute = this.getAttribute('type')
+    if (typeAttribute === 'editable' || typeAttribute === 'select-only') {
+      this.type = typeAttribute
+    }
+
+    if (this.hasAttribute('multiple')) {
+      this.multiple = true
+    }
+    if (this.hasAttribute('clearable')) {
+      this.clearable = true
+    }
+    if (this.hasAttribute('open')) {
+      this.open = true
+    }
   }
 
   override willUpdate(changedProperties: PropertyValues): void {
@@ -313,6 +386,11 @@ export class CVCombobox extends ReatomLitElement {
 
     if (changedProperties.has('value')) {
       const next = this.value.trim()
+      if (next.length > 0) {
+        this.requestedValue = next
+      } else if (this.optionRecords.length > 0) {
+        this.requestedValue = null
+      }
       const previous = this.captureState()
       if (next.length === 0) {
         this.model.actions.clearSelection()
@@ -399,16 +477,23 @@ export class CVCombobox extends ReatomLitElement {
   }
 
   private ensureOptionValue(option: CVComboboxOption, index: number): string {
-    const normalized = option.value?.trim()
-    if (normalized) return normalized
+    const normalized = option.value?.trim() || option.getAttribute('value')?.trim()
+    if (normalized) {
+      option.value = normalized
+      return normalized
+    }
 
     const fallback = `option-${index + 1}`
     option.value = fallback
     return fallback
   }
 
-  private parseMultipleValueIds(): string[] {
-    return this.value.trim().split(/\s+/).filter(Boolean)
+  private isOptionDisabled(option: CVComboboxOption): boolean {
+    return option.disabled || option.hasAttribute('disabled')
+  }
+
+  private parseMultipleValueIds(value = this.value): string[] {
+    return value.trim().split(/\s+/).filter(Boolean)
   }
 
   private hasUnknownSelectedIds(ids: readonly string[]): boolean {
@@ -426,7 +511,7 @@ export class CVCombobox extends ReatomLitElement {
   }
 
   private resolveInitialSelected(optionElements: CVComboboxOption[]): string | null {
-    const fromProperty = this.value.trim()
+    const fromProperty = this.value.trim() || this.requestedValue || ''
     if (fromProperty.length > 0) return fromProperty
 
     for (const [index, option] of optionElements.entries()) {
@@ -441,12 +526,24 @@ export class CVCombobox extends ReatomLitElement {
   private rebuildModelFromSlot(preserveState: boolean, requestRender = true): void {
     const optionElements = this.getOptionElements()
     const groupElements = this.getGroupElements()
+    const requestedValue = this.value.trim() || this.requestedValue || ''
+    const requestedIds = this.parseMultipleValueIds(requestedValue)
+    const capturedState = preserveState ? this.captureState() : null
 
-    const previousState = preserveState
-      ? this.captureState()
+    const previousState = capturedState
+      ? {
+          ...capturedState,
+          selectedId: this.multiple
+            ? capturedState.selectedId
+            : capturedState.selectedId || requestedValue || null,
+          selectedIds:
+            this.multiple && capturedState.selectedIds.length === 0 && requestedIds.length > 0
+              ? requestedIds
+              : capturedState.selectedIds,
+        }
       : {
           selectedId: this.resolveInitialSelected(optionElements),
-          selectedIds: this.multiple ? this.parseMultipleValueIds() : [],
+          selectedIds: this.multiple ? requestedIds : [],
           inputValue: this.inputValue,
           activeId: null,
           isOpen: this.open,
@@ -478,7 +575,7 @@ export class CVCombobox extends ReatomLitElement {
         const element = child as CVComboboxOption
         const id = this.ensureOptionValue(element, optionIndex)
         const label = element.textContent?.trim() || id
-        this.optionRecords.push({id, label, disabled: element.disabled, element})
+        this.optionRecords.push({id, label, disabled: this.isOptionDisabled(element), element})
         optionIndex++
       } else if (child.tagName.toLowerCase() === CVComboboxGroup.elementName) {
         const groupRecord = groupElementMap.get(child as CVComboboxGroup)
@@ -490,7 +587,7 @@ export class CVCombobox extends ReatomLitElement {
             const record: ComboboxOptionRecord = {
               id,
               label,
-              disabled: element.disabled,
+              disabled: this.isOptionDisabled(element),
               element,
               groupId: groupRecord?.id,
             }
@@ -548,8 +645,11 @@ export class CVCombobox extends ReatomLitElement {
     let initialSelectedIds: string[] | undefined
 
     if (this.multiple) {
-      const prevIds = this.parseMultipleValueIds()
+      const prevIds = previousState.selectedIds.length > 0 ? previousState.selectedIds : requestedIds
       initialSelectedIds = prevIds.filter((id) => enabledIds.has(id))
+      if (initialSelectedIds.length === 0 && this.optionRecords.length === 0) {
+        initialSelectedIds = prevIds
+      }
     } else {
       initialSelectedId =
         previousState.selectedId && enabledIds.has(previousState.selectedId) ? previousState.selectedId : null
@@ -594,6 +694,9 @@ export class CVCombobox extends ReatomLitElement {
       this.value = ids.join(' ')
     } else {
       this.value = this.model.state.selectedId() ?? ''
+    }
+    if (this.value.trim() || this.optionRecords.length > 0) {
+      this.requestedValue = this.value.trim() || null
     }
     this.inputValue = this.model.state.inputValue()
     this.open = this.model.state.isOpen()
@@ -986,6 +1089,10 @@ export class CVCombobox extends ReatomLitElement {
 
   protected override render() {
     const isSelectOnly = this.type === 'select-only'
+    const hasSelectedTags = this.multiple && this.getSelectedRecords().length > 0
+    const compactMultipleInput = hasSelectedTags && this.inputValue.trim().length === 0
+    const inputPlaceholder = hasSelectedTags ? '' : this.placeholder
+    const hasClearButton = this.clearable && Boolean(this.model?.state.hasSelection())
 
     const inputProps = this.model?.contracts.getInputProps() ?? {
       id: `${this.idBase}-input`,
@@ -1010,7 +1117,11 @@ export class CVCombobox extends ReatomLitElement {
 
     return html`
       <div part="base">
-        <div part="input-wrapper" class="cv-u-control-shell">
+        <div
+          part="input-wrapper"
+          class="cv-u-control-shell"
+          data-has-clear=${hasClearButton ? 'true' : nothing}
+        >
           ${this.renderTags()}
           ${
             isSelectOnly
@@ -1046,7 +1157,8 @@ export class CVCombobox extends ReatomLitElement {
                   aria-label=${inputProps['aria-label'] ?? nothing}
                   aria-invalid=${this.invalid ? 'true' : nothing}
                   .value=${this.inputValue}
-                  placeholder=${this.placeholder}
+                  placeholder=${inputPlaceholder}
+                  data-compact=${compactMultipleInput ? 'true' : nothing}
                   part="input"
                   class="cv-u-fill"
                   @input=${this.handleInputChange}

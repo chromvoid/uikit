@@ -35,6 +35,10 @@ export class CVComboboxOption extends LitElement {
         outline: none;
       }
 
+      :host([hidden]) {
+        display: none;
+      }
+
       .option {
         padding: var(--cv-space-2, 8px) var(--cv-space-3, 12px);
         border-radius: var(--cv-radius-sm, 6px);

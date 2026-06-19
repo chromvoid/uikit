@@ -9,6 +9,11 @@ CVCombobox.define()
 const stylesToText = () =>
   (CVCombobox.styles as Array<{cssText?: string}>).map((style) => style.cssText ?? '').join('\n')
 
+const optionStylesToText = () =>
+  (CVComboboxOption.styles as Array<{cssText?: string}>)
+    .map((style) => style.cssText ?? '')
+    .join('\n')
+
 const settle = async (element: CVCombobox) => {
   await element.updateComplete
   await Promise.resolve()
@@ -173,6 +178,24 @@ describe('cv-combobox', () => {
 
     expect(cssText).toMatch(/\[part='listbox'\][\s\S]*transition:[\s\S]*display[\s\S]*allow-discrete/)
     expect(cssText).toMatch(/transition-behavior:\s*allow-discrete/)
+  })
+
+  it('hides slotted options when the listbox contract marks them hidden', () => {
+    const cssText = optionStylesToText()
+
+    expect(cssText).toMatch(/:host\(\[hidden\]\)\s*{[\s\S]*display:\s*none/)
+  })
+
+  it('keeps selected multiple tags on the control row without a placeholder line', () => {
+    const cssText = stylesToText()
+
+    expect(cssText).toMatch(/\[part='input'\]\[data-compact='true'\]\s*{[\s\S]*flex:\s*0 0 1px;/)
+    expect(cssText).toMatch(/\[part='input'\]\[data-compact='true'\]\s*{[\s\S]*min-inline-size:\s*1px;/)
+    expect(cssText).toMatch(/\[part='input-wrapper'\]\[data-has-clear='true'\]\s*{[\s\S]*padding-inline-end:/)
+    expect(cssText).toMatch(
+      /\[part='input-wrapper'\]\[data-has-clear='true'\] \[part='clear-button'\]\s*{[\s\S]*position:\s*absolute;/,
+    )
+    expect(cssText).toMatch(/\[part='tag-label'\]\s*{[\s\S]*text-overflow:\s*ellipsis;/)
   })
 
   it('filters visible options from input text', async () => {
@@ -750,6 +773,62 @@ describe('cv-combobox', () => {
       await settle(combobox)
 
       expect(combobox.value).toBe('js py')
+    })
+
+    it('renders initial multiple value as tags without interaction', async () => {
+      const combobox = document.createElement('cv-combobox') as CVCombobox
+      combobox.multiple = true
+      combobox.clearable = true
+      combobox.value = 'js ts'
+      combobox.innerHTML = `
+        <cv-combobox-option value="js">JavaScript</cv-combobox-option>
+        <cv-combobox-option value="ts">TypeScript</cv-combobox-option>
+        <cv-combobox-option value="py">Python</cv-combobox-option>
+      `
+
+      document.body.append(combobox)
+      await settle(combobox)
+
+      const tags = Array.from(combobox.shadowRoot!.querySelectorAll('[part="tag"]'))
+      const input = combobox.shadowRoot!.querySelector('[part="input"]') as HTMLInputElement
+      const inputWrapper = combobox.shadowRoot!.querySelector('[part="input-wrapper"]') as HTMLElement
+      const tagLabels = tags.map((tag) =>
+        tag.querySelector('[part="tag-label"]')?.textContent?.trim(),
+      )
+
+      expect(combobox.value).toBe('js ts')
+      expect(tagLabels).toEqual(['JavaScript', 'TypeScript'])
+      expect(input.getAttribute('placeholder')).toBe('')
+      expect(input.dataset['compact']).toBe('true')
+      expect(inputWrapper.dataset['hasClear']).toBe('true')
+      expect(combobox.shadowRoot?.querySelector('[part="clear-button"]')).not.toBeNull()
+    })
+
+    it('renders initial multiple value from attributes as tags without interaction', async () => {
+      document.body.innerHTML = `
+        <cv-combobox multiple clearable value="js ts">
+          <cv-combobox-option value="js">JavaScript</cv-combobox-option>
+          <cv-combobox-option value="ts">TypeScript</cv-combobox-option>
+          <cv-combobox-option value="py">Python</cv-combobox-option>
+        </cv-combobox>
+      `
+
+      const combobox = document.body.querySelector('cv-combobox') as CVCombobox
+      await settle(combobox)
+
+      const tags = Array.from(combobox.shadowRoot!.querySelectorAll('[part="tag"]'))
+      const input = combobox.shadowRoot!.querySelector('[part="input"]') as HTMLInputElement
+      const inputWrapper = combobox.shadowRoot!.querySelector('[part="input-wrapper"]') as HTMLElement
+      const tagLabels = tags.map((tag) =>
+        tag.querySelector('[part="tag-label"]')?.textContent?.trim(),
+      )
+
+      expect(combobox.value).toBe('js ts')
+      expect(tagLabels).toEqual(['JavaScript', 'TypeScript'])
+      expect(input.getAttribute('placeholder')).toBe('')
+      expect(input.dataset['compact']).toBe('true')
+      expect(inputWrapper.dataset['hasClear']).toBe('true')
+      expect(combobox.shadowRoot?.querySelector('[part="clear-button"]')).not.toBeNull()
     })
 
     it('preserves a selected value when its option is added during slot rebuild', async () => {
