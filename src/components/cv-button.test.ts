@@ -48,6 +48,16 @@ describe('cv-button', () => {
       expect(stylesText).toContain('--cv-button-accent-color: var(--cv-color-primary, #65d7ff);')
       expect(stylesText).toContain('--cv-button-accent-color: var(--cv-color-danger, #ff7d86);')
     })
+
+    it('keeps long labels inside the button shell', () => {
+      const stylesText = getStylesText()
+
+      expect(stylesText).toMatch(/\[part='base'\]\s*{[\s\S]*min-inline-size:\s*0;/)
+      expect(stylesText).toMatch(/\[part='base'\]\s*{[\s\S]*overflow:\s*hidden;/)
+      expect(stylesText).toMatch(/\[part='label'\]\s*{[\s\S]*min-inline-size:\s*0;/)
+      expect(stylesText).toMatch(/\[part='label'\]\s*{[\s\S]*text-overflow:\s*ellipsis;/)
+      expect(stylesText).toMatch(/\[part='label'\]\s*{[\s\S]*white-space:\s*nowrap;/)
+    })
   })
 
   // --- 2a. Shadow DOM structure ---

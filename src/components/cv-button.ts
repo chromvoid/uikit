@@ -150,6 +150,7 @@ export class CVButton extends FormAssociatedReatomElement {
         display: inline-flex;
         align-items: center;
         width: 100%;
+        min-inline-size: 0;
         justify-content: center;
         gap: var(--cv-button-gap);
         padding: var(--cv-button-padding-block) var(--cv-button-padding-inline);
@@ -163,6 +164,7 @@ export class CVButton extends FormAssociatedReatomElement {
         cursor: pointer;
         user-select: none;
         white-space: nowrap;
+        overflow: hidden;
         transition:
           background var(--cv-duration-fast, 120ms) var(--cv-easing-standard, ease),
           border-color var(--cv-duration-fast, 120ms) var(--cv-easing-standard, ease),
@@ -174,6 +176,10 @@ export class CVButton extends FormAssociatedReatomElement {
         align-items: center;
         justify-content: center;
         gap: var(--cv-button-gap);
+        min-inline-size: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
 
       [part='prefix'],
