@@ -317,9 +317,13 @@ export class CVDatePicker extends FormAssociatedReatomElement {
       // A config-driven rebuild must not swallow a value change batched in the
       // same update. Seed the rebuilt model with the new external value when it
       // changed (otherwise rebuildModel's host-state sync would clobber it back
-      // to the old committed value), and fall through to re-apply other pending
-      // changes instead of early-returning.
-      this.rebuildModel(changedProperties.has('value') ? (this.value ?? '') : undefined)
+      // to the old committed value), and preserve a pending open write for the
+      // same reason. Fall through to re-apply other pending changes instead of
+      // early-returning.
+      this.rebuildModel(
+        changedProperties.has('value') ? (this.value ?? '') : undefined,
+        changedProperties.has('open') ? this.open : undefined,
+      )
     }
 
     if (changedProperties.has('disabled') && this.model.state.disabled() !== this.disabled) {
@@ -418,10 +422,10 @@ export class CVDatePicker extends FormAssociatedReatomElement {
     })
   }
 
-  private rebuildModel(seedValue?: string): void {
+  private rebuildModel(seedValue?: string, seedOpen?: boolean): void {
     const currentValue =
       seedValue !== undefined ? seedValue : (this.model.state.committedValue() ?? this.value)
-    const isOpen = this.model.state.isOpen()
+    const isOpen = seedOpen ?? this.model.state.isOpen()
 
     this.model = this.createModel(currentValue)
 

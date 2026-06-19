@@ -127,7 +127,9 @@ describe('cv-date-picker', () => {
       })
 
       expect(datePicker.getAttribute('value')).toBe('2026-01-10T12:30')
-      expect(datePicker.open).toBe(false)
+      expect(datePicker.open).toBe(true)
+      expect(getInput(datePicker).getAttribute('aria-expanded')).toBe('true')
+      expect(getDialog(datePicker).hidden).toBe(false)
       expect(datePicker.hasAttribute('disabled')).toBe(false)
       expect(datePicker.hasAttribute('readonly')).toBe(true)
       expect(datePicker.hasAttribute('required')).toBe(true)
@@ -219,6 +221,14 @@ describe('cv-date-picker', () => {
   })
 
   describe('behavior', () => {
+    it('opens from an initial open property without user interaction', async () => {
+      const datePicker = await createDatePicker({open: true})
+
+      expect(datePicker.open).toBe(true)
+      expect(getInput(datePicker).getAttribute('aria-expanded')).toBe('true')
+      expect(getDialog(datePicker).hidden).toBe(false)
+    })
+
     it('opens from input key and closes with Escape', async () => {
       const datePicker = await createDatePicker()
       const input = getInput(datePicker)
