@@ -58,6 +58,8 @@ export class CVProgressRing extends ReatomLitElement {
         position: relative;
         inline-size: 100%;
         block-size: 100%;
+        min-inline-size: 0;
+        line-height: 1;
       }
 
       [part='svg'] {
@@ -87,6 +89,9 @@ export class CVProgressRing extends ReatomLitElement {
         align-items: center;
         justify-content: center;
         color: var(--cv-progress-ring-label-color, var(--cv-color-text, #e8ecf6));
+        min-inline-size: 0;
+        line-height: 1;
+        text-align: center;
       }
 
       :host([indeterminate]) [part='svg'] {

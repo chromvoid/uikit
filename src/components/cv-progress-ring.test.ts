@@ -21,12 +21,23 @@ const createProgressRing = async (attrs?: Partial<CVProgressRing>) => {
 }
 
 const getBase = (el: CVProgressRing) => el.shadowRoot!.querySelector('[part="base"]') as HTMLElement
+const getStylesText = () =>
+  (CVProgressRing.styles as Array<{cssText?: string}>).map((style) => style.cssText ?? '').join('\n')
 
 afterEach(() => {
   document.body.innerHTML = ''
 })
 
 describe('cv-progress-ring', () => {
+  it('normalizes base and label sizing for stable visual diagnostics', () => {
+    const stylesText = getStylesText()
+
+    expect(stylesText).toMatch(/\[part='base'\]\s*{[\s\S]*min-inline-size:\s*0;/)
+    expect(stylesText).toMatch(/\[part='base'\]\s*{[\s\S]*line-height:\s*1;/)
+    expect(stylesText).toMatch(/\[part='label'\]\s*{[\s\S]*min-inline-size:\s*0;/)
+    expect(stylesText).toMatch(/\[part='label'\]\s*{[\s\S]*line-height:\s*1;/)
+  })
+
   // --- Shadow DOM structure ---
 
   describe('shadow DOM structure', () => {
