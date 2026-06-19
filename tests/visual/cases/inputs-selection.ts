@@ -107,16 +107,26 @@ export const inputsSelectionCases: readonly UikitVisualCase[] = [
     `,
   }),
   visualCase({
-    id: 'cv-textarea/states',
+    id: 'cv-textarea/basic',
     component: 'cv-textarea',
-    title: 'Textarea sizes, variants, readonly, disabled, invalid, resize, and long content',
-    states: ['outlined', 'filled', 'small', 'large', 'readonly', 'disabled', 'invalid', 'resize-none', 'long-content'],
+    title: 'Textarea default, filled, and size states',
+    states: ['outlined', 'filled', 'small', 'large'],
     html: `
       <div class="visual-grid">
         <cv-textarea value="Default textarea content" rows="3"></cv-textarea>
         <cv-textarea variant="filled" value="Filled textarea content" rows="3"></cv-textarea>
         <cv-textarea size="small" value="Small textarea" rows="2"></cv-textarea>
         <cv-textarea size="large" value="Large textarea" rows="2"></cv-textarea>
+      </div>
+    `,
+  }),
+  visualCase({
+    id: 'cv-textarea/validation',
+    component: 'cv-textarea',
+    title: 'Textarea readonly, disabled, invalid, resize, and long content states',
+    states: ['readonly', 'disabled', 'invalid', 'resize-none', 'long-content'],
+    html: `
+      <div class="visual-grid">
         <cv-textarea readonly value="Readonly textarea" rows="2"></cv-textarea>
         <cv-textarea disabled value="Disabled textarea" rows="2"></cv-textarea>
         <cv-textarea invalid resize="none" rows="4" value="Invalid textarea with a deliberately longer value that checks wrapping inside the control."></cv-textarea>
@@ -161,10 +171,6 @@ export const inputsSelectionCases: readonly UikitVisualCase[] = [
     component: 'cv-checkbox',
     title: 'Checkbox checked, unchecked, indeterminate, disabled, readonly, required, hover, and focus',
     states: ['unchecked', 'checked', 'indeterminate', 'disabled', 'readonly', 'required', 'hover', 'focus'],
-    interaction: {
-      focus: 'cv-checkbox[data-visual-id="focus"]',
-      hover: 'cv-checkbox[data-visual-id="hover"]',
-    },
     html: `
       <div class="visual-row">
         <cv-checkbox>Unchecked</cv-checkbox>
@@ -173,8 +179,8 @@ export const inputsSelectionCases: readonly UikitVisualCase[] = [
         <cv-checkbox disabled>Disabled</cv-checkbox>
         <cv-checkbox read-only checked>Readonly</cv-checkbox>
         <cv-checkbox required>Required</cv-checkbox>
-        <cv-checkbox data-visual-id="focus">Focused</cv-checkbox>
-        <cv-checkbox data-visual-id="hover">Hovered</cv-checkbox>
+        <cv-checkbox data-visual-state="focus">Focused</cv-checkbox>
+        <cv-checkbox data-visual-state="hover">Hovered</cv-checkbox>
       </div>
     `,
   }),
@@ -260,11 +266,10 @@ export const inputsSelectionCases: readonly UikitVisualCase[] = [
     `,
   }),
   visualCase({
-    id: 'cv-combobox/states',
+    id: 'cv-combobox/closed',
     component: 'cv-combobox',
-    title: 'Combobox editable, select-only, multiple, open, clearable, invalid, and grouped states',
-    states: ['editable', 'select-only', 'multiple', 'open', 'clearable', 'invalid', 'grouped'],
-    fullPage: true,
+    title: 'Combobox editable, select-only, and clearable closed states',
+    states: ['editable', 'select-only', 'clearable'],
     html: `
       <div class="visual-grid">
         <cv-combobox value="alpha" input-value="Alpha" clearable placeholder="Search entries">
@@ -272,27 +277,62 @@ export const inputsSelectionCases: readonly UikitVisualCase[] = [
           <cv-combobox-option value="beta">Beta</cv-combobox-option>
           <cv-combobox-option value="gamma" disabled>Gamma disabled</cv-combobox-option>
         </cv-combobox>
-        <cv-combobox open type="select" value="work" placeholder="Open combobox">
+        <cv-combobox type="select-only" value="work" placeholder="Select vault">
+          <cv-combobox-option value="personal">Personal vault</cv-combobox-option>
+          <cv-combobox-option value="work">Work vault</cv-combobox-option>
+        </cv-combobox>
+      </div>
+    `,
+  }),
+  visualCase({
+    id: 'cv-combobox/open',
+    component: 'cv-combobox',
+    title: 'Combobox open grouped listbox state',
+    states: ['open', 'grouped', 'select-only'],
+    diagnosticsIgnoredSelectors: ['.visual-overlay-frame'],
+    requiredSelectors: [
+      'cv-combobox[data-visual-id="open"] [part="listbox"]',
+      'cv-combobox[data-visual-id="open"] [part="group-label"]',
+    ],
+    html: `
+      <div class="visual-overlay-frame visual-overlay-frame--wide">
+        <cv-combobox data-visual-id="open" open type="select-only" value="work" placeholder="Open combobox">
           <cv-combobox-group label="Vaults">
             <cv-combobox-option value="personal">Personal vault</cv-combobox-option>
             <cv-combobox-option value="work">Work vault</cv-combobox-option>
           </cv-combobox-group>
         </cv-combobox>
-        <cv-combobox data-visual-id="multi" multiple open clearable max-tags-visible="2" placeholder="Tags">
+      </div>
+    `,
+  }),
+  visualCase({
+    id: 'cv-combobox/multiple',
+    component: 'cv-combobox',
+    title: 'Combobox multiple tags, clearable control, and overflow tag state',
+    states: ['multiple', 'tags', 'clearable', 'tag-overflow'],
+    requiredSelectors: ['cv-combobox[multiple] [part="tag"]', 'cv-combobox[multiple] [part="clear-button"]'],
+    html: `
+      <div class="visual-wide-row">
+        <cv-combobox multiple clearable max-tags-visible="2" value="secret shared archive" placeholder="Tags">
           <cv-combobox-option value="secret">Secret</cv-combobox-option>
           <cv-combobox-option value="shared">Shared</cv-combobox-option>
           <cv-combobox-option value="archive">Archive</cv-combobox-option>
         </cv-combobox>
+      </div>
+    `,
+  }),
+  visualCase({
+    id: 'cv-combobox/invalid',
+    component: 'cv-combobox',
+    title: 'Combobox invalid typed value state',
+    states: ['invalid', 'typed-value'],
+    html: `
+      <div class="visual-wide-row">
         <cv-combobox invalid input-value="Invalid value" placeholder="Invalid combobox">
           <cv-combobox-option value="valid">Valid</cv-combobox-option>
         </cv-combobox>
       </div>
     `,
-    afterMount(root) {
-      setElementProps(root, 'cv-combobox[data-visual-id="multi"]', {
-        value: 'secret',
-      })
-    },
   }),
   visualCase({
     id: 'cv-listbox/states',
@@ -343,13 +383,11 @@ export const inputsSelectionCases: readonly UikitVisualCase[] = [
   visualCase({
     id: 'cv-date-picker/states',
     component: 'cv-date-picker',
-    title: 'Date picker value, open calendar, disabled, readonly, invalid, and size states',
-    states: ['value', 'open', 'disabled', 'readonly', 'invalid', 'small', 'large'],
-    fullPage: true,
+    title: 'Date picker value, disabled, readonly, invalid, and size states',
+    states: ['value', 'disabled', 'readonly', 'invalid', 'small', 'large'],
     html: `
       <div class="visual-grid">
         <cv-date-picker value="2026-06-18"></cv-date-picker>
-        <cv-date-picker open value="2026-06-18"></cv-date-picker>
         <cv-date-picker disabled value="2026-06-18"></cv-date-picker>
         <cv-date-picker readonly value="2026-06-18"></cv-date-picker>
         <cv-date-picker input-invalid value="not-a-date"></cv-date-picker>
@@ -359,18 +397,50 @@ export const inputsSelectionCases: readonly UikitVisualCase[] = [
     `,
   }),
   visualCase({
+    id: 'cv-date-picker/open',
+    component: 'cv-date-picker',
+    title: 'Date picker open calendar dialog state',
+    states: ['open', 'calendar-dialog'],
+    diagnosticsIgnoredSelectors: ['cv-date-picker[data-visual-id="open"]'],
+    requiredSelectors: [
+      'cv-date-picker[data-visual-id="open"] [part="dialog"]',
+      'cv-date-picker[data-visual-id="open"] [part="calendar-grid"]',
+    ],
+    html: `
+      <div class="visual-overlay-frame visual-overlay-frame--wide visual-overlay-frame--tall">
+        <cv-date-picker data-visual-id="open" open value="2026-06-18"></cv-date-picker>
+      </div>
+    `,
+  }),
+  visualCase({
     id: 'cv-date-time-picker/states',
     component: 'cv-date-time-picker',
-    title: 'Date-time picker value, open dialog, 12h/24h, invalid, disabled, and size states',
-    states: ['value', 'open', 'hour-cycle-12', 'hour-cycle-24', 'invalid', 'disabled', 'large'],
-    fullPage: true,
+    title: 'Date-time picker value, 12h/24h, invalid, disabled, and size states',
+    states: ['value', 'hour-cycle-12', 'hour-cycle-24', 'invalid', 'disabled', 'large'],
     html: `
       <div class="visual-grid">
         <cv-date-time-picker value="2026-06-18T14:30"></cv-date-time-picker>
-        <cv-date-time-picker open value="2026-06-18T14:30" hour-cycle="12"></cv-date-time-picker>
+        <cv-date-time-picker value="2026-06-18T14:30" hour-cycle="12"></cv-date-time-picker>
         <cv-date-time-picker input-invalid value="bad-date-time"></cv-date-time-picker>
         <cv-date-time-picker disabled value="2026-06-18T14:30"></cv-date-time-picker>
         <cv-date-time-picker size="large" value="2026-12-24T09:15"></cv-date-time-picker>
+      </div>
+    `,
+  }),
+  visualCase({
+    id: 'cv-date-time-picker/open',
+    component: 'cv-date-time-picker',
+    title: 'Date-time picker open dialog with time controls',
+    states: ['open', 'calendar-dialog', 'time-inputs'],
+    diagnosticsIgnoredSelectors: ['cv-date-time-picker[data-visual-id="open"]'],
+    requiredSelectors: [
+      'cv-date-time-picker[data-visual-id="open"] [part="dialog"]',
+      'cv-date-time-picker[data-visual-id="open"] [part="calendar-grid"]',
+      'cv-date-time-picker[data-visual-id="open"] [part="hour-input"]',
+    ],
+    html: `
+      <div class="visual-overlay-frame visual-overlay-frame--wide visual-overlay-frame--tall">
+        <cv-date-time-picker data-visual-id="open" open value="2026-06-18T14:30" hour-cycle="12"></cv-date-time-picker>
       </div>
     `,
   }),

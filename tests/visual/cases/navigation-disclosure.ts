@@ -7,6 +7,11 @@ export const navigationDisclosureCases: readonly UikitVisualCase[] = [
     component: 'cv-accordion',
     title: 'Accordion single, multiple, expanded, disabled, and long content states',
     states: ['single', 'multiple', 'expanded', 'disabled-item', 'long-content'],
+    requiredSelectors: [
+      'cv-accordion-item[value="identity"] [part="panel"]',
+      'cv-accordion-item[value="one"] [part="panel"]',
+      'cv-accordion-item[value="two"] [part="panel"]',
+    ],
     html: `
       <div class="visual-grid">
         <cv-accordion value="identity" aria-label="Single accordion">
@@ -175,6 +180,7 @@ export const navigationDisclosureCases: readonly UikitVisualCase[] = [
     title: 'Drawer open, placement, trigger, title, description, body, and footer states',
     states: ['open', 'placement-end', 'trigger', 'title', 'description', 'footer'],
     fullPage: true,
+    requiredSelectors: ['cv-drawer [part="panel"]', 'cv-drawer [part="header-close"]'],
     html: `
       <div class="visual-stack">
         <cv-drawer open placement="end">

@@ -8,6 +8,7 @@ export const overlaysFloatingCases: readonly UikitVisualCase[] = [
     title: 'Bottom sheet open, handle, detent, title, body, and footer states',
     states: ['open', 'handle', 'middle-detent', 'title', 'description', 'footer'],
     fullPage: true,
+    requiredSelectors: ['cv-bottom-sheet cv-dialog [part="content"]', 'cv-bottom-sheet cv-dialog [part="footer"]'],
     html: `
       <cv-bottom-sheet open detent="middle" detents="collapsed middle expanded" show-handle>
         <span slot="title">Bottom sheet title</span>
@@ -57,6 +58,7 @@ export const overlaysFloatingCases: readonly UikitVisualCase[] = [
     title: 'Image viewer open, chrome, thumbnails, actions, busy, and metadata states',
     states: ['open', 'image', 'metadata', 'thumbnails', 'actions', 'chrome-visible'],
     fullPage: true,
+    requiredSelectors: ['cv-image-viewer [part="image"]', 'cv-image-viewer [part="meta"]'],
     html: `
       <cv-image-viewer open current-index="1" show-thumbnails chrome-visible></cv-image-viewer>
     `,
@@ -124,10 +126,8 @@ export const overlaysFloatingCases: readonly UikitVisualCase[] = [
           <span slot="title">Coach mark</span>
           <span slot="progress">1 of 3</span>
           <p>Use this action to import encrypted data into the vault.</p>
-          <div slot="actions">
-            <button data-guidance-action="primary">Next</button>
-            <button data-guidance-action="secondary">Skip</button>
-          </div>
+          <cv-button slot="actions" size="small" variant="primary">Next</cv-button>
+          <cv-button slot="actions" size="small">Skip</cv-button>
         </cv-guidance-panel>
         <cv-guidance-panel variant="hint" density="compact">
           <span slot="title">Compact hint</span>
@@ -151,6 +151,7 @@ export const overlaysFloatingCases: readonly UikitVisualCase[] = [
     title: 'Popover open bottom-start placement with arrow and long content',
     states: ['open', 'bottom-start', 'arrow', 'trigger', 'long-content'],
     diagnosticsIgnoredSelectors: ['.visual-overlay-frame'],
+    requiredSelectors: ['cv-popover[arrow] [part="content"]', 'cv-popover[arrow] [part="arrow"]'],
     html: `
       <div class="visual-overlay-frame">
         <cv-popover open arrow placement="bottom-start" offset="12">
@@ -168,6 +169,7 @@ export const overlaysFloatingCases: readonly UikitVisualCase[] = [
     title: 'Popover open right placement with compact content',
     states: ['open', 'right-placement', 'trigger', 'compact-content'],
     diagnosticsIgnoredSelectors: ['.visual-overlay-frame'],
+    requiredSelectors: ['cv-popover[placement="right"] [part="content"]'],
     html: `
       <div class="visual-overlay-frame">
         <div class="visual-overlay-row">
@@ -180,21 +182,44 @@ export const overlaysFloatingCases: readonly UikitVisualCase[] = [
     `,
   }),
   visualCase({
-    id: 'cv-tooltip/states',
+    id: 'cv-tooltip/open-arrow',
     component: 'cv-tooltip',
-    title: 'Tooltip open, arrow, disabled, hover trigger, and long content states',
-    states: ['open', 'arrow', 'disabled', 'trigger', 'long-content'],
-    fullPage: true,
+    title: 'Tooltip open arrow state',
+    states: ['open', 'arrow', 'trigger'],
+    diagnosticsIgnoredSelectors: ['.visual-overlay-frame'],
+    requiredSelectors: ['cv-tooltip[arrow] [part="content"]', 'cv-tooltip[arrow] [part="arrow"]'],
     html: `
-      <div class="visual-row">
+      <div class="visual-overlay-frame">
         <cv-tooltip open arrow>
           <cv-button slot="trigger">Hover target</cv-button>
           <span slot="content">Helpful tooltip copy</span>
         </cv-tooltip>
-        <cv-tooltip open>
+      </div>
+    `,
+  }),
+  visualCase({
+    id: 'cv-tooltip/long-content',
+    component: 'cv-tooltip',
+    title: 'Tooltip long content state',
+    states: ['open', 'long-content', 'compact-width'],
+    diagnosticsIgnoredSelectors: ['.visual-overlay-frame'],
+    requiredSelectors: ['cv-tooltip[data-visual-id="long"] [part="content"]'],
+    html: `
+      <div class="visual-overlay-frame">
+        <cv-tooltip data-visual-id="long" open>
           <cv-button slot="trigger" aria-label="Info">i</cv-button>
           <span slot="content">Long tooltip content that should keep a compact width.</span>
         </cv-tooltip>
+      </div>
+    `,
+  }),
+  visualCase({
+    id: 'cv-tooltip/disabled',
+    component: 'cv-tooltip',
+    title: 'Tooltip disabled trigger state',
+    states: ['disabled', 'trigger'],
+    html: `
+      <div class="visual-row">
         <cv-tooltip disabled open>
           <cv-button slot="trigger">Disabled tooltip</cv-button>
           <span slot="content">Hidden disabled content</span>
@@ -225,11 +250,12 @@ export const overlaysFloatingCases: readonly UikitVisualCase[] = [
     component: 'cv-context-menu',
     title: 'Context menu open, target, anchor position, active, selected, and disabled states',
     states: ['open', 'target', 'anchor-position', 'active', 'selected', 'disabled'],
-    fullPage: true,
+    diagnosticsIgnoredSelectors: ['.visual-overlay-frame'],
+    requiredSelectors: ['cv-context-menu [part="menu"]'],
     html: `
-      <div class="visual-grid">
-        <cv-context-menu open anchor-x="120" anchor-y="72" aria-label="Context menu">
-          <div slot="target" class="visual-demo-box">Right click target</div>
+      <div class="visual-overlay-frame visual-overlay-frame--wide">
+        <cv-context-menu open anchor-x="320" anchor-y="126" aria-label="Context menu">
+          <div slot="target" class="visual-demo-box visual-demo-box--wide">Right click target remains readable</div>
           <cv-menu-item value="copy" active>Copy</cv-menu-item>
           <cv-menu-item value="rename" selected>Rename</cv-menu-item>
           <cv-menu-item value="delete" disabled>Delete</cv-menu-item>
