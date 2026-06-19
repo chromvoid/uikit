@@ -50,16 +50,22 @@ export class CVProgress extends ReatomLitElement {
     css`
       :host {
         display: block;
+        --cv-progress-effective-height: var(--cv-progress-height, 10px);
+      }
+
+      :host(:not(:empty)) {
+        --cv-progress-effective-height: var(--cv-progress-height, var(--cv-progress-labeled-height, 18px));
       }
 
       [part='base'] {
         position: relative;
         inline-size: 100%;
-        block-size: var(--cv-progress-height, 10px);
+        block-size: var(--cv-progress-effective-height);
         border-radius: 999px;
         border: 1px solid var(--cv-color-border, #2a3245);
         background: var(--cv-progress-track-color, var(--cv-color-surface, #141923));
         overflow: hidden;
+        container-type: size;
       }
 
       [part='indicator'] {
@@ -80,7 +86,33 @@ export class CVProgress extends ReatomLitElement {
         display: flex;
         align-items: center;
         justify-content: center;
+        max-inline-size: 100%;
+        overflow: hidden;
         color: var(--cv-progress-label-color, var(--cv-color-text, #e8ecf6));
+        font-size: var(
+          --cv-progress-label-font-size,
+          min(var(--cv-font-size-xs, 0.75rem), max(0px, calc(var(--cv-progress-effective-height) - 3px)))
+        );
+        line-height: 1;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        pointer-events: none;
+      }
+
+      [part='label'] slot {
+        line-height: inherit;
+      }
+
+      ::slotted(*) {
+        color: inherit;
+        font-size: inherit;
+        line-height: inherit;
+      }
+
+      @container (max-height: 13px) {
+        [part='label'] {
+          display: none;
+        }
       }
 
       :host([indeterminate]) [part='indicator'] {
