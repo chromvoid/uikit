@@ -46,18 +46,20 @@ export const inputsSelectionCases: readonly UikitVisualCase[] = [
     title: 'Field label, description, error, required, disabled, invalid, and horizontal states',
     states: ['label', 'description', 'error', 'required', 'disabled', 'invalid', 'horizontal'],
     html: `
-      <div class="visual-grid">
-        <cv-field required>
-          <span slot="label">Vault name</span>
-          <cv-input value="Primary vault"></cv-input>
-          <span slot="description">Visible helper copy stays below the control.</span>
-        </cv-field>
-        <cv-field invalid>
-          <span slot="label">Recovery email</span>
-          <cv-input invalid value="invalid@"></cv-input>
-          <span slot="error">Enter a complete email address.</span>
-        </cv-field>
-        <cv-field orientation="horizontal" disabled>
+      <div class="visual-stack">
+        <div class="visual-grid">
+          <cv-field required>
+            <span slot="label">Vault name</span>
+            <cv-input value="Primary vault"></cv-input>
+            <span slot="description">Visible helper copy stays below the control.</span>
+          </cv-field>
+          <cv-field invalid>
+            <span slot="label">Recovery email</span>
+            <cv-input invalid value="invalid@"></cv-input>
+            <span slot="error">Enter a complete email address.</span>
+          </cv-field>
+        </div>
+        <cv-field class="visual-wide-row" orientation="horizontal" disabled>
           <span slot="label">Disabled field</span>
           <cv-input disabled value="Disabled value"></cv-input>
           <span slot="description">Horizontal field layout.</span>
@@ -212,9 +214,8 @@ export const inputsSelectionCases: readonly UikitVisualCase[] = [
   visualCase({
     id: 'cv-select/states',
     component: 'cv-select',
-    title: 'Select closed, open, grouped, multiple, clearable, invalid, disabled, and sizes',
-    states: ['closed', 'open', 'grouped', 'multiple', 'clearable', 'invalid', 'disabled', 'small', 'large'],
-    fullPage: true,
+    title: 'Select closed, grouped, multiple, clearable, invalid, disabled, and sizes',
+    states: ['closed', 'grouped', 'multiple', 'clearable', 'invalid', 'disabled', 'small', 'large'],
     html: `
       <div class="visual-stack">
         <div class="visual-grid">
@@ -233,6 +234,22 @@ export const inputsSelectionCases: readonly UikitVisualCase[] = [
             <cv-select-option value="disabled">Disabled select</cv-select-option>
           </cv-select>
         </div>
+      </div>
+    `,
+    afterMount(root) {
+      setElementProps(root, 'cv-select[selection-mode="multiple"]', {
+        selectedValues: ['notes', 'media'],
+      })
+    },
+  }),
+  visualCase({
+    id: 'cv-select/open',
+    component: 'cv-select',
+    title: 'Select open grouped listbox state',
+    states: ['open', 'grouped'],
+    diagnosticsIgnoredSelectors: ['.visual-overlay-frame'],
+    html: `
+      <div class="visual-overlay-frame">
         <cv-select open value="sync" placeholder="Open select">
           <cv-select-group label="Actions">
             <cv-select-option value="sync">Sync now</cv-select-option>
@@ -241,11 +258,6 @@ export const inputsSelectionCases: readonly UikitVisualCase[] = [
         </cv-select>
       </div>
     `,
-    afterMount(root) {
-      setElementProps(root, 'cv-select[selection-mode="multiple"]', {
-        selectedValues: ['notes', 'media'],
-      })
-    },
   }),
   visualCase({
     id: 'cv-combobox/states',

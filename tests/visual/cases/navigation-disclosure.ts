@@ -90,7 +90,7 @@ export const navigationDisclosureCases: readonly UikitVisualCase[] = [
     title: 'Tabs horizontal, vertical, selected, disabled, closable, and long panel states',
     states: ['horizontal', 'vertical', 'selected', 'disabled-tab', 'closable', 'long-content'],
     html: `
-      <div class="visual-grid">
+      <div class="visual-wide-grid">
         <cv-tabs value="overview">
           <cv-tab slot="nav" value="overview" closable>Overview</cv-tab>
           <cv-tab slot="nav" value="activity">Activity</cv-tab>
@@ -99,7 +99,7 @@ export const navigationDisclosureCases: readonly UikitVisualCase[] = [
           <cv-tab-panel tab="activity">Activity panel content.</cv-tab-panel>
           <cv-tab-panel tab="disabled">Disabled panel.</cv-tab-panel>
         </cv-tabs>
-        <cv-tabs value="settings" orientation="vertical">
+        <cv-tabs class="visual-wide-row" value="settings" orientation="vertical">
           <cv-tab slot="nav" value="settings">Settings</cv-tab>
           <cv-tab slot="nav" value="members">Members</cv-tab>
           <cv-tab-panel tab="settings">

@@ -61,11 +61,13 @@ export async function collectStageDiagnostics(
 
     const stageRect = stage.getBoundingClientRect()
     const elements = Array.from(stage.querySelectorAll('*')).filter(
-      (element): element is HTMLElement =>
-        element instanceof HTMLElement && !isIgnored(element),
+      (element): element is HTMLElement => element instanceof HTMLElement,
+    )
+    const diagnosticElements = elements.filter(
+      (element): element is HTMLElement => !isIgnored(element),
     )
 
-    const horizontalOverflow = elements
+    const horizontalOverflow = diagnosticElements
       .filter((element) => element.scrollWidth > element.clientWidth + 1)
       .slice(0, 25)
       .map((element) => ({
@@ -74,7 +76,7 @@ export async function collectStageDiagnostics(
         clientWidth: element.clientWidth,
       }))
 
-    const clippedText = elements
+    const clippedText = diagnosticElements
       .filter((element) => {
         const text = element.textContent?.trim()
         if (!text) return false
@@ -94,7 +96,7 @@ export async function collectStageDiagnostics(
       }))
 
     const outsideStage = checkOutsideStage
-      ? elements
+      ? diagnosticElements
           .filter((element) => {
             const rect = element.getBoundingClientRect()
             if (rect.width <= 0 || rect.height <= 0) return false

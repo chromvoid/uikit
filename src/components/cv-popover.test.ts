@@ -931,6 +931,14 @@ describe('cv-popover', () => {
       expect(slot).not.toBeNull()
     })
 
+    it('stylesheet provides default arrow shape and placement rules', () => {
+      const cssText = stylesToText()
+      expect(cssText).toContain("[part='arrow']")
+      expect(cssText).toContain('transform: rotate(45deg)')
+      expect(cssText).toContain("[part='content'][data-placement^='bottom'] [part='arrow']")
+      expect(cssText).toContain("[part='content'][data-placement^='right'] [part='arrow']")
+    })
+
     it('host reflects arrow boolean attribute', async () => {
       const el = await createPopover({arrow: true})
       expect(el.hasAttribute('arrow')).toBe(true)

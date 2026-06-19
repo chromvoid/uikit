@@ -23,6 +23,7 @@ async function mountCase(): Promise<void> {
   }
 
   provider.setAttribute('mode', theme)
+  document.documentElement.dataset.theme = theme
   document.body.dataset.theme = theme
 
   if (!caseId) {

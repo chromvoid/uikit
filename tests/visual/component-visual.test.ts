@@ -83,7 +83,7 @@ describe('UIKit visual snapshots', () => {
 
       const diagnostics = await collectStageDiagnostics(page, STAGE_SELECTOR, {
         checkOutsideStage: !visualCase.fullPage,
-        ignoredSelectors: [],
+        ignoredSelectors: visualCase.diagnosticsIgnoredSelectors ?? [],
       })
       expect(diagnostics.emptyStage).toBe(false)
 

@@ -55,6 +55,28 @@
         gap: 12px;
         min-width: min(860px, 100%);
       }
+      .visual-wide-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(360px, 1fr));
+        gap: 12px;
+        width: min(860px, calc(100vw - 88px));
+      }
+      .visual-wide-row {
+        display: grid;
+        width: min(520px, 100%);
+      }
+      .visual-overlay-frame {
+        position: relative;
+        display: block;
+        width: min(560px, calc(100vw - 88px));
+        min-height: 260px;
+      }
+      .visual-overlay-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        align-items: center;
+      }
       .visual-panel {
         display: grid;
         gap: 8px;

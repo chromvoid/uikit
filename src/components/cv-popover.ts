@@ -212,7 +212,7 @@ export class CVPopover extends ReatomLitElement {
         padding: var(--cv-popover-padding, var(--cv-space-3, 12px));
         border-radius: var(--cv-popover-border-radius, var(--cv-radius-md, 10px));
         border: 1px solid var(--cv-color-border, #2a3245);
-        background: var(--cv-color-surface-elevated, #1d2432);
+        background: var(--cv-popover-arrow-background, var(--cv-color-primary, #65d7ff));
         box-shadow: var(--cv-shadow-1, 0 2px 8px rgba(0, 0, 0, 0.24));
         color: var(--cv-color-text, #e8ecf6);
         margin: 0;
@@ -247,9 +247,38 @@ export class CVPopover extends ReatomLitElement {
 
       [part='arrow'] {
         position: absolute;
+        z-index: 1;
         display: block;
-        inline-size: var(--cv-popover-arrow-size, 8px);
-        block-size: var(--cv-popover-arrow-size, 8px);
+        inline-size: var(--cv-popover-arrow-size, 10px);
+        block-size: var(--cv-popover-arrow-size, 10px);
+        background: var(--cv-color-surface-elevated, #1d2432);
+        border-block-start: 1px solid var(--cv-color-border-strong, #3d4a5f);
+        border-inline-start: 1px solid var(--cv-color-border-strong, #3d4a5f);
+        transform: rotate(45deg);
+        pointer-events: none;
+      }
+
+      [part='content'][data-placement^='bottom'] [part='arrow'] {
+        inset-block-start: calc(var(--cv-popover-arrow-size, 10px) / -2);
+        inset-inline-start: var(--cv-popover-arrow-inline-start, var(--cv-space-4, 16px));
+      }
+
+      [part='content'][data-placement^='top'] [part='arrow'] {
+        inset-block-end: calc(var(--cv-popover-arrow-size, 10px) / -2);
+        inset-inline-start: var(--cv-popover-arrow-inline-start, var(--cv-space-4, 16px));
+        transform: rotate(225deg);
+      }
+
+      [part='content'][data-placement^='right'] [part='arrow'] {
+        inset-inline-start: calc(var(--cv-popover-arrow-size, 10px) / -2);
+        inset-block-start: var(--cv-popover-arrow-block-start, var(--cv-space-4, 16px));
+        transform: rotate(315deg);
+      }
+
+      [part='content'][data-placement^='left'] [part='arrow'] {
+        inset-inline-end: calc(var(--cv-popover-arrow-size, 10px) / -2);
+        inset-block-start: var(--cv-popover-arrow-block-start, var(--cv-space-4, 16px));
+        transform: rotate(135deg);
       }
     `,
   ]

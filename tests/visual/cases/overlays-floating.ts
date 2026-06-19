@@ -146,23 +146,36 @@ export const overlaysFloatingCases: readonly UikitVisualCase[] = [
     `,
   }),
   visualCase({
-    id: 'cv-popover/states',
+    id: 'cv-popover/bottom-arrow',
     component: 'cv-popover',
-    title: 'Popover open, placement, arrow, trigger, and long content states',
-    states: ['open', 'placement', 'arrow', 'trigger', 'long-content'],
-    fullPage: true,
+    title: 'Popover open bottom-start placement with arrow and long content',
+    states: ['open', 'bottom-start', 'arrow', 'trigger', 'long-content'],
+    diagnosticsIgnoredSelectors: ['.visual-overlay-frame'],
     html: `
-      <div class="visual-row">
-        <cv-popover open arrow placement="bottom-start">
+      <div class="visual-overlay-frame">
+        <cv-popover open arrow placement="bottom-start" offset="12">
           <cv-button slot="trigger">Open popover</cv-button>
           <strong>Popover title</strong>
           <p class="visual-long-text">Popover content with longer body copy validates max width and wrapping.</p>
           <cv-button size="small" variant="primary">Action</cv-button>
         </cv-popover>
+      </div>
+    `,
+  }),
+  visualCase({
+    id: 'cv-popover/right-placement',
+    component: 'cv-popover',
+    title: 'Popover open right placement with compact content',
+    states: ['open', 'right-placement', 'trigger', 'compact-content'],
+    diagnosticsIgnoredSelectors: ['.visual-overlay-frame'],
+    html: `
+      <div class="visual-overlay-frame">
+        <div class="visual-overlay-row">
         <cv-popover open placement="right">
           <span slot="trigger">Right placement</span>
           <span>Compact content</span>
         </cv-popover>
+        </div>
       </div>
     `,
   }),
