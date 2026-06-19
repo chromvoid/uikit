@@ -42,6 +42,61 @@ export function setElementProps<T extends Element>(
   return element
 }
 
+export async function waitForElementUpdate(element: Element): Promise<void> {
+  const maybeUpdating = element as Element & {updateComplete?: Promise<unknown>}
+  await maybeUpdating.updateComplete
+  await Promise.resolve()
+  await maybeUpdating.updateComplete
+}
+
+export async function pressElementKey(
+  root: HTMLElement,
+  selector: string,
+  key: string,
+  targetSelector = '[part="base"]',
+): Promise<void> {
+  const element = root.querySelector<HTMLElement>(selector)
+  if (!element) {
+    throw new Error(`Visual case selector not found: ${selector}`)
+  }
+
+  await waitForElementUpdate(element)
+
+  const target = (element.shadowRoot?.querySelector(targetSelector) as HTMLElement | null) ?? element
+  target.focus({preventScroll: true})
+  target.dispatchEvent(new KeyboardEvent('keydown', {key, bubbles: true, composed: true}))
+  await waitForElementUpdate(element)
+}
+
+export async function setShadowInputValue(
+  root: HTMLElement,
+  selector: string,
+  value: string,
+  inputSelector = '[part="input"]',
+): Promise<HTMLElement> {
+  const element = root.querySelector<HTMLElement>(selector)
+  if (!element) {
+    throw new Error(`Visual case selector not found: ${selector}`)
+  }
+
+  await waitForElementUpdate(element)
+
+  const input = element.shadowRoot?.querySelector<HTMLInputElement>(inputSelector)
+  if (!input) {
+    throw new Error(`Visual case shadow input not found: ${selector} ${inputSelector}`)
+  }
+
+  input.value = value
+  const inputEvent =
+    typeof InputEvent === 'function'
+      ? new InputEvent('input', {bubbles: true, composed: true, data: value, inputType: 'insertText'})
+      : new Event('input', {bubbles: true, composed: true})
+  input.dispatchEvent(inputEvent)
+  await waitForElementUpdate(element)
+
+  return element
+}
+
 export function dataSvg(label: string): string {
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="640" height="420" viewBox="0 0 640 420">
   <defs>

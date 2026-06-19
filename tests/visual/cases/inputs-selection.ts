@@ -1,5 +1,5 @@
 import type {UikitVisualCase} from '../component-visual-types'
-import {setElementProps, visualCase} from './helpers'
+import {pressElementKey, setElementProps, setShadowInputValue, visualCase, waitForElementUpdate} from './helpers'
 
 export const inputsSelectionCases: readonly UikitVisualCase[] = [
   visualCase({
@@ -22,7 +22,8 @@ export const inputsSelectionCases: readonly UikitVisualCase[] = [
     ],
     interaction: {focus: 'cv-input[data-visual-id="focus"]'},
     html: `
-      <div class="visual-grid">
+      <div class="visual-stack">
+        <div class="visual-grid">
         <cv-input placeholder="Default input" value="Default value"></cv-input>
         <cv-input variant="filled" value="Filled variant"></cv-input>
         <cv-input size="small" value="Small"></cv-input>
@@ -36,7 +37,10 @@ export const inputsSelectionCases: readonly UikitVisualCase[] = [
           <span slot="prefix">https://</span>
           <span slot="suffix">.onion</span>
         </cv-input>
-        <cv-input data-visual-id="focus" class="visual-long-text" value="Focused long value with wrapping pressure"></cv-input>
+        </div>
+        <div class="visual-wide-row">
+          <cv-input data-visual-id="focus" value="Focused truncation preview"></cv-input>
+        </div>
       </div>
     `,
   }),
@@ -242,10 +246,17 @@ export const inputsSelectionCases: readonly UikitVisualCase[] = [
         </div>
       </div>
     `,
-    afterMount(root) {
+    async afterMount(root) {
+      const select = root.querySelector<HTMLElement>('cv-select[selection-mode="multiple"]')
+      if (!select) {
+        throw new Error('Visual case selector not found: cv-select[selection-mode="multiple"]')
+      }
+
+      await waitForElementUpdate(select)
       setElementProps(root, 'cv-select[selection-mode="multiple"]', {
         selectedValues: ['notes', 'media'],
       })
+      await waitForElementUpdate(select)
     },
   }),
   visualCase({
@@ -254,9 +265,10 @@ export const inputsSelectionCases: readonly UikitVisualCase[] = [
     title: 'Select open grouped listbox state',
     states: ['open', 'grouped'],
     diagnosticsIgnoredSelectors: ['.visual-overlay-frame'],
+    requiredSelectors: ['cv-select[data-visual-id="open"] [part="listbox"]'],
     html: `
-      <div class="visual-overlay-frame">
-        <cv-select open value="sync" placeholder="Open select">
+      <div class="visual-overlay-frame visual-overlay-frame--compact">
+        <cv-select data-visual-id="open" open value="sync" placeholder="Open select">
           <cv-select-group label="Actions">
             <cv-select-option value="sync">Sync now</cv-select-option>
             <cv-select-option value="export">Export</cv-select-option>
@@ -295,7 +307,7 @@ export const inputsSelectionCases: readonly UikitVisualCase[] = [
       'cv-combobox[data-visual-id="open"] [part="group-label"]',
     ],
     html: `
-      <div class="visual-overlay-frame visual-overlay-frame--wide">
+      <div class="visual-overlay-frame visual-overlay-frame--compact">
         <cv-combobox data-visual-id="open" open type="select-only" value="work" placeholder="Open combobox">
           <cv-combobox-group label="Vaults">
             <cv-combobox-option value="personal">Personal vault</cv-combobox-option>
@@ -339,11 +351,12 @@ export const inputsSelectionCases: readonly UikitVisualCase[] = [
     component: 'cv-listbox',
     title: 'Listbox single, multiple, horizontal, grouped, selected, active, and disabled option states',
     states: ['single', 'multiple', 'horizontal', 'grouped', 'selected', 'active', 'disabled'],
+    requiredSelectors: ['cv-listbox[data-visual-id="single"] cv-option[data-visual-id="active-target"][active]'],
     html: `
       <div class="visual-grid">
-        <cv-listbox aria-label="Single listbox">
+        <cv-listbox data-visual-id="single" aria-label="Single listbox">
           <cv-option value="one" selected>One</cv-option>
-          <cv-option value="two" active>Two active</cv-option>
+          <cv-option data-visual-id="active-target" value="two">Two active</cv-option>
           <cv-option value="three" disabled>Three disabled</cv-option>
         </cv-listbox>
         <cv-listbox selection-mode="multiple" aria-label="Multiple listbox">
@@ -360,6 +373,21 @@ export const inputsSelectionCases: readonly UikitVisualCase[] = [
         </cv-listbox>
       </div>
     `,
+    async afterMount(root) {
+      const listbox = root.querySelector<HTMLElement>('cv-listbox[data-visual-id="single"]')
+      if (!listbox) {
+        throw new Error('Visual case selector not found: cv-listbox[data-visual-id="single"]')
+      }
+
+      await pressElementKey(root, 'cv-listbox[data-visual-id="single"]', 'ArrowDown')
+      const option = listbox.querySelector<HTMLElement>('cv-option[data-visual-id="active-target"]')
+      if (!option) {
+        throw new Error('Visual case selector not found: cv-option[data-visual-id="active-target"]')
+      }
+
+      option.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+      await waitForElementUpdate(listbox)
+    },
   }),
   visualCase({
     id: 'cv-option/states',
@@ -385,16 +413,20 @@ export const inputsSelectionCases: readonly UikitVisualCase[] = [
     component: 'cv-date-picker',
     title: 'Date picker value, disabled, readonly, invalid, and size states',
     states: ['value', 'disabled', 'readonly', 'invalid', 'small', 'large'],
+    requiredSelectors: ['cv-date-picker[data-visual-id="invalid"][input-invalid]'],
     html: `
       <div class="visual-grid">
         <cv-date-picker value="2026-06-18"></cv-date-picker>
         <cv-date-picker disabled value="2026-06-18"></cv-date-picker>
         <cv-date-picker readonly value="2026-06-18"></cv-date-picker>
-        <cv-date-picker input-invalid value="not-a-date"></cv-date-picker>
+        <cv-date-picker data-visual-id="invalid" value="2026-06-18"></cv-date-picker>
         <cv-date-picker size="small" value="2026-01-04"></cv-date-picker>
         <cv-date-picker size="large" value="2026-12-24"></cv-date-picker>
       </div>
     `,
+    async afterMount(root) {
+      await setShadowInputValue(root, 'cv-date-picker[data-visual-id="invalid"]', 'not-a-date')
+    },
   }),
   visualCase({
     id: 'cv-date-picker/open',
@@ -417,15 +449,19 @@ export const inputsSelectionCases: readonly UikitVisualCase[] = [
     component: 'cv-date-time-picker',
     title: 'Date-time picker value, 12h/24h, invalid, disabled, and size states',
     states: ['value', 'hour-cycle-12', 'hour-cycle-24', 'invalid', 'disabled', 'large'],
+    requiredSelectors: ['cv-date-time-picker[data-visual-id="invalid"][input-invalid]'],
     html: `
       <div class="visual-grid">
         <cv-date-time-picker value="2026-06-18T14:30"></cv-date-time-picker>
         <cv-date-time-picker value="2026-06-18T14:30" hour-cycle="12"></cv-date-time-picker>
-        <cv-date-time-picker input-invalid value="bad-date-time"></cv-date-time-picker>
+        <cv-date-time-picker data-visual-id="invalid" value="2026-06-18T14:30"></cv-date-time-picker>
         <cv-date-time-picker disabled value="2026-06-18T14:30"></cv-date-time-picker>
         <cv-date-time-picker size="large" value="2026-12-24T09:15"></cv-date-time-picker>
       </div>
     `,
+    async afterMount(root) {
+      await setShadowInputValue(root, 'cv-date-time-picker[data-visual-id="invalid"]', 'bad-date-time')
+    },
   }),
   visualCase({
     id: 'cv-date-time-picker/open',
@@ -449,11 +485,12 @@ export const inputsSelectionCases: readonly UikitVisualCase[] = [
     component: 'cv-time-picker',
     title: 'Time picker value, 12h/24h, invalid, disabled, readonly, minute step, and size states',
     states: ['value', 'hour-cycle-12', 'hour-cycle-24', 'invalid', 'disabled', 'readonly', 'minute-step', 'small', 'large'],
+    requiredSelectors: ['cv-time-picker[data-visual-id="invalid"][input-invalid]'],
     html: `
       <div class="visual-grid">
         <cv-time-picker value="14:30"></cv-time-picker>
         <cv-time-picker value="09:15" hour-cycle="12"></cv-time-picker>
-        <cv-time-picker input-invalid value="27:99"></cv-time-picker>
+        <cv-time-picker data-visual-id="invalid" value="12:00"></cv-time-picker>
         <cv-time-picker disabled value="10:00"></cv-time-picker>
         <cv-time-picker readonly value="11:45"></cv-time-picker>
         <cv-time-picker minute-step="15" value="16:15"></cv-time-picker>
@@ -461,6 +498,10 @@ export const inputsSelectionCases: readonly UikitVisualCase[] = [
         <cv-time-picker size="large" value="22:10"></cv-time-picker>
       </div>
     `,
+    async afterMount(root) {
+      const invalid = await setShadowInputValue(root, 'cv-time-picker[data-visual-id="invalid"]', '27:99')
+      await waitForElementUpdate(invalid)
+    },
   }),
   visualCase({
     id: 'cv-chip/states',

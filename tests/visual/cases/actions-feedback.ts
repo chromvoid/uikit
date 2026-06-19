@@ -206,7 +206,10 @@ export const actionsFeedbackCases: readonly UikitVisualCase[] = [
       <div class="visual-row">
         <span><cv-spinner label="Loading small"></cv-spinner></span>
         <cv-button loading>Button loading</cv-button>
-        <span class="visual-demo-box"><cv-spinner label="Loading large"></cv-spinner></span>
+        <span class="visual-loading-panel">
+          <cv-spinner label="Loading attachments"></cv-spinner>
+          <span>Loading attachments</span>
+        </span>
       </div>
     `,
   }),

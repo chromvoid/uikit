@@ -74,6 +74,10 @@
       .visual-overlay-frame--wide {
         width: min(680px, calc(100vw - 88px));
       }
+      .visual-overlay-frame--compact {
+        width: min(420px, calc(100vw - 88px));
+        min-height: 196px;
+      }
       .visual-overlay-frame--tall {
         min-height: 430px;
       }
@@ -108,6 +112,28 @@
       }
       .visual-demo-box--wide {
         min-width: 260px;
+      }
+      .visual-loading-panel {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        gap: 10px;
+        align-items: center;
+        min-width: 220px;
+        padding: 12px;
+        border: 1px solid var(--cv-color-border);
+        border-radius: 8px;
+        background: var(--cv-color-surface-secondary-glass);
+      }
+      .visual-popover-panel {
+        display: grid;
+        gap: 8px;
+        max-width: 220px;
+      }
+      .visual-popover-panel__title {
+        font-weight: 700;
+      }
+      .visual-popover-panel__body {
+        color: var(--cv-color-text-muted);
       }
       .visual-long-text {
         max-width: 260px;
@@ -148,6 +174,9 @@
       .visual-splitter-frame {
         width: min(720px, 80vw);
         height: 260px;
+      }
+      .visual-splitter-frame--compact {
+        height: 170px;
       }
       cv-checkbox[data-visual-state='hover']::part(indicator) {
         border-color: var(--cv-color-primary);

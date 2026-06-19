@@ -171,12 +171,16 @@ export const overlaysFloatingCases: readonly UikitVisualCase[] = [
     diagnosticsIgnoredSelectors: ['.visual-overlay-frame'],
     requiredSelectors: ['cv-popover[placement="right"] [part="content"]'],
     html: `
-      <div class="visual-overlay-frame">
+      <div class="visual-overlay-frame visual-overlay-frame--compact">
         <div class="visual-overlay-row">
-        <cv-popover open placement="right">
-          <span slot="trigger">Right placement</span>
-          <span>Compact content</span>
-        </cv-popover>
+          <cv-popover open placement="right">
+            <cv-button slot="trigger">Right placement</cv-button>
+            <div class="visual-popover-panel">
+              <span class="visual-popover-panel__title">Sync options</span>
+              <span class="visual-popover-panel__body">Choose the next vault sync action.</span>
+              <cv-button size="small" variant="primary">Run sync</cv-button>
+            </div>
+          </cv-popover>
         </div>
       </div>
     `,

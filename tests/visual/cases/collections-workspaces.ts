@@ -1,5 +1,5 @@
 import type {UikitVisualCase} from '../component-visual-types'
-import {visualCase} from './helpers'
+import {visualCase, waitForElementUpdate} from './helpers'
 
 export const collectionsWorkspacesCases: readonly UikitVisualCase[] = [
   visualCase({
@@ -138,19 +138,24 @@ export const collectionsWorkspacesCases: readonly UikitVisualCase[] = [
     component: 'cv-treegrid',
     title: 'Treegrid columns, expanded branch, selected row, active cell, disabled row, and child rows',
     states: ['columns', 'expanded-branch', 'selected-row', 'active-cell', 'disabled-row', 'children'],
+    requiredSelectors: [
+      'cv-treegrid[data-visual-id="tree"] [part="columnheader"]',
+      'cv-treegrid[data-visual-id="tree"] cv-treegrid-row[data-visual-id="child-a"]',
+      'cv-treegrid[data-visual-id="tree"] cv-treegrid-cell[data-visual-id="root-name"][active]',
+    ],
     html: `
-      <div class="visual-grid">
-        <cv-treegrid aria-label="Vault treegrid" selection-mode="multiple">
+      <div class="visual-wide-row">
+        <cv-treegrid data-visual-id="tree" aria-label="Vault treegrid" selection-mode="multiple">
           <cv-treegrid-column value="name" label="Name"></cv-treegrid-column>
           <cv-treegrid-column value="status" label="Status"></cv-treegrid-column>
-          <cv-treegrid-row value="root" index="1" branch expanded selected level="1">
-            <cv-treegrid-cell column="name" active>Workspace</cv-treegrid-cell>
+          <cv-treegrid-row data-visual-id="root-row" value="root" index="1">
+            <cv-treegrid-cell data-visual-id="root-name" column="name">Workspace</cv-treegrid-cell>
             <cv-treegrid-cell column="status"><cv-badge variant="primary">Open</cv-badge></cv-treegrid-cell>
-            <cv-treegrid-row slot="children" value="child-a" index="2" level="2">
+            <cv-treegrid-row data-visual-id="child-a" slot="children" value="child-a" index="2">
               <cv-treegrid-cell column="name">Notes</cv-treegrid-cell>
               <cv-treegrid-cell column="status"><cv-badge variant="success">Synced</cv-badge></cv-treegrid-cell>
             </cv-treegrid-row>
-            <cv-treegrid-row slot="children" value="child-b" index="3" level="2" disabled>
+            <cv-treegrid-row data-visual-id="child-b" slot="children" value="child-b" index="3" disabled>
               <cv-treegrid-cell column="name" disabled>Archive</cv-treegrid-cell>
               <cv-treegrid-cell column="status">Disabled</cv-treegrid-cell>
             </cv-treegrid-row>
@@ -158,6 +163,29 @@ export const collectionsWorkspacesCases: readonly UikitVisualCase[] = [
         </cv-treegrid>
       </div>
     `,
+    async afterMount(root) {
+      const tree = root.querySelector<
+        HTMLElement & {expandedValues: string[]; selectedValues: string[]; value: string}
+      >('cv-treegrid[data-visual-id="tree"]')
+      if (!tree) {
+        throw new Error('Visual case selector not found: cv-treegrid[data-visual-id="tree"]')
+      }
+
+      await waitForElementUpdate(tree)
+      const rootRow = tree.querySelector<HTMLElement & {value?: string}>('[data-visual-id="root-row"]')
+      const rootCell = tree.querySelector<HTMLElement & {column?: string}>('[data-visual-id="root-name"]')
+      const rootValue = rootRow?.value || rootRow?.getAttribute('value') || 'root'
+      const rootColumn = rootCell?.column || rootCell?.getAttribute('column') || 'name'
+
+      tree.expandedValues = [rootValue]
+      await waitForElementUpdate(tree)
+
+      tree.selectedValues = [rootValue]
+      await waitForElementUpdate(tree)
+
+      tree.value = `${rootValue}::${rootColumn}`
+      await waitForElementUpdate(tree)
+    },
   }),
   visualCase({
     id: 'cv-treeview/states',
@@ -210,15 +238,15 @@ export const collectionsWorkspacesCases: readonly UikitVisualCase[] = [
     viewports: ['default', 'wide'],
     html: `
       <div class="visual-stack">
-        <cv-window-splitter class="visual-splitter-frame" position="38" min="20" max="80" snap="30 50 70" aria-label="Horizontal splitter">
-          <div slot="primary" class="visual-panel">Primary pane with navigation content.</div>
+        <cv-window-splitter class="visual-splitter-frame visual-splitter-frame--compact" position="38" min="20" max="80" snap="30 50 70" aria-label="Horizontal splitter">
+          <div slot="primary" class="visual-panel">Navigation pane<br>All entries<br>Shared vaults</div>
           <span slot="separator">⋮</span>
-          <div slot="secondary" class="visual-panel">Secondary pane with details content.</div>
+          <div slot="secondary" class="visual-panel">Details pane<br>Selected entry metadata</div>
         </cv-window-splitter>
-        <cv-window-splitter class="visual-splitter-frame" orientation="vertical" fixed position="55" aria-label="Vertical splitter">
-          <div slot="primary" class="visual-panel">Top pane</div>
+        <cv-window-splitter class="visual-splitter-frame visual-splitter-frame--compact" orientation="vertical" fixed position="55" aria-label="Vertical splitter">
+          <div slot="primary" class="visual-panel">Preview pane</div>
           <span slot="separator">⋯</span>
-          <div slot="secondary" class="visual-panel">Bottom pane</div>
+          <div slot="secondary" class="visual-panel">Activity log</div>
         </cv-window-splitter>
       </div>
     `,
