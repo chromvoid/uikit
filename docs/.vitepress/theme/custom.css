@@ -1175,6 +1175,22 @@ cv-card.live-demo-card::part(footer) {
   grid-column: 1 / -1;
 }
 
+.code-input-demo-grid cv-field::part(label) {
+  color: rgba(226, 239, 255, 0.76);
+}
+
+.code-input-demo-grid cv-field::part(description) {
+  color: rgba(190, 206, 226, 0.72);
+}
+
+.code-input-demo-grid cv-code-input {
+  --cv-code-input-size: clamp(34px, 11vw, 40px);
+  --cv-code-input-gap: clamp(4px, 1.8vw, 8px);
+  --cv-code-input-background: rgba(238, 245, 255, 0.06);
+  --cv-code-input-border-color: rgba(143, 220, 255, 0.34);
+  --cv-code-input-color: #eef5ff;
+}
+
 .fieldset-demo-grid cv-fieldset {
   inline-size: 100%;
   min-inline-size: 0;

@@ -9,7 +9,7 @@ Segmented short-code entry for PIN, OTP, pairing, and recovery codes.
 ## Usage
 
 ```html
-<div class="field-demo-grid">
+<div class="field-demo-grid code-input-demo-grid">
   <cv-field required>
     <span slot="label">One-time code</span>
     <cv-code-input purpose="otp" length="6" required autocomplete="one-time-code"></cv-code-input>
