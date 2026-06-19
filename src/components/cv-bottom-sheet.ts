@@ -211,30 +211,25 @@ export class CVBottomSheet extends ReatomLitElement {
     }
 
     cv-dialog.has-detents::part(content) {
-      block-size: var(--cv-bottom-sheet-detent-max-height);
+      block-size: var(--cv-bottom-sheet-detent-visible-height);
     }
 
     cv-dialog.has-detents::part(body) {
-      block-size: var(--cv-bottom-sheet-detent-visible-height);
-      max-block-size: var(--cv-bottom-sheet-detent-visible-height);
+      max-block-size: none;
+    }
+
+    cv-dialog::part(header) {
+      padding: var(--cv-bottom-sheet-header-padding, var(--cv-space-4, 16px));
     }
 
     cv-dialog.detent-collapsed {
       --cv-bottom-sheet-active-detent-height: var(--cv-bottom-sheet-collapsed-height, 148px);
-      --cv-bottom-sheet-detent-offset: max(
-        0px,
-        calc(var(--cv-bottom-sheet-detent-max-height) - var(--cv-bottom-sheet-collapsed-height, 148px))
-      );
+      --cv-bottom-sheet-detent-offset: 0px;
     }
 
     cv-dialog.detent-middle {
       --cv-bottom-sheet-active-detent-height: var(--cv-bottom-sheet-middle-height, min(52dvh, 440px));
-      --cv-bottom-sheet-detent-offset: max(
-        0px,
-        calc(
-          var(--cv-bottom-sheet-detent-max-height) - var(--cv-bottom-sheet-middle-height, min(52dvh, 440px))
-        )
-      );
+      --cv-bottom-sheet-detent-offset: 0px;
     }
 
     cv-dialog.detent-expanded {
@@ -252,7 +247,14 @@ export class CVBottomSheet extends ReatomLitElement {
     cv-dialog::part(body) {
       min-block-size: 0;
       overflow: auto;
-      padding: 0;
+      padding: var(--cv-bottom-sheet-body-padding, 0 var(--cv-space-4, 16px) var(--cv-space-4, 16px));
+    }
+
+    cv-dialog::part(footer) {
+      padding: var(
+        --cv-bottom-sheet-footer-padding,
+        var(--cv-space-3, 12px) var(--cv-space-4, 16px) var(--cv-space-4, 16px)
+      );
     }
 
     .sheet-handle {

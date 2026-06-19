@@ -109,7 +109,24 @@ describe('cv-bottom-sheet', () => {
     expect(cssText).toContain('--cv-bottom-sheet-middle-height')
     expect(cssText).toContain('--cv-bottom-sheet-expanded-height')
     expect(cssText).toContain('cv-dialog.has-detents::part(body)')
-    expect(cssText).toContain('block-size: var(--cv-bottom-sheet-detent-visible-height)')
+    expect(cssText).toMatch(
+      /cv-dialog\.has-detents::part\(content\)\s*{[\s\S]*block-size:\s*var\(--cv-bottom-sheet-detent-visible-height\)/,
+    )
+    expect(cssText).toMatch(/cv-dialog\.has-detents::part\(body\)\s*{[\s\S]*max-block-size:\s*none;/)
+    expect(cssText).toMatch(
+      /cv-dialog\.detent-collapsed\s*{[\s\S]*--cv-bottom-sheet-detent-offset:\s*0px;/,
+    )
+    expect(cssText).toMatch(
+      /cv-dialog\.detent-middle\s*{[\s\S]*--cv-bottom-sheet-detent-offset:\s*0px;/,
+    )
+  })
+
+  it('keeps header, body, and footer readable inside the active detent', () => {
+    const cssText = stylesToText(CVBottomSheet.styles)
+
+    expect(cssText).toMatch(/cv-dialog::part\(header\)\s*{[\s\S]*padding:/)
+    expect(cssText).toMatch(/cv-dialog::part\(body\)\s*{[\s\S]*padding:/)
+    expect(cssText).toMatch(/cv-dialog::part\(footer\)\s*{[\s\S]*padding:/)
   })
 
   it('maps sheet movement to cv-dialog content motion variables without animating keyboard geometry', () => {
