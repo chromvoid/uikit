@@ -183,8 +183,10 @@ export class CVInput extends FormAssociatedReatomElement {
 
       /* --- variant: filled --- */
       :host([variant='filled']) [part='base'] {
-        background: var(--cv-color-surface, #141923);
+        background: var(--cv-color-surface-2, #181f2b);
         border-color: transparent;
+        box-shadow: inset 0 0 0 1px
+          color-mix(in oklab, var(--cv-color-border, #2a3245) 46%, var(--cv-color-surface-2, #181f2b));
       }
 
       /* --- focused --- */
