@@ -26,12 +26,24 @@ const getClearButton = (el: CVNumber) => el.shadowRoot!.querySelector('[part="cl
 const getStepper = (el: CVNumber) => el.shadowRoot!.querySelector('[part="stepper"]') as HTMLElement
 const getIncrement = (el: CVNumber) => el.shadowRoot!.querySelector('[part="increment"]') as HTMLButtonElement
 const getDecrement = (el: CVNumber) => el.shadowRoot!.querySelector('[part="decrement"]') as HTMLButtonElement
+const getStylesText = () =>
+  (CVNumber.styles as Array<{cssText?: string}>).map((style) => style.cssText ?? '').join('\n')
 
 afterEach(() => {
   document.body.innerHTML = ''
 })
 
 describe('cv-number', () => {
+  describe('style contract', () => {
+    it('renders filled variant with a visible non-prominent shell', () => {
+      const stylesText = getStylesText()
+
+      expect(stylesText).toMatch(/:host\(\[variant='filled'\]\) \[part='base'\]\s*{[\s\S]*background:\s*var\(--cv-color-surface-2/)
+      expect(stylesText).toMatch(/:host\(\[variant='filled'\]\) \[part='base'\]\s*{[\s\S]*border-color:\s*transparent;/)
+      expect(stylesText).toMatch(/:host\(\[variant='filled'\]\) \[part='base'\]\s*{[\s\S]*box-shadow:\s*inset 0 0 0 1px/)
+    })
+  })
+
   // ---------------------------------------------------------------------------
   // Shadow DOM structure
   // ---------------------------------------------------------------------------
