@@ -150,10 +150,14 @@ describe('cv-tooltip', () => {
 
   describe('attribute reflection', () => {
     it('boolean attributes reflect: open, disabled, arrow', async () => {
-      const el = await createTooltip({open: true, disabled: true, arrow: true})
+      const el = await createTooltip({open: true, arrow: true})
       expect(el.hasAttribute('open')).toBe(true)
-      expect(el.hasAttribute('disabled')).toBe(true)
       expect(el.hasAttribute('arrow')).toBe(true)
+
+      el.disabled = true
+      await settle(el)
+      expect(el.hasAttribute('disabled')).toBe(true)
+      expect(el.hasAttribute('open')).toBe(false)
     })
 
     it('string attribute reflects: trigger', async () => {
@@ -241,6 +245,14 @@ describe('cv-tooltip', () => {
     it('[part="content"] is visible when tooltip is open', async () => {
       const {contentPart} = await mountTooltip({open: true})
       expect(contentPart.hidden).toBe(false)
+    })
+
+    it('[part="content"] stays hidden when disabled and open are both set', async () => {
+      const {el, contentPart} = await mountTooltip({disabled: true, open: true})
+
+      expect(el.open).toBe(false)
+      expect(el.hasAttribute('open')).toBe(false)
+      expect(contentPart.hidden).toBe(true)
     })
   })
 
@@ -734,6 +746,26 @@ describe('cv-tooltip', () => {
       el.disabled = true
       await settle(el)
       expect(el.open).toBe(false)
+    })
+
+    it('programmatic open writes are ignored while disabled', async () => {
+      const {el, contentPart} = await mountTooltip({disabled: true, showDelay: 0, hideDelay: 0})
+
+      el.open = true
+      await settle(el)
+
+      expect(el.open).toBe(false)
+      expect(contentPart.hidden).toBe(true)
+    })
+
+    it('re-enabling does not restore a disabled open request', async () => {
+      const {el, contentPart} = await mountTooltip({disabled: true, open: true, showDelay: 0, hideDelay: 0})
+
+      el.disabled = false
+      await settle(el)
+
+      expect(el.open).toBe(false)
+      expect(contentPart.hidden).toBe(true)
     })
 
     it('re-enabling allows interactions again', async () => {

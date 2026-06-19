@@ -188,18 +188,26 @@ export class CVTooltip extends ReatomLitElement {
       // Preserve whichever is "more open": model state OR the declared property value.
       // On first update all properties appear changed; use this.open so an initialOpen
       // value set before connection is not discarded.
-      const wasOpen = this.model.state.isOpen() || this.open
+      const wasOpen = !this.disabled && (this.model.state.isOpen() || this.open)
       this.model = this.createModel(wasOpen)
       return
     }
 
     if (changedProperties.has('disabled')) {
       this.model.actions.setDisabled(this.disabled)
+      if (this.disabled && (this.model.state.isOpen() || this.open)) {
+        const previousOpen = this.model.state.isOpen()
+        this.model.actions.close()
+        this._programmaticOpen = true
+        this.applyInteractionResult(previousOpen)
+        this.lastEmittedOpen = this.model.state.isOpen()
+        this._programmaticOpen = false
+      }
     }
 
     if (changedProperties.has('open') && this.model.state.isOpen() !== this.open) {
       const previousOpen = this.model.state.isOpen()
-      if (this.open) {
+      if (this.open && !this.disabled) {
         this.model.actions.open()
       } else {
         this.model.actions.close()
