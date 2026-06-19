@@ -54,7 +54,10 @@ describe('cv-button', () => {
 
       expect(stylesText).toMatch(/\[part='base'\]\s*{[\s\S]*min-inline-size:\s*0;/)
       expect(stylesText).toMatch(/\[part='base'\]\s*{[\s\S]*overflow:\s*hidden;/)
+      expect(stylesText).toMatch(/\[part='label'\]\s*{[\s\S]*display:\s*block;/)
+      expect(stylesText).toMatch(/\[part='label'\]\s*{[\s\S]*flex:\s*1 1 auto;/)
       expect(stylesText).toMatch(/\[part='label'\]\s*{[\s\S]*min-inline-size:\s*0;/)
+      expect(stylesText).toMatch(/\[part='label'\]\s*{[\s\S]*max-inline-size:\s*100%;/)
       expect(stylesText).toMatch(/\[part='label'\]\s*{[\s\S]*text-overflow:\s*ellipsis;/)
       expect(stylesText).toMatch(/\[part='label'\]\s*{[\s\S]*white-space:\s*nowrap;/)
     })

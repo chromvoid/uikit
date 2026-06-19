@@ -172,13 +172,13 @@ export class CVButton extends FormAssociatedReatomElement {
       }
 
       [part='label'] {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        gap: var(--cv-button-gap);
+        display: block;
+        flex: 1 1 auto;
         min-inline-size: 0;
+        max-inline-size: 100%;
         overflow: hidden;
         text-overflow: ellipsis;
+        text-align: center;
         white-space: nowrap;
       }
 
