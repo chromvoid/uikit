@@ -4,13 +4,25 @@ import {html} from '../reatom-lit/index.js'
 import {ReatomLitElement} from '../reatom-lit/ReatomLitElement'
 import {CVKbd} from './cv-kbd'
 
+const parseKeysAttribute = (value: string | null): readonly string[] => {
+  if (!value?.trim()) return []
+  return value
+    .split(',')
+    .map((part) => part.trim())
+    .filter(Boolean)
+}
+
 export class CVShortcut extends ReatomLitElement {
   static elementName = 'cv-shortcut'
 
   static get properties() {
     return {
       label: {type: String},
-      keys: {attribute: false},
+      keys: {
+        converter: {
+          fromAttribute: parseKeysAttribute,
+        },
+      },
       separator: {type: String},
       ariaLabel: {type: String, attribute: 'aria-label'},
     }
@@ -80,8 +92,9 @@ export class CVShortcut extends ReatomLitElement {
 
   private parseLabel(): string[] {
     if (!this.label.trim()) return []
+    const separator = this.separator || '+'
     return this.label
-      .split('+')
+      .split(separator)
       .map((part) => part.trim())
       .filter(Boolean)
   }

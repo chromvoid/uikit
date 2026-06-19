@@ -33,6 +33,28 @@ describe('cv-shortcut', () => {
     expect(element.shadowRoot!.querySelectorAll('[part="separator"]')).toHaveLength(1)
   })
 
+  it('uses separator for label parsing and rendered separators', async () => {
+    const element = await createShortcut({label: 'Shift / Enter', separator: '/'})
+
+    expect(
+      Array.from(element.shadowRoot!.querySelectorAll('cv-kbd')).map((node) => node.textContent),
+    ).toEqual(['Shift', 'Enter'])
+    expect(element.shadowRoot!.querySelector('[part="separator"]')?.textContent).toBe('/')
+  })
+
+  it('renders comma-separated keys attribute with custom separator', async () => {
+    const host = document.createElement('div')
+    host.innerHTML = '<cv-shortcut keys="Shift, Enter" separator="/"></cv-shortcut>'
+    document.body.append(host)
+    const element = host.querySelector('cv-shortcut') as CVShortcut
+    await settle(element)
+
+    expect(
+      Array.from(element.shadowRoot!.querySelectorAll('cv-kbd')).map((node) => node.textContent),
+    ).toEqual(['Shift', 'Enter'])
+    expect(element.shadowRoot!.querySelector('[part="separator"]')?.textContent).toBe('/')
+  })
+
   it('renders keys property before label parsing and supports aria label override', async () => {
     const element = await createShortcut({
       keys: ['⌘', 'Shift', 'P'],

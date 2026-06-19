@@ -18,12 +18,12 @@ When `label` and `keys` are empty, the default slot is rendered instead.
 
 ## Attributes And Properties
 
-| Name         | Type                | Default | Description                                    |
-| ------------ | ------------------- | ------- | ---------------------------------------------- |
-| `label`      | String              | `""`    | Preformatted shortcut label such as `Ctrl + K` |
-| `keys`       | `readonly string[]` | `[]`    | Property-only key list rendered as `cv-kbd`    |
-| `separator`  | String              | `"+"`   | Separator between keys                         |
-| `aria-label` | String              | `""`    | Accessible label override                      |
+| Name         | Type                          | Default | Description                                                         |
+| ------------ | ----------------------------- | ------- | ------------------------------------------------------------------- |
+| `label`      | String                        | `""`    | Preformatted shortcut label such as `Ctrl + K`                      |
+| `keys`       | String or `readonly string[]` | `[]`    | Comma-separated attribute or property key list rendered as `cv-kbd` |
+| `separator`  | String                        | `"+"`   | Separator used to split `label` and render between keys             |
+| `aria-label` | String                        | `""`    | Accessible label override                                           |
 
 ## Slots
 
@@ -45,11 +45,14 @@ None.
 
 ## Usage
 
+Use `label` for static markup with the default `+` separator. Use `keys` for explicit key lists, either as a comma-separated attribute or as a JavaScript property; a non-empty `keys` value is rendered instead of parsing `label`.
+
 ```html
 <cv-shortcut label="Ctrl + K"></cv-shortcut>
+<cv-shortcut keys="Shift,Enter" separator="/"></cv-shortcut>
 
-<cv-shortcut></cv-shortcut>
+<cv-shortcut id="programmatic-shortcut"></cv-shortcut>
 <script type="module">
-  document.querySelector('cv-shortcut').keys = ['Meta', 'Shift', 'P']
+  document.querySelector('#programmatic-shortcut').keys = ['Meta', 'Shift', 'P']
 </script>
 ```
