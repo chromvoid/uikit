@@ -40,6 +40,23 @@ describe('cv-operation-queue', () => {
     expect(element.shadowRoot!.querySelector('[part="body"] slot:not([name])')).not.toBeNull()
   })
 
+  it('hides optional regions until their slots receive content', async () => {
+    const emptyElement = await createOperationQueue()
+
+    expect(emptyElement.shadowRoot!.querySelector('[part="icon"]')?.hasAttribute('hidden')).toBe(true)
+    expect(emptyElement.shadowRoot!.querySelector('[part="actions"]')?.hasAttribute('hidden')).toBe(true)
+    expect(emptyElement.shadowRoot!.querySelector('[part="footer"]')?.hasAttribute('hidden')).toBe(true)
+
+    const filledElement = await createOperationQueue(
+      undefined,
+      '<span slot="icon">*</span><button slot="actions">Pause</button><span slot="footer">Updated now</span>',
+    )
+
+    expect(filledElement.shadowRoot!.querySelector('[part="icon"]')?.hasAttribute('hidden')).toBe(false)
+    expect(filledElement.shadowRoot!.querySelector('[part="actions"]')?.hasAttribute('hidden')).toBe(false)
+    expect(filledElement.shadowRoot!.querySelector('[part="footer"]')?.hasAttribute('hidden')).toBe(false)
+  })
+
   it('renders empty slot when empty', async () => {
     const element = await createOperationQueue({empty: true}, '<span slot="empty">No operations</span>')
 

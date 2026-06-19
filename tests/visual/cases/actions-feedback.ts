@@ -349,24 +349,66 @@ export const actionsFeedbackCases: readonly UikitVisualCase[] = [
   visualCase({
     id: 'cv-operation-queue/states',
     component: 'cv-operation-queue',
-    title: 'Operation queue tones, busy, compact, actions, and empty states',
-    states: ['summary', 'actions', 'busy', 'compact', 'success-tone', 'empty'],
+    title: 'Operation queue aggregate status, batch actions, footer progress, compact, and empty states',
+    states: ['aggregate-summary', 'actions', 'busy', 'footer-progress', 'compact', 'success-tone', 'empty'],
     html: `
-      <div class="visual-grid">
-        <cv-operation-queue label="Operations" busy tone="primary">
-          <cv-status-indicator slot="icon" tone="primary" pulse></cv-status-indicator>
-          <span slot="summary">3 operations running</span>
-          <cv-button slot="actions" size="small">Pause</cv-button>
-          <div class="visual-list-row"><span>Sync metadata</span><cv-progress value="42"></cv-progress></div>
-          <span slot="footer">Updated just now</span>
+      <div class="visual-stack visual-wide-row">
+        <cv-operation-queue label="Encrypted export queue" busy tone="info">
+          <cv-status-indicator slot="icon" tone="info" pulse decorative></cv-status-indicator>
+          <span slot="summary">Encrypted export - 2 active / 1 queued</span>
+          <cv-button slot="actions" size="small" variant="ghost">Pause</cv-button>
+
+          <cv-task-list label="Transfer tasks" density="compact">
+            <div role="listitem">
+              <div>
+                <strong>Encrypt media archive</strong><br>
+                <span>Chunk 18 of 25 - 72%</span>
+                <cv-progress value="72" value-text="72%" aria-label="Encrypt media archive progress"></cv-progress>
+              </div>
+              <cv-badge variant="primary" pulse>Running</cv-badge>
+            </div>
+            <div role="listitem">
+              <div>
+                <strong>Verify metadata manifest</strong><br>
+                <span>Checksums match before transfer</span>
+              </div>
+              <cv-badge variant="success">Done</cv-badge>
+            </div>
+            <div role="listitem">
+              <div>
+                <strong>Upload encrypted backup</strong><br>
+                <span>Waiting for network slot</span>
+              </div>
+              <cv-button size="small" variant="ghost">Cancel</cv-button>
+            </div>
+          </cv-task-list>
+
+          <div slot="footer">
+            <span>1.8 GB of 2.4 GB transferred - retry window open</span>
+            <cv-progress
+              tone="upload"
+              value="74"
+              value-text="74%"
+              aria-label="Encrypted export transfer progress"
+            ></cv-progress>
+          </div>
         </cv-operation-queue>
-        <cv-operation-queue label="Finished" tone="success" density="compact">
-          <span slot="summary">Completed operations</span>
-          <div class="visual-list-row"><span>Export package</span><cv-badge variant="success">Done</cv-badge></div>
-        </cv-operation-queue>
-        <cv-operation-queue label="Empty queue" empty>
-          <span slot="empty">No active operations.</span>
-        </cv-operation-queue>
+
+        <div class="visual-grid">
+          <cv-operation-queue label="Finished" tone="success" density="compact">
+            <cv-status-indicator slot="icon" tone="success" decorative></cv-status-indicator>
+            <span slot="summary">Export package complete</span>
+            <span slot="footer">4 operations completed</span>
+          </cv-operation-queue>
+          <cv-operation-queue label="Empty queue" empty>
+            <cv-empty-state
+              slot="empty"
+              icon="check"
+              headline="Queue is clear"
+              description="New uploads, exports, and sync jobs will appear here."
+            ></cv-empty-state>
+          </cv-operation-queue>
+        </div>
       </div>
     `,
   }),
