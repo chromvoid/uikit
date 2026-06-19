@@ -87,6 +87,42 @@ describe('cv-treegrid', () => {
         const slot = getBase(grid).querySelector('slot:not([name])')
         expect(slot).not.toBeNull()
       })
+
+      it('renders column definitions as a header row instead of visible light-DOM content', async () => {
+        const grid = await createTreegrid({ariaLabel: 'Test'})
+        const nameColumn = createColumn('name', 'Name')
+        const statusColumn = createColumn('status', 'Status')
+        grid.append(
+          nameColumn,
+          statusColumn,
+          createRow('r1', [createCell('name', 'Workspace'), createCell('status', 'Open')]),
+        )
+        await settle(grid)
+
+        const header = getBase(grid).querySelector('[part="header"]')
+        const headers = Array.from(getBase(grid).querySelectorAll('[part="columnheader"]'))
+
+        expect(header).not.toBeNull()
+        expect(headers.map((headerCell) => headerCell.textContent?.trim())).toEqual(['Name', 'Status'])
+        expect(nameColumn.slot).toBe('definitions')
+        expect(statusColumn.slot).toBe('definitions')
+        expect(getBase(grid).querySelector('slot[name="definitions"]')).not.toBeNull()
+      })
+
+      it('assigns unique fallback row values across nested rows', async () => {
+        const grid = await createTreegrid({ariaLabel: 'Test'})
+        const rootRow = createRow('', [createCell('name', 'Workspace')], {
+          children: [createRow('', [createCell('name', 'Notes')])],
+        })
+        grid.append(createColumn('name', 'Name'), rootRow)
+        await settle(grid)
+
+        const childRow = rootRow.querySelector('cv-treegrid-row') as CVTreegridRow
+
+        expect(rootRow.value).toBe('row-1')
+        expect(childRow.value).toBe('row-2')
+        expect(rootRow.value).not.toBe(childRow.value)
+      })
     })
 
     describe('cv-treegrid-row', () => {

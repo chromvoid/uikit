@@ -110,6 +110,7 @@ export class CVTreegrid extends ReatomLitElement {
   private cellListeners = new WeakMap<CVTreegridCell, {focus: EventListener; click: EventListener}>()
   private model: TreegridModel
   private _programmaticChange = false
+  private fallbackRowCounter = 0
 
   constructor() {
     super()
@@ -130,6 +131,7 @@ export class CVTreegrid extends ReatomLitElement {
     css`
       :host {
         display: block;
+        --cv-treegrid-column-count: 1;
       }
 
       [part='base'] {
@@ -143,6 +145,28 @@ export class CVTreegrid extends ReatomLitElement {
       [part='base']:focus-visible {
         outline: 2px solid var(--cv-color-primary, #65d7ff);
         outline-offset: 1px;
+      }
+
+      slot[name='definitions'] {
+        display: none;
+      }
+
+      [part='header'] {
+        display: grid;
+        grid-template-columns: repeat(var(--cv-treegrid-column-count), minmax(0, 1fr));
+        border-bottom: 1px solid var(--cv-color-border, #2a3245);
+        background: var(--cv-color-surface-2, #181f2b);
+      }
+
+      [part='columnheader'] {
+        min-inline-size: 0;
+        padding: var(--cv-space-2, 8px) var(--cv-space-3, 12px);
+        color: var(--cv-color-text-muted, #8892a6);
+        font-size: var(--cv-font-size-sm, 13px);
+        font-weight: 700;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
     `,
   ]
@@ -261,26 +285,33 @@ export class CVTreegrid extends ReatomLitElement {
   }
 
   private ensureColumnValue(column: CVTreegridColumn, index: number): string {
-    const normalized = column.value?.trim()
-    if (normalized) return normalized
+    const normalized = column.value?.trim() || column.getAttribute('value')?.trim()
+    if (normalized) {
+      column.value = normalized
+      return normalized
+    }
 
     const fallback = `column-${index + 1}`
     column.value = fallback
     return fallback
   }
 
-  private ensureRowValue(row: CVTreegridRow, index: number): string {
-    const normalized = row.value?.trim()
-    if (normalized) return normalized
+  private ensureRowValue(row: CVTreegridRow): string {
+    const normalized = row.value?.trim() || row.getAttribute('value')?.trim()
+    if (normalized) {
+      row.value = normalized
+      return normalized
+    }
 
-    const fallback = `row-${index + 1}`
+    const fallback = `row-${++this.fallbackRowCounter}`
     row.value = fallback
     return fallback
   }
 
   private resolveCellColumn(cell: CVTreegridCell, index: number): string {
-    const normalized = cell.column?.trim()
+    const normalized = cell.column?.trim() || cell.getAttribute('column')?.trim()
     if (normalized && this.columnById.has(normalized)) {
+      cell.column = normalized
       return normalized
     }
 
@@ -338,6 +369,7 @@ export class CVTreegrid extends ReatomLitElement {
     this.cellRecords = []
     this.columnById.clear()
     this.rowById.clear()
+    this.fallbackRowCounter = 0
 
     this.parseColumns()
     const rows = this.parseRows(this)
@@ -406,11 +438,12 @@ export class CVTreegrid extends ReatomLitElement {
   private parseColumns(): void {
     this.columnRecords = this.getColumnElements().map((element, index) => {
       const id = this.ensureColumnValue(element, index)
+      element.slot = 'definitions'
 
       return {
         id,
         index: this.resolveIndex(element.index),
-        disabled: element.disabled,
+        disabled: element.disabled || element.hasAttribute('disabled'),
         cellRole: element.cellRole,
         element,
       }
@@ -421,7 +454,7 @@ export class CVTreegrid extends ReatomLitElement {
 
   private parseRows(container: ParentNode, parentId: string | null = null): TreegridRow[] {
     return this.getRowElements(container).map((rowElement, rowIndex) => {
-      const id = this.ensureRowValue(rowElement, rowIndex)
+      const id = this.ensureRowValue(rowElement)
       const parsedChildren = this.parseRows(rowElement, id)
       const childIds = parsedChildren.map((child) => child.id)
 
@@ -434,7 +467,7 @@ export class CVTreegrid extends ReatomLitElement {
       const record: TreegridRowRecord = {
         id,
         index: this.resolveIndex(rowElement.index),
-        disabled: rowElement.disabled,
+        disabled: rowElement.disabled || rowElement.hasAttribute('disabled'),
         parentId,
         children: childIds,
         element: rowElement,
@@ -450,7 +483,7 @@ export class CVTreegrid extends ReatomLitElement {
         return {
           rowId: id,
           colId,
-          disabled: cell.disabled,
+          disabled: cell.disabled || cell.hasAttribute('disabled'),
           valid,
           element: cell,
         }
@@ -460,7 +493,7 @@ export class CVTreegrid extends ReatomLitElement {
       return {
         id,
         index: this.resolveIndex(rowElement.index),
-        disabled: rowElement.disabled,
+        disabled: rowElement.disabled || rowElement.hasAttribute('disabled'),
         children: parsedChildren,
       } as TreegridRow
     })
@@ -535,6 +568,7 @@ export class CVTreegrid extends ReatomLitElement {
 
     const visibleRows = this.getVisibleRowIds(this.model.state.expandedRowIds())
     const columnCount = String(this.model.state.columnCount())
+    this.style.setProperty('--cv-treegrid-column-count', columnCount)
 
     for (const record of this.rowRecords) {
       const rowProps = this.model.contracts.getRowProps(record.id)
@@ -811,8 +845,13 @@ export class CVTreegrid extends ReatomLitElement {
     this.rebuildModelFromSlot(true, true)
   }
 
+  private getColumnLabel(record: TreegridColumnRecord): string {
+    return record.element.label || record.element.getAttribute('label') || record.element.textContent?.trim() || record.id
+  }
+
   protected override render() {
     const root = this.model.contracts.getTreegridProps()
+    const hasColumns = this.columnRecords.length > 0
 
     return html`
       <div
@@ -827,6 +866,22 @@ export class CVTreegrid extends ReatomLitElement {
         @keydown=${this.handleTreegridKeyDown}
         @cv-treegrid-row-slotchange=${this.handleSlotChange}
       >
+        <slot name="definitions" @slotchange=${this.handleSlotChange}></slot>
+        ${
+          hasColumns
+            ? html`
+              <div part="header" role="row">
+                ${this.columnRecords.map(
+                  (column, index) => html`
+                    <span part="columnheader" role="columnheader" aria-colindex=${String(index + 1)}>
+                      ${this.getColumnLabel(column)}
+                    </span>
+                  `,
+                )}
+              </div>
+            `
+            : nothing
+        }
         <slot @slotchange=${this.handleSlotChange}></slot>
       </div>
     `
