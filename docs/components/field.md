@@ -7,6 +7,37 @@ linkage for one slotted control.
 
 **Headless:** None (UIKit-only component)
 
+## Usage
+
+```html
+<div class="field-demo-grid">
+  <cv-field>
+    <span slot="label">Username</span>
+    <cv-input placeholder="alex"></cv-input>
+    <span slot="description">Visible label and helper text are linked to the control.</span>
+  </cv-field>
+
+  <cv-field required invalid>
+    <span slot="label">Email</span>
+    <cv-input type="email" value="not-an-email"></cv-input>
+    <span slot="description">Required state is propagated to the slotted control.</span>
+    <span slot="error">Enter a valid email address.</span>
+  </cv-field>
+
+  <cv-field disabled>
+    <span slot="label">Disabled field</span>
+    <cv-input value="Locked value"></cv-input>
+    <span slot="description">Disabled state is propagated to the slotted control.</span>
+  </cv-field>
+
+  <cv-field orientation="horizontal">
+    <span slot="label">Horizontal</span>
+    <cv-input value="Aligned control"></cv-input>
+    <span slot="description">The label stays in the first column, while meta text follows the control.</span>
+  </cv-field>
+</div>
+```
+
 ## Anatomy
 
 ```text
