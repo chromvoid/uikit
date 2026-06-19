@@ -24,13 +24,13 @@ Segmented short-code entry for PIN, OTP, pairing, and recovery codes.
 
   <cv-field>
     <span slot="label">Pairing token</span>
-    <cv-code-input purpose="pairing" charset="alphanumeric" length="8" value="CV7A9K2Q"></cv-code-input>
+    <cv-code-input purpose="pairing" charset="alphanumeric" length="6" value="CV7A9K"></cv-code-input>
     <span slot="description">Switch to `alphanumeric` for device pairing and recovery-style codes.</span>
   </cv-field>
 
   <cv-field invalid>
     <span slot="label">Recovery check</span>
-    <cv-code-input purpose="recovery" charset="alphanumeric" length="8" value="A7K2M9Q4"></cv-code-input>
+    <cv-code-input purpose="recovery" charset="alphanumeric" length="6" value="A7K2M9"></cv-code-input>
     <span slot="description">`cv-complete` fires when all segments are filled.</span>
     <span slot="error">The recovery code no longer matches this vault.</span>
   </cv-field>
