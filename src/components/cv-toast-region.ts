@@ -48,10 +48,10 @@ export class CVToastRegion extends ReatomLitElement {
     css`
       :host {
         display: block;
-        position: fixed;
+        position: var(--cv-toast-region-position, fixed);
         z-index: var(--cv-toast-region-z-index, 9999);
         inline-size: var(--cv-toast-region-width, auto);
-        max-width: var(--cv-toast-region-max-width, 420px);
+        max-inline-size: var(--cv-toast-region-max-width, 420px);
         pointer-events: none;
       }
 

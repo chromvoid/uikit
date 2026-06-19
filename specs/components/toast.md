@@ -35,12 +35,14 @@ Container that manages a queue of toast notifications with positioning, stacking
 
 ## CSS Custom Properties
 
-| Property                      | Default                   | Description                       |
-| ----------------------------- | ------------------------- | --------------------------------- |
-| `--cv-toast-region-gap`       | `var(--cv-space-2, 8px)`  | Spacing between stacked toasts    |
-| `--cv-toast-region-inset`     | `var(--cv-space-4, 16px)` | Distance from viewport edges      |
-| `--cv-toast-region-z-index`   | `9999`                    | Stacking order above page content |
-| `--cv-toast-region-max-width` | `420px`                   | Maximum width of the toast region |
+| Property                      | Default                   | Description                         |
+| ----------------------------- | ------------------------- | ----------------------------------- |
+| `--cv-toast-region-gap`       | `var(--cv-space-2, 8px)`  | Spacing between stacked toasts      |
+| `--cv-toast-region-inset`     | `var(--cv-space-4, 16px)` | Distance from viewport edges        |
+| `--cv-toast-region-position`  | `fixed`                   | CSS positioning mode for the region |
+| `--cv-toast-region-width`     | `auto`                    | Inline size of the toast region     |
+| `--cv-toast-region-z-index`   | `9999`                    | Stacking order above page content   |
+| `--cv-toast-region-max-width` | `420px`                   | Maximum width of the toast region   |
 
 ## Visual States
 
@@ -82,16 +84,37 @@ Container that manages a queue of toast notifications with positioning, stacking
 
 ```html
 <!-- Basic usage (imperative API via controller) -->
-<cv-toast-region></cv-toast-region>
+<div class="toast-demo-surface">
+  <div class="example-row">
+    <cv-button id="toast-save" variant="primary">Show saved</cv-button>
+    <cv-button id="toast-error" variant="danger">Show error</cv-button>
+    <cv-button id="toast-clear">Clear</cv-button>
+  </div>
 
-<script>
-  const region = document.querySelector('cv-toast-region')
-  region.controller.push({message: 'File saved', level: 'success'})
-  region.controller.push({message: 'Connection lost', level: 'error', durationMs: 0})
+  <cv-toast-region id="demo-toast-region" max-visible="2"></cv-toast-region>
+</div>
+
+<script type="module">
+  const region = document.getElementById('demo-toast-region')
+  const saveButton = document.getElementById('toast-save')
+  const errorButton = document.getElementById('toast-error')
+  const clearButton = document.getElementById('toast-clear')
+
+  const showSaved = () => {
+    region.controller.push({message: 'File saved', level: 'success', durationMs: 0})
+  }
+
+  const showError = () => {
+    region.controller.push({message: 'Connection lost', level: 'error', durationMs: 0})
+  }
+
+  saveButton.addEventListener('click', showSaved)
+  errorButton.addEventListener('click', showError)
+  clearButton.addEventListener('click', () => region.controller.clear())
+
+  showSaved()
+  showError()
 </script>
-
-<!-- Positioned bottom-center -->
-<cv-toast-region position="bottom-center"></cv-toast-region>
 ```
 
 ## Child Elements
