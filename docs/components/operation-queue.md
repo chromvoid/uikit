@@ -127,6 +127,7 @@ The queue shell owns layout, accessibility shell semantics, busy/tone styling, e
 | `--cv-operation-queue-background`           | `var(--cv-color-surface-2)`        | Root section background            |
 | `--cv-operation-queue-shadow`               | `var(--cv-shadow-sm)`              | Root section shadow                |
 | `--cv-operation-queue-body-gap`             | `var(--cv-space-2, 8px)`           | Gap inside the default body region |
+| `--cv-operation-queue-row-background`       | derived from queue background      | Flattened `cv-task-list` row fill  |
 | `--cv-operation-queue-empty-min-block-size` | `96px`                             | Minimum empty-state block size     |
 | `--cv-operation-queue-busy-line-opacity`    | `0.86`                             | Busy accent line opacity           |
 

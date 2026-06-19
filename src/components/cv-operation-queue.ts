@@ -69,6 +69,11 @@ export class CVOperationQueue extends ReatomLitElement {
         --cv-operation-queue-header-gap: var(--cv-space-2, 8px);
         --cv-operation-queue-body-gap: var(--cv-space-2, 8px);
         --cv-operation-queue-footer-gap: var(--cv-space-2, 8px);
+        --cv-operation-queue-row-background: color-mix(
+          in oklab,
+          var(--cv-operation-queue-background) 88%,
+          var(--cv-operation-queue-accent-color) 4%
+        );
         --cv-operation-queue-empty-min-block-size: 96px;
         --cv-operation-queue-accent-color: var(--cv-color-border-strong, #4c5870);
         --cv-operation-queue-accent-border: var(--cv-color-border-strong, #4c5870);
@@ -244,12 +249,33 @@ export class CVOperationQueue extends ReatomLitElement {
         display: contents;
       }
 
+      slot[name='icon']::slotted(*),
+      slot[name='summary']::slotted(*),
+      slot[name='actions']::slotted(*),
+      slot[name='footer']::slotted(*) {
+        color: inherit;
+      }
+
+      slot[name='actions']::slotted(cv-button) {
+        --cv-button-text-color: var(--cv-operation-queue-summary-color, var(--cv-color-text-strong, #f5f7fc));
+      }
+
       slot:not([name])::slotted(cv-task-list) {
+        color: var(--cv-operation-queue-color, var(--cv-color-text, #e8ecf6));
         --cv-task-list-padding: 0;
         --cv-task-list-border: 0;
         --cv-task-list-background: transparent;
         --cv-task-list-shadow: 0 0 0 transparent;
         --cv-task-list-radius: 0;
+        --cv-task-list-row-color: var(--cv-operation-queue-color, var(--cv-color-text, #e8ecf6));
+        --cv-task-list-row-background: var(--cv-operation-queue-row-background);
+        --cv-task-list-row-background-hover: color-mix(
+          in oklab,
+          var(--cv-operation-queue-row-background) 82%,
+          var(--cv-operation-queue-accent-color) 10%
+        );
+        --cv-task-list-row-border-color: var(--cv-color-border-muted, #2a3245);
+        --cv-task-list-row-border-color-hover: var(--cv-operation-queue-accent-border);
       }
 
       @media (prefers-reduced-motion: reduce) {
