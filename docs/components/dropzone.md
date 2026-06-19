@@ -9,12 +9,22 @@ Controlled visual shell for drag/drop or upload drop areas.
 ## Usage
 
 ```html
-<cv-dropzone active message="Drop files here">
-  <file-list></file-list>
+<cv-dropzone active message="Release files to upload">
+  <cv-empty-state
+    variant="dropzone"
+    icon="upload"
+    headline="Secure upload area"
+    description="Drag files here or choose them from the file picker."
+  ></cv-empty-state>
 </cv-dropzone>
 
-<cv-dropzone loading loading-label="Uploading files">
-  <file-list></file-list>
+<cv-dropzone loading loading-label="Encrypting files">
+  <cv-empty-state
+    variant="dropzone"
+    icon="lock"
+    headline="Preparing upload"
+    description="The content area stays stable while upload progress is active."
+  ></cv-empty-state>
 </cv-dropzone>
 ```
 
