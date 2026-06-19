@@ -78,7 +78,7 @@ None. Landmark has no user-driven interactions.
 </cv-landmark>
 
 <cv-landmark type="search" label="Vault search">
-  <cv-input type="search" placeholder="Search entries" aria-label="Search entries"></cv-input>
+  <cv-callout variant="neutral">Search surface for vault entries.</cv-callout>
 </cv-landmark>
 
 <cv-landmark type="complementary" label="Session status">
@@ -86,7 +86,7 @@ None. Landmark has no user-driven interactions.
 </cv-landmark>
 
 <cv-landmark type="region" label-id="landmark-demo-heading">
-  <h2 id="landmark-demo-heading">Latest vault activity</h2>
+  <cv-badge id="landmark-demo-heading" variant="primary">Latest vault activity</cv-badge>
   <cv-callout variant="success">2 entries changed in the active vault.</cv-callout>
 </cv-landmark>
 ```
