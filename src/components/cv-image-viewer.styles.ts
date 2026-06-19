@@ -8,7 +8,7 @@ export const cvImageViewerStyles = css`
     --cv-image-viewer-panel-strong: var(--cv-color-surface-glass-strong);
     --cv-image-viewer-border: var(--cv-color-border-glass);
     --cv-image-viewer-text: var(--cv-color-text-strongest);
-    --cv-image-viewer-muted: var(--cv-alpha-white-70);
+    --cv-image-viewer-muted: var(--cv-color-text-muted);
   }
 
   cv-dialog {

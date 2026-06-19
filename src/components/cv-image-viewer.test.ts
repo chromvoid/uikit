@@ -1,6 +1,7 @@
 import {afterEach, describe, expect, it, vi} from 'vitest'
 
 import {CVImageViewer, type CVImageViewerItem} from './cv-image-viewer'
+import {cvImageViewerStyles} from './cv-image-viewer.styles'
 
 CVImageViewer.define()
 
@@ -68,6 +69,12 @@ afterEach(() => {
 })
 
 describe('cv-image-viewer', () => {
+  it('derives muted chrome text from the active text token', () => {
+    expect(cvImageViewerStyles.cssText).toContain(
+      '--cv-image-viewer-muted: var(--cv-color-text-muted);',
+    )
+  })
+
   it('renders the modal shell, header, fallback image viewport, and controls', async () => {
     const viewer = await mountViewer({currentIndex: 1})
     const base = getBase(viewer)
