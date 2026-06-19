@@ -19,11 +19,21 @@ const createDropzone = async (attrs?: Partial<CVDropzone>, children = '') => {
   return element
 }
 
+const getStylesText = () =>
+  (CVDropzone.styles as Array<{cssText?: string}>).map((style) => style.cssText ?? '').join('\n')
+
 afterEach(() => {
   document.body.innerHTML = ''
 })
 
 describe('cv-dropzone', () => {
+  it('makes the active overlay visually own the state', () => {
+    const stylesText = getStylesText()
+
+    expect(stylesText).toMatch(/\[part='overlay'\]\s*{[\s\S]*z-index:\s*1;/)
+    expect(stylesText).toMatch(/:host\(\[active\]\) \[part='content'\]\s*{[\s\S]*opacity:\s*0;/)
+  })
+
   it('renders controlled content and overlay shell', async () => {
     const element = await createDropzone({active: true, message: 'Drop files'}, '<div>Files</div>')
     const base = element.shadowRoot!.querySelector('[part="base"]') as HTMLElement

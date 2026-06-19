@@ -51,6 +51,7 @@ export class CVDropzone extends ReatomLitElement {
       [part='content'] {
         min-inline-size: 0;
         min-block-size: 0;
+        transition: opacity var(--cv-duration-fast, 120ms) var(--cv-easing-standard, ease);
       }
 
       [part='overlay'],
@@ -73,6 +74,7 @@ export class CVDropzone extends ReatomLitElement {
         color: var(--cv-dropzone-overlay-color, var(--cv-color-primary, #65d7ff));
         font-weight: 600;
         opacity: 0;
+        z-index: 1;
         transition:
           opacity var(--cv-duration-fast, 120ms) var(--cv-easing-standard, ease),
           transform var(--cv-duration-fast, 120ms) var(--cv-easing-standard, ease);
@@ -80,6 +82,10 @@ export class CVDropzone extends ReatomLitElement {
 
       :host([active]) [part='overlay'] {
         opacity: 1;
+      }
+
+      :host([active]) [part='content'] {
+        opacity: 0;
       }
 
       [part='loading-overlay'] {
