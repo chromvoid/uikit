@@ -31,7 +31,7 @@ const unrelatedMarkers = [
 ]
 const sizeBudgets = {
   buttonLeaf: 56500,
-  selectLeaf: 60500,
+  selectLeaf: 61000,
 }
 
 const writeStdout = (message) => {

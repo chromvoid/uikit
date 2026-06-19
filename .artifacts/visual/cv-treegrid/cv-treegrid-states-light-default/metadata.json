@@ -1,0 +1,31 @@
+{
+  "suite": "cv-treegrid",
+  "name": "cv-treegrid/states-light-default",
+  "viewport": "default",
+  "clipSelector": "#uikit-visual-stage",
+  "fullPage": false,
+  "threshold": 0.12,
+  "maxDiffRatio": 0.003,
+  "auditMode": true,
+  "updateMode": false,
+  "caseId": "cv-treegrid/states",
+  "component": "cv-treegrid",
+  "diagnostics": {
+    "emptyStage": false,
+    "horizontalOverflow": [],
+    "clippedText": [],
+    "outsideStage": []
+  },
+  "states": [
+    "columns",
+    "expanded-branch",
+    "selected-row",
+    "active-cell",
+    "disabled-row",
+    "children"
+  ],
+  "theme": "light",
+  "title": "Treegrid columns, expanded branch, selected row, active cell, disabled row, and child rows",
+  "status": "missing-baseline",
+  "baselinePath": "/srv/projects/chromvoid/packages/uikit/tests/visual/__visual-baselines__/cv-treegrid/cv-treegrid-states-light-default.png"
+}

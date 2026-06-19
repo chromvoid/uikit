@@ -1,0 +1,34 @@
+{
+  "suite": "cv-badge",
+  "name": "cv-badge/states-dark-default",
+  "viewport": "default",
+  "clipSelector": "#uikit-visual-stage",
+  "fullPage": false,
+  "threshold": 0.12,
+  "maxDiffRatio": 0.003,
+  "auditMode": true,
+  "updateMode": false,
+  "caseId": "cv-badge/states",
+  "component": "cv-badge",
+  "diagnostics": {
+    "emptyStage": false,
+    "horizontalOverflow": [],
+    "clippedText": [],
+    "outsideStage": []
+  },
+  "states": [
+    "neutral",
+    "primary",
+    "success",
+    "warning",
+    "danger",
+    "small",
+    "large",
+    "pill",
+    "dot"
+  ],
+  "theme": "dark",
+  "title": "Badge variants, sizes, pill, and dot states",
+  "status": "missing-baseline",
+  "baselinePath": "/srv/projects/chromvoid/packages/uikit/tests/visual/__visual-baselines__/cv-badge/cv-badge-states-dark-default.png"
+}

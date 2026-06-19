@@ -1,0 +1,29 @@
+{
+  "suite": "cv-spinner",
+  "name": "cv-spinner/states-light-default",
+  "viewport": "default",
+  "clipSelector": "#uikit-visual-stage",
+  "fullPage": false,
+  "threshold": 0.12,
+  "maxDiffRatio": 0.003,
+  "auditMode": true,
+  "updateMode": false,
+  "caseId": "cv-spinner/states",
+  "component": "cv-spinner",
+  "diagnostics": {
+    "emptyStage": false,
+    "horizontalOverflow": [],
+    "clippedText": [],
+    "outsideStage": []
+  },
+  "states": [
+    "default",
+    "small-context",
+    "large-context",
+    "labelled"
+  ],
+  "theme": "light",
+  "title": "Spinner sizes and labelled state",
+  "status": "missing-baseline",
+  "baselinePath": "/srv/projects/chromvoid/packages/uikit/tests/visual/__visual-baselines__/cv-spinner/cv-spinner-states-light-default.png"
+}

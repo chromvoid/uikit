@@ -1,0 +1,31 @@
+{
+  "suite": "cv-card",
+  "name": "cv-card/states-light-default",
+  "viewport": "default",
+  "clipSelector": "#uikit-visual-stage",
+  "fullPage": false,
+  "threshold": 0.12,
+  "maxDiffRatio": 0.003,
+  "auditMode": true,
+  "updateMode": false,
+  "caseId": "cv-card/states",
+  "component": "cv-card",
+  "diagnostics": {
+    "emptyStage": false,
+    "horizontalOverflow": [],
+    "clippedText": [],
+    "outsideStage": []
+  },
+  "states": [
+    "elevated",
+    "outlined",
+    "filled",
+    "expanded",
+    "disabled",
+    "long-content"
+  ],
+  "theme": "light",
+  "title": "Card variants, expandable content, and disabled state",
+  "status": "missing-baseline",
+  "baselinePath": "/srv/projects/chromvoid/packages/uikit/tests/visual/__visual-baselines__/cv-card/cv-card-states-light-default.png"
+}

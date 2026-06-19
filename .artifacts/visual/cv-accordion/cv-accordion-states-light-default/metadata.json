@@ -1,0 +1,30 @@
+{
+  "suite": "cv-accordion",
+  "name": "cv-accordion/states-light-default",
+  "viewport": "default",
+  "clipSelector": "#uikit-visual-stage",
+  "fullPage": false,
+  "threshold": 0.12,
+  "maxDiffRatio": 0.003,
+  "auditMode": true,
+  "updateMode": false,
+  "caseId": "cv-accordion/states",
+  "component": "cv-accordion",
+  "diagnostics": {
+    "emptyStage": false,
+    "horizontalOverflow": [],
+    "clippedText": [],
+    "outsideStage": []
+  },
+  "states": [
+    "single",
+    "multiple",
+    "expanded",
+    "disabled-item",
+    "long-content"
+  ],
+  "theme": "light",
+  "title": "Accordion single, multiple, expanded, disabled, and long content states",
+  "status": "missing-baseline",
+  "baselinePath": "/srv/projects/chromvoid/packages/uikit/tests/visual/__visual-baselines__/cv-accordion/cv-accordion-states-light-default.png"
+}

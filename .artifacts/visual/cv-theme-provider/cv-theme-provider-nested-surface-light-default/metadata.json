@@ -1,0 +1,28 @@
+{
+  "suite": "cv-theme-provider",
+  "name": "cv-theme-provider/nested-surface-light-default",
+  "viewport": "default",
+  "clipSelector": "#uikit-visual-stage",
+  "fullPage": false,
+  "threshold": 0.12,
+  "maxDiffRatio": 0.003,
+  "auditMode": true,
+  "updateMode": false,
+  "caseId": "cv-theme-provider/nested-surface",
+  "component": "cv-theme-provider",
+  "diagnostics": {
+    "emptyStage": false,
+    "horizontalOverflow": [],
+    "clippedText": [],
+    "outsideStage": []
+  },
+  "states": [
+    "dark-provider",
+    "surface",
+    "nested-controls"
+  ],
+  "theme": "light",
+  "title": "Nested theme provider with themed controls",
+  "status": "missing-baseline",
+  "baselinePath": "/srv/projects/chromvoid/packages/uikit/tests/visual/__visual-baselines__/cv-theme-provider/cv-theme-provider-nested-surface-light-default.png"
+}

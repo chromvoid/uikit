@@ -1,0 +1,31 @@
+{
+  "suite": "cv-context-menu",
+  "name": "cv-context-menu/states-dark-default",
+  "viewport": "default",
+  "clipSelector": null,
+  "fullPage": true,
+  "threshold": 0.12,
+  "maxDiffRatio": 0.003,
+  "auditMode": true,
+  "updateMode": false,
+  "caseId": "cv-context-menu/states",
+  "component": "cv-context-menu",
+  "diagnostics": {
+    "emptyStage": false,
+    "horizontalOverflow": [],
+    "clippedText": [],
+    "outsideStage": []
+  },
+  "states": [
+    "open",
+    "target",
+    "anchor-position",
+    "active",
+    "selected",
+    "disabled"
+  ],
+  "theme": "dark",
+  "title": "Context menu open, target, anchor position, active, selected, and disabled states",
+  "status": "missing-baseline",
+  "baselinePath": "/srv/projects/chromvoid/packages/uikit/tests/visual/__visual-baselines__/cv-context-menu/cv-context-menu-states-dark-default.png"
+}

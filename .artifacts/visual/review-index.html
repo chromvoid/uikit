@@ -1,0 +1,3829 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>UIKit Visual Review</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        font: 14px/1.45 system-ui, sans-serif;
+        background: Canvas;
+        color: CanvasText;
+      }
+      body {
+        margin: 0;
+        padding: 24px;
+      }
+      h1 {
+        margin: 0 0 20px;
+        font-size: 24px;
+      }
+      .entry {
+        border: 1px solid GrayText;
+        border-radius: 8px;
+        margin: 0 0 16px;
+        padding: 14px;
+        background: Canvas;
+      }
+      .entry--error {
+        border-color: Mark;
+      }
+      .entry--warning {
+        border-color: Highlight;
+      }
+      header,
+      nav {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+      header {
+        justify-content: space-between;
+      }
+      mark {
+        border-radius: 999px;
+        padding: 2px 8px;
+        background: ButtonFace;
+        color: inherit;
+      }
+      a {
+        color: LinkText;
+      }
+      .shots {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 12px;
+        margin-top: 12px;
+      }
+      img {
+        max-width: 100%;
+        border: 1px solid GrayText;
+        background: Canvas;
+      }
+      pre {
+        overflow: auto;
+        padding: 12px;
+        border-radius: 6px;
+        background: Canvas;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>UIKit Visual Review</h1>
+    
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-accordion</strong>
+            <span>cv-accordion/states-dark-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-accordion/cv-accordion-states-dark-default/actual.png">actual</a>
+            
+            <a href="cv-accordion/cv-accordion-states-dark-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-accordion/cv-accordion-states-dark-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-accordion</strong>
+            <span>cv-accordion/states-light-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-accordion/cv-accordion-states-light-default/actual.png">actual</a>
+            
+            <a href="cv-accordion/cv-accordion-states-light-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-accordion/cv-accordion-states-light-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-alert</strong>
+            <span>cv-alert/visible-dark-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-alert/cv-alert-visible-dark-default/actual.png">actual</a>
+            
+            <a href="cv-alert/cv-alert-visible-dark-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-alert/cv-alert-visible-dark-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-alert</strong>
+            <span>cv-alert/visible-light-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-alert/cv-alert-visible-light-default/actual.png">actual</a>
+            
+            <a href="cv-alert/cv-alert-visible-light-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-alert/cv-alert-visible-light-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-badge</strong>
+            <span>cv-badge/states-dark-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-badge/cv-badge-states-dark-default/actual.png">actual</a>
+            
+            <a href="cv-badge/cv-badge-states-dark-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-badge/cv-badge-states-dark-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-badge</strong>
+            <span>cv-badge/states-light-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-badge/cv-badge-states-light-default/actual.png">actual</a>
+            
+            <a href="cv-badge/cv-badge-states-light-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-badge/cv-badge-states-light-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-bottom-sheet</strong>
+            <span>cv-bottom-sheet/open-dark-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-bottom-sheet/cv-bottom-sheet-open-dark-default/actual.png">actual</a>
+            
+            <a href="cv-bottom-sheet/cv-bottom-sheet-open-dark-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-bottom-sheet/cv-bottom-sheet-open-dark-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-bottom-sheet</strong>
+            <span>cv-bottom-sheet/open-light-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-bottom-sheet/cv-bottom-sheet-open-light-default/actual.png">actual</a>
+            
+            <a href="cv-bottom-sheet/cv-bottom-sheet-open-light-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-bottom-sheet/cv-bottom-sheet-open-light-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-breadcrumb</strong>
+            <span>cv-breadcrumb/states-dark-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-breadcrumb/cv-breadcrumb-states-dark-default/actual.png">actual</a>
+            
+            <a href="cv-breadcrumb/cv-breadcrumb-states-dark-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-breadcrumb/cv-breadcrumb-states-dark-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-breadcrumb</strong>
+            <span>cv-breadcrumb/states-light-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-breadcrumb/cv-breadcrumb-states-light-default/actual.png">actual</a>
+            
+            <a href="cv-breadcrumb/cv-breadcrumb-states-light-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-breadcrumb/cv-breadcrumb-states-light-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-button-group</strong>
+            <span>cv-button-group/states-dark-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-button-group/cv-button-group-states-dark-default/actual.png">actual</a>
+            
+            <a href="cv-button-group/cv-button-group-states-dark-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-button-group/cv-button-group-states-dark-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-button-group</strong>
+            <span>cv-button-group/states-light-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-button-group/cv-button-group-states-light-default/actual.png">actual</a>
+            
+            <a href="cv-button-group/cv-button-group-states-light-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-button-group/cv-button-group-states-light-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-button</strong>
+            <span>cv-button/states-dark-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-button/cv-button-states-dark-default/actual.png">actual</a>
+            
+            <a href="cv-button/cv-button-states-dark-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-button/cv-button-states-dark-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [
+    {
+      &quot;selector&quot;: &quot;cv-button.visual-long-text&quot;,
+      &quot;scrollWidth&quot;: 337,
+      &quot;clientWidth&quot;: 260
+    }
+  ],
+  &quot;clippedText&quot;: [
+    {
+      &quot;selector&quot;: &quot;cv-button.visual-long-text&quot;,
+      &quot;text&quot;: &quot;A long label that must not overflow the button shell&quot;,
+      &quot;scrollWidth&quot;: 337,
+      &quot;clientWidth&quot;: 260,
+      &quot;scrollHeight&quot;: 37,
+      &quot;clientHeight&quot;: 37
+    }
+  ],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-button</strong>
+            <span>cv-button/states-light-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-button/cv-button-states-light-default/actual.png">actual</a>
+            
+            <a href="cv-button/cv-button-states-light-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-button/cv-button-states-light-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [
+    {
+      &quot;selector&quot;: &quot;cv-button.visual-long-text&quot;,
+      &quot;scrollWidth&quot;: 337,
+      &quot;clientWidth&quot;: 260
+    }
+  ],
+  &quot;clippedText&quot;: [
+    {
+      &quot;selector&quot;: &quot;cv-button.visual-long-text&quot;,
+      &quot;text&quot;: &quot;A long label that must not overflow the button shell&quot;,
+      &quot;scrollWidth&quot;: 337,
+      &quot;clientWidth&quot;: 260,
+      &quot;scrollHeight&quot;: 37,
+      &quot;clientHeight&quot;: 37
+    }
+  ],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-callout</strong>
+            <span>cv-callout/states-dark-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-callout/cv-callout-states-dark-default/actual.png">actual</a>
+            
+            <a href="cv-callout/cv-callout-states-dark-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-callout/cv-callout-states-dark-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-callout</strong>
+            <span>cv-callout/states-light-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-callout/cv-callout-states-light-default/actual.png">actual</a>
+            
+            <a href="cv-callout/cv-callout-states-light-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-callout/cv-callout-states-light-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-card</strong>
+            <span>cv-card/states-dark-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-card/cv-card-states-dark-default/actual.png">actual</a>
+            
+            <a href="cv-card/cv-card-states-dark-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-card/cv-card-states-dark-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-card</strong>
+            <span>cv-card/states-light-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-card/cv-card-states-light-default/actual.png">actual</a>
+            
+            <a href="cv-card/cv-card-states-light-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-card/cv-card-states-light-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-carousel</strong>
+            <span>cv-carousel/states-dark-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-carousel/cv-carousel-states-dark-default/actual.png">actual</a>
+            
+            <a href="cv-carousel/cv-carousel-states-dark-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-carousel/cv-carousel-states-dark-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-carousel</strong>
+            <span>cv-carousel/states-light-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-carousel/cv-carousel-states-light-default/actual.png">actual</a>
+            
+            <a href="cv-carousel/cv-carousel-states-light-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-carousel/cv-carousel-states-light-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-checkbox</strong>
+            <span>cv-checkbox/states-dark-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-checkbox/cv-checkbox-states-dark-default/actual.png">actual</a>
+            
+            <a href="cv-checkbox/cv-checkbox-states-dark-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-checkbox/cv-checkbox-states-dark-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-checkbox</strong>
+            <span>cv-checkbox/states-light-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-checkbox/cv-checkbox-states-light-default/actual.png">actual</a>
+            
+            <a href="cv-checkbox/cv-checkbox-states-light-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-checkbox/cv-checkbox-states-light-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-chip-group</strong>
+            <span>cv-chip-group/states-dark-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-chip-group/cv-chip-group-states-dark-default/actual.png">actual</a>
+            
+            <a href="cv-chip-group/cv-chip-group-states-dark-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-chip-group/cv-chip-group-states-dark-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-chip-group</strong>
+            <span>cv-chip-group/states-light-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-chip-group/cv-chip-group-states-light-default/actual.png">actual</a>
+            
+            <a href="cv-chip-group/cv-chip-group-states-light-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-chip-group/cv-chip-group-states-light-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-chip</strong>
+            <span>cv-chip/states-dark-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-chip/cv-chip-states-dark-default/actual.png">actual</a>
+            
+            <a href="cv-chip/cv-chip-states-dark-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-chip/cv-chip-states-dark-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-chip</strong>
+            <span>cv-chip/states-light-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-chip/cv-chip-states-light-default/actual.png">actual</a>
+            
+            <a href="cv-chip/cv-chip-states-light-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-chip/cv-chip-states-light-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-close-button</strong>
+            <span>cv-close-button/states-dark-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-close-button/cv-close-button-states-dark-default/actual.png">actual</a>
+            
+            <a href="cv-close-button/cv-close-button-states-dark-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-close-button/cv-close-button-states-dark-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-close-button</strong>
+            <span>cv-close-button/states-light-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-close-button/cv-close-button-states-light-default/actual.png">actual</a>
+            
+            <a href="cv-close-button/cv-close-button-states-light-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-close-button/cv-close-button-states-light-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-code-input</strong>
+            <span>cv-code-input/states-dark-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-code-input/cv-code-input-states-dark-default/actual.png">actual</a>
+            
+            <a href="cv-code-input/cv-code-input-states-dark-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-code-input/cv-code-input-states-dark-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-code-input</strong>
+            <span>cv-code-input/states-light-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-code-input/cv-code-input-states-light-default/actual.png">actual</a>
+            
+            <a href="cv-code-input/cv-code-input-states-light-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-code-input/cv-code-input-states-light-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-combobox</strong>
+            <span>cv-combobox/states-dark-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-combobox/cv-combobox-states-dark-default/actual.png">actual</a>
+            
+            <a href="cv-combobox/cv-combobox-states-dark-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-combobox/cv-combobox-states-dark-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-combobox</strong>
+            <span>cv-combobox/states-light-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-combobox/cv-combobox-states-light-default/actual.png">actual</a>
+            
+            <a href="cv-combobox/cv-combobox-states-light-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-combobox/cv-combobox-states-light-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-context-menu</strong>
+            <span>cv-context-menu/states-dark-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-context-menu/cv-context-menu-states-dark-default/actual.png">actual</a>
+            
+            <a href="cv-context-menu/cv-context-menu-states-dark-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-context-menu/cv-context-menu-states-dark-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-context-menu</strong>
+            <span>cv-context-menu/states-light-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-context-menu/cv-context-menu-states-light-default/actual.png">actual</a>
+            
+            <a href="cv-context-menu/cv-context-menu-states-light-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-context-menu/cv-context-menu-states-light-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-copy-button</strong>
+            <span>cv-copy-button/states-dark-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-copy-button/cv-copy-button-states-dark-default/actual.png">actual</a>
+            
+            <a href="cv-copy-button/cv-copy-button-states-dark-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-copy-button/cv-copy-button-states-dark-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-copy-button</strong>
+            <span>cv-copy-button/states-light-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-copy-button/cv-copy-button-states-light-default/actual.png">actual</a>
+            
+            <a href="cv-copy-button/cv-copy-button-states-light-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-copy-button/cv-copy-button-states-light-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-date-picker</strong>
+            <span>cv-date-picker/states-dark-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-date-picker/cv-date-picker-states-dark-default/actual.png">actual</a>
+            
+            <a href="cv-date-picker/cv-date-picker-states-dark-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-date-picker/cv-date-picker-states-dark-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-date-picker</strong>
+            <span>cv-date-picker/states-light-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-date-picker/cv-date-picker-states-light-default/actual.png">actual</a>
+            
+            <a href="cv-date-picker/cv-date-picker-states-light-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-date-picker/cv-date-picker-states-light-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-date-time-picker</strong>
+            <span>cv-date-time-picker/states-dark-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-date-time-picker/cv-date-time-picker-states-dark-default/actual.png">actual</a>
+            
+            <a href="cv-date-time-picker/cv-date-time-picker-states-dark-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-date-time-picker/cv-date-time-picker-states-dark-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-date-time-picker</strong>
+            <span>cv-date-time-picker/states-light-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-date-time-picker/cv-date-time-picker-states-light-default/actual.png">actual</a>
+            
+            <a href="cv-date-time-picker/cv-date-time-picker-states-light-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-date-time-picker/cv-date-time-picker-states-light-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-dialog</strong>
+            <span>cv-dialog/open-dark-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-dialog/cv-dialog-open-dark-default/actual.png">actual</a>
+            
+            <a href="cv-dialog/cv-dialog-open-dark-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-dialog/cv-dialog-open-dark-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-dialog</strong>
+            <span>cv-dialog/open-light-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-dialog/cv-dialog-open-light-default/actual.png">actual</a>
+            
+            <a href="cv-dialog/cv-dialog-open-light-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-dialog/cv-dialog-open-light-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-disclosure</strong>
+            <span>cv-disclosure/states-dark-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-disclosure/cv-disclosure-states-dark-default/actual.png">actual</a>
+            
+            <a href="cv-disclosure/cv-disclosure-states-dark-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-disclosure/cv-disclosure-states-dark-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-disclosure</strong>
+            <span>cv-disclosure/states-light-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-disclosure/cv-disclosure-states-light-default/actual.png">actual</a>
+            
+            <a href="cv-disclosure/cv-disclosure-states-light-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-disclosure/cv-disclosure-states-light-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-drawer</strong>
+            <span>cv-drawer/open-dark-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-drawer/cv-drawer-open-dark-default/actual.png">actual</a>
+            
+            <a href="cv-drawer/cv-drawer-open-dark-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-drawer/cv-drawer-open-dark-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-drawer</strong>
+            <span>cv-drawer/open-light-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-drawer/cv-drawer-open-light-default/actual.png">actual</a>
+            
+            <a href="cv-drawer/cv-drawer-open-light-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-drawer/cv-drawer-open-light-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-dropzone</strong>
+            <span>cv-dropzone/states-dark-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-dropzone/cv-dropzone-states-dark-default/actual.png">actual</a>
+            
+            <a href="cv-dropzone/cv-dropzone-states-dark-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-dropzone/cv-dropzone-states-dark-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-dropzone</strong>
+            <span>cv-dropzone/states-light-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-dropzone/cv-dropzone-states-light-default/actual.png">actual</a>
+            
+            <a href="cv-dropzone/cv-dropzone-states-light-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-dropzone/cv-dropzone-states-light-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-empty-state</strong>
+            <span>cv-empty-state/states-dark-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-empty-state/cv-empty-state-states-dark-default/actual.png">actual</a>
+            
+            <a href="cv-empty-state/cv-empty-state-states-dark-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-empty-state/cv-empty-state-states-dark-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-empty-state</strong>
+            <span>cv-empty-state/states-light-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-empty-state/cv-empty-state-states-light-default/actual.png">actual</a>
+            
+            <a href="cv-empty-state/cv-empty-state-states-light-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-empty-state/cv-empty-state-states-light-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-feed</strong>
+            <span>cv-feed/states-dark-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-feed/cv-feed-states-dark-default/actual.png">actual</a>
+            
+            <a href="cv-feed/cv-feed-states-dark-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-feed/cv-feed-states-dark-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-feed</strong>
+            <span>cv-feed/states-light-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-feed/cv-feed-states-light-default/actual.png">actual</a>
+            
+            <a href="cv-feed/cv-feed-states-light-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-feed/cv-feed-states-light-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-field</strong>
+            <span>cv-field/states-dark-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-field/cv-field-states-dark-default/actual.png">actual</a>
+            
+            <a href="cv-field/cv-field-states-dark-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-field/cv-field-states-dark-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [
+    {
+      &quot;selector&quot;: &quot;cv-field&quot;,
+      &quot;scrollWidth&quot;: 201,
+      &quot;clientWidth&quot;: 185
+    }
+  ],
+  &quot;clippedText&quot;: [
+    {
+      &quot;selector&quot;: &quot;cv-field&quot;,
+      &quot;text&quot;: &quot;Disabled field\n          \n          Horizontal field layout.&quot;,
+      &quot;scrollWidth&quot;: 201,
+      &quot;clientWidth&quot;: 185,
+      &quot;scrollHeight&quot;: 89,
+      &quot;clientHeight&quot;: 89
+    }
+  ],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-field</strong>
+            <span>cv-field/states-light-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-field/cv-field-states-light-default/actual.png">actual</a>
+            
+            <a href="cv-field/cv-field-states-light-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-field/cv-field-states-light-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [
+    {
+      &quot;selector&quot;: &quot;cv-field&quot;,
+      &quot;scrollWidth&quot;: 201,
+      &quot;clientWidth&quot;: 185
+    }
+  ],
+  &quot;clippedText&quot;: [
+    {
+      &quot;selector&quot;: &quot;cv-field&quot;,
+      &quot;text&quot;: &quot;Disabled field\n          \n          Horizontal field layout.&quot;,
+      &quot;scrollWidth&quot;: 201,
+      &quot;clientWidth&quot;: 185,
+      &quot;scrollHeight&quot;: 89,
+      &quot;clientHeight&quot;: 89
+    }
+  ],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-fieldset</strong>
+            <span>cv-fieldset/states-dark-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-fieldset/cv-fieldset-states-dark-default/actual.png">actual</a>
+            
+            <a href="cv-fieldset/cv-fieldset-states-dark-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-fieldset/cv-fieldset-states-dark-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-fieldset</strong>
+            <span>cv-fieldset/states-light-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-fieldset/cv-fieldset-states-light-default/actual.png">actual</a>
+            
+            <a href="cv-fieldset/cv-fieldset-states-light-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-fieldset/cv-fieldset-states-light-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-grid</strong>
+            <span>cv-grid/states-dark-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-grid/cv-grid-states-dark-default/actual.png">actual</a>
+            
+            <a href="cv-grid/cv-grid-states-dark-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-grid/cv-grid-states-dark-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-grid</strong>
+            <span>cv-grid/states-light-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-grid/cv-grid-states-light-default/actual.png">actual</a>
+            
+            <a href="cv-grid/cv-grid-states-light-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-grid/cv-grid-states-light-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-guidance-anchor</strong>
+            <span>cv-guidance-anchor/content-dark-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-guidance-anchor/cv-guidance-anchor-content-dark-default/actual.png">actual</a>
+            
+            <a href="cv-guidance-anchor/cv-guidance-anchor-content-dark-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-guidance-anchor/cv-guidance-anchor-content-dark-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-guidance-anchor</strong>
+            <span>cv-guidance-anchor/content-light-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-guidance-anchor/cv-guidance-anchor-content-light-default/actual.png">actual</a>
+            
+            <a href="cv-guidance-anchor/cv-guidance-anchor-content-light-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-guidance-anchor/cv-guidance-anchor-content-light-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-guidance-panel</strong>
+            <span>cv-guidance-panel/states-dark-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-guidance-panel/cv-guidance-panel-states-dark-default/actual.png">actual</a>
+            
+            <a href="cv-guidance-panel/cv-guidance-panel-states-dark-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-guidance-panel/cv-guidance-panel-states-dark-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-guidance-panel</strong>
+            <span>cv-guidance-panel/states-light-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-guidance-panel/cv-guidance-panel-states-light-default/actual.png">actual</a>
+            
+            <a href="cv-guidance-panel/cv-guidance-panel-states-light-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-guidance-panel/cv-guidance-panel-states-light-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-icon-button</strong>
+            <span>cv-icon-button/states-dark-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-icon-button/cv-icon-button-states-dark-default/actual.png">actual</a>
+            
+            <a href="cv-icon-button/cv-icon-button-states-dark-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-icon-button/cv-icon-button-states-dark-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-icon-button</strong>
+            <span>cv-icon-button/states-light-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-icon-button/cv-icon-button-states-light-default/actual.png">actual</a>
+            
+            <a href="cv-icon-button/cv-icon-button-states-light-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-icon-button/cv-icon-button-states-light-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-image-viewer</strong>
+            <span>cv-image-viewer/open-dark-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-image-viewer/cv-image-viewer-open-dark-default/actual.png">actual</a>
+            
+            <a href="cv-image-viewer/cv-image-viewer-open-dark-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-image-viewer/cv-image-viewer-open-dark-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-image-viewer</strong>
+            <span>cv-image-viewer/open-light-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-image-viewer/cv-image-viewer-open-light-default/actual.png">actual</a>
+            
+            <a href="cv-image-viewer/cv-image-viewer-open-light-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-image-viewer/cv-image-viewer-open-light-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-input-group</strong>
+            <span>cv-input-group/states-dark-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-input-group/cv-input-group-states-dark-default/actual.png">actual</a>
+            
+            <a href="cv-input-group/cv-input-group-states-dark-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-input-group/cv-input-group-states-dark-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-input-group</strong>
+            <span>cv-input-group/states-light-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-input-group/cv-input-group-states-light-default/actual.png">actual</a>
+            
+            <a href="cv-input-group/cv-input-group-states-light-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-input-group/cv-input-group-states-light-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-input</strong>
+            <span>cv-input/states-dark-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-input/cv-input-states-dark-default/actual.png">actual</a>
+            
+            <a href="cv-input/cv-input-states-dark-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-input/cv-input-states-dark-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-input</strong>
+            <span>cv-input/states-light-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-input/cv-input-states-light-default/actual.png">actual</a>
+            
+            <a href="cv-input/cv-input-states-light-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-input/cv-input-states-light-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-kbd</strong>
+            <span>cv-kbd/states-dark-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-kbd/cv-kbd-states-dark-default/actual.png">actual</a>
+            
+            <a href="cv-kbd/cv-kbd-states-dark-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-kbd/cv-kbd-states-dark-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-kbd</strong>
+            <span>cv-kbd/states-light-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-kbd/cv-kbd-states-light-default/actual.png">actual</a>
+            
+            <a href="cv-kbd/cv-kbd-states-light-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-kbd/cv-kbd-states-light-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-landmark</strong>
+            <span>cv-landmark/regions-dark-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-landmark/cv-landmark-regions-dark-default/actual.png">actual</a>
+            
+            <a href="cv-landmark/cv-landmark-regions-dark-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-landmark/cv-landmark-regions-dark-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-landmark</strong>
+            <span>cv-landmark/regions-light-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-landmark/cv-landmark-regions-light-default/actual.png">actual</a>
+            
+            <a href="cv-landmark/cv-landmark-regions-light-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-landmark/cv-landmark-regions-light-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-link</strong>
+            <span>cv-link/states-dark-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-link/cv-link-states-dark-default/actual.png">actual</a>
+            
+            <a href="cv-link/cv-link-states-dark-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-link/cv-link-states-dark-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-link</strong>
+            <span>cv-link/states-light-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-link/cv-link-states-light-default/actual.png">actual</a>
+            
+            <a href="cv-link/cv-link-states-light-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-link/cv-link-states-light-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-listbox</strong>
+            <span>cv-listbox/states-dark-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-listbox/cv-listbox-states-dark-default/actual.png">actual</a>
+            
+            <a href="cv-listbox/cv-listbox-states-dark-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-listbox/cv-listbox-states-dark-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-listbox</strong>
+            <span>cv-listbox/states-light-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-listbox/cv-listbox-states-light-default/actual.png">actual</a>
+            
+            <a href="cv-listbox/cv-listbox-states-light-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-listbox/cv-listbox-states-light-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-menu</strong>
+            <span>cv-menu/states-dark-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-menu/cv-menu-states-dark-default/actual.png">actual</a>
+            
+            <a href="cv-menu/cv-menu-states-dark-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-menu/cv-menu-states-dark-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-menu</strong>
+            <span>cv-menu/states-light-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-menu/cv-menu-states-light-default/actual.png">actual</a>
+            
+            <a href="cv-menu/cv-menu-states-light-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-menu/cv-menu-states-light-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-meter</strong>
+            <span>cv-meter/states-dark-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-meter/cv-meter-states-dark-default/actual.png">actual</a>
+            
+            <a href="cv-meter/cv-meter-states-dark-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-meter/cv-meter-states-dark-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-meter</strong>
+            <span>cv-meter/states-light-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-meter/cv-meter-states-light-default/actual.png">actual</a>
+            
+            <a href="cv-meter/cv-meter-states-light-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-meter/cv-meter-states-light-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-number</strong>
+            <span>cv-number/states-dark-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-number/cv-number-states-dark-default/actual.png">actual</a>
+            
+            <a href="cv-number/cv-number-states-dark-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-number/cv-number-states-dark-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-number</strong>
+            <span>cv-number/states-light-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-number/cv-number-states-light-default/actual.png">actual</a>
+            
+            <a href="cv-number/cv-number-states-light-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-number/cv-number-states-light-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-operation-queue</strong>
+            <span>cv-operation-queue/states-dark-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-operation-queue/cv-operation-queue-states-dark-default/actual.png">actual</a>
+            
+            <a href="cv-operation-queue/cv-operation-queue-states-dark-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-operation-queue/cv-operation-queue-states-dark-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-operation-queue</strong>
+            <span>cv-operation-queue/states-light-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-operation-queue/cv-operation-queue-states-light-default/actual.png">actual</a>
+            
+            <a href="cv-operation-queue/cv-operation-queue-states-light-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-operation-queue/cv-operation-queue-states-light-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-option</strong>
+            <span>cv-option/states-dark-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-option/cv-option-states-dark-default/actual.png">actual</a>
+            
+            <a href="cv-option/cv-option-states-dark-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-option/cv-option-states-dark-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-option</strong>
+            <span>cv-option/states-light-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-option/cv-option-states-light-default/actual.png">actual</a>
+            
+            <a href="cv-option/cv-option-states-light-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-option/cv-option-states-light-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-pagination</strong>
+            <span>cv-pagination/states-dark-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-pagination/cv-pagination-states-dark-default/actual.png">actual</a>
+            
+            <a href="cv-pagination/cv-pagination-states-dark-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-pagination/cv-pagination-states-dark-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-pagination</strong>
+            <span>cv-pagination/states-light-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-pagination/cv-pagination-states-light-default/actual.png">actual</a>
+            
+            <a href="cv-pagination/cv-pagination-states-light-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-pagination/cv-pagination-states-light-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-popover</strong>
+            <span>cv-popover/states-dark-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-popover/cv-popover-states-dark-default/actual.png">actual</a>
+            
+            <a href="cv-popover/cv-popover-states-dark-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-popover/cv-popover-states-dark-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [
+    {
+      &quot;selector&quot;: &quot;cv-popover&quot;,
+      &quot;scrollWidth&quot;: 220,
+      &quot;clientWidth&quot;: 166
+    }
+  ],
+  &quot;clippedText&quot;: [
+    {
+      &quot;selector&quot;: &quot;div.visual-row&quot;,
+      &quot;text&quot;: &quot;Open popover\n          Popover title\n          Popover content with longer body copy validates max width and wrapping.\n &quot;,
+      &quot;scrollWidth&quot;: 336,
+      &quot;clientWidth&quot;: 336,
+      &quot;scrollHeight&quot;: 240,
+      &quot;clientHeight&quot;: 39
+    },
+    {
+      &quot;selector&quot;: &quot;cv-popover&quot;,
+      &quot;text&quot;: &quot;Open popover\n          Popover title\n          Popover content with longer body copy validates max width and wrapping.\n &quot;,
+      &quot;scrollWidth&quot;: 220,
+      &quot;clientWidth&quot;: 166,
+      &quot;scrollHeight&quot;: 240,
+      &quot;clientHeight&quot;: 39
+    }
+  ],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-popover</strong>
+            <span>cv-popover/states-light-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-popover/cv-popover-states-light-default/actual.png">actual</a>
+            
+            <a href="cv-popover/cv-popover-states-light-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-popover/cv-popover-states-light-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [
+    {
+      &quot;selector&quot;: &quot;cv-popover&quot;,
+      &quot;scrollWidth&quot;: 220,
+      &quot;clientWidth&quot;: 166
+    }
+  ],
+  &quot;clippedText&quot;: [
+    {
+      &quot;selector&quot;: &quot;div.visual-row&quot;,
+      &quot;text&quot;: &quot;Open popover\n          Popover title\n          Popover content with longer body copy validates max width and wrapping.\n &quot;,
+      &quot;scrollWidth&quot;: 336,
+      &quot;clientWidth&quot;: 336,
+      &quot;scrollHeight&quot;: 240,
+      &quot;clientHeight&quot;: 39
+    },
+    {
+      &quot;selector&quot;: &quot;cv-popover&quot;,
+      &quot;text&quot;: &quot;Open popover\n          Popover title\n          Popover content with longer body copy validates max width and wrapping.\n &quot;,
+      &quot;scrollWidth&quot;: 220,
+      &quot;clientWidth&quot;: 166,
+      &quot;scrollHeight&quot;: 240,
+      &quot;clientHeight&quot;: 39
+    }
+  ],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-presence</strong>
+            <span>cv-presence/states-dark-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-presence/cv-presence-states-dark-default/actual.png">actual</a>
+            
+            <a href="cv-presence/cv-presence-states-dark-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-presence/cv-presence-states-dark-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-presence</strong>
+            <span>cv-presence/states-light-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-presence/cv-presence-states-light-default/actual.png">actual</a>
+            
+            <a href="cv-presence/cv-presence-states-light-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-presence/cv-presence-states-light-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-progress-ring</strong>
+            <span>cv-progress-ring/states-dark-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-progress-ring/cv-progress-ring-states-dark-default/actual.png">actual</a>
+            
+            <a href="cv-progress-ring/cv-progress-ring-states-dark-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-progress-ring/cv-progress-ring-states-dark-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [
+    {
+      &quot;selector&quot;: &quot;cv-progress-ring&quot;,
+      &quot;scrollWidth&quot;: 84,
+      &quot;clientWidth&quot;: 80
+    }
+  ],
+  &quot;clippedText&quot;: [
+    {
+      &quot;selector&quot;: &quot;div.visual-row&quot;,
+      &quot;text&quot;: &quot;68%\n        24%&quot;,
+      &quot;scrollWidth&quot;: 278,
+      &quot;clientWidth&quot;: 278,
+      &quot;scrollHeight&quot;: 84,
+      &quot;clientHeight&quot;: 80
+    },
+    {
+      &quot;selector&quot;: &quot;cv-progress-ring&quot;,
+      &quot;text&quot;: &quot;68%&quot;,
+      &quot;scrollWidth&quot;: 80,
+      &quot;clientWidth&quot;: 80,
+      &quot;scrollHeight&quot;: 84,
+      &quot;clientHeight&quot;: 80
+    },
+    {
+      &quot;selector&quot;: &quot;cv-progress-ring&quot;,
+      &quot;text&quot;: &quot;24%&quot;,
+      &quot;scrollWidth&quot;: 80,
+      &quot;clientWidth&quot;: 80,
+      &quot;scrollHeight&quot;: 84,
+      &quot;clientHeight&quot;: 80
+    }
+  ],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-progress-ring</strong>
+            <span>cv-progress-ring/states-light-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-progress-ring/cv-progress-ring-states-light-default/actual.png">actual</a>
+            
+            <a href="cv-progress-ring/cv-progress-ring-states-light-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-progress-ring/cv-progress-ring-states-light-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [
+    {
+      &quot;selector&quot;: &quot;cv-progress-ring&quot;,
+      &quot;scrollWidth&quot;: 83,
+      &quot;clientWidth&quot;: 80
+    }
+  ],
+  &quot;clippedText&quot;: [
+    {
+      &quot;selector&quot;: &quot;div.visual-row&quot;,
+      &quot;text&quot;: &quot;68%\n        24%&quot;,
+      &quot;scrollWidth&quot;: 278,
+      &quot;clientWidth&quot;: 278,
+      &quot;scrollHeight&quot;: 84,
+      &quot;clientHeight&quot;: 80
+    },
+    {
+      &quot;selector&quot;: &quot;cv-progress-ring&quot;,
+      &quot;text&quot;: &quot;68%&quot;,
+      &quot;scrollWidth&quot;: 80,
+      &quot;clientWidth&quot;: 80,
+      &quot;scrollHeight&quot;: 84,
+      &quot;clientHeight&quot;: 80
+    },
+    {
+      &quot;selector&quot;: &quot;cv-progress-ring&quot;,
+      &quot;text&quot;: &quot;24%&quot;,
+      &quot;scrollWidth&quot;: 80,
+      &quot;clientWidth&quot;: 80,
+      &quot;scrollHeight&quot;: 84,
+      &quot;clientHeight&quot;: 80
+    }
+  ],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-progress</strong>
+            <span>cv-progress/states-dark-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-progress/cv-progress-states-dark-default/actual.png">actual</a>
+            
+            <a href="cv-progress/cv-progress-states-dark-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-progress/cv-progress-states-dark-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-progress</strong>
+            <span>cv-progress/states-light-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-progress/cv-progress-states-light-default/actual.png">actual</a>
+            
+            <a href="cv-progress/cv-progress-states-light-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-progress/cv-progress-states-light-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-radio</strong>
+            <span>cv-radio/states-dark-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-radio/cv-radio-states-dark-default/actual.png">actual</a>
+            
+            <a href="cv-radio/cv-radio-states-dark-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-radio/cv-radio-states-dark-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-radio</strong>
+            <span>cv-radio/states-light-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-radio/cv-radio-states-light-default/actual.png">actual</a>
+            
+            <a href="cv-radio/cv-radio-states-light-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-radio/cv-radio-states-light-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-scroll-area</strong>
+            <span>cv-scroll-area/states-dark-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-scroll-area/cv-scroll-area-states-dark-default/actual.png">actual</a>
+            
+            <a href="cv-scroll-area/cv-scroll-area-states-dark-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-scroll-area/cv-scroll-area-states-dark-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-scroll-area</strong>
+            <span>cv-scroll-area/states-light-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-scroll-area/cv-scroll-area-states-light-default/actual.png">actual</a>
+            
+            <a href="cv-scroll-area/cv-scroll-area-states-light-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-scroll-area/cv-scroll-area-states-light-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-select</strong>
+            <span>cv-select/states-dark-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-select/cv-select-states-dark-default/actual.png">actual</a>
+            
+            <a href="cv-select/cv-select-states-dark-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-select/cv-select-states-dark-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [
+    {
+      &quot;selector&quot;: &quot;div.visual-stack&quot;,
+      &quot;text&quot;: &quot;Personal vault\n            Work vault\n            Archive vault\n          \n          \n            Notes\n            File&quot;,
+      &quot;scrollWidth&quot;: 278,
+      &quot;clientWidth&quot;: 278,
+      &quot;scrollHeight&quot;: 336,
+      &quot;clientHeight&quot;: 233
+    },
+    {
+      &quot;selector&quot;: &quot;cv-select&quot;,
+      &quot;text&quot;: &quot;Sync now\n            Export&quot;,
+      &quot;scrollWidth&quot;: 260,
+      &quot;clientWidth&quot;: 260,
+      &quot;scrollHeight&quot;: 140,
+      &quot;clientHeight&quot;: 37
+    }
+  ],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-select</strong>
+            <span>cv-select/states-light-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-select/cv-select-states-light-default/actual.png">actual</a>
+            
+            <a href="cv-select/cv-select-states-light-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-select/cv-select-states-light-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [
+    {
+      &quot;selector&quot;: &quot;div.visual-stack&quot;,
+      &quot;text&quot;: &quot;Personal vault\n            Work vault\n            Archive vault\n          \n          \n            Notes\n            File&quot;,
+      &quot;scrollWidth&quot;: 278,
+      &quot;clientWidth&quot;: 278,
+      &quot;scrollHeight&quot;: 335,
+      &quot;clientHeight&quot;: 233
+    },
+    {
+      &quot;selector&quot;: &quot;cv-select&quot;,
+      &quot;text&quot;: &quot;Sync now\n            Export&quot;,
+      &quot;scrollWidth&quot;: 260,
+      &quot;clientWidth&quot;: 260,
+      &quot;scrollHeight&quot;: 139,
+      &quot;clientHeight&quot;: 37
+    }
+  ],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-separator</strong>
+            <span>cv-separator/orientations-dark-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-separator/cv-separator-orientations-dark-default/actual.png">actual</a>
+            
+            <a href="cv-separator/cv-separator-orientations-dark-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-separator/cv-separator-orientations-dark-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-separator</strong>
+            <span>cv-separator/orientations-light-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-separator/cv-separator-orientations-light-default/actual.png">actual</a>
+            
+            <a href="cv-separator/cv-separator-orientations-light-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-separator/cv-separator-orientations-light-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-shortcut</strong>
+            <span>cv-shortcut/states-dark-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-shortcut/cv-shortcut-states-dark-default/actual.png">actual</a>
+            
+            <a href="cv-shortcut/cv-shortcut-states-dark-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-shortcut/cv-shortcut-states-dark-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-shortcut</strong>
+            <span>cv-shortcut/states-light-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-shortcut/cv-shortcut-states-light-default/actual.png">actual</a>
+            
+            <a href="cv-shortcut/cv-shortcut-states-light-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-shortcut/cv-shortcut-states-light-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-sidebar</strong>
+            <span>cv-sidebar/states-dark-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-sidebar/cv-sidebar-states-dark-default/actual.png">actual</a>
+            
+            <a href="cv-sidebar/cv-sidebar-states-dark-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-sidebar/cv-sidebar-states-dark-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-sidebar</strong>
+            <span>cv-sidebar/states-light-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-sidebar/cv-sidebar-states-light-default/actual.png">actual</a>
+            
+            <a href="cv-sidebar/cv-sidebar-states-light-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-sidebar/cv-sidebar-states-light-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-skeleton</strong>
+            <span>cv-skeleton/states-dark-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-skeleton/cv-skeleton-states-dark-default/actual.png">actual</a>
+            
+            <a href="cv-skeleton/cv-skeleton-states-dark-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-skeleton/cv-skeleton-states-dark-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-skeleton</strong>
+            <span>cv-skeleton/states-light-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-skeleton/cv-skeleton-states-light-default/actual.png">actual</a>
+            
+            <a href="cv-skeleton/cv-skeleton-states-light-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-skeleton/cv-skeleton-states-light-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-spinbutton</strong>
+            <span>cv-spinbutton/states-dark-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-spinbutton/cv-spinbutton-states-dark-default/actual.png">actual</a>
+            
+            <a href="cv-spinbutton/cv-spinbutton-states-dark-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-spinbutton/cv-spinbutton-states-dark-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-spinbutton</strong>
+            <span>cv-spinbutton/states-light-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-spinbutton/cv-spinbutton-states-light-default/actual.png">actual</a>
+            
+            <a href="cv-spinbutton/cv-spinbutton-states-light-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-spinbutton/cv-spinbutton-states-light-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-spinner</strong>
+            <span>cv-spinner/states-dark-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-spinner/cv-spinner-states-dark-default/actual.png">actual</a>
+            
+            <a href="cv-spinner/cv-spinner-states-dark-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-spinner/cv-spinner-states-dark-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-spinner</strong>
+            <span>cv-spinner/states-light-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-spinner/cv-spinner-states-light-default/actual.png">actual</a>
+            
+            <a href="cv-spinner/cv-spinner-states-light-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-spinner/cv-spinner-states-light-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-status-indicator</strong>
+            <span>cv-status-indicator/states-dark-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-status-indicator/cv-status-indicator-states-dark-default/actual.png">actual</a>
+            
+            <a href="cv-status-indicator/cv-status-indicator-states-dark-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-status-indicator/cv-status-indicator-states-dark-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-status-indicator</strong>
+            <span>cv-status-indicator/states-light-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-status-indicator/cv-status-indicator-states-light-default/actual.png">actual</a>
+            
+            <a href="cv-status-indicator/cv-status-indicator-states-light-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-status-indicator/cv-status-indicator-states-light-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-status-pill</strong>
+            <span>cv-status-pill/states-dark-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-status-pill/cv-status-pill-states-dark-default/actual.png">actual</a>
+            
+            <a href="cv-status-pill/cv-status-pill-states-dark-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-status-pill/cv-status-pill-states-dark-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-status-pill</strong>
+            <span>cv-status-pill/states-light-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-status-pill/cv-status-pill-states-light-default/actual.png">actual</a>
+            
+            <a href="cv-status-pill/cv-status-pill-states-light-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-status-pill/cv-status-pill-states-light-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-steps</strong>
+            <span>cv-steps/states-dark-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-steps/cv-steps-states-dark-default/actual.png">actual</a>
+            
+            <a href="cv-steps/cv-steps-states-dark-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-steps/cv-steps-states-dark-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-steps</strong>
+            <span>cv-steps/states-light-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-steps/cv-steps-states-light-default/actual.png">actual</a>
+            
+            <a href="cv-steps/cv-steps-states-light-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-steps/cv-steps-states-light-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-switch</strong>
+            <span>cv-switch/states-dark-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-switch/cv-switch-states-dark-default/actual.png">actual</a>
+            
+            <a href="cv-switch/cv-switch-states-dark-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-switch/cv-switch-states-dark-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-switch</strong>
+            <span>cv-switch/states-light-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-switch/cv-switch-states-light-default/actual.png">actual</a>
+            
+            <a href="cv-switch/cv-switch-states-light-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-switch/cv-switch-states-light-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-table</strong>
+            <span>cv-table/states-dark-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-table/cv-table-states-dark-default/actual.png">actual</a>
+            
+            <a href="cv-table/cv-table-states-dark-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-table/cv-table-states-dark-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-table</strong>
+            <span>cv-table/states-light-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-table/cv-table-states-light-default/actual.png">actual</a>
+            
+            <a href="cv-table/cv-table-states-light-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-table/cv-table-states-light-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-tabs</strong>
+            <span>cv-tabs/states-dark-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-tabs/cv-tabs-states-dark-default/actual.png">actual</a>
+            
+            <a href="cv-tabs/cv-tabs-states-dark-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-tabs/cv-tabs-states-dark-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [
+    {
+      &quot;selector&quot;: &quot;div.visual-grid&quot;,
+      &quot;scrollWidth&quot;: 425,
+      &quot;clientWidth&quot;: 404
+    },
+    {
+      &quot;selector&quot;: &quot;cv-tabs&quot;,
+      &quot;scrollWidth&quot;: 217,
+      &quot;clientWidth&quot;: 196
+    }
+  ],
+  &quot;clippedText&quot;: [
+    {
+      &quot;selector&quot;: &quot;div.visual-grid&quot;,
+      &quot;text&quot;: &quot;Overview\n          Activity\n          Disabled\n          Overview panel with key workspace metrics.\n          Activity p&quot;,
+      &quot;scrollWidth&quot;: 425,
+      &quot;clientWidth&quot;: 404,
+      &quot;scrollHeight&quot;: 229,
+      &quot;clientHeight&quot;: 229
+    },
+    {
+      &quot;selector&quot;: &quot;cv-tabs&quot;,
+      &quot;text&quot;: &quot;Settings\n          Members\n          \n            Vertical panel content validates side-by-side tab and panel layout.\n  &quot;,
+      &quot;scrollWidth&quot;: 217,
+      &quot;clientWidth&quot;: 196,
+      &quot;scrollHeight&quot;: 229,
+      &quot;clientHeight&quot;: 229
+    }
+  ],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-tabs</strong>
+            <span>cv-tabs/states-light-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-tabs/cv-tabs-states-light-default/actual.png">actual</a>
+            
+            <a href="cv-tabs/cv-tabs-states-light-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-tabs/cv-tabs-states-light-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [
+    {
+      &quot;selector&quot;: &quot;div.visual-grid&quot;,
+      &quot;scrollWidth&quot;: 425,
+      &quot;clientWidth&quot;: 404
+    },
+    {
+      &quot;selector&quot;: &quot;cv-tabs&quot;,
+      &quot;scrollWidth&quot;: 217,
+      &quot;clientWidth&quot;: 196
+    }
+  ],
+  &quot;clippedText&quot;: [
+    {
+      &quot;selector&quot;: &quot;div.visual-grid&quot;,
+      &quot;text&quot;: &quot;Overview\n          Activity\n          Disabled\n          Overview panel with key workspace metrics.\n          Activity p&quot;,
+      &quot;scrollWidth&quot;: 425,
+      &quot;clientWidth&quot;: 404,
+      &quot;scrollHeight&quot;: 229,
+      &quot;clientHeight&quot;: 229
+    },
+    {
+      &quot;selector&quot;: &quot;cv-tabs&quot;,
+      &quot;text&quot;: &quot;Settings\n          Members\n          \n            Vertical panel content validates side-by-side tab and panel layout.\n  &quot;,
+      &quot;scrollWidth&quot;: 217,
+      &quot;clientWidth&quot;: 196,
+      &quot;scrollHeight&quot;: 229,
+      &quot;clientHeight&quot;: 229
+    }
+  ],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-task-list</strong>
+            <span>cv-task-list/states-dark-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-task-list/cv-task-list-states-dark-default/actual.png">actual</a>
+            
+            <a href="cv-task-list/cv-task-list-states-dark-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-task-list/cv-task-list-states-dark-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-task-list</strong>
+            <span>cv-task-list/states-light-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-task-list/cv-task-list-states-light-default/actual.png">actual</a>
+            
+            <a href="cv-task-list/cv-task-list-states-light-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-task-list/cv-task-list-states-light-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-textarea</strong>
+            <span>cv-textarea/states-dark-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-textarea/cv-textarea-states-dark-default/actual.png">actual</a>
+            
+            <a href="cv-textarea/cv-textarea-states-dark-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-textarea/cv-textarea-states-dark-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-textarea</strong>
+            <span>cv-textarea/states-light-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-textarea/cv-textarea-states-light-default/actual.png">actual</a>
+            
+            <a href="cv-textarea/cv-textarea-states-light-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-textarea/cv-textarea-states-light-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-theme-provider</strong>
+            <span>cv-theme-provider/nested-surface-dark-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-theme-provider/cv-theme-provider-nested-surface-dark-default/actual.png">actual</a>
+            
+            <a href="cv-theme-provider/cv-theme-provider-nested-surface-dark-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-theme-provider/cv-theme-provider-nested-surface-dark-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-theme-provider</strong>
+            <span>cv-theme-provider/nested-surface-light-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-theme-provider/cv-theme-provider-nested-surface-light-default/actual.png">actual</a>
+            
+            <a href="cv-theme-provider/cv-theme-provider-nested-surface-light-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-theme-provider/cv-theme-provider-nested-surface-light-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-time-picker</strong>
+            <span>cv-time-picker/states-dark-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-time-picker/cv-time-picker-states-dark-default/actual.png">actual</a>
+            
+            <a href="cv-time-picker/cv-time-picker-states-dark-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-time-picker/cv-time-picker-states-dark-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-time-picker</strong>
+            <span>cv-time-picker/states-light-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-time-picker/cv-time-picker-states-light-default/actual.png">actual</a>
+            
+            <a href="cv-time-picker/cv-time-picker-states-light-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-time-picker/cv-time-picker-states-light-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-toast</strong>
+            <span>cv-toast/states-dark-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-toast/cv-toast-states-dark-default/actual.png">actual</a>
+            
+            <a href="cv-toast/cv-toast-states-dark-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-toast/cv-toast-states-dark-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-toast</strong>
+            <span>cv-toast/states-light-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-toast/cv-toast-states-light-default/actual.png">actual</a>
+            
+            <a href="cv-toast/cv-toast-states-light-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-toast/cv-toast-states-light-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-toolbar</strong>
+            <span>cv-toolbar/states-dark-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-toolbar/cv-toolbar-states-dark-default/actual.png">actual</a>
+            
+            <a href="cv-toolbar/cv-toolbar-states-dark-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-toolbar/cv-toolbar-states-dark-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-toolbar</strong>
+            <span>cv-toolbar/states-light-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-toolbar/cv-toolbar-states-light-default/actual.png">actual</a>
+            
+            <a href="cv-toolbar/cv-toolbar-states-light-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-toolbar/cv-toolbar-states-light-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-tooltip</strong>
+            <span>cv-tooltip/states-dark-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-tooltip/cv-tooltip-states-dark-default/actual.png">actual</a>
+            
+            <a href="cv-tooltip/cv-tooltip-states-dark-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-tooltip/cv-tooltip-states-dark-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-tooltip</strong>
+            <span>cv-tooltip/states-light-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-tooltip/cv-tooltip-states-light-default/actual.png">actual</a>
+            
+            <a href="cv-tooltip/cv-tooltip-states-light-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-tooltip/cv-tooltip-states-light-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-treegrid</strong>
+            <span>cv-treegrid/states-dark-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-treegrid/cv-treegrid-states-dark-default/actual.png">actual</a>
+            
+            <a href="cv-treegrid/cv-treegrid-states-dark-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-treegrid/cv-treegrid-states-dark-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-treegrid</strong>
+            <span>cv-treegrid/states-light-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-treegrid/cv-treegrid-states-light-default/actual.png">actual</a>
+            
+            <a href="cv-treegrid/cv-treegrid-states-light-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-treegrid/cv-treegrid-states-light-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-treeview</strong>
+            <span>cv-treeview/states-dark-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-treeview/cv-treeview-states-dark-default/actual.png">actual</a>
+            
+            <a href="cv-treeview/cv-treeview-states-dark-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-treeview/cv-treeview-states-dark-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-treeview</strong>
+            <span>cv-treeview/states-light-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-treeview/cv-treeview-states-light-default/actual.png">actual</a>
+            
+            <a href="cv-treeview/cv-treeview-states-light-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-treeview/cv-treeview-states-light-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-visually-hidden</strong>
+            <span>cv-visually-hidden/content-dark-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-visually-hidden/cv-visually-hidden-content-dark-default/actual.png">actual</a>
+            
+            <a href="cv-visually-hidden/cv-visually-hidden-content-dark-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-visually-hidden/cv-visually-hidden-content-dark-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-visually-hidden</strong>
+            <span>cv-visually-hidden/content-light-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-visually-hidden/cv-visually-hidden-content-light-default/actual.png">actual</a>
+            
+            <a href="cv-visually-hidden/cv-visually-hidden-content-light-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-visually-hidden/cv-visually-hidden-content-light-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-window-splitter</strong>
+            <span>cv-window-splitter/states-dark-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-window-splitter/cv-window-splitter-states-dark-default/actual.png">actual</a>
+            
+            <a href="cv-window-splitter/cv-window-splitter-states-dark-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-window-splitter/cv-window-splitter-states-dark-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-window-splitter</strong>
+            <span>cv-window-splitter/states-dark-wide</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-window-splitter/cv-window-splitter-states-dark-wide/actual.png">actual</a>
+            
+            <a href="cv-window-splitter/cv-window-splitter-states-dark-wide/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-window-splitter/cv-window-splitter-states-dark-wide/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-window-splitter</strong>
+            <span>cv-window-splitter/states-light-default</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-window-splitter/cv-window-splitter-states-light-default/actual.png">actual</a>
+            
+            <a href="cv-window-splitter/cv-window-splitter-states-light-default/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-window-splitter/cv-window-splitter-states-light-default/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+
+        <article class="entry entry--warning">
+          <header>
+            <strong>cv-window-splitter</strong>
+            <span>cv-window-splitter/states-light-wide</span>
+            <mark>missing-baseline</mark>
+          </header>
+          <nav>
+            <a href="cv-window-splitter/cv-window-splitter-states-light-wide/actual.png">actual</a>
+            
+            <a href="cv-window-splitter/cv-window-splitter-states-light-wide/metadata.json">metadata</a>
+          </nav>
+          <div class="shots">
+            <img src="cv-window-splitter/cv-window-splitter-states-light-wide/actual.png" alt="">
+            
+          </div>
+          <details><summary>Diagnostics</summary><pre>{
+  &quot;emptyStage&quot;: false,
+  &quot;horizontalOverflow&quot;: [],
+  &quot;clippedText&quot;: [],
+  &quot;outsideStage&quot;: []
+}</pre></details>
+        </article>
+  </body>
+</html>

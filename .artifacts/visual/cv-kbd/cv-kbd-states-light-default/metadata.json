@@ -1,0 +1,29 @@
+{
+  "suite": "cv-kbd",
+  "name": "cv-kbd/states-light-default",
+  "viewport": "default",
+  "clipSelector": "#uikit-visual-stage",
+  "fullPage": false,
+  "threshold": 0.12,
+  "maxDiffRatio": 0.003,
+  "auditMode": true,
+  "updateMode": false,
+  "caseId": "cv-kbd/states",
+  "component": "cv-kbd",
+  "diagnostics": {
+    "emptyStage": false,
+    "horizontalOverflow": [],
+    "clippedText": [],
+    "outsideStage": []
+  },
+  "states": [
+    "small",
+    "medium",
+    "large",
+    "strong"
+  ],
+  "theme": "light",
+  "title": "Keyboard token sizes and tones",
+  "status": "missing-baseline",
+  "baselinePath": "/srv/projects/chromvoid/packages/uikit/tests/visual/__visual-baselines__/cv-kbd/cv-kbd-states-light-default.png"
+}

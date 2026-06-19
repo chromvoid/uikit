@@ -1,0 +1,28 @@
+{
+  "suite": "cv-shortcut",
+  "name": "cv-shortcut/states-light-default",
+  "viewport": "default",
+  "clipSelector": "#uikit-visual-stage",
+  "fullPage": false,
+  "threshold": 0.12,
+  "maxDiffRatio": 0.003,
+  "auditMode": true,
+  "updateMode": false,
+  "caseId": "cv-shortcut/states",
+  "component": "cv-shortcut",
+  "diagnostics": {
+    "emptyStage": false,
+    "horizontalOverflow": [],
+    "clippedText": [],
+    "outsideStage": []
+  },
+  "states": [
+    "parsed-label",
+    "custom-separator",
+    "keys-property"
+  ],
+  "theme": "light",
+  "title": "Shortcut parsed label and JS keys state",
+  "status": "missing-baseline",
+  "baselinePath": "/srv/projects/chromvoid/packages/uikit/tests/visual/__visual-baselines__/cv-shortcut/cv-shortcut-states-light-default.png"
+}

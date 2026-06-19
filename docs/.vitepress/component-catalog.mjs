@@ -10,6 +10,10 @@ export const componentGroups = [
       {name: 'cv-card', slug: 'card', spec: 'card'},
       {name: 'cv-link', slug: 'link', spec: 'link'},
       {name: 'cv-landmark', slug: 'landmark', spec: 'landmark'},
+      {name: 'cv-scroll-area', slug: 'scroll-area', spec: 'scroll-area'},
+      {name: 'cv-separator', slug: 'separator', spec: 'separator'},
+      {name: 'cv-visually-hidden', slug: 'visually-hidden', spec: 'visually-hidden'},
+      {name: 'cv-presence', slug: 'presence', spec: 'presence'},
     ],
   },
   {
@@ -18,6 +22,7 @@ export const componentGroups = [
     description: 'Primary actions, inline status, and asynchronous feedback surfaces for user flows.',
     items: [
       {name: 'cv-button', slug: 'button', spec: 'button'},
+      {name: 'cv-button-group', slug: 'button-group', spec: 'button-group'},
       {name: 'cv-copy-button', slug: 'copy-button', spec: 'copy-button'},
       {name: 'cv-alert', slug: 'alert', spec: 'alert'},
       {name: 'cv-toast', slug: 'toast', spec: 'toast'},
@@ -42,6 +47,10 @@ export const componentGroups = [
     description: 'Form controls, range inputs, and selection primitives with accessible keyboard behavior.',
     items: [
       {name: 'cv-input', slug: 'input', spec: 'input'},
+      {name: 'cv-field', slug: 'field', spec: 'field'},
+      {name: 'cv-fieldset', slug: 'fieldset', spec: 'fieldset'},
+      {name: 'cv-input-group', slug: 'input-group', spec: 'input-group'},
+      {name: 'cv-code-input', slug: 'code-input', spec: 'code-input'},
       {name: 'cv-textarea', slug: 'textarea', spec: 'textarea'},
       {name: 'cv-number', slug: 'number', spec: 'number'},
       {name: 'cv-spinbutton', slug: 'spinbutton', spec: 'spinbutton'},
@@ -68,6 +77,8 @@ export const componentGroups = [
       {name: 'cv-breadcrumb', slug: 'breadcrumb', spec: 'breadcrumb'},
       {name: 'cv-disclosure', slug: 'disclosure', spec: 'disclosure'},
       {name: 'cv-tabs', slug: 'tabs', spec: 'tabs'},
+      {name: 'cv-pagination', slug: 'pagination', spec: 'pagination'},
+      {name: 'cv-steps', slug: 'steps', spec: 'steps'},
       {name: 'cv-sidebar', slug: 'sidebar', spec: 'sidebar'},
       {name: 'cv-drawer', slug: 'drawer', spec: 'drawer'},
     ],

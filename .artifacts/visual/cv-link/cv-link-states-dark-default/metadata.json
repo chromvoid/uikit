@@ -1,0 +1,28 @@
+{
+  "suite": "cv-link",
+  "name": "cv-link/states-dark-default",
+  "viewport": "default",
+  "clipSelector": "#uikit-visual-stage",
+  "fullPage": false,
+  "threshold": 0.12,
+  "maxDiffRatio": 0.003,
+  "auditMode": true,
+  "updateMode": false,
+  "caseId": "cv-link/states",
+  "component": "cv-link",
+  "diagnostics": {
+    "emptyStage": false,
+    "horizontalOverflow": [],
+    "clippedText": [],
+    "outsideStage": []
+  },
+  "states": [
+    "default",
+    "focus",
+    "long-label"
+  ],
+  "theme": "dark",
+  "title": "Link default, focus, and long label states",
+  "status": "missing-baseline",
+  "baselinePath": "/srv/projects/chromvoid/packages/uikit/tests/visual/__visual-baselines__/cv-link/cv-link-states-dark-default.png"
+}

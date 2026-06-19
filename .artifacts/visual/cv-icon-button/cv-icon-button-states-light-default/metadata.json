@@ -1,0 +1,34 @@
+{
+  "suite": "cv-icon-button",
+  "name": "cv-icon-button/states-light-default",
+  "viewport": "default",
+  "clipSelector": "#uikit-visual-stage",
+  "fullPage": false,
+  "threshold": 0.12,
+  "maxDiffRatio": 0.003,
+  "auditMode": true,
+  "updateMode": false,
+  "caseId": "cv-icon-button/states",
+  "component": "cv-icon-button",
+  "diagnostics": {
+    "emptyStage": false,
+    "horizontalOverflow": [],
+    "clippedText": [],
+    "outsideStage": []
+  },
+  "states": [
+    "default",
+    "primary",
+    "danger",
+    "ghost",
+    "small",
+    "large",
+    "disabled",
+    "loading",
+    "pressed"
+  ],
+  "theme": "light",
+  "title": "Icon button variants, sizes, disabled, loading, pressed, hover, and focus",
+  "status": "missing-baseline",
+  "baselinePath": "/srv/projects/chromvoid/packages/uikit/tests/visual/__visual-baselines__/cv-icon-button/cv-icon-button-states-light-default.png"
+}

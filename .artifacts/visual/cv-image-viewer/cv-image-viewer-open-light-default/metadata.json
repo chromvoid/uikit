@@ -1,0 +1,31 @@
+{
+  "suite": "cv-image-viewer",
+  "name": "cv-image-viewer/open-light-default",
+  "viewport": "default",
+  "clipSelector": null,
+  "fullPage": true,
+  "threshold": 0.12,
+  "maxDiffRatio": 0.003,
+  "auditMode": true,
+  "updateMode": false,
+  "caseId": "cv-image-viewer/open",
+  "component": "cv-image-viewer",
+  "diagnostics": {
+    "emptyStage": false,
+    "horizontalOverflow": [],
+    "clippedText": [],
+    "outsideStage": []
+  },
+  "states": [
+    "open",
+    "image",
+    "metadata",
+    "thumbnails",
+    "actions",
+    "chrome-visible"
+  ],
+  "theme": "light",
+  "title": "Image viewer open, chrome, thumbnails, actions, busy, and metadata states",
+  "status": "missing-baseline",
+  "baselinePath": "/srv/projects/chromvoid/packages/uikit/tests/visual/__visual-baselines__/cv-image-viewer/cv-image-viewer-open-light-default.png"
+}

@@ -1,0 +1,32 @@
+{
+  "suite": "cv-feed",
+  "name": "cv-feed/states-dark-default",
+  "viewport": "default",
+  "clipSelector": "#uikit-visual-stage",
+  "fullPage": false,
+  "threshold": 0.12,
+  "maxDiffRatio": 0.003,
+  "auditMode": true,
+  "updateMode": false,
+  "caseId": "cv-feed/states",
+  "component": "cv-feed",
+  "diagnostics": {
+    "emptyStage": false,
+    "horizontalOverflow": [],
+    "clippedText": [],
+    "outsideStage": []
+  },
+  "states": [
+    "articles",
+    "active",
+    "disabled",
+    "loading",
+    "empty",
+    "error",
+    "busy"
+  ],
+  "theme": "dark",
+  "title": "Feed articles, active, disabled, loading, empty, error, and busy states",
+  "status": "missing-baseline",
+  "baselinePath": "/srv/projects/chromvoid/packages/uikit/tests/visual/__visual-baselines__/cv-feed/cv-feed-states-dark-default.png"
+}

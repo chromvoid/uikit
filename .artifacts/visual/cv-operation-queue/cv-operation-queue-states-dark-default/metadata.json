@@ -1,0 +1,31 @@
+{
+  "suite": "cv-operation-queue",
+  "name": "cv-operation-queue/states-dark-default",
+  "viewport": "default",
+  "clipSelector": "#uikit-visual-stage",
+  "fullPage": false,
+  "threshold": 0.12,
+  "maxDiffRatio": 0.003,
+  "auditMode": true,
+  "updateMode": false,
+  "caseId": "cv-operation-queue/states",
+  "component": "cv-operation-queue",
+  "diagnostics": {
+    "emptyStage": false,
+    "horizontalOverflow": [],
+    "clippedText": [],
+    "outsideStage": []
+  },
+  "states": [
+    "summary",
+    "actions",
+    "busy",
+    "compact",
+    "success-tone",
+    "empty"
+  ],
+  "theme": "dark",
+  "title": "Operation queue tones, busy, compact, actions, and empty states",
+  "status": "missing-baseline",
+  "baselinePath": "/srv/projects/chromvoid/packages/uikit/tests/visual/__visual-baselines__/cv-operation-queue/cv-operation-queue-states-dark-default.png"
+}

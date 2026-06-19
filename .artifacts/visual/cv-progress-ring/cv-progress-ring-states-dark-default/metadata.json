@@ -1,0 +1,59 @@
+{
+  "suite": "cv-progress-ring",
+  "name": "cv-progress-ring/states-dark-default",
+  "viewport": "default",
+  "clipSelector": "#uikit-visual-stage",
+  "fullPage": false,
+  "threshold": 0.12,
+  "maxDiffRatio": 0.003,
+  "auditMode": true,
+  "updateMode": false,
+  "caseId": "cv-progress-ring/states",
+  "component": "cv-progress-ring",
+  "diagnostics": {
+    "emptyStage": false,
+    "horizontalOverflow": [
+      {
+        "selector": "cv-progress-ring",
+        "scrollWidth": 84,
+        "clientWidth": 80
+      }
+    ],
+    "clippedText": [
+      {
+        "selector": "div.visual-row",
+        "text": "68%\n        24%",
+        "scrollWidth": 278,
+        "clientWidth": 278,
+        "scrollHeight": 84,
+        "clientHeight": 80
+      },
+      {
+        "selector": "cv-progress-ring",
+        "text": "68%",
+        "scrollWidth": 80,
+        "clientWidth": 80,
+        "scrollHeight": 84,
+        "clientHeight": 80
+      },
+      {
+        "selector": "cv-progress-ring",
+        "text": "24%",
+        "scrollWidth": 80,
+        "clientWidth": 80,
+        "scrollHeight": 84,
+        "clientHeight": 80
+      }
+    ],
+    "outsideStage": []
+  },
+  "states": [
+    "determinate",
+    "indeterminate",
+    "label"
+  ],
+  "theme": "dark",
+  "title": "Progress ring determinate and indeterminate states",
+  "status": "missing-baseline",
+  "baselinePath": "/srv/projects/chromvoid/packages/uikit/tests/visual/__visual-baselines__/cv-progress-ring/cv-progress-ring-states-dark-default.png"
+}

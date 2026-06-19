@@ -1,0 +1,33 @@
+{
+  "suite": "cv-checkbox",
+  "name": "cv-checkbox/states-light-default",
+  "viewport": "default",
+  "clipSelector": "#uikit-visual-stage",
+  "fullPage": false,
+  "threshold": 0.12,
+  "maxDiffRatio": 0.003,
+  "auditMode": true,
+  "updateMode": false,
+  "caseId": "cv-checkbox/states",
+  "component": "cv-checkbox",
+  "diagnostics": {
+    "emptyStage": false,
+    "horizontalOverflow": [],
+    "clippedText": [],
+    "outsideStage": []
+  },
+  "states": [
+    "unchecked",
+    "checked",
+    "indeterminate",
+    "disabled",
+    "readonly",
+    "required",
+    "hover",
+    "focus"
+  ],
+  "theme": "light",
+  "title": "Checkbox checked, unchecked, indeterminate, disabled, readonly, required, hover, and focus",
+  "status": "missing-baseline",
+  "baselinePath": "/srv/projects/chromvoid/packages/uikit/tests/visual/__visual-baselines__/cv-checkbox/cv-checkbox-states-light-default.png"
+}

@@ -121,13 +121,17 @@
     "prepack": "npm run build",
     "prepublishOnly": "npm run lint && npm run test && npm run check:pack",
     "test": "npm run test:unit && npm run check:exports && npm run check:bundle && npm run check:entry-imports",
-    "test:unit": "vitest run --config ./vitest.config.ts"
+    "test:unit": "vitest run --config ./vitest.config.ts",
+    "test:visual": "vitest run --config ./vitest.visual.config.ts",
+    "test:visual:audit": "UIKIT_VISUAL_AUDIT=1 vitest run --config ./vitest.visual.config.ts",
+    "test:visual:update": "UPDATE_VISUAL_SNAPSHOTS=1 vitest run --config ./vitest.visual.config.ts"
   },
   "dependencies": {
     "@chromvoid/headless-ui": "0.2.0",
     "@reatom/core": "^1001.0.0"
   },
   "devDependencies": {
+    "@blazediff/core": "1.9.1",
     "@types/node": "^24.11.0",
     "@unocss/transformer-directives": "^66.6.7",
     "esbuild": "^0.27.4",
@@ -135,6 +139,8 @@
     "lit": "^3.3.1",
     "oxfmt": "^0.41.0",
     "oxlint": "^1.51.0",
+    "playwright": "^1.54.2",
+    "pngjs": "7.0.0",
     "typescript": "^6.0.3",
     "unocss": "^66.6.7",
     "vite": "^8.0.16",

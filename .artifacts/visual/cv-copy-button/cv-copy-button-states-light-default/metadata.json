@@ -1,0 +1,31 @@
+{
+  "suite": "cv-copy-button",
+  "name": "cv-copy-button/states-light-default",
+  "viewport": "default",
+  "clipSelector": "#uikit-visual-stage",
+  "fullPage": false,
+  "threshold": 0.12,
+  "maxDiffRatio": 0.003,
+  "auditMode": true,
+  "updateMode": false,
+  "caseId": "cv-copy-button/states",
+  "component": "cv-copy-button",
+  "diagnostics": {
+    "emptyStage": false,
+    "horizontalOverflow": [],
+    "clippedText": [],
+    "outsideStage": []
+  },
+  "states": [
+    "default",
+    "plain",
+    "small",
+    "large",
+    "disabled",
+    "long-value"
+  ],
+  "theme": "light",
+  "title": "Copy button default, plain, sizes, disabled, and long value states",
+  "status": "missing-baseline",
+  "baselinePath": "/srv/projects/chromvoid/packages/uikit/tests/visual/__visual-baselines__/cv-copy-button/cv-copy-button-states-light-default.png"
+}

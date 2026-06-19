@@ -1,0 +1,29 @@
+{
+  "suite": "cv-alert",
+  "name": "cv-alert/visible-light-default",
+  "viewport": "default",
+  "clipSelector": "#uikit-visual-stage",
+  "fullPage": false,
+  "threshold": 0.12,
+  "maxDiffRatio": 0.003,
+  "auditMode": true,
+  "updateMode": false,
+  "caseId": "cv-alert/visible",
+  "component": "cv-alert",
+  "diagnostics": {
+    "emptyStage": false,
+    "horizontalOverflow": [],
+    "clippedText": [],
+    "outsideStage": []
+  },
+  "states": [
+    "visible",
+    "assertive",
+    "polite",
+    "long-message"
+  ],
+  "theme": "light",
+  "title": "Alert visible message and polite live region",
+  "status": "missing-baseline",
+  "baselinePath": "/srv/projects/chromvoid/packages/uikit/tests/visual/__visual-baselines__/cv-alert/cv-alert-visible-light-default.png"
+}

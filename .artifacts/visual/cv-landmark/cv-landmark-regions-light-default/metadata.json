@@ -1,0 +1,28 @@
+{
+  "suite": "cv-landmark",
+  "name": "cv-landmark/regions-light-default",
+  "viewport": "default",
+  "clipSelector": "#uikit-visual-stage",
+  "fullPage": false,
+  "threshold": 0.12,
+  "maxDiffRatio": 0.003,
+  "auditMode": true,
+  "updateMode": false,
+  "caseId": "cv-landmark/regions",
+  "component": "cv-landmark",
+  "diagnostics": {
+    "emptyStage": false,
+    "horizontalOverflow": [],
+    "clippedText": [],
+    "outsideStage": []
+  },
+  "states": [
+    "region",
+    "complementary",
+    "labelled"
+  ],
+  "theme": "light",
+  "title": "Landmark region and complementary surfaces",
+  "status": "missing-baseline",
+  "baselinePath": "/srv/projects/chromvoid/packages/uikit/tests/visual/__visual-baselines__/cv-landmark/cv-landmark-regions-light-default.png"
+}

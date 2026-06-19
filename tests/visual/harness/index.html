@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>UIKit Visual Harness</title>
+    <style>
+      html {
+        min-width: 100%;
+        min-height: 100%;
+        background: var(--cv-color-bg);
+      }
+      body {
+        margin: 0;
+        min-width: 100%;
+        min-height: 100vh;
+        color: var(--cv-color-text);
+        background: var(--cv-gradient-surface-deep);
+        font-family:
+          Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      }
+      body[data-theme="light"] {
+        background: var(--cv-gradient-surface);
+      }
+      cv-theme-provider {
+        display: block;
+        min-height: 100vh;
+        padding: 24px;
+        box-sizing: border-box;
+      }
+      #uikit-visual-stage {
+        box-sizing: border-box;
+        width: fit-content;
+        max-width: min(100%, 1100px);
+        min-width: min(100%, 320px);
+        min-height: 48px;
+        padding: 20px;
+        border: 1px solid var(--cv-color-border);
+        border-radius: 12px;
+        background: var(--cv-color-surface-glass);
+      }
+      .visual-stack {
+        display: grid;
+        gap: 14px;
+      }
+      .visual-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        align-items: center;
+      }
+      .visual-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 12px;
+        min-width: min(860px, 100%);
+      }
+      .visual-panel {
+        display: grid;
+        gap: 8px;
+        min-width: 0;
+        padding: 12px;
+        border: 1px solid var(--cv-color-border);
+        border-radius: 8px;
+        background: var(--cv-color-surface-secondary-glass);
+      }
+      .visual-label {
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--cv-color-text-muted);
+      }
+      .visual-demo-box {
+        display: grid;
+        place-items: center;
+        min-height: 88px;
+        padding: 14px;
+        border: 1px dashed var(--cv-color-border-strong);
+        border-radius: 8px;
+      }
+      .visual-long-text {
+        max-width: 260px;
+      }
+      .visual-wide-control {
+        width: min(520px, 100%);
+      }
+      .visual-scrollbox {
+        width: 320px;
+        height: 132px;
+      }
+      .visual-scroll-content {
+        display: grid;
+        gap: 8px;
+        min-width: 520px;
+      }
+      .visual-list-row {
+        display: flex;
+        justify-content: space-between;
+        gap: 14px;
+        padding: 8px 10px;
+        border: 1px solid var(--cv-color-border);
+        border-radius: 6px;
+      }
+      .visual-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 999px;
+        background: var(--cv-gradient-brand);
+      }
+      .visual-image {
+        width: 180px;
+        height: 112px;
+        border-radius: 8px;
+        background: var(--cv-gradient-brand), var(--cv-gradient-transparency-canvas);
+        background-size: auto, 24px 24px;
+      }
+      .visual-splitter-frame {
+        width: min(720px, 80vw);
+        height: 260px;
+      }
+    </style>
+  </head>
+  <body>
+    <cv-theme-provider id="uikit-visual-provider">
+      <main id="uikit-visual-stage" aria-label="UIKit visual test stage"></main>
+    </cv-theme-provider>
+    <script type="module" src="./main.ts"></script>
+  </body>
+</html>

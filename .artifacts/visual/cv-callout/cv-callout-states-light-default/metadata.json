@@ -1,0 +1,32 @@
+{
+  "suite": "cv-callout",
+  "name": "cv-callout/states-light-default",
+  "viewport": "default",
+  "clipSelector": "#uikit-visual-stage",
+  "fullPage": false,
+  "threshold": 0.12,
+  "maxDiffRatio": 0.003,
+  "auditMode": true,
+  "updateMode": false,
+  "caseId": "cv-callout/states",
+  "component": "cv-callout",
+  "diagnostics": {
+    "emptyStage": false,
+    "horizontalOverflow": [],
+    "clippedText": [],
+    "outsideStage": []
+  },
+  "states": [
+    "info",
+    "success",
+    "warning",
+    "danger",
+    "neutral",
+    "closable",
+    "dense"
+  ],
+  "theme": "light",
+  "title": "Callout variants with closable and dense states",
+  "status": "missing-baseline",
+  "baselinePath": "/srv/projects/chromvoid/packages/uikit/tests/visual/__visual-baselines__/cv-callout/cv-callout-states-light-default.png"
+}

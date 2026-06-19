@@ -1,0 +1,34 @@
+{
+  "suite": "cv-number",
+  "name": "cv-number/states-dark-default",
+  "viewport": "default",
+  "clipSelector": "#uikit-visual-stage",
+  "fullPage": false,
+  "threshold": 0.12,
+  "maxDiffRatio": 0.003,
+  "auditMode": true,
+  "updateMode": false,
+  "caseId": "cv-number/states",
+  "component": "cv-number",
+  "diagnostics": {
+    "emptyStage": false,
+    "horizontalOverflow": [],
+    "clippedText": [],
+    "outsideStage": []
+  },
+  "states": [
+    "outlined",
+    "filled",
+    "stepper",
+    "clearable",
+    "invalid",
+    "disabled",
+    "readonly",
+    "small",
+    "large"
+  ],
+  "theme": "dark",
+  "title": "Number input variants, stepper, clearable, invalid, disabled, readonly, and size states",
+  "status": "missing-baseline",
+  "baselinePath": "/srv/projects/chromvoid/packages/uikit/tests/visual/__visual-baselines__/cv-number/cv-number-states-dark-default.png"
+}

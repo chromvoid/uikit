@@ -1,0 +1,31 @@
+{
+  "suite": "cv-progress",
+  "name": "cv-progress/states-light-default",
+  "viewport": "default",
+  "clipSelector": "#uikit-visual-stage",
+  "fullPage": false,
+  "threshold": 0.12,
+  "maxDiffRatio": 0.003,
+  "auditMode": true,
+  "updateMode": false,
+  "caseId": "cv-progress/states",
+  "component": "cv-progress",
+  "diagnostics": {
+    "emptyStage": false,
+    "horizontalOverflow": [],
+    "clippedText": [],
+    "outsideStage": []
+  },
+  "states": [
+    "determinate",
+    "indeterminate",
+    "success",
+    "warning",
+    "danger",
+    "label"
+  ],
+  "theme": "light",
+  "title": "Progress determinate, indeterminate, and tone states",
+  "status": "missing-baseline",
+  "baselinePath": "/srv/projects/chromvoid/packages/uikit/tests/visual/__visual-baselines__/cv-progress/cv-progress-states-light-default.png"
+}

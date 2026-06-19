@@ -1,0 +1,32 @@
+{
+  "suite": "cv-grid",
+  "name": "cv-grid/states-dark-default",
+  "viewport": "default",
+  "clipSelector": "#uikit-visual-stage",
+  "fullPage": false,
+  "threshold": 0.12,
+  "maxDiffRatio": 0.003,
+  "auditMode": true,
+  "updateMode": false,
+  "caseId": "cv-grid/states",
+  "component": "cv-grid",
+  "diagnostics": {
+    "emptyStage": false,
+    "horizontalOverflow": [],
+    "clippedText": [],
+    "outsideStage": []
+  },
+  "states": [
+    "columns",
+    "rows",
+    "selected-cell",
+    "active-cell",
+    "disabled-cell",
+    "multi-selection",
+    "read-only"
+  ],
+  "theme": "dark",
+  "title": "Grid columns, rows, selected, active, disabled, read-only, and multi-selection states",
+  "status": "missing-baseline",
+  "baselinePath": "/srv/projects/chromvoid/packages/uikit/tests/visual/__visual-baselines__/cv-grid/cv-grid-states-dark-default.png"
+}

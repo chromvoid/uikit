@@ -1,0 +1,27 @@
+{
+  "suite": "cv-visually-hidden",
+  "name": "cv-visually-hidden/content-light-default",
+  "viewport": "default",
+  "clipSelector": "#uikit-visual-stage",
+  "fullPage": false,
+  "threshold": 0.12,
+  "maxDiffRatio": 0.003,
+  "auditMode": true,
+  "updateMode": false,
+  "caseId": "cv-visually-hidden/content",
+  "component": "cv-visually-hidden",
+  "diagnostics": {
+    "emptyStage": false,
+    "horizontalOverflow": [],
+    "clippedText": [],
+    "outsideStage": []
+  },
+  "states": [
+    "hidden-content",
+    "visible-neighbors"
+  ],
+  "theme": "light",
+  "title": "Visually hidden content in visible context",
+  "status": "missing-baseline",
+  "baselinePath": "/srv/projects/chromvoid/packages/uikit/tests/visual/__visual-baselines__/cv-visually-hidden/cv-visually-hidden-content-light-default.png"
+}

@@ -1,0 +1,29 @@
+{
+  "suite": "cv-separator",
+  "name": "cv-separator/orientations-light-default",
+  "viewport": "default",
+  "clipSelector": "#uikit-visual-stage",
+  "fullPage": false,
+  "threshold": 0.12,
+  "maxDiffRatio": 0.003,
+  "auditMode": true,
+  "updateMode": false,
+  "caseId": "cv-separator/orientations",
+  "component": "cv-separator",
+  "diagnostics": {
+    "emptyStage": false,
+    "horizontalOverflow": [],
+    "clippedText": [],
+    "outsideStage": []
+  },
+  "states": [
+    "horizontal",
+    "labelled",
+    "vertical",
+    "decorative-false"
+  ],
+  "theme": "light",
+  "title": "Separator horizontal, labelled, and vertical orientations",
+  "status": "missing-baseline",
+  "baselinePath": "/srv/projects/chromvoid/packages/uikit/tests/visual/__visual-baselines__/cv-separator/cv-separator-orientations-light-default.png"
+}

@@ -1,0 +1,30 @@
+{
+  "suite": "cv-dropzone",
+  "name": "cv-dropzone/states-dark-default",
+  "viewport": "default",
+  "clipSelector": "#uikit-visual-stage",
+  "fullPage": false,
+  "threshold": 0.12,
+  "maxDiffRatio": 0.003,
+  "auditMode": true,
+  "updateMode": false,
+  "caseId": "cv-dropzone/states",
+  "component": "cv-dropzone",
+  "diagnostics": {
+    "emptyStage": false,
+    "horizontalOverflow": [],
+    "clippedText": [],
+    "outsideStage": []
+  },
+  "states": [
+    "idle",
+    "active",
+    "loading",
+    "disabled",
+    "long-message"
+  ],
+  "theme": "dark",
+  "title": "Dropzone idle, active, loading, and disabled states",
+  "status": "missing-baseline",
+  "baselinePath": "/srv/projects/chromvoid/packages/uikit/tests/visual/__visual-baselines__/cv-dropzone/cv-dropzone-states-dark-default.png"
+}

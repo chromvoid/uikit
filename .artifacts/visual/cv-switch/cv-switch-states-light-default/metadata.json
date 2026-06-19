@@ -1,0 +1,32 @@
+{
+  "suite": "cv-switch",
+  "name": "cv-switch/states-light-default",
+  "viewport": "default",
+  "clipSelector": "#uikit-visual-stage",
+  "fullPage": false,
+  "threshold": 0.12,
+  "maxDiffRatio": 0.003,
+  "auditMode": true,
+  "updateMode": false,
+  "caseId": "cv-switch/states",
+  "component": "cv-switch",
+  "diagnostics": {
+    "emptyStage": false,
+    "horizontalOverflow": [],
+    "clippedText": [],
+    "outsideStage": []
+  },
+  "states": [
+    "unchecked",
+    "checked",
+    "disabled",
+    "required",
+    "small",
+    "large",
+    "help-text"
+  ],
+  "theme": "light",
+  "title": "Switch checked, unchecked, disabled, required, sizes, and help text",
+  "status": "missing-baseline",
+  "baselinePath": "/srv/projects/chromvoid/packages/uikit/tests/visual/__visual-baselines__/cv-switch/cv-switch-states-light-default.png"
+}

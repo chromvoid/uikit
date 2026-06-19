@@ -1,0 +1,33 @@
+{
+  "suite": "cv-toast",
+  "name": "cv-toast/states-dark-default",
+  "viewport": "default",
+  "clipSelector": "#uikit-visual-stage",
+  "fullPage": false,
+  "threshold": 0.12,
+  "maxDiffRatio": 0.003,
+  "auditMode": true,
+  "updateMode": false,
+  "caseId": "cv-toast/states",
+  "component": "cv-toast",
+  "diagnostics": {
+    "emptyStage": false,
+    "horizontalOverflow": [],
+    "clippedText": [],
+    "outsideStage": []
+  },
+  "states": [
+    "info",
+    "success",
+    "warning",
+    "error",
+    "loading",
+    "progress",
+    "paused",
+    "actions"
+  ],
+  "theme": "dark",
+  "title": "Toast levels, progress, paused, closable, and actions",
+  "status": "missing-baseline",
+  "baselinePath": "/srv/projects/chromvoid/packages/uikit/tests/visual/__visual-baselines__/cv-toast/cv-toast-states-dark-default.png"
+}

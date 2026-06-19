@@ -1,0 +1,34 @@
+{
+  "suite": "cv-time-picker",
+  "name": "cv-time-picker/states-light-default",
+  "viewport": "default",
+  "clipSelector": "#uikit-visual-stage",
+  "fullPage": false,
+  "threshold": 0.12,
+  "maxDiffRatio": 0.003,
+  "auditMode": true,
+  "updateMode": false,
+  "caseId": "cv-time-picker/states",
+  "component": "cv-time-picker",
+  "diagnostics": {
+    "emptyStage": false,
+    "horizontalOverflow": [],
+    "clippedText": [],
+    "outsideStage": []
+  },
+  "states": [
+    "value",
+    "hour-cycle-12",
+    "hour-cycle-24",
+    "invalid",
+    "disabled",
+    "readonly",
+    "minute-step",
+    "small",
+    "large"
+  ],
+  "theme": "light",
+  "title": "Time picker value, 12h/24h, invalid, disabled, readonly, minute step, and size states",
+  "status": "missing-baseline",
+  "baselinePath": "/srv/projects/chromvoid/packages/uikit/tests/visual/__visual-baselines__/cv-time-picker/cv-time-picker-states-light-default.png"
+}

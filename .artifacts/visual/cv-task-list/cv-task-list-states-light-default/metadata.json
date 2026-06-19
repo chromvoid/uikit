@@ -1,0 +1,30 @@
+{
+  "suite": "cv-task-list",
+  "name": "cv-task-list/states-light-default",
+  "viewport": "default",
+  "clipSelector": "#uikit-visual-stage",
+  "fullPage": false,
+  "threshold": 0.12,
+  "maxDiffRatio": 0.003,
+  "auditMode": true,
+  "updateMode": false,
+  "caseId": "cv-task-list/states",
+  "component": "cv-task-list",
+  "diagnostics": {
+    "emptyStage": false,
+    "horizontalOverflow": [],
+    "clippedText": [],
+    "outsideStage": []
+  },
+  "states": [
+    "comfortable",
+    "compact",
+    "busy",
+    "empty",
+    "footer"
+  ],
+  "theme": "light",
+  "title": "Task list comfortable, compact, busy, and empty states",
+  "status": "missing-baseline",
+  "baselinePath": "/srv/projects/chromvoid/packages/uikit/tests/visual/__visual-baselines__/cv-task-list/cv-task-list-states-light-default.png"
+}

@@ -1,0 +1,27 @@
+{
+  "suite": "cv-presence",
+  "name": "cv-presence/states-dark-default",
+  "viewport": "default",
+  "clipSelector": "#uikit-visual-stage",
+  "fullPage": false,
+  "threshold": 0.12,
+  "maxDiffRatio": 0.003,
+  "auditMode": true,
+  "updateMode": false,
+  "caseId": "cv-presence/states",
+  "component": "cv-presence",
+  "diagnostics": {
+    "emptyStage": false,
+    "horizontalOverflow": [],
+    "clippedText": [],
+    "outsideStage": []
+  },
+  "states": [
+    "present",
+    "keep-mounted-hidden"
+  ],
+  "theme": "dark",
+  "title": "Presence present and kept mounted hidden states",
+  "status": "missing-baseline",
+  "baselinePath": "/srv/projects/chromvoid/packages/uikit/tests/visual/__visual-baselines__/cv-presence/cv-presence-states-dark-default.png"
+}

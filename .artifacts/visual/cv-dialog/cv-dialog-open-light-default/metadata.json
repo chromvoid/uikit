@@ -1,0 +1,31 @@
+{
+  "suite": "cv-dialog",
+  "name": "cv-dialog/open-light-default",
+  "viewport": "default",
+  "clipSelector": null,
+  "fullPage": true,
+  "threshold": 0.12,
+  "maxDiffRatio": 0.003,
+  "auditMode": true,
+  "updateMode": false,
+  "caseId": "cv-dialog/open",
+  "component": "cv-dialog",
+  "diagnostics": {
+    "emptyStage": false,
+    "horizontalOverflow": [],
+    "clippedText": [],
+    "outsideStage": []
+  },
+  "states": [
+    "open",
+    "modal",
+    "title",
+    "description",
+    "footer",
+    "closable"
+  ],
+  "theme": "light",
+  "title": "Dialog open, modal, title, description, body, footer, and close states",
+  "status": "missing-baseline",
+  "baselinePath": "/srv/projects/chromvoid/packages/uikit/tests/visual/__visual-baselines__/cv-dialog/cv-dialog-open-light-default.png"
+}

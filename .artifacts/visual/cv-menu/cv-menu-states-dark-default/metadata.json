@@ -1,0 +1,32 @@
+{
+  "suite": "cv-menu",
+  "name": "cv-menu/states-dark-default",
+  "viewport": "default",
+  "clipSelector": "#uikit-visual-stage",
+  "fullPage": false,
+  "threshold": 0.12,
+  "maxDiffRatio": 0.003,
+  "auditMode": true,
+  "updateMode": false,
+  "caseId": "cv-menu/states",
+  "component": "cv-menu",
+  "diagnostics": {
+    "emptyStage": false,
+    "horizontalOverflow": [],
+    "clippedText": [],
+    "outsideStage": []
+  },
+  "states": [
+    "open",
+    "selected",
+    "active",
+    "disabled",
+    "checkbox",
+    "radio",
+    "submenu"
+  ],
+  "theme": "dark",
+  "title": "Menu open, selected, active, disabled, checkbox, radio, and submenu states",
+  "status": "missing-baseline",
+  "baselinePath": "/srv/projects/chromvoid/packages/uikit/tests/visual/__visual-baselines__/cv-menu/cv-menu-states-dark-default.png"
+}

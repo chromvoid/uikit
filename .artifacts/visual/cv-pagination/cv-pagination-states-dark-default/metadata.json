@@ -1,0 +1,30 @@
+{
+  "suite": "cv-pagination",
+  "name": "cv-pagination/states-dark-default",
+  "viewport": "default",
+  "clipSelector": "#uikit-visual-stage",
+  "fullPage": false,
+  "threshold": 0.12,
+  "maxDiffRatio": 0.003,
+  "auditMode": true,
+  "updateMode": false,
+  "caseId": "cv-pagination/states",
+  "component": "cv-pagination",
+  "diagnostics": {
+    "emptyStage": false,
+    "horizontalOverflow": [],
+    "clippedText": [],
+    "outsideStage": []
+  },
+  "states": [
+    "page",
+    "page-count",
+    "ellipsis",
+    "compact",
+    "disabled"
+  ],
+  "theme": "dark",
+  "title": "Pagination normal, compact, disabled, boundary, and ellipsis states",
+  "status": "missing-baseline",
+  "baselinePath": "/srv/projects/chromvoid/packages/uikit/tests/visual/__visual-baselines__/cv-pagination/cv-pagination-states-dark-default.png"
+}

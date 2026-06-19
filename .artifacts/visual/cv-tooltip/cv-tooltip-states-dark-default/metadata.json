@@ -1,0 +1,30 @@
+{
+  "suite": "cv-tooltip",
+  "name": "cv-tooltip/states-dark-default",
+  "viewport": "default",
+  "clipSelector": null,
+  "fullPage": true,
+  "threshold": 0.12,
+  "maxDiffRatio": 0.003,
+  "auditMode": true,
+  "updateMode": false,
+  "caseId": "cv-tooltip/states",
+  "component": "cv-tooltip",
+  "diagnostics": {
+    "emptyStage": false,
+    "horizontalOverflow": [],
+    "clippedText": [],
+    "outsideStage": []
+  },
+  "states": [
+    "open",
+    "arrow",
+    "disabled",
+    "trigger",
+    "long-content"
+  ],
+  "theme": "dark",
+  "title": "Tooltip open, arrow, disabled, hover trigger, and long content states",
+  "status": "missing-baseline",
+  "baselinePath": "/srv/projects/chromvoid/packages/uikit/tests/visual/__visual-baselines__/cv-tooltip/cv-tooltip-states-dark-default.png"
+}

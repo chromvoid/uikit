@@ -1,0 +1,32 @@
+{
+  "suite": "cv-sidebar",
+  "name": "cv-sidebar/states-light-default",
+  "viewport": "default",
+  "clipSelector": "#uikit-visual-stage",
+  "fullPage": false,
+  "threshold": 0.12,
+  "maxDiffRatio": 0.003,
+  "auditMode": true,
+  "updateMode": false,
+  "caseId": "cv-sidebar/states",
+  "component": "cv-sidebar",
+  "diagnostics": {
+    "emptyStage": false,
+    "horizontalOverflow": [],
+    "clippedText": [],
+    "outsideStage": []
+  },
+  "states": [
+    "expanded",
+    "collapsed",
+    "active-item",
+    "disabled-item",
+    "header",
+    "footer",
+    "sizes"
+  ],
+  "theme": "light",
+  "title": "Sidebar expanded, collapsed, active item, disabled item, header, and footer states",
+  "status": "missing-baseline",
+  "baselinePath": "/srv/projects/chromvoid/packages/uikit/tests/visual/__visual-baselines__/cv-sidebar/cv-sidebar-states-light-default.png"
+}

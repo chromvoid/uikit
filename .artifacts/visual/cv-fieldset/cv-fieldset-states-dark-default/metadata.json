@@ -1,0 +1,31 @@
+{
+  "suite": "cv-fieldset",
+  "name": "cv-fieldset/states-dark-default",
+  "viewport": "default",
+  "clipSelector": "#uikit-visual-stage",
+  "fullPage": false,
+  "threshold": 0.12,
+  "maxDiffRatio": 0.003,
+  "auditMode": true,
+  "updateMode": false,
+  "caseId": "cv-fieldset/states",
+  "component": "cv-fieldset",
+  "diagnostics": {
+    "emptyStage": false,
+    "horizontalOverflow": [],
+    "clippedText": [],
+    "outsideStage": []
+  },
+  "states": [
+    "legend",
+    "description",
+    "error",
+    "invalid",
+    "disabled",
+    "horizontal"
+  ],
+  "theme": "dark",
+  "title": "Fieldset legend, description, error, invalid, disabled, and horizontal states",
+  "status": "missing-baseline",
+  "baselinePath": "/srv/projects/chromvoid/packages/uikit/tests/visual/__visual-baselines__/cv-fieldset/cv-fieldset-states-dark-default.png"
+}
