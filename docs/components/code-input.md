@@ -6,6 +6,37 @@ Segmented short-code entry for PIN, OTP, pairing, and recovery codes.
 
 **Headless:** [`createCodeInput`](https://github.com/chromvoid/headless-ui/blob/main/specs/components/code-input.md)
 
+## Usage
+
+```html
+<div class="field-demo-grid">
+  <cv-field required>
+    <span slot="label">One-time code</span>
+    <cv-code-input purpose="otp" length="6" required autocomplete="one-time-code"></cv-code-input>
+    <span slot="description">Default numeric OTP entry. Pasted digits are distributed across segments.</span>
+  </cv-field>
+
+  <cv-field>
+    <span slot="label">Masked PIN</span>
+    <cv-code-input purpose="pin" length="4" mask value="2048"></cv-code-input>
+    <span slot="description">Use `mask` for short PINs when the entered code should not be visible.</span>
+  </cv-field>
+
+  <cv-field>
+    <span slot="label">Pairing token</span>
+    <cv-code-input purpose="pairing" charset="alphanumeric" length="8" value="CV7A9K2Q"></cv-code-input>
+    <span slot="description">Switch to `alphanumeric` for device pairing and recovery-style codes.</span>
+  </cv-field>
+
+  <cv-field invalid>
+    <span slot="label">Recovery check</span>
+    <cv-code-input purpose="recovery" charset="alphanumeric" length="8" value="A7K2M9Q4"></cv-code-input>
+    <span slot="description">`cv-complete` fires when all segments are filled.</span>
+    <span slot="error">The recovery code no longer matches this vault.</span>
+  </cv-field>
+</div>
+```
+
 ## Attributes
 
 | Attribute      | Type     | Default       | Description                    |
