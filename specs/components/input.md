@@ -22,22 +22,22 @@ Single-line text input control supporting text-like types, clearable behavior, a
 
 ## Attributes
 
-| Attribute         | Type        | Default      | Reflects | Description                                                                |
-| ----------------- | ----------- | ------------ | -------- | -------------------------------------------------------------------------- |
-| `value`           | String      | `""`         | no       | Current input value                                                        |
-| `type`            | `InputType` | `"text"`     | no       | Input type: `text` \| `password` \| `email` \| `url` \| `tel` \| `search`  |
-| `placeholder`     | String      | `""`         | no       | Placeholder text displayed when the input is empty                         |
-| `disabled`        | Boolean     | `false`      | yes      | Prevents interaction and dims the component                                |
-| `readonly`        | Boolean     | `false`      | yes      | Prevents editing while keeping the input focusable                         |
-| `required`        | Boolean     | `false`      | yes      | Marks the input as required for form validation                            |
-| `clearable`       | Boolean     | `false`      | yes      | Shows a clear button when the input has a value                            |
-| `password-toggle` | Boolean     | `false`      | yes      | Shows a password visibility toggle (only effective when `type="password"`) |
-| `size`            | String      | `"medium"`   | yes      | Component size: `small` \| `medium` \| `large`                             |
-| `variant`         | String      | `"outlined"` | yes      | Visual variant: `outlined` \| `filled`                                     |
-| `preset`          | String      | —            | yes      | Semantic preset: `search-mobile`                                           |
-| `name`            | String      | `""`         | no       | Name for form association                                                  |
-| `aria-labelledby` | String      | `""`         | no       | ID reference passed to the native input                                    |
-| `aria-describedby`| String      | `""`         | no       | Description/error ID reference passed to the native input                  |
+| Attribute          | Type        | Default      | Reflects | Description                                                                |
+| ------------------ | ----------- | ------------ | -------- | -------------------------------------------------------------------------- |
+| `value`            | String      | `""`         | no       | Current input value                                                        |
+| `type`             | `InputType` | `"text"`     | no       | Input type: `text` \| `password` \| `email` \| `url` \| `tel` \| `search`  |
+| `placeholder`      | String      | `""`         | no       | Placeholder text displayed when the input is empty                         |
+| `disabled`         | Boolean     | `false`      | yes      | Prevents interaction and dims the component                                |
+| `readonly`         | Boolean     | `false`      | yes      | Prevents editing while keeping the input focusable                         |
+| `required`         | Boolean     | `false`      | yes      | Marks the input as required for form validation                            |
+| `clearable`        | Boolean     | `false`      | yes      | Shows a clear button when the input has a value                            |
+| `password-toggle`  | Boolean     | `false`      | yes      | Shows a password visibility toggle (only effective when `type="password"`) |
+| `size`             | String      | `"medium"`   | yes      | Component size: `small` \| `medium` \| `large`                             |
+| `variant`          | String      | `"outlined"` | yes      | Visual variant: `outlined` \| `filled`                                     |
+| `preset`           | String      | —            | yes      | Semantic preset: `search-mobile`                                           |
+| `name`             | String      | `""`         | no       | Name for form association                                                  |
+| `aria-labelledby`  | String      | `""`         | no       | ID reference passed to the native input                                    |
+| `aria-describedby` | String      | `""`         | no       | Description/error ID reference passed to the native input                  |
 
 ## Variants
 
@@ -62,13 +62,13 @@ Single-line text input control supporting text-like types, clearable behavior, a
 
 ## Slots
 
-| Slot                 | Description                                        |
-| -------------------- | -------------------------------------------------- |
-| `prefix`             | Content rendered before the input (e.g., icon)     |
-| `suffix`             | Content rendered after the input (e.g., icon)      |
-| `clear-icon`         | Custom icon for the clear button (default: `×`)    |
-| `show-password-icon` | Custom icon for the "show password" state          |
-| `hide-password-icon` | Custom icon for the "hide password" state          |
+| Slot                 | Description                                     |
+| -------------------- | ----------------------------------------------- |
+| `prefix`             | Content rendered before the input (e.g., icon)  |
+| `suffix`             | Content rendered after the input (e.g., icon)   |
+| `clear-icon`         | Custom icon for the clear button (default: `×`) |
+| `show-password-icon` | Custom icon for the "show password" state       |
+| `hide-password-icon` | Custom icon for the "hide password" state       |
 
 > **Note:** The native `<input>` element is not slottable. There is no default slot.
 
@@ -197,45 +197,60 @@ UIKit does not own value management, type resolution, clearable logic, or passwo
 ## Usage
 
 ```html
-<!-- Basic text input -->
-<cv-input placeholder="Enter text"></cv-input>
+<div class="input-demo-grid">
+  <div class="input-demo-cell">
+    <span class="input-demo-label">Basic</span>
+    <cv-input placeholder="Enter text"></cv-input>
+  </div>
 
-<!-- With label and help text through cv-field -->
-<cv-field>
-  <span slot="label">Username</span>
-  <cv-input></cv-input>
-  <span slot="description">Enter your username</span>
-</cv-field>
+  <div class="input-demo-cell">
+    <span class="input-demo-label">Value</span>
+    <cv-input value="Stored value"></cv-input>
+  </div>
 
-<!-- Clearable -->
-<cv-input clearable value="Hello world"></cv-input>
+  <div class="input-demo-cell">
+    <span class="input-demo-label">Clearable</span>
+    <cv-input clearable value="Hello world"></cv-input>
+  </div>
 
-<!-- Password with toggle -->
-<cv-input type="password" password-toggle placeholder="Password"></cv-input>
+  <div class="input-demo-cell">
+    <span class="input-demo-label">Password</span>
+    <cv-input type="password" password-toggle placeholder="Password"></cv-input>
+  </div>
 
-<!-- Filled variant, small size -->
-<cv-input variant="filled" size="small" placeholder="Search..."></cv-input>
+  <div class="input-demo-cell">
+    <span class="input-demo-label">Search</span>
+    <cv-input variant="filled" size="small" placeholder="Search..."></cv-input>
+  </div>
 
-<!-- With prefix and suffix icons -->
-<cv-input>
-  <icon-search slot="prefix"></icon-search>
-  <icon-arrow slot="suffix"></icon-arrow>
-</cv-input>
+  <div class="input-demo-cell">
+    <span class="input-demo-label">Affixes</span>
+    <cv-input value="chromvoid">
+      <span slot="prefix" aria-hidden="true">@</span>
+      <span slot="suffix">.app</span>
+    </cv-input>
+  </div>
 
-<!-- Disabled -->
-<cv-input disabled value="Cannot edit"></cv-input>
+  <div class="input-demo-cell">
+    <span class="input-demo-label">Disabled</span>
+    <cv-input disabled value="Cannot edit"></cv-input>
+  </div>
 
-<!-- Readonly -->
-<cv-input readonly value="Read only value"></cv-input>
+  <div class="input-demo-cell">
+    <span class="input-demo-label">Readonly</span>
+    <cv-input readonly value="Read only value"></cv-input>
+  </div>
 
-<!-- Email type, required -->
-<cv-field required>
-  <span slot="label">Email</span>
-  <cv-input type="email" required placeholder="Email address"></cv-input>
-</cv-field>
+  <div class="input-demo-cell">
+    <span class="input-demo-label">Email</span>
+    <cv-input type="email" required placeholder="Email address"></cv-input>
+  </div>
 
-<!-- Large size, outlined variant with custom clear icon -->
-<cv-input size="large" clearable>
-  <icon-x slot="clear-icon"></icon-x>
-</cv-input>
+  <div class="input-demo-cell">
+    <span class="input-demo-label">Large clearable</span>
+    <cv-input size="large" clearable value="Vault name">
+      <span slot="clear-icon" aria-hidden="true">x</span>
+    </cv-input>
+  </div>
+</div>
 ```
