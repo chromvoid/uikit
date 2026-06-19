@@ -97,20 +97,4 @@ export const foundationCases: readonly UikitVisualCase[] = [
       </div>
     `,
   }),
-  visualCase({
-    id: 'cv-landmark/regions',
-    component: 'cv-landmark',
-    title: 'Landmark region and complementary surfaces',
-    states: ['region', 'complementary', 'labelled'],
-    html: `
-      <div class="visual-grid">
-        <cv-landmark type="region" label="Vault summary">
-          <div class="visual-panel">Region landmark content</div>
-        </cv-landmark>
-        <cv-landmark type="complementary" label="Related actions">
-          <div class="visual-panel">Complementary landmark content</div>
-        </cv-landmark>
-      </div>
-    `,
-  }),
 ]

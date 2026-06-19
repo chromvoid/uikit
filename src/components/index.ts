@@ -178,7 +178,6 @@ export type {
 } from './cv-textarea'
 export type {CVTreegridRowEventMap, CVTreegridRowSlotchangeEvent} from './cv-treegrid-row'
 export type {CVTreeItemEventMap, CVTreeItemToggleDetail, CVTreeItemToggleEvent} from './cv-treeitem'
-export {CVLandmark} from './cv-landmark'
 export {CVListbox} from './cv-listbox'
 export {CVListboxGroup} from './cv-listbox-group'
 export {CVLink} from './cv-link'

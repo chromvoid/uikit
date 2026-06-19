@@ -45,7 +45,6 @@ import {
   CVImageViewer,
   CVInput,
   CVKbd,
-  CVLandmark,
   CVLink,
   CVListbox,
   CVListboxGroup,
@@ -151,7 +150,6 @@ export function registerUikit(): void {
   CVImageViewer.define()
   CVInput.define()
   CVKbd.define()
-  CVLandmark.define()
   CVOption.define()
   CVListboxGroup.define()
   CVListbox.define()

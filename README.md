@@ -20,7 +20,6 @@ Thin Lit UI layer over `@chromvoid/headless-ui`.
 - `cv-dialog`
 - `cv-feed` + `cv-feed-article`
 - `cv-grid` + `cv-grid-column` + `cv-grid-row` + `cv-grid-cell`
-- `cv-landmark`
 - `cv-link`
 - `cv-listbox` + `cv-option`
 - `cv-menu` + `cv-menu-item`

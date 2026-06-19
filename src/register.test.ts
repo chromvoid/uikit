@@ -48,7 +48,6 @@ const registeredElements = [
   'cv-icon',
   'cv-input',
   'cv-kbd',
-  'cv-landmark',
   'cv-link',
   'cv-listbox',
   'cv-listbox-group',

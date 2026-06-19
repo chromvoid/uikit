@@ -45,7 +45,6 @@ declare global {
     'cv-image-viewer': import('./cv-image-viewer').CVImageViewer
     'cv-input': import('./cv-input').CVInput
     'cv-kbd': import('./cv-kbd').CVKbd
-    'cv-landmark': import('./cv-landmark').CVLandmark
     'cv-link': import('./cv-link').CVLink
     'cv-listbox': import('./cv-listbox').CVListbox
     'cv-listbox-group': import('./cv-listbox-group').CVListboxGroup
