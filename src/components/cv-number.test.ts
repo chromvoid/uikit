@@ -1048,6 +1048,66 @@ describe('cv-number', () => {
   })
 
   // ---------------------------------------------------------------------------
+  // Imperative numeric API
+  // ---------------------------------------------------------------------------
+
+  describe('imperative numeric API', () => {
+    it('supports step/page methods and set/get value without emitting cv-change', async () => {
+      const el = await createNumber({value: 10, step: 2, largeStep: 20})
+      let changeCount = 0
+
+      el.addEventListener('cv-change', () => changeCount++)
+
+      el.stepUp(2)
+      el.stepDown()
+      el.pageUp()
+      el.pageDown(2)
+      el.setValue(7)
+      await settle(el)
+
+      expect(el.getValue()).toBe(8)
+      expect(el.value).toBe(8)
+      expect(changeCount).toBe(0)
+    })
+
+    it('supports setRange and updates bounded stepper behavior', async () => {
+      const el = await createNumber({value: 10, stepper: true})
+
+      el.setRange(0, 10)
+      await settle(el)
+
+      expect(getInput(el).getAttribute('aria-valuemin')).toBe('0')
+      expect(getInput(el).getAttribute('aria-valuemax')).toBe('10')
+      expect(getIncrement(el).getAttribute('aria-disabled')).toBe('true')
+      expect(getDecrement(el).getAttribute('aria-disabled')).toBeNull()
+    })
+
+    it('accepts null setRange bounds as unbounded migration inputs', async () => {
+      const el = await createNumber({value: 10, min: 0, max: 10, stepper: true})
+
+      el.setRange(null, null)
+      await settle(el)
+
+      expect(getInput(el).hasAttribute('aria-valuemin')).toBe(false)
+      expect(getInput(el).hasAttribute('aria-valuemax')).toBe(false)
+      expect(getIncrement(el).getAttribute('aria-disabled')).toBeNull()
+      expect(getDecrement(el).getAttribute('aria-disabled')).toBeNull()
+    })
+
+    it('focus/select target the inner input element', async () => {
+      const el = await createNumber({value: 123})
+
+      el.focus()
+      el.select()
+      await settle(el)
+
+      const isHostFocused = document.activeElement === el
+      const isInputFocused = el.shadowRoot?.activeElement === getInput(el)
+      expect(isHostFocused || isInputFocused).toBe(true)
+    })
+  })
+
+  // ---------------------------------------------------------------------------
   // Draft text corner cases
   // ---------------------------------------------------------------------------
 
@@ -1099,17 +1159,62 @@ describe('cv-number', () => {
   // ---------------------------------------------------------------------------
 
   describe('form association lifecycle', () => {
-    it('formResetCallback restores the explicit defaultValue', async () => {
+    it('supports checkValidity/reportValidity/setCustomValidity APIs', async () => {
+      const el = await createNumber({value: 3, name: 'qty'})
+      expect(typeof el.checkValidity).toBe('function')
+      expect(typeof el.reportValidity).toBe('function')
+      expect(typeof el.setCustomValidity).toBe('function')
+
+      el.setCustomValidity('Bad value')
+      expect(el.checkValidity()).toBe(false)
+
+      el.setCustomValidity('')
+      expect(el.checkValidity()).toBe(true)
+    })
+
+    it('formResetCallback restores the value captured at first connect', async () => {
       const el = await createNumber({value: 9, defaultValue: 3})
+
+      el.setValue(12)
+      await settle(el)
+      expect(el.value).toBe(12)
 
       el.formResetCallback()
       await settle(el)
 
-      expect(el.value).toBe(3)
+      expect(el.value).toBe(9)
+    })
+
+    it('formResetCallback restores the initial value even when disabled', async () => {
+      const el = await createNumber({value: 4})
+
+      el.setValue(9)
+      await settle(el)
+      expect(el.value).toBe(9)
+
+      el.disabled = true
+      await settle(el)
+
+      el.formResetCallback()
+      await settle(el)
+
+      expect(el.value).toBe(4)
     })
 
     it('formStateRestoreCallback restores a numeric string state', async () => {
       const el = await createNumber({value: 5})
+
+      el.formStateRestoreCallback('17')
+      await settle(el)
+
+      expect(el.value).toBe(17)
+    })
+
+    it('formStateRestoreCallback restores state even when disabled', async () => {
+      const el = await createNumber({value: 5})
+
+      el.disabled = true
+      await settle(el)
 
       el.formStateRestoreCallback('17')
       await settle(el)

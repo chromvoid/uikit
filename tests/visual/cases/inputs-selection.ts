@@ -140,33 +140,33 @@ export const inputsSelectionCases: readonly UikitVisualCase[] = [
   visualCase({
     id: 'cv-number/states',
     component: 'cv-number',
-    title: 'Number input variants, stepper, clearable, invalid, disabled, readonly, and size states',
-    states: ['outlined', 'filled', 'stepper', 'clearable', 'invalid', 'disabled', 'readonly', 'small', 'large'],
+    title: 'Number input variants, stepper, bounded, clearable, invalid, disabled, readonly, required, and size states',
+    states: [
+      'outlined',
+      'filled',
+      'stepper',
+      'bounded',
+      'clearable',
+      'invalid',
+      'disabled',
+      'readonly',
+      'required',
+      'small',
+      'large',
+    ],
     html: `
       <div class="visual-grid">
         <cv-number value="42" min="0" max="100"></cv-number>
         <cv-number variant="filled" value="64"></cv-number>
-        <cv-number stepper value="12"></cv-number>
+        <cv-number stepper aria-label="Quantity" value="12"></cv-number>
+        <cv-number stepper aria-label="Bounded quantity" value="4" min="0" max="10"></cv-number>
         <cv-number clearable value="7"></cv-number>
         <cv-number invalid value="1000" max="100"></cv-number>
         <cv-number disabled value="5"></cv-number>
         <cv-number read-only value="9"></cv-number>
+        <cv-number required value="1"></cv-number>
         <cv-number size="small" value="1"></cv-number>
         <cv-number size="large" value="99"></cv-number>
-      </div>
-    `,
-  }),
-  visualCase({
-    id: 'cv-spinbutton/states',
-    component: 'cv-spinbutton',
-    title: 'Spinbutton value, min, max, disabled, readonly, and required states',
-    states: ['value', 'bounded', 'disabled', 'readonly', 'required'],
-    html: `
-      <div class="visual-row">
-        <cv-spinbutton aria-label="Quantity" value="4" min="0" max="10"></cv-spinbutton>
-        <cv-spinbutton aria-label="Disabled quantity" disabled value="2"></cv-spinbutton>
-        <cv-spinbutton aria-label="Readonly quantity" read-only value="8"></cv-spinbutton>
-        <cv-spinbutton aria-label="Required quantity" required value="1"></cv-spinbutton>
       </div>
     `,
   }),

@@ -6,6 +6,7 @@ import {live} from 'lit/directives/live.js'
 import {FormAssociatedReatomElement} from '../form-associated/FormAssociatedReatomElement'
 import type {FormAssociatedValidity} from '../form-associated/withFormAssociated'
 import {hasTextEditableFocus} from './focus-utils'
+import {getNumberValidityState, hasNumberValidityErrors} from './cv-number-validity'
 
 type CVNumberSize = 'small' | 'medium' | 'large'
 type CVNumberVariant = 'outlined' | 'filled'
@@ -80,6 +81,9 @@ export class CVNumber extends FormAssociatedReatomElement {
   private model!: NumberModel
   private modelInitialized = false
   private _valueOnFocus: number | null = null
+  private customValidityMessage = ''
+  private initialValueSnapshot = 0
+  private hasInitialValueSnapshot = false
 
   constructor() {
     super()
@@ -184,13 +188,11 @@ export class CVNumber extends FormAssociatedReatomElement {
         cursor: pointer;
       }
 
-      /* --- variant: outlined (default) --- */
       :host([variant='outlined']) [part='base'] {
         border-color: var(--cv-number-border-color);
         background: var(--cv-number-background);
       }
 
-      /* --- variant: filled --- */
       :host([variant='filled']) [part='base'] {
         background: var(--cv-color-surface-2, #181f2b);
         border-color: transparent;
@@ -198,7 +200,6 @@ export class CVNumber extends FormAssociatedReatomElement {
           color-mix(in oklab, var(--cv-color-border, #2a3245) 46%, var(--cv-color-surface-2, #181f2b));
       }
 
-      /* --- focused --- */
       :host([focused]) [part='base'] {
         box-shadow: var(--cv-number-focus-ring);
       }
@@ -211,7 +212,6 @@ export class CVNumber extends FormAssociatedReatomElement {
         box-shadow: 0 0 0 2px var(--cv-color-danger-border-strong);
       }
 
-      /* --- sizes --- */
       :host([size='small']) {
         --cv-number-height: 30px;
         --cv-number-padding-inline: var(--cv-space-2, 8px);
@@ -224,7 +224,6 @@ export class CVNumber extends FormAssociatedReatomElement {
         --cv-number-font-size: var(--cv-font-size-md, 16px);
       }
 
-      /* --- disabled --- */
       :host([disabled]) {
         pointer-events: none;
       }
@@ -238,7 +237,6 @@ export class CVNumber extends FormAssociatedReatomElement {
         cursor: not-allowed;
       }
 
-      /* --- read-only --- */
       :host([read-only]) [part='base'] {
         cursor: default;
       }
@@ -247,20 +245,6 @@ export class CVNumber extends FormAssociatedReatomElement {
         cursor: default;
       }
 
-      /* --- required --- */
-      :host([required]) {
-        /* No default visual change; stylable via part selectors */
-      }
-
-      /* --- clearable --- */
-      :host([clearable]) {
-        /* Clear button space reserved in layout */
-      }
-
-      /* --- stepper --- */
-      :host([stepper]) {
-        /* Stepper buttons rendered and visible */
-      }
     `,
   ]
 
@@ -284,14 +268,96 @@ export class CVNumber extends FormAssociatedReatomElement {
   }
 
   protected override getFormAssociatedValidity(): FormAssociatedValidity {
-    if (this.invalid) {
+    const validity = getNumberValidityState({
+      customValidityMessage: this.customValidityMessage,
+      invalid: this.invalid,
+      required: this.required,
+      value: this.modelInitialized ? this.model.state.value() : this.value,
+      min: this.toFiniteOrUndefined(this.min),
+      max: this.toFiniteOrUndefined(this.max),
+      step: this.step,
+    })
+
+    if (hasNumberValidityErrors(validity.flags)) {
       return {
-        flags: {customError: true},
-        message: 'Invalid value',
+        flags: validity.flags,
+        message: validity.message,
+        anchor: this.inputElement ?? undefined,
       }
     }
 
     return {flags: {}}
+  }
+
+  private get inputElement(): HTMLInputElement | null {
+    return this.shadowRoot?.querySelector('[part="input"]') as HTMLInputElement | null
+  }
+
+  setCustomValidity(message: string): void {
+    this.customValidityMessage = message
+    this.syncFormAssociatedState()
+  }
+
+  stepUp(times = 1): void {
+    this.applyProgrammaticMutation(() => {
+      for (let i = 0; i < this.normalizeTimes(times); i++) {
+        this.model.actions.increment()
+      }
+    })
+  }
+
+  stepDown(times = 1): void {
+    this.applyProgrammaticMutation(() => {
+      for (let i = 0; i < this.normalizeTimes(times); i++) {
+        this.model.actions.decrement()
+      }
+    })
+  }
+
+  pageUp(times = 1): void {
+    this.applyProgrammaticMutation(() => {
+      for (let i = 0; i < this.normalizeTimes(times); i++) {
+        this.model.actions.incrementLarge()
+      }
+    })
+  }
+
+  pageDown(times = 1): void {
+    this.applyProgrammaticMutation(() => {
+      for (let i = 0; i < this.normalizeTimes(times); i++) {
+        this.model.actions.decrementLarge()
+      }
+    })
+  }
+
+  setValue(value: number): void {
+    this.applyProgrammaticMutation(() => {
+      this.model.actions.setValue(value)
+    })
+  }
+
+  getValue(): number {
+    this.ensureModel()
+    return this.model.state.value()
+  }
+
+  setRange(min: number | null | undefined, max: number | null | undefined): void {
+    this.min = min ?? undefined
+    this.max = max ?? undefined
+  }
+
+  private applyProgrammaticMutation(mutate: () => void): void {
+    this.ensureModel()
+    mutate()
+    this.syncValueFromModel()
+    this.syncFormAssociatedState()
+    this.requestUpdate()
+  }
+
+  private normalizeTimes(value: number): number {
+    if (!Number.isFinite(value)) return 1
+    const normalized = Math.floor(Math.abs(value))
+    return Math.max(normalized, 1)
   }
 
   private toFiniteOrUndefined(value: number | undefined | null): number | undefined {
@@ -348,7 +414,7 @@ export class CVNumber extends FormAssociatedReatomElement {
       return
     }
 
-    // Recreate model when immutable spinbutton options change after initialization
+    // Recreate model when immutable numeric options change after initialization.
     if (
       changedProperties.has('min') ||
       changedProperties.has('max') ||
@@ -423,8 +489,6 @@ export class CVNumber extends FormAssociatedReatomElement {
     }
   }
 
-  // --- Form association ---
-
   protected override onFormDisabledChanged(_disabled: boolean): void {
     if (!this.modelInitialized) return
     this.model.actions.setDisabled(this.isEffectivelyDisabled())
@@ -432,8 +496,7 @@ export class CVNumber extends FormAssociatedReatomElement {
 
   protected override onFormReset(): void {
     if (!this.modelInitialized) return
-    const defaultVal = this.model.state.defaultValue()
-    this.model.actions.setValue(defaultVal)
+    this.model.actions.setValue(this.initialValueSnapshot)
     this.syncValueFromModel()
   }
 
@@ -452,6 +515,10 @@ export class CVNumber extends FormAssociatedReatomElement {
 
   override connectedCallback(): void {
     super.connectedCallback()
+    if (!this.hasInitialValueSnapshot) {
+      this.initialValueSnapshot = this.value
+      this.hasInitialValueSnapshot = true
+    }
     this.addEventListener('pointerdown', this.handleHostPointerDown)
   }
 
@@ -495,8 +562,6 @@ export class CVNumber extends FormAssociatedReatomElement {
     const input = this.shadowRoot?.querySelector('[part="input"]') as HTMLInputElement | null
     input?.select()
   }
-
-  // --- Event handlers ---
 
   private handleNativeInput(event: Event) {
     const target = event.target as HTMLInputElement
@@ -631,8 +696,6 @@ export class CVNumber extends FormAssociatedReatomElement {
     this.requestUpdate()
     // cv-clear event is dispatched by the onClear callback in createModel
   }
-
-  // --- Render ---
 
   protected override render() {
     this.ensureModel()

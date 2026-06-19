@@ -75,7 +75,6 @@ const registeredElements = [
   'cv-slider',
   'cv-slider-multi-thumb',
   'cv-skeleton',
-  'cv-spinbutton',
   'cv-spinner',
   'cv-status-indicator',
   'cv-step',

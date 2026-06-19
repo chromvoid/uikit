@@ -1,6 +1,6 @@
 # cv-number
 
-Numeric input field with optional stepper controls, clearable behavior, and prefix/suffix slots.
+Numeric input field with ARIA spinbutton semantics, optional stepper controls, clearable behavior, and prefix/suffix slots.
 
 **Headless:** [`createNumber`](https://github.com/chromvoid/headless-ui/blob/main/specs/components/number.md)
 
@@ -26,7 +26,7 @@ Numeric input field with optional stepper controls, clearable behavior, and pref
 | Attribute          | Type    | Default      | Reflects | Description                                              |
 | ------------------ | ------- | ------------ | -------- | -------------------------------------------------------- |
 | `value`            | Number  | `0`          | no       | Current numeric value                                    |
-| `default-value`    | Number  | `min ?? 0`   | no       | Value to reset to on clear                               |
+| `default-value`    | Number  | `min ?? 0`   | no       | Value to reset to on clear; form reset restores the initial connected `value` snapshot |
 | `min`              | Number  | —            | no       | Optional minimum boundary                                |
 | `max`              | Number  | —            | no       | Optional maximum boundary                                |
 | `step`             | Number  | `1`          | no       | Small increment/decrement step                           |
@@ -211,6 +211,36 @@ UIKit does not own value management, clamping, snapping, draft commit logic, or 
 | `cv-focus`  | `{ }`               | Fires when the input receives focus                                                                                                                           |
 | `cv-blur`   | `{ }`               | Fires when the input loses focus                                                                                                                              |
 
+## Imperative API
+
+| Method / Property            | Description                                             |
+| ---------------------------- | ------------------------------------------------------- |
+| `stepUp(times = 1)`          | Increments by `step` `times` times                      |
+| `stepDown(times = 1)`        | Decrements by `step` `times` times                      |
+| `pageUp(times = 1)`          | Increments by `largeStep` `times` times                 |
+| `pageDown(times = 1)`        | Decrements by `largeStep` `times` times                 |
+| `setValue(value)`            | Sets numeric value through headless normalization       |
+| `getValue()`                 | Returns current committed numeric value                 |
+| `setRange(min, max)`         | Updates range boundaries; `null`/`undefined` removes a bound |
+| `focus(options?)`            | Focuses inner input control                             |
+| `select()`                   | Selects text in inner input control                     |
+| `checkValidity()`            | Runs current validation checks                          |
+| `reportValidity()`           | Reports validation state to UA when supported           |
+| `setCustomValidity(message)` | Sets/clears custom validity message                     |
+| `form`                       | Form owner when form-associated internals are supported |
+| `validity`                   | Current validity state when supported                   |
+| `validationMessage`          | Current validation message                              |
+| `willValidate`               | Whether control participates in validation              |
+
+## Form Association
+
+- Component is form-associated via `ElementInternals` when available.
+- Submit value is serialized as the committed numeric value string.
+- `disabled` state removes form value from submission.
+- Reset restores the initial `value` snapshot captured on first connection.
+- Clear button and `Escape` reset to `default-value` (`min ?? 0` when omitted), which is separate from form reset.
+- Browser form-state restoration accepts numeric string state and ignores non-numeric state.
+
 ## Usage
 
 ```html
@@ -229,6 +259,9 @@ UIKit does not own value management, clamping, snapping, draft commit logic, or 
 
 <!-- Stepper buttons visible -->
 <cv-number value="1" min="0" max="10" stepper></cv-number>
+
+<!-- Numeric input with visible stepper controls -->
+<cv-number name="quantity" value="2" min="0" max="10" step="1" stepper></cv-number>
 
 <!-- Clearable -->
 <cv-number value="42" clearable></cv-number>

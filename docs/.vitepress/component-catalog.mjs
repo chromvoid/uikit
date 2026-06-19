@@ -47,7 +47,6 @@ export const componentGroups = [
       {name: 'cv-code-input', slug: 'code-input', spec: 'code-input'},
       {name: 'cv-textarea', slug: 'textarea', spec: 'textarea'},
       {name: 'cv-number', slug: 'number', spec: 'number'},
-      {name: 'cv-spinbutton', slug: 'spinbutton', spec: 'spinbutton'},
       {name: 'cv-checkbox', slug: 'checkbox', spec: 'checkbox'},
       {name: 'cv-radio', slug: 'radio', spec: 'radio'},
       {name: 'cv-switch', slug: 'switch', spec: 'switch'},

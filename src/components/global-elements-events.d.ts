@@ -72,7 +72,6 @@ declare global {
     'cv-slider': import('./cv-slider').CVSlider
     'cv-slider-multi-thumb': import('./cv-slider-multi-thumb').CVSliderMultiThumb
     'cv-skeleton': import('./cv-skeleton').CVSkeleton
-    'cv-spinbutton': import('./cv-spinbutton').CVSpinbutton
     'cv-spinner': import('./cv-spinner').CVSpinner
     'cv-status-indicator': import('./cv-status-indicator').CVStatusIndicator
     'cv-step': import('./cv-step').CVStep

@@ -72,7 +72,6 @@ import {
   CVSlider,
   CVSliderMultiThumb,
   CVSkeleton,
-  CVSpinbutton,
   CVSpinner,
   CVStatusIndicator,
   CVStep,
@@ -179,7 +178,6 @@ export function registerUikit(): void {
   CVSlider.define()
   CVSliderMultiThumb.define()
   CVSkeleton.define()
-  CVSpinbutton.define()
   CVSpinner.define()
   CVStatusIndicator.define()
   CVStep.define()

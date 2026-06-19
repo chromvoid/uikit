@@ -69,24 +69,24 @@ None. Landmark has no user-driven interactions.
 ## Usage
 
 ```html
-<cv-landmark type="navigation" label="Main navigation">
-  <nav-links></nav-links>
+<cv-landmark type="navigation" label="Vault navigation">
+  <div class="example-row">
+    <cv-link href="#overview">Overview</cv-link>
+    <cv-link href="#entries">Entries</cv-link>
+    <cv-link href="#audit">Audit</cv-link>
+  </div>
 </cv-landmark>
 
-<cv-landmark type="main">
-  <page-content></page-content>
+<cv-landmark type="search" label="Vault search">
+  <cv-input type="search" placeholder="Search entries" aria-label="Search entries"></cv-input>
 </cv-landmark>
 
-<cv-landmark type="complementary" label="Related articles">
-  <aside-content></aside-content>
+<cv-landmark type="complementary" label="Session status">
+  <cv-callout variant="info">Orange Pi core paired. Deniable vault is locked.</cv-callout>
 </cv-landmark>
 
-<cv-landmark type="search" label="Site search">
-  <search-form></search-form>
-</cv-landmark>
-
-<cv-landmark type="region" label-id="section-heading">
-  <h2 id="section-heading">Latest News</h2>
-  <article-list></article-list>
+<cv-landmark type="region" label-id="landmark-demo-heading">
+  <h2 id="landmark-demo-heading">Latest vault activity</h2>
+  <cv-callout variant="success">2 entries changed in the active vault.</cv-callout>
 </cv-landmark>
 ```
