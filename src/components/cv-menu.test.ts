@@ -146,6 +146,26 @@ describe('cv-menu', () => {
       const {menu} = await mountMenu({closeOnSelect: false})
       expect(menu.hasAttribute('close-on-select')).toBe(false)
     })
+
+    it('supports close-on-select="false" for declarative keep-open usage', async () => {
+      const menu = document.createElement('cv-menu') as CVMenu
+      menu.setAttribute('open', '')
+      menu.setAttribute('close-on-select', 'false')
+      menu.innerHTML = `
+        <cv-menu-item value="a">Alpha</cv-menu-item>
+      `
+
+      document.body.append(menu)
+      await settle(menu)
+
+      const item = menu.querySelector('cv-menu-item') as CVMenuItem
+      item.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+      await settle(menu)
+
+      expect(menu.closeOnSelect).toBe(false)
+      expect(menu.open).toBe(true)
+      expect(menu.value).toBe('a')
+    })
   })
 
   // --- Events ---

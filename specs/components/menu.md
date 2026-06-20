@@ -14,12 +14,12 @@ Menu panel that displays a list of actionable items, supporting checkable items 
 
 ## Attributes
 
-| Attribute         | Type    | Default | Description                                                                          |
-| ----------------- | ------- | ------- | ------------------------------------------------------------------------------------ |
-| `value`           | String  | `""`    | Last selected item value                                                             |
-| `open`            | Boolean | `false` | Whether the menu panel is visible                                                    |
-| `close-on-select` | Boolean | `true`  | Close the menu after an item is selected (overridden to `false` for checkable items) |
-| `aria-label`      | String  | `""`    | Accessible label for the menu                                                        |
+| Attribute         | Type    | Default | Description                                                        |
+| ----------------- | ------- | ------- | ------------------------------------------------------------------ |
+| `value`           | String  | `""`    | Last selected item value                                           |
+| `open`            | Boolean | `false` | Whether the menu panel is visible                                  |
+| `close-on-select` | Boolean | `true`  | Close after item selection; `"false"` keeps declarative menus open |
+| `aria-label`      | String  | `""`    | Accessible label for the menu                                      |
 
 ## Slots
 
@@ -104,38 +104,46 @@ UIKit does not own activation, navigation, check toggle, or submenu logic; headl
 
 ```html
 <!-- Basic menu -->
-<cv-menu open aria-label="Actions" data-live-demo-height="420">
+<cv-menu open close-on-select="false" aria-label="Actions" data-live-demo-height="180">
   <cv-menu-item value="cut">Cut</cv-menu-item>
   <cv-menu-item value="copy">Copy</cv-menu-item>
   <cv-menu-item value="paste">Paste</cv-menu-item>
 </cv-menu>
+```
 
+```html
 <!-- With disabled item -->
-<cv-menu open aria-label="Edit">
+<cv-menu open close-on-select="false" aria-label="Edit" data-live-demo-height="150">
   <cv-menu-item value="undo">Undo</cv-menu-item>
   <cv-menu-item value="redo" disabled>Redo</cv-menu-item>
 </cv-menu>
+```
 
+```html
 <!-- With checkbox group -->
-<cv-menu open aria-label="View options">
+<cv-menu open close-on-select="false" aria-label="View options" data-live-demo-height="190">
   <cv-menu-group type="checkbox" label="Panels">
     <cv-menu-item value="toolbar" checked>Toolbar</cv-menu-item>
     <cv-menu-item value="sidebar">Sidebar</cv-menu-item>
     <cv-menu-item value="statusbar" checked>Status Bar</cv-menu-item>
   </cv-menu-group>
 </cv-menu>
+```
 
+```html
 <!-- With radio group -->
-<cv-menu open aria-label="Sort order">
+<cv-menu open close-on-select="false" aria-label="Sort order" data-live-demo-height="190">
   <cv-menu-group type="radio" label="Sort by">
     <cv-menu-item value="name" checked>Name</cv-menu-item>
     <cv-menu-item value="date">Date</cv-menu-item>
     <cv-menu-item value="size">Size</cv-menu-item>
   </cv-menu-group>
 </cv-menu>
+```
 
+```html
 <!-- With submenu -->
-<cv-menu open aria-label="File">
+<cv-menu open close-on-select="false" aria-label="File" data-live-demo-height="220">
   <cv-menu-item value="new">New</cv-menu-item>
   <cv-menu-item value="share">
     Share

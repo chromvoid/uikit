@@ -29,18 +29,19 @@ interface MenuSnapshot {
   open: boolean
 }
 
-const menuKeysToPrevent = new Set([
-  'ArrowUp',
-  'ArrowDown',
-  'Home',
-  'End',
-  'Enter',
-  ' ',
-  'Spacebar',
-  'Escape',
-])
+const menuKeysToPrevent = new Set(['ArrowUp', 'ArrowDown', 'Home', 'End', 'Enter', ' ', 'Spacebar', 'Escape'])
 
 let cvMenuNonce = 0
+
+const defaultTrueBooleanAttributeConverter = {
+  fromAttribute(value: string | null): boolean {
+    if (value == null) return false
+    return value.toLowerCase() !== 'false'
+  },
+  toAttribute(value: boolean): string | null {
+    return value ? '' : null
+  },
+}
 
 export class CVMenu extends ReatomLitElement {
   static elementName = 'cv-menu'
@@ -49,7 +50,11 @@ export class CVMenu extends ReatomLitElement {
     return {
       value: {type: String, reflect: true},
       open: {type: Boolean, reflect: true},
-      closeOnSelect: {type: Boolean, attribute: 'close-on-select', reflect: true},
+      closeOnSelect: {
+        attribute: 'close-on-select',
+        reflect: true,
+        converter: defaultTrueBooleanAttributeConverter,
+      },
       ariaLabel: {type: String, attribute: 'aria-label'},
     }
   }
