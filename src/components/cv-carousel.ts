@@ -81,6 +81,9 @@ export class CVCarousel extends ReatomLitElement {
     css`
       :host {
         display: block;
+        box-sizing: border-box;
+        max-inline-size: 100%;
+        min-inline-size: 0;
         --cv-carousel-gap: var(--cv-space-3, 12px);
         --cv-carousel-control-size: 48px;
         --cv-carousel-control-radius: var(--cv-radius-md, 10px);
@@ -92,8 +95,11 @@ export class CVCarousel extends ReatomLitElement {
       }
 
       [part='base'] {
+        box-sizing: border-box;
         display: grid;
         gap: var(--cv-carousel-gap);
+        max-inline-size: 100%;
+        min-inline-size: 0;
       }
 
       [part='controls'] {
@@ -104,10 +110,14 @@ export class CVCarousel extends ReatomLitElement {
       }
 
       [part='slides'] {
+        box-sizing: border-box;
         display: flex;
         gap: var(--cv-carousel-gap);
+        max-inline-size: 100%;
+        min-inline-size: 0;
         overflow-x: auto;
         overscroll-behavior-inline: contain;
+        padding-inline: var(--cv-carousel-scroll-padding);
         scroll-padding-inline: var(--cv-carousel-scroll-padding);
         scroll-snap-type: x mandatory;
         scrollbar-width: none;

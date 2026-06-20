@@ -68,7 +68,7 @@ Slideshow component that presents slides as a native horizontal scroll-snap rail
 | `--cv-carousel-control-radius`        | `var(--cv-radius-md, 10px)`       | Border radius of control buttons                                   |
 | `--cv-carousel-indicator-size`        | `10px`                            | Visual size of inactive indicator dots                             |
 | `--cv-carousel-indicator-target-size` | `var(--cv-carousel-control-size)` | Touch target size of indicator buttons                             |
-| `--cv-carousel-scroll-padding`        | `var(--cv-space-2, 8px)`          | Inline scroll padding used by the snap viewport                    |
+| `--cv-carousel-scroll-padding`        | `var(--cv-space-2, 8px)`          | Inline viewport inset and scroll padding used by the snap viewport |
 | `--cv-carousel-slide-inline-size`     | `min(100%, 42rem)`                | Physical inline size of each scroll-snap slide                     |
 | `--cv-carousel-mobile-peek`           | `32px`                            | Narrow viewport peek size that reveals the next slide              |
 | `--cv-carousel-slide-min-height`      | `120px`                           | Minimum block size of each slide                                   |
