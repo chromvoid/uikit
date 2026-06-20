@@ -1,19 +1,19 @@
 import type MarkdownIt from 'markdown-it'
 
 const CV_TAG_RE = /<cv-[\w-]+/
+// Open image viewers are real fullscreen modals; keep those docs examples source-only.
+const SOURCE_ONLY_DEMO_RE = /<cv-image-viewer\b(?=[^>]*\bopen(?:\s|=|>|$))/i
 
 export function liveDemoPlugin(md: MarkdownIt): void {
   const defaultFence =
-    md.renderer.rules.fence ||
-    ((tokens, idx, options, _env, self) =>
-      self.renderToken(tokens, idx, options))
+    md.renderer.rules.fence || ((tokens, idx, options, _env, self) => self.renderToken(tokens, idx, options))
 
   md.renderer.rules.fence = (tokens, idx, options, env, self) => {
     const token = tokens[idx]
     const lang = token.info.trim().split(/\s+/)[0]
     const raw = token.content
 
-    if (lang !== 'html' || !CV_TAG_RE.test(raw)) {
+    if (lang !== 'html' || !CV_TAG_RE.test(raw) || SOURCE_ONLY_DEMO_RE.test(raw)) {
       return defaultFence(tokens, idx, options, env, self)
     }
 

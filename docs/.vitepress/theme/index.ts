@@ -46,6 +46,10 @@ function scheduleDocsShellAccessibilitySync(): void {
   })
 }
 
+function syncDocsThemeMode(): void {
+  document.documentElement.dataset.theme = 'dark'
+}
+
 const theme: Theme = {
   ...DefaultTheme,
   enhanceApp(ctx) {
@@ -60,9 +64,11 @@ const theme: Theme = {
     }
 
     if (typeof window !== 'undefined') {
+      syncDocsThemeMode()
       const previousAfterRouteChange = ctx.router.onAfterRouteChange
       ctx.router.onAfterRouteChange = async (to) => {
         await previousAfterRouteChange?.(to)
+        syncDocsThemeMode()
         scheduleDocsShellAccessibilitySync()
       }
 

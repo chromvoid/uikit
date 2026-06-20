@@ -7,6 +7,8 @@ import {responsiveTablesPlugin} from './markdown/responsiveTables'
 const description =
   'ChromVoid UIKit is a Lit-based component layer over @chromvoid/headless-ui with reusable theme tokens and accessible interactions.'
 
+const forceDarkThemeScript = "document.documentElement.dataset.theme='dark'"
+
 const repoName = process.env.GITHUB_REPOSITORY?.split('/')[1]
 const base =
   process.env.DOCS_BASE ?? (process.env.GITHUB_ACTIONS === 'true' && repoName ? `/${repoName}/` : '/')
@@ -27,6 +29,7 @@ export default defineConfig({
   cleanUrls: false,
   lastUpdated: true,
   head: [
+    ['script', {}, forceDarkThemeScript],
     ['meta', {name: 'theme-color', content: '#0b0d12'}],
     ['meta', {property: 'og:title', content: 'ChromVoid UIKit'}],
     ['meta', {property: 'og:description', content: description}],
