@@ -13,7 +13,16 @@
   "diagnostics": {
     "emptyStage": false,
     "horizontalOverflow": [],
-    "clippedText": [],
+    "clippedText": [
+      {
+        "selector": "span",
+        "text": "-",
+        "scrollWidth": 16,
+        "clientWidth": 16,
+        "scrollHeight": 18,
+        "clientHeight": 16
+      }
+    ],
     "outsideStage": [],
     "stageViewportOverflow": null
   },
@@ -22,10 +31,11 @@
     "multiple",
     "expanded",
     "disabled-item",
+    "custom-icon",
     "long-content"
   ],
   "theme": "dark",
-  "title": "Accordion single, multiple, expanded, disabled, and long content states",
+  "title": "Accordion single, multiple, expanded, disabled, custom icon, and long content states",
   "status": "missing-baseline",
   "baselinePath": "/srv/projects/chromvoid/packages/uikit/tests/visual/__visual-baselines__/cv-accordion/cv-accordion-states-dark-default.png"
 }

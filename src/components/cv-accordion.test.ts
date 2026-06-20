@@ -24,12 +24,122 @@ const createItem = (value: string, label: string, content: string) => {
   return item
 }
 
+const createSvgIcon = (slot: 'expand-icon' | 'collapse-icon') => {
+  const wrapper = document.createElement('span')
+  wrapper.slot = slot
+
+  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
+  svg.setAttribute('viewBox', '0 0 24 24')
+  svg.setAttribute('aria-hidden', 'true')
+  svg.setAttribute('fill', 'none')
+  svg.setAttribute('stroke', 'currentColor')
+  svg.setAttribute('stroke-width', '2')
+  svg.setAttribute('stroke-linecap', 'round')
+  svg.setAttribute('stroke-linejoin', 'round')
+
+  const path = document.createElementNS('http://www.w3.org/2000/svg', 'path')
+  path.setAttribute('d', slot === 'expand-icon' ? 'M5 12h14M12 5v14' : 'M5 12h14')
+  svg.append(path)
+
+  wrapper.append(svg)
+  return wrapper
+}
+
 const getTrigger = (item: CVAccordionItem) =>
   item.shadowRoot?.querySelector('[part="trigger"]') as HTMLButtonElement
-const getPanel = (item: CVAccordionItem) =>
-  item.shadowRoot?.querySelector('[part="panel"]') as HTMLElement
+const getPanel = (item: CVAccordionItem) => item.shadowRoot?.querySelector('[part="panel"]') as HTMLElement
+const getIndicator = (item: CVAccordionItem) =>
+  item.shadowRoot?.querySelector('[part~="indicator"]') as HTMLElement
+
+const settleItem = async (item: CVAccordionItem) => {
+  await item.updateComplete
+  await Promise.resolve()
+  await item.updateComplete
+}
+
+const mockReducedMotion = (matches: boolean) => {
+  const originalMatchMedia = window.matchMedia
+  Object.defineProperty(window, 'matchMedia', {
+    configurable: true,
+    value: (query: string): MediaQueryList => ({
+      matches,
+      media: query,
+      onchange: null,
+      addEventListener: vi.fn(),
+      removeEventListener: vi.fn(),
+      addListener: vi.fn(),
+      removeListener: vi.fn(),
+      dispatchEvent: vi.fn(() => false),
+    }),
+  })
+
+  return () => {
+    Object.defineProperty(window, 'matchMedia', {
+      configurable: true,
+      value: originalMatchMedia,
+    })
+  }
+}
+
+const mockAnimationFrames = () => {
+  const hadRequestAnimationFrame = 'requestAnimationFrame' in window
+  const hadCancelAnimationFrame = 'cancelAnimationFrame' in window
+  const originalRequestAnimationFrame = window.requestAnimationFrame
+  const originalCancelAnimationFrame = window.cancelAnimationFrame
+  const frames = new Map<number, FrameRequestCallback>()
+  let nextHandle = 1
+
+  Object.defineProperty(window, 'requestAnimationFrame', {
+    configurable: true,
+    value: vi.fn((callback: FrameRequestCallback) => {
+      const handle = nextHandle++
+      frames.set(handle, callback)
+      return handle
+    }),
+  })
+
+  Object.defineProperty(window, 'cancelAnimationFrame', {
+    configurable: true,
+    value: vi.fn((handle: number) => {
+      frames.delete(handle)
+    }),
+  })
+
+  return {
+    flushNextFrame() {
+      const next = frames.entries().next().value as [number, FrameRequestCallback] | undefined
+      if (!next) {
+        throw new Error('No animation frame queued')
+      }
+
+      const [handle, callback] = next
+      frames.delete(handle)
+      callback(window.performance.now())
+    },
+    restore() {
+      if (hadRequestAnimationFrame) {
+        Object.defineProperty(window, 'requestAnimationFrame', {
+          configurable: true,
+          value: originalRequestAnimationFrame,
+        })
+      } else {
+        Reflect.deleteProperty(window, 'requestAnimationFrame')
+      }
+
+      if (hadCancelAnimationFrame) {
+        Object.defineProperty(window, 'cancelAnimationFrame', {
+          configurable: true,
+          value: originalCancelAnimationFrame,
+        })
+      } else {
+        Reflect.deleteProperty(window, 'cancelAnimationFrame')
+      }
+    },
+  }
+}
 
 afterEach(() => {
+  vi.useRealTimers()
   vi.restoreAllMocks()
   document.body.innerHTML = ''
 })
@@ -39,6 +149,51 @@ describe('cv-accordion', () => {
     CVAccordion.define()
 
     expect(customElements.get(CVAccordionItem.elementName)).toBe(CVAccordionItem)
+  })
+
+  it('renders the public indicator part alias and expand/collapse icon slots', async () => {
+    CVAccordionItem.define()
+    CVAccordion.define()
+
+    const accordion = document.createElement('cv-accordion') as CVAccordion
+    const itemA = createItem('a', 'A', 'Panel A')
+
+    accordion.append(itemA)
+    document.body.append(accordion)
+    await settle(accordion)
+    await settleItem(itemA)
+
+    const indicator = getIndicator(itemA)
+
+    expect(indicator).not.toBeNull()
+    expect(indicator.getAttribute('part')?.split(/\s+/)).toEqual(['indicator', 'trigger-icon'])
+    expect(indicator.querySelector('slot[name="expand-icon"]')).not.toBeNull()
+    expect(indicator.querySelector('slot[name="collapse-icon"]')).not.toBeNull()
+    expect(indicator.querySelector('[part="default-expand-icon"]')).not.toBeNull()
+    expect(indicator.querySelector('[part="default-collapse-icon"]')).not.toBeNull()
+  })
+
+  it('assigns custom expand and collapse icon slot content', async () => {
+    CVAccordionItem.define()
+    CVAccordion.define()
+
+    const accordion = document.createElement('cv-accordion') as CVAccordion
+    const itemA = createItem('a', 'A', 'Panel A')
+    const expandIcon = createSvgIcon('expand-icon')
+    const collapseIcon = createSvgIcon('collapse-icon')
+
+    itemA.append(expandIcon, collapseIcon)
+    accordion.append(itemA)
+    document.body.append(accordion)
+    await settle(accordion)
+    await settleItem(itemA)
+
+    const indicator = getIndicator(itemA)
+    const expandSlot = indicator.querySelector('slot[name="expand-icon"]') as HTMLSlotElement
+    const collapseSlot = indicator.querySelector('slot[name="collapse-icon"]') as HTMLSlotElement
+
+    expect(expandSlot.assignedElements()).toEqual([expandIcon])
+    expect(collapseSlot.assignedElements()).toEqual([collapseIcon])
   })
 
   it('toggles sections in single mode and emits change', async () => {
@@ -222,6 +377,142 @@ describe('cv-accordion', () => {
     expect(itemB.expanded).toBe(false)
   })
 
+  it('keeps a collapsing panel mounted and hidden from interaction until transition ends', async () => {
+    CVAccordionItem.define()
+    CVAccordion.define()
+
+    const accordion = document.createElement('cv-accordion') as CVAccordion
+    accordion.value = 'a'
+    const itemA = createItem('a', 'A', 'Panel A')
+
+    accordion.append(itemA)
+    document.body.append(accordion)
+    await settle(accordion)
+    await settleItem(itemA)
+
+    expect(getPanel(itemA).hidden).toBe(false)
+
+    accordion.value = ''
+    await settle(accordion)
+    await settleItem(itemA)
+
+    const panel = getPanel(itemA)
+    expect(itemA.expanded).toBe(false)
+    expect(panel.hidden).toBe(false)
+    expect(panel.getAttribute('aria-hidden')).toBe('true')
+    expect(panel.hasAttribute('inert')).toBe(true)
+    expect(panel.getAttribute('data-state')).toBe('closing')
+
+    panel.dispatchEvent(new Event('transitionend', {bubbles: true}))
+    await settle(accordion)
+    await settleItem(itemA)
+
+    expect(panel.hidden).toBe(true)
+    expect(panel.hasAttribute('aria-hidden')).toBe(false)
+    expect(panel.hasAttribute('inert')).toBe(false)
+    expect(panel.getAttribute('data-state')).toBe('closed')
+  })
+
+  it('keeps an opening panel mounted for a paint before transitioning open', async () => {
+    CVAccordionItem.define()
+    CVAccordion.define()
+    const animationFrames = mockAnimationFrames()
+
+    try {
+      const accordion = document.createElement('cv-accordion') as CVAccordion
+      const itemA = createItem('a', 'A', 'Panel A')
+
+      accordion.append(itemA)
+      document.body.append(accordion)
+      await settle(accordion)
+      await settleItem(itemA)
+
+      getTrigger(itemA).dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+      await settle(accordion)
+      await settleItem(itemA)
+
+      expect(itemA.expanded).toBe(true)
+      expect(getPanel(itemA).hidden).toBe(false)
+      expect(getPanel(itemA).getAttribute('data-state')).toBe('opening')
+
+      animationFrames.flushNextFrame()
+      await settleItem(itemA)
+
+      expect(getPanel(itemA).getAttribute('data-state')).toBe('opening')
+
+      animationFrames.flushNextFrame()
+      await settleItem(itemA)
+
+      expect(getPanel(itemA).getAttribute('data-state')).toBe('open')
+    } finally {
+      animationFrames.restore()
+    }
+  })
+
+  it('ignores a stale close transition when the section reopens before transition end', async () => {
+    CVAccordionItem.define()
+    CVAccordion.define()
+
+    const accordion = document.createElement('cv-accordion') as CVAccordion
+    accordion.value = 'a'
+    const itemA = createItem('a', 'A', 'Panel A')
+
+    accordion.append(itemA)
+    document.body.append(accordion)
+    await settle(accordion)
+    await settleItem(itemA)
+
+    accordion.value = ''
+    await settle(accordion)
+    await settleItem(itemA)
+    expect(getPanel(itemA).getAttribute('data-state')).toBe('closing')
+
+    accordion.value = 'a'
+    await settle(accordion)
+    await settleItem(itemA)
+
+    const panel = getPanel(itemA)
+    panel.dispatchEvent(new Event('transitionend', {bubbles: true}))
+    await settle(accordion)
+    await settleItem(itemA)
+
+    expect(itemA.expanded).toBe(true)
+    expect(panel.hidden).toBe(false)
+    expect(panel.hasAttribute('aria-hidden')).toBe(false)
+    expect(panel.hasAttribute('inert')).toBe(false)
+    expect(panel.getAttribute('data-state')).toBe('open')
+  })
+
+  it('closes immediately when reduced motion is requested', async () => {
+    CVAccordionItem.define()
+    CVAccordion.define()
+    const restoreMatchMedia = mockReducedMotion(true)
+
+    try {
+      const accordion = document.createElement('cv-accordion') as CVAccordion
+      accordion.value = 'a'
+      const itemA = createItem('a', 'A', 'Panel A')
+
+      accordion.append(itemA)
+      document.body.append(accordion)
+      await settle(accordion)
+      await settleItem(itemA)
+
+      accordion.value = ''
+      await settle(accordion)
+      await settleItem(itemA)
+
+      const panel = getPanel(itemA)
+      expect(itemA.expanded).toBe(false)
+      expect(panel.hidden).toBe(true)
+      expect(panel.hasAttribute('aria-hidden')).toBe(false)
+      expect(panel.hasAttribute('inert')).toBe(false)
+      expect(panel.getAttribute('data-state')).toBe('closed')
+    } finally {
+      restoreMatchMedia()
+    }
+  })
+
   it('assigns fallback section values to items without a value', async () => {
     CVAccordionItem.define()
     CVAccordion.define()
@@ -335,9 +626,7 @@ describe('cv-accordion', () => {
     document.body.append(accordion)
     await settle(accordion)
 
-    getTrigger(itemA).dispatchEvent(
-      new KeyboardEvent('keydown', {key: 'End', bubbles: true, composed: true}),
-    )
+    getTrigger(itemA).dispatchEvent(new KeyboardEvent('keydown', {key: 'End', bubbles: true, composed: true}))
     await settle(accordion)
     expect(itemC.active).toBe(true)
 

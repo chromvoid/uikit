@@ -1,7 +1,7 @@
 {
   "suite": "cv-accordion",
-  "name": "cv-accordion/states-light-default",
-  "viewport": "default",
+  "name": "cv-accordion/states-light-compact",
+  "viewport": "compact",
   "clipSelector": "#uikit-visual-stage",
   "fullPage": false,
   "threshold": 0.12,
@@ -37,5 +37,5 @@
   "theme": "light",
   "title": "Accordion single, multiple, expanded, disabled, custom icon, and long content states",
   "status": "missing-baseline",
-  "baselinePath": "/srv/projects/chromvoid/packages/uikit/tests/visual/__visual-baselines__/cv-accordion/cv-accordion-states-light-default.png"
+  "baselinePath": "/srv/projects/chromvoid/packages/uikit/tests/visual/__visual-baselines__/cv-accordion/cv-accordion-states-light-compact.png"
 }
