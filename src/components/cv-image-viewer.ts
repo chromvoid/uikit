@@ -41,7 +41,7 @@ export type CVImageViewerThumbnailWindow = {
 export type CVImageViewerLayout = 'desktop' | 'mobile' | 'auto'
 export type CVImageViewerCloseReason = 'control' | 'escape' | 'backdrop'
 export type CVImageViewerNavigationDirection = 'forward' | 'backward' | 'none'
-export type CVImageViewerNavigationSource = 'control' | 'keyboard' | 'thumbnail' | 'programmatic'
+export type CVImageViewerNavigationSource = 'control' | 'gesture' | 'keyboard' | 'thumbnail' | 'programmatic'
 
 export type CVImageViewerCloseDetail = {
   reason: CVImageViewerCloseReason
@@ -98,6 +98,14 @@ export interface CVImageViewerEventMap {
 
 const DEFAULT_THUMBNAIL_STEP_PX = 64
 const IMAGE_TRANSITION_FALLBACK_MS = 360
+const WHEEL_GESTURE_LINE_PX = 16
+const WHEEL_GESTURE_PAGE_PX = 800
+const WHEEL_GESTURE_DELTA_LINE = 1
+const WHEEL_GESTURE_DELTA_PAGE = 2
+const WHEEL_GESTURE_MIN_DELTA_PX = 8
+const WHEEL_GESTURE_HORIZONTAL_RATIO = 1.35
+const WHEEL_GESTURE_NAVIGATION_THRESHOLD_PX = 80
+const WHEEL_GESTURE_RESET_MS = 220
 
 type PendingNavigation = {
   index: number
@@ -135,6 +143,12 @@ function isInteractiveTextInput(target: EventTarget | null): boolean {
   return tagName === 'input' || tagName === 'textarea' || tagName === 'select' || target.isContentEditable
 }
 
+function normalizeWheelDelta(delta: number, deltaMode: number): number {
+  if (deltaMode === WHEEL_GESTURE_DELTA_LINE) return delta * WHEEL_GESTURE_LINE_PX
+  if (deltaMode === WHEEL_GESTURE_DELTA_PAGE) return delta * WHEEL_GESTURE_PAGE_PX
+  return delta
+}
+
 export class CVImageViewer extends ReatomLitElement {
   static elementName = 'cv-image-viewer'
 
@@ -170,6 +184,9 @@ export class CVImageViewer extends ReatomLitElement {
   private imageTransitionPreviousItem: CVImageViewerItem | null = null
   private imageTransitionTimer: ReturnType<typeof window.setTimeout> | null = null
   private imageTransitionCycle = 0
+  private wheelGestureDeltaX = 0
+  private wheelGestureLocked = false
+  private wheelGestureTimer: ReturnType<typeof window.setTimeout> | null = null
 
   constructor() {
     super()
@@ -206,6 +223,7 @@ export class CVImageViewer extends ReatomLitElement {
     }
 
     this.resetImageTransition()
+    this.resetWheelGesture()
     super.disconnectedCallback()
   }
 
@@ -233,6 +251,7 @@ export class CVImageViewer extends ReatomLitElement {
     if (!this.open) {
       this.pendingNavigation = null
       this.resetImageTransition()
+      this.resetWheelGesture()
       return
     }
 
@@ -411,6 +430,26 @@ export class CVImageViewer extends ReatomLitElement {
     this.requestUpdate()
   }
 
+  private resetWheelGesture(): void {
+    if (this.wheelGestureTimer) {
+      window.clearTimeout(this.wheelGestureTimer)
+      this.wheelGestureTimer = null
+    }
+
+    this.wheelGestureDeltaX = 0
+    this.wheelGestureLocked = false
+  }
+
+  private scheduleWheelGestureReset(): void {
+    if (this.wheelGestureTimer) {
+      window.clearTimeout(this.wheelGestureTimer)
+    }
+
+    this.wheelGestureTimer = window.setTimeout(() => {
+      this.resetWheelGesture()
+    }, WHEEL_GESTURE_RESET_MS)
+  }
+
   private dispatchClose(reason: CVImageViewerCloseReason): void {
     this.dispatchViewerEvent('cv-close', {reason})
   }
@@ -472,6 +511,39 @@ export class CVImageViewer extends ReatomLitElement {
   private handleViewportBackdropClick(event: MouseEvent) {
     if (event.target !== event.currentTarget) return
     this.dispatchClose('backdrop')
+  }
+
+  private handleViewportWheel(event: WheelEvent) {
+    if (!this.open || event.defaultPrevented || this.items.length <= 1) return
+    if (event.ctrlKey || event.metaKey || event.altKey) return
+
+    const deltaX = normalizeWheelDelta(event.deltaX, event.deltaMode)
+    const deltaY = normalizeWheelDelta(event.deltaY, event.deltaMode)
+    const absX = Math.abs(deltaX)
+    const absY = Math.abs(deltaY)
+    const isHorizontalGesture =
+      absX >= WHEEL_GESTURE_MIN_DELTA_PX && absX > absY * WHEEL_GESTURE_HORIZONTAL_RATIO
+
+    if (!isHorizontalGesture) return
+
+    event.preventDefault()
+    event.stopPropagation()
+    this.scheduleWheelGestureReset()
+
+    if (this.wheelGestureLocked) return
+
+    this.wheelGestureDeltaX += deltaX
+    if (Math.abs(this.wheelGestureDeltaX) < WHEEL_GESTURE_NAVIGATION_THRESHOLD_PX) return
+
+    const direction = this.wheelGestureDeltaX > 0 ? 'forward' : 'backward'
+    this.wheelGestureDeltaX = 0
+    this.wheelGestureLocked = true
+
+    if (direction === 'forward') {
+      this.next('gesture')
+    } else {
+      this.previous('gesture')
+    }
   }
 
   private handleCloseClick() {
@@ -789,7 +861,7 @@ export class CVImageViewer extends ReatomLitElement {
             aria-busy=${String(this.busy || Boolean(currentItem?.loading))}
             @click=${this.handleViewportBackdropClick}
           >
-            <div part="viewport">
+            <div part="viewport" @wheel=${this.handleViewportWheel}>
               <slot name="viewport">${this.renderFallbackViewport(currentItem)}</slot>
             </div>
             <cv-button

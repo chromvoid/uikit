@@ -275,6 +275,8 @@ type CVImageViewerThumbnailWindow = {
 
 The built-in fallback viewport animates committed image changes with a directional slide/fade based on the navigation direction. Slotted viewport content remains fully consumer-owned. The transition respects `prefers-reduced-motion`.
 
+Navigation `source` values are `control`, `gesture`, `keyboard`, `thumbnail`, or `programmatic`. On desktop, the built-in viewport treats a clearly horizontal wheel gesture as touchpad gallery navigation: one continuous swipe emits at most one `cv-input` request, while vertical wheel input and zoom/meta gestures are ignored.
+
 ## Keyboard
 
 | Key          | Behavior                           |

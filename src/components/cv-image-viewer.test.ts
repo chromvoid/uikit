@@ -63,6 +63,31 @@ async function getDialogContent(viewer: CVImageViewer) {
   return content!
 }
 
+function createWheelEvent(init: {
+  deltaX: number
+  deltaY: number
+  deltaMode?: number
+  altKey?: boolean
+  ctrlKey?: boolean
+  metaKey?: boolean
+}) {
+  const event = new Event('wheel', {
+    bubbles: true,
+    cancelable: true,
+  }) as WheelEvent
+
+  Object.defineProperties(event, {
+    deltaX: {value: init.deltaX},
+    deltaY: {value: init.deltaY},
+    deltaMode: {value: init.deltaMode ?? 0},
+    altKey: {value: Boolean(init.altKey)},
+    ctrlKey: {value: Boolean(init.ctrlKey)},
+    metaKey: {value: Boolean(init.metaKey)},
+  })
+
+  return event
+}
+
 afterEach(() => {
   document.body.innerHTML = ''
   vi.restoreAllMocks()
@@ -181,6 +206,70 @@ describe('cv-image-viewer', () => {
     ])
     expect(changes).toEqual(inputs)
     expect(closes).toEqual([{reason: 'escape'}])
+  })
+
+  it('emits gesture navigation from horizontal touchpad wheel input', async () => {
+    const viewer = await mountViewer()
+    const inputs: unknown[] = []
+    const changes: unknown[] = []
+    const viewport = viewer.shadowRoot?.querySelector<HTMLElement>('[part="viewport"]')
+    const wheel = createWheelEvent({
+      deltaX: 96,
+      deltaY: 4,
+    })
+
+    viewer.addEventListener('cv-input', (event) => inputs.push(event.detail))
+    viewer.addEventListener('cv-change', (event) => changes.push(event.detail))
+    viewport?.dispatchEvent(wheel)
+    await settle(viewer)
+
+    expect(wheel.defaultPrevented).toBe(true)
+    expect(viewer.currentIndex).toBe(0)
+    expect(inputs).toEqual([
+      {
+        index: 1,
+        itemId: 2,
+        direction: 'forward',
+        source: 'gesture',
+      },
+    ])
+    expect(changes).toEqual([])
+  })
+
+  it('ignores vertical wheel input and debounces a continuous horizontal gesture', async () => {
+    const viewer = await mountViewer({currentIndex: 1})
+    const inputs: unknown[] = []
+    const viewport = viewer.shadowRoot?.querySelector<HTMLElement>('[part="viewport"]')
+    const verticalWheel = createWheelEvent({
+      deltaX: 20,
+      deltaY: 96,
+    })
+    const backwardWheel = () =>
+      createWheelEvent({
+        deltaX: -96,
+        deltaY: 2,
+      })
+
+    viewer.addEventListener('cv-input', (event) => inputs.push(event.detail))
+    viewport?.dispatchEvent(verticalWheel)
+    expect(inputs).toEqual([])
+
+    const firstGesture = backwardWheel()
+    const repeatedGesture = backwardWheel()
+    viewport?.dispatchEvent(firstGesture)
+    viewport?.dispatchEvent(repeatedGesture)
+    await settle(viewer)
+
+    expect(firstGesture.defaultPrevented).toBe(true)
+    expect(repeatedGesture.defaultPrevented).toBe(true)
+    expect(inputs).toEqual([
+      {
+        index: 0,
+        itemId: 1,
+        direction: 'backward',
+        source: 'gesture',
+      },
+    ])
   })
 
   it('keeps Escape controlled when focus is on the internal dialog content', async () => {
