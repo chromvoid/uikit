@@ -22,6 +22,8 @@
     "compact",
     "busy",
     "empty",
+    "progress",
+    "actions",
     "footer"
   ],
   "theme": "dark",
