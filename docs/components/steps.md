@@ -2,32 +2,223 @@
 
 # cv-steps
 
-Controlled progress display for step-based flows.
+Controlled progress display for linear, step-based flows.
 
 **Headless:** None (UIKit-only component)
+
+## Usage
+
+```html
+<div class="steps-demo-shell" data-demo="steps">
+  <section class="steps-demo-hero" aria-labelledby="steps-demo-title">
+    <div class="steps-demo-copy">
+      <span class="steps-demo-kicker">Progress model</span>
+      <h3 id="steps-demo-title">Use steps when the user is inside one ordered flow.</h3>
+      <p>
+        Set <code>current</code> on <code>cv-steps</code>, set explicit status on each <code>cv-step</code>,
+        and add <code>selectable</code> only when the surrounding screen can safely jump between steps.
+      </p>
+    </div>
+
+    <dl class="steps-demo-metrics" aria-label="Steps behavior summary">
+      <div>
+        <dt>State</dt>
+        <dd>current</dd>
+      </div>
+      <div>
+        <dt>Layout</dt>
+        <dd>horizontal / vertical</dd>
+      </div>
+      <div>
+        <dt>Event</dt>
+        <dd>cv-step-select</dd>
+      </div>
+    </dl>
+  </section>
+
+  <section class="steps-demo-section" aria-labelledby="steps-demo-horizontal-title">
+    <div class="steps-demo-section-header">
+      <span class="steps-demo-kicker">Horizontal flow</span>
+      <h4 id="steps-demo-horizontal-title">Use for compact setup, import, and publish flows</h4>
+    </div>
+
+    <div class="steps-demo-panel">
+      <cv-steps current="encrypt" aria-label="Vault export progress">
+        <cv-step value="prepare" status="complete">
+          <span slot="marker">1</span>
+          <span class="steps-demo-step-title">Prepare archive</span>
+          <span class="steps-demo-step-meta">Inputs collected and checked.</span>
+        </cv-step>
+        <cv-step value="encrypt" status="current">
+          <span slot="marker">2</span>
+          <span class="steps-demo-step-title">Encrypt files</span>
+          <span class="steps-demo-step-meta">Current operation with primary focus.</span>
+        </cv-step>
+        <cv-step value="upload" status="pending">
+          <span slot="marker">3</span>
+          <span class="steps-demo-step-title">Upload bundle</span>
+          <span class="steps-demo-step-meta">Waiting for the active step.</span>
+        </cv-step>
+        <cv-step value="verify" status="pending">
+          <span slot="marker">4</span>
+          <span class="steps-demo-step-title">Verify receipt</span>
+          <span class="steps-demo-step-meta">Final proof after transfer.</span>
+        </cv-step>
+      </cv-steps>
+    </div>
+  </section>
+
+  <section class="steps-demo-section" aria-labelledby="steps-demo-vertical-title">
+    <div class="steps-demo-section-header">
+      <span class="steps-demo-kicker">Vertical checklist</span>
+      <h4 id="steps-demo-vertical-title">Use when labels need room or each step needs detail</h4>
+    </div>
+
+    <div class="steps-demo-grid">
+      <div class="steps-demo-panel">
+        <span class="steps-demo-label">Pairing workflow</span>
+        <cv-steps orientation="vertical" current="proof" aria-label="Device pairing progress">
+          <cv-step value="host" status="complete">
+            <span slot="marker">✓</span>
+            <span class="steps-demo-step-title">Detect local host</span>
+            <span class="steps-demo-step-meta">The transport is available and trusted.</span>
+          </cv-step>
+          <cv-step value="proof" status="current">
+            <span slot="marker">2</span>
+            <span class="steps-demo-step-title">Compare pairing proof</span>
+            <span class="steps-demo-step-meta"
+              >Keep the current task visible while the user verifies the code.</span
+            >
+          </cv-step>
+          <cv-step value="policy" status="pending">
+            <span slot="marker">3</span>
+            <span class="steps-demo-step-title">Choose sync policy</span>
+            <span class="steps-demo-step-meta">Next step is visible but not active.</span>
+          </cv-step>
+        </cv-steps>
+      </div>
+
+      <div class="steps-demo-panel">
+        <span class="steps-demo-label">State matrix</span>
+        <cv-steps orientation="vertical" current="current" aria-label="Step visual states">
+          <cv-step value="done" status="complete">
+            <span slot="marker">✓</span>
+            <span class="steps-demo-step-title">Complete</span>
+            <span class="steps-demo-step-meta">Use for finished work.</span>
+          </cv-step>
+          <cv-step value="current" status="current">
+            <span slot="marker">2</span>
+            <span class="steps-demo-step-title">Current</span>
+            <span class="steps-demo-step-meta">Use for the active step.</span>
+          </cv-step>
+          <cv-step value="pending" status="pending">
+            <span slot="marker">3</span>
+            <span class="steps-demo-step-title">Pending</span>
+            <span class="steps-demo-step-meta">Use for not-yet-started work.</span>
+          </cv-step>
+          <cv-step value="blocked" status="error">
+            <span slot="marker">!</span>
+            <span class="steps-demo-step-title">Error</span>
+            <span class="steps-demo-step-meta">Use when the flow needs correction.</span>
+          </cv-step>
+          <cv-step value="disabled" disabled>
+            <span slot="marker">5</span>
+            <span class="steps-demo-step-title">Disabled</span>
+            <span class="steps-demo-step-meta">Use for unavailable branches.</span>
+          </cv-step>
+        </cv-steps>
+      </div>
+    </div>
+  </section>
+
+  <section class="steps-demo-section" aria-labelledby="steps-demo-selectable-title">
+    <div class="steps-demo-section-header">
+      <span class="steps-demo-kicker">Selectable</span>
+      <h4 id="steps-demo-selectable-title">
+        Listen for selection, then update the controlled <code>current</code> value
+      </h4>
+    </div>
+
+    <div class="steps-demo-panel steps-demo-panel--interactive">
+      <cv-steps
+        class="steps-demo-selectable"
+        current="device"
+        selectable
+        aria-label="Recovery setup step picker"
+      >
+        <cv-step value="device" status="current">
+          <span slot="marker">1</span>
+          <span class="steps-demo-step-title">Device</span>
+          <span class="steps-demo-step-meta">Select the recovery device.</span>
+        </cv-step>
+        <cv-step value="secret" status="pending">
+          <span slot="marker">2</span>
+          <span class="steps-demo-step-title">Secret</span>
+          <span class="steps-demo-step-meta">Confirm protected material.</span>
+        </cv-step>
+        <cv-step value="review" status="pending">
+          <span slot="marker">3</span>
+          <span class="steps-demo-step-title">Review</span>
+          <span class="steps-demo-step-meta">Check policy before commit.</span>
+        </cv-step>
+        <cv-step value="sealed" status="pending" disabled>
+          <span slot="marker">4</span>
+          <span class="steps-demo-step-title">Sealed</span>
+          <span class="steps-demo-step-meta">Disabled until review passes.</span>
+        </cv-step>
+      </cv-steps>
+      <output class="steps-demo-output" aria-live="polite">Selected step: device</output>
+    </div>
+  </section>
+</div>
+
+<script>
+  document.querySelectorAll('.steps-demo-shell[data-demo="steps"]:not([data-ready])').forEach((shell) => {
+    shell.dataset.ready = 'true'
+    const group = shell.querySelector('.steps-demo-selectable')
+    const output = shell.querySelector('.steps-demo-output')
+
+    group?.addEventListener('cv-step-select', (event) => {
+      const value = event.detail?.value
+      if (!value) return
+      group.current = value
+      group.setAttribute('current', value)
+      if (output) {
+        output.textContent = `Selected step: ${value}`
+      }
+    })
+  })
+</script>
+```
 
 ## Anatomy
 
 ```text
 <cv-steps>
-└── <ol part="base">
+└── <div part="base" role="list">
     └── <slot> ← cv-step children
 ```
 
 ## Attributes
 
-| Attribute     | Type        | Default   | Description                  |
-| ------------- | ----------- | --------- | ---------------------------- | ---------------- |
-| `current`     | String      | `""`      | Current step value           |
-| `orientation` | `horizontal | vertical` | `horizontal`                 | Layout direction |
-| `selectable`  | Boolean     | `false`   | Allows step selection events |
+| Attribute     | Type                         | Default        | Description                                               |
+| ------------- | ---------------------------- | -------------- | --------------------------------------------------------- |
+| `current`     | String                       | `""`           | Current step value                                        |
+| `orientation` | `"horizontal" \| "vertical"` | `"horizontal"` | Layout direction                                          |
+| `selectable`  | Boolean                      | `false`        | Emits step selection events from enabled child `cv-step`s |
 
 ## Child: cv-step
 
 Attrs: `value`, `status="pending|current|complete|error"`, `disabled`.
+
+`current` is controlled by the parent `cv-steps`. Child `status` remains explicit: use `complete`,
+`pending`, and `error` to describe surrounding steps instead of expecting the component to infer progress.
 
 ## Events
 
 | Event            | Detail      |
 | ---------------- | ----------- |
 | `cv-step-select` | `{ value }` |
+
+`cv-step-select` fires only when `selectable` is set and the clicked step is enabled and has a `value`.
+Update `current` from the owning route/model after receiving the event.
