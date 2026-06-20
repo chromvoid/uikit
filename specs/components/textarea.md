@@ -14,23 +14,23 @@ Multi-line text input with native textarea semantics and headless state delegati
 
 ## Attributes
 
-| Attribute     | Type    | Default      | Reflects | Description                                        |
-| ------------- | ------- | ------------ | -------- | -------------------------------------------------- |
-| `value`       | String  | `""`         | no       | Current textarea value                             |
-| `placeholder` | String  | `""`         | no       | Placeholder text                                   |
-| `disabled`    | Boolean | `false`      | yes      | Prevents interaction and removes from tab sequence |
-| `readonly`    | Boolean | `false`      | yes      | Prevents editing while keeping focusability        |
-| `required`    | Boolean | `false`      | yes      | Marks the field as required                        |
-| `rows`        | Number  | `4`          | no       | Visible row count                                  |
-| `cols`        | Number  | `20`         | no       | Visible column count                               |
-| `minlength`   | Number  | —            | no       | Minimum accepted value length                      |
-| `maxlength`   | Number  | —            | no       | Maximum accepted value length                      |
-| `resize`      | String  | `"vertical"` | yes      | Resize behavior: `vertical` \| `none`              |
-| `size`        | String  | `"medium"`   | yes      | Component size: `small` \| `medium` \| `large`     |
-| `variant`     | String  | `"outlined"` | yes      | Visual variant: `outlined` \| `filled`             |
-| `name`        | String  | `""`         | no       | Native textarea form field name                    |
-| `aria-labelledby` | String | `""`      | no       | ID reference passed to the native textarea         |
-| `aria-describedby` | String | `""`     | no       | Description/error ID reference passed to the native textarea |
+| Attribute          | Type    | Default      | Reflects | Description                                                  |
+| ------------------ | ------- | ------------ | -------- | ------------------------------------------------------------ |
+| `value`            | String  | `""`         | no       | Current textarea value                                       |
+| `placeholder`      | String  | `""`         | no       | Placeholder text                                             |
+| `disabled`         | Boolean | `false`      | yes      | Prevents interaction and removes from tab sequence           |
+| `readonly`         | Boolean | `false`      | yes      | Prevents editing while keeping focusability                  |
+| `required`         | Boolean | `false`      | yes      | Marks the field as required                                  |
+| `rows`             | Number  | `4`          | no       | Visible row count                                            |
+| `cols`             | Number  | `20`         | no       | Visible column count                                         |
+| `minlength`        | Number  | —            | no       | Minimum accepted value length                                |
+| `maxlength`        | Number  | —            | no       | Maximum accepted value length                                |
+| `resize`           | String  | `"vertical"` | yes      | Resize behavior: `vertical` \| `none`                        |
+| `size`             | String  | `"medium"`   | yes      | Component size: `small` \| `medium` \| `large`               |
+| `variant`          | String  | `"outlined"` | yes      | Visual variant: `outlined` \| `filled`                       |
+| `name`             | String  | `""`         | no       | Native textarea form field name                              |
+| `aria-labelledby`  | String  | `""`         | no       | ID reference passed to the native textarea                   |
+| `aria-describedby` | String  | `""`         | no       | Description/error ID reference passed to the native textarea |
 
 ## Variants
 
@@ -147,15 +147,26 @@ UIKit does not own ARIA computation, disabled/readonly guards, or filled-state d
 ## Usage
 
 ```html
-<cv-textarea placeholder="Write a comment"></cv-textarea>
+<div class="textarea-demo-grid">
+  <cv-field class="textarea-demo-cell">
+    <span slot="label">Basic</span>
+    <cv-textarea placeholder="Write a comment"></cv-textarea>
+  </cv-field>
 
-<cv-field required>
-  <span slot="label">Comment</span>
-  <cv-textarea required rows="6"></cv-textarea>
-  <span slot="description">Be specific and concise.</span>
-</cv-field>
+  <cv-field class="textarea-demo-cell" required>
+    <span slot="label">Comment</span>
+    <cv-textarea rows="6"></cv-textarea>
+    <span slot="description">Be specific and concise.</span>
+  </cv-field>
 
-<cv-textarea variant="filled" size="small" resize="none"></cv-textarea>
+  <cv-field class="textarea-demo-cell textarea-demo-cell--compact">
+    <span slot="label">Filled compact</span>
+    <cv-textarea variant="filled" size="small" resize="none"></cv-textarea>
+  </cv-field>
 
-<cv-textarea disabled value="Read-only snapshot"></cv-textarea>
+  <cv-field class="textarea-demo-cell textarea-demo-cell--compact" disabled>
+    <span slot="label">Disabled</span>
+    <cv-textarea value="Read-only snapshot"></cv-textarea>
+  </cv-field>
+</div>
 ```
