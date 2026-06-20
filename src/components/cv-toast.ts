@@ -64,7 +64,7 @@ export class CVToast extends ReatomLitElement {
       [part='base'] {
         display: grid;
         grid-template-columns: auto 1fr auto;
-        align-items: start;
+        align-items: center;
         gap: var(--cv-toast-gap, var(--cv-space-2, 8px));
         padding: var(--cv-toast-padding-block, var(--cv-space-3, 12px))
           var(--cv-toast-padding-inline, var(--cv-space-4, 16px));
