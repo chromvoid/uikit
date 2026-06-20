@@ -613,10 +613,7 @@ describe('cv-sidebar', () => {
         /:host\(\[collapsed\]:not\(\[mobile\]\)\)\s*{[\s\S]*inline-size:\s*var\(--cv-sidebar-rail-inline-size/,
       )
       expect(cssText).toMatch(
-        /:host\(\[collapsed\]:not\(\[mobile\]\)\) slot\[name='header'\]\s*{[\s\S]*display:\s*none;/,
-      )
-      expect(cssText).toMatch(
-        /:host\(\[collapsed\]:not\(\[mobile\]\)\) \[part='footer'\]\s*{[\s\S]*display:\s*none;/,
+        /:host\(\[collapsed\]:not\(\[mobile\]\)\) slot\[name='header'\],[\s\S]*:host\(\[collapsed\]:not\(\[mobile\]\)\) \[part='footer'\]\s*{[\s\S]*display:\s*none;/,
       )
     })
 
@@ -625,13 +622,18 @@ describe('cv-sidebar', () => {
       const transitionText = transitionsToText(cssText)
 
       expect(transitionText).not.toMatch(/\b(?:inline-size|width|grid-template-columns)\b/)
+      expect(cssText).toContain(':host(:not([mobile]))::before')
+      expect(cssText).toMatch(/\[part='panel'\]\s*{[\s\S]*transition:[\s\S]*border-color[\s\S]*box-shadow/)
       expect(cssText).toMatch(/\[part='overlay'\]\s*{[\s\S]*transition:[\s\S]*opacity[\s\S]*display/)
       expect(cssText).toMatch(
         /:host\(\[mobile\]\) \[part='panel'\]\s*{[\s\S]*transition:[\s\S]*opacity[\s\S]*transform[\s\S]*display/,
       )
+      expect(cssText).toMatch(
+        /slot\[name='header'\],[\s\S]*\[part='footer'\]\s*{[\s\S]*transition:[\s\S]*opacity[\s\S]*transform[\s\S]*display/,
+      )
       expect(cssText).toContain('transition-behavior: allow-discrete')
       expect(cssText).toMatch(
-        /@media \(prefers-reduced-motion: reduce\)\s*{[\s\S]*\[part='overlay'\],[\s\S]*:host\(\[mobile\]\) \[part='panel'\],[\s\S]*\[part='toggle'\]\s*{[\s\S]*transition:\s*none;/,
+        /@media \(prefers-reduced-motion: reduce\)\s*{[\s\S]*:host\(:not\(\[mobile\]\)\)::before,[\s\S]*\[part='overlay'\],[\s\S]*:host\(:not\(\[mobile\]\)\) \[part='panel'\],[\s\S]*:host\(\[mobile\]\) \[part='panel'\],[\s\S]*slot\[name='header'\],[\s\S]*\[part='footer'\],[\s\S]*\[part='toggle'\]\s*{[\s\S]*transition:\s*none;/,
       )
     })
   })

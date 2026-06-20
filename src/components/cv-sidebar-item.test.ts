@@ -141,7 +141,7 @@ describe('cv-sidebar-item', () => {
     expect(collapsedLabelRule).toContain('clip: rect(0 0 0 0);')
     expect(collapsedLabelRule).toContain('white-space: nowrap;')
     expect(collapsedLabelRule).toContain('opacity: 0;')
-    expect(collapsedLabelRule).toContain('transform: translateX(-4px);')
+    expect(collapsedLabelRule).toContain('transform: translateX(-8px);')
     expect(collapsedLabelRule).not.toMatch(/display:\s*none/)
   })
 
@@ -151,7 +151,10 @@ describe('cv-sidebar-item', () => {
 
     expect(transitionText).not.toMatch(/\b(?:inline-size|width|grid-template-columns)\b/)
     expect(cssText).toMatch(/\[part='label'\]\s*{[\s\S]*transition:[\s\S]*opacity[\s\S]*transform/)
-    expect(cssText).toMatch(/\[part='suffix'\]\s*{[\s\S]*transition:[\s\S]*opacity[\s\S]*transform/)
+    expect(cssText).toMatch(
+      /\[part='suffix'\]\s*{[\s\S]*transition:[\s\S]*opacity[\s\S]*transform[\s\S]*display/,
+    )
+    expect(cssText).toContain('transition-behavior: allow-discrete')
     expect(cssText).toMatch(
       /@media \(prefers-reduced-motion: reduce\)\s*{[\s\S]*\[part='label'\],[\s\S]*\[part='suffix'\]\s*{[\s\S]*transition:\s*none;[\s\S]*transform:\s*none;/,
     )

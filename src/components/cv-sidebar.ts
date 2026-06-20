@@ -157,6 +157,32 @@ export class CVSidebar extends ReatomLitElement {
         inline-size: var(--cv-sidebar-inline-size, 280px);
       }
 
+      :host(:not([mobile]))::before {
+        content: '';
+        position: absolute;
+        inset-block: 0;
+        inset-inline-start: 0;
+        z-index: 0;
+        inline-size: var(--cv-sidebar-inline-size, 280px);
+        block-size: 100%;
+        pointer-events: none;
+        opacity: 0;
+        transform: translateX(-10px);
+        background:
+          linear-gradient(90deg, rgba(101, 215, 255, 0.18), transparent 64%),
+          linear-gradient(180deg, rgba(238, 245, 255, 0.055), transparent 42%);
+        transition:
+          opacity var(--cv-sidebar-transition-duration, var(--cv-duration-normal, 200ms))
+            var(--cv-sidebar-transition-easing, var(--cv-easing-standard, ease)),
+          transform var(--cv-sidebar-transition-duration, var(--cv-duration-normal, 200ms))
+            var(--cv-sidebar-transition-easing, var(--cv-easing-standard, ease));
+      }
+
+      :host(:not([collapsed]):not([mobile]))::before {
+        opacity: 0.16;
+        transform: translateX(0);
+      }
+
       [part='overlay'] {
         position: fixed;
         inset: 0;
@@ -179,15 +205,28 @@ export class CVSidebar extends ReatomLitElement {
         display: grid;
         grid-template-rows: auto 1fr auto;
         position: relative;
+        z-index: 1;
         inline-size: var(--cv-sidebar-inline-size, 280px);
         block-size: 100%;
         background: var(--cv-sidebar-background, var(--cv-color-surface, #141923));
         border-inline-end: 1px solid var(--cv-sidebar-border-color, var(--cv-color-border, #2a3245));
+        box-shadow: inset -1px 0 0 rgba(101, 215, 255, 0.08);
         overflow: hidden;
+        transition:
+          border-color var(--cv-sidebar-transition-duration, var(--cv-duration-normal, 200ms))
+            var(--cv-sidebar-transition-easing, var(--cv-easing-standard, ease)),
+          box-shadow var(--cv-sidebar-transition-duration, var(--cv-duration-normal, 200ms))
+            var(--cv-sidebar-transition-easing, var(--cv-easing-standard, ease));
       }
 
       :host([collapsed]) [part='panel'] {
         inline-size: var(--cv-sidebar-rail-inline-size, 56px);
+      }
+
+      :host(:not([collapsed]):not([mobile])) [part='panel'] {
+        box-shadow:
+          inset -24px 0 42px -46px rgba(101, 215, 255, 0.72),
+          inset -1px 0 0 rgba(101, 215, 255, 0.12);
       }
 
       :host([collapsed]:not([mobile])) {
@@ -202,14 +241,6 @@ export class CVSidebar extends ReatomLitElement {
         justify-content: center;
         padding-inline: var(--cv-space-2, 8px);
         overflow: hidden;
-      }
-
-      :host([collapsed]:not([mobile])) slot[name='header'] {
-        display: none;
-      }
-
-      :host([collapsed]:not([mobile])) [part='footer'] {
-        display: none;
       }
 
       :host([collapsed]:not([mobile])) [part='toggle'] {
@@ -271,6 +302,39 @@ export class CVSidebar extends ReatomLitElement {
         padding-inline: var(--cv-sidebar-padding-inline, var(--cv-space-3, 12px));
       }
 
+      slot[name='header'],
+      [part='footer'] {
+        opacity: 1;
+        transform: translateX(0);
+        transition:
+          opacity var(--cv-sidebar-transition-duration, var(--cv-duration-normal, 200ms))
+            var(--cv-sidebar-transition-easing, var(--cv-easing-standard, ease)),
+          transform var(--cv-sidebar-transition-duration, var(--cv-duration-normal, 200ms))
+            var(--cv-sidebar-transition-easing, var(--cv-easing-standard, ease)),
+          display var(--cv-sidebar-transition-duration, var(--cv-duration-normal, 200ms)) allow-discrete;
+        transition-behavior: allow-discrete;
+      }
+
+      slot[name='header'] {
+        display: inline-flex;
+        min-inline-size: 0;
+      }
+
+      :host([collapsed]:not([mobile])) slot[name='header'],
+      :host([collapsed]:not([mobile])) [part='footer'] {
+        display: none;
+        opacity: 0;
+        transform: translateX(-8px);
+      }
+
+      @starting-style {
+        :host(:not([collapsed]):not([mobile])) slot[name='header'],
+        :host(:not([collapsed]):not([mobile])) [part='footer'] {
+          opacity: 0;
+          transform: translateX(-8px);
+        }
+      }
+
       ::slotted([slot='header']) {
         min-inline-size: 0;
         overflow: hidden;
@@ -315,12 +379,19 @@ export class CVSidebar extends ReatomLitElement {
       }
 
       @media (prefers-reduced-motion: reduce) {
+        :host(:not([mobile]))::before,
         [part='overlay'],
+        :host(:not([mobile])) [part='panel'],
         :host([mobile]) [part='panel'],
+        slot[name='header'],
+        [part='footer'],
         [part='toggle'] {
           transition: none;
         }
 
+        :host(:not([mobile]))::before,
+        slot[name='header'],
+        [part='footer'],
         :host([mobile]) [part='panel'] {
           transform: none;
         }

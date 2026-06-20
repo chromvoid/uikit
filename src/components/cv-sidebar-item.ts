@@ -95,8 +95,12 @@ export class CVSidebarItem extends LitElement {
         opacity: 1;
         transform: translateX(0);
         transition:
-          opacity var(--cv-duration-fast, 120ms) var(--cv-easing-standard, ease),
-          transform var(--cv-duration-fast, 120ms) var(--cv-easing-standard, ease);
+          opacity var(--cv-sidebar-transition-duration, var(--cv-duration-normal, 200ms))
+            var(--cv-sidebar-transition-easing, var(--cv-easing-standard, ease)),
+          transform var(--cv-sidebar-transition-duration, var(--cv-duration-normal, 200ms))
+            var(--cv-sidebar-transition-easing, var(--cv-easing-standard, ease)),
+          display var(--cv-sidebar-transition-duration, var(--cv-duration-normal, 200ms)) allow-discrete;
+        transition-behavior: allow-discrete;
       }
 
       [part='label'] {
@@ -107,8 +111,10 @@ export class CVSidebarItem extends LitElement {
         opacity: 1;
         transform: translateX(0);
         transition:
-          opacity var(--cv-duration-fast, 120ms) var(--cv-easing-standard, ease),
-          transform var(--cv-duration-fast, 120ms) var(--cv-easing-standard, ease);
+          opacity var(--cv-sidebar-transition-duration, var(--cv-duration-normal, 200ms))
+            var(--cv-sidebar-transition-easing, var(--cv-easing-standard, ease)),
+          transform var(--cv-sidebar-transition-duration, var(--cv-duration-normal, 200ms))
+            var(--cv-sidebar-transition-easing, var(--cv-easing-standard, ease));
       }
 
       :host([data-sidebar-collapsed]:not([data-sidebar-mobile])) [part='base'] {
@@ -127,13 +133,21 @@ export class CVSidebarItem extends LitElement {
         overflow: hidden;
         white-space: nowrap;
         opacity: 0;
-        transform: translateX(-4px);
+        transform: translateX(-8px);
       }
 
       :host([data-sidebar-collapsed]:not([data-sidebar-mobile])) [part='suffix'] {
         display: none;
         opacity: 0;
-        transform: translateX(-4px);
+        transform: translateX(-8px);
+      }
+
+      @starting-style {
+        [part='label'],
+        [part='suffix'] {
+          opacity: 0;
+          transform: translateX(-8px);
+        }
       }
 
       @media (prefers-reduced-motion: reduce) {
