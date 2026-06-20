@@ -84,7 +84,7 @@ Container that manages a queue of toast notifications with positioning, stacking
 
 ```html
 <!-- Basic usage (imperative API via controller) -->
-<div class="toast-demo-surface">
+<div class="toast-demo-surface" data-live-demo-height="560">
   <div class="example-row">
     <cv-button id="toast-save" variant="primary">Show saved</cv-button>
     <cv-button id="toast-error" variant="danger">Show error</cv-button>

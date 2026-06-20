@@ -289,7 +289,7 @@ These behaviors are optional and currently not required on `cv-combobox`:
 
 ```html
 <!-- Basic editable combobox -->
-<cv-combobox aria-label="Search">
+<cv-combobox aria-label="Search" data-live-demo-height="420">
   <cv-combobox-option value="a">Alpha</cv-combobox-option>
   <cv-combobox-option value="b">Beta</cv-combobox-option>
   <cv-combobox-option value="c" disabled>Gamma</cv-combobox-option>

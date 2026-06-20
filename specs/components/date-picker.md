@@ -286,6 +286,7 @@ UIKit owns rendering and animation only.
 
 ```html
 <cv-date-picker
+  data-live-demo-height="420"
   mode="date"
   aria-label="Flight date"
   placeholder="Select departure date"

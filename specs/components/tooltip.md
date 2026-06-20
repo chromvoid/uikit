@@ -106,7 +106,7 @@ Both events bubble and are composed. They are dispatched together on every trans
 
 ```html
 <!-- Default: hover + focus triggers -->
-<cv-tooltip>
+<cv-tooltip data-live-demo-height="420">
   <button slot="trigger">Hover me</button>
   <span slot="content">Contextual info</span>
 </cv-tooltip>

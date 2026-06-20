@@ -158,7 +158,7 @@ All keyboard handlers are no-ops.
 ## Usage
 
 ```html
-<div class="select-demo-grid">
+<div class="select-demo-grid" data-live-demo-height="420">
   <cv-field class="select-demo-cell">
     <span slot="label">Basic</span>
     <span slot="description">Empty single-select with placeholder text until a choice is made.</span>

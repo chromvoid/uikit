@@ -158,7 +158,7 @@ Slide-out panel dialog anchored to a viewport edge, used for navigation, forms, 
 
 ```html
 <!-- Basic drawer (slides from end) -->
-<cv-drawer>
+<cv-drawer data-live-demo-height="560">
   <span slot="trigger">Open drawer</span>
   <span slot="title">Settings</span>
   <p>Drawer body content here.</p>

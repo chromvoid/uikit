@@ -72,7 +72,6 @@ Mobile modal sheet primitive that reuses `cv-dialog` for modal state, focus mana
 <div
   class="bottom-sheet-demo-surface"
   data-demo="bottom-sheet"
-  data-live-demo-isolated
   data-live-demo-height="560"
 >
   <div class="bottom-sheet-demo-copy">

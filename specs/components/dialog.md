@@ -154,7 +154,7 @@ The top-layer shell, overlay, and content expose `data-state="closed|opening|ope
 ## Usage
 
 ```html
-<div class="dialog-demo-shell" data-demo="dialog">
+<div class="dialog-demo-shell" data-demo="dialog" data-live-demo-height="560">
   <section class="dialog-demo-hero" aria-labelledby="dialog-demo-title">
     <div class="dialog-demo-copy">
       <span class="dialog-demo-kicker">Controlled dialogs</span>

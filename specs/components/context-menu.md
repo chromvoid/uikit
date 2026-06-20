@@ -159,7 +159,7 @@ UIKit does not own activation or navigation logic; headless state is the source 
 
 ```html
 <!-- Basic context menu -->
-<cv-context-menu aria-label="File actions">
+<cv-context-menu aria-label="File actions" data-live-demo-height="420">
   <div slot="target">Right-click here</div>
   <cv-menu-item value="copy">Copy</cv-menu-item>
   <cv-menu-item value="paste">Paste</cv-menu-item>

@@ -163,7 +163,7 @@ When the `arrow` boolean attribute is present, the `[part="arrow"]` element is r
 
 ```html
 <!-- Basic popover -->
-<cv-popover>
+<cv-popover data-live-demo-height="420">
   <span slot="trigger">Options</span>
   <p>Popover content here</p>
 </cv-popover>
