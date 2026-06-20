@@ -19,14 +19,12 @@
   },
   "states": [
     "elevated",
-    "outlined",
-    "filled",
-    "expanded",
-    "disabled",
+    "outlined-media",
+    "filled-expanded",
     "long-content"
   ],
   "theme": "dark",
-  "title": "Card variants, expandable content, and disabled state",
+  "title": "Card variants with media and expanded disclosure",
   "status": "missing-baseline",
   "baselinePath": "/srv/projects/chromvoid/packages/uikit/tests/visual/__visual-baselines__/cv-card/cv-card-states-dark-default.png"
 }
