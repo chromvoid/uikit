@@ -12,8 +12,23 @@
   "component": "cv-sidebar",
   "diagnostics": {
     "emptyStage": false,
-    "horizontalOverflow": [],
-    "clippedText": [],
+    "horizontalOverflow": [
+      {
+        "selector": "cv-sidebar",
+        "scrollWidth": 220,
+        "clientWidth": 48
+      }
+    ],
+    "clippedText": [
+      {
+        "selector": "cv-sidebar",
+        "text": "A Assets B Boundaries",
+        "scrollWidth": 220,
+        "clientWidth": 48,
+        "scrollHeight": 172,
+        "clientHeight": 172
+      }
+    ],
     "outsideStage": [],
     "stageViewportOverflow": null
   },
