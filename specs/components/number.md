@@ -14,7 +14,7 @@ Numeric input field with ARIA spinbutton semantics, optional stepper controls, c
     ├── <input part="input" role="spinbutton" inputmode="decimal">
     ├── <span part="clear-button" role="button">       ← conditional on showClearButton
     │   └── <slot name="clear-icon">×</slot>
-    ├── <span part="stepper">                           ← conditional on stepper
+    ├── <span part="stepper">                           ← conditional on stepper, horizontal controls
     │   ├── <button part="increment" type="button">
     │   └── <button part="decrement" type="button">
     └── <span part="suffix">
@@ -23,26 +23,26 @@ Numeric input field with ARIA spinbutton semantics, optional stepper controls, c
 
 ## Attributes
 
-| Attribute          | Type    | Default      | Reflects | Description                                              |
-| ------------------ | ------- | ------------ | -------- | -------------------------------------------------------- |
-| `value`            | Number  | `0`          | no       | Current numeric value                                    |
+| Attribute          | Type    | Default      | Reflects | Description                                                                            |
+| ------------------ | ------- | ------------ | -------- | -------------------------------------------------------------------------------------- |
+| `value`            | Number  | `0`          | no       | Current numeric value                                                                  |
 | `default-value`    | Number  | `min ?? 0`   | no       | Value to reset to on clear; form reset restores the initial connected `value` snapshot |
-| `min`              | Number  | —            | no       | Optional minimum boundary                                |
-| `max`              | Number  | —            | no       | Optional maximum boundary                                |
-| `step`             | Number  | `1`          | no       | Small increment/decrement step                           |
-| `large-step`       | Number  | `10`         | no       | Large increment/decrement step (`PageUp`/`PageDown`)     |
-| `name`             | String  | `""`         | no       | Form field name for submit serialization                 |
-| `disabled`         | Boolean | `false`      | yes      | Prevents interaction and dims the component              |
-| `read-only`        | Boolean | `false`      | yes      | Keeps focusable/announced but blocks user mutation       |
-| `required`         | Boolean | `false`      | yes      | Marks the field as required for form validation          |
-| `clearable`        | Boolean | `false`      | yes      | Shows a clear button when the value differs from default |
-| `stepper`          | Boolean | `false`      | yes      | Shows increment/decrement stepper buttons                |
-| `placeholder`      | String  | `""`         | no       | Placeholder text displayed when the input is empty       |
-| `size`             | String  | `"medium"`   | yes      | Component size: `small` \| `medium` \| `large`           |
-| `variant`          | String  | `"outlined"` | yes      | Visual variant: `outlined` \| `filled`                   |
-| `aria-label`       | String  | `""`         | no       | Accessible label                                         |
-| `aria-labelledby`  | String  | `""`         | no       | ID reference to visible label                            |
-| `aria-describedby` | String  | `""`         | no       | ID reference to description                              |
+| `min`              | Number  | —            | no       | Optional minimum boundary                                                              |
+| `max`              | Number  | —            | no       | Optional maximum boundary                                                              |
+| `step`             | Number  | `1`          | no       | Small increment/decrement step                                                         |
+| `large-step`       | Number  | `10`         | no       | Large increment/decrement step (`PageUp`/`PageDown`)                                   |
+| `name`             | String  | `""`         | no       | Form field name for submit serialization                                               |
+| `disabled`         | Boolean | `false`      | yes      | Prevents interaction and dims the component                                            |
+| `read-only`        | Boolean | `false`      | yes      | Keeps focusable/announced but blocks user mutation                                     |
+| `required`         | Boolean | `false`      | yes      | Marks the field as required for form validation                                        |
+| `clearable`        | Boolean | `false`      | yes      | Shows a clear button when the value differs from default                               |
+| `stepper`          | Boolean | `false`      | yes      | Shows increment/decrement stepper buttons                                              |
+| `placeholder`      | String  | `""`         | no       | Placeholder text displayed when the input is empty                                     |
+| `size`             | String  | `"medium"`   | yes      | Component size: `small` \| `medium` \| `large`                                         |
+| `variant`          | String  | `"outlined"` | yes      | Visual variant: `outlined` \| `filled`                                                 |
+| `aria-label`       | String  | `""`         | no       | Accessible label                                                                       |
+| `aria-labelledby`  | String  | `""`         | no       | ID reference to visible label                                                          |
+| `aria-describedby` | String  | `""`         | no       | ID reference to description                                                            |
 
 ## Variants
 
@@ -98,7 +98,9 @@ Numeric input field with ARIA spinbutton semantics, optional stepper controls, c
 | `--cv-number-icon-size`           | `1em`                                        | Size of prefix/suffix/clear icons                               |
 | `--cv-number-gap`                 | `var(--cv-space-2, 8px)`                     | Spacing between inner elements (prefix, input, buttons, suffix) |
 | `--cv-number-transition-duration` | `var(--cv-duration-fast, 120ms)`             | Transition duration for state changes                           |
-| `--cv-number-stepper-width`       | `24px`                                       | Width of each stepper button                                    |
+| `--cv-number-stepper-width`       | `28px`                                       | Legacy fallback for horizontal stepper button inline size        |
+| `--cv-number-stepper-button-inline-size` | `var(--cv-number-stepper-width, 28px)` | Inline size of each horizontal stepper button                    |
+| `--cv-number-stepper-button-gap`  | `2px`                                        | Gap between horizontal stepper buttons                           |
 
 Additionally, component styles depend on theme tokens through fallback values:
 
@@ -131,6 +133,8 @@ Additionally, component styles depend on theme tokens through fallback values:
 | `:host([filled])`             | Indicates value differs from default (e.g., for floating label transitions) |
 | `:host([clearable])`          | Clear button space reserved in layout                                       |
 | `:host([stepper])`            | Stepper buttons rendered and visible                                        |
+| `:host([stepper-active="increment"])` | Transient pressed/step feedback for the increment button             |
+| `:host([stepper-active="decrement"])` | Transient pressed/step feedback for the decrement button             |
 | `:host([size="small"])`       | Small size overrides                                                        |
 | `:host([size="large"])`       | Large size overrides                                                        |
 | `:host([variant="outlined"])` | Visible border, transparent background                                      |
@@ -190,8 +194,11 @@ Additionally, component styles depend on theme tokens through fallback values:
 - Native `<input>` `focus` event -> `actions.setFocused(true)` -> dispatches `cv-focus` CustomEvent
 - Native `<input>` `blur` event -> `actions.setFocused(false)` (triggers draft commit) -> dispatches `cv-blur` CustomEvent; if value changed since focus, dispatches `cv-change` CustomEvent
 - Clear button `click` -> `actions.clear()` -> dispatches `cv-clear` CustomEvent
-- Increment button `click` -> `actions.increment()` -> dispatches `cv-change` CustomEvent
-- Decrement button `click` -> `actions.decrement()` -> dispatches `cv-change` CustomEvent
+- Increment/decrement button `click` -> unified user step path -> `actions.increment()` / `actions.decrement()` -> dispatches `cv-change` CustomEvent only when the committed value changes
+- Focused `stepper` + fine-pointer desktop wheel up/down -> normalized threshold accumulator -> unified user step path; modifiers, horizontal-dominant wheel movement, unfocused controls, disabled/read-only controls, and hidden steppers are ignored
+- `stepper` + horizontal touch swipe right/left -> thresholded scrub steps through the unified user step path; vertical-dominant touch movement cancels the gesture so page scroll remains available
+- Stepper button press-and-hold -> delayed repeated steps through the unified user step path, with accelerating repeat interval and click suppression after repeat starts
+- Successful touch-origin swipe and long-press steps may call `navigator.vibrate(6)` as best-effort feedback when available; vibration is throttled and disabled under `prefers-reduced-motion: reduce`
 
 ### Input display logic (UIKit responsibility)
 
@@ -204,33 +211,33 @@ UIKit does not own value management, clamping, snapping, draft commit logic, or 
 
 ## Events
 
-| Event       | Detail              | Description                                                                                                                                                   |
-| ----------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `cv-change` | `{ value: number }` | Fires on committed value change from user interaction (stepper click, keyboard step, draft commit on blur/Enter). Does not fire from programmatic `setValue`. |
-| `cv-clear`  | `{ }`               | Fires when the value is cleared via the clear button or `Escape` key                                                                                          |
-| `cv-focus`  | `{ }`               | Fires when the input receives focus                                                                                                                           |
-| `cv-blur`   | `{ }`               | Fires when the input loses focus                                                                                                                              |
+| Event       | Detail              | Description                                                                                                                                                                                         |
+| ----------- | ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `cv-change` | `{ value: number }` | Fires on committed value change from user interaction (stepper click, focused wheel step, touch swipe step, long-press step, keyboard step, draft commit on blur/Enter). Does not fire from programmatic `setValue`. |
+| `cv-clear`  | `{ }`               | Fires when the value is cleared via the clear button or `Escape` key                                                                                                                                |
+| `cv-focus`  | `{ }`               | Fires when the input receives focus                                                                                                                                                                 |
+| `cv-blur`   | `{ }`               | Fires when the input loses focus                                                                                                                                                                    |
 
 ## Imperative API
 
-| Method / Property            | Description                                             |
-| ---------------------------- | ------------------------------------------------------- |
-| `stepUp(times = 1)`          | Increments by `step` `times` times                      |
-| `stepDown(times = 1)`        | Decrements by `step` `times` times                      |
-| `pageUp(times = 1)`          | Increments by `largeStep` `times` times                 |
-| `pageDown(times = 1)`        | Decrements by `largeStep` `times` times                 |
-| `setValue(value)`            | Sets numeric value through headless normalization       |
-| `getValue()`                 | Returns current committed numeric value                 |
+| Method / Property            | Description                                                  |
+| ---------------------------- | ------------------------------------------------------------ |
+| `stepUp(times = 1)`          | Increments by `step` `times` times                           |
+| `stepDown(times = 1)`        | Decrements by `step` `times` times                           |
+| `pageUp(times = 1)`          | Increments by `largeStep` `times` times                      |
+| `pageDown(times = 1)`        | Decrements by `largeStep` `times` times                      |
+| `setValue(value)`            | Sets numeric value through headless normalization            |
+| `getValue()`                 | Returns current committed numeric value                      |
 | `setRange(min, max)`         | Updates range boundaries; `null`/`undefined` removes a bound |
-| `focus(options?)`            | Focuses inner input control                             |
-| `select()`                   | Selects text in inner input control                     |
-| `checkValidity()`            | Runs current validation checks                          |
-| `reportValidity()`           | Reports validation state to UA when supported           |
-| `setCustomValidity(message)` | Sets/clears custom validity message                     |
-| `form`                       | Form owner when form-associated internals are supported |
-| `validity`                   | Current validity state when supported                   |
-| `validationMessage`          | Current validation message                              |
-| `willValidate`               | Whether control participates in validation              |
+| `focus(options?)`            | Focuses inner input control                                  |
+| `select()`                   | Selects text in inner input control                          |
+| `checkValidity()`            | Runs current validation checks                               |
+| `reportValidity()`           | Reports validation state to UA when supported                |
+| `setCustomValidity(message)` | Sets/clears custom validity message                          |
+| `form`                       | Form owner when form-associated internals are supported      |
+| `validity`                   | Current validity state when supported                        |
+| `validationMessage`          | Current validation message                                   |
+| `willValidate`               | Whether control participates in validation                   |
 
 ## Form Association
 
@@ -244,52 +251,54 @@ UIKit does not own value management, clamping, snapping, draft commit logic, or 
 ## Usage
 
 ```html
-<!-- Basic number input -->
-<cv-number value="0" placeholder="Enter a number"></cv-number>
+<div class="number-demo-grid">
+  <cv-field class="number-demo-cell">
+    <span slot="label">Basic</span>
+    <cv-number value="0" placeholder="Enter a number"></cv-number>
+  </cv-field>
 
-<!-- With label and help text through cv-field -->
-<cv-field>
-  <span slot="label">Quantity</span>
-  <cv-number></cv-number>
-  <span slot="description">Enter a value between 1 and 100</span>
-</cv-field>
+  <cv-field class="number-demo-cell">
+    <span slot="label">Range</span>
+    <cv-number value="5" min="0" max="100" step="5" large-step="25"></cv-number>
+  </cv-field>
 
-<!-- With min, max, and step -->
-<cv-number value="5" min="0" max="100" step="5" large-step="25"></cv-number>
+  <cv-field class="number-demo-cell">
+    <span slot="label">Stepper</span>
+    <cv-number name="quantity" value="2" min="0" max="10" step="1" stepper></cv-number>
+  </cv-field>
 
-<!-- Stepper buttons visible -->
-<cv-number value="1" min="0" max="10" stepper></cv-number>
+  <cv-field class="number-demo-cell">
+    <span slot="label">Clearable</span>
+    <cv-number value="42" clearable></cv-number>
+  </cv-field>
 
-<!-- Numeric input with visible stepper controls -->
-<cv-number name="quantity" value="2" min="0" max="10" step="1" stepper></cv-number>
+  <cv-field class="number-demo-cell">
+    <span slot="label">Affixes</span>
+    <cv-number value="19">
+      <span slot="prefix">$</span>
+      <span slot="suffix">.00</span>
+    </cv-number>
+  </cv-field>
 
-<!-- Clearable -->
-<cv-number value="42" clearable></cv-number>
+  <cv-field class="number-demo-cell">
+    <span slot="label">Filled small</span>
+    <cv-number variant="filled" size="small" placeholder="0"></cv-number>
+  </cv-field>
 
-<!-- With prefix (currency symbol) and suffix (unit) -->
-<cv-number>
-  <span slot="prefix">$</span>
-  <span slot="suffix">.00</span>
-</cv-number>
+  <cv-field class="number-demo-cell" disabled>
+    <span slot="label">Disabled</span>
+    <cv-number value="50"></cv-number>
+  </cv-field>
 
-<!-- Filled variant, small size -->
-<cv-number variant="filled" size="small" placeholder="0"></cv-number>
+  <cv-field class="number-demo-cell">
+    <span slot="label">Read-only</span>
+    <cv-number read-only value="100"></cv-number>
+  </cv-field>
 
-<!-- Large size, outlined variant with stepper and clearable -->
-<cv-number size="large" stepper clearable value="10" min="0" max="99"></cv-number>
-
-<!-- Disabled -->
-<cv-number disabled value="50"></cv-number>
-
-<!-- Read-only -->
-<cv-number read-only value="100"></cv-number>
-
-<!-- Required with label -->
-<cv-field required>
-  <span slot="label">Age</span>
-  <cv-number required></cv-number>
-</cv-field>
-
-<!-- With accessible label -->
-<cv-number aria-label="Quantity" value="1" min="1" max="99" stepper></cv-number>
+  <cv-field class="number-demo-cell" required>
+    <span slot="label">Age</span>
+    <cv-number min="18" max="120"></cv-number>
+    <span slot="description">Native validation stays linked to the field.</span>
+  </cv-field>
+</div>
 ```

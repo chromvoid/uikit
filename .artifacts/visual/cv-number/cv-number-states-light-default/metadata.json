@@ -22,16 +22,18 @@
     "filled",
     "stepper",
     "bounded",
+    "bounded-min",
+    "bounded-max",
     "clearable",
     "invalid",
     "disabled",
     "readonly",
     "required",
-    "small",
-    "large"
+    "small-stepper",
+    "large-stepper"
   ],
   "theme": "light",
-  "title": "Number input variants, stepper, bounded, clearable, invalid, disabled, readonly, required, and size states",
+  "title": "Number input variants, horizontal steppers, bounded edges, clearable, invalid, disabled, readonly, required, and size states",
   "status": "missing-baseline",
   "baselinePath": "/srv/projects/chromvoid/packages/uikit/tests/visual/__visual-baselines__/cv-number/cv-number-states-light-default.png"
 }

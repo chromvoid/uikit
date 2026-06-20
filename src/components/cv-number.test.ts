@@ -1,4 +1,4 @@
-import {afterEach, describe, expect, it} from 'vitest'
+import {afterEach, describe, expect, it, vi} from 'vitest'
 
 import {CVNumber} from './cv-number'
 
@@ -28,9 +28,78 @@ const getIncrement = (el: CVNumber) => el.shadowRoot!.querySelector('[part="incr
 const getDecrement = (el: CVNumber) => el.shadowRoot!.querySelector('[part="decrement"]') as HTMLButtonElement
 const getStylesText = () =>
   (CVNumber.styles as Array<{cssText?: string}>).map((style) => style.cssText ?? '').join('\n')
+const originalMatchMediaDescriptor = Object.getOwnPropertyDescriptor(window, 'matchMedia')
+const originalVibrateDescriptor = Object.getOwnPropertyDescriptor(navigator, 'vibrate')
+
+const createPointerEvent = (
+  type: string,
+  init: MouseEventInit & {pointerId?: number; pointerType?: string; isPrimary?: boolean} = {},
+): PointerEvent => {
+  const event = new MouseEvent(type, {
+    bubbles: true,
+    composed: true,
+    cancelable: true,
+    button: 0,
+    ...init,
+  }) as PointerEvent
+
+  Object.defineProperties(event, {
+    pointerId: {value: init.pointerId ?? 1},
+    pointerType: {value: init.pointerType ?? 'touch'},
+    isPrimary: {value: init.isPrimary ?? true},
+  })
+
+  return event
+}
+
+const createWheelEvent = (deltaY: number, init: WheelEventInit = {}) =>
+  new WheelEvent('wheel', {
+    bubbles: true,
+    composed: true,
+    cancelable: true,
+    deltaY,
+    ...init,
+  })
+
+const setMatchMedia = (matches: (query: string) => boolean) => {
+  Object.defineProperty(window, 'matchMedia', {
+    configurable: true,
+    value: vi.fn((query: string) => {
+      return {
+        matches: matches(query),
+        media: query,
+        onchange: null,
+        addEventListener: vi.fn(),
+        removeEventListener: vi.fn(),
+        addListener: vi.fn(),
+        removeListener: vi.fn(),
+        dispatchEvent: vi.fn(),
+      } as unknown as MediaQueryList
+    }),
+  })
+}
+
+const setNavigatorVibrate = (vibrate: ReturnType<typeof vi.fn>) => {
+  Object.defineProperty(navigator, 'vibrate', {
+    configurable: true,
+    value: vibrate,
+  })
+}
+
+const restoreProperty = (target: object, key: PropertyKey, descriptor: PropertyDescriptor | undefined) => {
+  if (descriptor) {
+    Object.defineProperty(target, key, descriptor)
+  } else {
+    Reflect.deleteProperty(target, key)
+  }
+}
 
 afterEach(() => {
   document.body.innerHTML = ''
+  vi.useRealTimers()
+  vi.restoreAllMocks()
+  restoreProperty(window, 'matchMedia', originalMatchMediaDescriptor)
+  restoreProperty(navigator, 'vibrate', originalVibrateDescriptor)
 })
 
 describe('cv-number', () => {
@@ -38,9 +107,37 @@ describe('cv-number', () => {
     it('renders filled variant with a visible non-prominent shell', () => {
       const stylesText = getStylesText()
 
-      expect(stylesText).toMatch(/:host\(\[variant='filled'\]\) \[part='base'\]\s*{[\s\S]*background:\s*var\(--cv-color-surface-2/)
-      expect(stylesText).toMatch(/:host\(\[variant='filled'\]\) \[part='base'\]\s*{[\s\S]*border-color:\s*transparent;/)
-      expect(stylesText).toMatch(/:host\(\[variant='filled'\]\) \[part='base'\]\s*{[\s\S]*box-shadow:\s*inset 0 0 0 1px/)
+      expect(stylesText).toMatch(
+        /:host\(\[variant='filled'\]\) \[part='base'\]\s*{[\s\S]*background:\s*var\(--cv-color-surface-2/,
+      )
+      expect(stylesText).toMatch(
+        /:host\(\[variant='filled'\]\) \[part='base'\]\s*{[\s\S]*border-color:\s*transparent;/,
+      )
+      expect(stylesText).toMatch(
+        /:host\(\[variant='filled'\]\) \[part='base'\]\s*{[\s\S]*box-shadow:\s*inset 0 0 0 1px/,
+      )
+    })
+
+    it('keeps stepper buttons constrained inside the control height', () => {
+      const stylesText = getStylesText()
+
+      expect(stylesText).toContain("[part='stepper']")
+      expect(stylesText).toMatch(/\[part='stepper'\]\s*{[\s\S]*display:\s*inline-flex;/)
+      expect(stylesText).toMatch(
+        /\[part='stepper'\]\s*{[\s\S]*gap:\s*var\(--cv-number-stepper-button-gap\);/,
+      )
+      expect(stylesText).toMatch(/--cv-number-stepper-button-inline-size:\s*var\(--cv-number-stepper-width,\s*28px\);/)
+      expect(stylesText).toMatch(
+        /\[part='increment'\],\s*\n\s*\[part='decrement'\]\s*{[\s\S]*inline-size:\s*var\(--cv-number-stepper-button-inline-size\);/,
+      )
+      expect(stylesText).toMatch(
+        /\[part='increment'\],\s*\n\s*\[part='decrement'\]\s*{[\s\S]*block-size:\s*max\(22px,\s*calc\(var\(--cv-number-height\) - 8px\)\);/,
+      )
+      expect(stylesText).toMatch(
+        /:host\(\[stepper\]\) \[part='base'\]\s*{[\s\S]*touch-action:\s*pan-y pinch-zoom;/,
+      )
+      expect(stylesText).toContain(":host([stepper-active='increment']) [part='increment']")
+      expect(stylesText).toMatch(/\[part='increment'\]\[aria-disabled='true'\]/)
     })
   })
 
@@ -437,6 +534,331 @@ describe('cv-number', () => {
       await settle(el)
 
       expect(el.value).toBeGreaterThanOrEqual(0)
+    })
+  })
+
+  // ---------------------------------------------------------------------------
+  // Stepper wheel and swipe gestures
+  // ---------------------------------------------------------------------------
+
+  describe('stepper wheel and swipe gestures', () => {
+    it('desktop wheel up increments the focused stepper value', async () => {
+      const el = await createNumber({value: 5, step: 1, stepper: true})
+      const changes: Array<{value: number}> = []
+
+      el.addEventListener('cv-change', (event) => {
+        changes.push((event as CustomEvent<{value: number}>).detail)
+      })
+
+      getInput(el).dispatchEvent(new FocusEvent('focus', {bubbles: true}))
+      await settle(el)
+
+      const event = createWheelEvent(-48)
+      getBase(el).dispatchEvent(event)
+      await settle(el)
+
+      expect(el.value).toBe(6)
+      expect(event.defaultPrevented).toBe(true)
+      expect(changes).toEqual([{value: 6}])
+    })
+
+    it('desktop wheel down decrements the focused stepper value', async () => {
+      const el = await createNumber({value: 5, step: 1, stepper: true})
+
+      getInput(el).dispatchEvent(new FocusEvent('focus', {bubbles: true}))
+      await settle(el)
+
+      getBase(el).dispatchEvent(
+        createWheelEvent(48),
+      )
+      await settle(el)
+
+      expect(el.value).toBe(4)
+    })
+
+    it('desktop wheel accumulates trackpad-sized deltas before stepping', async () => {
+      const el = await createNumber({value: 5, step: 1, stepper: true})
+      const changes: Array<{value: number}> = []
+
+      el.addEventListener('cv-change', (event) => {
+        changes.push((event as CustomEvent<{value: number}>).detail)
+      })
+
+      getInput(el).dispatchEvent(new FocusEvent('focus', {bubbles: true}))
+      await settle(el)
+
+      const first = createWheelEvent(-16)
+      const second = createWheelEvent(-16)
+      const third = createWheelEvent(-16)
+
+      getBase(el).dispatchEvent(first)
+      getBase(el).dispatchEvent(second)
+      await settle(el)
+
+      expect(el.value).toBe(5)
+      expect(first.defaultPrevented).toBe(true)
+      expect(second.defaultPrevented).toBe(true)
+
+      getBase(el).dispatchEvent(third)
+      await settle(el)
+
+      expect(el.value).toBe(6)
+      expect(third.defaultPrevented).toBe(true)
+      expect(changes).toEqual([{value: 6}])
+    })
+
+    it('desktop wheel normalizes line-mode deltas', async () => {
+      const el = await createNumber({value: 5, step: 1, stepper: true})
+
+      getInput(el).dispatchEvent(new FocusEvent('focus', {bubbles: true}))
+      await settle(el)
+
+      const event = createWheelEvent(-3, {deltaMode: 1})
+      getBase(el).dispatchEvent(event)
+      await settle(el)
+
+      expect(el.value).toBe(6)
+      expect(event.defaultPrevented).toBe(true)
+    })
+
+    it('desktop wheel resets accumulated deltas when direction changes', async () => {
+      const el = await createNumber({value: 5, step: 1, stepper: true})
+
+      getInput(el).dispatchEvent(new FocusEvent('focus', {bubbles: true}))
+      await settle(el)
+
+      getBase(el).dispatchEvent(createWheelEvent(-24))
+      getBase(el).dispatchEvent(createWheelEvent(24))
+      await settle(el)
+
+      expect(el.value).toBe(5)
+    })
+
+    it('desktop wheel caps very large bursts', async () => {
+      const el = await createNumber({value: 5, step: 1, stepper: true})
+
+      getInput(el).dispatchEvent(new FocusEvent('focus', {bubbles: true}))
+      await settle(el)
+
+      getBase(el).dispatchEvent(createWheelEvent(-480))
+      await settle(el)
+
+      expect(el.value).toBe(9)
+    })
+
+    it('does not hijack horizontal-dominant wheel gestures', async () => {
+      const el = await createNumber({value: 5, step: 1, stepper: true})
+      getInput(el).dispatchEvent(new FocusEvent('focus', {bubbles: true}))
+      await settle(el)
+
+      const event = createWheelEvent(-48, {deltaX: 96})
+      getBase(el).dispatchEvent(event)
+      await settle(el)
+
+      expect(el.value).toBe(5)
+      expect(event.defaultPrevented).toBe(false)
+    })
+
+    it('does not use wheel stepping on coarse pointer environments', async () => {
+      setMatchMedia((query) => {
+        if (query === '(hover: hover) and (pointer: fine)') return false
+        return false
+      })
+      const el = await createNumber({value: 5, step: 1, stepper: true})
+
+      getInput(el).dispatchEvent(new FocusEvent('focus', {bubbles: true}))
+      await settle(el)
+
+      const event = createWheelEvent(-48)
+      getBase(el).dispatchEvent(event)
+      await settle(el)
+
+      expect(el.value).toBe(5)
+      expect(event.defaultPrevented).toBe(false)
+    })
+
+    it('does not hijack wheel scroll when the stepper is not focused', async () => {
+      const el = await createNumber({value: 5, step: 1, stepper: true})
+      const event = createWheelEvent(-48)
+
+      getBase(el).dispatchEvent(event)
+      await settle(el)
+
+      expect(el.value).toBe(5)
+      expect(event.defaultPrevented).toBe(false)
+    })
+
+    it('does not apply wheel changes when stepper controls are hidden', async () => {
+      const el = await createNumber({value: 5, step: 1})
+
+      getInput(el).dispatchEvent(new FocusEvent('focus', {bubbles: true}))
+      await settle(el)
+
+      const event = createWheelEvent(-48)
+      getBase(el).dispatchEvent(event)
+      await settle(el)
+
+      expect(el.value).toBe(5)
+      expect(event.defaultPrevented).toBe(false)
+    })
+
+    it('touch swipe right increments the stepper value', async () => {
+      const el = await createNumber({value: 5, step: 1, stepper: true})
+      const changes: Array<{value: number}> = []
+      const base = getBase(el)
+
+      el.addEventListener('cv-change', (event) => {
+        changes.push((event as CustomEvent<{value: number}>).detail)
+      })
+
+      base.dispatchEvent(createPointerEvent('pointerdown', {clientX: 100, clientY: 20}))
+      const move = createPointerEvent('pointermove', {clientX: 136, clientY: 22})
+      base.dispatchEvent(move)
+      base.dispatchEvent(createPointerEvent('pointerup', {clientX: 136, clientY: 22}))
+      await settle(el)
+
+      expect(el.value).toBe(6)
+      expect(move.defaultPrevented).toBe(true)
+      expect(changes).toEqual([{value: 6}])
+    })
+
+    it('touch swipe left decrements the stepper value', async () => {
+      const el = await createNumber({value: 5, step: 1, stepper: true})
+      const base = getBase(el)
+
+      base.dispatchEvent(createPointerEvent('pointerdown', {clientX: 140, clientY: 20}))
+      base.dispatchEvent(createPointerEvent('pointermove', {clientX: 104, clientY: 22}))
+      base.dispatchEvent(createPointerEvent('pointerup', {clientX: 104, clientY: 22}))
+      await settle(el)
+
+      expect(el.value).toBe(4)
+    })
+
+    it('touch swipe applies multiple thresholded steps in one value change', async () => {
+      const el = await createNumber({value: 5, step: 1, stepper: true})
+      const changes: Array<{value: number}> = []
+      const base = getBase(el)
+
+      el.addEventListener('cv-change', (event) => {
+        changes.push((event as CustomEvent<{value: number}>).detail)
+      })
+
+      base.dispatchEvent(createPointerEvent('pointerdown', {clientX: 100, clientY: 20}))
+      const move = createPointerEvent('pointermove', {clientX: 169, clientY: 21})
+      base.dispatchEvent(move)
+      base.dispatchEvent(createPointerEvent('pointerup', {clientX: 169, clientY: 21}))
+      await settle(el)
+
+      expect(el.value).toBe(7)
+      expect(move.defaultPrevented).toBe(true)
+      expect(changes).toEqual([{value: 7}])
+    })
+
+    it('touch swipe vibrates after a successful step', async () => {
+      const vibrate = vi.fn(() => true)
+      setNavigatorVibrate(vibrate)
+      const el = await createNumber({value: 5, step: 1, stepper: true})
+      const base = getBase(el)
+
+      base.dispatchEvent(createPointerEvent('pointerdown', {clientX: 100, clientY: 20}))
+      base.dispatchEvent(createPointerEvent('pointermove', {clientX: 136, clientY: 22}))
+      base.dispatchEvent(createPointerEvent('pointerup', {clientX: 136, clientY: 22}))
+      await settle(el)
+
+      expect(vibrate).toHaveBeenCalledWith(6)
+    })
+
+    it('touch swipe does not vibrate when reduced motion is requested', async () => {
+      const vibrate = vi.fn(() => true)
+      setNavigatorVibrate(vibrate)
+      setMatchMedia((query) => query === '(prefers-reduced-motion: reduce)')
+      const el = await createNumber({value: 5, step: 1, stepper: true})
+      const base = getBase(el)
+
+      base.dispatchEvent(createPointerEvent('pointerdown', {clientX: 100, clientY: 20}))
+      base.dispatchEvent(createPointerEvent('pointermove', {clientX: 136, clientY: 22}))
+      base.dispatchEvent(createPointerEvent('pointerup', {clientX: 136, clientY: 22}))
+      await settle(el)
+
+      expect(el.value).toBe(6)
+      expect(vibrate).not.toHaveBeenCalled()
+    })
+
+    it('touch swipe ignores vertical scroll gestures', async () => {
+      const el = await createNumber({value: 5, step: 1, stepper: true})
+      const base = getBase(el)
+
+      base.dispatchEvent(createPointerEvent('pointerdown', {clientX: 100, clientY: 20}))
+      const move = createPointerEvent('pointermove', {clientX: 104, clientY: 58})
+      base.dispatchEvent(move)
+      base.dispatchEvent(createPointerEvent('pointerup', {clientX: 104, clientY: 58}))
+      await settle(el)
+
+      expect(el.value).toBe(5)
+      expect(move.defaultPrevented).toBe(false)
+    })
+
+    it('long press repeats and suppresses the final click', async () => {
+      vi.useFakeTimers()
+      const el = await createNumber({value: 5, step: 1, stepper: true})
+      const increment = getIncrement(el)
+
+      increment.dispatchEvent(createPointerEvent('pointerdown', {pointerType: 'mouse'}))
+      vi.advanceTimersByTime(421)
+      await settle(el)
+
+      expect(el.value).toBe(6)
+
+      increment.dispatchEvent(createPointerEvent('pointerup', {pointerType: 'mouse'}))
+      increment.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+      await settle(el)
+
+      expect(el.value).toBe(6)
+    })
+
+    it('long press accelerates and stops after pointerup', async () => {
+      vi.useFakeTimers()
+      const el = await createNumber({value: 5, step: 1, stepper: true})
+      const increment = getIncrement(el)
+
+      increment.dispatchEvent(createPointerEvent('pointerdown', {pointerType: 'mouse'}))
+      vi.advanceTimersByTime(730)
+      await settle(el)
+
+      const valueAfterRepeat = el.value
+      expect(valueAfterRepeat).toBeGreaterThan(6)
+
+      increment.dispatchEvent(createPointerEvent('pointerup', {pointerType: 'mouse'}))
+      vi.advanceTimersByTime(500)
+      await settle(el)
+
+      expect(el.value).toBe(valueAfterRepeat)
+    })
+
+    it('long press resets when the element disconnects', async () => {
+      vi.useFakeTimers()
+      const el = await createNumber({value: 5, step: 1, stepper: true})
+
+      getIncrement(el).dispatchEvent(createPointerEvent('pointerdown', {pointerType: 'mouse'}))
+      el.remove()
+      vi.advanceTimersByTime(800)
+      await Promise.resolve()
+
+      expect(el.value).toBe(5)
+    })
+
+    it('touch long press vibrates only for successful repeated steps', async () => {
+      vi.useFakeTimers()
+      const vibrate = vi.fn(() => true)
+      setNavigatorVibrate(vibrate)
+      const el = await createNumber({value: 5, step: 1, stepper: true})
+
+      getIncrement(el).dispatchEvent(createPointerEvent('pointerdown', {pointerType: 'touch'}))
+      vi.advanceTimersByTime(421)
+      await settle(el)
+
+      expect(el.value).toBe(6)
+      expect(vibrate).toHaveBeenCalledWith(6)
     })
   })
 
@@ -933,9 +1355,7 @@ describe('cv-number', () => {
     it('ignores ArrowUp when a modifier key is held (browser/OS shortcut)', async () => {
       const el = await createNumber({value: 5, step: 1})
 
-      getInput(el).dispatchEvent(
-        new KeyboardEvent('keydown', {key: 'ArrowUp', ctrlKey: true, bubbles: true}),
-      )
+      getInput(el).dispatchEvent(new KeyboardEvent('keydown', {key: 'ArrowUp', ctrlKey: true, bubbles: true}))
       await settle(el)
 
       expect(el.value).toBe(5)
