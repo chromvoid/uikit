@@ -101,6 +101,14 @@ describe('cv-tooltip', () => {
       expect(cssText).toMatch(/\[part='content'\]\s*{[\s\S]*overflow-wrap:\s*anywhere;/)
     })
 
+    it('keeps native anchor-positioned content offset from the trigger', () => {
+      const cssText = stylesToText()
+
+      expect(cssText).toMatch(
+        /\[part='content'\]\[data-anchor-positioning='true'\]\s*{[\s\S]*margin:\s*var\(--cv-space-2,\s*8px\);/,
+      )
+    })
+
     it('renders slot[name="trigger"] inside [part="trigger"]', async () => {
       const el = await createTooltip()
       const triggerPart = el.shadowRoot!.querySelector('[part="trigger"]')!
@@ -1026,6 +1034,8 @@ describe('cv-tooltip', () => {
         },
       )
       vi.spyOn(window, 'cancelAnimationFrame').mockImplementation((): void => {})
+      vi.spyOn(window, 'innerWidth', 'get').mockReturnValue(1024)
+      vi.spyOn(window, 'innerHeight', 'get').mockReturnValue(768)
 
       const {el, triggerWrap, contentPart} = await mountTooltip({showDelay: 0, hideDelay: 0})
       triggerWrap.getBoundingClientRect = () => new DOMRect(120, 40, 20, 20)
@@ -1037,7 +1047,7 @@ describe('cv-tooltip', () => {
       expect(contentPart.getAttribute('data-anchor-positioning')).toBe('false')
       expect(contentPart.style.position).toBe('fixed')
       expect(contentPart.getAttribute('data-placement')).toBe('bottom')
-      expect(contentPart.style.top).not.toBe('')
+      expect(contentPart.style.top).toBe('68px')
       expect(contentPart.style.left).not.toBe('')
     })
 
@@ -1049,6 +1059,8 @@ describe('cv-tooltip', () => {
         },
       )
       vi.spyOn(window, 'cancelAnimationFrame').mockImplementation((): void => {})
+      vi.spyOn(window, 'innerWidth', 'get').mockReturnValue(1024)
+      vi.spyOn(window, 'innerHeight', 'get').mockReturnValue(768)
 
       const {el, triggerWrap, contentPart} = await mountTooltip({showDelay: 0, hideDelay: 0})
       triggerWrap.getBoundingClientRect = () => new DOMRect(120, 720, 20, 20)
@@ -1059,6 +1071,7 @@ describe('cv-tooltip', () => {
 
       expect(contentPart.style.position).toBe('fixed')
       expect(contentPart.getAttribute('data-placement')).toBe('top')
+      expect(contentPart.style.top).toBe('632px')
     })
   })
 

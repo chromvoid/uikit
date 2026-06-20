@@ -31,6 +31,7 @@ const supportsNativeAnchoredAutoplacement =
   supportsNativePopover && supportsAnchorPositioning && supportsAnchorTryFallbacks
 
 let cvTooltipNonce = 0
+const tooltipOffset = 8
 
 export class CVTooltip extends ReatomLitElement {
   static elementName = 'cv-tooltip'
@@ -94,7 +95,7 @@ export class CVTooltip extends ReatomLitElement {
       [part='content'] {
         position: absolute;
         inset-inline-start: 50%;
-        inset-block-end: calc(100% + var(--cv-space-1, 4px));
+        inset-block-end: calc(100% + var(--cv-space-2, 8px));
         transform: translateX(-50%);
         z-index: 30;
         max-inline-size: min(320px, calc(100vw - 32px));
@@ -119,6 +120,7 @@ export class CVTooltip extends ReatomLitElement {
         position-visibility: anchors-visible;
         transform: none;
         translate: none;
+        margin: var(--cv-space-2, 8px);
       }
 
       [part='content'][hidden] {
@@ -294,7 +296,7 @@ export class CVTooltip extends ReatomLitElement {
     const contentRect = content.getBoundingClientRect()
     const viewportWidth = window.innerWidth
     const viewportHeight = window.innerHeight
-    const gap = 6
+    const gap = tooltipOffset
     const viewportPadding = 8
 
     const spaceAbove = triggerRect.top
