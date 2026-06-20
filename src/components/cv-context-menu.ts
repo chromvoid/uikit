@@ -45,6 +45,7 @@ const contextMenuKeysToPrevent = new Set([
 ])
 
 let cvContextMenuNonce = 0
+const connectedContextMenus = new Set<CVContextMenu>()
 
 export class CVContextMenu extends ReatomLitElement {
   static elementName = 'cv-context-menu'
@@ -114,7 +115,7 @@ export class CVContextMenu extends ReatomLitElement {
       }
 
       [part='target']:focus-visible {
-        outline: 2px solid var(--cv-color-primary, #65d7ff);
+        outline: 2px solid var(--cv-color-focus-ring);
         outline-offset: 2px;
       }
 
@@ -124,17 +125,70 @@ export class CVContextMenu extends ReatomLitElement {
         inset-block-start: var(--cv-context-menu-y, 0px);
         z-index: var(--cv-context-menu-z-index, 80);
         min-inline-size: var(--cv-context-menu-min-inline-size, 180px);
+        max-inline-size: min(300px, calc(100vw - var(--cv-space-4, 16px)));
+        max-block-size: min(420px, calc(100vh - var(--cv-space-4, 16px)));
         display: grid;
         gap: var(--cv-context-menu-gap, var(--cv-space-1, 4px));
         padding: var(--cv-context-menu-padding, var(--cv-space-1, 4px));
         border-radius: var(--cv-context-menu-border-radius, var(--cv-radius-md, 10px));
-        border: 1px solid var(--cv-color-border, #2a3245);
-        background: var(--cv-color-surface-elevated, #1d2432);
-        box-shadow: var(--cv-shadow-1, 0 2px 8px rgba(0, 0, 0, 0.24));
+        border: 1px solid var(--cv-color-border-muted);
+        background: var(--cv-color-surface-elevated);
+        box-shadow: var(--cv-shadow-2);
+        overflow: auto;
+        overscroll-behavior: contain;
+        opacity: 1;
+        transform: translate3d(0, 0, 0) scale(1);
+        transform-origin: top left;
+        transition:
+          opacity var(--cv-duration-fast, 120ms) var(--cv-easing-standard, ease),
+          transform var(--cv-duration-fast, 120ms) var(--cv-easing-standard, ease),
+          display var(--cv-duration-fast, 120ms) allow-discrete;
+        transition-behavior: allow-discrete;
       }
 
       [part='menu'][hidden] {
         display: none;
+        opacity: 0;
+        transform: translate3d(0, -4px, 0) scale(0.98);
+      }
+
+      @starting-style {
+        [part='menu']:not([hidden]) {
+          opacity: 0;
+          transform: translate3d(0, -4px, 0) scale(0.98);
+        }
+      }
+
+      ::slotted(cv-menu-item) {
+        display: block;
+        inline-size: 100%;
+        min-inline-size: 0;
+        font-size: var(--cv-font-size-sm, 0.875rem);
+        font-weight: var(--cv-font-weight-medium, 500);
+        letter-spacing: 0;
+        --cv-menu-item-padding-block: var(--cv-space-2, 8px);
+        --cv-menu-item-padding-inline: var(--cv-space-3, 12px);
+        --cv-menu-item-border-radius: var(--cv-radius-1, 6px);
+        --cv-menu-item-hover-background: var(--cv-color-surface-hover);
+        --cv-menu-item-active-color: var(--cv-color-text-strong);
+        --cv-menu-item-active-background: var(--cv-color-surface-hover);
+        --cv-menu-item-selected-background: var(--cv-color-active);
+        --cv-menu-item-focus-ring: var(--cv-color-focus-ring);
+      }
+
+      ::slotted([role='separator']) {
+        display: block;
+        block-size: 1px;
+        margin: var(--cv-space-1, 4px) var(--cv-space-2, 8px);
+        border: 0;
+        background: var(--cv-color-border-faint);
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        [part='menu'] {
+          transition: none;
+          transform: none;
+        }
       }
     `,
   ]
@@ -147,6 +201,7 @@ export class CVContextMenu extends ReatomLitElement {
 
   override connectedCallback(): void {
     super.connectedCallback()
+    connectedContextMenus.add(this)
     if (!this.model) {
       this.rebuildModelFromSlot(false, false)
     } else {
@@ -162,6 +217,7 @@ export class CVContextMenu extends ReatomLitElement {
 
   override disconnectedCallback(): void {
     super.disconnectedCallback()
+    connectedContextMenus.delete(this)
     this.detachItemListeners()
     this.syncDocumentListeners(true)
   }
@@ -339,6 +395,9 @@ export class CVContextMenu extends ReatomLitElement {
     this.anchorX = this.model.state.anchorX()
     this.anchorY = this.model.state.anchorY()
     this.syncPositionProperties()
+    if (this.open) {
+      this.closePeerContextMenus()
+    }
 
     if (requestRender) {
       this.requestUpdate()
@@ -453,6 +512,10 @@ export class CVContextMenu extends ReatomLitElement {
     this.syncPositionProperties()
     this.syncItemElements()
 
+    if (next.open) {
+      this.closePeerContextMenus()
+    }
+
     const valueChanged = previous.value !== nextValue
     const activeChanged = previous.activeId !== next.activeId
     const openChanged = previous.open !== next.open
@@ -485,6 +548,14 @@ export class CVContextMenu extends ReatomLitElement {
     if (!next.open && next.restoreTargetId && previous.restoreTargetId !== next.restoreTargetId) {
       const target = this.shadowRoot?.querySelector(`[id="${next.restoreTargetId}"]`) as HTMLElement | null
       target?.focus()
+    }
+  }
+
+  private closePeerContextMenus(): void {
+    for (const menu of connectedContextMenus) {
+      if (menu !== this && menu.open) {
+        menu.close()
+      }
     }
   }
 

@@ -659,6 +659,24 @@ describe('cv-context-menu', () => {
   // --- dismiss behavior ---
 
   describe('dismiss behavior', () => {
+    it('closes a previously open context menu when another one opens', async () => {
+      const first = await mountContextMenu()
+      const second = await mountContextMenu()
+
+      first.target.dispatchEvent(new MouseEvent('contextmenu', {bubbles: true, clientX: 10, clientY: 10}))
+      await settle(first.menu)
+      expect(first.menu.open).toBe(true)
+
+      second.target.dispatchEvent(new MouseEvent('contextmenu', {bubbles: true, clientX: 50, clientY: 60}))
+      await settle(second.menu)
+      await settle(first.menu)
+
+      expect(first.menu.open).toBe(false)
+      expect(first.menuBox.hidden).toBe(true)
+      expect(second.menu.open).toBe(true)
+      expect(second.menuBox.hidden).toBe(false)
+    })
+
     it('closes on outside pointer', async () => {
       const {menu, target} = await mountContextMenu()
 

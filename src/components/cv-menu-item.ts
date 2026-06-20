@@ -52,22 +52,31 @@ export class CVMenuItem extends LitElement {
         padding: var(--cv-menu-item-padding-block, var(--cv-space-2, 8px))
           var(--cv-menu-item-padding-inline, var(--cv-space-3, 12px));
         border-radius: var(--cv-menu-item-border-radius, var(--cv-radius-sm, 6px));
-        color: var(--cv-color-text, #e8ecf6);
+        color: var(--cv-menu-item-color, var(--cv-color-text));
+        background: var(--cv-menu-item-background, transparent);
+        box-shadow: var(--cv-menu-item-shadow, none);
         transition:
           background var(--cv-duration-fast, 120ms) var(--cv-easing-standard, ease),
+          box-shadow var(--cv-duration-fast, 120ms) var(--cv-easing-standard, ease),
           color var(--cv-duration-fast, 120ms) var(--cv-easing-standard, ease);
       }
 
       :host(:hover) .item {
-        background: var(--cv-color-primary-ring);
+        color: var(--cv-menu-item-hover-color, var(--cv-menu-item-color, var(--cv-color-text)));
+        background: var(--cv-menu-item-hover-background, var(--cv-color-primary-ring));
+        box-shadow: var(--cv-menu-item-hover-shadow, var(--cv-menu-item-shadow, none));
       }
 
       :host([active]) .item {
-        background: var(--cv-color-primary-ring);
+        color: var(--cv-menu-item-active-color, var(--cv-menu-item-color, var(--cv-color-text)));
+        background: var(--cv-menu-item-active-background, var(--cv-color-primary-ring));
+        box-shadow: var(--cv-menu-item-active-shadow, var(--cv-menu-item-shadow, none));
       }
 
       :host([selected]) .item {
-        background: var(--cv-color-primary-border);
+        color: var(--cv-menu-item-selected-color, var(--cv-menu-item-color, var(--cv-color-text)));
+        background: var(--cv-menu-item-selected-background, var(--cv-color-primary-border));
+        box-shadow: var(--cv-menu-item-selected-shadow, var(--cv-menu-item-shadow, none));
       }
 
       :host([disabled]) .item {
@@ -75,7 +84,7 @@ export class CVMenuItem extends LitElement {
       }
 
       :host(:focus-visible) .item {
-        outline: 2px solid var(--cv-color-primary, #65d7ff);
+        outline: 2px solid var(--cv-menu-item-focus-ring, var(--cv-color-focus-ring));
         outline-offset: 1px;
       }
 
