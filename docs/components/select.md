@@ -9,7 +9,7 @@ Single or multi-selection dropdown that composes a combobox trigger with a listb
 ## Usage
 
 ```html
-<div class="select-demo-grid">
+<div class="select-demo-grid" data-live-demo-height="420">
   <cv-field class="select-demo-cell">
     <span slot="label">Basic</span>
     <span slot="description">Empty single-select with placeholder text until a choice is made.</span>
@@ -102,11 +102,7 @@ Single or multi-selection dropdown that composes a combobox trigger with a listb
   <cv-field class="select-demo-cell select-demo-cell--wide">
     <span slot="label">Persistent popup</span>
     <span slot="description">Set closeOnSelect to false when multiple picks should keep the popup open.</span>
-    <cv-select
-      data-select-demo-keep-open
-      selection-mode="multiple"
-      placeholder="Pick options"
-    >
+    <cv-select data-select-demo-keep-open selection-mode="multiple" placeholder="Pick options">
       <cv-select-option value="a">Option A</cv-select-option>
       <cv-select-option value="b">Option B</cv-select-option>
     </cv-select>
@@ -137,20 +133,20 @@ Single or multi-selection dropdown that composes a combobox trigger with a listb
 
 ## Attributes
 
-| Attribute         | Type    | Default    | Description                                     |
-| ----------------- | ------- | ---------- | ----------------------------------------------- |
-| `value`           | String  | `""`       | Currently selected option value (single-select) |
-| `open`            | Boolean | `false`    | Whether the listbox popup is visible            |
-| `selection-mode`  | String  | `"single"` | Selection mode: `single` \| `multiple`          |
-| `aria-label`      | String  | `""`       | Accessible label for the trigger                |
-| `aria-labelledby` | String  | `""`       | External label id, typically from `cv-field`    |
-| `aria-describedby` | String | `""`       | External description id, typically from `cv-field` |
-| `close-on-select` | Boolean | `true`     | Close popup after an option is selected         |
-| `placeholder`     | String  | `""`       | Hint text when no option is selected            |
-| `disabled`        | Boolean | `false`    | Prevents all interaction                        |
-| `required`        | Boolean | `false`    | Marks the field as required for form validation |
-| `clearable`       | Boolean | `false`    | Shows a clear button when a value is selected   |
-| `size`            | String  | `"medium"` | Size: `small` \| `medium` \| `large`            |
+| Attribute          | Type    | Default    | Description                                        |
+| ------------------ | ------- | ---------- | -------------------------------------------------- |
+| `value`            | String  | `""`       | Currently selected option value (single-select)    |
+| `open`             | Boolean | `false`    | Whether the listbox popup is visible               |
+| `selection-mode`   | String  | `"single"` | Selection mode: `single` \| `multiple`             |
+| `aria-label`       | String  | `""`       | Accessible label for the trigger                   |
+| `aria-labelledby`  | String  | `""`       | External label id, typically from `cv-field`       |
+| `aria-describedby` | String  | `""`       | External description id, typically from `cv-field` |
+| `close-on-select`  | Boolean | `true`     | Close popup after an option is selected            |
+| `placeholder`      | String  | `""`       | Hint text when no option is selected               |
+| `disabled`         | Boolean | `false`    | Prevents all interaction                           |
+| `required`         | Boolean | `false`    | Marks the field as required for form validation    |
+| `clearable`        | Boolean | `false`    | Shows a clear button when a value is selected      |
+| `size`             | String  | `"medium"` | Size: `small` \| `medium` \| `large`               |
 
 Non-reflected properties:
 
@@ -186,13 +182,13 @@ Non-reflected properties:
 
 ## CSS Custom Properties
 
-| Property                        | Default                   | Description                                |
-| ------------------------------- | ------------------------- | ------------------------------------------ |
-| `--cv-select-inline-size`       | `260px`                   | Inline size of the host element            |
-| `--cv-select-min-height`        | `36px`                    | Minimum block size of the trigger          |
-| `--cv-select-padding-inline`    | `var(--cv-space-3, 12px)` | Horizontal padding of the trigger          |
-| `--cv-select-padding-block`     | `var(--cv-space-2, 8px)`  | Vertical padding of the trigger            |
-| `--cv-select-clear-button-size` | `1.4em`                   | Inline and block size of the clear button  |
+| Property                        | Default                   | Description                               |
+| ------------------------------- | ------------------------- | ----------------------------------------- |
+| `--cv-select-inline-size`       | `260px`                   | Inline size of the host element           |
+| `--cv-select-min-height`        | `36px`                    | Minimum block size of the trigger         |
+| `--cv-select-padding-inline`    | `var(--cv-space-3, 12px)` | Horizontal padding of the trigger         |
+| `--cv-select-padding-block`     | `var(--cv-space-2, 8px)`  | Vertical padding of the trigger           |
+| `--cv-select-clear-button-size` | `1.4em`                   | Inline and block size of the clear button |
 
 ## Visual States
 

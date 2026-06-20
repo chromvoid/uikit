@@ -10,7 +10,7 @@ Non-modal overlay anchored to a trigger element for contextual content such as m
 
 ```html
 <!-- Basic popover -->
-<cv-popover>
+<cv-popover data-live-demo-height="420">
   <span slot="trigger">Options</span>
   <p>Popover content here</p>
 </cv-popover>

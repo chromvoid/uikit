@@ -18,6 +18,7 @@ This document is the UIKit surface contract for `cv-date-picker`.
 
 ```html
 <cv-date-picker
+  data-live-demo-height="420"
   mode="date"
   aria-label="Flight date"
   placeholder="Select departure date"

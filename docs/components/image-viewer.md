@@ -7,7 +7,7 @@ Fullscreen image viewer shell for modal image inspection, gallery navigation, ac
 ## Usage
 
 ```html
-<cv-image-viewer open current-index="0"></cv-image-viewer>
+<cv-image-viewer open current-index="0" data-live-demo-height="560"></cv-image-viewer>
 <script type="module">
   const viewer = document.querySelector('cv-image-viewer')
   viewer.items = [

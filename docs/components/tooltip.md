@@ -10,7 +10,7 @@ Contextual information overlay that appears near a trigger element on hover, foc
 
 ```html
 <!-- Default: hover + focus triggers -->
-<cv-tooltip>
+<cv-tooltip data-live-demo-height="420">
   <button slot="trigger">Hover me</button>
   <span slot="content">Contextual info</span>
 </cv-tooltip>

@@ -9,7 +9,7 @@ Grouped form wrapper using native fieldset/legend semantics.
 ## Usage
 
 ```html
-<div class="fieldset-demo-grid">
+<div class="fieldset-demo-grid" data-live-demo-height="420">
   <cv-fieldset>
     <span slot="legend">Account access</span>
     <span slot="description">Group related fields under one native legend and description.</span>

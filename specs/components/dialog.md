@@ -47,13 +47,13 @@ Modal or non-modal dialog overlay for presenting focused content, confirmations,
 
 ## Slots
 
-| Slot           | Description                                               |
-| -------------- | --------------------------------------------------------- |
-| `(default)`    | Dialog body content                                       |
-| `title`        | Dialog title text                                         |
-| `description`  | Description text below the title                          |
-| `header-close` | Icon content for the header close button (defaults to X)  |
-| `footer`       | Footer content (action buttons, etc.)                     |
+| Slot           | Description                                              |
+| -------------- | -------------------------------------------------------- |
+| `(default)`    | Dialog body content                                      |
+| `title`        | Dialog title text                                        |
+| `description`  | Description text below the title                         |
+| `header-close` | Icon content for the header close button (defaults to X) |
+| `footer`       | Footer content (action buttons, etc.)                    |
 
 ## CSS Parts
 
@@ -160,8 +160,8 @@ The top-layer shell, overlay, and content expose `data-state="closed|opening|ope
       <span class="dialog-demo-kicker">Controlled dialogs</span>
       <h3 id="dialog-demo-title">Choose the dialog pattern by task risk</h3>
       <p>
-        External controls own the open state. The labels below describe each scenario; only the action
-        buttons are interactive.
+        External controls own the open state. The labels below describe each scenario; only the action buttons
+        are interactive.
       </p>
     </div>
 

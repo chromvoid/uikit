@@ -45,15 +45,15 @@ Contextual menu triggered by right-click, keyboard invocation, or imperative `op
 
 ## CSS Custom Properties
 
-| Property                            | Default                     | Description                                                                |
-| ----------------------------------- | --------------------------- | -------------------------------------------------------------------------- |
-| `--cv-context-menu-x`               | `0px`                       | Inline-start position of the menu popup, set by the component from anchor  |
-| `--cv-context-menu-y`               | `0px`                       | Block-start position of the menu popup, set by the component from anchor   |
-| `--cv-context-menu-min-inline-size` | `180px`                     | Minimum inline size of the menu popup                                      |
-| `--cv-context-menu-padding`         | `var(--cv-space-1, 4px)`    | Padding inside the menu popup                                              |
-| `--cv-context-menu-gap`             | `var(--cv-space-1, 4px)`    | Gap between menu items                                                     |
-| `--cv-context-menu-border-radius`   | `var(--cv-radius-md, 10px)` | Border radius of the menu popup                                            |
-| `--cv-context-menu-z-index`         | `80`                        | Z-index of the menu popup                                                  |
+| Property                            | Default                     | Description                                                               |
+| ----------------------------------- | --------------------------- | ------------------------------------------------------------------------- |
+| `--cv-context-menu-x`               | `0px`                       | Inline-start position of the menu popup, set by the component from anchor |
+| `--cv-context-menu-y`               | `0px`                       | Block-start position of the menu popup, set by the component from anchor  |
+| `--cv-context-menu-min-inline-size` | `180px`                     | Minimum inline size of the menu popup                                     |
+| `--cv-context-menu-padding`         | `var(--cv-space-1, 4px)`    | Padding inside the menu popup                                             |
+| `--cv-context-menu-gap`             | `var(--cv-space-1, 4px)`    | Gap between menu items                                                    |
+| `--cv-context-menu-border-radius`   | `var(--cv-radius-md, 10px)` | Border radius of the menu popup                                           |
+| `--cv-context-menu-z-index`         | `80`                        | Z-index of the menu popup                                                 |
 
 ## Visual States
 
@@ -100,30 +100,30 @@ interface CVContextMenuEventDetail {
 
 ### Menu
 
-| Key               | Action                                      |
-| ----------------- | ------------------------------------------- |
-| `Escape`          | Close menu, restore focus to target         |
-| `Tab`             | Close menu, restore focus to target         |
-| `ArrowDown`       | Move active to next enabled item, wrapping  |
-| `ArrowUp`         | Move active to previous enabled item        |
-| `Home`            | Move active to first enabled item           |
-| `End`             | Move active to last enabled item            |
-| `Enter` / `Space` | Select active item                          |
+| Key               | Action                                     |
+| ----------------- | ------------------------------------------ |
+| `Escape`          | Close menu, restore focus to target        |
+| `Tab`             | Close menu, restore focus to target        |
+| `ArrowDown`       | Move active to next enabled item, wrapping |
+| `ArrowUp`         | Move active to previous enabled item       |
+| `Home`            | Move active to first enabled item          |
+| `End`             | Move active to last enabled item           |
+| `Enter` / `Space` | Select active item                         |
 
 ## ARIA Contract
 
-| Element | Attribute       | Value               |
-| ------- | --------------- | ------------------- |
-| menu    | `role`          | `menu`              |
-| menu    | `tabindex`      | `-1`                |
-| menu    | `aria-label`    | optional label text |
-| menu    | `hidden`        | reflects `!open`    |
-| menu    | `data-anchor-x` | string of `anchorX` |
-| menu    | `data-anchor-y` | string of `anchorY` |
-| target  | `id`            | `{idBase}-target`   |
+| Element | Attribute       | Value                                   |
+| ------- | --------------- | --------------------------------------- |
+| menu    | `role`          | `menu`                                  |
+| menu    | `tabindex`      | `-1`                                    |
+| menu    | `aria-label`    | optional label text                     |
+| menu    | `hidden`        | reflects `!open`                        |
+| menu    | `data-anchor-x` | string of `anchorX`                     |
+| menu    | `data-anchor-y` | string of `anchorY`                     |
+| target  | `id`            | `{idBase}-target`                       |
 | item    | `role`          | from `cv-menu-item` headless item props |
-| item    | `tabindex`      | `-1`                |
-| item    | `aria-disabled` | present when disabled |
+| item    | `tabindex`      | `-1`                                    |
+| item    | `aria-disabled` | present when disabled                   |
 
 ## Reactive State Mapping
 
@@ -139,13 +139,13 @@ interface CVContextMenuEventDetail {
 | `close-on-outside-pointer` | attr -> option | passed as `closeOnOutsidePointer` in `createContextMenu(options)`              |
 | `close-on-scroll`          | attr -> DOM    | attaches a document scroll close listener only while `open && closeOnScroll`   |
 
-| Headless State                        | Direction      | DOM Reflection                                                                 |
-| ------------------------------------- | -------------- | ------------------------------------------------------------------------------ |
-| `state.isOpen()`                      | state -> attr  | `[open]` host attribute, menu `[hidden]`                                       |
-| `state.activeId()`                    | state -> DOM   | `[data-active]` on item elements, focus management                             |
+| Headless State                        | Direction      | DOM Reflection                                                                   |
+| ------------------------------------- | -------------- | -------------------------------------------------------------------------------- |
+| `state.isOpen()`                      | state -> attr  | `[open]` host attribute, menu `[hidden]`                                         |
+| `state.activeId()`                    | state -> DOM   | `[data-active]` on item elements, focus management                               |
 | `state.anchorX()` / `state.anchorY()` | state -> attr  | `[anchor-x]` / `[anchor-y]` host attributes and host-owned CSS custom properties |
-| `state.openedBy()`                    | state -> event | included in `cv-input`/`cv-change` event detail                                |
-| `state.restoreTargetId()`             | state -> DOM   | focus restored to target element on close                                      |
+| `state.openedBy()`                    | state -> event | included in `cv-input`/`cv-change` event detail                                  |
+| `state.restoreTargetId()`             | state -> DOM   | focus restored to target element on close                                        |
 
 Contracts applied to DOM elements:
 

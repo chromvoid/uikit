@@ -9,7 +9,7 @@ Persistent layout sidebar with desktop expand/collapse, mobile overlay mode, and
 ## Usage
 
 ```html
-<div class="sidebar-demo-shell">
+<div class="sidebar-demo-shell" data-live-demo-height="560">
   <cv-sidebar class="sidebar-demo-nav" aria-label="Threat model navigation">
     <span slot="header" class="sidebar-demo-brand">
       <span class="sidebar-demo-brand-mark" aria-hidden="true"></span>
@@ -78,7 +78,7 @@ Persistent layout sidebar with desktop expand/collapse, mobile overlay mode, and
 ```
 
 ```html
-<div class="sidebar-demo-rail">
+<div class="sidebar-demo-rail" data-live-demo-height="560">
   <cv-sidebar collapsed size="small" aria-label="Collapsed threat model navigation">
     <span slot="header">Threat Model</span>
     <cv-icon slot="toggle" name="menu" size="s" aria-hidden="true"></cv-icon>
@@ -106,7 +106,7 @@ Persistent layout sidebar with desktop expand/collapse, mobile overlay mode, and
 ```
 
 ```html
-<div class="sidebar-demo-overlay">
+<div class="sidebar-demo-overlay" data-live-demo-height="560">
   <cv-sidebar mobile inert aria-label="Mobile threat model navigation">
     <span slot="header">Threat Model</span>
     <cv-icon slot="toggle" name="menu" size="s" aria-hidden="true"></cv-icon>

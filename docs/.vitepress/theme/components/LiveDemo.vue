@@ -8,8 +8,10 @@ const props = defineProps<{
   highlighted: string
 }>()
 
+
 const DEFAULT_FRAME_HEIGHT = 160
 const RESIZE_MESSAGE_TYPE = 'cv-live-demo:resize'
+
 
 const container = ref<HTMLElement | null>(null)
 const iframe = ref<HTMLIFrameElement | null>(null)
@@ -81,12 +83,14 @@ function isFrameResizeMessage(data: unknown): data is {type: typeof RESIZE_MESSA
 function handleFrameMessage(event: MessageEvent): void {
   if (event.source !== iframe.value?.contentWindow || !isFrameResizeMessage(event.data)) return
 
+
   frameHeight.value = Math.max(minFrameHeight.value, Math.ceil(event.data.height))
 }
 
 
 function renderFrameDemo(raw: string): void {
   if (!iframe.value) return
+
 
   frameHeight.value = minFrameHeight.value
 

@@ -9,14 +9,14 @@ Modal or non-modal dialog overlay for presenting focused content, confirmations,
 ## Usage
 
 ```html
-<div class="dialog-demo-shell" data-demo="dialog">
+<div class="dialog-demo-shell" data-demo="dialog" data-live-demo-height="560">
   <section class="dialog-demo-hero" aria-labelledby="dialog-demo-title">
     <div class="dialog-demo-copy">
       <span class="dialog-demo-kicker">Controlled dialogs</span>
       <h3 id="dialog-demo-title">Choose the dialog pattern by task risk</h3>
       <p>
-        External controls own the open state. The labels below describe each scenario; only the action
-        buttons are interactive.
+        External controls own the open state. The labels below describe each scenario; only the action buttons
+        are interactive.
       </p>
     </div>
 
@@ -167,13 +167,13 @@ Modal or non-modal dialog overlay for presenting focused content, confirmations,
 
 ## Slots
 
-| Slot           | Description                                               |
-| -------------- | --------------------------------------------------------- |
-| `(default)`    | Dialog body content                                       |
-| `title`        | Dialog title text                                         |
-| `description`  | Description text below the title                          |
-| `header-close` | Icon content for the header close button (defaults to X)  |
-| `footer`       | Footer content (action buttons, etc.)                     |
+| Slot           | Description                                              |
+| -------------- | -------------------------------------------------------- |
+| `(default)`    | Dialog body content                                      |
+| `title`        | Dialog title text                                        |
+| `description`  | Description text below the title                         |
+| `header-close` | Icon content for the header close button (defaults to X) |
+| `footer`       | Footer content (action buttons, etc.)                    |
 
 ## CSS Parts
 

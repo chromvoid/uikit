@@ -9,7 +9,7 @@ The control is timezone-free. It owns generic input, stepping, clear, and validi
 ## Usage
 
 ```html
-<cv-time-picker name="reminder-time" required></cv-time-picker>
+<cv-time-picker name="reminder-time" required data-live-demo-height="420"></cv-time-picker>
 <cv-time-picker value="09:30" min="08:00" max="18:00" minute-step="15"></cv-time-picker>
 ```
 

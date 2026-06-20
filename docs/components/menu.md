@@ -10,7 +10,7 @@ Menu panel that displays a list of actionable items, supporting checkable items 
 
 ```html
 <!-- Basic menu -->
-<cv-menu open aria-label="Actions">
+<cv-menu open aria-label="Actions" data-live-demo-height="420">
   <cv-menu-item value="cut">Cut</cv-menu-item>
   <cv-menu-item value="copy">Copy</cv-menu-item>
   <cv-menu-item value="paste">Paste</cv-menu-item>
