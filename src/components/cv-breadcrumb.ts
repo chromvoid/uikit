@@ -54,20 +54,31 @@ export class CVBreadcrumb extends ReatomLitElement {
     css`
       :host {
         display: block;
+        min-inline-size: 0;
+        max-inline-size: 100%;
       }
 
       [part='base'] {
         display: block;
+        min-inline-size: 0;
+        max-inline-size: 100%;
       }
 
       [part='list'] {
         display: flex;
         flex-wrap: wrap;
         align-items: center;
-        gap: var(--cv-space-2, 8px);
+        row-gap: var(--cv-breadcrumb-row-gap, var(--cv-space-1, 4px));
+        column-gap: var(--cv-breadcrumb-gap, var(--cv-space-2, 8px));
+        min-inline-size: 0;
+        max-inline-size: 100%;
         margin: 0;
         padding: 0;
         list-style: none;
+      }
+
+      ::slotted(cv-breadcrumb-item) {
+        min-inline-size: 0;
       }
     `,
   ]

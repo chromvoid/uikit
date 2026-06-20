@@ -9,42 +9,146 @@ Navigation landmark that displays a trail of links showing the user's current lo
 ## Usage
 
 ```html
-<cv-breadcrumb>
-  <cv-breadcrumb-item value="home" href="/">Home</cv-breadcrumb-item>
-  <cv-breadcrumb-item value="docs" href="/docs">Docs</cv-breadcrumb-item>
-  <cv-breadcrumb-item value="api" href="/docs/api">API</cv-breadcrumb-item>
-</cv-breadcrumb>
+<div class="breadcrumb-demo-shell" data-demo="breadcrumb">
+  <section class="breadcrumb-demo-hero" aria-labelledby="breadcrumb-demo-title">
+    <div class="breadcrumb-demo-copy">
+      <span class="breadcrumb-demo-kicker">Navigation landmark</span>
+      <h3 id="breadcrumb-demo-title">Show where the user is, not what they should do next.</h3>
+      <p>
+        Breadcrumbs expose one hierarchy trail, keep the current page marked with `aria-current`, and
+        let each segment remain a normal link.
+      </p>
+    </div>
 
-<!-- Controlled current item -->
-<cv-breadcrumb value="docs">
-  <cv-breadcrumb-item value="home" href="/">Home</cv-breadcrumb-item>
-  <cv-breadcrumb-item value="docs" href="/docs">Docs</cv-breadcrumb-item>
-  <cv-breadcrumb-item value="api" href="/docs/api">API</cv-breadcrumb-item>
-</cv-breadcrumb>
+    <dl class="breadcrumb-demo-metrics" aria-label="Breadcrumb behavior summary">
+      <div>
+        <dt>Root</dt>
+        <dd>navigation landmark</dd>
+      </div>
+      <div>
+        <dt>Current</dt>
+        <dd>aria-current page</dd>
+      </div>
+      <div>
+        <dt>Slots</dt>
+        <dd>prefix, suffix, separator</dd>
+      </div>
+    </dl>
+  </section>
 
-<!-- Custom aria-label -->
-<cv-breadcrumb aria-label="You are here">
-  <cv-breadcrumb-item value="home" href="/">Home</cv-breadcrumb-item>
-  <cv-breadcrumb-item value="page" href="/page">Current Page</cv-breadcrumb-item>
-</cv-breadcrumb>
+  <section class="breadcrumb-demo-section" aria-labelledby="breadcrumb-demo-default-title">
+    <div class="breadcrumb-demo-section-header">
+      <span class="breadcrumb-demo-kicker">Default path</span>
+      <h4 id="breadcrumb-demo-default-title">The last item becomes current when no value is set</h4>
+    </div>
 
-<!-- With prefix icons -->
-<cv-breadcrumb>
-  <cv-breadcrumb-item value="home" href="/">
-    <cv-icon name="home" slot="prefix"></cv-icon>
-    Home
-  </cv-breadcrumb-item>
-  <cv-breadcrumb-item value="settings" href="/settings">Settings</cv-breadcrumb-item>
-</cv-breadcrumb>
+    <div class="breadcrumb-demo-panel breadcrumb-demo-panel--primary">
+      <cv-breadcrumb aria-label="Vault path">
+        <cv-breadcrumb-item value="workspace" href="#workspace">
+          <cv-icon name="database" size="s" slot="prefix"></cv-icon>
+          Workspace
+        </cv-breadcrumb-item>
+        <cv-breadcrumb-item value="vaults" href="#vaults">Vaults</cv-breadcrumb-item>
+        <cv-breadcrumb-item value="client-keys" href="#client-keys">Client keys</cv-breadcrumb-item>
+      </cv-breadcrumb>
+    </div>
+  </section>
 
-<!-- Custom separator -->
-<cv-breadcrumb>
-  <cv-breadcrumb-item value="home" href="/">
-    Home
-    <span slot="separator">→</span>
-  </cv-breadcrumb-item>
-  <cv-breadcrumb-item value="page" href="/page">Page</cv-breadcrumb-item>
-</cv-breadcrumb>
+  <section class="breadcrumb-demo-section breadcrumb-demo-controlled" aria-labelledby="breadcrumb-demo-controlled-title">
+    <div class="breadcrumb-demo-section-header">
+      <span class="breadcrumb-demo-kicker">Controlled current item</span>
+      <h4 id="breadcrumb-demo-controlled-title">Set `value` when the route state owns the active segment</h4>
+    </div>
+
+    <div class="breadcrumb-demo-panel">
+      <cv-breadcrumb value="vaults" aria-label="Controlled path">
+        <cv-breadcrumb-item value="workspace" href="#workspace">Workspace</cv-breadcrumb-item>
+        <cv-breadcrumb-item value="vaults" href="#vaults">Vaults</cv-breadcrumb-item>
+        <cv-breadcrumb-item value="client-keys" href="#client-keys">Client keys</cv-breadcrumb-item>
+      </cv-breadcrumb>
+      <output class="breadcrumb-demo-output" aria-live="polite">Current value: vaults</output>
+    </div>
+  </section>
+
+  <section class="breadcrumb-demo-section" aria-labelledby="breadcrumb-demo-slots-title">
+    <div class="breadcrumb-demo-section-header">
+      <span class="breadcrumb-demo-kicker">Overflow and slots</span>
+      <h4 id="breadcrumb-demo-slots-title">Keep long paths on one rail; show slot decoration separately</h4>
+    </div>
+
+    <div class="breadcrumb-demo-grid">
+      <div class="breadcrumb-demo-panel breadcrumb-demo-panel--path breadcrumb-demo-panel--wide">
+        <div class="breadcrumb-demo-panel-heading">
+          <span class="breadcrumb-demo-label">Overflow rail</span>
+          <p class="breadcrumb-demo-note">Long middle segments truncate on one line instead of turning into paragraph-like rows.</p>
+        </div>
+        <cv-breadcrumb aria-label="Long vault path">
+          <cv-breadcrumb-item value="files" href="#files">Files</cv-breadcrumb-item>
+          <cv-breadcrumb-item value="case-folder" href="#case-folder">
+            Cross-border investigation workspace
+          </cv-breadcrumb-item>
+          <cv-breadcrumb-item value="evidence-package" href="#evidence-package">
+            Evidence package with very long archive name
+          </cv-breadcrumb-item>
+        </cv-breadcrumb>
+      </div>
+
+      <div class="breadcrumb-demo-panel breadcrumb-demo-panel--path">
+        <div class="breadcrumb-demo-panel-heading">
+          <span class="breadcrumb-demo-label">Prefix and suffix</span>
+          <p class="breadcrumb-demo-note">Affixes support a segment without changing the path rhythm.</p>
+        </div>
+        <cv-breadcrumb aria-label="Affix path">
+          <cv-breadcrumb-item value="vaults" href="#vaults">
+            <cv-icon name="database" size="s" slot="prefix"></cv-icon>
+            Vaults
+          </cv-breadcrumb-item>
+          <cv-breadcrumb-item value="access" href="#access">
+            Access policy
+            <span slot="suffix">beta</span>
+          </cv-breadcrumb-item>
+        </cv-breadcrumb>
+      </div>
+
+      <div class="breadcrumb-demo-panel breadcrumb-demo-panel--path">
+        <div class="breadcrumb-demo-panel-heading">
+          <span class="breadcrumb-demo-label">Custom separator</span>
+          <p class="breadcrumb-demo-note">A custom separator should still read as one continuous path.</p>
+        </div>
+        <cv-breadcrumb aria-label="Settings path">
+          <cv-breadcrumb-item value="settings" href="#settings">
+            Settings
+            <span slot="separator">→</span>
+          </cv-breadcrumb-item>
+          <cv-breadcrumb-item value="access" href="#access">Access policy</cv-breadcrumb-item>
+        </cv-breadcrumb>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>
+  document.querySelectorAll('.breadcrumb-demo-shell[data-demo="breadcrumb"]:not([data-ready])').forEach((shell) => {
+    shell.dataset.ready = 'true'
+    const breadcrumb = shell.querySelector('.breadcrumb-demo-controlled cv-breadcrumb')
+    const output = shell.querySelector('.breadcrumb-demo-output')
+
+    breadcrumb?.addEventListener('click', (event) => {
+      const item = event
+        .composedPath()
+        .find(
+          (target) =>
+            target instanceof HTMLElement && target.tagName.toLowerCase() === 'cv-breadcrumb-item',
+        )
+
+      if (!item) return
+      event.preventDefault()
+      if (item.current) return
+      breadcrumb.value = item.value
+      output.textContent = `Current value: ${item.value}`
+    })
+  })
+</script>
 ```
 
 ## Anatomy
@@ -82,6 +186,7 @@ Navigation landmark that displays a trail of links showing the user's current lo
 | Property              | Default                  | Description                  |
 | --------------------- | ------------------------ | ---------------------------- |
 | `--cv-breadcrumb-gap` | `var(--cv-space-2, 8px)` | Gap between breadcrumb items |
+| `--cv-breadcrumb-row-gap` | `var(--cv-space-1, 4px)` | Row gap when breadcrumb items wrap |
 
 ## Events
 
@@ -140,15 +245,29 @@ No component-specific events. Navigation uses standard link click behavior.
 
 #### CSS Custom Properties
 
-| Property                                   | Default                  | Description                                     |
-| ------------------------------------------ | ------------------------ | ----------------------------------------------- |
-| `--cv-breadcrumb-item-gap`                 | `var(--cv-space-2, 8px)` | Gap between prefix, link, suffix, and separator |
-| `--cv-breadcrumb-item-separator-opacity`   | `0.6`                    | Opacity of the separator                        |
-| `--cv-breadcrumb-item-current-font-weight` | `600`                    | Font weight of the current item's link          |
+| Property                                      | Default                       | Description                                      |
+| --------------------------------------------- | ----------------------------- | ------------------------------------------------ |
+| `--cv-breadcrumb-item-gap`                    | `var(--cv-space-2, 8px)`      | Gap between prefix, link, suffix, and separator  |
+| `--cv-breadcrumb-item-font-size`              | `var(--cv-font-size-sm, .875rem)` | Item label font size                         |
+| `--cv-breadcrumb-item-link-max-inline-size`   | `18rem`                       | Maximum width before label truncation            |
+| `--cv-breadcrumb-item-link-min-block-size`    | `28px`                        | Minimum link target height                       |
+| `--cv-breadcrumb-item-link-padding-block`     | `4px`                         | Link block-axis padding                          |
+| `--cv-breadcrumb-item-link-padding-inline`    | `7px`                         | Link inline-axis padding                         |
+| `--cv-breadcrumb-item-link-radius`            | `var(--cv-radius-1, 6px)`     | Link border radius                               |
+| `--cv-breadcrumb-item-color`                  | `var(--cv-color-text-muted)`  | Default item text color                          |
+| `--cv-breadcrumb-item-hover-background`       | `var(--cv-color-surface-hover)` | Hover background for non-current items        |
+| `--cv-breadcrumb-item-hover-color`            | `var(--cv-color-text)`        | Hover text color for non-current items           |
+| `--cv-breadcrumb-item-focus-ring`             | `var(--cv-color-focus-ring)`  | Focus-visible outline color                      |
+| `--cv-breadcrumb-item-separator-opacity`      | `0.62`                        | Opacity of the separator                         |
+| `--cv-breadcrumb-item-current-background`     | `var(--cv-color-primary-surface)` | Current item background                       |
+| `--cv-breadcrumb-item-current-border-color`   | `var(--cv-color-primary-border)` | Current item border color                     |
+| `--cv-breadcrumb-item-current-color`          | `var(--cv-color-text-strong)` | Current item text color                          |
+| `--cv-breadcrumb-item-current-font-weight`    | `var(--cv-font-weight-semibold, 600)` | Font weight of the current item's link |
 
 #### Visual States
 
 | Host selector                   | Description                                                       |
 | ------------------------------- | ----------------------------------------------------------------- |
-| `:host([current])`              | Current page — link has `font-weight: 600`, `aria-current="page"` |
-| `:host(:not([show-separator]))` | Separator hidden (last item)                                      |
+| `:host([current])`              | Current page — link has highlighted surface styles and `aria-current="page"` |
+| `:host(:not([show-separator]))` | Separator hidden (last item)                                                |
+| `[part="link"]:focus-visible`   | Keyboard focus ring on the interactive link                                  |
