@@ -108,17 +108,19 @@ Events fire only on user-initiated state changes (click, keyboard). Programmatic
 
 ## Usage
 
+Use `cv-disclosure` for one local reveal: advanced settings, optional help, or a single FAQ answer. Prefer native `<details>/<summary>` for static content that does not need ChromVoid styling, events, or headless state. Use `cv-accordion` instead when the UI is a coordinated set of sections with controlled value(s), roving focus, heading levels, or "at least one open" rules.
+
 ```html
-<!-- Basic disclosure -->
+<!-- Single optional reveal -->
 <cv-disclosure>
-  <span slot="trigger">More details</span>
-  Hidden content revealed on expand.
+  <span slot="trigger">Why is this field optional?</span>
+  The value is only needed when this record must match an external system.
 </cv-disclosure>
 
-<!-- Initially open -->
+<!-- Initially open advanced settings -->
 <cv-disclosure open>
-  <span slot="trigger">Section</span>
-  This content is visible by default.
+  <span slot="trigger">Advanced SSH options</span>
+  <p>Override the default key comment and rotation reminder.</p>
 </cv-disclosure>
 
 <!-- Disabled -->
@@ -127,24 +129,34 @@ Events fire only on user-initiated state changes (click, keyboard). Programmatic
   Cannot be toggled.
 </cv-disclosure>
 
-<!-- Accordion group (exclusive) -->
-<cv-disclosure name="faq">
-  <span slot="trigger">Question 1</span>
-  Answer 1.
+<!-- Lightweight exclusive disclosure group.
+     Opening one named disclosure closes matching peers.
+     This is not a full accordion: no roving focus, no value/expandedValues
+     contract, and no allow-zero-expanded invariant. -->
+<cv-disclosure name="security-notes">
+  <span slot="trigger">Recovery phrase notes</span>
+  <p>Explain where the phrase is stored and who can access it.</p>
 </cv-disclosure>
 
-<cv-disclosure name="faq">
-  <span slot="trigger">Question 2</span>
-  Answer 2.
+<cv-disclosure name="security-notes">
+  <span slot="trigger">Hardware token notes</span>
+  <p>Describe the fallback token and enrollment date.</p>
 </cv-disclosure>
 
-<cv-disclosure name="faq">
-  <span slot="trigger">Question 3</span>
-  Answer 3.
+<cv-disclosure name="security-notes">
+  <span slot="trigger">Audit notes</span>
+  <p>Keep the visible trail short and specific.</p>
 </cv-disclosure>
 
-<!-- Custom animation timing -->
-<cv-disclosure style="--cv-disclosure-duration: 300ms; --cv-disclosure-easing: cubic-bezier(0.4, 0, 0.2, 1);">
+<!-- Custom animation timing via a class or component stylesheet -->
+<style>
+  .slow-disclosure {
+    --cv-disclosure-duration: 300ms;
+    --cv-disclosure-easing: cubic-bezier(0.4, 0, 0.2, 1);
+  }
+</style>
+
+<cv-disclosure class="slow-disclosure">
   <span slot="trigger">Slow reveal</span>
   Content with custom animation.
 </cv-disclosure>
