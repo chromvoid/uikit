@@ -19,6 +19,11 @@ const createDialog = async (attrs?: Partial<CVDialog>) => {
   return el
 }
 
+const openDialog = async (el: CVDialog) => {
+  el.open = true
+  await settle(el)
+}
+
 const getContent = (el: CVDialog) => el.shadowRoot!.querySelector('[part="content"]') as HTMLElement
 const getOverlay = (el: CVDialog) => el.shadowRoot!.querySelector('[part="overlay"]') as HTMLElement
 const getModalShell = (el: CVDialog) =>
@@ -113,13 +118,10 @@ describe('cv-dialog', () => {
   // --- Shadow DOM structure ---
 
   describe('shadow DOM structure', () => {
-    it('renders [part="trigger"] as a <button> with slot[name="trigger"]', async () => {
+    it('does not render the removed built-in trigger API', async () => {
       const el = await createDialog()
-      const trigger = el.shadowRoot!.querySelector('[part="trigger"]') as HTMLElement
-      expect(trigger).not.toBeNull()
-      expect(trigger.tagName).toBe('BUTTON')
-      const slot = trigger.querySelector('slot[name="trigger"]')
-      expect(slot).not.toBeNull()
+      expect(el.shadowRoot!.querySelector('[part="trigger"]')).toBeNull()
+      expect(el.shadowRoot!.querySelector('slot[name="trigger"]')).toBeNull()
     })
 
     it('renders [part="overlay"] as a <div>', async () => {
@@ -267,43 +269,9 @@ describe('cv-dialog', () => {
   // --- Events ---
 
   describe('events', () => {
-    it('input event fires with {open: true} when opened via trigger click', async () => {
-      const el = await createDialog()
-      const trigger = el.shadowRoot!.querySelector('[part="trigger"]') as HTMLElement
-      let detail: unknown
-
-      el.addEventListener('cv-input', (e) => {
-        detail = (e as CustomEvent).detail
-      })
-
-      trigger.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
-      await settle(el)
-
-      expect(detail).toEqual({open: true})
-    })
-
-    it('change event fires with {open: true} when opened via trigger click', async () => {
-      const el = await createDialog()
-      const trigger = el.shadowRoot!.querySelector('[part="trigger"]') as HTMLElement
-      let detail: unknown
-
-      el.addEventListener('cv-change', (e) => {
-        detail = (e as CustomEvent).detail
-      })
-
-      trigger.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
-      await settle(el)
-
-      expect(detail).toEqual({open: true})
-    })
-
     it('input and change fire with {open: false} when closed', async () => {
       const el = await createDialog()
-      const trigger = el.shadowRoot!.querySelector('[part="trigger"]') as HTMLElement
-
-      // Open first
-      trigger.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
-      await settle(el)
+      await openDialog(el)
 
       const inputDetails: unknown[] = []
       const changeDetails: unknown[] = []
@@ -440,15 +408,13 @@ describe('cv-dialog', () => {
 
     it('cv-show fires when dialog begins to open', async () => {
       const el = await createDialog()
-      const trigger = el.shadowRoot!.querySelector('[part="trigger"]') as HTMLElement
       let fired = false
 
       el.addEventListener('cv-show', () => {
         fired = true
       })
 
-      trigger.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
-      await settle(el)
+      await openDialog(el)
 
       expect(fired).toBe(true)
     })
@@ -471,7 +437,6 @@ describe('cv-dialog', () => {
     it('cv-after-show fires after dialog open animation completes', async () => {
       vi.useFakeTimers()
       const el = await createDialog()
-      const trigger = el.shadowRoot!.querySelector('[part="trigger"]') as HTMLElement
       let fired = false
 
       el.addEventListener('cv-after-show', () => {
@@ -479,8 +444,7 @@ describe('cv-dialog', () => {
       })
 
       setPresenceTransitionDuration(el, '120ms')
-      trigger.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
-      await settle(el)
+      await openDialog(el)
 
       expect(fired).toBe(false)
 
@@ -591,29 +555,6 @@ describe('cv-dialog', () => {
       expect(describedby).toBe(desc.id)
     })
 
-    it('trigger has aria-haspopup="dialog"', async () => {
-      const el = await createDialog()
-      const trigger = el.shadowRoot!.querySelector('[part="trigger"]') as HTMLElement
-      expect(trigger.getAttribute('aria-haspopup')).toBe('dialog')
-    })
-
-    it('trigger has aria-expanded reflecting open state', async () => {
-      const el = await createDialog()
-      const trigger = el.shadowRoot!.querySelector('[part="trigger"]') as HTMLElement
-      expect(trigger.getAttribute('aria-expanded')).toBe('false')
-
-      trigger.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
-      await settle(el)
-      expect(trigger.getAttribute('aria-expanded')).toBe('true')
-    })
-
-    it('trigger has aria-controls pointing to content id', async () => {
-      const el = await createDialog()
-      const trigger = el.shadowRoot!.querySelector('[part="trigger"]') as HTMLElement
-      const content = getContent(el)
-      expect(trigger.getAttribute('aria-controls')).toBe(content.id)
-    })
-
     it('header-close button has aria-label="Close"', async () => {
       const el = await createDialog()
       const headerClose = el.shadowRoot!.querySelector('[part="header-close"]') as HTMLElement
@@ -624,12 +565,10 @@ describe('cv-dialog', () => {
   // --- Open and close behavior ---
 
   describe('open and close behavior', () => {
-    it('trigger click opens the dialog', async () => {
+    it('controlled open property shows the dialog', async () => {
       const el = await createDialog()
-      const trigger = el.shadowRoot!.querySelector('[part="trigger"]') as HTMLElement
 
-      trigger.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
-      await settle(el)
+      await openDialog(el)
 
       expect(el.open).toBe(true)
       const overlay = el.shadowRoot!.querySelector('[part="overlay"]') as HTMLElement
@@ -637,11 +576,7 @@ describe('cv-dialog', () => {
     })
 
     it('header-close button click closes the dialog', async () => {
-      const el = await createDialog()
-      const trigger = el.shadowRoot!.querySelector('[part="trigger"]') as HTMLElement
-
-      trigger.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
-      await settle(el)
+      const el = await createDialog({open: true})
       expect(el.open).toBe(true)
 
       const headerClose = el.shadowRoot!.querySelector('[part="header-close"]') as HTMLElement
@@ -659,11 +594,7 @@ describe('cv-dialog', () => {
     })
 
     it('Escape key closes the dialog', async () => {
-      const el = await createDialog()
-      const trigger = el.shadowRoot!.querySelector('[part="trigger"]') as HTMLElement
-
-      trigger.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
-      await settle(el)
+      const el = await createDialog({open: true})
       expect(el.open).toBe(true)
 
       const content = getContent(el)
@@ -674,11 +605,7 @@ describe('cv-dialog', () => {
     })
 
     it('overlay click closes the dialog', async () => {
-      const el = await createDialog()
-      const trigger = el.shadowRoot!.querySelector('[part="trigger"]') as HTMLElement
-
-      trigger.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
-      await settle(el)
+      const el = await createDialog({open: true})
       expect(el.open).toBe(true)
 
       const overlay = el.shadowRoot!.querySelector('[part="overlay"]') as HTMLElement
@@ -686,19 +613,6 @@ describe('cv-dialog', () => {
       overlay.dispatchEvent(new MouseEvent('click', {bubbles: true}))
       await settle(el)
 
-      expect(el.open).toBe(false)
-    })
-
-    it('trigger click toggles open state', async () => {
-      const el = await createDialog()
-      const trigger = el.shadowRoot!.querySelector('[part="trigger"]') as HTMLElement
-
-      trigger.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
-      await settle(el)
-      expect(el.open).toBe(true)
-
-      trigger.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
-      await settle(el)
       expect(el.open).toBe(false)
     })
   })
@@ -735,11 +649,7 @@ describe('cv-dialog', () => {
     })
 
     it('does not lock body scroll when modal=false and dialog is open', async () => {
-      const el = await createDialog({modal: false})
-      const trigger = el.shadowRoot!.querySelector('[part="trigger"]') as HTMLElement
-
-      trigger.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
-      await settle(el)
+      await createDialog({modal: false, open: true})
 
       expect(document.body.style.overflow).not.toBe('hidden')
     })
@@ -773,11 +683,7 @@ describe('cv-dialog', () => {
 
   describe('keyboard interaction', () => {
     it('Escape closes dialog when closeOnEscape=true (default)', async () => {
-      const el = await createDialog()
-      const trigger = el.shadowRoot!.querySelector('[part="trigger"]') as HTMLElement
-
-      trigger.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
-      await settle(el)
+      const el = await createDialog({open: true})
       expect(el.open).toBe(true)
 
       const content = getContent(el)
@@ -788,11 +694,7 @@ describe('cv-dialog', () => {
     })
 
     it('Escape does not close dialog when closeOnEscape=false', async () => {
-      const el = await createDialog({closeOnEscape: false})
-      const trigger = el.shadowRoot!.querySelector('[part="trigger"]') as HTMLElement
-
-      trigger.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
-      await settle(el)
+      const el = await createDialog({closeOnEscape: false, open: true})
       expect(el.open).toBe(true)
 
       const content = getContent(el)
@@ -821,26 +723,6 @@ describe('cv-dialog', () => {
       const event = new KeyboardEvent('keydown', {key: 'Escape', bubbles: true, cancelable: true})
       event.preventDefault()
       content.dispatchEvent(event)
-      await settle(el)
-
-      expect(el.open).toBe(true)
-    })
-
-    it('trigger Enter key opens dialog', async () => {
-      const el = await createDialog()
-      const trigger = el.shadowRoot!.querySelector('[part="trigger"]') as HTMLElement
-
-      trigger.dispatchEvent(new KeyboardEvent('keydown', {key: 'Enter', bubbles: true}))
-      await settle(el)
-
-      expect(el.open).toBe(true)
-    })
-
-    it('trigger Space key opens dialog', async () => {
-      const el = await createDialog()
-      const trigger = el.shadowRoot!.querySelector('[part="trigger"]') as HTMLElement
-
-      trigger.dispatchEvent(new KeyboardEvent('keydown', {key: ' ', bubbles: true}))
       await settle(el)
 
       expect(el.open).toBe(true)
@@ -982,41 +864,9 @@ describe('cv-dialog', () => {
     })
   })
 
-  describe('deprecated trigger slot', () => {
-    it('warns once when slot="trigger" is used', async () => {
-      const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
-
-      try {
-        const el = document.createElement('cv-dialog') as CVDialog
-        const trigger = document.createElement('span')
-        trigger.slot = 'trigger'
-        trigger.textContent = 'Legacy trigger'
-        el.append(trigger)
-        document.body.append(el)
-        await settle(el)
-
-        expect(warn).toHaveBeenCalledWith(expect.stringContaining('slot="trigger" is deprecated'))
-      } finally {
-        warn.mockRestore()
-      }
-    })
-  })
-
   // --- Headless contract delegation ---
 
   describe('headless contract delegation', () => {
-    it('trigger ARIA attributes come from headless getTriggerProps()', async () => {
-      const el = await createDialog()
-      const trigger = el.shadowRoot!.querySelector('[part="trigger"]') as HTMLElement
-      // Verify trigger has id, role, aria-haspopup, aria-expanded, aria-controls
-      // These should be dynamically set from the headless model, not hardcoded
-      expect(trigger.id).toBeTruthy()
-      expect(trigger.getAttribute('role')).toBe('button')
-      expect(trigger.getAttribute('aria-haspopup')).toBe('dialog')
-      expect(trigger.getAttribute('aria-expanded')).toBeDefined()
-      expect(trigger.getAttribute('aria-controls')).toBeTruthy()
-    })
-
     it('content ARIA attributes come from headless getContentProps()', async () => {
       const el = await createDialog()
       const content = getContent(el)
@@ -1054,9 +904,7 @@ describe('cv-dialog', () => {
       const overlay = getOverlay(el)
       expect(overlay.hidden).toBe(true)
 
-      const trigger = el.shadowRoot!.querySelector('[part="trigger"]') as HTMLElement
-      trigger.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
-      await settle(el)
+      await openDialog(el)
 
       expect(overlay.hidden).toBe(false)
     })
@@ -1089,13 +937,6 @@ describe('cv-dialog', () => {
       expect(getContent(el).dataset['state']).toBe('closed')
     })
 
-    it('aria-controls on trigger matches content id', async () => {
-      const el = await createDialog()
-      const trigger = el.shadowRoot!.querySelector('[part="trigger"]') as HTMLElement
-      const content = getContent(el)
-      expect(trigger.getAttribute('aria-controls')).toBe(content.id)
-    })
-
     it('aria-labelledby on content matches title id', async () => {
       const el = await createDialog()
       const content = getContent(el)
@@ -1115,22 +956,14 @@ describe('cv-dialog', () => {
 
   describe('scroll lock', () => {
     it('body overflow is hidden when modal dialog is open', async () => {
-      const el = await createDialog()
-      const trigger = el.shadowRoot!.querySelector('[part="trigger"]') as HTMLElement
-
-      trigger.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
-      await settle(el)
+      await createDialog({open: true})
 
       expect(document.body.style.overflow).toBe('hidden')
     })
 
     it('body overflow is restored when modal dialog is closed', async () => {
       vi.useFakeTimers()
-      const el = await createDialog()
-      const trigger = el.shadowRoot!.querySelector('[part="trigger"]') as HTMLElement
-
-      trigger.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
-      await settle(el)
+      const el = await createDialog({open: true})
       setPresenceTransitionDuration(el, '120ms')
       expect(document.body.style.overflow).toBe('hidden')
 
@@ -1145,21 +978,13 @@ describe('cv-dialog', () => {
     })
 
     it('body overflow is NOT set to hidden for non-modal dialog', async () => {
-      const el = await createDialog({modal: false})
-      const trigger = el.shadowRoot!.querySelector('[part="trigger"]') as HTMLElement
-
-      trigger.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
-      await settle(el)
+      await createDialog({modal: false, open: true})
 
       expect(document.body.style.overflow).not.toBe('hidden')
     })
 
     it('body overflow is restored when modal dialog element is disconnected', async () => {
-      const el = await createDialog()
-      const trigger = el.shadowRoot!.querySelector('[part="trigger"]') as HTMLElement
-
-      trigger.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
-      await settle(el)
+      const el = await createDialog({open: true})
       expect(document.body.style.overflow).toBe('hidden')
 
       el.remove()

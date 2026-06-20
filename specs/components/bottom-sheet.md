@@ -5,10 +5,117 @@ Mobile modal sheet primitive that reuses `cv-dialog` for modal state, focus mana
 ## Usage
 
 ```html
-<cv-bottom-sheet open no-header>
-  <span slot="title">Player</span>
-  <div>Sheet content</div>
-</cv-bottom-sheet>
+<style>
+  .bottom-sheet-demo-surface {
+    display: grid;
+    align-content: start;
+    gap: 18px;
+    inline-size: 100%;
+    min-block-size: 100dvh;
+    overflow: hidden;
+    padding: clamp(18px, 4vw, 28px);
+    box-sizing: border-box;
+    background:
+      linear-gradient(180deg, rgba(12, 20, 32, 0.98), rgba(7, 13, 22, 0.98)),
+      radial-gradient(circle at 12% 0%, rgba(101, 215, 255, 0.12), transparent 34%),
+      radial-gradient(circle at 88% 18%, rgba(179, 136, 255, 0.1), transparent 36%);
+  }
+
+  .bottom-sheet-demo-copy {
+    display: grid;
+    gap: 10px;
+    max-inline-size: 34rem;
+  }
+
+  .bottom-sheet-demo-kicker {
+    color: #94e9ff;
+    font-family: var(--vp-font-family-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0;
+    text-transform: uppercase;
+  }
+
+  .bottom-sheet-demo-copy h3,
+  .bottom-sheet-demo-copy p {
+    margin: 0;
+  }
+
+  .bottom-sheet-demo-copy h3 {
+    max-inline-size: 24ch;
+    color: #eef5ff;
+    font-size: 1.35rem;
+    line-height: 1.1;
+    text-wrap: balance;
+  }
+
+  .bottom-sheet-demo-copy p {
+    color: rgba(190, 206, 226, 0.76);
+    font-size: 0.92rem;
+    line-height: 1.58;
+  }
+
+  .bottom-sheet-demo-sheet {
+    --cv-bottom-sheet-width: min(100%, 520px);
+    --cv-bottom-sheet-max-width: 100%;
+    --cv-bottom-sheet-max-height: min(360px, calc(100dvh - 24px));
+    --cv-bottom-sheet-expanded-height: min(420px, calc(100dvh - 24px));
+    --cv-bottom-sheet-border-radius: 16px 16px 0 0;
+  }
+
+  .bottom-sheet-demo-sheet::part(content) {
+    box-shadow:
+      0 -18px 44px rgba(0, 0, 0, 0.32),
+      inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  }
+</style>
+
+<div
+  class="bottom-sheet-demo-surface"
+  data-demo="bottom-sheet"
+  data-live-demo-isolated
+  data-live-demo-height="560"
+>
+  <div class="bottom-sheet-demo-copy">
+    <span class="bottom-sheet-demo-kicker">Isolated preview</span>
+    <h3>Open the sheet inside this frame.</h3>
+    <p>
+      The sheet keeps its normal modal dialog behavior. The iframe is the preview viewport, so the backdrop
+      covers this frame instead of the documentation shell.
+    </p>
+    <cv-button class="bottom-sheet-demo-open" variant="primary">Open bottom sheet</cv-button>
+  </div>
+
+  <cv-bottom-sheet class="bottom-sheet-demo-sheet" initial-focus-id="bottom-sheet-demo-close">
+    <span slot="title">Player</span>
+    <p>Sheet content stays inside the preview container instead of covering the documentation page.</p>
+    <cv-button id="bottom-sheet-demo-close" slot="footer">Close</cv-button>
+  </cv-bottom-sheet>
+</div>
+
+<script>
+  document
+    .querySelectorAll('.bottom-sheet-demo-surface[data-demo="bottom-sheet"]:not([data-ready])')
+    .forEach((surface) => {
+      surface.dataset.ready = 'true'
+
+      const sheet = surface.querySelector('.bottom-sheet-demo-sheet')
+      const openButton = surface.querySelector('.bottom-sheet-demo-open')
+      const closeButton = surface.querySelector('#bottom-sheet-demo-close')
+
+      openButton?.addEventListener('click', () => {
+        if (sheet) sheet.open = true
+      })
+
+      closeButton?.addEventListener('click', () => {
+        if (sheet) sheet.open = false
+      })
+
+      sheet?.addEventListener('cv-change', (event) => {
+        if (event.detail.open) return
+        openButton?.focus({preventScroll: true})
+      })
+    })
+</script>
 ```
 
 ## Anatomy

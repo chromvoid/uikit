@@ -8,9 +8,7 @@ Modal or non-modal dialog overlay for presenting focused content, confirmations,
 
 ```
 <cv-dialog> (host)
-├── <button part="trigger"> (legacy, deprecated)
-│   └── <slot name="trigger">
-└── modal=true:
+├── modal=true:
     └── <dialog class="portal-shell"> (top layer)
         └── <div part="overlay">
             └── <section part="content" role="dialog|alertdialog">
@@ -52,7 +50,6 @@ Modal or non-modal dialog overlay for presenting focused content, confirmations,
 | Slot           | Description                                               |
 | -------------- | --------------------------------------------------------- |
 | `(default)`    | Dialog body content                                       |
-| `trigger`      | Deprecated legacy content for the built-in trigger button |
 | `title`        | Dialog title text                                         |
 | `description`  | Description text below the title                          |
 | `header-close` | Icon content for the header close button (defaults to X)  |
@@ -62,7 +59,6 @@ Modal or non-modal dialog overlay for presenting focused content, confirmations,
 
 | Part           | Element     | Description                                                       |
 | -------------- | ----------- | ----------------------------------------------------------------- |
-| `trigger`      | `<button>`  | Deprecated built-in trigger button                                |
 | `overlay`      | `<div>`     | Backdrop/overlay container                                        |
 | `content`      | `<section>` | Dialog content panel with `role="dialog"` or `role="alertdialog"` |
 | `header`       | `<header>`  | Header area containing title, description, and close button       |
@@ -115,7 +111,7 @@ The top-layer shell, overlay, and content expose `data-state="closed|opening|ope
 | `cv-hide`       | —                 | Fires when dialog begins to close                  |
 | `cv-after-hide` | —                 | Fires after dialog close animation completes       |
 
-`cv-input` and `cv-change` fire only for user-initiated state changes (trigger click, Escape, outside pointer, outside focus, header close). Programmatic `open` attribute changes do not emit these events.
+`cv-input` and `cv-change` fire only for user-initiated close interactions (Escape, outside pointer, outside focus, header close). Programmatic `open` attribute changes do not emit these events.
 
 `cv-after-show` and `cv-after-hide` fire after the presence transition completes. Reduced-motion and zero-duration paths complete immediately.
 
@@ -141,10 +137,9 @@ The top-layer shell, overlay, and content expose `data-state="closed|opening|ope
 | `state.type()`                 | state → attr   | `[type]` host attribute                       |
 | `state.isFocusTrapped()`       | state → effect | activates focus trap within the dialog        |
 | `state.shouldLockScroll()`     | state → effect | applies `overflow: hidden` to `document.body` |
-| `state.restoreTargetId()`      | state → effect | focuses the trigger element on close          |
+| `state.restoreTargetId()`      | state → effect | restores focus after close when available     |
 | `state.initialFocusTargetId()` | state → effect | focuses the specified element on open         |
 
-- `contracts.getTriggerProps()` is spread onto `[part="trigger"]` to apply `role`, `aria-haspopup`, `aria-expanded`, `aria-controls`, `tabindex`, and click/keydown handlers.
 - `contracts.getOverlayProps()` is spread onto `[part="overlay"]` to apply `hidden`, `data-open`, and outside pointer/focus handlers.
 - `contracts.getContentProps()` is spread onto `[part="content"]` to apply `role` (`dialog` or `alertdialog`), `aria-modal`, `aria-labelledby`, `aria-describedby`, `tabindex`, and keydown handler.
 - `contracts.getTitleProps()` is spread onto `[part="title"]` to apply the `id` for `aria-labelledby`.
@@ -159,55 +154,117 @@ The top-layer shell, overlay, and content expose `data-state="closed|opening|ope
 ## Usage
 
 ```html
-<!-- Controlled dialog -->
-<button type="button" onclick="dialog.open = true">Open</button>
-<cv-dialog id="dialog">
-  <span slot="title">Confirm action</span>
-  <span slot="description">Are you sure you want to proceed?</span>
-  <p>This action cannot be undone.</p>
-  <div slot="footer">
-    <cv-button variant="ghost">Cancel</cv-button>
-    <cv-button variant="primary">Confirm</cv-button>
-  </div>
-</cv-dialog>
+<div class="dialog-demo-shell" data-demo="dialog">
+  <section class="dialog-demo-hero" aria-labelledby="dialog-demo-title">
+    <div class="dialog-demo-copy">
+      <span class="dialog-demo-kicker">Controlled dialogs</span>
+      <h3 id="dialog-demo-title">Choose the dialog pattern by task risk</h3>
+      <p>
+        External controls own the open state. The labels below describe each scenario; only the action
+        buttons are interactive.
+      </p>
+    </div>
 
-<!-- Alert dialog -->
-<button type="button" onclick="alertDialog.open = true">Delete</button>
-<cv-dialog id="alertDialog" type="alertdialog">
-  <span slot="title">Delete item?</span>
-  <span slot="description">This will permanently delete the item.</span>
-  <div slot="footer">
-    <cv-button variant="ghost">Cancel</cv-button>
-    <cv-button variant="danger">Delete</cv-button>
-  </div>
-</cv-dialog>
+    <div class="dialog-demo-actions" aria-label="Controlled dialog examples">
+      <div class="dialog-demo-action">
+        <span class="dialog-demo-label">Confirmation</span>
+        <cv-button variant="primary" data-dialog-open="dialog-demo-confirm">Review transfer</cv-button>
+      </div>
+      <div class="dialog-demo-action">
+        <span class="dialog-demo-label">Destructive alert</span>
+        <cv-button variant="danger" data-dialog-open="dialog-demo-delete">Delete record</cv-button>
+      </div>
+      <div class="dialog-demo-action">
+        <span class="dialog-demo-label">Non-modal help</span>
+        <cv-button data-dialog-open="dialog-demo-info">Show details</cv-button>
+      </div>
+    </div>
+  </section>
 
-<!-- Non-modal dialog -->
-<button type="button" onclick="infoDialog.open = true">Show info</button>
-<cv-dialog id="infoDialog" modal="false">
-  <span slot="title">Information</span>
-  <p>This dialog does not block the page.</p>
-</cv-dialog>
+  <section class="dialog-demo-section" aria-labelledby="dialog-demo-variants-title">
+    <div class="dialog-demo-section-header">
+      <span class="dialog-demo-kicker">Variants</span>
+      <h4 id="dialog-demo-variants-title">Header and close affordance examples</h4>
+    </div>
 
-<!-- Without header -->
-<cv-dialog no-header>
-  <p>Minimal dialog with body content only.</p>
-  <div slot="footer">
-    <cv-button variant="primary">OK</cv-button>
-  </div>
-</cv-dialog>
+    <div class="dialog-demo-grid">
+      <div class="dialog-demo-panel">
+        <span class="dialog-demo-label">No header</span>
+        <p>Use for short acknowledgements where the body is already clear.</p>
+        <cv-button data-dialog-open="dialog-demo-compact">Open compact notice</cv-button>
+      </div>
 
-<!-- Custom header close icon -->
-<cv-dialog>
-  <span slot="title">Settings</span>
-  <icon-close slot="header-close"></icon-close>
-  <p>Dialog content here.</p>
-</cv-dialog>
+      <div class="dialog-demo-panel">
+        <span class="dialog-demo-label">Custom close icon</span>
+        <p>Use the header-close slot when the shell needs a branded or platform-specific icon.</p>
+        <cv-button data-dialog-open="dialog-demo-settings">Open settings</cv-button>
+      </div>
+    </div>
+  </section>
 
-<!-- Legacy built-in trigger (deprecated) -->
-<cv-dialog>
-  <span slot="trigger">Open</span>
-  <span slot="title">Legacy trigger</span>
-  <p>Prefer external triggers with controlled .open.</p>
-</cv-dialog>
+  <cv-dialog
+    id="dialog-demo-confirm"
+    class="dialog-demo-controlled"
+    initial-focus-id="dialog-demo-confirm-action"
+  >
+    <span slot="title">Confirm transfer?</span>
+    <span slot="description">Review the operation before committing it to the vault.</span>
+    <p>This action updates the shared record and notifies connected devices.</p>
+    <div slot="footer">
+      <cv-button variant="ghost" data-dialog-close="dialog-demo-confirm">Cancel</cv-button>
+      <cv-button id="dialog-demo-confirm-action" variant="primary" data-dialog-close="dialog-demo-confirm">
+        Confirm transfer
+      </cv-button>
+    </div>
+  </cv-dialog>
+
+  <cv-dialog id="dialog-demo-delete" class="dialog-demo-controlled" type="alertdialog">
+    <span slot="title">Delete vault record?</span>
+    <span slot="description">This permanently removes the selected record from the current vault.</span>
+    <div slot="footer">
+      <cv-button variant="ghost" data-dialog-close="dialog-demo-delete">Cancel</cv-button>
+      <cv-button variant="danger" data-dialog-close="dialog-demo-delete">Delete record</cv-button>
+    </div>
+  </cv-dialog>
+
+  <cv-dialog id="dialog-demo-info" class="dialog-demo-controlled" modal="false">
+    <span slot="title">Sync window</span>
+    <p>This non-modal dialog keeps the page available while showing contextual information.</p>
+    <div slot="footer">
+      <cv-button variant="primary" data-dialog-close="dialog-demo-info">Got it</cv-button>
+    </div>
+  </cv-dialog>
+
+  <cv-dialog id="dialog-demo-compact" class="dialog-demo-controlled" no-header>
+    <p>Minimal dialog with body content only.</p>
+    <div slot="footer">
+      <cv-button variant="primary" data-dialog-close="dialog-demo-compact">OK</cv-button>
+    </div>
+  </cv-dialog>
+
+  <cv-dialog id="dialog-demo-settings" class="dialog-demo-controlled">
+    <span slot="title">Settings</span>
+    <span slot="header-close">X</span>
+    <p>Dialog content here.</p>
+  </cv-dialog>
+</div>
+
+<script>
+  document.querySelectorAll('.dialog-demo-shell[data-demo="dialog"]:not([data-ready])').forEach((shell) => {
+    shell.dataset.ready = 'true'
+    const dialogs = new Map([...shell.querySelectorAll('cv-dialog[id]')].map((dialog) => [dialog.id, dialog]))
+    const setDialogOpen = (id, open) => {
+      const dialog = dialogs.get(id)
+      if (dialog) dialog.open = open
+    }
+
+    shell.querySelectorAll('[data-dialog-open]').forEach((control) => {
+      control.addEventListener('click', () => setDialogOpen(control.dataset.dialogOpen, true))
+    })
+
+    shell.querySelectorAll('[data-dialog-close]').forEach((control) => {
+      control.addEventListener('click', () => setDialogOpen(control.dataset.dialogClose, false))
+    })
+  })
+</script>
 ```

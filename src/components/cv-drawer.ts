@@ -163,8 +163,8 @@ export class CVDrawer extends ReatomLitElement {
       [part='panel'][data-placement='start'] {
         inset-block: 0;
         inset-inline-start: 0;
-        inline-size: var(--cv-drawer-size, 360px);
-        max-inline-size: var(--cv-drawer-max-size, calc(100dvh - 32px));
+        inline-size: min(var(--cv-drawer-size, 360px), 100%);
+        max-inline-size: min(var(--cv-drawer-max-size, calc(100dvh - 32px)), 100%);
         border-radius: 0 var(--cv-drawer-border-radius, var(--cv-radius-lg, 14px))
           var(--cv-drawer-border-radius, var(--cv-radius-lg, 14px)) 0;
         transform: translate3d(-100%, 0, 0);
@@ -175,8 +175,8 @@ export class CVDrawer extends ReatomLitElement {
       [part='panel'][data-placement='end'] {
         inset-block: 0;
         inset-inline-end: 0;
-        inline-size: var(--cv-drawer-size, 360px);
-        max-inline-size: var(--cv-drawer-max-size, calc(100dvh - 32px));
+        inline-size: min(var(--cv-drawer-size, 360px), 100%);
+        max-inline-size: min(var(--cv-drawer-max-size, calc(100dvh - 32px)), 100%);
         border-radius: var(--cv-drawer-border-radius, var(--cv-radius-lg, 14px)) 0 0
           var(--cv-drawer-border-radius, var(--cv-radius-lg, 14px));
         transform: translate3d(100%, 0, 0);
@@ -187,8 +187,8 @@ export class CVDrawer extends ReatomLitElement {
       [part='panel'][data-placement='top'] {
         inset-inline: 0;
         inset-block-start: 0;
-        block-size: var(--cv-drawer-size, 360px);
-        max-block-size: var(--cv-drawer-max-size, calc(100dvh - 32px));
+        block-size: min(var(--cv-drawer-size, 360px), 100%);
+        max-block-size: min(var(--cv-drawer-max-size, calc(100dvh - 32px)), 100%);
         border-radius: 0 0 var(--cv-drawer-border-radius, var(--cv-radius-lg, 14px))
           var(--cv-drawer-border-radius, var(--cv-radius-lg, 14px));
         transform: translate3d(0, -100%, 0);
@@ -199,8 +199,8 @@ export class CVDrawer extends ReatomLitElement {
       [part='panel'][data-placement='bottom'] {
         inset-inline: 0;
         inset-block-end: 0;
-        block-size: var(--cv-drawer-size, 360px);
-        max-block-size: var(--cv-drawer-max-size, calc(100dvh - 32px));
+        block-size: min(var(--cv-drawer-size, 360px), 100%);
+        max-block-size: min(var(--cv-drawer-max-size, calc(100dvh - 32px)), 100%);
         border-radius: var(--cv-drawer-border-radius, var(--cv-radius-lg, 14px))
           var(--cv-drawer-border-radius, var(--cv-radius-lg, 14px)) 0 0;
         transform: translate3d(0, 100%, 0);

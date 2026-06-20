@@ -506,6 +506,19 @@ describe('cv-drawer', () => {
       const updatedPanel = getPanel(el)
       expect(updatedPanel.getAttribute('data-placement')).toBe('bottom')
     })
+
+    it('clamps panel size to its containing block for all placements', () => {
+      const cssText = stylesToText(CVDrawer.styles)
+
+      expect(cssText).toContain('inline-size: min(var(--cv-drawer-size, 360px), 100%);')
+      expect(cssText).toContain(
+        'max-inline-size: min(var(--cv-drawer-max-size, calc(100dvh - 32px)), 100%);',
+      )
+      expect(cssText).toContain('block-size: min(var(--cv-drawer-size, 360px), 100%);')
+      expect(cssText).toContain(
+        'max-block-size: min(var(--cv-drawer-max-size, calc(100dvh - 32px)), 100%);',
+      )
+    })
   })
 
   // --- Open and close behavior ---

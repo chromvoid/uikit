@@ -69,10 +69,6 @@ const STANDARD_FOCUSABLE_SELECTORS = [
 const INPUT_LIKE_COMPONENTS = ['cv-input', 'cv-number', 'cv-textarea', 'cv-select']
 
 const managedDialogStyles = `
-  :is(cv-dialog, cv-bottom-sheet).cv-managed-dialog::part(trigger) {
-    display: none;
-  }
-
   :is(cv-dialog, cv-bottom-sheet).cv-managed-dialog::part(content) {
     gap: 0;
     padding: 0;

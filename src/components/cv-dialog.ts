@@ -17,7 +17,6 @@ type PopoverHostElement = HTMLElement & {
 type DialogPresenceState = 'closed' | 'opening' | 'open' | 'closing'
 
 let cvDialogNonce = 0
-let hasWarnedAboutTriggerSlot = false
 
 // Stack of currently-open dialogs in open order. Only the topmost dialog
 // reacts to outside-focus dismissal, so opening/closing a stacked dialog does
@@ -141,7 +140,7 @@ export class CVDialog extends ReatomLitElement {
   static styles = [
     css`
       :host {
-        display: inline-block;
+        display: contents;
         --cv-dialog-viewport-inset-top: var(--safe-area-top, env(safe-area-inset-top, 0px));
         --cv-dialog-viewport-inset-right: var(--safe-area-right, env(safe-area-inset-right, 0px));
         --cv-dialog-viewport-inset-bottom: calc(
@@ -173,24 +172,6 @@ export class CVDialog extends ReatomLitElement {
         --cv-dialog-content-transition-property: opacity, transform;
         --cv-dialog-content-closed-transform: translate3d(0, 8px, 0) scale(0.98);
         --cv-dialog-content-open-transform: translate3d(0, 0, 0) scale(1);
-      }
-
-      [part='trigger'] {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        min-block-size: 36px;
-        padding: 0 var(--cv-space-3, 12px);
-        border-radius: var(--cv-radius-sm, 6px);
-        border: 1px solid var(--cv-color-border, #2a3245);
-        background: var(--cv-color-surface, #141923);
-        color: var(--cv-color-text, #e8ecf6);
-        cursor: pointer;
-      }
-
-      [part='trigger']:focus-visible {
-        outline: 2px solid var(--cv-color-primary, #65d7ff);
-        outline-offset: 1px;
       }
 
       .portal-shell {
@@ -422,7 +403,6 @@ export class CVDialog extends ReatomLitElement {
 
   override connectedCallback(): void {
     super.connectedCallback()
-    this.warnAboutDeprecatedTriggerSlot()
     this.syncOutsideFocusListener()
     this.syncScrollLock()
   }
@@ -483,7 +463,6 @@ export class CVDialog extends ReatomLitElement {
   override updated(changedProperties: PropertyValues): void {
     super.updated(changedProperties)
 
-    this.warnAboutDeprecatedTriggerSlot()
     this.syncTopLayerVisibility()
     this.syncOutsideFocusListener()
     this.syncScrollLock()
@@ -981,22 +960,12 @@ export class CVDialog extends ReatomLitElement {
     return false
   }
 
-  private warnAboutDeprecatedTriggerSlot(): void {
-    if (hasWarnedAboutTriggerSlot) return
-    if (!this.querySelector('[slot="trigger"]')) return
-
-    hasWarnedAboutTriggerSlot = true
-    globalThis['console']?.warn?.(
-      '[cv-dialog] slot="trigger" is deprecated. Control dialog visibility with `.open` or use createDialogController/dialogService.',
-    )
-  }
-
   private handleDocumentFocusIn(event: FocusEvent) {
     if (!this.open) return
 
     // Only the topmost open dialog reacts to outside focus. Otherwise opening
     // a stacked dialog B focuses its content, which would dismiss the
-    // underlying dialog A — and restoring focus to A's trigger would in turn
+    // underlying dialog A — and restoring focus to A's opener would in turn
     // dismiss B. With a stack, a dialog beneath another open dialog never
     // treats focus changes as outside-focus dismissals.
     if (!this.isTopmostOpenDialog()) return
@@ -1022,24 +991,6 @@ export class CVDialog extends ReatomLitElement {
     }
 
     return false
-  }
-
-  private handleTriggerClick() {
-    this.captureFocusRestoreTarget()
-    const previous = this.captureState()
-    this.model.contracts.getTriggerProps().onClick()
-    this.applyInteractionResult(previous)
-  }
-
-  private handleTriggerKeyDown(event: KeyboardEvent) {
-    if (event.key === 'Enter' || event.key === ' ' || event.key === 'Spacebar') {
-      event.preventDefault()
-    }
-
-    this.captureFocusRestoreTarget()
-    const previous = this.captureState()
-    this.model.contracts.getTriggerProps().onKeyDown({key: event.key})
-    this.applyInteractionResult(previous)
   }
 
   private handleOverlayMouseDown(event: MouseEvent) {
@@ -1213,24 +1164,7 @@ export class CVDialog extends ReatomLitElement {
   }
 
   protected override render() {
-    const triggerProps = this.model.contracts.getTriggerProps()
-
     return html`
-      <button
-        id=${triggerProps.id}
-        role=${triggerProps.role}
-        tabindex=${triggerProps.tabindex}
-        aria-haspopup=${triggerProps['aria-haspopup']}
-        aria-expanded=${triggerProps['aria-expanded']}
-        aria-controls=${triggerProps['aria-controls']}
-        part="trigger"
-        type="button"
-        @click=${this.handleTriggerClick}
-        @keydown=${this.handleTriggerKeyDown}
-      >
-        <slot name="trigger">Open dialog</slot>
-      </button>
-
       ${
         this.modal
           ? html`

@@ -35,7 +35,6 @@ export const overlaysFloatingCases: readonly UikitVisualCase[] = [
     fullPage: true,
     html: `
       <cv-dialog open>
-        <cv-button slot="trigger">Open dialog</cv-button>
         <span slot="title">Confirm export</span>
         <span slot="description">Review export settings before continuing.</span>
         <div class="visual-stack">

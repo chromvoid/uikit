@@ -162,10 +162,6 @@ export class CVBottomSheet extends ReatomLitElement {
       --cv-dialog-content-open-transform: translateY(var(--cv-bottom-sheet-drag-offset, 0px));
     }
 
-    cv-dialog::part(trigger) {
-      display: none;
-    }
-
     cv-dialog::part(overlay) {
       place-items: end center;
       padding-block-start: var(--cv-bottom-sheet-overlay-block-start);
@@ -562,7 +558,7 @@ export class CVBottomSheet extends ReatomLitElement {
     return html`
       <cv-dialog
         class=${dialogClass}
-        exportparts="trigger, overlay, content, header, title, description, header-close, body, footer"
+        exportparts="overlay, content, header, title, description, header-close, body, footer"
         .open=${this.open}
         .modal=${this.modal}
         .type=${this.type}
