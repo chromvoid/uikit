@@ -1268,8 +1268,7 @@ body::after {
 }
 
 cv-card.catalog-stat-card,
-cv-card.catalog-card,
-cv-card.live-demo-card {
+cv-card.catalog-card {
   display: block;
   --cv-card-padding: 18px;
   --cv-card-border-radius: 16px;
@@ -1277,17 +1276,8 @@ cv-card.live-demo-card {
   --cv-card-background: linear-gradient(180deg, var(--docs-surface-2), var(--docs-surface-1));
 }
 
-cv-card.live-demo-card {
-  --cv-card-border-color: rgba(118, 181, 222, 0.18);
-  --cv-card-background: linear-gradient(180deg, rgba(16, 25, 39, 0.96), rgba(8, 14, 23, 0.96));
-  --cv-card-header-color: #eef5ff;
-  --cv-card-body-color: rgba(190, 206, 226, 0.78);
-  --cv-card-footer-color: rgba(190, 206, 226, 0.78);
-}
-
 cv-card.catalog-stat-card::part(base),
-cv-card.catalog-card::part(base),
-cv-card.live-demo-card::part(base) {
+cv-card.catalog-card::part(base) {
   min-block-size: 100%;
   border-color: rgba(118, 181, 222, 0.18);
   background: linear-gradient(180deg, rgba(16, 25, 39, 0.96), rgba(8, 14, 23, 0.96));
@@ -1302,33 +1292,20 @@ cv-card.live-demo-card::part(base) {
 }
 
 cv-card.catalog-stat-card:hover::part(base),
-cv-card.catalog-card:hover::part(base),
-cv-card.live-demo-card:hover::part(base) {
+cv-card.catalog-card:hover::part(base) {
   border-color: var(--docs-border-strong);
   transform: translateY(-2px);
 }
 
 cv-card.catalog-stat-card::part(header),
-cv-card.catalog-card::part(header),
-cv-card.live-demo-card::part(header) {
+cv-card.catalog-card::part(header) {
   padding-bottom: 0;
   color: #eef5ff;
-}
-
-cv-card.live-demo-card::part(body) {
-  color: rgba(190, 206, 226, 0.78);
 }
 
 cv-card.catalog-stat-card::part(footer),
 cv-card.catalog-card::part(footer) {
   display: none;
-}
-
-cv-card.live-demo-card::part(footer) {
-  padding-top: 0;
-  min-inline-size: 0;
-  max-inline-size: 100%;
-  color: rgba(190, 206, 226, 0.78);
 }
 
 .catalog-stat-header,
@@ -1419,10 +1396,13 @@ cv-card.live-demo-card::part(footer) {
   white-space: nowrap;
 }
 
-cv-card.live-demo-card {
+.live-demo-card {
+  display: grid;
+  gap: 16px;
   min-inline-size: 0;
   max-inline-size: 100%;
   margin: 24px 0;
+  padding: 18px;
   border: 1px solid rgba(118, 181, 222, 0.18);
   border-radius: 16px;
   background: linear-gradient(180deg, rgba(16, 25, 39, 0.96), rgba(8, 14, 23, 0.96));
@@ -1430,17 +1410,12 @@ cv-card.live-demo-card {
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.03),
     var(--docs-shadow);
-  --cv-card-background: linear-gradient(180deg, rgba(16, 25, 39, 0.96), rgba(8, 14, 23, 0.96));
-  --cv-card-border-color: rgba(118, 181, 222, 0.18);
-  --cv-card-header-color: #eef5ff;
-  --cv-card-body-color: rgba(190, 206, 226, 0.78);
-  --cv-card-footer-color: rgba(190, 206, 226, 0.78);
 }
 
-cv-card.live-demo-card:defined {
-  border: 0;
-  background: transparent;
-  box-shadow: none;
+.live-demo-footer {
+  min-inline-size: 0;
+  max-inline-size: 100%;
+  color: rgba(190, 206, 226, 0.78);
 }
 
 .live-demo-frame {

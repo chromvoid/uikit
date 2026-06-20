@@ -465,24 +465,26 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <cv-card class="live-demo-card" variant="outlined">
-    <div slot="header" class="live-demo-header">
+  <section class="live-demo-card" aria-label="Component live demo">
+    <header class="live-demo-header">
       <div class="live-demo-meta">
         <cv-badge variant="primary" pill size="small">Live demo</cv-badge>
         <cv-badge :variant="hasScript ? 'primary' : 'success'" pill size="small">
           {{ hasScript ? 'Interactive preview' : 'Static preview' }}
         </cv-badge>
       </div>
-    </div>
+    </header>
 
     <div class="live-demo-body" :class="{'live-demo-body--frame-pending': !isInline && !frameReady}">
       <div v-if="!isInline" ref="frameHost" class="live-demo-frame-host" />
       <div v-else ref="container" class="live-demo-preview" />
     </div>
 
-    <cv-disclosure slot="footer" class="live-demo-source">
-      <span slot="trigger">View source</span>
-      <div v-html="highlightedHtml" />
-    </cv-disclosure>
-  </cv-card>
+    <footer class="live-demo-footer">
+      <cv-disclosure class="live-demo-source">
+        <span slot="trigger">View source</span>
+        <div v-html="highlightedHtml" />
+      </cv-disclosure>
+    </footer>
+  </section>
 </template>
