@@ -25,10 +25,6 @@ export const cvImageViewerStyles = css`
     --cv-dialog-content-open-transform: none;
   }
 
-  cv-dialog::part(trigger) {
-    display: none;
-  }
-
   cv-dialog::part(content) {
     inline-size: 100vw;
     max-inline-size: 100vw;
