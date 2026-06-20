@@ -1385,20 +1385,8 @@ cv-card.live-demo-card::part(footer) {
   align-items: center;
 }
 
-.catalog-card .components-title,
-.live-demo-title {
+.catalog-card .components-title {
   margin: 0;
-}
-
-.live-demo-title {
-  max-width: 34ch;
-  font-size: 0.98rem;
-  line-height: 1.45;
-  color: var(--vp-c-text-1);
-}
-
-cv-card.live-demo-card .live-demo-title {
-  color: #eef5ff;
 }
 
 .catalog-card .components-description {

@@ -472,13 +472,7 @@ onUnmounted(() => {
         <cv-badge :variant="hasScript ? 'primary' : 'success'" pill size="small">
           {{ hasScript ? 'Interactive preview' : 'Static preview' }}
         </cv-badge>
-        <cv-badge v-if="!isInline" variant="primary" pill size="small">Isolated frame</cv-badge>
       </div>
-      <p class="live-demo-title">
-        {{
-          isInline ? 'Rendered inside the documentation shell' : 'Rendered inside an isolated preview frame'
-        }}
-      </p>
     </div>
 
     <div class="live-demo-body" :class="{'live-demo-body--frame-pending': !isInline && !frameReady}">
