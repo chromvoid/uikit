@@ -211,6 +211,7 @@ export const navigationDisclosureCases: readonly UikitVisualCase[] = [
             <span slot="prefix">B</span>
             Boundaries
           </cv-sidebar-item>
+          <span slot="footer">persistent mode</span>
         </cv-sidebar>
       </div>
     `,

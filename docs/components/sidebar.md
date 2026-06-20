@@ -108,9 +108,26 @@ Persistent layout sidebar with desktop expand/collapse, mobile overlay mode, and
 
     <!-- Mobile overlay preview. -->
     <div class="sidebar-demo-overlay">
-      <cv-sidebar mobile inert aria-label="Mobile threat model navigation">
+      <button
+        type="button"
+        class="sidebar-demo-overlay-trigger"
+        data-sidebar-demo-overlay-trigger
+        aria-controls="sidebar-demo-mobile-nav"
+        aria-expanded="true"
+        aria-label="Open mobile navigation"
+        hidden
+      >
+        <span class="sidebar-demo-toggle-glyph" aria-hidden="true"></span>
+      </button>
+
+      <cv-sidebar
+        id="sidebar-demo-mobile-nav"
+        mobile
+        overlay-open
+        aria-label="Mobile threat model navigation"
+      >
         <span slot="header">Threat Model</span>
-        <span slot="toggle" class="sidebar-demo-toggle-glyph" aria-hidden="true"></span>
+        <span slot="toggle" class="sidebar-demo-close-glyph" aria-hidden="true"></span>
 
         <cv-sidebar-item href="#assets" active>
           <span slot="prefix" class="sidebar-demo-item-glyph">A</span>
@@ -128,12 +145,40 @@ Persistent layout sidebar with desktop expand/collapse, mobile overlay mode, and
 
       <section class="sidebar-demo-overlay-copy" aria-label="Overlay preview workspace">
         <p class="sidebar-demo-kicker">overlay preview</p>
-        <h3>Mobile review handoff</h3>
-        <p>The panel sits over the workspace while active assets and trust boundaries remain in context.</p>
+        <h3>Touch review overlay</h3>
+        <p>The workspace stays dimmed while threat sections move into a dialog-style navigation layer.</p>
       </section>
     </div>
   </div>
 </div>
+
+<script>
+  ;(() => {
+    const root =
+      document.currentScript?.previousElementSibling ?? document.querySelector('.sidebar-demo-showcase')
+    if (!(root instanceof HTMLElement)) return
+
+    const sidebar = root.querySelector('#sidebar-demo-mobile-nav')
+    const trigger = root.querySelector('[data-sidebar-demo-overlay-trigger]')
+    if (!(sidebar instanceof HTMLElement) || !(trigger instanceof HTMLButtonElement)) return
+
+    const syncTrigger = (event) => {
+      const detail = event instanceof CustomEvent ? event.detail : null
+      const open =
+        typeof detail?.overlayOpen === 'boolean' ? detail.overlayOpen : sidebar.hasAttribute('overlay-open')
+      trigger.hidden = open
+      trigger.setAttribute('aria-expanded', String(open))
+    }
+
+    trigger.addEventListener('click', () => {
+      sidebar.setAttribute('overlay-open', '')
+      syncTrigger()
+    })
+
+    sidebar.addEventListener('cv-change', syncTrigger)
+    syncTrigger()
+  })()
+</script>
 ```
 
 ```html
