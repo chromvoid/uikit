@@ -67,7 +67,15 @@ export const collectionsWorkspacesCases: readonly UikitVisualCase[] = [
     id: 'cv-grid/states',
     component: 'cv-grid',
     title: 'Grid columns, rows, selected, active, disabled, read-only, and multi-selection states',
-    states: ['columns', 'rows', 'selected-cell', 'active-cell', 'disabled-cell', 'multi-selection', 'read-only'],
+    states: [
+      'columns',
+      'rows',
+      'selected-cell',
+      'active-cell',
+      'disabled-cell',
+      'multi-selection',
+      'read-only',
+    ],
     html: `
       <div class="visual-grid">
         <cv-grid selection-mode="multiple" aria-label="Vault grid" total-row-count="3" total-column-count="3">
@@ -96,8 +104,18 @@ export const collectionsWorkspacesCases: readonly UikitVisualCase[] = [
   visualCase({
     id: 'cv-table/states',
     component: 'cv-table',
-    title: 'Table columns, sortable header, selected row, striped, compact, bordered, and sticky header states',
-    states: ['columns', 'rows', 'sortable', 'selected-row', 'striped', 'compact', 'bordered', 'sticky-header'],
+    title:
+      'Table columns, sortable header, selected row, striped, compact, bordered, and sticky header states',
+    states: [
+      'columns',
+      'rows',
+      'sortable',
+      'selected-row',
+      'striped',
+      'compact',
+      'bordered',
+      'sticky-header',
+    ],
     html: `
       <div class="visual-grid">
         <cv-table

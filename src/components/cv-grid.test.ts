@@ -154,6 +154,34 @@ describe('cv-grid', () => {
       const grid = await createGrid()
       expect(grid.value).toBe('r1::c1')
     })
+
+    it('uses declarative child attributes during initial model rebuild', async () => {
+      const grid = document.createElement('cv-grid') as CVGrid
+      grid.setAttribute('aria-label', 'Vault matrix')
+      grid.setAttribute('selection-mode', 'multiple')
+      grid.setAttribute('value', 'vault::owner')
+      grid.innerHTML = `
+        <cv-grid-column value="scope">Boundary</cv-grid-column>
+        <cv-grid-column value="owner">Owner</cv-grid-column>
+        <cv-grid-column value="state" index="4">State</cv-grid-column>
+        <cv-grid-row value="vault" index="3">
+          <cv-grid-cell column="scope">Primary vault</cv-grid-cell>
+          <cv-grid-cell column="owner">Alex</cv-grid-cell>
+          <cv-grid-cell column="state" disabled>Blocked</cv-grid-cell>
+        </cv-grid-row>
+      `
+
+      document.body.append(grid)
+      await settle(grid)
+
+      expect(grid.value).toBe('vault::owner')
+      expect(grid.querySelector('cv-grid-column')?.getAttribute('value')).toBe('scope')
+      expect(grid.querySelector('cv-grid-row')?.getAttribute('value')).toBe('vault')
+      expect(grid.querySelector('cv-grid-cell')?.getAttribute('column')).toBe('scope')
+      expect(grid.querySelector('cv-grid-column[value="state"]')?.getAttribute('aria-colindex')).toBe('4')
+      expect(grid.querySelector('cv-grid-row[value="vault"]')?.getAttribute('aria-rowindex')).toBe('3')
+      expect(grid.querySelector('cv-grid-cell[column="state"]')?.getAttribute('aria-disabled')).toBe('true')
+    })
   })
 
   // --- attribute reflection ---

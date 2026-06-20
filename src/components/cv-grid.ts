@@ -244,8 +244,7 @@ export class CVGrid extends ReatomLitElement {
       // prop, the model rebuild must seed from the new property values, not the
       // pre-rebuild model snapshot — otherwise the requested value is silently
       // dropped. Seed from properties whenever they changed in this batch.
-      const seedFromProperties =
-        changedProperties.has('value') || changedProperties.has('selectedValues')
+      const seedFromProperties = changedProperties.has('value') || changedProperties.has('selectedValues')
       this.rebuildModelFromSlot(!seedFromProperties, false)
       return
     }
@@ -298,12 +297,26 @@ export class CVGrid extends ReatomLitElement {
     }
   }
 
-  private resolveIndex(value: number): number | undefined {
-    if (!Number.isFinite(value) || value < 1) {
+  private resolveIndex(element: HTMLElement, value: number): number | undefined {
+    const attributeValue = element.getAttribute('index')
+    const resolvedValue = attributeValue == null ? value : Number(attributeValue)
+    if (!Number.isFinite(resolvedValue) || resolvedValue < 1) {
       return undefined
     }
 
-    return Math.floor(value)
+    return Math.floor(resolvedValue)
+  }
+
+  private resolveStringProperty(
+    element: HTMLElement,
+    propertyValue: string | null | undefined,
+    attributeName: string,
+  ): string {
+    return propertyValue?.trim() || element.getAttribute(attributeName)?.trim() || ''
+  }
+
+  private resolveDisabled(element: HTMLElement, value: boolean): boolean {
+    return value || element.hasAttribute('disabled')
   }
 
   private getColumnElements(): CVGridColumn[] {
@@ -325,8 +338,11 @@ export class CVGrid extends ReatomLitElement {
   }
 
   private ensureColumnValue(column: CVGridColumn, index: number): string {
-    const normalized = column.value?.trim()
-    if (normalized) return normalized
+    const normalized = this.resolveStringProperty(column, column.value, 'value')
+    if (normalized) {
+      column.value = normalized
+      return normalized
+    }
 
     const fallback = `column-${index + 1}`
     column.value = fallback
@@ -334,8 +350,11 @@ export class CVGrid extends ReatomLitElement {
   }
 
   private ensureRowValue(row: CVGridRow, index: number): string {
-    const normalized = row.value?.trim()
-    if (normalized) return normalized
+    const normalized = this.resolveStringProperty(row, row.value, 'value')
+    if (normalized) {
+      row.value = normalized
+      return normalized
+    }
 
     const fallback = `row-${index + 1}`
     row.value = fallback
@@ -343,8 +362,11 @@ export class CVGrid extends ReatomLitElement {
   }
 
   private resolveCellColumnId(cell: CVGridCell, index: number): string {
-    const normalized = cell.column?.trim()
-    if (normalized) return normalized
+    const normalized = this.resolveStringProperty(cell, cell.column, 'column')
+    if (normalized) {
+      cell.column = normalized
+      return normalized
+    }
 
     const fallback = this.columnRecords[index]?.id ?? ''
     cell.column = fallback
@@ -374,9 +396,7 @@ export class CVGrid extends ReatomLitElement {
           activeKey: (this.value ?? '').trim() || null,
           selectedKeys: [
             ...new Set(
-              (this.selectedValues ?? [])
-                .map((value) => value.trim())
-                .filter((value) => value.length > 0),
+              (this.selectedValues ?? []).map((value) => value.trim()).filter((value) => value.length > 0),
             ),
           ],
         }
@@ -389,12 +409,14 @@ export class CVGrid extends ReatomLitElement {
 
     this.columnRecords = this.getColumnElements().map((element, index) => {
       const id = this.ensureColumnValue(element, index)
+      const disabled = this.resolveDisabled(element, element.disabled)
+      element.disabled = disabled
       element.slot = 'columns'
 
       return {
         id,
-        index: this.resolveIndex(element.index),
-        disabled: element.disabled,
+        index: this.resolveIndex(element, element.index),
+        disabled,
         element,
       }
     })
@@ -404,18 +426,22 @@ export class CVGrid extends ReatomLitElement {
 
     this.rowRecords = this.getRowElements().map((row, rowIndex) => {
       const id = this.ensureRowValue(row, rowIndex)
+      const rowDisabled = this.resolveDisabled(row, row.disabled)
+      row.disabled = rowDisabled
       row.slot = 'rows'
 
       const cells = this.getCellElements(row).map((cell, cellIndex) => {
         const colId = this.resolveCellColumnId(cell, cellIndex)
         const key = cellKey(id, colId)
         const valid = validColumnIds.has(colId)
+        const cellDisabled = this.resolveDisabled(cell, cell.disabled)
+        cell.disabled = cellDisabled
 
         const record: GridCellRecord = {
           key,
           rowId: id,
           colId,
-          disabled: cell.disabled,
+          disabled: cellDisabled,
           valid,
           element: cell,
         }
@@ -433,8 +459,8 @@ export class CVGrid extends ReatomLitElement {
 
       return {
         id,
-        index: this.resolveIndex(row.index),
-        disabled: row.disabled,
+        index: this.resolveIndex(row, row.index),
+        disabled: rowDisabled,
         cells,
         element: row,
       }
@@ -446,9 +472,7 @@ export class CVGrid extends ReatomLitElement {
     // every real cell then reports tabindex=-1 and the roving tabindex is lost.
     // Treat each missing pair as a disabled cell so navigation skips over it.
     for (const row of this.rowRecords) {
-      const presentColIds = new Set(
-        row.cells.filter((cell) => cell.valid).map((cell) => cell.colId),
-      )
+      const presentColIds = new Set(row.cells.filter((cell) => cell.valid).map((cell) => cell.colId))
       for (const colId of validColumnIds) {
         if (!presentColIds.has(colId)) {
           disabledCells.push({rowId: row.id, colId})

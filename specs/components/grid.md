@@ -206,90 +206,89 @@ The following features are explicitly out of scope for the current implementatio
 ## Usage
 
 ```html
-<!-- Basic grid -->
-<cv-grid aria-label="Users">
-  <cv-grid-column value="name" label="Name">Name</cv-grid-column>
-  <cv-grid-column value="status" label="Status">Status</cv-grid-column>
-  <cv-grid-column value="role" label="Role">Role</cv-grid-column>
+<div class="grid-demo-shell" data-demo="grid" data-live-demo-height="720">
+  <section class="grid-demo-hero" aria-labelledby="grid-demo-title">
+    <p class="grid-demo-kicker">APG grid adapter</p>
+    <h2 id="grid-demo-title">Vault authorization matrix</h2>
+    <p>
+      Cell focus, multi-selection, disabled states, and event detail all come from the same headless grid
+      contract.
+    </p>
+  </section>
 
-  <cv-grid-row value="r1">
-    <cv-grid-cell column="name">Alice</cv-grid-cell>
-    <cv-grid-cell column="status">Active</cv-grid-cell>
-    <cv-grid-cell column="role">Admin</cv-grid-cell>
-  </cv-grid-row>
-  <cv-grid-row value="r2">
-    <cv-grid-cell column="name">Bob</cv-grid-cell>
-    <cv-grid-cell column="status">Inactive</cv-grid-cell>
-    <cv-grid-cell column="role">Editor</cv-grid-cell>
-  </cv-grid-row>
-</cv-grid>
+  <div class="grid-demo-toolbar" aria-label="Grid contract summary">
+    <span>role="grid"</span>
+    <span>selection-mode="multiple"</span>
+    <span>roving tabindex</span>
+    <span>PageUp/PageDown</span>
+  </div>
 
-<!-- Multiple selection -->
-<cv-grid aria-label="Tasks" selection-mode="multiple">
-  <cv-grid-column value="task">Task</cv-grid-column>
-  <cv-grid-column value="priority">Priority</cv-grid-column>
+  <div class="grid-demo-table-scroll">
+    <cv-grid
+      id="grid-demo-matrix"
+      aria-label="Vault authorization matrix"
+      selection-mode="multiple"
+      page-size="2"
+      value="vault::owner"
+      total-row-count="8"
+      total-column-count="4"
+    >
+      <cv-grid-column value="scope">Boundary</cv-grid-column>
+      <cv-grid-column value="owner">Owner</cv-grid-column>
+      <cv-grid-column value="state">State</cv-grid-column>
+      <cv-grid-column value="risk">Risk</cv-grid-column>
 
-  <cv-grid-row value="t1">
-    <cv-grid-cell column="task">Review PR</cv-grid-cell>
-    <cv-grid-cell column="priority">High</cv-grid-cell>
-  </cv-grid-row>
-  <cv-grid-row value="t2">
-    <cv-grid-cell column="task">Write docs</cv-grid-cell>
-    <cv-grid-cell column="priority">Low</cv-grid-cell>
-  </cv-grid-row>
-</cv-grid>
+      <cv-grid-row value="vault">
+        <cv-grid-cell column="scope">Primary vault</cv-grid-cell>
+        <cv-grid-cell column="owner">Alex</cv-grid-cell>
+        <cv-grid-cell column="state">Verified</cv-grid-cell>
+        <cv-grid-cell column="risk">Low</cv-grid-cell>
+      </cv-grid-row>
+      <cv-grid-row value="relay">
+        <cv-grid-cell column="scope">USB relay</cv-grid-cell>
+        <cv-grid-cell column="owner">Device core</cv-grid-cell>
+        <cv-grid-cell column="state">Paired</cv-grid-cell>
+        <cv-grid-cell column="risk">Medium</cv-grid-cell>
+      </cv-grid-row>
+      <cv-grid-row value="escrow">
+        <cv-grid-cell column="scope">Emergency share</cv-grid-cell>
+        <cv-grid-cell column="owner">Counsel</cv-grid-cell>
+        <cv-grid-cell column="state">Pending</cv-grid-cell>
+        <cv-grid-cell column="risk">Review</cv-grid-cell>
+      </cv-grid-row>
+      <cv-grid-row value="decoy">
+        <cv-grid-cell column="scope">Decoy namespace</cv-grid-cell>
+        <cv-grid-cell column="owner" disabled>No access</cv-grid-cell>
+        <cv-grid-cell column="state">Isolated</cv-grid-cell>
+        <cv-grid-cell column="risk">Hidden</cv-grid-cell>
+      </cv-grid-row>
+    </cv-grid>
+  </div>
 
-<!-- With disabled cells and rows -->
-<cv-grid aria-label="Inventory" readonly>
-  <cv-grid-column value="item">Item</cv-grid-column>
-  <cv-grid-column value="qty">Quantity</cv-grid-column>
+  <output class="grid-demo-readout" for="grid-demo-matrix" aria-live="polite">
+    Active cell: vault::owner · Selected cells: 3
+  </output>
+</div>
 
-  <cv-grid-row value="r1">
-    <cv-grid-cell column="item">Widget A</cv-grid-cell>
-    <cv-grid-cell column="qty">42</cv-grid-cell>
-  </cv-grid-row>
-  <cv-grid-row value="r2" disabled>
-    <cv-grid-cell column="item">Widget B</cv-grid-cell>
-    <cv-grid-cell column="qty">0</cv-grid-cell>
-  </cv-grid-row>
-</cv-grid>
+<script>
+  customElements.whenDefined('cv-grid').then(async () => {
+    const grid = document.querySelector('#grid-demo-matrix')
+    const readout = document.querySelector('.grid-demo-readout')
+    if (!grid || !readout) return
 
-<!-- aria-activedescendant focus strategy -->
-<cv-grid aria-label="Data" focus-strategy="aria-activedescendant">
-  <cv-grid-column value="col1">Column 1</cv-grid-column>
-  <cv-grid-column value="col2">Column 2</cv-grid-column>
+    const syncReadout = () => {
+      const selectedCount = grid.selectedValues?.length ?? 0
+      readout.textContent = `Active cell: ${grid.value || 'none'} · Selected cells: ${selectedCount}`
+    }
 
-  <cv-grid-row value="r1">
-    <cv-grid-cell column="col1">A1</cv-grid-cell>
-    <cv-grid-cell column="col2">A2</cv-grid-cell>
-  </cv-grid-row>
-</cv-grid>
-
-<!-- Selection follows focus -->
-<cv-grid aria-label="Files" selection-follows-focus>
-  <cv-grid-column value="name">Name</cv-grid-column>
-  <cv-grid-column value="size">Size</cv-grid-column>
-
-  <cv-grid-row value="f1">
-    <cv-grid-cell column="name">readme.md</cv-grid-cell>
-    <cv-grid-cell column="size">2KB</cv-grid-cell>
-  </cv-grid-row>
-  <cv-grid-row value="f2">
-    <cv-grid-cell column="name">index.ts</cv-grid-cell>
-    <cv-grid-cell column="size">4KB</cv-grid-cell>
-  </cv-grid-row>
-</cv-grid>
-
-<!-- Virtualized grid with total counts -->
-<cv-grid aria-label="Log" total-row-count="10000" total-column-count="5" page-size="50">
-  <cv-grid-column value="ts">Timestamp</cv-grid-column>
-  <cv-grid-column value="msg">Message</cv-grid-column>
-
-  <cv-grid-row value="r1">
-    <cv-grid-cell column="ts">12:00:01</cv-grid-cell>
-    <cv-grid-cell column="msg">Server started</cv-grid-cell>
-  </cv-grid-row>
-</cv-grid>
+    grid.addEventListener('cv-input', syncReadout)
+    grid.addEventListener('cv-change', syncReadout)
+    await grid.updateComplete
+    grid.selectedValues = ['vault::owner', 'relay::scope', 'escrow::risk']
+    await grid.updateComplete
+    syncReadout()
+  })
+</script>
 ```
 
 ## Child Elements
