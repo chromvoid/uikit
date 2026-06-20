@@ -18,15 +18,16 @@
     "stageViewportOverflow": null
   },
   "states": [
-    "summary",
+    "aggregate-summary",
     "actions",
     "busy",
+    "footer-progress",
     "compact",
     "success-tone",
     "empty"
   ],
   "theme": "light",
-  "title": "Operation queue tones, busy, compact, actions, and empty states",
+  "title": "Operation queue aggregate status, batch actions, footer progress, compact, and empty states",
   "status": "missing-baseline",
   "baselinePath": "/srv/projects/chromvoid/packages/uikit/tests/visual/__visual-baselines__/cv-operation-queue/cv-operation-queue-states-light-default.png"
 }
