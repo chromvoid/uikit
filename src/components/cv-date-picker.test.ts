@@ -38,6 +38,12 @@ const getCalendarGrid = (element: CVDatePicker) =>
 const getCalendarDays = (element: CVDatePicker) =>
   Array.from(element.shadowRoot!.querySelectorAll('[part="calendar-day"]')) as HTMLButtonElement[]
 
+const getHourInput = (element: CVDatePicker) =>
+  element.shadowRoot!.querySelector('[part="hour-input"]') as HTMLInputElement | null
+
+const getMinuteInput = (element: CVDatePicker) =>
+  element.shadowRoot!.querySelector('[part="minute-input"]') as HTMLInputElement | null
+
 const getApplyButton = (element: CVDatePicker) =>
   element.shadowRoot!.querySelector('[part="apply-button"]') as HTMLButtonElement
 
@@ -70,7 +76,7 @@ describe('cv-date-picker', () => {
     it('defines discrete display presence for dialog', () => {
       const cssText = stylesToText()
 
-      expect(cssText).toMatch(/\[part='dialog'\][\s\S]*transition:[\s\S]*display[\s\S]*allow-discrete/)
+      expect(cssText).toMatch(/\[part=(['"])dialog\1\][\s\S]*transition:[\s\S]*display[\s\S]*allow-discrete/)
       expect(cssText).toMatch(/transition-behavior:\s*allow-discrete/)
     })
   })
@@ -102,6 +108,7 @@ describe('cv-date-picker', () => {
       expect(datePicker.readonly).toBe(false)
       expect(datePicker.required).toBe(false)
       expect(datePicker.placeholder).toBe('Select date and time')
+      expect(datePicker.mode).toBe('date-time')
       expect(datePicker.size).toBe('medium')
       expect(datePicker.locale).toBe('en-US')
       expect(datePicker.timeZone).toBe('local')
@@ -121,6 +128,7 @@ describe('cv-date-picker', () => {
         disabled: false,
         readonly: true,
         required: true,
+        mode: 'date-time',
         size: 'large',
         timeZone: 'utc',
         closeOnEscape: false,
@@ -133,6 +141,7 @@ describe('cv-date-picker', () => {
       expect(datePicker.hasAttribute('disabled')).toBe(false)
       expect(datePicker.hasAttribute('readonly')).toBe(true)
       expect(datePicker.hasAttribute('required')).toBe(true)
+      expect(datePicker.getAttribute('mode')).toBe('date-time')
       expect(datePicker.getAttribute('size')).toBe('large')
       expect(datePicker.getAttribute('time-zone')).toBe('utc')
       expect(datePicker.hasAttribute('close-on-escape')).toBe(false)
@@ -266,6 +275,104 @@ describe('cv-date-picker', () => {
       const changeDetail = detail as unknown as Record<string, unknown>
       expect(changeDetail['source']).toBe('dialog')
       expect(typeof changeDetail['value']).toBe('string')
+    })
+
+    it('reopens from input click after applying a draft selection', async () => {
+      const datePicker = await createDatePicker({value: '2026-01-01T00:00'})
+      const input = getInput(datePicker)
+
+      dispatchKeyDown(input, 'ArrowDown')
+      await settle(datePicker)
+
+      const day = getCalendarDays(datePicker).find(
+        (button) => button.getAttribute('data-date') === '2026-01-10',
+      )!
+      day.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+      getApplyButton(datePicker).dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+      await settle(datePicker)
+      expect(datePicker.open).toBe(false)
+      expect(getDialog(datePicker).hidden).toBe(true)
+
+      input.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+      await settle(datePicker)
+
+      expect(datePicker.open).toBe(true)
+      expect(input.getAttribute('aria-expanded')).toBe('true')
+      expect(getDialog(datePicker).hidden).toBe(false)
+    })
+
+    it('hides time controls and commits date-only values in date mode', async () => {
+      const datePicker = await createDatePicker({mode: 'date'})
+      let detail: Record<string, unknown> | null = null
+      datePicker.addEventListener('cv-change', (event) => {
+        detail = (event as unknown as CustomEvent<Record<string, unknown>>).detail
+      })
+
+      expect(getInput(datePicker).placeholder).toBe('Select date')
+      expect(getHourInput(datePicker)).toBeNull()
+      expect(getMinuteInput(datePicker)).toBeNull()
+
+      const input = getInput(datePicker)
+      input.value = '2026-01-10'
+      input.dispatchEvent(new Event('input', {bubbles: true, composed: true}))
+      dispatchKeyDown(input, 'Enter')
+      await settle(datePicker)
+
+      expect(datePicker.value).toBe('2026-01-10')
+      expect(datePicker.getAttribute('value')).toBe('2026-01-10')
+      expect(detail).not.toBeNull()
+      expect((detail as unknown as Record<string, unknown>)['value']).toBe('2026-01-10')
+      expect((detail as unknown as Record<string, unknown>)['source']).toBe('input')
+    })
+
+    it('preserves custom placeholder text in date mode', async () => {
+      const datePicker = await createDatePicker({mode: 'date', placeholder: 'Pick start'})
+
+      expect(getInput(datePicker).placeholder).toBe('Pick start')
+    })
+
+    it('normalizes an initial date-time value to date-only output in date mode', async () => {
+      const datePicker = await createDatePicker({mode: 'date', value: '2026-01-10T12:30'})
+
+      expect(datePicker.value).toBe('2026-01-10')
+      expect(getInput(datePicker).value).toBe('2026-01-10')
+      expect(getHourInput(datePicker)).toBeNull()
+      expect(getMinuteInput(datePicker)).toBeNull()
+    })
+
+    it('renders time controls and commits date-time values in explicit date-time mode', async () => {
+      const datePicker = await createDatePicker({mode: 'date-time'})
+      const input = getInput(datePicker)
+
+      expect(getHourInput(datePicker)).not.toBeNull()
+      expect(getMinuteInput(datePicker)).not.toBeNull()
+
+      input.value = '2026-01-10T12:30'
+      input.dispatchEvent(new Event('input', {bubbles: true, composed: true}))
+      dispatchKeyDown(input, 'Enter')
+      await settle(datePicker)
+
+      expect(datePicker.value).toBe('2026-01-10T12:30')
+    })
+
+    it('switches mode and updates value and DOM without remounting', async () => {
+      const datePicker = await createDatePicker({value: '2026-01-10T12:30'})
+
+      datePicker.mode = 'date'
+      await settle(datePicker)
+
+      expect(datePicker.value).toBe('2026-01-10')
+      expect(getInput(datePicker).value).toBe('2026-01-10')
+      expect(getHourInput(datePicker)).toBeNull()
+      expect(getMinuteInput(datePicker)).toBeNull()
+
+      datePicker.mode = 'date-time'
+      await settle(datePicker)
+
+      expect(datePicker.value).toBe('2026-01-10T00:00')
+      expect(getInput(datePicker).value).toBe('2026-01-10T00:00')
+      expect(getHourInput(datePicker)).not.toBeNull()
+      expect(getMinuteInput(datePicker)).not.toBeNull()
     })
 
     it('clears committed value through clear button', async () => {
@@ -483,9 +590,7 @@ describe('cv-date-picker', () => {
       dispatchKeyDown(getCalendarGrid(datePicker), 'ArrowRight')
       await settle(datePicker)
 
-      const focusedDay = getCalendarDays(datePicker).find(
-        (day) => day.getAttribute('tabindex') === '0',
-      )
+      const focusedDay = getCalendarDays(datePicker).find((day) => day.getAttribute('tabindex') === '0')
       expect(focusedDay?.getAttribute('data-date')).toBe('2026-01-20')
     })
   })

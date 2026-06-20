@@ -1,6 +1,7 @@
 import {
   createDatePicker,
   type DatePickerKeyboardEventLike,
+  type DatePickerMode,
   type DatePickerModel,
   type DatePickerTimeZone,
 } from '@chromvoid/headless-ui/date-picker'
@@ -24,6 +25,7 @@ export interface CVDatePickerChangeEventDetail {
 }
 
 type CVDatePickerSize = 'small' | 'medium' | 'large'
+type CVDatePickerMode = DatePickerMode
 
 let cvDatePickerNonce = 0
 
@@ -39,6 +41,7 @@ export class CVDatePicker extends FormAssociatedReatomElement {
       readonly: {type: Boolean, reflect: true},
       required: {type: Boolean, reflect: true},
       placeholder: {type: String},
+      mode: {type: String, reflect: true},
       size: {type: String, reflect: true},
       locale: {type: String},
       timeZone: {type: String, attribute: 'time-zone', reflect: true},
@@ -60,6 +63,7 @@ export class CVDatePicker extends FormAssociatedReatomElement {
   declare readonly: boolean
   declare required: boolean
   declare placeholder: string
+  declare mode: CVDatePickerMode
   declare size: CVDatePickerSize
   declare locale: string
   declare timeZone: DatePickerTimeZone
@@ -89,6 +93,7 @@ export class CVDatePicker extends FormAssociatedReatomElement {
     this.readonly = false
     this.required = false
     this.placeholder = 'Select date and time'
+    this.mode = 'date-time'
     this.size = 'medium'
     this.locale = 'en-US'
     this.timeZone = 'local'
@@ -110,7 +115,10 @@ export class CVDatePicker extends FormAssociatedReatomElement {
     css`
       :host {
         display: inline-block;
-        inline-size: var(--cv-date-picker-min-width, 260px);
+        inline-size: var(--cv-date-picker-width, 360px);
+        min-inline-size: min(100%, var(--cv-date-picker-min-width, 260px));
+        max-inline-size: 100%;
+        font: var(--cv-date-picker-font-size, inherit);
       }
 
       [part='base'] {
@@ -119,9 +127,11 @@ export class CVDatePicker extends FormAssociatedReatomElement {
       }
 
       [part='input-wrap'] {
+        box-sizing: border-box;
         display: flex;
         align-items: center;
         gap: var(--cv-space-2, 8px);
+        inline-size: 100%;
         min-block-size: var(--cv-date-picker-input-min-height, 36px);
         padding: var(--cv-date-picker-input-padding-block, var(--cv-space-2, 8px))
           var(--cv-date-picker-input-padding-inline, var(--cv-space-3, 12px));
@@ -152,20 +162,30 @@ export class CVDatePicker extends FormAssociatedReatomElement {
       }
 
       [part='clear-button'] {
+        box-sizing: border-box;
         display: inline-flex;
         align-items: center;
         justify-content: center;
+        inline-size: var(--cv-date-picker-clear-button-size, 28px);
+        block-size: var(--cv-date-picker-clear-button-size, 28px);
         border: none;
+        border-radius: var(--cv-radius-sm, 6px);
         background: transparent;
         color: var(--cv-color-text-muted, #9aa6bf);
         cursor: pointer;
         padding: 0;
+        font: inherit;
+        line-height: 1;
       }
 
       [part='dialog'] {
-        inline-size: var(--cv-date-picker-dialog-width, min(560px, calc(100vw - 32px)));
+        box-sizing: border-box;
+        inline-size: var(--cv-date-picker-dialog-width, min(360px, calc(100vw - 32px)));
+        max-inline-size: 100%;
         display: grid;
-        gap: var(--cv-space-2, 8px);
+        grid-template-columns: minmax(0, 1fr) auto;
+        align-items: start;
+        gap: var(--cv-space-3, 12px);
         padding: var(--cv-space-3, 12px);
         border-radius: var(--cv-date-picker-border-radius, var(--cv-radius-md, 10px));
         border: 1px solid var(--cv-color-border, #2a3245);
@@ -196,39 +216,90 @@ export class CVDatePicker extends FormAssociatedReatomElement {
 
       [part='calendar-shell'] {
         display: grid;
-        grid-template-columns: auto auto 1fr auto auto;
+        grid-column: 1 / -1;
+        grid-template-columns:
+          var(--cv-date-picker-nav-button-size, 32px) var(--cv-date-picker-nav-button-size, 32px)
+          minmax(0, 1fr)
+          var(--cv-date-picker-nav-button-size, 32px) var(--cv-date-picker-nav-button-size, 32px);
         align-items: center;
-        gap: var(--cv-space-2, 8px);
+        gap: var(--cv-space-1, 4px);
+        inline-size: 100%;
       }
 
       [part='month-label'] {
         justify-self: center;
+        color: var(--cv-color-text-muted, #9aa6bf);
+        font-weight: 600;
+        line-height: 1.2;
+        text-align: center;
       }
 
       [part='month-nav-button'],
       [part='year-nav-button'],
       [part='apply-button'],
       [part='cancel-button'] {
+        box-sizing: border-box;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-block-size: var(--cv-date-picker-action-button-min-height, 36px);
+        padding: 0 var(--cv-date-picker-action-button-padding-inline, var(--cv-space-3, 12px));
         border: 1px solid var(--cv-color-border, #2a3245);
         background: var(--cv-color-surface, #141923);
         color: var(--cv-color-text, #e8ecf6);
         border-radius: var(--cv-radius-sm, 6px);
         cursor: pointer;
+        font: inherit;
+        line-height: 1;
+        transition:
+          border-color var(--cv-duration-fast, 120ms) var(--cv-easing-standard, ease),
+          background-color var(--cv-duration-fast, 120ms) var(--cv-easing-standard, ease),
+          color var(--cv-duration-fast, 120ms) var(--cv-easing-standard, ease);
+      }
+
+      [part='month-nav-button'],
+      [part='year-nav-button'] {
+        inline-size: var(--cv-date-picker-nav-button-size, 32px);
+        block-size: var(--cv-date-picker-nav-button-size, 32px);
+        min-inline-size: var(--cv-date-picker-nav-button-size, 32px);
+        min-block-size: var(--cv-date-picker-nav-button-size, 32px);
+        padding: 0;
+        font-size: 1rem;
+      }
+
+      [part='apply-button'],
+      [part='cancel-button'] {
+        min-inline-size: var(--cv-date-picker-action-button-min-width, 72px);
       }
 
       [part='calendar-grid'] {
         display: grid;
+        grid-column: 1 / -1;
         grid-template-columns: repeat(7, minmax(0, 1fr));
+        justify-self: center;
+        inline-size: min(100%, var(--cv-date-picker-calendar-size, 304px));
         gap: var(--cv-date-picker-day-gap, var(--cv-space-1, 4px));
       }
 
       [part='calendar-day'] {
-        min-block-size: var(--cv-date-picker-day-size, 34px);
+        box-sizing: border-box;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        block-size: var(--cv-date-picker-day-size, 40px);
+        min-block-size: var(--cv-date-picker-day-size, 40px);
+        padding: 0;
         border: 1px solid var(--cv-color-border, #2a3245);
-        background: transparent;
+        background: var(--cv-color-surface, #141923);
         color: var(--cv-color-text, #e8ecf6);
         border-radius: var(--cv-radius-sm, 6px);
         cursor: pointer;
+        font: inherit;
+        line-height: 1;
+        transition:
+          border-color var(--cv-duration-fast, 120ms) var(--cv-easing-standard, ease),
+          background-color var(--cv-duration-fast, 120ms) var(--cv-easing-standard, ease),
+          color var(--cv-duration-fast, 120ms) var(--cv-easing-standard, ease);
       }
 
       [part='calendar-day'][data-month='prev'],
@@ -238,29 +309,112 @@ export class CVDatePicker extends FormAssociatedReatomElement {
 
       [part='calendar-day'][aria-selected='true'] {
         background: var(--cv-color-primary-surface-strong);
+        border-color: var(--cv-color-primary-border-strong, var(--cv-color-primary, #00e5ff));
+        color: var(--cv-color-text-strong, var(--cv-color-text, #e8ecf6));
       }
 
       [part='time-row'] {
         display: inline-flex;
         align-items: center;
+        justify-self: start;
         gap: var(--cv-space-2, 8px);
       }
 
       [part='hour-input'],
       [part='minute-input'] {
-        inline-size: 3.5ch;
+        box-sizing: border-box;
+        inline-size: var(--cv-date-picker-time-input-width, 48px);
+        min-block-size: var(--cv-date-picker-time-input-min-height, 36px);
+        padding: 0 var(--cv-space-2, 8px);
+        border: 1px solid var(--cv-color-border, #2a3245);
+        border-radius: var(--cv-radius-sm, 6px);
+        background: var(--cv-color-surface, #141923);
+        color: var(--cv-color-text, #e8ecf6);
         text-align: center;
+        font: inherit;
+        line-height: 1;
       }
 
       [part='actions'] {
         display: inline-flex;
+        flex-wrap: wrap;
+        justify-self: end;
+        align-self: center;
         justify-content: flex-end;
         gap: var(--cv-date-picker-button-gap, var(--cv-space-2, 8px));
       }
 
       [part='dialog-caption'] {
+        grid-column: 1 / -1;
         color: var(--cv-color-text-muted, #9aa6bf);
         font-size: 0.85em;
+      }
+
+      :where(
+        [part='input'],
+        [part='clear-button'],
+        [part='month-nav-button'],
+        [part='year-nav-button'],
+        [part='calendar-day'],
+        [part='hour-input'],
+        [part='minute-input'],
+        [part='apply-button'],
+        [part='cancel-button']
+      ):focus-visible {
+        outline: 2px solid var(--cv-color-focus-ring, var(--cv-color-primary, #00e5ff));
+        outline-offset: 2px;
+      }
+
+      @media (hover: hover) {
+        [part='clear-button']:hover,
+        [part='month-nav-button']:hover,
+        [part='year-nav-button']:hover,
+        [part='calendar-day']:hover,
+        [part='apply-button']:hover,
+        [part='cancel-button']:hover {
+          border-color: var(--cv-color-border-strong, var(--cv-color-border, #2a3245));
+          background: var(--cv-color-surface-hover, var(--cv-color-hover, rgb(0 229 255 / 10%)));
+        }
+      }
+
+      [part='month-nav-button']:active,
+      [part='year-nav-button']:active,
+      [part='calendar-day']:active,
+      [part='apply-button']:active,
+      [part='cancel-button']:active {
+        background: var(--cv-color-active, rgb(0 229 255 / 18%));
+      }
+
+      [part='clear-button']:disabled,
+      [part='month-nav-button']:disabled,
+      [part='year-nav-button']:disabled,
+      [part='calendar-day']:disabled,
+      [part='apply-button']:disabled,
+      [part='cancel-button']:disabled,
+      [part='hour-input']:disabled,
+      [part='minute-input']:disabled {
+        cursor: not-allowed;
+        opacity: 0.55;
+      }
+
+      @media (max-width: 420px) {
+        [part='dialog'] {
+          grid-template-columns: 1fr;
+        }
+
+        [part='time-row'],
+        [part='actions'] {
+          grid-column: 1 / -1;
+        }
+
+        [part='actions'] {
+          justify-self: stretch;
+        }
+
+        [part='apply-button'],
+        [part='cancel-button'] {
+          flex: 1 1 0;
+        }
       }
 
       :host([size='small']) {
@@ -338,8 +492,21 @@ export class CVDatePicker extends FormAssociatedReatomElement {
       this.model.actions.setRequired(this.required)
     }
 
-    if (changedProperties.has('placeholder') && this.model.state.placeholder() !== this.placeholder) {
-      this.model.actions.setPlaceholder(this.placeholder)
+    if (changedProperties.has('mode')) {
+      const normalizedMode = this.normalizeMode(this.mode)
+      if (this.mode !== normalizedMode) {
+        this.mode = normalizedMode
+      }
+      if (this.model.state.mode() !== normalizedMode) {
+        this.model.actions.setMode(normalizedMode)
+      }
+    }
+
+    if (changedProperties.has('placeholder') || changedProperties.has('mode')) {
+      const placeholder = this.getEffectivePlaceholder()
+      if (this.model.state.placeholder() !== placeholder) {
+        this.model.actions.setPlaceholder(placeholder)
+      }
     }
 
     if (changedProperties.has('locale') && this.model.state.locale() !== this.locale) {
@@ -401,7 +568,8 @@ export class CVDatePicker extends FormAssociatedReatomElement {
       required: this.required,
       disabled: this.isEffectivelyDisabled(),
       readonly: this.readonly,
-      placeholder: this.placeholder,
+      placeholder: this.getEffectivePlaceholder(),
+      mode: this.normalizeMode(this.mode),
       locale: this.locale,
       timeZone: this.timeZone === 'utc' ? 'utc' : 'local',
       min: this.toNullable(this.min),
@@ -441,6 +609,15 @@ export class CVDatePicker extends FormAssociatedReatomElement {
     return trimmed.length > 0 ? trimmed : null
   }
 
+  private normalizeMode(value: unknown): CVDatePickerMode {
+    return value === 'date' ? 'date' : 'date-time'
+  }
+
+  private getEffectivePlaceholder(): string {
+    if (this.placeholder !== 'Select date and time') return this.placeholder
+    return this.normalizeMode(this.mode) === 'date' ? 'Select date' : 'Select date and time'
+  }
+
   private syncModelFromExternalValue(): void {
     const nextValue = (this.value ?? '').trim()
     const committedValue = this.model.state.committedValue() ?? ''
@@ -462,6 +639,7 @@ export class CVDatePicker extends FormAssociatedReatomElement {
     const isOpen = this.model.state.isOpen()
     const inputInvalid = this.model.state.inputInvalid()
     const hasValue = this.model.state.hasCommittedSelection()
+    const mode = this.model.state.mode()
 
     if (this.value !== committedValue) {
       this.value = committedValue
@@ -477,6 +655,10 @@ export class CVDatePicker extends FormAssociatedReatomElement {
 
     if (this.hasValue !== hasValue) {
       this.hasValue = hasValue
+    }
+
+    if (this.mode !== mode) {
+      this.mode = mode
     }
 
     this.syncFormAssociatedState()
@@ -552,6 +734,11 @@ export class CVDatePicker extends FormAssociatedReatomElement {
   private handleInputEvent(event: Event): void {
     const value = (event.currentTarget as HTMLInputElement).value
     this.model.contracts.getInputProps().onInput(value)
+    this.syncHostStateFromModel()
+  }
+
+  private handleInputClick(): void {
+    this.model.contracts.getInputProps().onClick()
     this.syncHostStateFromModel()
   }
 
@@ -702,7 +889,10 @@ export class CVDatePicker extends FormAssociatedReatomElement {
     if (this.inputInvalid) {
       return {
         flags: {badInput: true},
-        message: 'Please enter a valid date and time.',
+        message:
+          this.model.state.mode() === 'date'
+            ? 'Please enter a valid date.'
+            : 'Please enter a valid date and time.',
       }
     }
 
@@ -743,8 +933,9 @@ export class CVDatePicker extends FormAssociatedReatomElement {
     const yearPrevProps = this.model.contracts.getYearNavButtonProps('prev')
     const yearNextProps = this.model.contracts.getYearNavButtonProps('next')
 
-    const hourInputProps = this.model.contracts.getHourInputProps()
-    const minuteInputProps = this.model.contracts.getMinuteInputProps()
+    const isDateTimeMode = this.model.state.mode() === 'date-time'
+    const hourInputProps = isDateTimeMode ? this.model.contracts.getHourInputProps() : null
+    const minuteInputProps = isDateTimeMode ? this.model.contracts.getMinuteInputProps() : null
     const applyButtonProps = this.model.contracts.getApplyButtonProps()
     const cancelButtonProps = this.model.contracts.getCancelButtonProps()
     const clearButtonProps = this.model.contracts.getClearButtonProps()
@@ -779,6 +970,7 @@ export class CVDatePicker extends FormAssociatedReatomElement {
               aria-required=${inputProps.required ? 'true' : nothing}
               aria-label=${inputProps['aria-label'] ?? nothing}
               @input=${this.handleInputEvent}
+              @click=${this.handleInputClick}
               @keydown=${this.handleInputKeyDown}
               @focus=${this.handleInputFocus}
               @blur=${this.handleInputBlur}
@@ -891,39 +1083,45 @@ export class CVDatePicker extends FormAssociatedReatomElement {
             })}
           </div>
 
-          <div part="time-row">
-            <input
-              part="hour-input"
-              id=${hourInputProps.id}
-              type=${hourInputProps.type}
-              inputmode=${hourInputProps.inputmode}
-              aria-label=${hourInputProps['aria-label']}
-              .value=${hourInputProps.value}
-              minlength=${hourInputProps.minlength}
-              maxlength=${hourInputProps.maxlength}
-              ?disabled=${hourInputProps.disabled}
-              ?readonly=${hourInputProps.readonly}
-              data-segment="hour"
-              @input=${this.handleTimeInput}
-              @keydown=${this.handleTimeKeyDown}
-            />
-            <span part="time-separator">:</span>
-            <input
-              part="minute-input"
-              id=${minuteInputProps.id}
-              type=${minuteInputProps.type}
-              inputmode=${minuteInputProps.inputmode}
-              aria-label=${minuteInputProps['aria-label']}
-              .value=${minuteInputProps.value}
-              minlength=${minuteInputProps.minlength}
-              maxlength=${minuteInputProps.maxlength}
-              ?disabled=${minuteInputProps.disabled}
-              ?readonly=${minuteInputProps.readonly}
-              data-segment="minute"
-              @input=${this.handleTimeInput}
-              @keydown=${this.handleTimeKeyDown}
-            />
-          </div>
+          ${
+            isDateTimeMode && hourInputProps && minuteInputProps
+              ? html`
+                <div part="time-row">
+                  <input
+                    part="hour-input"
+                    id=${hourInputProps.id}
+                    type=${hourInputProps.type}
+                    inputmode=${hourInputProps.inputmode}
+                    aria-label=${hourInputProps['aria-label']}
+                    .value=${hourInputProps.value}
+                    minlength=${hourInputProps.minlength}
+                    maxlength=${hourInputProps.maxlength}
+                    ?disabled=${hourInputProps.disabled}
+                    ?readonly=${hourInputProps.readonly}
+                    data-segment="hour"
+                    @input=${this.handleTimeInput}
+                    @keydown=${this.handleTimeKeyDown}
+                  />
+                  <span part="time-separator">:</span>
+                  <input
+                    part="minute-input"
+                    id=${minuteInputProps.id}
+                    type=${minuteInputProps.type}
+                    inputmode=${minuteInputProps.inputmode}
+                    aria-label=${minuteInputProps['aria-label']}
+                    .value=${minuteInputProps.value}
+                    minlength=${minuteInputProps.minlength}
+                    maxlength=${minuteInputProps.maxlength}
+                    ?disabled=${minuteInputProps.disabled}
+                    ?readonly=${minuteInputProps.readonly}
+                    data-segment="minute"
+                    @input=${this.handleTimeInput}
+                    @keydown=${this.handleTimeKeyDown}
+                  />
+                </div>
+              `
+              : nothing
+          }
 
           <div part="actions">
             <button
