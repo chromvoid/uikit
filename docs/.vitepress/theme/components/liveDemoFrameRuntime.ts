@@ -3,11 +3,14 @@ import {registerUikit} from '@chromvoid/uikit/register'
 import {unoUtilities} from '@chromvoid/uikit/styles/uno-utilities'
 
 import '@chromvoid/uikit/theme/tokens.css'
+import liveDemoExamplesCss from '../live-demo-examples.css?raw'
 
 setUnoUtilities(unoUtilities)
 registerUikit()
 
-function installFrameReset(): void {
+const RESIZE_MESSAGE_TYPE = 'cv-live-demo:resize'
+
+function installFrameStyles(): void {
   const style = document.createElement('style')
   style.textContent = `
     html,
@@ -31,6 +34,10 @@ function installFrameReset(): void {
     }
   `
   document.head.append(style)
+
+  const demoStyle = document.createElement('style')
+  demoStyle.textContent = liveDemoExamplesCss
+  document.head.append(demoStyle)
 }
 
 function readPayload(): string {
@@ -64,6 +71,30 @@ function runDemoScript(script: HTMLScriptElement): void {
   }
 }
 
+function measurePreviewHeight(preview: HTMLElement): number {
+  const rect = preview.getBoundingClientRect()
+  return Math.ceil(
+    Math.max(rect.height, preview.scrollHeight, document.body.scrollHeight, document.documentElement.scrollHeight),
+  )
+}
+
+function postPreviewHeight(preview: HTMLElement): void {
+  window.parent.postMessage({type: RESIZE_MESSAGE_TYPE, height: measurePreviewHeight(preview)}, '*')
+}
+
+function observePreview(preview: HTMLElement): void {
+  const post = () => postPreviewHeight(preview)
+
+  if ('ResizeObserver' in window) {
+    const observer = new ResizeObserver(post)
+    observer.observe(preview)
+  }
+
+  requestAnimationFrame(post)
+  requestAnimationFrame(() => requestAnimationFrame(post))
+  window.addEventListener('load', post, {once: true})
+}
+
 function mountDemo(): void {
   const raw = readPayload()
   if (!raw.trim()) return
@@ -73,9 +104,14 @@ function mountDemo(): void {
   const scripts = [...template.content.querySelectorAll('script')]
   scripts.forEach((script) => script.remove())
 
-  document.body.replaceChildren(template.content.cloneNode(true))
+  const preview = document.createElement('main')
+  preview.className = 'live-demo-preview live-demo-preview--frame'
+  preview.append(template.content.cloneNode(true))
+
+  document.body.replaceChildren(preview)
   scripts.forEach(runDemoScript)
+  observePreview(preview)
 }
 
-installFrameReset()
+installFrameStyles()
 mountDemo()

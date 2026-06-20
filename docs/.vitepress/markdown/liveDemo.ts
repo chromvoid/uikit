@@ -1,8 +1,8 @@
 import type MarkdownIt from 'markdown-it'
 
 const CV_TAG_RE = /<cv-[\w-]+/
-// Open image viewers are real fullscreen modals; keep those docs examples source-only.
-const SOURCE_ONLY_DEMO_RE = /<cv-image-viewer\b(?=[^>]*\bopen(?:\s|=|>|$))/i
+// Explicit docs-only escape hatch for examples that should show source without a live preview.
+const SOURCE_ONLY_DEMO_RE = /\sdata-live-demo-source-only(?:[\s=>]|$)/i
 
 export function liveDemoPlugin(md: MarkdownIt): void {
   const defaultFence =
