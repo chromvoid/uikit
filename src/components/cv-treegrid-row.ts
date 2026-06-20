@@ -76,7 +76,6 @@ export class CVTreegridRow extends LitElement {
         align-items: center;
         min-block-size: 32px;
         padding-inline: var(--cv-space-2, 8px);
-        padding-inline-start: calc(var(--cv-treegrid-child-indent) * max(var(--cv-treegrid-level, 1) - 1, 0));
       }
 
       [part='children'][hidden] {

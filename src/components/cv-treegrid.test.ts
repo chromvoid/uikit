@@ -61,6 +61,11 @@ const createTreegrid = async (attrs?: Partial<CVTreegrid>) => {
 
 const getBase = (grid: CVTreegrid) => grid.shadowRoot!.querySelector('[part="base"]') as HTMLElement
 
+const getToggle = async (cell: CVTreegridCell) => {
+  await cell.updateComplete
+  return cell.shadowRoot!.querySelector('[part="toggle"]') as HTMLButtonElement
+}
+
 afterEach(() => {
   document.body.innerHTML = ''
 })
@@ -167,6 +172,22 @@ describe('cv-treegrid', () => {
         const slot = cell.shadowRoot!.querySelector('slot')
         expect(slot).not.toBeNull()
       })
+
+      it('renders disclosure parts when marked as the tree-control cell', async () => {
+        CVTreegridCell.define()
+        const cell = document.createElement('cv-treegrid-cell') as CVTreegridCell
+        cell.treeControl = true
+        cell.branch = true
+        cell.rowId = 'r1'
+        document.body.append(cell)
+        await cell.updateComplete
+
+        expect(cell.shadowRoot!.querySelector('[part="tree"]')).not.toBeNull()
+        expect(cell.shadowRoot!.querySelector('[part="toggle"]')).not.toBeNull()
+        expect(cell.shadowRoot!.querySelector('[part="toggle-icon"]')).not.toBeNull()
+        expect(cell.shadowRoot!.querySelector('[part="content"]')).not.toBeNull()
+        expect(cell.shadowRoot!.querySelector('[part="guide"]')).not.toBeNull()
+      })
     })
 
     describe('cv-treegrid-column', () => {
@@ -223,6 +244,11 @@ describe('cv-treegrid', () => {
         expect(cell.disabled).toBe(false)
         expect(cell.active).toBe(false)
         expect(cell.selected).toBe(false)
+        expect(cell.treeControl).toBe(false)
+        expect(cell.branch).toBe(false)
+        expect(cell.expanded).toBe(false)
+        expect(cell.level).toBe(1)
+        expect(cell.rowId).toBe('')
       })
     })
 
@@ -279,16 +305,24 @@ describe('cv-treegrid', () => {
       expect(row.getAttribute('level')).toBe('3')
     })
 
-    it('cv-treegrid-cell: boolean attrs reflect — disabled, active, selected', async () => {
+    it('cv-treegrid-cell: attrs reflect — disabled, active, selected, tree-control, branch, expanded, level', async () => {
       const cell = document.createElement('cv-treegrid-cell') as CVTreegridCell
       cell.disabled = true
       cell.active = true
       cell.selected = true
+      cell.treeControl = true
+      cell.branch = true
+      cell.expanded = true
+      cell.level = 3
       document.body.append(cell)
       await cell.updateComplete
       expect(cell.hasAttribute('disabled')).toBe(true)
       expect(cell.hasAttribute('active')).toBe(true)
       expect(cell.hasAttribute('selected')).toBe(true)
+      expect(cell.hasAttribute('tree-control')).toBe(true)
+      expect(cell.hasAttribute('branch')).toBe(true)
+      expect(cell.hasAttribute('expanded')).toBe(true)
+      expect(cell.getAttribute('level')).toBe('3')
     })
 
     it('cv-treegrid-column: boolean attr disabled reflects', async () => {
@@ -363,10 +397,58 @@ describe('cv-treegrid', () => {
 
       expect(inputDetail).toMatchObject({
         value: expect.any(String),
-        activeCell: expect.objectContaining({rowId: expect.any(String), colId: expect.any(String)}),
+        activeCell: expect.objectContaining({
+          rowId: expect.any(String),
+          colId: expect.any(String),
+        }),
         selectedValues: expect.any(Array),
         expandedValues: expect.any(Array),
       })
+    })
+
+    it('clicking a branch disclosure toggles expansion and does not select the row', async () => {
+      const grid = await createTreegrid({ariaLabel: 'Test', selectionMode: 'multiple'})
+      grid.append(
+        createColumn('name', 'Name', {cellRole: 'rowheader'}),
+        createRow('r1', [createCell('name', 'A')], {
+          children: [createRow('r1a', [createCell('name', 'A1')])],
+        }),
+      )
+      await settle(grid)
+
+      let inputCount = 0
+      let changeCount = 0
+      grid.addEventListener('cv-input', () => inputCount++)
+      grid.addEventListener('cv-change', () => changeCount++)
+
+      const cell = grid.querySelector('cv-treegrid-cell[column="name"]') as CVTreegridCell
+      const toggle = await getToggle(cell)
+      toggle.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true, cancelable: true}))
+      await settle(grid)
+
+      expect(grid.expandedValues).toEqual(['r1'])
+      expect(grid.selectedValues).toEqual([])
+      expect(inputCount).toBe(1)
+      expect(changeCount).toBe(1)
+    })
+
+    it('disabled branch disclosure does not expand the row', async () => {
+      const grid = await createTreegrid({ariaLabel: 'Test'})
+      grid.append(
+        createColumn('name', 'Name', {cellRole: 'rowheader'}),
+        createRow('r1', [createCell('name', 'A')], {
+          children: [createRow('r1a', [createCell('name', 'A1')])],
+          disabled: true,
+        }),
+      )
+      await settle(grid)
+
+      const cell = grid.querySelector('cv-treegrid-cell[column="name"]') as CVTreegridCell
+      const toggle = await getToggle(cell)
+      toggle.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true, cancelable: true}))
+      await settle(grid)
+
+      expect(grid.expandedValues).toEqual([])
     })
 
     it('input detail.value is null when no cell is active', async () => {
@@ -740,7 +822,11 @@ describe('cv-treegrid', () => {
       grid.append(createColumn('name', 'Name'), createRow('r1', [createCell('name', 'A')]))
       await settle(grid)
 
-      const event = new KeyboardEvent('keydown', {key: 'ArrowDown', bubbles: true, cancelable: true})
+      const event = new KeyboardEvent('keydown', {
+        key: 'ArrowDown',
+        bubbles: true,
+        cancelable: true,
+      })
       getBase(grid).dispatchEvent(event)
       await settle(grid)
       expect(event.defaultPrevented).toBe(true)
@@ -1111,6 +1197,52 @@ describe('cv-treegrid', () => {
   // --- expand/collapse ---
 
   describe('expand/collapse', () => {
+    it('marks the rowheader cell as the tree-control cell', async () => {
+      const grid = await createTreegrid({ariaLabel: 'Test'})
+      grid.append(
+        createColumn('status', 'Status'),
+        createColumn('name', 'Name', {cellRole: 'rowheader'}),
+        createRow('r1', [createCell('status', 'Open'), createCell('name', 'Root')], {
+          children: [createRow('r1a', [createCell('status', 'Ready'), createCell('name', 'Child')])],
+        }),
+      )
+      await settle(grid)
+
+      const statusCell = grid.querySelector(
+        'cv-treegrid-row[value="r1"] cv-treegrid-cell[column="status"]',
+      ) as CVTreegridCell
+      const nameCell = grid.querySelector(
+        'cv-treegrid-row[value="r1"] cv-treegrid-cell[column="name"]',
+      ) as CVTreegridCell
+
+      expect(statusCell.treeControl).toBe(false)
+      expect(nameCell.treeControl).toBe(true)
+      expect(nameCell.branch).toBe(true)
+      expect(nameCell.rowId).toBe('r1')
+    })
+
+    it('falls back to the first valid cell when no rowheader column exists', async () => {
+      const grid = await createTreegrid({ariaLabel: 'Test'})
+      grid.append(
+        createColumn('name', 'Name'),
+        createColumn('status', 'Status'),
+        createRow('r1', [createCell('name', 'Root'), createCell('status', 'Open')], {
+          children: [createRow('r1a', [createCell('name', 'Child'), createCell('status', 'Ready')])],
+        }),
+      )
+      await settle(grid)
+
+      const nameCell = grid.querySelector(
+        'cv-treegrid-row[value="r1"] cv-treegrid-cell[column="name"]',
+      ) as CVTreegridCell
+      const statusCell = grid.querySelector(
+        'cv-treegrid-row[value="r1"] cv-treegrid-cell[column="status"]',
+      ) as CVTreegridCell
+
+      expect(nameCell.treeControl).toBe(true)
+      expect(statusCell.treeControl).toBe(false)
+    })
+
     it('ArrowRight on collapsed branch row expands it; children become visible', async () => {
       const grid = await createTreegrid({ariaLabel: 'Test'})
       grid.append(
@@ -1185,6 +1317,27 @@ describe('cv-treegrid', () => {
 
       grid.expandedValues = ['r1']
       await settle(grid)
+      expect(childRow.hidden).toBe(false)
+    })
+
+    it('programmatic expandedValues and selectedValues written in one update both apply', async () => {
+      const grid = await createTreegrid({ariaLabel: 'Test', selectionMode: 'multiple'})
+      grid.append(
+        createColumn('name', 'Name'),
+        createRow('r1', [createCell('name', 'A')], {
+          children: [createRow('r1a', [createCell('name', 'A1')])],
+        }),
+      )
+      await settle(grid)
+
+      const childRow = grid.querySelector('cv-treegrid-row[value="r1a"]') as CVTreegridRow
+
+      grid.expandedValues = ['r1']
+      grid.selectedValues = ['r1']
+      await settle(grid)
+
+      expect(grid.expandedValues).toEqual(['r1'])
+      expect(grid.selectedValues).toEqual(['r1'])
       expect(childRow.hidden).toBe(false)
     })
 
@@ -1533,10 +1686,7 @@ describe('cv-treegrid', () => {
 
     it('removing the value attribute does not throw (null guard)', async () => {
       const grid = await createTreegrid({ariaLabel: 'Test'})
-      grid.append(
-        createColumn('name', 'Name'),
-        createRow('r1', [createCell('name', 'A')]),
-      )
+      grid.append(createColumn('name', 'Name'), createRow('r1', [createCell('name', 'A')]))
       await settle(grid)
 
       expect(() => {
@@ -1555,7 +1705,12 @@ describe('cv-treegrid', () => {
       await settle(grid)
       expect(grid.value).toBe('r1::name')
 
-      const event = new KeyboardEvent('keydown', {key: 'ArrowDown', altKey: true, bubbles: true, cancelable: true})
+      const event = new KeyboardEvent('keydown', {
+        key: 'ArrowDown',
+        altKey: true,
+        bubbles: true,
+        cancelable: true,
+      })
       getBase(grid).dispatchEvent(event)
       await settle(grid)
 

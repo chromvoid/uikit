@@ -9,24 +9,188 @@ Hierarchical tabular data grid combining multi-column structure with tree expans
 ## Usage
 
 ```html
-<cv-treegrid aria-label="File tree" selection-mode="single">
-  <cv-treegrid-column value="name" cell-role="rowheader">Name</cv-treegrid-column>
-  <cv-treegrid-column value="size">Size</cv-treegrid-column>
+<div class="treegrid-demo-shell" data-demo="treegrid" data-live-demo-height="760">
+  <section class="treegrid-demo-hero" aria-labelledby="treegrid-demo-title">
+    <div class="treegrid-demo-copy">
+      <span class="treegrid-demo-kicker">Hierarchical grid adapter</span>
+      <h3 id="treegrid-demo-title">Map nested vault layers without losing column context.</h3>
+      <p>
+        Treegrid keeps row hierarchy, expansion state, row selection, active-cell focus, and column semantics
+        on one APG-aligned contract.
+      </p>
+    </div>
 
-  <cv-treegrid-row value="src">
-    <cv-treegrid-cell column="name">src/</cv-treegrid-cell>
-    <cv-treegrid-cell column="size">—</cv-treegrid-cell>
-    <cv-treegrid-row value="index" slot="children">
-      <cv-treegrid-cell column="name">index.ts</cv-treegrid-cell>
-      <cv-treegrid-cell column="size">2 KB</cv-treegrid-cell>
-    </cv-treegrid-row>
-  </cv-treegrid-row>
+    <dl class="treegrid-demo-metrics" aria-label="Treegrid behavior summary">
+      <div>
+        <dt>Root</dt>
+        <dd>treegrid</dd>
+      </div>
+      <div>
+        <dt>Rows</dt>
+        <dd>nested branches</dd>
+      </div>
+      <div>
+        <dt>State</dt>
+        <dd>focus + select + expand</dd>
+      </div>
+    </dl>
+  </section>
 
-  <cv-treegrid-row value="readme">
-    <cv-treegrid-cell column="name">README.md</cv-treegrid-cell>
-    <cv-treegrid-cell column="size">4 KB</cv-treegrid-cell>
-  </cv-treegrid-row>
-</cv-treegrid>
+  <section class="treegrid-demo-workbench" aria-labelledby="treegrid-demo-workbench-title">
+    <div class="treegrid-demo-section-header">
+      <span class="treegrid-demo-kicker">Vault trust map</span>
+      <h4 id="treegrid-demo-workbench-title">Branch rows reveal visible and hidden operating layers</h4>
+    </div>
+
+    <div class="treegrid-demo-toolbar" aria-label="Active treegrid capabilities">
+      <span>selection-mode="multiple"</span>
+      <span>rowheader cells</span>
+      <span>expanded branches</span>
+      <span>roving tabindex</span>
+    </div>
+
+    <div class="treegrid-demo-scroll">
+      <cv-treegrid
+        id="treegrid-demo-map"
+        aria-label="Vault trust boundary map"
+        selection-mode="multiple"
+        value="visible-surface::status"
+      >
+        <cv-treegrid-column value="layer" cell-role="rowheader">Layer</cv-treegrid-column>
+        <cv-treegrid-column value="status">Status</cv-treegrid-column>
+        <cv-treegrid-column value="owner">Owner</cv-treegrid-column>
+        <cv-treegrid-column value="scope">Scope</cv-treegrid-column>
+
+        <cv-treegrid-row value="visible-surface">
+          <cv-treegrid-cell column="layer">Visible surface</cv-treegrid-cell>
+          <cv-treegrid-cell column="status"
+            ><cv-badge variant="primary" size="small">Visible</cv-badge></cv-treegrid-cell
+          >
+          <cv-treegrid-cell column="owner">Traveler</cv-treegrid-cell>
+          <cv-treegrid-cell column="scope">Inspect</cv-treegrid-cell>
+          <cv-treegrid-row value="travel-profile" slot="children">
+            <cv-treegrid-cell column="layer">Travel profile</cv-treegrid-cell>
+            <cv-treegrid-cell column="status"
+              ><cv-badge variant="success" size="small">Ready</cv-badge></cv-treegrid-cell
+            >
+            <cv-treegrid-cell column="owner">Alex</cv-treegrid-cell>
+            <cv-treegrid-cell column="scope">Allowed</cv-treegrid-cell>
+          </cv-treegrid-row>
+          <cv-treegrid-row value="border-docs" slot="children">
+            <cv-treegrid-cell column="layer">Border docs</cv-treegrid-cell>
+            <cv-treegrid-cell column="status"
+              ><cv-badge variant="neutral" size="small">Decoy</cv-badge></cv-treegrid-cell
+            >
+            <cv-treegrid-cell column="owner">Maria</cv-treegrid-cell>
+            <cv-treegrid-cell column="scope">Visible</cv-treegrid-cell>
+          </cv-treegrid-row>
+        </cv-treegrid-row>
+
+        <cv-treegrid-row value="sealed-core">
+          <cv-treegrid-cell column="layer">Sealed core</cv-treegrid-cell>
+          <cv-treegrid-cell column="status"
+            ><cv-badge variant="success" size="small">Verified</cv-badge></cv-treegrid-cell
+          >
+          <cv-treegrid-cell column="owner">Device</cv-treegrid-cell>
+          <cv-treegrid-cell column="scope">Device</cv-treegrid-cell>
+          <cv-treegrid-row value="primary-vault" slot="children">
+            <cv-treegrid-cell column="layer">Primary vault</cv-treegrid-cell>
+            <cv-treegrid-cell column="status"
+              ><cv-badge variant="success" size="small">Sealed</cv-badge></cv-treegrid-cell
+            >
+            <cv-treegrid-cell column="owner">Alex</cv-treegrid-cell>
+            <cv-treegrid-cell column="scope">Hidden</cv-treegrid-cell>
+            <cv-treegrid-row value="otp-seeds" slot="children">
+              <cv-treegrid-cell column="layer">OTP seed group</cv-treegrid-cell>
+              <cv-treegrid-cell column="status"
+                ><cv-badge variant="warning" size="small">Rotating</cv-badge></cv-treegrid-cell
+              >
+              <cv-treegrid-cell column="owner">Vault</cv-treegrid-cell>
+              <cv-treegrid-cell column="scope">Session</cv-treegrid-cell>
+            </cv-treegrid-row>
+          </cv-treegrid-row>
+          <cv-treegrid-row value="relay-core" slot="children">
+            <cv-treegrid-cell column="layer">Relay core</cv-treegrid-cell>
+            <cv-treegrid-cell column="status"
+              ><cv-badge variant="success" size="small">Paired</cv-badge></cv-treegrid-cell
+            >
+            <cv-treegrid-cell column="owner">USB device</cv-treegrid-cell>
+            <cv-treegrid-cell column="scope">Local</cv-treegrid-cell>
+          </cv-treegrid-row>
+        </cv-treegrid-row>
+
+        <cv-treegrid-row value="recovery-envelope">
+          <cv-treegrid-cell column="layer">Recovery envelope</cv-treegrid-cell>
+          <cv-treegrid-cell column="status"
+            ><cv-badge variant="warning" size="small">Review</cv-badge></cv-treegrid-cell
+          >
+          <cv-treegrid-cell column="owner">Counsel</cv-treegrid-cell>
+          <cv-treegrid-cell column="scope">Shared</cv-treegrid-cell>
+          <cv-treegrid-row value="expired-export" slot="children" disabled>
+            <cv-treegrid-cell column="layer" disabled>Expired export</cv-treegrid-cell>
+            <cv-treegrid-cell column="status"
+              ><cv-badge variant="danger" size="small">Blocked</cv-badge></cv-treegrid-cell
+            >
+            <cv-treegrid-cell column="owner">Legacy</cv-treegrid-cell>
+            <cv-treegrid-cell column="scope">None</cv-treegrid-cell>
+          </cv-treegrid-row>
+        </cv-treegrid-row>
+      </cv-treegrid>
+    </div>
+
+    <output class="treegrid-demo-readout" for="treegrid-demo-map" aria-live="polite">
+      Active cell: visible-surface::status | Selected rows: none | Expanded branches: none
+    </output>
+  </section>
+</div>
+
+<script>
+  document
+    .querySelectorAll('.treegrid-demo-shell[data-demo="treegrid"]:not([data-ready])')
+    .forEach((shell) => {
+      shell.dataset.ready = 'true'
+
+      customElements.whenDefined('cv-treegrid').then(async () => {
+        const treegrid = shell.querySelector('#treegrid-demo-map')
+        const readout = shell.querySelector('.treegrid-demo-readout')
+        if (!treegrid || !readout) return
+
+        const rowLabels = new Map([
+          ['visible-surface', 'Visible surface'],
+          ['travel-profile', 'Travel profile'],
+          ['border-docs', 'Border docs'],
+          ['sealed-core', 'Sealed core'],
+          ['primary-vault', 'Primary vault'],
+          ['otp-seeds', 'OTP seed group'],
+          ['relay-core', 'Relay core'],
+          ['recovery-envelope', 'Recovery envelope'],
+          ['expired-export', 'Expired export'],
+        ])
+
+        const formatRows = (values, fallback) => {
+          const labels = values.map((value) => rowLabels.get(value) || value)
+          return labels.length > 0 ? labels.join(', ') : fallback
+        }
+
+        const syncReadout = () => {
+          readout.textContent = [
+            `Active cell: ${treegrid.value || 'none'}`,
+            `Selected rows: ${formatRows(treegrid.selectedValues || [], 'none')}`,
+            `Expanded branches: ${formatRows(treegrid.expandedValues || [], 'none')}`,
+          ].join(' | ')
+        }
+
+        treegrid.addEventListener('cv-input', syncReadout)
+        treegrid.addEventListener('cv-change', syncReadout)
+        await treegrid.updateComplete
+        treegrid.expandedValues = ['visible-surface', 'sealed-core', 'primary-vault', 'recovery-envelope']
+        treegrid.selectedValues = ['visible-surface', 'sealed-core']
+        treegrid.value = 'visible-surface::status'
+        await treegrid.updateComplete
+        syncReadout()
+      })
+    })
+</script>
 ```
 
 ## Anatomy
@@ -34,7 +198,9 @@ Hierarchical tabular data grid combining multi-column structure with tree expans
 ```
 <cv-treegrid> (host)
 └── <div part="base" role="treegrid">
-    └── <slot>                          ← accepts cv-treegrid-column and cv-treegrid-row children
+    ├── <div part="header" role="row">
+    │   └── <span part="columnheader">   ← first rowheader/first column also exposes tree-column-header
+    └── <slot>                           ← accepts cv-treegrid-column and cv-treegrid-row children
 ```
 
 ## Attributes
@@ -56,9 +222,12 @@ Hierarchical tabular data grid combining multi-column structure with tree expans
 
 ## CSS Parts
 
-| Part   | Element | Description                                                                                                    |
-| ------ | ------- | -------------------------------------------------------------------------------------------------------------- |
-| `base` | `<div>` | Root interactive element with `role="treegrid"`; receives all ARIA grid attributes and keyboard event handling |
+| Part                 | Element  | Description                                                                                                    |
+| -------------------- | -------- | -------------------------------------------------------------------------------------------------------------- |
+| `base`               | `<div>`  | Root interactive element with `role="treegrid"`; receives all ARIA grid attributes and keyboard event handling |
+| `header`             | `<div>`  | Rendered column header row                                                                                     |
+| `columnheader`       | `<span>` | Column header cell                                                                                             |
+| `tree-column-header` | `<span>` | Inner label wrapper inside the tree column header                                                              |
 
 ## CSS Custom Properties
 
@@ -84,10 +253,11 @@ Additionally, component styles depend on theme tokens through fallback values:
 
 ## Events
 
-| Event       | Detail                                                                                                              | Description                                                                                                                    |
-| ----------- | ------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
-| `cv-input`  | `{ value: string \| null, activeCell: TreegridCellId \| null, selectedValues: string[], expandedValues: string[] }` | Fires on any user interaction that changes active cell, selection, or expansion state                                          |
-| `cv-change` | `{ value: string \| null, activeCell: TreegridCellId \| null, selectedValues: string[], expandedValues: string[] }` | Fires when selection or expansion state commits (subset of `cv-input` cases; active-cell-only changes do not fire `cv-change`) |
+| Event                    | Detail                                                                                                              | Description                                                                                                                    |
+| ------------------------ | ------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| `cv-input`               | `{ value: string \| null, activeCell: TreegridCellId \| null, selectedValues: string[], expandedValues: string[] }` | Fires on any user interaction that changes active cell, selection, or expansion state                                          |
+| `cv-change`              | `{ value: string \| null, activeCell: TreegridCellId \| null, selectedValues: string[], expandedValues: string[] }` | Fires when selection or expansion state commits (subset of `cv-input` cases; active-cell-only changes do not fire `cv-change`) |
+| `cv-treegrid-row-toggle` | `{ rowId: string }`                                                                                                 | Fires from the tree-control cell disclosure button before `cv-treegrid` handles it with `actions.toggleRowExpanded(rowId)`     |
 
 `value` in the detail is `null` when no cell is active, otherwise the `"rowId::colId"` string.
 
@@ -110,13 +280,13 @@ Additionally, component styles depend on theme tokens through fallback values:
 
 ### Headless state → DOM attributes
 
-| Headless Signal          | Direction    | DOM Reflection                                                                                                                                       |
-| ------------------------ | ------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `state.activeCellId()`   | state → attr | `value` property (`"rowId::colId"` string); `tabindex="0"` and `data-active="true"` on active cell via `getCellProps`                                |
-| `state.selectedRowIds()` | state → attr | `selectedValues` property; `aria-selected="true"` on selected rows and cells via `getRowProps`/`getCellProps`; `[selected]` on row and cell elements |
-| `state.expandedRowIds()` | state → attr | `expandedValues` property; `aria-expanded="true/false"` on branch rows via `getRowProps`; child row visibility toggled via `hidden` attribute        |
-| `state.rowCount()`       | state → attr | `aria-rowcount` on `[part="base"]` via `getTreegridProps`                                                                                            |
-| `state.columnCount()`    | state → attr | `aria-colcount` on `[part="base"]` via `getTreegridProps`; `--cv-treegrid-column-count` inline style on each row                                     |
+| Headless Signal          | Direction    | DOM Reflection                                                                                                                                                                              |
+| ------------------------ | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `state.activeCellId()`   | state → attr | `value` property (`"rowId::colId"` string); `tabindex="0"` and `data-active="true"` on active cell via `getCellProps`                                                                       |
+| `state.selectedRowIds()` | state → attr | `selectedValues` property; `aria-selected="true"` on selected rows and cells via `getRowProps`/`getCellProps`; `[selected]` on row and cell elements                                        |
+| `state.expandedRowIds()` | state → attr | `expandedValues` property; `aria-expanded="true/false"` on branch rows via `getRowProps`; child row visibility toggled via `hidden`; tree-control cell receives `[branch]` and `[expanded]` |
+| `state.rowCount()`       | state → attr | `aria-rowcount` on `[part="base"]` via `getTreegridProps`                                                                                                                                   |
+| `state.columnCount()`    | state → attr | `aria-colcount` on `[part="base"]` via `getTreegridProps`; `--cv-treegrid-column-count` inline style on each row                                                                            |
 
 ### Contracts spread onto DOM elements
 
@@ -126,10 +296,13 @@ Additionally, component styles depend on theme tokens through fallback values:
 | `contracts.getRowProps(rowId)`         | Each `cv-treegrid-row` element (`id`, `role`, `aria-level`, `aria-posinset`, `aria-setsize`, `aria-rowindex`, `aria-expanded`, `aria-selected`, `aria-disabled`)    |
 | `contracts.getCellProps(rowId, colId)` | Each `cv-treegrid-cell` element (`id`, `role`, `tabindex`, `aria-colindex`, `aria-selected`, `aria-disabled`, `data-active`); `onFocus` wired to cell `focus` event |
 
+`cv-treegrid` also marks exactly one visible valid cell per row as `[tree-control]`: the first `rowheader` column cell, falling back to the first valid cell. That cell receives parent-written `branch`, `expanded`, `level`, and property-only `rowId` values for the disclosure affordance.
+
 ### Pointer and keyboard action triggers
 
 | User Trigger                                               | Action Called                                                                                                                                                                                              |
 | ---------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `click` on a branch disclosure button                      | Calls `actions.toggleRowExpanded(rowId)`; does not update active cell or row selection                                                                                                                     |
 | `click` on a cell                                          | Sets active cell via `onFocus()`; then calls `actions.toggleRowSelection(rowId)` in `multiple` mode (plain or `Ctrl/Meta` click both accumulate), or `actions.selectRow(rowId)` (replace) in `single` mode |
 | `keydown` `Enter` or `Space` on active cell                | `actions.selectRow(activeRowId)` (non-additive) or `actions.toggleRowSelection(activeRowId)` (when `Ctrl/Meta` held in `multiple` mode)                                                                    |
 | `keydown` navigation keys                                  | `actions.handleKeyDown(event)`                                                                                                                                                                             |
@@ -183,16 +356,16 @@ Represents a single data row. Slotted directly into `cv-treegrid` (root rows) or
 
 #### Attributes
 
-| Attribute  | Type    | Default | Description                                                                                                                                                                                                                            |
-| ---------- | ------- | ------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `value`    | String  | `""`    | Row identifier. Auto-assigned as `"row-N"` if empty                                                                                                                                                                                    |
-| `index`    | Number  | `0`     | Explicit `aria-rowindex` override; values `< 1` or non-finite are ignored (headless assigns positional index)                                                                                                                          |
-| `disabled` | Boolean | `false` | Marks row as disabled; excluded from navigation and selection                                                                                                                                                                          |
-| `active`   | Boolean | `false` | Set by parent when a cell in this row is the active cell; drives row-level highlight                                                                                                                                                   |
-| `selected` | Boolean | `false` | Set by parent when this row is selected; drives row-level selection styling                                                                                                                                                            |
-| `expanded` | Boolean | `false` | Set by parent; controls visibility of `[part="children"]` and reflects `aria-expanded`                                                                                                                                                 |
-| `branch`   | Boolean | `false` | Set by parent when this row has child rows; used for styling expand/collapse affordance                                                                                                                                                |
-| `level`    | Number  | `1`     | Nesting depth; used to compute `--cv-treegrid-level` for indent. Auto-written by parent `cv-treegrid.syncElementsFromModel()` from `getRowProps()['aria-level']`; root rows get `1`, child rows get `2`, grandchild rows get `3`, etc. |
+| Attribute  | Type    | Default | Description                                                                                                                                                                          |
+| ---------- | ------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `value`    | String  | `""`    | Row identifier. Auto-assigned as `"row-N"` if empty                                                                                                                                  |
+| `index`    | Number  | `0`     | Explicit `aria-rowindex` override; values `< 1` or non-finite are ignored (headless assigns positional index)                                                                        |
+| `disabled` | Boolean | `false` | Marks row as disabled; excluded from navigation and selection                                                                                                                        |
+| `active`   | Boolean | `false` | Set by parent when a cell in this row is the active cell; drives row-level highlight                                                                                                 |
+| `selected` | Boolean | `false` | Set by parent when this row is selected; drives row-level selection styling                                                                                                          |
+| `expanded` | Boolean | `false` | Set by parent; controls visibility of `[part="children"]` and reflects `aria-expanded`                                                                                               |
+| `branch`   | Boolean | `false` | Set by parent when this row has child rows; mirrored onto the row's tree-control cell for the disclosure affordance                                                                  |
+| `level`    | Number  | `1`     | Nesting depth. Auto-written by parent `cv-treegrid.syncElementsFromModel()` from `getRowProps()['aria-level']`; root rows get `1`, child rows get `2`, grandchild rows get `3`, etc. |
 
 #### Slots
 
@@ -203,18 +376,18 @@ Represents a single data row. Slotted directly into `cv-treegrid` (root rows) or
 
 #### CSS Parts
 
-| Part       | Element | Description                                                                                                                          |
-| ---------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------ |
-| `row`      | `<div>` | Grid row layout element; uses CSS grid with `--cv-treegrid-column-count` columns and left-padding derived from `--cv-treegrid-level` |
-| `children` | `<div>` | Container for nested child rows; `hidden` when `[expanded]` is absent                                                                |
+| Part       | Element | Description                                                                      |
+| ---------- | ------- | -------------------------------------------------------------------------------- |
+| `row`      | `<div>` | Grid row layout element; uses CSS grid with `--cv-treegrid-column-count` columns |
+| `children` | `<div>` | Container for nested child rows; `hidden` when `[expanded]` is absent            |
 
 #### CSS Custom Properties
 
-| Property                     | Default | Description                                                                                                                                |
-| ---------------------------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
-| `--cv-treegrid-child-indent` | `14px`  | Horizontal indent per nesting level; applied as `padding-inline-start: calc(--cv-treegrid-child-indent * max(--cv-treegrid-level - 1, 0))` |
-| `--cv-treegrid-level`        | `1`     | Current nesting depth (written by the row's own render from `this.level`); consumed by `[part="row"]` indent calculation                   |
-| `--cv-treegrid-column-count` | `1`     | Number of columns; written by parent `cv-treegrid` as an inline style on each row; drives the `grid-template-columns`                      |
+| Property                     | Default | Description                                                                                                           |
+| ---------------------------- | ------- | --------------------------------------------------------------------------------------------------------------------- |
+| `--cv-treegrid-child-indent` | `14px`  | Compatibility alias inherited by tree-control cells as the default `--cv-treegrid-indent-size`                        |
+| `--cv-treegrid-level`        | `1`     | Current nesting depth (written by the row's own render from `this.level`)                                             |
+| `--cv-treegrid-column-count` | `1`     | Number of columns; written by parent `cv-treegrid` as an inline style on each row; drives the `grid-template-columns` |
 
 Additionally, component styles depend on theme tokens:
 
@@ -304,17 +477,31 @@ Represents a single cell within a `cv-treegrid-row`. The `column` attribute link
 
 ```
 <cv-treegrid-cell> (host)
-└── <slot>   ← cell content
+└── <slot>                                        ← normal cell content
+
+<cv-treegrid-cell tree-control> (host)
+└── <span part="tree">
+    ├── <span part="guide">
+    ├── <button part="toggle" aria-expanded>     ← branch rows only; hidden spacer on leaves
+    │   └── <span part="toggle-icon">
+    └── <span part="content">
+        └── <slot>                               ← cell content
 ```
 
 #### Attributes
 
-| Attribute  | Type    | Default | Description                                                                                                       |
-| ---------- | ------- | ------- | ----------------------------------------------------------------------------------------------------------------- |
-| `column`   | String  | `""`    | Id of the `cv-treegrid-column` this cell belongs to; positional fallback used when value is empty or unrecognized |
-| `disabled` | Boolean | `false` | Marks this specific cell as disabled; excluded from navigation                                                    |
-| `active`   | Boolean | `false` | Set by parent when this cell is the active cell; drives cell-level highlight                                      |
-| `selected` | Boolean | `false` | Set by parent when the row containing this cell is selected; drives `font-weight: 600`                            |
+| Attribute      | Type    | Default | Description                                                                                                                 |
+| -------------- | ------- | ------- | --------------------------------------------------------------------------------------------------------------------------- |
+| `column`       | String  | `""`    | Id of the `cv-treegrid-column` this cell belongs to; positional fallback used when value is empty or unrecognized           |
+| `disabled`     | Boolean | `false` | Marks this specific cell as disabled; excluded from navigation                                                              |
+| `active`       | Boolean | `false` | Set by parent when this cell is the active cell; drives cell-level highlight                                                |
+| `selected`     | Boolean | `false` | Set by parent when the row containing this cell is selected; drives `font-weight: 600`                                      |
+| `tree-control` | Boolean | `false` | Set by parent on the first rowheader cell, falling back to the first valid cell; renders hierarchy indent and disclosure UI |
+| `branch`       | Boolean | `false` | Set by parent on the tree-control cell when the row has child rows                                                          |
+| `expanded`     | Boolean | `false` | Set by parent on the tree-control cell from the row expansion state                                                         |
+| `level`        | Number  | `1`     | Set by parent on the tree-control cell from row `aria-level`; drives indent and guide placement                             |
+
+`rowId` is a property-only parent-written value used by the disclosure button event. It is not reflected as an attribute.
 
 #### Slots
 
@@ -324,15 +511,22 @@ Represents a single cell within a `cv-treegrid-row`. The `column` attribute link
 
 #### CSS Parts
 
-| Part     | Element | Description                                        |
-| -------- | ------- | -------------------------------------------------- |
-| _(none)_ | —       | Cell renders a single `<slot>` with no named parts |
+| Part          | Element    | Description                                                             |
+| ------------- | ---------- | ----------------------------------------------------------------------- |
+| `tree`        | `<span>`   | Tree-control wrapper for indentation, disclosure, guide, and content    |
+| `guide`       | `<span>`   | Non-interactive hierarchy guide line                                    |
+| `toggle`      | `<button>` | Disclosure control; hidden but space-preserving on leaf rows            |
+| `toggle-icon` | `<span>`   | Chevron glyph inside the disclosure button                              |
+| `content`     | `<span>`   | Content wrapper around the default slot when the cell is `tree-control` |
 
 #### CSS Custom Properties
 
-| Property | Default | Description                           |
-| -------- | ------- | ------------------------------------- |
-| _(none)_ | —       | No component-scoped custom properties |
+| Property                    | Default                                 | Description                                            |
+| --------------------------- | --------------------------------------- | ------------------------------------------------------ |
+| `--cv-treegrid-indent-size` | `var(--cv-treegrid-child-indent, 14px)` | Horizontal indent per tree level                       |
+| `--cv-treegrid-toggle-size` | `22px`                                  | Inline/block size of the disclosure control            |
+| `--cv-treegrid-guide-color` | `var(--cv-color-border, #2a3245)`       | Hierarchy guide line color                             |
+| `--cv-treegrid-level`       | `1`                                     | Current nesting depth written by the cell from `level` |
 
 Additionally, component styles depend on theme tokens:
 
@@ -350,6 +544,9 @@ Additionally, component styles depend on theme tokens:
 | `:host`                 | `display: block`                                                       |
 | `:host([active])`       | `background: var(--cv-color-selected)`                                 |
 | `:host([selected])`     | `font-weight: 600`                                                     |
+| `:host([tree-control])` | Renders tree affordance wrapper around slotted content                 |
+| `:host([branch])`       | Shows enabled disclosure button when the row is not disabled           |
+| `:host([expanded])`     | Shows expanded disclosure icon and `aria-expanded="true"`              |
 | `:host([disabled])`     | `opacity: 0.55`                                                        |
 | `:host(:focus-visible)` | `outline: 2px solid var(--cv-color-primary)` at `outline-offset: -2px` |
 
