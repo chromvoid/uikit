@@ -24,7 +24,6 @@ import {
   CVCommandPalette,
   CVContextMenu,
   CVCopyButton,
-  CVDateTimePicker,
   CVDatePicker,
   CVDialog,
   CVDisclosure,
@@ -60,6 +59,7 @@ import {
   CVPopover,
   CVProgress,
   CVProgressRing,
+  CVQrCode,
   CVRadio,
   CVRadioGroup,
   CVSelect,
@@ -129,7 +129,6 @@ export function registerUikit(): void {
   CVCombobox.define()
   CVCodeInput.define()
   CVContextMenu.define()
-  CVDateTimePicker.define()
   CVDatePicker.define()
   CVDialog.define()
   CVDisclosure.define()
@@ -165,6 +164,7 @@ export function registerUikit(): void {
   CVPopover.define()
   CVProgress.define()
   CVProgressRing.define()
+  CVQrCode.define()
   CVRadio.define()
   CVRadioGroup.define()
   CVSelectOption.define()

@@ -37,7 +37,6 @@ export {CVComboboxGroup} from './cv-combobox-group'
 export {CVComboboxOption} from './cv-combobox-option'
 export {CVContextMenu} from './cv-context-menu'
 export {CVDisclosure} from './cv-disclosure'
-export {CVDateTimePicker} from './cv-date-time-picker'
 export {CVDatePicker} from './cv-date-picker'
 export {CVDialog} from './cv-dialog'
 export {CVDropzone} from './cv-dropzone'
@@ -110,6 +109,12 @@ export type {
   CVCopyButtonErrorEvent,
   CVCopyButtonEventMap,
 } from './cv-copy-button'
+export {
+  CVQrCode,
+  type CVQrCodeErrorCorrection,
+  type CVQrCodeLogoSize,
+  type CVQrCodeModuleShape,
+} from './cv-qr-code'
 export type {
   CVFeedEventMap,
   CVFeedExitAfterEvent,

@@ -24,7 +24,6 @@ declare global {
     'cv-command-palette': import('./cv-command-palette').CVCommandPalette
     'cv-context-menu': import('./cv-context-menu').CVContextMenu
     'cv-copy-button': import('./cv-copy-button').CVCopyButton
-    'cv-date-time-picker': import('./cv-date-time-picker').CVDateTimePicker
     'cv-date-picker': import('./cv-date-picker').CVDatePicker
     'cv-dialog': import('./cv-dialog').CVDialog
     'cv-dropzone': import('./cv-dropzone').CVDropzone
@@ -60,6 +59,7 @@ declare global {
     'cv-popover': import('./cv-popover').CVPopover
     'cv-progress': import('./cv-progress').CVProgress
     'cv-progress-ring': import('./cv-progress-ring').CVProgressRing
+    'cv-qr-code': import('./cv-qr-code').CVQrCode
     'cv-radio': import('./cv-radio').CVRadio
     'cv-radio-group': import('./cv-radio-group').CVRadioGroup
     'cv-select': import('./cv-select').CVSelect
