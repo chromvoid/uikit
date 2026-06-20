@@ -103,6 +103,29 @@ describe('cv-treeview', () => {
       expect(tree.getAttribute('value')).toBe(tree.value)
     })
 
+    it('uses declarative cv-treeitem value attributes when building the tree model', async () => {
+      const tree = document.createElement('cv-treeview') as CVTreeview
+      tree.innerHTML = `
+        <cv-treeitem value="root" label="Root">
+          <cv-treeitem value="child" label="Child"></cv-treeitem>
+        </cv-treeitem>
+      `
+      document.body.append(tree)
+      await settle(tree)
+
+      tree.expandedValues = ['root']
+      await settle(tree)
+
+      tree.value = 'child'
+      await settle(tree)
+
+      const root = tree.querySelector('cv-treeitem[value="root"]') as CVTreeItem
+      const child = tree.querySelector('cv-treeitem[value="child"]') as CVTreeItem
+      expect(root.expanded).toBe(true)
+      expect(child.selected).toBe(true)
+      expect(tree.value).toBe('child')
+    })
+
     it('selection-mode attribute reflects property', async () => {
       const tree = await createTree([], {selectionMode: 'multiple'})
       expect(tree.getAttribute('selection-mode')).toBe('multiple')
@@ -832,9 +855,7 @@ describe('cv-treeview', () => {
     })
 
     it('adding a nested subtree triggers a rebuild (no phantom nodes / stale setsize)', async () => {
-      const tree = await createTree([
-        createItem('a', 'A', {children: [createItem('a1', 'A1')]}),
-      ])
+      const tree = await createTree([createItem('a', 'A', {children: [createItem('a1', 'A1')]})])
       tree.expandedValues = ['a']
       await settle(tree)
 

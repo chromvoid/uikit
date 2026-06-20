@@ -173,7 +173,7 @@ export class CVTreeview extends ReatomLitElement {
   }
 
   private ensureItemValue(item: CVTreeItem, index: number): string {
-    const normalized = item.value?.trim()
+    const normalized = item.value?.trim() || item.getAttribute('value')?.trim()
     if (normalized) return normalized
 
     const fallback = `item-${index + 1}`

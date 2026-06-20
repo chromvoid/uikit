@@ -40,9 +40,9 @@ export class CVTreeItem extends LitElement {
 
   constructor() {
     super()
-    this.value = ''
-    this.label = ''
-    this.disabled = false
+    this.value = this.getAttribute('value') ?? ''
+    this.label = this.getAttribute('label') ?? ''
+    this.disabled = this.hasAttribute('disabled')
     this.active = false
     this.selected = false
     this.expanded = false
