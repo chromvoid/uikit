@@ -654,8 +654,7 @@ body::after {
 .component-card p,
 .uikit-stat-label,
 .uikit-architecture-step p,
-.uikit-callout p,
-.live-demo-script-note {
+.uikit-callout p {
   color: var(--docs-text-muted);
 }
 
@@ -1316,50 +1315,29 @@ cv-card.catalog-card::part(footer) {
   gap: 12px;
 }
 
-.live-demo-header {
-  display: grid;
-  gap: 12px;
-}
-
 .catalog-stat-body,
-.catalog-card-body,
-.live-demo-body {
+.catalog-card-body {
   display: grid;
   gap: 16px;
 }
 
 .live-demo-body {
+  display: grid;
+  gap: 0;
   position: relative;
 }
 
 .live-demo-body--frame-pending::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  border: 1px solid var(--docs-border);
-  border-radius: 14px;
-  background:
-    linear-gradient(180deg, rgba(11, 18, 29, 0.96), rgba(8, 14, 23, 0.96)),
-    radial-gradient(circle at top left, rgba(125, 214, 255, 0.08), transparent 34%);
-  pointer-events: none;
+  content: none;
 }
 
 .catalog-stat-body {
   gap: 8px;
 }
 
-.catalog-card-heading,
-.live-demo-heading {
+.catalog-card-heading {
   display: grid;
   gap: 10px;
-}
-
-.live-demo-meta {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  align-items: center;
 }
 
 .catalog-card .components-title {
@@ -1398,46 +1376,22 @@ cv-card.catalog-card::part(footer) {
 
 .live-demo-card {
   display: grid;
-  gap: 16px;
+  gap: 0;
   min-inline-size: 0;
   max-inline-size: 100%;
   margin: 24px 0;
-  padding: 18px;
-  border: 1px solid rgba(118, 181, 222, 0.18);
-  border-radius: 16px;
-  background: linear-gradient(180deg, rgba(16, 25, 39, 0.96), rgba(8, 14, 23, 0.96));
-  color: #eef5ff;
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.03),
-    var(--docs-shadow);
-}
-
-.live-demo-card--preview-only {
-  gap: 0;
   padding: 0;
   border: 0;
   border-radius: 0;
   background: transparent;
+  color: #eef5ff;
   box-shadow: none;
-}
-
-.live-demo-card--preview-only .live-demo-body {
-  gap: 0;
-}
-
-.live-demo-card--preview-only .live-demo-body--frame-pending::before {
-  content: none;
-}
-
-.live-demo-card--preview-only .live-demo-frame {
-  border: 0;
-  border-radius: 0;
-  background: transparent;
 }
 
 .live-demo-footer {
   min-inline-size: 0;
   max-inline-size: 100%;
+  margin-block-start: 12px;
   color: rgba(190, 206, 226, 0.78);
 }
 
@@ -1447,9 +1401,9 @@ cv-card.catalog-card::part(footer) {
   display: block;
   inline-size: 100%;
   min-inline-size: 0;
-  border: 1px solid var(--docs-border);
-  border-radius: 14px;
-  background: rgba(8, 14, 23, 0.96);
+  border: 0;
+  border-radius: 0;
+  background: transparent;
   color-scheme: dark;
   opacity: 0;
   transition: opacity 140ms ease;
@@ -1463,10 +1417,6 @@ cv-card.catalog-card::part(footer) {
 
 .live-demo-frame--ready {
   opacity: 1;
-}
-
-.live-demo-script-note {
-  margin: 0;
 }
 
 cv-disclosure.live-demo-source:not(:defined) > :not([slot='trigger']) {

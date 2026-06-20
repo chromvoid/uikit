@@ -176,6 +176,7 @@ declare global {
     'cv-table-row-slotchange': import('./cv-table-row').CVTableRowSlotchangeEvent
     'cv-thumbnail-metrics': import('./cv-image-viewer').CVImageViewerThumbnailMetricsEvent
     'cv-treegrid-row-slotchange': import('./cv-treegrid-row').CVTreegridRowSlotchangeEvent
+    'cv-treegrid-row-toggle': import('./cv-treegrid-cell').CVTreegridRowToggleEvent
     'cv-treeitem-toggle': import('./cv-treeitem').CVTreeItemToggleEvent
     'cv-step-select': CustomEvent<import('./cv-steps').CVStepSelectDetail>
   }

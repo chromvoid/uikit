@@ -181,6 +181,11 @@ export type {
   CVTextareaInputEvent,
   CVTextareaValueDetail,
 } from './cv-textarea'
+export type {
+  CVTreegridCellEventMap,
+  CVTreegridRowToggleDetail,
+  CVTreegridRowToggleEvent,
+} from './cv-treegrid-cell'
 export type {CVTreegridRowEventMap, CVTreegridRowSlotchangeEvent} from './cv-treegrid-row'
 export type {CVTreeItemEventMap, CVTreeItemToggleDetail, CVTreeItemToggleEvent} from './cv-treeitem'
 export {CVListbox} from './cv-listbox'

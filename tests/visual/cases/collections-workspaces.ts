@@ -202,13 +202,15 @@ export const collectionsWorkspacesCases: readonly UikitVisualCase[] = [
     states: ['columns', 'expanded-branch', 'selected-row', 'active-cell', 'disabled-row', 'children'],
     requiredSelectors: [
       'cv-treegrid[data-visual-id="tree"] [part="columnheader"]',
+      'cv-treegrid[data-visual-id="tree"] cv-treegrid-cell[data-visual-id="root-name"] [part="toggle"]',
       'cv-treegrid[data-visual-id="tree"] cv-treegrid-row[data-visual-id="child-a"]',
+      'cv-treegrid[data-visual-id="tree"] cv-treegrid-row[data-visual-id="grandchild-a"]',
       'cv-treegrid[data-visual-id="tree"] cv-treegrid-cell[data-visual-id="root-name"][active]',
     ],
     html: `
       <div class="visual-wide-row">
         <cv-treegrid data-visual-id="tree" aria-label="Vault treegrid" selection-mode="multiple">
-          <cv-treegrid-column value="name" label="Name"></cv-treegrid-column>
+          <cv-treegrid-column value="name" label="Name" cell-role="rowheader"></cv-treegrid-column>
           <cv-treegrid-column value="status" label="Status"></cv-treegrid-column>
           <cv-treegrid-row data-visual-id="root-row" value="root" index="1">
             <cv-treegrid-cell data-visual-id="root-name" column="name">Workspace</cv-treegrid-cell>
@@ -216,8 +218,12 @@ export const collectionsWorkspacesCases: readonly UikitVisualCase[] = [
             <cv-treegrid-row data-visual-id="child-a" slot="children" value="child-a" index="2">
               <cv-treegrid-cell column="name">Notes</cv-treegrid-cell>
               <cv-treegrid-cell column="status"><cv-badge variant="success">Synced</cv-badge></cv-treegrid-cell>
+              <cv-treegrid-row data-visual-id="grandchild-a" slot="children" value="grandchild-a" index="3">
+                <cv-treegrid-cell column="name">OTP seeds</cv-treegrid-cell>
+                <cv-treegrid-cell column="status"><cv-badge variant="warning">Rotating</cv-badge></cv-treegrid-cell>
+              </cv-treegrid-row>
             </cv-treegrid-row>
-            <cv-treegrid-row data-visual-id="child-b" slot="children" value="child-b" index="3" disabled>
+            <cv-treegrid-row data-visual-id="child-b" slot="children" value="child-b" index="4" disabled>
               <cv-treegrid-cell column="name" disabled>Archive</cv-treegrid-cell>
               <cv-treegrid-cell column="status">Disabled</cv-treegrid-cell>
             </cv-treegrid-row>
@@ -239,10 +245,8 @@ export const collectionsWorkspacesCases: readonly UikitVisualCase[] = [
       const rootValue = rootRow?.value || rootRow?.getAttribute('value') || 'root'
       const rootColumn = rootCell?.column || rootCell?.getAttribute('column') || 'name'
 
-      tree.expandedValues = [rootValue]
-      await waitForElementUpdate(tree)
-
       tree.selectedValues = [rootValue]
+      tree.expandedValues = [rootValue, 'child-a']
       await waitForElementUpdate(tree)
 
       tree.value = `${rootValue}::${rootColumn}`

@@ -32,7 +32,7 @@ function installFrameStyles(): void {
     body {
       min-block-size: 100%;
       margin: 0;
-      background: #070d16;
+      background: transparent;
       color: #eef5ff;
       font-family:
         Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;

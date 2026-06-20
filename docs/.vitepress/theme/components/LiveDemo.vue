@@ -72,9 +72,7 @@ function decodeBase64Utf8(value: string): string {
 
 const decoded = computed(() => decodeBase64Utf8(props.code))
 const highlightedHtml = computed(() => decodeBase64Utf8(props.highlighted))
-const hasScript = computed(() => /<script[\s>]/i.test(decoded.value))
 const isInline = computed(() => /\sdata-live-demo-inline(?:[\s=>]|$)/i.test(decoded.value))
-const isPreviewOnly = computed(() => /\sdata-live-demo-preview-only(?:[\s=>]|$)/i.test(decoded.value))
 const minFrameHeight = computed(() => {
   const match = decoded.value.match(/\sdata-live-demo-height=["']?(\d{2,4})["']?/i)
   const parsedHeight = Number.parseInt(match?.[1] ?? '', 10)
@@ -466,26 +464,13 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <section
-    class="live-demo-card"
-    :class="{'live-demo-card--preview-only': isPreviewOnly}"
-    aria-label="Component live demo"
-  >
-    <header v-if="!isPreviewOnly" class="live-demo-header">
-      <div class="live-demo-meta">
-        <cv-badge variant="primary" pill size="small">Live demo</cv-badge>
-        <cv-badge :variant="hasScript ? 'primary' : 'success'" pill size="small">
-          {{ hasScript ? 'Interactive preview' : 'Static preview' }}
-        </cv-badge>
-      </div>
-    </header>
-
+  <section class="live-demo-card" aria-label="Component live demo">
     <div class="live-demo-body" :class="{'live-demo-body--frame-pending': !isInline && !frameReady}">
       <div v-if="!isInline" ref="frameHost" class="live-demo-frame-host" />
       <div v-else ref="container" class="live-demo-preview" />
     </div>
 
-    <footer v-if="!isPreviewOnly" class="live-demo-footer">
+    <footer class="live-demo-footer">
       <cv-disclosure class="live-demo-source">
         <span slot="trigger">View source</span>
         <div v-html="highlightedHtml" />
