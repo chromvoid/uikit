@@ -240,7 +240,10 @@
 }
 
 .live-demo-preview--frame:has([data-live-demo-height]) {
-  min-block-size: 100dvh;
+  min-block-size: 100%;
+}
+
+.live-demo-preview--frame:has(.bottom-sheet-demo-surface) {
   overflow: hidden;
   padding: 0;
   background: transparent;
