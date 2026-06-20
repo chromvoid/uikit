@@ -147,37 +147,154 @@ Badge is non-interactive. No `input`, `change`, or custom events are emitted.
 ## Usage
 
 ```html
-<cv-badge>Default</cv-badge>
+<div class="badge-demo-shell" data-demo="badge" data-live-demo-height="720">
+  <section class="badge-demo-hero" aria-labelledby="badge-demo-title">
+    <div class="badge-demo-copy">
+      <span class="badge-demo-kicker">Passive status</span>
+      <h3 id="badge-demo-title">Use badges for state, counts, and compact risk labels.</h3>
+      <p>
+        Badge stays non-interactive: it can announce dynamic changes, mark decorative labels, or collapse into
+        a dot without becoming a chip, button, or filter control.
+      </p>
+    </div>
 
-<cv-badge variant="primary">New</cv-badge>
+    <dl class="badge-demo-metrics" aria-label="Badge contract highlights">
+      <div>
+        <dt>Interaction</dt>
+        <dd>none</dd>
+      </div>
+      <div>
+        <dt>Live region</dt>
+        <dd>opt-in with dynamic</dd>
+      </div>
+      <div>
+        <dt>Shapes</dt>
+        <dd>label / pill / dot</dd>
+      </div>
+    </dl>
+  </section>
 
-<cv-badge variant="success">Active</cv-badge>
+  <section class="badge-demo-board" aria-label="Vault state badge examples">
+    <div class="badge-demo-record">
+      <div class="badge-demo-record-head">
+        <div>
+          <span>Vault surface</span>
+          <strong>travel-profile.visible</strong>
+        </div>
+        <cv-badge variant="success" pill>verified</cv-badge>
+      </div>
 
-<cv-badge variant="warning">Pending</cv-badge>
+      <div class="badge-demo-row">
+        <div>
+          <span>Visible layer</span>
+          <strong>Decoy workspace shown during border review</strong>
+        </div>
+        <cv-badge variant="primary" pill>
+          <span class="badge-demo-mark" slot="prefix">V</span>
+          exposed
+        </cv-badge>
+      </div>
 
-<cv-badge variant="danger">Error</cv-badge>
+      <div class="badge-demo-row">
+        <div>
+          <span>Hidden layer</span>
+          <strong>Sealed core mounted only after hardware trust check</strong>
+        </div>
+        <cv-badge variant="neutral" pill>not in visible route</cv-badge>
+      </div>
 
-<cv-badge variant="danger" dot></cv-badge>
+      <div class="badge-demo-row badge-demo-row--warning">
+        <div>
+          <span>Review queue</span>
+          <strong>Two entries need policy confirmation</strong>
+        </div>
+        <cv-badge variant="warning" dynamic pill>2 pending</cv-badge>
+      </div>
 
-<cv-badge variant="primary" dot pulse aria-label="New notifications"></cv-badge>
+      <div class="badge-demo-row badge-demo-row--danger">
+        <div>
+          <span>Relay state</span>
+          <strong>Remote write disabled by local policy</strong>
+        </div>
+        <cv-badge variant="danger" pill>
+          blocked
+          <span class="badge-demo-mark" slot="suffix">!</span>
+        </cv-badge>
+      </div>
+    </div>
 
-<cv-badge variant="primary" pill>Badge</cv-badge>
+    <aside class="badge-demo-panel" aria-label="Status dot examples">
+      <div class="badge-demo-panel-head">
+        <span class="badge-demo-kicker">Dot mode</span>
+        <h4>When a label is already nearby, use a labelled dot.</h4>
+      </div>
 
-<cv-badge variant="success" size="small">3</cv-badge>
+      <div class="badge-demo-dot-list">
+        <div>
+          <cv-badge variant="success" dot aria-label="Synced"></cv-badge>
+          <span>Synced to local index</span>
+        </div>
+        <div>
+          <cv-badge variant="primary" dot pulse aria-label="New vault events"></cv-badge>
+          <span>New vault events</span>
+        </div>
+        <div>
+          <cv-badge variant="warning" dot aria-label="Needs review"></cv-badge>
+          <span>Needs policy review</span>
+        </div>
+        <div>
+          <cv-badge variant="danger" dot pulse aria-label="Critical relay block"></cv-badge>
+          <span>Relay block active</span>
+        </div>
+      </div>
+    </aside>
+  </section>
 
-<cv-badge variant="danger" size="large">99+</cv-badge>
+  <section class="badge-demo-section" aria-labelledby="badge-demo-variants-title">
+    <div class="badge-demo-section-header">
+      <span class="badge-demo-kicker">Variants and sizes</span>
+      <h4 id="badge-demo-variants-title">One component covers passive labels, counts, and semantic tone.</h4>
+    </div>
 
-<cv-badge dynamic variant="primary">5</cv-badge>
-
-<cv-badge decorative variant="neutral">Info</cv-badge>
-
-<cv-badge variant="primary">
-  <icon-circle slot="prefix"></icon-circle>
-  Online
-</cv-badge>
-
-<cv-badge variant="danger">
-  Alerts
-  <icon-bell slot="suffix"></icon-bell>
-</cv-badge>
+    <div class="badge-demo-matrix" aria-label="Badge variants and size examples">
+      <div>
+        <span>Neutral</span>
+        <cv-badge variant="neutral">Default</cv-badge>
+        <cv-badge variant="neutral" pill>Muted pill</cv-badge>
+        <cv-badge variant="neutral" pill decorative>Decorative</cv-badge>
+        <cv-badge variant="neutral" dot aria-label="Neutral dot"></cv-badge>
+      </div>
+      <div>
+        <span>Primary</span>
+        <cv-badge variant="primary">New</cv-badge>
+        <cv-badge variant="primary" pill>Visible</cv-badge>
+        <cv-badge variant="primary" dot aria-label="Primary dot"></cv-badge>
+      </div>
+      <div>
+        <span>Success</span>
+        <cv-badge variant="success">Paired</cv-badge>
+        <cv-badge variant="success" pill>Verified</cv-badge>
+        <cv-badge variant="success" dot aria-label="Success dot"></cv-badge>
+      </div>
+      <div>
+        <span>Warning</span>
+        <cv-badge variant="warning">Pending</cv-badge>
+        <cv-badge variant="warning" pill>Needs review</cv-badge>
+        <cv-badge variant="warning" dot aria-label="Warning dot"></cv-badge>
+      </div>
+      <div>
+        <span>Danger</span>
+        <cv-badge variant="danger">Blocked</cv-badge>
+        <cv-badge variant="danger" pill>Threat</cv-badge>
+        <cv-badge variant="danger" dot aria-label="Danger dot"></cv-badge>
+      </div>
+      <div>
+        <span>Size</span>
+        <cv-badge variant="primary" size="small">3</cv-badge>
+        <cv-badge variant="primary">12</cv-badge>
+        <cv-badge variant="primary" size="large" pill>99+</cv-badge>
+      </div>
+    </div>
+  </section>
+</div>
 ```
