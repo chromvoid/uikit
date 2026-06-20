@@ -198,59 +198,59 @@ UIKit does not own value management, type resolution, clearable logic, or passwo
 
 ```html
 <div class="input-demo-grid">
-  <div class="input-demo-cell">
-    <span class="input-demo-label">Basic</span>
+  <cv-field class="input-demo-cell">
+    <span slot="label">Basic</span>
     <cv-input placeholder="Enter text"></cv-input>
-  </div>
+  </cv-field>
 
-  <div class="input-demo-cell">
-    <span class="input-demo-label">Value</span>
+  <cv-field class="input-demo-cell">
+    <span slot="label">Value</span>
     <cv-input value="Stored value"></cv-input>
-  </div>
+  </cv-field>
 
-  <div class="input-demo-cell">
-    <span class="input-demo-label">Clearable</span>
+  <cv-field class="input-demo-cell">
+    <span slot="label">Clearable</span>
     <cv-input clearable value="Hello world"></cv-input>
-  </div>
+  </cv-field>
 
-  <div class="input-demo-cell">
-    <span class="input-demo-label">Password</span>
+  <cv-field class="input-demo-cell">
+    <span slot="label">Password</span>
     <cv-input type="password" password-toggle placeholder="Password"></cv-input>
-  </div>
+  </cv-field>
 
-  <div class="input-demo-cell">
-    <span class="input-demo-label">Search</span>
+  <cv-field class="input-demo-cell">
+    <span slot="label">Search</span>
     <cv-input variant="filled" size="small" placeholder="Search..."></cv-input>
-  </div>
+  </cv-field>
 
-  <div class="input-demo-cell">
-    <span class="input-demo-label">Affixes</span>
+  <cv-field class="input-demo-cell">
+    <span slot="label">Affixes</span>
     <cv-input value="chromvoid">
       <span slot="prefix" aria-hidden="true">@</span>
       <span slot="suffix">.app</span>
     </cv-input>
-  </div>
+  </cv-field>
 
-  <div class="input-demo-cell">
-    <span class="input-demo-label">Disabled</span>
-    <cv-input disabled value="Cannot edit"></cv-input>
-  </div>
+  <cv-field class="input-demo-cell" disabled>
+    <span slot="label">Disabled</span>
+    <cv-input value="Cannot edit"></cv-input>
+  </cv-field>
 
-  <div class="input-demo-cell">
-    <span class="input-demo-label">Readonly</span>
+  <cv-field class="input-demo-cell">
+    <span slot="label">Readonly</span>
     <cv-input readonly value="Read only value"></cv-input>
-  </div>
+  </cv-field>
 
-  <div class="input-demo-cell">
-    <span class="input-demo-label">Email</span>
-    <cv-input type="email" required placeholder="Email address"></cv-input>
-  </div>
+  <cv-field class="input-demo-cell" required>
+    <span slot="label">Email</span>
+    <cv-input type="email" placeholder="Email address"></cv-input>
+  </cv-field>
 
-  <div class="input-demo-cell">
-    <span class="input-demo-label">Large clearable</span>
+  <cv-field class="input-demo-cell">
+    <span slot="label">Large clearable</span>
     <cv-input size="large" clearable value="Vault name">
       <span slot="clear-icon" aria-hidden="true">x</span>
     </cv-input>
-  </div>
+  </cv-field>
 </div>
 ```
