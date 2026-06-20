@@ -36,32 +36,75 @@ export const collectionsWorkspacesCases: readonly UikitVisualCase[] = [
   visualCase({
     id: 'cv-carousel/states',
     component: 'cv-carousel',
-    title: 'Carousel active slide, visible slides, paused autoplay, controls, and indicators',
-    states: ['active-slide', 'visible-slides', 'paused', 'autoplay', 'controls', 'indicators'],
+    title: 'Carousel native scroll-snap rail, icon controls, dot indicators, and mobile peeking',
+    states: [
+      'scroll-snap',
+      'active-slide',
+      'visible-slides',
+      'paused',
+      'autoplay',
+      'icon-controls',
+      'dot-indicators',
+    ],
+    viewports: ['compact', 'default'],
+    requiredSelectors: [
+      'cv-carousel[data-visual-id="snap"] [part="slides"]',
+      'cv-carousel[data-visual-id="snap"] [part~="next"] cv-icon[name="chevron-right"]',
+      'cv-carousel[data-visual-id="snap"] [part="indicator-dot"]',
+      'cv-carousel[data-visual-id="snap"][active-index="2"]',
+    ],
     html: `
-      <div class="visual-grid">
-        <cv-carousel active-index="1" visible-slides="2" autoplay paused aria-label="Highlights">
+      <div class="visual-wide-row">
+        <cv-carousel data-visual-id="snap" active-index="1" visible-slides="2" autoplay paused aria-label="Vault highlights">
           <cv-carousel-slide value="one" label="First slide">
             <div class="visual-panel">
-              <strong>First slide</strong>
-              <p>Inactive slide content.</p>
+              <strong>Threat model</strong>
+              <p>Choose which vault surface is visible before a session starts.</p>
             </div>
           </cv-carousel-slide>
           <cv-carousel-slide value="two" label="Second slide">
             <div class="visual-panel">
-              <strong>Second slide</strong>
-              <p>Active slide content.</p>
+              <strong>Device boundary</strong>
+              <p>Pair trusted hardware before opening deniable records.</p>
             </div>
           </cv-carousel-slide>
           <cv-carousel-slide value="three" label="Third slide">
             <div class="visual-panel">
-              <strong>Third slide</strong>
-              <p>Additional slide content.</p>
+              <strong>Audit window</strong>
+              <p>Review recent access without exposing hidden vault layers.</p>
+            </div>
+          </cv-carousel-slide>
+          <cv-carousel-slide value="four" label="Fourth slide">
+            <div class="visual-panel">
+              <strong>Recovery</strong>
+              <p>Keep fallback material separate from primary vault paths.</p>
             </div>
           </cv-carousel-slide>
         </cv-carousel>
       </div>
     `,
+    async afterMount(root) {
+      setIconBasePath(new URL('../../../docs/public/assets/icons/lucide', import.meta.url).toString())
+
+      const carousel = root.querySelector<HTMLElement & {updateComplete?: Promise<unknown>}>(
+        'cv-carousel[data-visual-id="snap"]',
+      )
+      if (!carousel) {
+        throw new Error('Visual case selector not found: cv-carousel[data-visual-id="snap"]')
+      }
+
+      await waitForElementUpdate(carousel)
+
+      const next = carousel.shadowRoot?.querySelector<HTMLButtonElement>('[part~="next"]')
+      if (!next) {
+        throw new Error(
+          'Visual case shadow control not found: cv-carousel[data-visual-id="snap"] [part~="next"]',
+        )
+      }
+
+      next.click()
+      await waitForElementUpdate(carousel)
+    },
   }),
   visualCase({
     id: 'cv-grid/states',
@@ -229,22 +272,36 @@ export const collectionsWorkspacesCases: readonly UikitVisualCase[] = [
   visualCase({
     id: 'cv-toolbar/states',
     component: 'cv-toolbar',
-    title: 'Toolbar horizontal, vertical, active item, disabled item, separator, wrap, and icons',
-    states: ['horizontal', 'vertical', 'active-item', 'disabled-item', 'separator', 'wrap'],
+    title: 'Toolbar command strip, vertical rail, roving active item, disabled item, separator, and wrap',
+    states: ['command-strip', 'vertical-rail', 'active-item', 'disabled-item', 'separator', 'wrap'],
+    requiredSelectors: [
+      'cv-toolbar[data-visual-id="record-tools"]',
+      'cv-toolbar[data-visual-id="record-tools"] cv-toolbar-separator',
+      'cv-toolbar[data-visual-id="inspector-tools"][orientation="vertical"]',
+    ],
     html: `
       <div class="visual-grid">
-        <cv-toolbar value="bold" wrap aria-label="Editor toolbar">
-          <cv-toolbar-item value="bold" active><strong>B</strong></cv-toolbar-item>
-          <cv-toolbar-item value="italic"><em>I</em></cv-toolbar-item>
+        <cv-toolbar data-visual-id="record-tools" value="item-1" wrap aria-label="Record tools">
+          <cv-toolbar-item value="item-1" active>
+            <strong>Mask</strong>
+          </cv-toolbar-item>
+          <cv-toolbar-item value="item-2">Reveal</cv-toolbar-item>
+          <cv-toolbar-item value="item-3">Copy</cv-toolbar-item>
           <cv-toolbar-separator></cv-toolbar-separator>
-          <cv-toolbar-item value="link">Link</cv-toolbar-item>
-          <cv-toolbar-item value="disabled" disabled>Disabled</cv-toolbar-item>
+          <cv-toolbar-item value="item-4">Audit</cv-toolbar-item>
+          <cv-toolbar-item value="item-5" disabled>Export</cv-toolbar-item>
         </cv-toolbar>
-        <cv-toolbar orientation="vertical" aria-label="Vertical toolbar">
-          <cv-toolbar-item value="one" active>One</cv-toolbar-item>
-          <cv-toolbar-item value="two">Two</cv-toolbar-item>
+
+        <cv-toolbar
+          data-visual-id="inspector-tools"
+          value="item-1"
+          orientation="vertical"
+          aria-label="Inspector tools"
+        >
+          <cv-toolbar-item value="item-1" active>Inspect</cv-toolbar-item>
+          <cv-toolbar-item value="item-2">History</cv-toolbar-item>
           <cv-toolbar-separator separator-orientation="horizontal"></cv-toolbar-separator>
-          <cv-toolbar-item value="three">Three</cv-toolbar-item>
+          <cv-toolbar-item value="item-3">Policy</cv-toolbar-item>
         </cv-toolbar>
       </div>
     `,

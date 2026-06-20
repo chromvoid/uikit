@@ -133,26 +133,200 @@ UIKit does not own navigation or focus-memory logic; headless state is the sourc
 ## Usage
 
 ```html
-<cv-toolbar aria-label="Text formatting">
-  <cv-toolbar-item value="bold">Bold</cv-toolbar-item>
-  <cv-toolbar-item value="italic">Italic</cv-toolbar-item>
-  <cv-toolbar-item value="underline">Underline</cv-toolbar-item>
-</cv-toolbar>
+<div class="toolbar-demo-shell" data-demo="toolbar" data-live-demo-preview-only>
+  <section class="toolbar-demo-hero" aria-labelledby="toolbar-demo-title">
+    <div class="toolbar-demo-copy">
+      <span class="toolbar-demo-kicker">Composite command surface</span>
+      <h3 id="toolbar-demo-title">Use toolbar when Tab should enter once and arrows move between tools.</h3>
+      <p>
+        Toolbar gives a cluster of peer commands one accessible surface:
+        <code>role="toolbar"</code>, roving <code>tabindex</code>, arrow-key movement, separators, focus
+        memory, and a controlled <code>value</code> for the active item.
+      </p>
+    </div>
 
-<cv-toolbar aria-label="Actions" wrap="false">
-  <cv-toolbar-item value="cut">Cut</cv-toolbar-item>
-  <cv-toolbar-item value="copy">Copy</cv-toolbar-item>
-  <cv-toolbar-separator></cv-toolbar-separator>
-  <cv-toolbar-item value="paste">Paste</cv-toolbar-item>
-</cv-toolbar>
+    <dl class="toolbar-demo-metrics" aria-label="Toolbar behavior summary">
+      <div>
+        <dt>Tab stop</dt>
+        <dd>one</dd>
+      </div>
+      <div>
+        <dt>Keys</dt>
+        <dd>arrows / Home / End</dd>
+      </div>
+      <div>
+        <dt>State</dt>
+        <dd>value + cv-change</dd>
+      </div>
+    </dl>
+  </section>
 
-<cv-toolbar orientation="vertical" aria-label="Tools">
-  <cv-toolbar-item value="brush">Brush</cv-toolbar-item>
-  <cv-toolbar-item value="eraser">Eraser</cv-toolbar-item>
-  <cv-toolbar-separator></cv-toolbar-separator>
-  <cv-toolbar-item value="fill">Fill</cv-toolbar-item>
-  <cv-toolbar-item value="picker" disabled>Picker</cv-toolbar-item>
-</cv-toolbar>
+  <section class="toolbar-demo-workbench" aria-labelledby="toolbar-demo-workbench-title">
+    <div class="toolbar-demo-section-header">
+      <span class="toolbar-demo-kicker">Record command strip</span>
+      <h4 id="toolbar-demo-workbench-title">
+        One toolbar can expose editing, inspection, and export tools without adding extra Tab stops
+      </h4>
+    </div>
+
+    <div class="toolbar-demo-surface">
+      <header class="toolbar-demo-surface-header">
+        <div>
+          <span class="toolbar-demo-label">Vault record</span>
+          <strong>Border checkpoint profile</strong>
+        </div>
+        <output class="toolbar-demo-state" data-toolbar-active aria-live="polite">Command strip: Mask</output>
+      </header>
+
+      <cv-toolbar class="toolbar-demo-command-strip" value="item-1" wrap aria-label="Vault record tools">
+        <cv-toolbar-item value="item-1">
+          <span class="toolbar-demo-item">
+            <span class="toolbar-demo-glyph" aria-hidden="true">M</span>
+            <span>Mask</span>
+          </span>
+        </cv-toolbar-item>
+        <cv-toolbar-item value="item-2">
+          <span class="toolbar-demo-item">
+            <span class="toolbar-demo-glyph" aria-hidden="true">R</span>
+            <span>Reveal</span>
+          </span>
+        </cv-toolbar-item>
+        <cv-toolbar-item value="item-3">
+          <span class="toolbar-demo-item">
+            <span class="toolbar-demo-glyph" aria-hidden="true">C</span>
+            <span>Copy</span>
+          </span>
+        </cv-toolbar-item>
+        <cv-toolbar-separator></cv-toolbar-separator>
+        <cv-toolbar-item value="item-4">
+          <span class="toolbar-demo-item">
+            <span class="toolbar-demo-glyph" aria-hidden="true">A</span>
+            <span>Audit</span>
+          </span>
+        </cv-toolbar-item>
+        <cv-toolbar-item value="item-5" disabled>
+          <span class="toolbar-demo-item">
+            <span class="toolbar-demo-glyph" aria-hidden="true">E</span>
+            <span>Export</span>
+          </span>
+        </cv-toolbar-item>
+      </cv-toolbar>
+
+      <div class="toolbar-demo-record" aria-label="Selected record preview">
+        <div>
+          <span>Surface</span>
+          <strong>Travel profile</strong>
+        </div>
+        <div>
+          <span>Visible state</span>
+          <strong>masked</strong>
+        </div>
+        <div>
+          <span>Audit trail</span>
+          <strong>ready</strong>
+        </div>
+      </div>
+
+      <output class="toolbar-demo-log" data-toolbar-log aria-live="polite">
+        cv-change will report the active tool after keyboard or pointer movement.
+      </output>
+    </div>
+  </section>
+
+  <section class="toolbar-demo-split" aria-labelledby="toolbar-demo-rail-title">
+    <div class="toolbar-demo-rail-panel">
+      <div class="toolbar-demo-section-header">
+        <span class="toolbar-demo-kicker">Vertical tool rail</span>
+        <h4 id="toolbar-demo-rail-title">Use orientation for side tools and dense editors</h4>
+      </div>
+
+      <cv-toolbar
+        class="toolbar-demo-rail"
+        value="item-1"
+        orientation="vertical"
+        aria-label="Inspector tools"
+      >
+        <cv-toolbar-item value="item-1">
+          <span class="toolbar-demo-item">
+            <span class="toolbar-demo-glyph" aria-hidden="true">I</span>
+            <span>Inspect</span>
+          </span>
+        </cv-toolbar-item>
+        <cv-toolbar-item value="item-2">
+          <span class="toolbar-demo-item">
+            <span class="toolbar-demo-glyph" aria-hidden="true">H</span>
+            <span>History</span>
+          </span>
+        </cv-toolbar-item>
+        <cv-toolbar-separator></cv-toolbar-separator>
+        <cv-toolbar-item value="item-3">
+          <span class="toolbar-demo-item">
+            <span class="toolbar-demo-glyph" aria-hidden="true">P</span>
+            <span>Policy</span>
+          </span>
+        </cv-toolbar-item>
+      </cv-toolbar>
+    </div>
+
+    <div class="toolbar-demo-boundary">
+      <span class="toolbar-demo-kicker">Boundary</span>
+      <h4>Toolbar is not a button group.</h4>
+      <div class="toolbar-demo-boundary-grid">
+        <div>
+          <span class="toolbar-demo-label">button-group</span>
+          <cv-button-group attached aria-label="Record actions">
+            <cv-button size="small" variant="primary">Unlock</cv-button>
+            <cv-button size="small">Lock</cv-button>
+            <cv-button size="small" variant="danger">Wipe</cv-button>
+          </cv-button-group>
+          <p>Use for independent buttons that stay normal buttons in the Tab order.</p>
+        </div>
+
+        <div>
+          <span class="toolbar-demo-label">toolbar</span>
+          <p>
+            Use for peer tools inside one command surface, where Tab enters the surface once and arrows move
+            between items.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>
+  document.querySelectorAll('.toolbar-demo-shell[data-demo="toolbar"]:not([data-ready])').forEach((shell) => {
+    shell.dataset.ready = 'true'
+    const activeOutput = shell.querySelector('[data-toolbar-active]')
+    const logOutput = shell.querySelector('[data-toolbar-log]')
+
+    const labelForValue = (toolbar, value) => {
+      const item = Array.from(toolbar.querySelectorAll('cv-toolbar-item')).find(
+        (candidate) => candidate.value === value || candidate.getAttribute('value') === value,
+      )
+      return item?.querySelector('.toolbar-demo-item span:last-child')?.textContent?.trim() || value
+    }
+
+    const bindToolbar = (selector, label) => {
+      const toolbar = shell.querySelector(selector)
+      if (!toolbar) return
+
+      toolbar.addEventListener('cv-change', (event) => {
+        const value = event.detail?.activeId || toolbar.getAttribute('value') || 'none'
+        const readableValue = labelForValue(toolbar, value)
+        if (activeOutput) {
+          activeOutput.textContent = `${label}: ${readableValue}`
+        }
+        if (logOutput) {
+          logOutput.textContent = `cv-change -> activeId "${value}" (${readableValue})`
+        }
+      })
+    }
+
+    bindToolbar('.toolbar-demo-command-strip', 'Command strip')
+    bindToolbar('.toolbar-demo-rail', 'Inspector rail')
+  })
+</script>
 ```
 
 ## Child Elements

@@ -6,7 +6,7 @@
   "fullPage": false,
   "threshold": 0.12,
   "maxDiffRatio": 0.003,
-  "auditMode": true,
+  "auditMode": false,
   "updateMode": false,
   "caseId": "cv-toolbar/states",
   "component": "cv-toolbar",
@@ -18,15 +18,15 @@
     "stageViewportOverflow": null
   },
   "states": [
-    "horizontal",
-    "vertical",
+    "command-strip",
+    "vertical-rail",
     "active-item",
     "disabled-item",
     "separator",
     "wrap"
   ],
   "theme": "light",
-  "title": "Toolbar horizontal, vertical, active item, disabled item, separator, wrap, and icons",
+  "title": "Toolbar command strip, vertical rail, roving active item, disabled item, separator, and wrap",
   "status": "missing-baseline",
   "baselinePath": "/srv/projects/chromvoid/packages/uikit/tests/visual/__visual-baselines__/cv-toolbar/cv-toolbar-states-light-default.png"
 }
