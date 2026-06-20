@@ -9,7 +9,7 @@ Container of interactive elements that provides a single tab stop and arrow-key 
 ## Usage
 
 ```html
-<div class="toolbar-demo-shell" data-demo="toolbar" data-live-demo-preview-only>
+<div class="toolbar-demo-shell" data-demo="toolbar">
   <section class="toolbar-demo-hero" aria-labelledby="toolbar-demo-title">
     <div class="toolbar-demo-copy">
       <span class="toolbar-demo-kicker">Composite command surface</span>
