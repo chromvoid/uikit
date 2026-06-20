@@ -1,19 +1,11 @@
-# cv-chip and cv-chip-group
+# cv-chip
 
-Action, removable, and selectable chip primitives.
+Compact interactive token for filters, applied facets, tags, and secondary action clusters.
 
-`cv-chip` renders one chip. `cv-chip-group` owns generic chip selection and roving focus state for a group of slotted chips.
+Use `cv-chip` when the visible token does something: activates a filter editor, toggles a value through
+`cv-chip-group`, or exposes a dedicated remove action.
 
 ## Anatomy
-
-```
-<cv-chip-group selection-mode="multiple">
-  <cv-chip value="photos">Photos</cv-chip>
-  <cv-chip value="docs" removable>Docs</cv-chip>
-</cv-chip-group>
-```
-
-`cv-chip` shadow structure:
 
 ```
 <cv-chip> (host)
@@ -26,8 +18,6 @@ Action, removable, and selectable chip primitives.
 
 ## Attributes
 
-### cv-chip
-
 | Attribute   | Type    | Default     | Description                          |
 | ----------- | ------- | ----------- | ------------------------------------ |
 | `value`     | String  | `""`        | Value used by chip-group selection   |
@@ -38,18 +28,7 @@ Action, removable, and selectable chip primitives.
 | `size`      | String  | `"medium"`  | `"small"`, `"medium"`, or `"large"`  |
 | `pill`      | Boolean | `false`     | Fully rounded chip shape             |
 
-### cv-chip-group
-
-| Attribute        | Type    | Default        | Description                                         |
-| ---------------- | ------- | -------------- | --------------------------------------------------- |
-| `selection-mode` | String  | `"none"`       | `"none"`, `"single"`, or `"multiple"`               |
-| `value`          | String  | `""`           | Single value or space-separated multiple values     |
-| `orientation`    | String  | `"horizontal"` | `"horizontal"` or `"vertical"` roving key direction |
-| `disabled`       | Boolean | `false`        | Disables group selection and child chip interaction |
-
 ## Slots
-
-`cv-chip` slots:
 
 | Slot        | Description      |
 | ----------- | ---------------- |
@@ -57,18 +36,15 @@ Action, removable, and selectable chip primitives.
 | `prefix`    | Leading content  |
 | `suffix`    | Trailing content |
 
-`cv-chip-group` has one default slot for `cv-chip` children.
-
 ## CSS Parts
 
-| Component       | Part            | Description            |
-| --------------- | --------------- | ---------------------- |
-| `cv-chip`       | `base`          | Action surface         |
-| `cv-chip`       | `prefix`        | Prefix slot wrapper    |
-| `cv-chip`       | `label`         | Default slot wrapper   |
-| `cv-chip`       | `suffix`        | Suffix slot wrapper    |
-| `cv-chip`       | `remove-button` | Remove action button   |
-| `cv-chip-group` | `base`          | Group layout container |
+| Part            | Description          |
+| --------------- | -------------------- |
+| `base`          | Action surface       |
+| `prefix`        | Prefix slot wrapper  |
+| `label`         | Default slot wrapper |
+| `suffix`        | Suffix slot wrapper  |
+| `remove-button` | Remove action button |
 
 ## Events
 
@@ -76,27 +52,131 @@ Action, removable, and selectable chip primitives.
 | ---------------- | -------------------------------------------------- | --------------------------------------- |
 | `cv-chip-action` | `{ value: string, source: "click" \| "keyboard" }` | Emitted by a chip activation            |
 | `cv-chip-remove` | `{ value: string }`                                | Emitted by a chip remove button         |
-| `cv-input`       | `{ value, changedValue, selected, source }`        | Emitted by group before/at user commit  |
-| `cv-change`      | `{ value, changedValue, selected, source }`        | Emitted by group after selection commit |
-
-`cv-chip-group` emits user events only from user interaction. Programmatic `value` updates sync selected chips without emitting events.
 
 ## Keyboard
 
 | Key           | Behavior                                   |
 | ------------- | ------------------------------------------ |
 | `Enter`/Space | Activates the focused chip                 |
-| Arrow keys    | Move roving focus according to orientation |
-| `Home`/`End`  | Move focus to first or last chip           |
+
+Arrow-key roving focus is handled by [`cv-chip-group`](./chip-group.md), not by a standalone chip.
+
+## When to use chip vs badge
+
+| Need                                                     | Use        |
+| -------------------------------------------------------- | ---------- |
+| Applied filter, selected tag, quick facet, removable tag | `cv-chip`  |
+| Passive state, count, warning label, status dot          | `cv-badge` |
+| Single or multiple selection across several chips        | `cv-chip-group` |
+
+## Behavior notes
+
+- `selected` changes the pressed state and maps to `aria-pressed`.
+- `disabled` removes the chip from tab order and blocks action/remove events.
+- `removable` adds a nested remove button that emits `cv-chip-remove` without also emitting `cv-chip-action`.
+- `value` is the stable payload consumed by events and by `cv-chip-group`.
 
 ## Usage
 
 ```html
-<cv-chip value="tag">Tag</cv-chip>
+<div class="chip-demo-shell" data-demo="chip">
+  <section class="chip-demo-hero" aria-labelledby="chip-demo-title">
+    <div class="chip-demo-copy">
+      <span class="chip-demo-kicker">Interactive token</span>
+      <h3 id="chip-demo-title">Use chips when the label is also a control.</h3>
+      <p>
+        A chip carries a stable value, optional selected state, and optional remove action in the same
+        compact surface.
+      </p>
+    </div>
 
-<cv-chip-group selection-mode="single" value="all">
-  <cv-chip value="all">All</cv-chip>
-  <cv-chip value="images">Images</cv-chip>
-  <cv-chip value="videos">Videos</cv-chip>
-</cv-chip-group>
+    <div class="chip-demo-rack" aria-label="Chip behavior examples">
+      <div class="chip-demo-cell chip-demo-cell--good">
+        <span class="chip-demo-label">Applied filter</span>
+        <cv-chip value="local" selected removable>
+          <span slot="prefix">#</span>
+          Local vault
+        </cv-chip>
+        <p>Selected token with a remove affordance.</p>
+      </div>
+
+      <div class="chip-demo-cell">
+        <span class="chip-demo-label">Quick action</span>
+        <cv-chip value="filter-rule">
+          <span slot="prefix">+</span>
+          Add rule
+        </cv-chip>
+        <p>Clickable token that can open a focused editor.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="chip-demo-section" aria-labelledby="chip-demo-states-title">
+    <div class="chip-demo-section-header">
+      <span class="chip-demo-kicker">States</span>
+      <h4 id="chip-demo-states-title">Action, selected, removable, disabled, and size variants</h4>
+    </div>
+
+    <div class="chip-demo-state-grid">
+      <div class="chip-demo-cell">
+        <span class="chip-demo-label">Action</span>
+        <cv-chip value="edit-filter">Open filter</cv-chip>
+      </div>
+
+      <div class="chip-demo-cell">
+        <span class="chip-demo-label">Selected</span>
+        <cv-chip value="work" selected>Work</cv-chip>
+      </div>
+
+      <div class="chip-demo-cell">
+        <span class="chip-demo-label">Removable</span>
+        <cv-chip value="otp" removable>OTP seeds</cv-chip>
+      </div>
+
+      <div class="chip-demo-cell">
+        <span class="chip-demo-label">Disabled</span>
+        <cv-chip value="remote" disabled>Remote sync</cv-chip>
+      </div>
+
+      <div class="chip-demo-cell">
+        <span class="chip-demo-label">Small</span>
+        <cv-chip value="small" size="small">Compact</cv-chip>
+      </div>
+
+      <div class="chip-demo-cell">
+        <span class="chip-demo-label">Large pill</span>
+        <cv-chip value="large" size="large" pill selected>Threat model</cv-chip>
+      </div>
+    </div>
+  </section>
+
+  <section class="chip-demo-section" aria-labelledby="chip-demo-events-title">
+    <div class="chip-demo-section-header">
+      <span class="chip-demo-kicker">Event contract</span>
+      <h4 id="chip-demo-events-title">Activation and removal emit different events</h4>
+    </div>
+
+    <div class="chip-demo-event-panel">
+      <div class="chip-demo-event-row" aria-label="Interactive chip event examples">
+        <cv-chip value="files" removable selected>Files</cv-chip>
+        <cv-chip value="notes">Notes</cv-chip>
+        <cv-chip value="media" removable>Media</cv-chip>
+      </div>
+      <output class="chip-demo-output" aria-live="polite">Event log appears here.</output>
+    </div>
+  </section>
+</div>
+
+<script>
+  document.querySelectorAll('.chip-demo-shell[data-demo="chip"]:not([data-ready])').forEach((shell) => {
+    shell.dataset.ready = 'true'
+    const output = shell.querySelector('.chip-demo-output')
+    shell.addEventListener('cv-chip-action', (event) => {
+      output.textContent = `cv-chip-action: ${event.detail.value} via ${event.detail.source}`
+    })
+    shell.addEventListener('cv-chip-remove', (event) => {
+      output.textContent = `cv-chip-remove: ${event.detail.value}`
+    })
+  })
+</script>
 ```
