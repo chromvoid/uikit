@@ -168,38 +168,378 @@ Keyboard events are forwarded to `actions.handleKeyDown(event)`. The return valu
 ## Usage
 
 ```html
-<!-- Basic feed -->
-<cv-feed label="Latest posts">
-  <cv-feed-article article-id="post-1">
-    <h3>First Post</h3>
-    <p>Content of the first post.</p>
-  </cv-feed-article>
-  <cv-feed-article article-id="post-2">
-    <h3>Second Post</h3>
-    <p>Content of the second post.</p>
-  </cv-feed-article>
-</cv-feed>
+<div class="feed-demo-shell" data-demo="feed" data-live-demo-height="780">
+  <section class="feed-demo-hero" aria-labelledby="feed-demo-title">
+    <div class="feed-demo-copy">
+      <span class="feed-demo-kicker">Bidirectional stream</span>
+      <h3 id="feed-demo-title">Feed emits load requests; consumers slot in new articles.</h3>
+      <p>
+        This is not virtualization. Scroll sentinels request more records, then the wrapper appends or
+        prepends <code>cv-feed-article</code> nodes while the feed exposes a busy update state.
+      </p>
+    </div>
 
-<!-- Feed with empty and error states -->
-<cv-feed label="Activity feed">
-  <div slot="empty">No activity yet.</div>
-  <div slot="error">Failed to load. Please try again.</div>
-  <div slot="loading">Loading articles...</div>
-</cv-feed>
+    <dl class="feed-demo-status" aria-label="Feed runtime state">
+      <div>
+        <dt>Loaded</dt>
+        <dd data-feed-loaded>3 articles</dd>
+      </div>
+      <div>
+        <dt>Active</dt>
+        <dd data-feed-active>Latest device handoff</dd>
+      </div>
+      <div>
+        <dt>Busy</dt>
+        <dd data-feed-busy>false</dd>
+      </div>
+      <div>
+        <dt>Last event</dt>
+        <dd data-feed-last>Ready</dd>
+      </div>
+    </dl>
+  </section>
 
-<!-- Feed with event handling for infinite scroll -->
-<cv-feed
-  label="News feed"
-  @cv-load-more="${handleLoadMore}"
-  @cv-load-newer="${handleLoadNewer}"
-  @cv-exit-after="${handleExitAfter}"
-  @cv-exit-before="${handleExitBefore}"
->
-  <cv-feed-article article-id="news-1">
-    <h3>Breaking News</h3>
-    <p>Details here.</p>
-  </cv-feed-article>
-</cv-feed>
+  <section class="feed-demo-board" aria-label="Interactive feed demo">
+    <div class="feed-demo-toolbar" aria-label="Feed demo controls">
+      <cv-button data-feed-action="newer" variant="primary">Load newer</cv-button>
+      <cv-button data-feed-action="older">Load older</cv-button>
+      <cv-button data-feed-action="error" variant="danger">Trigger error</cv-button>
+      <cv-button data-feed-action="clear">Clear error</cv-button>
+      <cv-button data-feed-action="empty">Empty</cv-button>
+      <cv-button data-feed-action="reset">Reset</cv-button>
+    </div>
+
+    <div class="feed-demo-main">
+      <div class="feed-demo-frame">
+        <button type="button" class="feed-demo-boundary" data-feed-before>Focus target before feed</button>
+
+        <div class="feed-demo-scroll-wrap">
+          <div class="feed-demo-scroll" data-feed-scroll>
+            <cv-feed class="feed-demo-feed" label="Vault activity stream">
+              <cv-empty-state
+                slot="empty"
+                headline="No activity loaded"
+                description="Use Reset or either load control to repopulate the stream."
+              ></cv-empty-state>
+              <cv-callout slot="error" variant="danger">
+                Feed failed to load. Clear the error to continue.
+              </cv-callout>
+            </cv-feed>
+          </div>
+
+          <div class="feed-demo-load-status" data-feed-load-status aria-live="polite" hidden>
+            <cv-spinner></cv-spinner>
+            <span>Loading articles...</span>
+          </div>
+        </div>
+
+        <button type="button" class="feed-demo-boundary" data-feed-after>Focus target after feed</button>
+      </div>
+
+      <aside class="feed-demo-log" aria-label="Feed event log">
+        <span class="feed-demo-label">Event log</span>
+        <ol data-feed-events aria-live="polite"></ol>
+      </aside>
+    </div>
+  </section>
+</div>
+
+<script>
+  document.querySelectorAll('.feed-demo-shell[data-demo="feed"]:not([data-ready])').forEach((shell) => {
+    shell.dataset.ready = 'true'
+
+    const feed = shell.querySelector('.feed-demo-feed')
+    const scroller = shell.querySelector('[data-feed-scroll]')
+    const beforeTarget = shell.querySelector('[data-feed-before]')
+    const afterTarget = shell.querySelector('[data-feed-after]')
+    const loadedOutput = shell.querySelector('[data-feed-loaded]')
+    const activeOutput = shell.querySelector('[data-feed-active]')
+    const busyOutput = shell.querySelector('[data-feed-busy]')
+    const lastOutput = shell.querySelector('[data-feed-last]')
+    const loadStatus = shell.querySelector('[data-feed-load-status]')
+    const loadStatusText = loadStatus?.querySelector('span')
+    const eventList = shell.querySelector('[data-feed-events]')
+
+    if (
+      !feed ||
+      !scroller ||
+      !loadedOutput ||
+      !activeOutput ||
+      !busyOutput ||
+      !lastOutput ||
+      !loadStatus ||
+      !loadStatusText ||
+      !eventList
+    ) {
+      return
+    }
+
+    const initialRecords = [
+      {
+        id: 'activity-01',
+        title: 'Latest device handoff',
+        meta: 'aria-posinset 1',
+        body: 'Desktop approved an Android USB bridge session.',
+      },
+      {
+        id: 'activity-02',
+        title: 'Muted recovery reminder',
+        meta: 'disabled article',
+        body: 'Disabled items stay in the set but are skipped by PageDown.',
+        disabled: true,
+      },
+      {
+        id: 'activity-03',
+        title: 'Encrypted archive opened',
+        meta: 'keyboard target',
+        body: 'Focus an article, then use PageDown or PageUp to move through the stream.',
+      },
+    ]
+    const newerSeed = [
+      {
+        id: 'activity-new-02',
+        title: 'Fresh sync proof received',
+        meta: 'prepended',
+        body: 'Newer entries are inserted above the current content.',
+      },
+      {
+        id: 'activity-new-01',
+        title: 'Policy changed on phone',
+        meta: 'prepended',
+        body: 'The focused article contract stays stable as positions are recalculated.',
+      },
+    ]
+    const olderSeed = [
+      {
+        id: 'activity-old-01',
+        title: 'Archive exported',
+        meta: 'appended',
+        body: 'Older entries are appended when the bottom sentinel or control requests more.',
+      },
+      {
+        id: 'activity-old-02',
+        title: 'Vault note imported',
+        meta: 'appended',
+        body: 'The feed root reports aria-busy while the wrapper simulates loading.',
+      },
+      {
+        id: 'activity-old-03',
+        title: 'Pairing challenge reviewed',
+        meta: 'appended',
+        body: 'All article positions update from the same headless contract.',
+      },
+    ]
+
+    let newerQueue = []
+    let olderQueue = []
+    let sentinelLoadArmed = false
+    let loadingDirection = null
+
+    const cloneRecords = (records) => records.map((record) => ({...record}))
+
+    const getArticleElements = () => [...feed.querySelectorAll('cv-feed-article')]
+
+    const clearArticles = () => {
+      getArticleElements().forEach((article) => article.remove())
+    }
+
+    const createArticle = (record) => {
+      const article = document.createElement('cv-feed-article')
+      article.articleId = record.id
+      article.disabled = record.disabled === true
+      article.innerHTML = `
+        <article class="feed-demo-article">
+          <div>
+            <h4>${record.title}</h4>
+            <p>${record.body}</p>
+          </div>
+          <span>${record.meta}</span>
+        </article>
+      `
+      return article
+    }
+
+    const insertRecords = (records, direction) => {
+      const fragment = document.createDocumentFragment()
+      records.forEach((record) => fragment.append(createArticle(record)))
+
+      if (direction === 'newer') {
+        feed.insertBefore(fragment, feed.querySelector('cv-feed-article'))
+        return
+      }
+
+      feed.append(fragment)
+    }
+
+    const getActiveLabel = () => {
+      const active = feed.querySelector('cv-feed-article[data-active="true"] h4')
+      return active?.textContent?.trim() || 'none'
+    }
+
+    const addEvent = (message) => {
+      const item = document.createElement('li')
+      item.textContent = message
+      lastOutput.textContent = message
+      eventList.prepend(item)
+
+      while (eventList.children.length > 5) {
+        eventList.lastElementChild?.remove()
+      }
+    }
+
+    const syncStatus = () => {
+      const count = getArticleElements().length
+      const busy = feed.busy
+        ? 'true'
+        : feed.shadowRoot?.querySelector('[part="base"]')?.getAttribute('aria-busy') || 'false'
+
+      loadedOutput.textContent = `${count} ${count === 1 ? 'article' : 'articles'}`
+      activeOutput.textContent = getActiveLabel()
+      busyOutput.textContent = busy
+    }
+
+    const scheduleStatusSync = () => {
+      requestAnimationFrame(syncStatus)
+    }
+
+    const setBusy = (direction, value) => {
+      feed.busy = value
+      scroller.toggleAttribute('data-loading', value)
+      loadStatus.hidden = !value
+      loadStatusText.textContent =
+        direction === 'newer' ? 'Prepending newer records...' : 'Appending older records...'
+      scheduleStatusSync()
+    }
+
+    const loadRecords = async (direction, source) => {
+      if (loadingDirection) {
+        addEvent(`Ignored ${source}; ${loadingDirection} load is already running.`)
+        return
+      }
+
+      const queue = direction === 'newer' ? newerQueue : olderQueue
+      const batch = queue.splice(0, 2)
+
+      if (batch.length === 0) {
+        addEvent(`No ${direction === 'newer' ? 'newer' : 'older'} records left.`)
+        return
+      }
+
+      loadingDirection = direction
+      feed.error = false
+      setBusy(direction, true)
+      addEvent(`${source}: loading ${batch.length} ${direction} records.`)
+      const previousScrollHeight = scroller.scrollHeight
+      const previousScrollTop = scroller.scrollTop
+      await new Promise((resolve) => setTimeout(resolve, 420))
+      insertRecords(batch, direction)
+      setBusy(direction, false)
+      loadingDirection = null
+      scheduleStatusSync()
+
+      if (direction === 'newer' && source.startsWith('cv-load')) {
+        requestAnimationFrame(() => {
+          scroller.scrollTop = previousScrollTop + (scroller.scrollHeight - previousScrollHeight)
+        })
+      }
+
+      if (direction === 'newer' && source === 'control') {
+        requestAnimationFrame(() => {
+          scroller.scrollTop = 0
+        })
+      }
+    }
+
+    const armSentinelLoading = () => {
+      if (loadingDirection || sentinelLoadArmed) return
+      sentinelLoadArmed = true
+      addEvent('Sentinels armed for scroll-triggered loading.')
+    }
+
+    const resetFeed = () => {
+      newerQueue = cloneRecords(newerSeed)
+      olderQueue = cloneRecords(olderSeed)
+      sentinelLoadArmed = false
+      loadingDirection = null
+      feed.error = false
+      feed.loading = false
+      feed.busy = false
+      loadStatus.hidden = true
+      scroller.removeAttribute('data-loading')
+      clearArticles()
+      insertRecords(cloneRecords(initialRecords), 'older')
+      addEvent('Reset loaded the initial feed records.')
+      scheduleStatusSync()
+      requestAnimationFrame(() => {
+        scroller.scrollTop = 0
+      })
+    }
+
+    feed.addEventListener('cv-load-more', () => {
+      if (!sentinelLoadArmed) return
+      sentinelLoadArmed = false
+      void loadRecords('older', 'cv-load-more')
+    })
+
+    feed.addEventListener('cv-load-newer', () => {
+      if (!sentinelLoadArmed) return
+      sentinelLoadArmed = false
+      void loadRecords('newer', 'cv-load-newer')
+    })
+
+    feed.addEventListener('cv-exit-before', () => {
+      addEvent('cv-exit-before moved focus before the feed.')
+      beforeTarget?.focus()
+    })
+
+    feed.addEventListener('cv-exit-after', () => {
+      addEvent('cv-exit-after moved focus after the feed.')
+      afterTarget?.focus()
+    })
+
+    feed.addEventListener('keydown', (event) => {
+      if (event.key === 'PageDown' || event.key === 'PageUp') {
+        requestAnimationFrame(() => {
+          addEvent(`${event.key} moved active article to ${getActiveLabel()}.`)
+          syncStatus()
+        })
+      }
+    })
+
+    shell.querySelectorAll('[data-feed-action]').forEach((control) => {
+      control.addEventListener('click', () => {
+        const action = control.dataset.feedAction
+
+        if (action === 'newer') void loadRecords('newer', 'control')
+        if (action === 'older') void loadRecords('older', 'control')
+        if (action === 'error') {
+          feed.error = true
+          addEvent('Error slot rendered.')
+          scheduleStatusSync()
+        }
+        if (action === 'clear') {
+          feed.error = false
+          addEvent('Error cleared.')
+          scheduleStatusSync()
+        }
+        if (action === 'empty') {
+          clearArticles()
+          feed.error = false
+          addEvent('Articles removed; empty slot rendered.')
+          scheduleStatusSync()
+        }
+        if (action === 'reset') resetFeed()
+      })
+    })
+
+    scroller.addEventListener('wheel', armSentinelLoading, {passive: true})
+    scroller.addEventListener('touchstart', armSentinelLoading, {passive: true})
+    scroller.addEventListener('pointerdown', armSentinelLoading)
+
+    resetFeed()
+    addEvent('Use the scroll area or load controls to request more articles.')
+  })
+</script>
 ```
 
 ## Child Elements
