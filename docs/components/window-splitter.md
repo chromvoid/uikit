@@ -9,40 +9,227 @@ A resizable pane separator that lets users drag or keyboard-navigate to redistri
 ## Usage
 
 ```html
-<!-- Default: horizontal separator (top/bottom split) -->
-<cv-window-splitter position="40" min="20" max="80">
-  <div slot="primary">
-    <p>Primary pane content</p>
-  </div>
-  <div slot="secondary">
-    <p>Secondary pane content</p>
-  </div>
-</cv-window-splitter>
+<div class="window-splitter-demo-shell" data-demo="window-splitter" data-live-demo-height="760">
+  <section class="window-splitter-demo-hero" aria-labelledby="window-splitter-demo-title">
+    <div class="window-splitter-demo-copy">
+      <span class="window-splitter-demo-kicker">Resizable workspace boundary</span>
+      <h3 id="window-splitter-demo-title">
+        Resize visible and hidden panes without losing the separator contract.
+      </h3>
+      <p>
+        Window splitter keeps pointer drag, keyboard resizing, snap points, ARIA separator values, and
+        committed change events on the same headless model.
+      </p>
+    </div>
 
-<!-- Vertical separator (left/right split) with snap points -->
-<cv-window-splitter
-  orientation="vertical"
-  position="50"
-  snap="25% 50% 75%"
-  snap-threshold="10"
-  aria-label="Resize panels"
->
-  <nav slot="primary">Navigation</nav>
-  <main slot="secondary">Content</main>
-</cv-window-splitter>
+    <dl class="window-splitter-demo-metrics" aria-label="Window splitter behavior summary">
+      <div>
+        <dt>Role</dt>
+        <dd>separator</dd>
+      </div>
+      <div>
+        <dt>Keys</dt>
+        <dd>arrows / Home / End</dd>
+      </div>
+      <div>
+        <dt>Snap</dt>
+        <dd>25 / 50 / 75</dd>
+      </div>
+    </dl>
+  </section>
 
-<!-- Fixed (toggle) mode -->
-<cv-window-splitter orientation="vertical" fixed position="30">
-  <aside slot="primary">Sidebar</aside>
-  <section slot="secondary">Main content</section>
-</cv-window-splitter>
+  <section class="window-splitter-demo-workbench" aria-labelledby="window-splitter-demo-workbench-title">
+    <div class="window-splitter-demo-section-header">
+      <span class="window-splitter-demo-kicker">Vault review workspace</span>
+      <h4 id="window-splitter-demo-workbench-title">
+        Drag the divider or focus it and use keyboard commands to rebalance the panes
+      </h4>
+    </div>
 
-<!-- Custom separator handle -->
-<cv-window-splitter orientation="vertical">
-  <div slot="primary">Left</div>
-  <div slot="secondary">Right</div>
-  <span slot="separator">⠿</span>
-</cv-window-splitter>
+    <div class="window-splitter-demo-toolbar" aria-label="Active splitter capabilities">
+      <span>orientation="vertical"</span>
+      <span>snap="25% 50% 75%"</span>
+      <span>cv-input + cv-change</span>
+      <span>custom handle</span>
+    </div>
+
+    <div class="window-splitter-demo-stage">
+      <cv-window-splitter
+        id="window-splitter-demo-vault"
+        orientation="vertical"
+        position="50"
+        min="0"
+        max="100"
+        step="5"
+        snap="25% 50% 75%"
+        snap-threshold="6"
+        aria-label="Resize vault review panes"
+      >
+        <section class="window-splitter-demo-pane window-splitter-demo-pane--primary" slot="primary">
+          <div class="window-splitter-demo-pane-header">
+            <span>Visible surface</span>
+            <strong>Travel profile</strong>
+          </div>
+
+          <div class="window-splitter-demo-card-list" aria-label="Visible records">
+            <article>
+              <span>Identity bundle</span>
+              <strong>Inspectable</strong>
+            </article>
+            <article>
+              <span>Border notes</span>
+              <strong>Decoy layer</strong>
+            </article>
+            <article>
+              <span>Session receipt</span>
+              <strong>Expires today</strong>
+            </article>
+          </div>
+        </section>
+
+        <section class="window-splitter-demo-pane window-splitter-demo-pane--secondary" slot="secondary">
+          <div class="window-splitter-demo-pane-header">
+            <span>Sealed core</span>
+            <strong>Hidden vault route</strong>
+          </div>
+
+          <div class="window-splitter-demo-proof-grid" aria-label="Hidden vault proof points">
+            <div>
+              <span>Namespace</span>
+              <strong>deniable</strong>
+            </div>
+            <div>
+              <span>Trust boundary</span>
+              <strong>hardware</strong>
+            </div>
+            <div>
+              <span>Reveal policy</span>
+              <strong>local only</strong>
+            </div>
+            <div>
+              <span>Audit state</span>
+              <strong>verified</strong>
+            </div>
+          </div>
+        </section>
+
+        <span class="window-splitter-demo-handle" slot="separator" aria-hidden="true">
+          <span></span>
+          <span></span>
+          <span></span>
+        </span>
+      </cv-window-splitter>
+    </div>
+
+    <div class="window-splitter-demo-status">
+      <div>
+        <output
+          class="window-splitter-demo-readout"
+          for="window-splitter-demo-vault"
+          aria-live="polite"
+          data-splitter-output
+        >
+          Primary pane: 50% | Event: ready
+        </output>
+        <meter
+          class="window-splitter-demo-meter"
+          min="0"
+          max="100"
+          value="50"
+          aria-label="Primary pane size"
+          data-splitter-meter
+        ></meter>
+      </div>
+
+      <div class="window-splitter-demo-snaps" aria-label="Snap point guide">
+        <span data-snap-value="25">25</span>
+        <span data-snap-value="50">50</span>
+        <span data-snap-value="75">75</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="window-splitter-demo-secondary" aria-labelledby="window-splitter-demo-fixed-title">
+    <div class="window-splitter-demo-section-header">
+      <span class="window-splitter-demo-kicker">Fixed toggle mode</span>
+      <h4 id="window-splitter-demo-fixed-title">
+        Use fixed when the separator switches between two committed states
+      </h4>
+    </div>
+
+    <cv-window-splitter
+      id="window-splitter-demo-fixed"
+      class="window-splitter-demo-fixed"
+      orientation="horizontal"
+      fixed
+      position="35"
+      min="0"
+      max="100"
+      aria-label="Toggle session notes panel"
+    >
+      <section class="window-splitter-demo-pane window-splitter-demo-pane--compact" slot="primary">
+        <span>Session notes</span>
+        <strong>Visible summary stays available while the lower panel toggles.</strong>
+      </section>
+      <section class="window-splitter-demo-pane window-splitter-demo-pane--compact" slot="secondary">
+        <span>Audit detail</span>
+        <strong>Focus the separator and press Enter to collapse or restore.</strong>
+      </section>
+    </cv-window-splitter>
+
+    <output
+      class="window-splitter-demo-readout"
+      for="window-splitter-demo-fixed"
+      aria-live="polite"
+      data-fixed-output
+    >
+      Fixed pane: 35% | Press Enter on separator
+    </output>
+  </section>
+</div>
+
+<script>
+  document
+    .querySelectorAll('.window-splitter-demo-shell[data-demo="window-splitter"]:not([data-ready])')
+    .forEach((shell) => {
+      shell.dataset.ready = 'true'
+
+      customElements.whenDefined('cv-window-splitter').then(async () => {
+        const mainSplitter = shell.querySelector('#window-splitter-demo-vault')
+        const fixedSplitter = shell.querySelector('#window-splitter-demo-fixed')
+        const mainOutput = shell.querySelector('[data-splitter-output]')
+        const fixedOutput = shell.querySelector('[data-fixed-output]')
+        const meter = shell.querySelector('[data-splitter-meter]')
+        const snapMarkers = [...shell.querySelectorAll('[data-snap-value]')]
+        if (!mainSplitter || !fixedSplitter || !mainOutput || !fixedOutput || !meter) return
+
+        const formatPosition = (splitter) => `${Math.round(Number(splitter.position))}%`
+
+        const syncMain = (eventName = 'ready') => {
+          const position = Number(mainSplitter.position)
+          mainOutput.textContent = `Primary pane: ${formatPosition(mainSplitter)} | Event: ${eventName}`
+          meter.value = String(position)
+          snapMarkers.forEach((marker) => {
+            const snap = Number(marker.dataset.snapValue)
+            marker.toggleAttribute('data-active', Math.abs(position - snap) <= 3)
+          })
+        }
+
+        const syncFixed = (eventName = 'ready') => {
+          fixedOutput.textContent = `Fixed pane: ${formatPosition(fixedSplitter)} | Event: ${eventName}`
+        }
+
+        mainSplitter.addEventListener('cv-input', () => syncMain('cv-input'))
+        mainSplitter.addEventListener('cv-change', () => syncMain('cv-change'))
+        fixedSplitter.addEventListener('cv-input', () => syncFixed('cv-input'))
+        fixedSplitter.addEventListener('cv-change', () => syncFixed('cv-change'))
+
+        await Promise.all([mainSplitter.updateComplete, fixedSplitter.updateComplete])
+        syncMain()
+        syncFixed()
+      })
+    })
+</script>
 ```
 
 ## Anatomy
