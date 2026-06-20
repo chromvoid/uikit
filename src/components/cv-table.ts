@@ -305,20 +305,26 @@ export class CVTable extends ReatomLitElement {
     return 'none'
   }
 
-  private resolveIndex(value: number): number | undefined {
-    if (!Number.isFinite(value) || value < 1) {
+  private resolveIndex(value: number, attributeValue?: string | null): number | undefined {
+    const fallback = Number.parseInt(this.normalizeText(attributeValue), 10)
+    const resolved = Number.isFinite(value) && value >= 1 ? value : fallback
+
+    if (!Number.isFinite(resolved) || resolved < 1) {
       return undefined
     }
 
-    return Math.floor(value)
+    return Math.floor(resolved)
   }
 
-  private resolveSpan(value: number): number | undefined {
-    if (!Number.isFinite(value) || value < 2) {
+  private resolveSpan(value: number, attributeValue?: string | null): number | undefined {
+    const fallback = Number.parseInt(this.normalizeText(attributeValue), 10)
+    const resolved = Number.isFinite(value) && value >= 2 ? value : fallback
+
+    if (!Number.isFinite(resolved) || resolved < 2) {
       return undefined
     }
 
-    return Math.floor(value)
+    return Math.floor(resolved)
   }
 
   private getColumnElements(): CVTableColumn[] {
@@ -340,7 +346,7 @@ export class CVTable extends ReatomLitElement {
   }
 
   private ensureColumnValue(column: CVTableColumn, index: number): string {
-    const normalized = column.value?.trim()
+    const normalized = this.normalizeText(column.value) || this.normalizeText(column.getAttribute('value'))
     if (normalized) return normalized
 
     const fallback = `column-${index + 1}`
@@ -349,7 +355,7 @@ export class CVTable extends ReatomLitElement {
   }
 
   private ensureRowValue(row: CVTableRow, index: number): string {
-    const normalized = row.value?.trim()
+    const normalized = this.normalizeText(row.value) || this.normalizeText(row.getAttribute('value'))
     if (normalized) return normalized
 
     const fallback = `row-${index + 1}`
@@ -358,7 +364,7 @@ export class CVTable extends ReatomLitElement {
   }
 
   private resolveCellColumnId(cell: CVTableCell, index: number): string {
-    const normalized = cell.column?.trim()
+    const normalized = this.normalizeText(cell.column) || this.normalizeText(cell.getAttribute('column'))
     if (normalized) return normalized
 
     const fallback = this.columnRecords[index]?.id ?? ''
@@ -405,8 +411,8 @@ export class CVTable extends ReatomLitElement {
 
       return {
         id,
-        index: this.resolveIndex(element.index),
-        sortable: element.sortable,
+        index: this.resolveIndex(element.index, element.getAttribute('index')),
+        sortable: element.sortable || element.hasAttribute('sortable'),
         element,
       }
     })
@@ -419,15 +425,15 @@ export class CVTable extends ReatomLitElement {
 
       const cells = this.getCellElements(row).map((cell, cellIndex) => ({
         columnId: this.resolveCellColumnId(cell, cellIndex),
-        rowHeader: cell.rowHeader,
-        colspan: this.resolveSpan(cell.colspan),
-        rowspan: this.resolveSpan(cell.rowspan),
+        rowHeader: cell.rowHeader || cell.hasAttribute('row-header'),
+        colspan: this.resolveSpan(cell.colspan, cell.getAttribute('colspan')),
+        rowspan: this.resolveSpan(cell.rowspan, cell.getAttribute('rowspan')),
         element: cell,
       }))
 
       return {
         id,
-        index: this.resolveIndex(row.index),
+        index: this.resolveIndex(row.index, row.getAttribute('index')),
         cells,
         element: row,
       }

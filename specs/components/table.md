@@ -101,6 +101,8 @@ Additionally, component styles depend on theme tokens through fallback values:
 
 Sort events (`cv-input` / `cv-change`) fire only when sort state changes due to user interaction (column header click or keyboard activation). They share the same detail shape and follow the convention where `cv-input` fires on interaction and `cv-change` fires on committed state change.
 
+`cv-table` does not reorder slotted rows by itself. Consumers own data ordering and should update row order from `cv-change` when visual sorting is needed.
+
 `cv-selection-change` fires when selection changes due to user interaction (row click, Space key, Ctrl+A). It does not fire for programmatic attribute changes.
 
 `cv-focus-change` fires when the focused cell changes during grid navigation. It does not fire for programmatic `setFocusedCell` calls.
@@ -180,69 +182,215 @@ UIKit does not own sort, selection, or navigation logic; headless state is the s
 ## Usage
 
 ```html
-<!-- Basic table -->
-<cv-table aria-label="Users">
-  <cv-table-column value="name" label="Name" sortable></cv-table-column>
-  <cv-table-column value="email" label="Email"></cv-table-column>
-  <cv-table-column value="role" label="Role"></cv-table-column>
+<div class="table-demo-shell" data-demo="table" data-live-demo-height="760">
+  <section class="table-demo-hero" aria-labelledby="table-demo-title">
+    <div class="table-demo-copy">
+      <span class="table-demo-kicker">Structured vault data</span>
+      <h3 id="table-demo-title">Use table for scan-first records, not freeform cards.</h3>
+      <p>
+        Sort state, row selection, sticky headers, density modifiers, and grid keyboard navigation all stay on
+        the same headless table contract.
+      </p>
+    </div>
 
-  <cv-table-row value="user-1">
-    <cv-table-cell column="name" row-header>Alice</cv-table-cell>
-    <cv-table-cell column="email">alice@example.com</cv-table-cell>
-    <cv-table-cell column="role">Admin</cv-table-cell>
-  </cv-table-row>
-  <cv-table-row value="user-2">
-    <cv-table-cell column="name" row-header>Bob</cv-table-cell>
-    <cv-table-cell column="email">bob@example.com</cv-table-cell>
-    <cv-table-cell column="role">Editor</cv-table-cell>
-  </cv-table-row>
-</cv-table>
+    <dl class="table-demo-metrics" aria-label="Table behavior summary">
+      <div>
+        <dt>Root</dt>
+        <dd>table / grid</dd>
+      </div>
+      <div>
+        <dt>Rows</dt>
+        <dd>multi-select</dd>
+      </div>
+      <div>
+        <dt>Keys</dt>
+        <dd>arrows + page</dd>
+      </div>
+    </dl>
+  </section>
 
-<!-- Striped, compact, bordered with sticky header -->
-<cv-table aria-label="Log entries" striped compact bordered sticky-header>
-  <cv-table-column value="timestamp" label="Time" sortable></cv-table-column>
-  <cv-table-column value="level" label="Level"></cv-table-column>
-  <cv-table-column value="message" label="Message"></cv-table-column>
+  <section class="table-demo-workbench" aria-labelledby="table-demo-workbench-title">
+    <div class="table-demo-section-header">
+      <span class="table-demo-kicker">Operational inventory</span>
+      <h4 id="table-demo-workbench-title">Sortable status table with selected vault layers</h4>
+    </div>
 
-  <cv-table-row value="log-1">
-    <cv-table-cell column="timestamp">12:01:33</cv-table-cell>
-    <cv-table-cell column="level">INFO</cv-table-cell>
-    <cv-table-cell column="message">Server started</cv-table-cell>
-  </cv-table-row>
-</cv-table>
+    <div class="table-demo-toolbar" aria-label="Active table capabilities">
+      <span>striped</span>
+      <span>compact</span>
+      <span>bordered</span>
+      <span>sticky-header</span>
+      <span>interactive</span>
+    </div>
 
-<!-- Selectable rows (multi) -->
-<cv-table aria-label="Files" selectable="multi">
-  <cv-table-column value="name" label="Name"></cv-table-column>
-  <cv-table-column value="size" label="Size"></cv-table-column>
+    <div class="table-demo-scroll">
+      <cv-table
+        id="table-demo-vaults"
+        aria-label="Vault layer inventory"
+        sort-column="layer"
+        sort-direction="ascending"
+        selectable="multi"
+        interactive
+        striped
+        compact
+        bordered
+        sticky-header
+        page-size="2"
+        total-row-count="6"
+        total-column-count="5"
+      >
+        <cv-table-column slot="columns" value="layer" label="Layer" sortable></cv-table-column>
+        <cv-table-column slot="columns" value="owner" label="Owner" sortable></cv-table-column>
+        <cv-table-column slot="columns" value="state" label="State"></cv-table-column>
+        <cv-table-column slot="columns" value="exposure" label="Exposure"></cv-table-column>
+        <cv-table-column slot="columns" value="ttl" label="TTL"></cv-table-column>
 
-  <cv-table-row value="file-1">
-    <cv-table-cell column="name">readme.md</cv-table-cell>
-    <cv-table-cell column="size">4 KB</cv-table-cell>
-  </cv-table-row>
-  <cv-table-row value="file-2">
-    <cv-table-cell column="name">index.ts</cv-table-cell>
-    <cv-table-cell column="size">12 KB</cv-table-cell>
-  </cv-table-row>
-</cv-table>
+        <cv-table-row slot="rows" value="primary-vault">
+          <cv-table-cell column="layer" row-header>Primary vault</cv-table-cell>
+          <cv-table-cell column="owner">Alex</cv-table-cell>
+          <cv-table-cell column="state"
+            ><cv-badge variant="success" size="small">Verified</cv-badge></cv-table-cell
+          >
+          <cv-table-cell column="exposure">Hidden</cv-table-cell>
+          <cv-table-cell column="ttl">30 days</cv-table-cell>
+        </cv-table-row>
+        <cv-table-row slot="rows" value="decoy-surface">
+          <cv-table-cell column="layer" row-header>Decoy surface</cv-table-cell>
+          <cv-table-cell column="owner">Traveler</cv-table-cell>
+          <cv-table-cell column="state"
+            ><cv-badge variant="primary" size="small">Visible</cv-badge></cv-table-cell
+          >
+          <cv-table-cell column="exposure">Inspectable</cv-table-cell>
+          <cv-table-cell column="ttl">Active</cv-table-cell>
+        </cv-table-row>
+        <cv-table-row slot="rows" value="relay-core">
+          <cv-table-cell column="layer" row-header>Relay core</cv-table-cell>
+          <cv-table-cell column="owner">Device</cv-table-cell>
+          <cv-table-cell column="state"
+            ><cv-badge variant="success" size="small">Paired</cv-badge></cv-table-cell
+          >
+          <cv-table-cell column="exposure">Hardware</cv-table-cell>
+          <cv-table-cell column="ttl">Session</cv-table-cell>
+        </cv-table-row>
+        <cv-table-row slot="rows" value="legal-archive">
+          <cv-table-cell column="layer" row-header>Legal archive</cv-table-cell>
+          <cv-table-cell column="owner">Counsel</cv-table-cell>
+          <cv-table-cell column="state"
+            ><cv-badge variant="warning" size="small">Review</cv-badge></cv-table-cell
+          >
+          <cv-table-cell column="exposure">Shared</cv-table-cell>
+          <cv-table-cell column="ttl">7 days</cv-table-cell>
+        </cv-table-row>
+        <cv-table-row slot="rows" value="recovery-share">
+          <cv-table-cell column="layer" row-header>Recovery share</cv-table-cell>
+          <cv-table-cell column="owner">Maria</cv-table-cell>
+          <cv-table-cell column="state"
+            ><cv-badge variant="neutral" size="small">Dormant</cv-badge></cv-table-cell
+          >
+          <cv-table-cell column="exposure">Sealed</cv-table-cell>
+          <cv-table-cell column="ttl">90 days</cv-table-cell>
+        </cv-table-row>
+        <cv-table-row slot="rows" value="expired-export">
+          <cv-table-cell column="layer" row-header>Expired export</cv-table-cell>
+          <cv-table-cell column="owner">Legacy</cv-table-cell>
+          <cv-table-cell column="state"
+            ><cv-badge variant="danger" size="small">Blocked</cv-badge></cv-table-cell
+          >
+          <cv-table-cell column="exposure">None</cv-table-cell>
+          <cv-table-cell column="ttl">Expired</cv-table-cell>
+        </cv-table-row>
+      </cv-table>
+    </div>
 
-<!-- Interactive grid with selection -->
-<cv-table aria-label="Spreadsheet" interactive selectable="multi" page-size="5">
-  <cv-table-column value="a" label="A"></cv-table-column>
-  <cv-table-column value="b" label="B"></cv-table-column>
-  <cv-table-column value="c" label="C"></cv-table-column>
+    <output class="table-demo-readout" for="table-demo-vaults" aria-live="polite">
+      Sort: layer ascending | Selected: none | Focus: awaiting grid navigation
+    </output>
+  </section>
+</div>
 
-  <cv-table-row value="row-1">
-    <cv-table-cell column="a">1</cv-table-cell>
-    <cv-table-cell column="b">2</cv-table-cell>
-    <cv-table-cell column="c">3</cv-table-cell>
-  </cv-table-row>
-  <cv-table-row value="row-2">
-    <cv-table-cell column="a">4</cv-table-cell>
-    <cv-table-cell column="b">5</cv-table-cell>
-    <cv-table-cell column="c">6</cv-table-cell>
-  </cv-table-row>
-</cv-table>
+<script>
+  document.querySelectorAll('.table-demo-shell[data-demo="table"]:not([data-ready])').forEach((shell) => {
+    shell.dataset.ready = 'true'
+
+    customElements.whenDefined('cv-table').then(async () => {
+      const table = shell.querySelector('#table-demo-vaults')
+      const readout = shell.querySelector('.table-demo-readout')
+      if (!table || !readout) return
+
+      let focusLabel = 'awaiting grid navigation'
+      const selectedLabels = new Map([
+        ['primary-vault', 'Primary vault'],
+        ['decoy-surface', 'Decoy surface'],
+        ['relay-core', 'Relay core'],
+        ['legal-archive', 'Legal archive'],
+        ['recovery-share', 'Recovery share'],
+        ['expired-export', 'Expired export'],
+      ])
+      const rowSortData = new Map([
+        ['primary-vault', {layer: 'Primary vault', owner: 'Alex'}],
+        ['decoy-surface', {layer: 'Decoy surface', owner: 'Traveler'}],
+        ['relay-core', {layer: 'Relay core', owner: 'Device'}],
+        ['legal-archive', {layer: 'Legal archive', owner: 'Counsel'}],
+        ['recovery-share', {layer: 'Recovery share', owner: 'Maria'}],
+        ['expired-export', {layer: 'Expired export', owner: 'Legacy'}],
+      ])
+      const originalRowOrder = new Map(
+        [...table.querySelectorAll('cv-table-row')].map((row, index) => [row.value, index]),
+      )
+
+      const applySort = () => {
+        const column = table.sortColumn
+        const direction = table.sortDirection
+
+        const rows = [...table.querySelectorAll('cv-table-row')]
+        if (!column || direction === 'none') {
+          rows.sort((a, b) => (originalRowOrder.get(a.value) ?? 0) - (originalRowOrder.get(b.value) ?? 0))
+          table.append(...rows)
+          return
+        }
+
+        rows.sort((a, b) => {
+          const aValue = rowSortData.get(a.value)?.[column] || ''
+          const bValue = rowSortData.get(b.value)?.[column] || ''
+          const result = aValue.localeCompare(bValue, undefined, {sensitivity: 'base'})
+          return direction === 'descending' ? -result : result
+        })
+        table.append(...rows)
+      }
+
+      const syncReadout = () => {
+        const selected = [...table.querySelectorAll('cv-table-row[selected]')]
+          .map((row) => selectedLabels.get(row.value) || row.value)
+          .join(', ')
+        const column = table.sortColumn || 'none'
+        const direction = table.sortDirection || 'none'
+        const sortLabel = column === 'none' || direction === 'none' ? 'none' : `${column} ${direction}`
+        readout.textContent = `Sort: ${sortLabel} | Selected: ${selected || 'none'} | Focus: ${focusLabel}`
+      }
+
+      table.addEventListener('cv-change', async () => {
+        applySort()
+        await table.updateComplete
+        syncReadout()
+      })
+      table.addEventListener('cv-selection-change', syncReadout)
+      table.addEventListener('cv-focus-change', (event) => {
+        const {rowIndex, columnIndex} = event.detail
+        focusLabel =
+          rowIndex == null || columnIndex == null ? 'none' : `row ${rowIndex + 1}, column ${columnIndex + 1}`
+        syncReadout()
+      })
+
+      await table.updateComplete
+      shell.querySelector('cv-table-row[value="primary-vault"]')?.click()
+      shell.querySelector('cv-table-row[value="relay-core"]')?.click()
+      await table.updateComplete
+      applySort()
+      await table.updateComplete
+      syncReadout()
+    })
+  })
+</script>
 ```
 
 ## Child Elements

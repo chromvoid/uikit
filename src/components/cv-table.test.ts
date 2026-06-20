@@ -873,6 +873,40 @@ describe('cv-table', () => {
       expect(nameCol.sortDirection).toBe('ascending')
     })
 
+    it('preserves declarative value attributes when parsed from markup', async () => {
+      const host = document.createElement('div')
+      host.innerHTML = `
+        <cv-table aria-label="Vaults" sort-column="layer" sort-direction="ascending" selectable="multi">
+          <cv-table-column slot="columns" value="layer" label="Layer" sortable></cv-table-column>
+          <cv-table-column slot="columns" value="owner" label="Owner"></cv-table-column>
+          <cv-table-row slot="rows" value="primary-vault">
+            <cv-table-cell column="layer" row-header>Primary vault</cv-table-cell>
+            <cv-table-cell column="owner">Alex</cv-table-cell>
+          </cv-table-row>
+        </cv-table>
+      `
+
+      const table = host.firstElementChild as CVTable
+      document.body.append(table)
+      await settle(table)
+
+      const layerCol = table.querySelector('cv-table-column[value="layer"]') as CVTableColumn
+      const row = table.querySelector('cv-table-row[value="primary-vault"]') as CVTableRow
+      const layerCell = table.querySelector('cv-table-cell[column="layer"]') as CVTableCell
+
+      expect(layerCol).not.toBeNull()
+      expect(layerCol.getAttribute('aria-sort')).toBe('ascending')
+      expect(layerCol.getAttribute('tabindex')).toBe('0')
+      expect(table.sortColumn).toBe('layer')
+      expect(row).not.toBeNull()
+      expect(layerCell.getAttribute('role')).toBe('rowheader')
+
+      row.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+      await settle(table)
+
+      expect(row.getAttribute('aria-selected')).toBe('true')
+    })
+
     it('cells hidden when their column is removed', async () => {
       const table = document.createElement('cv-table') as CVTable
       table.ariaLabel = 'Test'
