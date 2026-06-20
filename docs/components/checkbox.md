@@ -16,13 +16,103 @@ This document is the UIKit surface contract for Checkbox.
 ## Usage
 
 ```html
-<cv-checkbox>Accept terms</cv-checkbox>
+<div class="checkbox-demo-shell">
+  <section class="checkbox-demo-hero" aria-labelledby="checkbox-demo-title">
+    <div class="checkbox-demo-copy">
+      <span class="checkbox-demo-kicker">State contract</span>
+      <h3 id="checkbox-demo-title">Tri-state selection with form semantics</h3>
+      <p>
+        Checkbox presents boolean and indeterminate state, forwards ARIA to the interactive element, and
+        participates in native form submission when checked.
+      </p>
+    </div>
 
-<cv-checkbox checked>Remember me</cv-checkbox>
+    <dl class="checkbox-demo-metrics" aria-label="Checkbox state summary">
+      <div>
+        <dt>Toggle</dt>
+        <dd>Space / click</dd>
+      </div>
+      <div>
+        <dt>Mixed</dt>
+        <dd>aria-checked</dd>
+      </div>
+      <div>
+        <dt>Form</dt>
+        <dd>name + value</dd>
+      </div>
+    </dl>
+  </section>
 
-<cv-checkbox indeterminate>Select all (partial)</cv-checkbox>
+  <section class="checkbox-demo-section" aria-labelledby="checkbox-demo-states-title">
+    <div class="checkbox-demo-section-header">
+      <span class="checkbox-demo-kicker">Visual states</span>
+      <h4 id="checkbox-demo-states-title">Default, checked, mixed, required, read-only, disabled</h4>
+    </div>
 
-<cv-checkbox disabled>Unavailable option</cv-checkbox>
+    <div class="checkbox-demo-state-grid">
+      <div class="checkbox-demo-cell">
+        <span class="checkbox-demo-label">Unchecked</span>
+        <cv-checkbox name="export" value="logs">Export audit log</cv-checkbox>
+      </div>
+
+      <div class="checkbox-demo-cell">
+        <span class="checkbox-demo-label">Checked</span>
+        <cv-checkbox checked name="export" value="vault">Include vault manifest</cv-checkbox>
+      </div>
+
+      <div class="checkbox-demo-cell">
+        <span class="checkbox-demo-label">Indeterminate</span>
+        <cv-checkbox indeterminate name="export" value="records">Partial record selection</cv-checkbox>
+      </div>
+
+      <div class="checkbox-demo-cell">
+        <span class="checkbox-demo-label">Required</span>
+        <cv-checkbox required name="confirm" value="accepted">Operator confirmation</cv-checkbox>
+      </div>
+
+      <div class="checkbox-demo-cell">
+        <span class="checkbox-demo-label">Read-only</span>
+        <cv-checkbox read-only checked name="policy" value="locked">Policy inherited</cv-checkbox>
+      </div>
+
+      <div class="checkbox-demo-cell">
+        <span class="checkbox-demo-label">Disabled</span>
+        <cv-checkbox disabled name="storage" value="remote">Remote sync unavailable</cv-checkbox>
+      </div>
+    </div>
+  </section>
+
+  <section
+    class="checkbox-demo-section checkbox-demo-section--workflow"
+    aria-labelledby="checkbox-demo-flow-title"
+  >
+    <div class="checkbox-demo-section-header">
+      <span class="checkbox-demo-kicker">Grouped use</span>
+      <h4 id="checkbox-demo-flow-title">Bulk selection and vault setup patterns</h4>
+    </div>
+
+    <div class="checkbox-demo-workflow-grid">
+      <div class="checkbox-demo-panel">
+        <div class="checkbox-demo-toolbar">
+          <cv-checkbox indeterminate aria-label="Select visible vault entries">3 of 7 selected</cv-checkbox>
+          <span class="checkbox-demo-token">aria-checked="mixed"</span>
+        </div>
+
+        <div class="checkbox-demo-list">
+          <cv-checkbox checked name="entries" value="root-db">Database root</cv-checkbox>
+          <cv-checkbox checked name="entries" value="otp-seeds">OTP seeds</cv-checkbox>
+          <cv-checkbox name="entries" value="media-cache">Media cache</cv-checkbox>
+        </div>
+      </div>
+
+      <form class="checkbox-demo-panel checkbox-demo-form" aria-label="Vault creation checklist">
+        <cv-checkbox checked name="vault-policy" value="local-unlock">Require local unlock</cv-checkbox>
+        <cv-checkbox name="vault-policy" value="recovery-code">Generate recovery code</cv-checkbox>
+        <cv-checkbox required name="vault-policy" value="acknowledged">Acknowledge threat model</cv-checkbox>
+      </form>
+    </div>
+  </section>
+</div>
 ```
 
 ## Anatomy
@@ -37,12 +127,19 @@ This document is the UIKit surface contract for Checkbox.
 
 ## Attributes
 
-| Attribute       | Type    | Default | Description                                                    |
-| --------------- | ------- | ------- | -------------------------------------------------------------- |
-| `checked`       | Boolean | `false` | Checked state                                                  |
-| `indeterminate` | Boolean | `false` | Indeterminate state (takes precedence over `checked` visually) |
-| `disabled`      | Boolean | `false` | Prevents interaction                                           |
-| `read-only`     | Boolean | `false` | Visible but not toggleable                                     |
+| Attribute          | Type    | Default | Description                                                         |
+| ------------------ | ------- | ------- | ------------------------------------------------------------------- |
+| `name`             | String  | `""`    | Form field name                                                     |
+| `value`            | String  | `"on"`  | Submitted form value when checked                                   |
+| `checked`          | Boolean | `false` | Checked state                                                       |
+| `indeterminate`    | Boolean | `false` | Indeterminate state (takes precedence over `checked` visually)      |
+| `disabled`         | Boolean | `false` | Prevents interaction                                                |
+| `read-only`        | Boolean | `false` | Visible but not toggleable                                          |
+| `required`         | Boolean | `false` | Requires checked state for form validity                            |
+| `aria-label`       | String  | `""`    | Accessible label forwarded to the interactive checkbox element      |
+| `aria-labelledby`  | String  | `""`    | Label reference forwarded to the interactive checkbox element       |
+| `aria-describedby` | String  | `""`    | Description reference forwarded to the interactive checkbox element |
+| `tabindex`         | String  | `0`     | Tab order hint forwarded to the interactive checkbox element        |
 
 ## Slots
 
@@ -78,6 +175,9 @@ No component-specific custom properties. Styling uses design tokens:
 | `:host([checked])`       | Primary-tinted indicator border and background, solid checkmark |
 | `:host([indeterminate])` | Horizontal line checkmark (2px height, full width)              |
 | `:host([disabled])`      | Reduced opacity (`0.55`), `cursor: not-allowed`                 |
+| `:host([read-only])`     | Non-toggleable state with normal visibility                     |
+| `:host([required])`      | Required semantic state with `aria-required="true"`             |
+| `:host(:focus-visible)`  | Focus ring on the interactive checkbox element                  |
 
 ## ARIA
 
@@ -92,12 +192,21 @@ No component-specific custom properties. Styling uses design tokens:
 - User toggle transition: `indeterminate` -> `checked`.
 - Disabled or read-only checkboxes do not respond to toggle actions.
 
+## Form Behavior
+
+- `cv-checkbox` is form-associated.
+- The control contributes `name=value` only when `checked=true` and `indeterminate=false`.
+- If `value` is empty, the submitted value falls back to `"on"`.
+- `indeterminate=true` is treated as unchecked for form submission and validity.
+- `required` is valid only when the checkbox is checked and not indeterminate.
+- Form reset restores the initially captured `checked` / `indeterminate` state.
+
 ## Events
 
-| Event       | Detail                                                         | Description              |
-| ----------- | -------------------------------------------------------------- | ------------------------ |
-| `cv-input`  | `{ checked: boolean, indeterminate: boolean, value?: string }` | Fires on toggle          |
-| `cv-change` | `{ checked: boolean, indeterminate: boolean, value?: string }` | Fires when state commits |
+| Event       | Detail                                                                    | Description              |
+| ----------- | ------------------------------------------------------------------------- | ------------------------ |
+| `cv-input`  | `{ value: boolean \| "mixed", checked: boolean, indeterminate: boolean }` | Fires on toggle          |
+| `cv-change` | `{ value: boolean \| "mixed", checked: boolean, indeterminate: boolean }` | Fires when state commits |
 
 ## Migration Notes (Non-normative)
 
@@ -108,19 +217,21 @@ This section documents known terminology/payload changes and the breaking-change
 - `indeterminate` is the canonical third-state term.
 - `mixed` remains an ARIA token only (used exclusively in `aria-checked="mixed"`).
 
-### Payload change: legacy detail -> current detail
+### Payload compatibility: legacy `value` plus canonical booleans
 
-- Old (legacy docs): `{ value: boolean | "mixed", checked: boolean, mixed: boolean }`.
-- New (current contract): `{ checked: boolean, indeterminate: boolean, value?: string }`.
+- Runtime events expose `{ value: boolean | "mixed", checked: boolean, indeterminate: boolean }`.
+- `checked` and `indeterminate` are the canonical fields for new consumers.
+- `value` is a compatibility state token, not the string form value from the host `value` property.
 
 Mappings:
 
-- `value === "mixed"` or `mixed === true` -> `indeterminate=true` and `checked=false`.
-- Prefer reading `indeterminate` and `checked` instead of interpreting `value`.
+- `value === "mixed"` -> `indeterminate=true` and `checked=false`.
+- `value === true` -> `checked=true` and `indeterminate=false`.
+- `value === false` -> `checked=false` and `indeterminate=false`.
 
 ### Breaking-change communication policy
 
-This change is breaking for consumers that relied on legacy terminology (`mixed`) or the legacy event detail shape.
+Any future breaking change for consumers that rely on legacy terminology (`mixed`) or compatibility event fields must be called out here.
 
 When this contract changes in a breaking way, this section MUST explicitly document:
 
@@ -132,12 +243,12 @@ When this contract changes in a breaking way, this section MUST explicitly docum
 
 This matrix is intentionally short and exists to prevent drift between `headless-ui/specs/components/checkbox.md` and `uikit/specs/components/checkbox.md`.
 
-| Surface                      | Headless                                   | UIKit                                    |
-| ---------------------------- | ------------------------------------------ | ---------------------------------------- |
-| Canonical third-state term   | `indeterminate`                            | `indeterminate` attribute + event detail |
-| ARIA token for third state   | `aria-checked="mixed"` only                | `aria-checked="mixed"` only              |
-| State representation         | `checked:boolean`, `indeterminate:boolean` | `checked`/`indeterminate` attributes     |
-| User toggle transition       | `indeterminate` -> `checked`               | `indeterminate` -> `checked`             |
-| Disabled/read-only semantics | cannot toggle                              | cannot toggle                            |
-| Payload on user interaction  | N/A (actions/state API)                    | `{ checked, indeterminate, value? }`     |
-| Form primitives              | specified (see headless spec)              | not specified on `cv-checkbox` surface   |
+| Surface                      | Headless                                   | UIKit                                           |
+| ---------------------------- | ------------------------------------------ | ----------------------------------------------- |
+| Canonical third-state term   | `indeterminate`                            | `indeterminate` attribute + event detail        |
+| ARIA token for third state   | `aria-checked="mixed"` only                | `aria-checked="mixed"` only                     |
+| State representation         | `checked:boolean`, `indeterminate:boolean` | `checked`/`indeterminate` attributes            |
+| User toggle transition       | `indeterminate` -> `checked`               | `indeterminate` -> `checked`                    |
+| Disabled/read-only semantics | cannot toggle                              | cannot toggle                                   |
+| Payload on user interaction  | N/A (actions/state API)                    | `{ value, checked, indeterminate }`             |
+| Form primitives              | specified (see headless spec)              | form-associated via `name`, `value`, `required` |
