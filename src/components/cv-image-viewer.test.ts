@@ -70,8 +70,59 @@ afterEach(() => {
 
 describe('cv-image-viewer', () => {
   it('derives muted chrome text from the active text token', () => {
+    expect(cvImageViewerStyles.cssText).toContain('--cv-image-viewer-muted: var(--cv-color-text-muted);')
     expect(cvImageViewerStyles.cssText).toContain(
-      '--cv-image-viewer-muted: var(--cv-color-text-muted);',
+      '--cv-image-viewer-backdrop: var(--cv-color-background, #070b12);',
+    )
+    expect(cvImageViewerStyles.cssText).toContain('var(--cv-image-viewer-backdrop);')
+  })
+
+  it('uses contain-fit sizing for the main image viewport', () => {
+    expect(cvImageViewerStyles.cssText).toContain("[part='viewport'] {")
+    expect(cvImageViewerStyles.cssText).toContain("[part='image'] {")
+    expect(cvImageViewerStyles.cssText).toContain("[part='image-stage'] {")
+    expect(cvImageViewerStyles.cssText).toContain('position: absolute;')
+    expect(cvImageViewerStyles.cssText).toContain('inset: 0;')
+    expect(cvImageViewerStyles.cssText).toContain('inline-size: 100%;')
+    expect(cvImageViewerStyles.cssText).toContain('block-size: 100%;')
+    expect(cvImageViewerStyles.cssText).toContain('object-fit: contain;')
+    expect(cvImageViewerStyles.cssText).toContain('object-position: center;')
+  })
+
+  it('uses directional image transitions that respect reduced motion', () => {
+    expect(cvImageViewerStyles.cssText).toContain(
+      '--cv-image-viewer-image-transition-duration: var(--cv-duration-normal, 250ms);',
+    )
+    expect(cvImageViewerStyles.cssText).toContain(
+      "[part='image-stage'][data-transition-direction='forward'] [part='image'][data-transition-phase='current']",
+    )
+    expect(cvImageViewerStyles.cssText).toContain('@keyframes cv-image-viewer-current-forward')
+    expect(cvImageViewerStyles.cssText).toContain('@keyframes cv-image-viewer-outgoing-backward')
+    expect(cvImageViewerStyles.cssText).toMatch(
+      /@media \(prefers-reduced-motion: reduce\)[\s\S]*\[part='image-stage'\]\[data-transition-direction\] \[part='image'\]\[data-transition-phase\]\s*\{[\s\S]*animation:\s*none;/,
+    )
+    expect(cvImageViewerStyles.cssText).toMatch(
+      /@media \(prefers-reduced-motion: reduce\)[\s\S]*\[part='image'\]\[data-transition-phase='outgoing'\]\s*\{[\s\S]*display:\s*none;/,
+    )
+  })
+
+  it('uses contain-fit sizing for thumbnail rail previews', () => {
+    expect(cvImageViewerStyles.cssText).toMatch(/\[part='thumbnail'\] img\s*\{[\s\S]*object-fit:\s*contain;/)
+  })
+
+  it('positions navigation controls from tokenized part names', () => {
+    expect(cvImageViewerStyles.cssText).toContain("[part~='nav'] {")
+    expect(cvImageViewerStyles.cssText).toContain('inset-block-start: 50%;')
+    expect(cvImageViewerStyles.cssText).toContain('transform: translateY(-50%);')
+    expect(cvImageViewerStyles.cssText).not.toContain("[part='nav'] {")
+  })
+
+  it('uses a restrained selected thumbnail border instead of the text color', () => {
+    expect(cvImageViewerStyles.cssText).toMatch(
+      /\[part='thumbnail'\]\[aria-current='true'\]\s*\{[\s\S]*var\(--cv-color-primary-dark/,
+    )
+    expect(cvImageViewerStyles.cssText).not.toContain(
+      "[part='thumbnail'][aria-current='true'] {\n    border-color: var(--cv-image-viewer-text);",
     )
   })
 
@@ -132,6 +183,42 @@ describe('cv-image-viewer', () => {
     expect(closes).toEqual([{reason: 'escape'}])
   })
 
+  it('keeps Escape controlled when focus is on the internal dialog content', async () => {
+    const viewer = await mountViewer()
+    const closes: unknown[] = []
+    const dialog = viewer.shadowRoot?.querySelector('cv-dialog') as
+      | (HTMLElement & {open: boolean; updateComplete?: Promise<unknown>})
+      | null
+    const dialogContent = await getDialogContent(viewer)
+
+    expect(dialog?.open).toBe(true)
+    viewer.addEventListener('cv-close', (event) => {
+      closes.push(event.detail)
+      viewer.open = false
+    })
+
+    const event = new KeyboardEvent('keydown', {
+      key: 'Escape',
+      bubbles: true,
+      cancelable: true,
+      composed: true,
+    })
+    dialogContent.dispatchEvent(event)
+    await settle(viewer)
+
+    expect(event.defaultPrevented).toBe(true)
+    expect(closes).toEqual([{reason: 'escape'}])
+    expect(viewer.open).toBe(false)
+    expect(dialog?.open).toBe(false)
+
+    viewer.open = true
+    await settle(viewer)
+    await dialog?.updateComplete
+
+    expect(viewer.open).toBe(true)
+    expect(dialog?.open).toBe(true)
+  })
+
   it('emits programmatic committed changes without navigation input', async () => {
     const viewer = await mountViewer()
     const inputs: unknown[] = []
@@ -152,6 +239,38 @@ describe('cv-image-viewer', () => {
         source: 'programmatic',
       },
     ])
+  })
+
+  it('renders a directional current/outgoing image transition for committed navigation', async () => {
+    const viewer = await mountViewer()
+
+    viewer.currentIndex = 1
+    await settle(viewer)
+
+    const stage = viewer.shadowRoot?.querySelector<HTMLElement>('[part="image-stage"]')
+    const images = Array.from(viewer.shadowRoot?.querySelectorAll<HTMLImageElement>('[part="image"]') ?? [])
+
+    expect(stage?.dataset['transitionDirection']).toBe('forward')
+    expect(images.map((image) => image.dataset['transitionPhase'])).toEqual(['current', 'outgoing'])
+    expect(images.map((image) => image.getAttribute('src'))).toEqual(['blob:two', 'blob:one'])
+
+    const firstCurrentImage = images[0]
+    viewer.currentIndex = 2
+    await settle(viewer)
+    const restartedImages = Array.from(
+      viewer.shadowRoot?.querySelectorAll<HTMLImageElement>('[part="image"]') ?? [],
+    )
+
+    expect(stage?.dataset['transitionDirection']).toBe('forward')
+    expect(restartedImages[0]).not.toBe(firstCurrentImage)
+    expect(restartedImages.map((image) => image.dataset['transitionPhase'])).toEqual(['current', 'outgoing'])
+    expect(restartedImages.map((image) => image.getAttribute('src'))).toEqual(['blob:three', 'blob:two'])
+
+    restartedImages[0]?.dispatchEvent(new Event('animationend', {bubbles: true}))
+    await settle(viewer)
+
+    expect(stage?.dataset['transitionDirection']).toBe('none')
+    expect(viewer.shadowRoot?.querySelectorAll('[part="image"]')).toHaveLength(1)
   })
 
   it('emits action details and ignores disabled or loading actions', async () => {

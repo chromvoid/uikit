@@ -1,4 +1,5 @@
 import {nothing, type PropertyValues} from 'lit'
+import {keyed} from 'lit/directives/keyed.js'
 
 import {html} from '../reatom-lit/index.js'
 import {ReatomLitElement} from '../reatom-lit/ReatomLitElement'
@@ -96,6 +97,7 @@ export interface CVImageViewerEventMap {
 }
 
 const DEFAULT_THUMBNAIL_STEP_PX = 64
+const IMAGE_TRANSITION_FALLBACK_MS = 360
 
 type PendingNavigation = {
   index: number
@@ -164,6 +166,10 @@ export class CVImageViewer extends ReatomLitElement {
 
   private focusRestoreTarget: HTMLElement | null = null
   private pendingNavigation: PendingNavigation | null = null
+  private imageTransitionDirection: CVImageViewerNavigationDirection = 'none'
+  private imageTransitionPreviousItem: CVImageViewerItem | null = null
+  private imageTransitionTimer: ReturnType<typeof window.setTimeout> | null = null
+  private imageTransitionCycle = 0
 
   constructor() {
     super()
@@ -199,6 +205,7 @@ export class CVImageViewer extends ReatomLitElement {
       this.restoreCapturedFocus()
     }
 
+    this.resetImageTransition()
     super.disconnectedCallback()
   }
 
@@ -207,6 +214,10 @@ export class CVImageViewer extends ReatomLitElement {
 
     if (changedProperties.has('open') && this.open && changedProperties.get('open') !== true) {
       this.captureFocusRestoreTarget()
+    }
+
+    if (changedProperties.has('currentIndex')) {
+      this.prepareImageTransition(changedProperties.get('currentIndex'))
     }
   }
 
@@ -221,6 +232,7 @@ export class CVImageViewer extends ReatomLitElement {
 
     if (!this.open) {
       this.pendingNavigation = null
+      this.resetImageTransition()
       return
     }
 
@@ -349,6 +361,56 @@ export class CVImageViewer extends ReatomLitElement {
     this.dispatchEvent(new CustomEvent(name, {detail, bubbles: true, composed: true}))
   }
 
+  private prepareImageTransition(previousValue: unknown): void {
+    if (!this.open || typeof previousValue !== 'number' || this.items.length <= 1) {
+      this.resetImageTransition()
+      return
+    }
+
+    const nextIndex = this.currentItemIndex
+    const previousIndex = clampIndex(previousValue, this.items.length)
+    if (nextIndex === previousIndex) {
+      this.resetImageTransition()
+      return
+    }
+
+    const currentItem = this.items[nextIndex]
+    const previousItem = this.items[previousIndex]
+    if (!currentItem?.src || currentItem.loading || currentItem.error || !previousItem?.src) {
+      this.resetImageTransition()
+      return
+    }
+
+    this.clearImageTransitionTimer()
+    this.imageTransitionCycle += 1
+    this.imageTransitionDirection =
+      this.pendingNavigation?.index === nextIndex
+        ? this.pendingNavigation.direction
+        : getDirection(previousIndex, nextIndex)
+    this.imageTransitionPreviousItem = previousItem
+    this.imageTransitionTimer = window.setTimeout(() => {
+      this.finishImageTransition()
+    }, IMAGE_TRANSITION_FALLBACK_MS)
+  }
+
+  private clearImageTransitionTimer(): void {
+    if (!this.imageTransitionTimer) return
+    window.clearTimeout(this.imageTransitionTimer)
+    this.imageTransitionTimer = null
+  }
+
+  private resetImageTransition(): void {
+    this.clearImageTransitionTimer()
+    this.imageTransitionDirection = 'none'
+    this.imageTransitionPreviousItem = null
+  }
+
+  private finishImageTransition(): void {
+    if (this.imageTransitionDirection === 'none' && !this.imageTransitionPreviousItem) return
+    this.resetImageTransition()
+    this.requestUpdate()
+  }
+
   private dispatchClose(reason: CVImageViewerCloseReason): void {
     this.dispatchViewerEvent('cv-close', {reason})
   }
@@ -447,6 +509,12 @@ export class CVImageViewer extends ReatomLitElement {
       index: this.currentItemIndex,
       sourceUrl: image.currentSrc || image.src || null,
     })
+  }
+
+  private handleImageTransitionEnd(event: Event) {
+    if (!(event.target instanceof HTMLImageElement)) return
+    if (event.target.dataset['transitionPhase'] !== 'current') return
+    this.finishImageTransition()
   }
 
   private handleActionClick(event: Event) {
@@ -570,14 +638,49 @@ export class CVImageViewer extends ReatomLitElement {
       `
     }
 
+    const transitionDirection = this.imageTransitionDirection
+    const outgoingItem =
+      transitionDirection !== 'none' && this.imageTransitionPreviousItem?.src
+        ? this.imageTransitionPreviousItem
+        : null
+
     return html`
-      <img
-        part="image"
-        src=${item.src}
-        alt=${item.alt ?? item.title}
-        decoding="async"
-        @error=${this.handleImageError}
-      />
+      <div
+        part="image-stage"
+        data-transition-direction=${transitionDirection}
+        @animationend=${this.handleImageTransitionEnd}
+      >
+        ${keyed(
+          `current-${this.imageTransitionCycle}-${this.currentItemIndex}-${item.id}-${item.src}`,
+          html`
+            <img
+              part="image"
+              data-transition-phase="current"
+              src=${item.src}
+              alt=${item.alt ?? item.title}
+              decoding="async"
+              @error=${this.handleImageError}
+            />
+          `,
+        )}
+        ${
+          outgoingItem
+            ? keyed(
+                `outgoing-${this.imageTransitionCycle}-${outgoingItem.id}-${outgoingItem.src}`,
+                html`
+                  <img
+                    part="image"
+                    data-transition-phase="outgoing"
+                    src=${outgoingItem.src}
+                    alt=""
+                    aria-hidden="true"
+                    decoding="async"
+                  />
+                `,
+              )
+            : nothing
+        }
+      </div>
     `
   }
 
@@ -655,6 +758,7 @@ export class CVImageViewer extends ReatomLitElement {
         .closeOnOutsidePointer=${false}
         .closeOnOutsideFocus=${false}
         .modal=${true}
+        @keydown=${this.handleShellKeyDown}
       >
         <span slot="title">${title}</span>
         <section part="base" @keydown=${this.handleShellKeyDown}>
