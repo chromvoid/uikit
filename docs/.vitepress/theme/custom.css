@@ -1412,6 +1412,29 @@ cv-card.catalog-card::part(footer) {
     var(--docs-shadow);
 }
 
+.live-demo-card--preview-only {
+  gap: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.live-demo-card--preview-only .live-demo-body {
+  gap: 0;
+}
+
+.live-demo-card--preview-only .live-demo-body--frame-pending::before {
+  content: none;
+}
+
+.live-demo-card--preview-only .live-demo-frame {
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+
 .live-demo-footer {
   min-inline-size: 0;
   max-inline-size: 100%;
