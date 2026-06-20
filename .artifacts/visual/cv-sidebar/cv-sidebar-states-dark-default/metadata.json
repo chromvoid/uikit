@@ -6,7 +6,7 @@
   "fullPage": false,
   "threshold": 0.12,
   "maxDiffRatio": 0.003,
-  "auditMode": true,
+  "auditMode": false,
   "updateMode": false,
   "caseId": "cv-sidebar/states",
   "component": "cv-sidebar",

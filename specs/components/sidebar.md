@@ -178,20 +178,128 @@ Lightweight sidebar navigation item that adapts to expanded and collapsed rail m
 ## Usage
 
 ```html
-<cv-sidebar>
-  <span slot="header">Threat Model</span>
+<div class="sidebar-demo-shell">
+  <cv-sidebar class="sidebar-demo-nav" aria-label="Threat model navigation">
+    <span slot="header" class="sidebar-demo-brand">
+      <span class="sidebar-demo-brand-mark" aria-hidden="true"></span>
+      Threat Model
+    </span>
+    <cv-icon slot="toggle" name="menu" size="s" aria-hidden="true"></cv-icon>
 
-  <cv-sidebar-item href="#assets">
-    <cv-icon slot="prefix" name="database"></cv-icon>
-    Assets
-  </cv-sidebar-item>
+    <cv-sidebar-item href="#assets" active>
+      <cv-icon slot="prefix" name="database" size="s"></cv-icon>
+      Assets
+      <cv-badge slot="suffix" variant="primary" size="small">live</cv-badge>
+    </cv-sidebar-item>
 
-  <cv-sidebar-item href="#crypto" active>
-    <cv-icon slot="prefix" name="shield"></cv-icon>
-    Crypto
-    <cv-badge slot="suffix">Active</cv-badge>
-  </cv-sidebar-item>
-</cv-sidebar>
+    <cv-sidebar-item href="#trust-boundaries">
+      <cv-icon slot="prefix" name="shield-check" size="s"></cv-icon>
+      Trust boundaries
+    </cv-sidebar-item>
+
+    <cv-sidebar-item href="#deniable-vaults">
+      <cv-icon slot="prefix" name="eye" size="s"></cv-icon>
+      Deniable vaults
+    </cv-sidebar-item>
+
+    <cv-sidebar-item href="#host-state">
+      <cv-icon slot="prefix" name="activity" size="s"></cv-icon>
+      Host state
+    </cv-sidebar-item>
+
+    <cv-sidebar-item href="#out-of-scope" disabled>
+      <cv-icon slot="prefix" name="lock" size="s"></cv-icon>
+      Out of scope
+    </cv-sidebar-item>
+
+    <span slot="footer" class="sidebar-demo-status">Mode: persistent</span>
+  </cv-sidebar>
+
+  <section class="sidebar-demo-workspace" aria-label="Selected threat model section">
+    <p class="sidebar-demo-kicker">selected section</p>
+    <h3>Assets under pressure</h3>
+    <p>
+      Navigation stays persistent while the workspace explains visible assets, hidden layers, and operational
+      limits.
+    </p>
+    <dl class="sidebar-demo-proof-list">
+      <div>
+        <dt>Boundary</dt>
+        <dd>device state</dd>
+      </div>
+      <div>
+        <dt>Signal</dt>
+        <dd>active section</dd>
+      </div>
+      <div>
+        <dt>Limit</dt>
+        <dd>live host compromise</dd>
+      </div>
+    </dl>
+    <div class="sidebar-demo-mechanism">
+      <span class="sidebar-demo-label">mechanism</span>
+      <strong
+        >Navigation groups decoy and real-vault evidence without implying cryptographic separation.</strong
+      >
+    </div>
+  </section>
+</div>
+```
+
+```html
+<div class="sidebar-demo-rail">
+  <cv-sidebar collapsed size="small" aria-label="Collapsed threat model navigation">
+    <span slot="header">Threat Model</span>
+    <cv-icon slot="toggle" name="menu" size="s" aria-hidden="true"></cv-icon>
+
+    <cv-sidebar-item href="#assets" active>
+      <cv-icon slot="prefix" name="database" size="s"></cv-icon>
+      Assets
+    </cv-sidebar-item>
+    <cv-sidebar-item href="#trust-boundaries">
+      <cv-icon slot="prefix" name="shield-check" size="s"></cv-icon>
+      Trust boundaries
+    </cv-sidebar-item>
+    <cv-sidebar-item href="#deniable-vaults">
+      <cv-icon slot="prefix" name="eye" size="s"></cv-icon>
+      Deniable vaults
+    </cv-sidebar-item>
+  </cv-sidebar>
+
+  <section class="sidebar-demo-rail-copy" aria-label="Rail state summary">
+    <p class="sidebar-demo-kicker">rail state</p>
+    <h3>Compact review mode</h3>
+    <p>Section markers stay visible while the current threat-model notes use the remaining workspace.</p>
+  </section>
+</div>
+```
+
+```html
+<div class="sidebar-demo-overlay">
+  <cv-sidebar mobile inert aria-label="Mobile threat model navigation">
+    <span slot="header">Threat Model</span>
+    <cv-icon slot="toggle" name="menu" size="s" aria-hidden="true"></cv-icon>
+
+    <cv-sidebar-item href="#assets" active>
+      <cv-icon slot="prefix" name="database" size="s"></cv-icon>
+      Assets
+    </cv-sidebar-item>
+    <cv-sidebar-item href="#trust-boundaries">
+      <cv-icon slot="prefix" name="shield-check" size="s"></cv-icon>
+      Trust boundaries
+    </cv-sidebar-item>
+    <cv-sidebar-item href="#host-state">
+      <cv-icon slot="prefix" name="activity" size="s"></cv-icon>
+      Host state
+    </cv-sidebar-item>
+  </cv-sidebar>
+
+  <section class="sidebar-demo-overlay-copy" aria-label="Overlay preview workspace">
+    <p class="sidebar-demo-kicker">overlay preview</p>
+    <h3>Mobile review handoff</h3>
+    <p>The panel sits over the workspace while active assets and trust boundaries remain in context.</p>
+  </section>
+</div>
 ```
 
 ```html

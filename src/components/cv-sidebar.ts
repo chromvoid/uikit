@@ -181,6 +181,25 @@ export class CVSidebar extends ReatomLitElement {
         inline-size: var(--cv-sidebar-rail-inline-size, 56px);
       }
 
+      :host([collapsed]:not([mobile])) [part='header'] {
+        box-sizing: border-box;
+        inline-size: var(--cv-sidebar-rail-inline-size, 56px);
+        min-inline-size: 0;
+        max-inline-size: var(--cv-sidebar-rail-inline-size, 56px);
+        justify-content: center;
+        padding-inline: var(--cv-space-2, 8px);
+        overflow: hidden;
+      }
+
+      :host([collapsed]:not([mobile])) slot[name='header'] {
+        display: none;
+      }
+
+      :host([collapsed]:not([mobile])) [part='toggle'] {
+        flex: 0 0 auto;
+        margin-inline-start: 0;
+      }
+
       :host([size='small']) {
         --cv-sidebar-inline-size: 220px;
         --cv-sidebar-rail-inline-size: 48px;
