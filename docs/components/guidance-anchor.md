@@ -9,6 +9,142 @@ Lightweight semantic anchor wrapper for product guidance registration.
 ## Usage
 
 ```html
+<div class="guidance-anchor-demo-shell" data-demo="guidance-anchor" data-live-demo-height="640">
+  <section class="guidance-anchor-demo-brief" aria-labelledby="guidance-anchor-demo-title">
+    <div class="guidance-anchor-demo-copy">
+      <span class="guidance-anchor-demo-kicker">Anchor registration</span>
+      <h3 id="guidance-anchor-demo-title">Connect guidance to the real product action.</h3>
+      <p>
+        The wrapper stays visually transparent. It publishes stable metadata so an app guidance host can
+        resolve where a coach mark, inline hint, or blocked-action panel belongs.
+      </p>
+    </div>
+
+    <dl class="guidance-anchor-demo-flow" aria-label="Guidance anchor contract">
+      <div>
+        <dt>Action</dt>
+        <dd>Upload file</dd>
+      </div>
+      <div>
+        <dt>Anchor id</dt>
+        <dd>files.create-or-upload</dd>
+      </div>
+      <div>
+        <dt>Host receives</dt>
+        <dd>register event</dd>
+      </div>
+    </dl>
+  </section>
+
+  <section
+    class="guidance-anchor-demo-workspace"
+    data-guidance-demo-workspace
+    aria-label="Guided file toolbar preview"
+  ></section>
+
+  <template data-guidance-demo-template>
+    <div class="guidance-anchor-demo-product">
+      <header class="guidance-anchor-demo-toolbar">
+        <div class="guidance-anchor-demo-title">
+          <span>Files</span>
+          <strong>Secure vault</strong>
+        </div>
+
+        <div class="guidance-anchor-demo-actions" aria-label="File actions">
+          <cv-button>New folder</cv-button>
+          <cv-guidance-anchor anchor-id="files.create-or-upload" surface="files" owner="files">
+            <span class="guidance-anchor-demo-target">
+              <cv-button variant="primary" data-guidance-demo-action>Upload file</cv-button>
+            </span>
+          </cv-guidance-anchor>
+        </div>
+      </header>
+
+      <div class="guidance-anchor-demo-content">
+        <div class="guidance-anchor-demo-list" aria-label="File list preview">
+          <div>
+            <span class="guidance-anchor-demo-file">Recovery-codes.txt</span>
+            <span class="guidance-anchor-demo-meta">encrypted</span>
+          </div>
+          <div>
+            <span class="guidance-anchor-demo-file">Border-notes.md</span>
+            <span class="guidance-anchor-demo-meta">local vault</span>
+          </div>
+          <div>
+            <span class="guidance-anchor-demo-file">Client-archive.zip</span>
+            <span class="guidance-anchor-demo-meta">sealed</span>
+          </div>
+        </div>
+
+        <div class="guidance-anchor-demo-callout">
+          <span class="guidance-anchor-demo-rail" aria-hidden="true"></span>
+          <cv-guidance-panel variant="coach-mark" density="compact">
+            <span slot="icon" aria-hidden="true">i</span>
+            <span slot="title">Upload encrypted file</span>
+            <p>Anchor ready. This panel is rendered by a host after it receives the anchor registration.</p>
+            <button slot="actions" type="button" data-guidance-action="primary">Got it</button>
+            <button slot="actions" type="button" data-guidance-action="secondary">Later</button>
+          </cv-guidance-panel>
+        </div>
+      </div>
+    </div>
+  </template>
+
+  <section class="guidance-anchor-demo-inspector" aria-labelledby="guidance-anchor-demo-event-title">
+    <div>
+      <span class="guidance-anchor-demo-kicker">Observed event</span>
+      <h4 id="guidance-anchor-demo-event-title">What the app guidance host receives</h4>
+    </div>
+    <output data-guidance-demo-log aria-live="polite">Waiting for anchor registration...</output>
+    <cv-button size="small" data-guidance-demo-remount>Remount anchor</cv-button>
+  </section>
+</div>
+
+<script>
+  document
+    .querySelectorAll('.guidance-anchor-demo-shell[data-demo="guidance-anchor"]:not([data-ready])')
+    .forEach((shell) => {
+      shell.dataset.ready = 'true'
+
+      const workspace = shell.querySelector('[data-guidance-demo-workspace]')
+      const template = shell.querySelector('template[data-guidance-demo-template]')
+      const log = shell.querySelector('[data-guidance-demo-log]')
+      const remount = shell.querySelector('[data-guidance-demo-remount]')
+
+      const setLog = (message) => {
+        if (log) log.textContent = message
+      }
+
+      shell.addEventListener('guidance-anchor-register', (event) => {
+        const detail = event.detail ?? {}
+        shell.dataset.anchorState = 'registered'
+        setLog(`guidance-anchor-register -> ${detail.surface}:${detail.anchorId} (owner: ${detail.owner})`)
+      })
+
+      shell.addEventListener('guidance-anchor-unregister', (event) => {
+        const detail = event.detail ?? {}
+        shell.dataset.anchorState = 'unregistered'
+        setLog(`guidance-anchor-unregister -> ${detail.surface}:${detail.anchorId}`)
+      })
+
+      const mountAnchor = () => {
+        if (!workspace || !template) return
+        workspace.replaceChildren(template.content.cloneNode(true))
+      }
+
+      remount?.addEventListener('click', () => {
+        workspace?.replaceChildren()
+        window.setTimeout(mountAnchor, 160)
+      })
+
+      mountAnchor()
+    })
+</script>
+```
+
+Minimal registration markup:
+
+```html
 <cv-guidance-anchor anchor-id="files.create-or-upload" surface="files" owner="files">
   <button type="button">Upload</button>
 </cv-guidance-anchor>

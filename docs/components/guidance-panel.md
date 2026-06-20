@@ -7,16 +7,108 @@ Product-agnostic guidance body layout for coach marks, inline hints, warnings, a
 ## Usage
 
 ```html
-<cv-guidance-panel variant="coach-mark" density="comfortable">
-  <cv-icon slot="icon" name="sparkles"></cv-icon>
-  <span slot="title">Create your first item</span>
-  <p>Start with a password, note, file, or passkey.</p>
-  <span slot="progress">1 / 4</span>
-  <div slot="actions">
-    <cv-button>Start</cv-button>
-    <cv-button variant="ghost">Later</cv-button>
-  </div>
-</cv-guidance-panel>
+<div class="guidance-panel-demo-shell" data-demo="guidance-panel" data-live-demo-height="760">
+  <section class="guidance-panel-demo-brief" aria-labelledby="guidance-panel-demo-title">
+    <div class="guidance-panel-demo-copy">
+      <span class="guidance-panel-demo-kicker">Guidance body primitive</span>
+      <h3 id="guidance-panel-demo-title">One readable panel for every guidance placement.</h3>
+      <p>
+        Use the panel when the product needs to explain a next step, a warning, or a blocked action. The app
+        guidance host decides when and where it appears; this component keeps the message, variant, progress,
+        and actions visually consistent.
+      </p>
+    </div>
+
+    <dl class="guidance-panel-demo-contract" aria-label="Guidance panel responsibility split">
+      <div>
+        <dt>UIKit owns</dt>
+        <dd>Slots, density, variant color, and action styling.</dd>
+      </div>
+      <div>
+        <dt>Host owns</dt>
+        <dd>Placement, progress state, dismiss, snooze, and focus behavior.</dd>
+      </div>
+    </dl>
+  </section>
+
+  <section class="guidance-panel-demo-product" aria-labelledby="guidance-panel-demo-product-title">
+    <header class="guidance-panel-demo-toolbar">
+      <div>
+        <span class="guidance-panel-demo-kicker">Vault setup</span>
+        <h4 id="guidance-panel-demo-product-title">The same panel body in product context</h4>
+      </div>
+      <span class="guidance-panel-demo-status">3 placements</span>
+    </header>
+
+    <div class="guidance-panel-demo-grid">
+      <div class="guidance-panel-demo-workspace" aria-label="Guided vault setup preview">
+        <div class="guidance-panel-demo-vault-row">
+          <span>
+            <strong>Recovery key</strong>
+            <small>generated locally</small>
+          </span>
+          <span class="guidance-panel-demo-state">done</span>
+        </div>
+
+        <div class="guidance-panel-demo-vault-row guidance-panel-demo-vault-row--active">
+          <span>
+            <strong>First secret</strong>
+            <small>waiting for user action</small>
+          </span>
+          <cv-button variant="primary" size="small">Create item</cv-button>
+        </div>
+
+        <div class="guidance-panel-demo-coach-mark">
+          <span class="guidance-panel-demo-rail" aria-hidden="true"></span>
+          <cv-guidance-panel variant="coach-mark" density="comfortable">
+            <span slot="icon" aria-hidden="true">i</span>
+            <span slot="title">Create the first vault item</span>
+            <p>
+              A coach mark can sit near the action it explains while the host tracks this as step 2 of the
+              onboarding sequence.
+            </p>
+            <span slot="progress">2 / 4</span>
+            <button slot="actions" type="button" data-guidance-action="primary">Start</button>
+            <button slot="actions" type="button" data-guidance-action="secondary">Later</button>
+          </cv-guidance-panel>
+        </div>
+      </div>
+
+      <aside class="guidance-panel-demo-stack" aria-label="Guidance variants preview">
+        <cv-guidance-panel variant="hint" density="compact">
+          <span slot="icon" aria-hidden="true">?</span>
+          <span slot="title">Inline hint</span>
+          <p>Place compact help below a field or empty state without opening an overlay.</p>
+        </cv-guidance-panel>
+
+        <cv-guidance-panel variant="warning" density="compact">
+          <span slot="icon" aria-hidden="true">!</span>
+          <span slot="title">Risk before export</span>
+          <p>Warn before an operation changes the user's threat model or leaves the local vault.</p>
+          <button slot="actions" type="button" data-guidance-action="secondary">Review</button>
+        </cv-guidance-panel>
+
+        <cv-guidance-panel variant="blocked" density="compact">
+          <span slot="icon" aria-hidden="true">x</span>
+          <span slot="title">Action blocked</span>
+          <p>Explain why the action is unavailable and point to the next recoverable step.</p>
+          <button slot="actions" type="button" data-guidance-action="primary">Connect device</button>
+        </cv-guidance-panel>
+      </aside>
+    </div>
+  </section>
+
+  <section class="guidance-panel-demo-note" aria-labelledby="guidance-panel-demo-note-title">
+    <div>
+      <span class="guidance-panel-demo-kicker">Accessibility boundary</span>
+      <h4 id="guidance-panel-demo-note-title">The panel is content, not a dialog.</h4>
+    </div>
+    <p>
+      It renders neutral note content. Put it inside a popover, bottom sheet, inline region, or blocked-action
+      surface when the owning app layer supplies the right semantics.
+    </p>
+  </section>
+</div>
 ```
 
 ## Anatomy
