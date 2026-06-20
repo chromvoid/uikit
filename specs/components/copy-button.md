@@ -20,16 +20,15 @@ Button that copies a value to the system clipboard with three-state visual feedb
 
 ## Attributes
 
-| Attribute           | Type    | Default         | Description                                                                                                                                      |
-| ------------------- | ------- | --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `value`             | String  | `''`            | Text to copy. Property also accepts `(() => Promise<string>)` for lazy/sensitive values (property-only, not reflected as attribute for security) |
-| `disabled`          | Boolean | `false`         | Prevents interaction                                                                                                                             |
-| `feedback-duration` | Number  | `1500`          | Milliseconds to show success/error feedback before reverting to idle                                                                             |
-| `size`              | String  | `"medium"`      | Size: `small` \| `medium` \| `large`                                                                                                             |
-| `appearance`        | String  | `"default"`     | Appearance: `default` \| `plain`                                                                                                                 |
-| `success-label`     | String  | `"Copied"`      | Text used for success `aria-label` and live-region feedback                                                                                      |
-| `error-label`       | String  | `"Copy failed"` | Text used for error `aria-label` and live-region feedback                                                                                        |
-| `aria-label`        | String  | unset           | Accessible label used while idle                                                                                                                 |
+| Attribute           | Type    | Default         | Description                                                          |
+| ------------------- | ------- | --------------- | -------------------------------------------------------------------- |
+| `disabled`          | Boolean | `false`         | Prevents interaction                                                 |
+| `feedback-duration` | Number  | `1500`          | Milliseconds to show success/error feedback before reverting to idle |
+| `size`              | String  | `"medium"`      | Size: `small` \| `medium` \| `large`                                 |
+| `appearance`        | String  | `"default"`     | Appearance: `default` \| `plain`                                     |
+| `success-label`     | String  | `"Copied"`      | Text used for success `aria-label` and live-region feedback          |
+| `error-label`       | String  | `"Copy failed"` | Text used for error `aria-label` and live-region feedback            |
+| `aria-label`        | String  | unset           | Accessible label used while idle                                     |
 
 Property-only options:
 
@@ -143,9 +142,9 @@ Additionally, component styles depend on theme tokens through fallback values:
 | `contracts.getIconContainerProps('success')` | Inner `[part="success-icon"]` | Spread as attributes; provides `aria-hidden`, `hidden`                                                              |
 | `contracts.getIconContainerProps('error')`   | Inner `[part="error-icon"]`   | Spread as attributes; provides `aria-hidden`, `hidden`                                                              |
 
-### Headless options passed from UIKit attributes
+### Headless options passed from UIKit API
 
-| UIKit Attribute     | Headless Option    | Notes                                                      |
+| UIKit API           | Headless Option    | Notes                                                      |
 | ------------------- | ------------------ | ---------------------------------------------------------- |
 | `value`             | `value`            | Property-only; accepts `string \| (() => Promise<string>)` |
 | `feedback-duration` | `feedbackDuration` | Numeric attribute, defaults to `1500`                      |
@@ -188,86 +187,213 @@ Events are dispatched by the UIKit adapter by providing `onCopy` and `onError` c
 ## Usage
 
 ```html
-<!-- Basic usage -->
-<cv-copy-button value="text to copy"></cv-copy-button>
+<div class="copy-button-demo-shell" data-demo="copy-button" data-live-demo-height="420">
+  <section class="copy-button-demo-hero" aria-labelledby="copy-button-demo-title">
+    <div class="copy-button-demo-copy">
+      <p class="copy-button-demo-kicker">Clipboard boundary</p>
+      <h3 id="copy-button-demo-title">Copy sensitive values without putting them in markup</h3>
+      <p>
+        Values are assigned as properties, clipboard writes can be adapter-backed, and the visible control
+        stays a compact icon with success/error feedback.
+      </p>
+    </div>
 
-<!-- With aria-label for accessible context -->
-<cv-copy-button value="secret123" aria-label="Copy password"></cv-copy-button>
+    <dl class="copy-button-demo-metrics" aria-label="Copy button contract highlights">
+      <div>
+        <dt>Value</dt>
+        <dd>property-only</dd>
+      </div>
+      <div>
+        <dt>Feedback</dt>
+        <dd>idle / success / error</dd>
+      </div>
+      <div>
+        <dt>Keyboard</dt>
+        <dd>Enter and Space</dd>
+      </div>
+    </dl>
+  </section>
 
-<!-- Small size -->
-<cv-copy-button value="hello" size="small"></cv-copy-button>
+  <section class="copy-button-demo-workbench" aria-label="Vault record copy actions">
+    <div class="copy-button-demo-record">
+      <div class="copy-button-demo-record-head">
+        <div>
+          <span>Vault record</span>
+          <strong>border-relay.admin</strong>
+        </div>
+        <span class="copy-button-demo-badge">local adapter</span>
+      </div>
 
-<!-- Custom feedback duration (3 seconds) -->
-<cv-copy-button value="hello" feedback-duration="3000"></cv-copy-button>
+      <div class="copy-button-demo-row" data-copy-row>
+        <div>
+          <span>Username</span>
+          <code>alex@chromvoid.local</code>
+        </div>
+        <cv-copy-button
+          data-copy-target="username"
+          data-copy-label="Username"
+          aria-label="Copy username"
+          success-label="Username copied"
+          error-label="Username copy failed"
+          feedback-duration="5600"
+        ></cv-copy-button>
+      </div>
 
-<!-- Domain-specific clipboard adapter and localized feedback -->
-<cv-copy-button
-  aria-label="Copy password"
-  success-label="Copied"
-  error-label="Failed to copy"
-></cv-copy-button>
+      <div class="copy-button-demo-row copy-button-demo-row--secret" data-copy-row>
+        <div>
+          <span>Password</span>
+          <code>cv-••••-••••-91f3</code>
+        </div>
+        <cv-copy-button
+          data-copy-target="password"
+          data-copy-label="Password"
+          aria-label="Copy password"
+          success-label="Password copied"
+          error-label="Password copy failed"
+          feedback-duration="5600"
+        ></cv-copy-button>
+      </div>
 
-<!-- Custom icons via slots -->
-<cv-copy-button value="hello">
-  <svg
-    slot="copy-icon"
-    xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    stroke-width="2"
-    stroke-linecap="round"
-    stroke-linejoin="round"
-  >
-    <path d="M12 5v14" />
-    <path d="M5 12h14" />
-  </svg>
-  <svg
-    slot="success-icon"
-    xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    stroke-width="2"
-    stroke-linecap="round"
-    stroke-linejoin="round"
-  >
-    <circle cx="12" cy="12" r="9" />
-    <path d="m8.5 12 2.5 2.5 4.5-5" />
-  </svg>
-  <svg
-    slot="error-icon"
-    xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    stroke-width="2"
-    stroke-linecap="round"
-    stroke-linejoin="round"
-  >
-    <path d="M12 3 3 20h18L12 3Z" />
-    <path d="M12 9v4" />
-    <path d="M12 17h.01" />
-  </svg>
-</cv-copy-button>
+      <div class="copy-button-demo-row" data-copy-row>
+        <div>
+          <span>TOTP</span>
+          <code>493 120</code>
+        </div>
+        <cv-copy-button
+          data-copy-target="totp"
+          data-copy-label="TOTP"
+          aria-label="Copy TOTP code"
+          success-label="TOTP copied"
+          error-label="TOTP copy failed"
+          size="small"
+          feedback-duration="5600"
+        ></cv-copy-button>
+      </div>
 
-<!-- Disabled -->
-<cv-copy-button value="hello" disabled></cv-copy-button>
+      <div class="copy-button-demo-row copy-button-demo-row--danger" data-copy-row>
+        <div>
+          <span>Policy probe</span>
+          <code>denied by adapter</code>
+        </div>
+        <cv-copy-button
+          data-copy-target="blocked"
+          data-copy-label="Policy probe"
+          aria-label="Copy blocked value"
+          success-label="Blocked value copied"
+          error-label="Clipboard blocked"
+          feedback-duration="5600"
+        ></cv-copy-button>
+      </div>
+    </div>
 
-<!-- Async value (property-only, set via JS) -->
-<cv-copy-button id="lazy-copy"></cv-copy-button>
-<script>
-  document.querySelector('#lazy-copy').value = async () => {
-    const res = await fetch('/api/secret')
-    return res.text()
-  }
+    <aside class="copy-button-demo-side" aria-label="Copy button variants and event output">
+      <div class="copy-button-demo-variants">
+        <div>
+          <cv-copy-button
+            data-copy-target="plain"
+            data-copy-label="Plain button"
+            aria-label="Copy plain value"
+            appearance="plain"
+            success-label="Plain copied"
+            feedback-duration="5600"
+          ></cv-copy-button>
+          <span>plain</span>
+        </div>
+        <div>
+          <cv-copy-button
+            data-copy-target="large"
+            data-copy-label="Large button"
+            aria-label="Copy large value"
+            size="large"
+            success-label="Large copied"
+            feedback-duration="5600"
+          ></cv-copy-button>
+          <span>large</span>
+        </div>
+        <div>
+          <cv-copy-button aria-label="Copy disabled value" disabled></cv-copy-button>
+          <span>disabled</span>
+        </div>
+      </div>
+
+      <p class="copy-button-demo-log" role="status" aria-live="polite" data-copy-output>
+        Waiting for a copy event. Click any active copy button.
+      </p>
+    </aside>
+  </section>
+</div>
+
+<script type="module">
+  const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
+
+  document
+    .querySelectorAll('.copy-button-demo-shell[data-demo="copy-button"]:not([data-ready])')
+    .forEach((shell) => {
+      shell.dataset.ready = 'true'
+
+      const output = shell.querySelector('[data-copy-output]')
+      const rows = [...shell.querySelectorAll('[data-copy-row]')]
+
+      const setOutput = (message, state) => {
+        shell.dataset.copyState = state
+        if (output) output.textContent = message
+      }
+
+      const markRow = (button, state) => {
+        rows.forEach((row) => delete row.dataset.copyResult)
+        button?.closest('[data-copy-row]')?.setAttribute('data-copy-result', state)
+      }
+
+      const writeLocally = async (text) => {
+        await delay(120)
+        shell.dataset.clipboard = text
+      }
+
+      const setupButton = (target, value, writeText = writeLocally) => {
+        const button = shell.querySelector(`[data-copy-target="${target}"]`)
+        if (!button) return
+
+        button.value = value
+        button.clipboard = {writeText}
+      }
+
+      setupButton('username', 'alex@chromvoid.local')
+      setupButton('password', async () => {
+        await delay(180)
+        return 'cv-02e6-4d89-91f3'
+      })
+      setupButton('totp', '493120')
+      setupButton('plain', 'shadow-tag:decoy-visible')
+      setupButton('large', 'recovery-window:18m')
+      setupButton('blocked', 'policy-blocked-note', async () => {
+        await delay(120)
+        throw new Error('Clipboard blocked by adapter policy')
+      })
+
+      shell.addEventListener('cv-copy', (event) => {
+        const button = event.target instanceof HTMLElement ? event.target : null
+        const label = button?.dataset.copyLabel ?? 'Value'
+        const value = String(event.detail.value)
+        markRow(button, 'success')
+        setOutput(`${label}: copied ${value.length} characters through the injected adapter.`, 'success')
+      })
+
+      shell.addEventListener('cv-error', (event) => {
+        const button = event.target instanceof HTMLElement ? event.target : null
+        const label = button?.dataset.copyLabel ?? 'Value'
+        const message = event.detail.error?.message ?? 'Copy failed'
+        markRow(button, 'error')
+        setOutput(`${label}: ${message}.`, 'error')
+      })
+
+      const activate = (target) => {
+        const button = shell.querySelector(`[data-copy-target="${target}"]`)
+        const base = button?.shadowRoot?.querySelector('[part="base"]')
+        base?.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+      }
+
+      window.setTimeout(() => activate('password'), 260)
+      window.setTimeout(() => activate('blocked'), 920)
+    })
 </script>
-
-<!-- Listening for events -->
-<cv-copy-button
-  value="hello"
-  @cv-copy="${(e) => console.log('Copied:', e.detail.value)}"
-  @cv-error="${(e) => console.error('Failed:', e.detail.error)}"
->
-</cv-copy-button>
 ```
