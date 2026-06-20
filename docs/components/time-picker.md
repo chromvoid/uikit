@@ -70,6 +70,9 @@ None in V1.
 ## Form Contract
 
 - Form value is the committed `HH:mm` value.
+- User input accepts digit-only editing shorthand. Three or four digits commit as `H:mm` / `HH:mm`
+  (`942` and `0942` both commit to `09:42`); one or two digits are treated as an incomplete draft
+  and do not set `input-invalid` while the user is still entering a time.
 - Disabled controls submit `null`.
 - Reset restores the captured default value.
 - Required, invalid draft, and range failures are reported through form-associated validity.

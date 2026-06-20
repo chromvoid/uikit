@@ -66,6 +66,26 @@ describe('cv-time-picker model', () => {
     expect(change.previousValue).toBe('08:00')
     expect(model.actions.step(-1).value).toBe('09:00')
   })
+
+  it('accepts digit-only drafts and commits complete shorthand input', () => {
+    const model = createTimePickerModel('testTimePickerDigits')
+
+    const partial = model.actions.setInput('42', 'input')
+    expect(partial.invalid).toBe(false)
+    expect(model.actions.commit('input')).toEqual({
+      value: '',
+      inputValue: '42',
+      invalid: false,
+      source: 'input',
+      previousValue: '',
+    })
+
+    model.actions.setInput('942', 'input')
+    expect(model.actions.commit('input').value).toBe('09:42')
+
+    model.actions.setInput('2360', 'input')
+    expect(model.state.invalid()).toBe(true)
+  })
 })
 
 describe('cv-time-picker', () => {
@@ -104,6 +124,31 @@ describe('cv-time-picker', () => {
     expect(changeDetails).toEqual([{value: '09:30', previousValue: '', source: 'input'}])
     expect(element.value).toBe('09:30')
     expect(element.hasValue).toBe(true)
+  })
+
+  it('keeps short digit drafts valid and commits complete digit shorthand', async () => {
+    const element = await createTimePicker()
+    const inputDetails: CVTimePickerInputEventDetail[] = []
+    element.addEventListener('cv-input', (event) => {
+      inputDetails.push((event as CustomEvent<CVTimePickerInputEventDetail>).detail)
+    })
+
+    const input = getInput(element)
+    input.value = '42'
+    input.dispatchEvent(new Event('input', {bubbles: true, composed: true}))
+    await settle(element)
+
+    expect(element.inputInvalid).toBe(false)
+    expect(inputDetails.at(-1)).toEqual({value: '', inputValue: '42', invalid: false, source: 'input'})
+
+    input.value = '0942'
+    input.dispatchEvent(new Event('input', {bubbles: true, composed: true}))
+    input.dispatchEvent(new Event('change', {bubbles: true, composed: true}))
+    await settle(element)
+
+    expect(element.inputInvalid).toBe(false)
+    expect(element.value).toBe('09:42')
+    expect(getInput(element).value).toBe('09:42')
   })
 
   it('does not emit user events for programmatic value changes', async () => {

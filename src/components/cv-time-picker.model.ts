@@ -11,6 +11,13 @@ export interface CVTimePickerStateChange {
 }
 
 const TIME_RE = /^([01]\d|2[0-3]):([0-5]\d)$/
+const DIGIT_INPUT_RE = /^\d{1,4}$/
+
+type ParsedTimeInput =
+  | {kind: 'empty'}
+  | {kind: 'incomplete'}
+  | {kind: 'invalid'}
+  | {kind: 'valid'; minutes: number}
 
 export const isValidTimeValue = (value: string): boolean => value.length === 0 || TIME_RE.test(value)
 
@@ -43,6 +50,28 @@ const clampMinutes = (value: number, min: string, max: string): number => {
 
 const snapMinutes = (value: number, step: number): number => Math.round(value / step) * step
 
+const parseInputTime = (value: string): ParsedTimeInput => {
+  const input = value.trim()
+  if (input.length === 0) return {kind: 'empty'}
+
+  const exactMinutes = timeToMinutes(input)
+  if (exactMinutes !== null) return {kind: 'valid', minutes: exactMinutes}
+
+  if (!DIGIT_INPUT_RE.test(input)) return {kind: 'invalid'}
+  if (input.length <= 2) return {kind: 'incomplete'}
+
+  const digits = input.padStart(4, '0')
+  const normalized = `${digits.slice(0, 2)}:${digits.slice(2)}`
+  const minutes = timeToMinutes(normalized)
+  if (minutes === null) return {kind: 'invalid'}
+  return {kind: 'valid', minutes}
+}
+
+const inputTimeToMinutes = (value: string): number | null => {
+  const parsed = parseInputTime(value)
+  return parsed.kind === 'valid' ? parsed.minutes : null
+}
+
 export const createTimePickerModel = (name = 'cvTimePicker') => {
   const value = atom('', `${name}.value`)
   const inputValue = atom('', `${name}.inputValue`)
@@ -55,9 +84,10 @@ export const createTimePickerModel = (name = 'cvTimePicker') => {
 
   const invalid = computed(() => {
     const input = inputValue().trim()
-    if (input.length === 0) return false
-    const minutes = timeToMinutes(input)
-    if (minutes === null) return true
+    const parsed = parseInputTime(input)
+    if (parsed.kind === 'empty' || parsed.kind === 'incomplete') return false
+    if (parsed.kind === 'invalid') return true
+    const minutes = parsed.minutes
     const minMinutes = timeToMinutes(min())
     const maxMinutes = timeToMinutes(max())
     if (minMinutes !== null && minutes < minMinutes) return true
@@ -105,11 +135,16 @@ export const createTimePickerModel = (name = 'cvTimePicker') => {
       inputValue.set('')
       return {value: '', inputValue: '', invalid: false, source, previousValue}
     }
-    const minutes = timeToMinutes(input)
-    if (minutes === null) {
+    const parsed = parseInputTime(input)
+    if (parsed.kind === 'incomplete') {
+      inputValue.set(input)
+      return {value: previousValue, inputValue: input, invalid: false, source, previousValue}
+    }
+    if (parsed.kind !== 'valid') {
+      inputValue.set(input)
       return {value: previousValue, inputValue: input, invalid: true, source, previousValue}
     }
-    const snapped = snapMinutes(clampMinutes(minutes, min(), max()), minuteStep())
+    const snapped = snapMinutes(clampMinutes(parsed.minutes, min(), max()), minuteStep())
     const nextValue = minutesToTime(clampMinutes(snapped, min(), max()))
     value.set(nextValue)
     inputValue.set(nextValue)
@@ -118,7 +153,7 @@ export const createTimePickerModel = (name = 'cvTimePicker') => {
 
   const step = action((direction: -1 | 1): CVTimePickerStateChange => {
     const previousValue = value()
-    const base = timeToMinutes(value()) ?? timeToMinutes(inputValue()) ?? timeToMinutes(min()) ?? 0
+    const base = timeToMinutes(value()) ?? inputTimeToMinutes(inputValue()) ?? timeToMinutes(min()) ?? 0
     const nextValue = minutesToTime(clampMinutes(base + direction * minuteStep(), min(), max()))
     value.set(nextValue)
     inputValue.set(nextValue)
