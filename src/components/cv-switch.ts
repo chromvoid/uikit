@@ -30,6 +30,7 @@ export class CVSwitch extends FormAssociatedReatomElement {
       value: {type: String},
       checked: {type: Boolean, reflect: true},
       disabled: {type: Boolean, reflect: true},
+      loading: {type: Boolean, reflect: true},
       required: {type: Boolean, reflect: true},
       size: {type: String, reflect: true},
       helpText: {type: String, attribute: 'help-text', reflect: true},
@@ -40,6 +41,7 @@ export class CVSwitch extends FormAssociatedReatomElement {
   declare value: string
   declare checked: boolean
   declare disabled: boolean
+  declare loading: boolean
   declare required: boolean
   declare size: CVSwitchSize
   declare helpText: string
@@ -58,6 +60,7 @@ export class CVSwitch extends FormAssociatedReatomElement {
     this.value = 'on'
     this.checked = false
     this.disabled = false
+    this.loading = false
     this.required = false
     this.size = 'medium'
     this.helpText = ''
@@ -65,6 +68,7 @@ export class CVSwitch extends FormAssociatedReatomElement {
       idBase: this.idBase,
       isOn: this.checked,
       isDisabled: this.isEffectivelyDisabled(),
+      isLoading: this.loading,
     }
     this.model = createSwitch(this.modelOptions)
   }
@@ -77,6 +81,9 @@ export class CVSwitch extends FormAssociatedReatomElement {
         --cv-switch-height: 24px;
         --cv-switch-thumb-size: 18px;
         --cv-switch-gap: var(--cv-space-2, 8px);
+        --cv-switch-track-content-gap: 4px;
+        --cv-switch-loader-size: calc(var(--cv-switch-thumb-size) * 0.58);
+        --cv-switch-loader-stroke: 2px;
       }
 
       [part='base'] {
@@ -88,37 +95,79 @@ export class CVSwitch extends FormAssociatedReatomElement {
       }
 
       [part='control'] {
-        display: inline-flex;
+        display: inline-grid;
         align-items: center;
-        inline-size: var(--cv-switch-width);
+        inline-size: max-content;
+        min-inline-size: var(--cv-switch-width);
         block-size: var(--cv-switch-height);
+        box-sizing: border-box;
         padding: 2px;
         border-radius: 999px;
         border: 1px solid var(--cv-color-border, #2a3245);
         background: var(--cv-color-surface-elevated, #1d2432);
         flex-shrink: 0;
         position: relative;
+        overflow: hidden;
         transition:
           background var(--cv-duration-fast, 120ms) var(--cv-easing-standard, ease),
           border-color var(--cv-duration-fast, 120ms) var(--cv-easing-standard, ease);
       }
 
       [part='thumb'] {
+        position: absolute;
+        inset-block-start: 50%;
+        inset-inline-start: 2px;
+        z-index: 1;
+        display: grid;
+        place-items: center;
+        flex: 0 0 auto;
         inline-size: var(--cv-switch-thumb-size);
         block-size: var(--cv-switch-thumb-size);
         border-radius: 50%;
         background: var(--cv-color-text-muted, #9aa6bf);
-        transform: translateX(0);
+        transform: translateY(-50%);
         transition:
-          transform var(--cv-duration-fast, 120ms) var(--cv-easing-standard, ease),
+          inset-inline-start var(--cv-duration-fast, 120ms) var(--cv-easing-standard, ease),
           background var(--cv-duration-fast, 120ms) var(--cv-easing-standard, ease);
+      }
+
+      [part='loader'] {
+        inline-size: var(--cv-switch-loader-size);
+        block-size: var(--cv-switch-loader-size);
+        box-sizing: border-box;
+        border-radius: 999px;
+        border: var(--cv-switch-loader-stroke) solid rgb(from var(--cv-color-primary, #65d7ff) r g b / 0.32);
+        border-block-start-color: var(--cv-color-primary, #65d7ff);
+        animation: cv-switch-loader-spin 800ms linear infinite;
       }
 
       [part='toggled'],
       [part='untoggled'] {
+        grid-area: 1 / 1;
         display: inline-flex;
         align-items: center;
-        justify-content: center;
+        box-sizing: border-box;
+        min-inline-size: max-content;
+        color: var(--cv-switch-track-content-color, var(--cv-color-text, #e8ecf6));
+        font-size: var(--cv-switch-track-content-font-size, 0.62em);
+        line-height: 1;
+        pointer-events: none;
+        white-space: nowrap;
+      }
+
+      [part='toggled'] {
+        padding-inline: 4px calc(var(--cv-switch-thumb-size) + var(--cv-switch-track-content-gap));
+        justify-content: flex-start;
+      }
+
+      [part='untoggled'] {
+        padding-inline: calc(var(--cv-switch-thumb-size) + var(--cv-switch-track-content-gap)) 4px;
+        justify-content: flex-end;
+      }
+
+      [part='toggled'][hidden],
+      [part='untoggled'][hidden] {
+        visibility: hidden;
       }
 
       :host([checked]) [part='control'] {
@@ -131,13 +180,26 @@ export class CVSwitch extends FormAssociatedReatomElement {
       }
 
       :host([checked]) [part='thumb'] {
-        transform: translateX(calc(var(--cv-switch-width) - var(--cv-switch-thumb-size) - 6px));
+        inset-inline-start: calc(100% - var(--cv-switch-thumb-size) - 2px);
         background: var(--cv-color-primary, #65d7ff);
+      }
+
+      :host([checked]) [part='loader'] {
+        border-color: rgb(from var(--cv-color-surface, #141923) r g b / 0.35);
+        border-block-start-color: var(--cv-color-surface, #141923);
       }
 
       [part='control']:focus-visible {
         outline: 2px solid var(--cv-color-primary, #65d7ff);
         outline-offset: 2px;
+      }
+
+      :host([loading]) {
+        cursor: progress;
+      }
+
+      :host([loading]) [part='base'] {
+        cursor: progress;
       }
 
       :host([disabled]) [part='base'] {
@@ -162,6 +224,18 @@ export class CVSwitch extends FormAssociatedReatomElement {
         inline-size: 100%;
         color: var(--cv-switch-help-text-color, var(--cv-color-text-muted, #9aa6bf));
         font-size: var(--cv-switch-help-text-font-size, 0.85em);
+      }
+
+      @keyframes cv-switch-loader-spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        [part='loader'] {
+          animation-duration: 3200ms;
+        }
       }
     `,
   ]
@@ -199,6 +273,10 @@ export class CVSwitch extends FormAssociatedReatomElement {
 
     if (changedProperties.has('disabled')) {
       this.model.actions.setDisabled(this.isEffectivelyDisabled())
+    }
+
+    if (changedProperties.has('loading')) {
+      this.model.actions.setLoading(this.loading)
     }
 
     if (changedProperties.has('checked') && this.model.state.isOn() !== this.checked) {
@@ -295,6 +373,10 @@ export class CVSwitch extends FormAssociatedReatomElement {
     return this.disabled || this.formDisabled
   }
 
+  private isInteractionBlocked(): boolean {
+    return this.isEffectivelyDisabled() || this.loading
+  }
+
   private handleClick() {
     const previousValue = this.model.state.isOn()
     this.model.contracts.getSwitchProps().onClick()
@@ -309,7 +391,7 @@ export class CVSwitch extends FormAssociatedReatomElement {
    * has its own `@click=${handleClick}` listener).
    */
   private handleHostClick = (event: MouseEvent) => {
-    if (this.isEffectivelyDisabled()) return
+    if (this.isInteractionBlocked()) return
 
     const base = this.shadowRoot?.querySelector('[part="base"]')
     if (base && event.composedPath().includes(base)) return
@@ -342,15 +424,24 @@ export class CVSwitch extends FormAssociatedReatomElement {
           aria-checked=${props['aria-checked']}
           aria-disabled=${props['aria-disabled']}
           aria-required=${this.required ? 'true' : nothing}
+          aria-busy=${props['aria-busy'] ?? nothing}
           aria-label=${hostAriaLabel ?? nothing}
           aria-labelledby=${ariaLabelledBy ?? nothing}
           aria-describedby=${props['aria-describedby'] ?? nothing}
           part="control"
           @keydown=${this.handleKeyDown}
         >
-          <span part="toggled" ?hidden=${!isChecked}><slot name="toggled"></slot></span>
-          <span part="untoggled" ?hidden=${isChecked}><slot name="untoggled"></slot></span>
-          <span part="thumb"></span>
+          <span part="toggled" aria-hidden="true" ?hidden=${!isChecked}><slot name="toggled"></slot></span>
+          <span part="untoggled" aria-hidden="true" ?hidden=${isChecked}><slot name="untoggled"></slot></span>
+          <span part="thumb">
+            ${
+              this.loading
+                ? html`
+                    <span part="loader" aria-hidden="true"></span>
+                  `
+                : nothing
+            }
+          </span>
         </div>
         <span part="label" id=${fallbackLabelId ?? nothing}><slot></slot></span>
         ${

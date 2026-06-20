@@ -15,6 +15,7 @@ Toggle control that represents an on/off state, visually distinct from a checkbo
     │   ├── <span part="untoggled" hidden>
     │   │   └── <slot name="untoggled">
     │   └── <span part="thumb">
+    │       └── <span part="loader" aria-hidden="true"> (when loading)
     ├── <span part="label">
     │   └── <slot>
     └── <span part="help-text" id="{idBase}-help-text">
@@ -27,12 +28,13 @@ The `help-text` part is rendered only when the `help-text` attribute is set or t
 
 ## Attributes
 
-| Attribute   | Type    | Default    | Description                                 |
-| ----------- | ------- | ---------- | ------------------------------------------- |
-| `checked`   | Boolean | `false`    | On/off state                                |
-| `disabled`  | Boolean | `false`    | Prevents interaction                        |
-| `size`      | String  | `"medium"` | Size: `small` \| `medium` \| `large`        |
-| `help-text` | String  | `""`       | Descriptive text displayed below the switch |
+| Attribute   | Type    | Default    | Description                                                        |
+| ----------- | ------- | ---------- | ------------------------------------------------------------------ |
+| `checked`   | Boolean | `false`    | On/off state                                                       |
+| `disabled`  | Boolean | `false`    | Prevents interaction and disables the form-associated value        |
+| `loading`   | Boolean | `false`    | Shows pending state and blocks interaction without disabling value |
+| `size`      | String  | `"medium"` | Size: `small` \| `medium` \| `large`                               |
+| `help-text` | String  | `""`       | Descriptive text displayed below the switch                        |
 
 ## Sizes
 
@@ -53,32 +55,37 @@ The `help-text` part is rendered only when the `help-text` attribute is set or t
 
 ## CSS Parts
 
-| Part        | Element  | Description                                                  |
-| ----------- | -------- | ------------------------------------------------------------ |
-| `base`      | `<div>`  | Root layout wrapper (contains control + label + help-text)   |
-| `control`   | `<div>`  | Track/oval with `role="switch"`                              |
-| `thumb`     | `<span>` | Sliding knob inside the control                              |
-| `toggled`   | `<span>` | Wrapper around the `toggled` slot (visible when checked)     |
-| `untoggled` | `<span>` | Wrapper around the `untoggled` slot (visible when unchecked) |
-| `label`     | `<span>` | Wrapper around the default slot                              |
-| `help-text` | `<span>` | Wrapper around the `help-text` slot or attribute text        |
+| Part        | Element  | Description                                                   |
+| ----------- | -------- | ------------------------------------------------------------- |
+| `base`      | `<div>`  | Root layout wrapper (contains control + label + help-text)    |
+| `control`   | `<div>`  | Track/oval with `role="switch"`                               |
+| `thumb`     | `<span>` | Sliding knob inside the control                               |
+| `loader`    | `<span>` | CSS-only pending spinner rendered inside `thumb` when loading |
+| `toggled`   | `<span>` | Wrapper around the `toggled` slot (visible when checked)      |
+| `untoggled` | `<span>` | Wrapper around the `untoggled` slot (visible when unchecked)  |
+| `label`     | `<span>` | Wrapper around the default slot                               |
+| `help-text` | `<span>` | Wrapper around the `help-text` slot or attribute text         |
 
 ## CSS Custom Properties
 
-| Property                          | Default                               | Description                             |
-| --------------------------------- | ------------------------------------- | --------------------------------------- |
-| `--cv-switch-width`               | `44px`                                | Inline size of the control track        |
-| `--cv-switch-height`              | `24px`                                | Block size of the control track         |
-| `--cv-switch-thumb-size`          | `18px`                                | Size of the thumb knob                  |
-| `--cv-switch-gap`                 | `var(--cv-space-2, 8px)`              | Spacing between control track and label |
-| `--cv-switch-help-text-color`     | `var(--cv-color-text-muted, #9aa6bf)` | Color of the help text                  |
-| `--cv-switch-help-text-font-size` | `0.85em`                              | Font size of the help text              |
+| Property                          | Default                                    | Description                                      |
+| --------------------------------- | ------------------------------------------ | ------------------------------------------------ |
+| `--cv-switch-width`               | `44px`                                     | Minimum inline size of the control track         |
+| `--cv-switch-height`              | `24px`                                     | Block size of the control track                  |
+| `--cv-switch-thumb-size`          | `18px`                                     | Size of the thumb knob                           |
+| `--cv-switch-gap`                 | `var(--cv-space-2, 8px)`                   | Spacing between control track and label          |
+| `--cv-switch-track-content-gap`   | `4px`                                      | Spacing between thumb and toggled/untoggled slot |
+| `--cv-switch-loader-size`         | `calc(var(--cv-switch-thumb-size) * 0.58)` | Size of the loading spinner inside the thumb     |
+| `--cv-switch-loader-stroke`       | `2px`                                      | Stroke width of the loading spinner              |
+| `--cv-switch-help-text-color`     | `var(--cv-color-text-muted, #9aa6bf)`      | Color of the help text                           |
+| `--cv-switch-help-text-font-size` | `0.85em`                                   | Font size of the help text                       |
 
 ## Visual States
 
 | Host selector           | Description                                                                                             |
 | ----------------------- | ------------------------------------------------------------------------------------------------------- |
 | `:host([checked])`      | Primary-tinted track, thumb translated to end position; `toggled` part visible, `untoggled` part hidden |
+| `:host([loading])`      | Progress cursor and loader inside the thumb; current checked visual state remains visible               |
 | `:host([disabled])`     | Reduced opacity (`0.55`), `cursor: not-allowed`                                                         |
 | `:host([size="small"])` | Small size overrides                                                                                    |
 | `:host([size="large"])` | Large size overrides                                                                                    |
@@ -91,55 +98,171 @@ The `help-text` part is rendered only when the `help-text` attribute is set or t
 | -------------- | -------------- | --------------------------------------------------------------------------------------------------------------------- |
 | `checked`      | attr -> action | `actions.setOn(value)`                                                                                                |
 | `disabled`     | attr -> action | `actions.setDisabled(value)`                                                                                          |
+| `loading`      | attr -> action | `actions.setLoading(value)`                                                                                           |
 | `help-text`    | attr -> option | When present, generates an id for the help-text element and passes it as `ariaDescribedBy` in `createSwitch(options)` |
 
-| Headless State       | Direction     | DOM Reflection              |
-| -------------------- | ------------- | --------------------------- |
-| `state.isOn()`       | state -> attr | `[checked]` host attribute  |
-| `state.isDisabled()` | state -> attr | `[disabled]` host attribute |
+| Headless State       | Direction     | DOM Reflection                                                     |
+| -------------------- | ------------- | ------------------------------------------------------------------ |
+| `state.isOn()`       | state -> attr | `[checked]` host attribute                                         |
+| `state.isDisabled()` | state -> attr | `[disabled]` host attribute                                        |
+| `state.isLoading()`  | state -> attr | `aria-busy`, `aria-disabled`, and `tabindex` on `[part="control"]` |
 
-- `contracts.getSwitchProps()` is spread onto the inner `[part="control"]` element to apply `role`, `aria-checked`, `aria-disabled`, `tabindex`, and keyboard/click handlers.
+- `contracts.getSwitchProps()` is spread onto the inner `[part="control"]` element to apply `role`, `aria-checked`, `aria-disabled`, `aria-busy`, `tabindex`, and keyboard/click handlers.
 - When help text is present (via attribute or slot), the component generates the id `{idBase}-help-text` for the help-text element and passes it as the `ariaDescribedBy` option to `createSwitch`, which produces the `aria-describedby` attribute in `getSwitchProps()`.
 - UIKit dispatches `cv-input` and `cv-change` events by observing `isOn` changes triggered by user activation (not by controlled `setOn`).
+- `loading` blocks click, host `.click()`, `Enter`, and `Space` activation, but controlled `checked` updates, form reset, form restore, and form-associated value submission remain available.
 - Toggled/untoggled slot visibility is purely visual (CSS-driven); no headless state or ARIA changes are involved.
+- Toggled/untoggled slot content participates in track sizing; `--cv-switch-width` is a minimum, not a fixed width.
 - UIKit does not own toggle or keyboard logic; headless state is the source of truth.
 
 ## Events
 
-| Event       | Detail               | Description                      |
-| ----------- | -------------------- | -------------------------------- |
-| `cv-input`  | `{checked: boolean}` | Fires on toggle interaction      |
-| `cv-change` | `{checked: boolean}` | Fires when checked state commits |
+| Event       | Detail               | Description                                           |
+| ----------- | -------------------- | ----------------------------------------------------- |
+| `cv-input`  | `{checked: boolean}` | Fires on toggle interaction when not disabled/loading |
+| `cv-change` | `{checked: boolean}` | Fires when checked state commits from user activation |
 
 ## Usage
 
 ```html
-<cv-switch>Dark mode</cv-switch>
+<div class="switch-demo-shell">
+  <section class="switch-demo-hero" aria-labelledby="switch-demo-title">
+    <div class="switch-demo-copy">
+      <span class="switch-demo-kicker">Switch pattern</span>
+      <h3 id="switch-demo-title">Immediate settings with an explicit on/off state.</h3>
+      <p>
+        Use switches for settings that apply as soon as the user changes them. Pair ambiguous settings with
+        help text instead of relying on the label alone.
+      </p>
+    </div>
 
-<cv-switch checked>Notifications</cv-switch>
+    <div class="switch-demo-rack" aria-label="Primary switch examples">
+      <cv-switch checked size="large">
+        Hardware bridge
+        <span slot="help-text">Connects the vault to a trusted local device.</span>
+      </cv-switch>
 
-<cv-switch disabled>Locked setting</cv-switch>
+      <cv-switch checked>
+        Encrypted sync
+        <span slot="help-text">Runs after the next vault update.</span>
+      </cv-switch>
 
-<cv-switch size="small">Compact</cv-switch>
+      <cv-switch>
+        Decoy hints
+        <span slot="help-text">Shows non-sensitive onboarding labels.</span>
+      </cv-switch>
+    </div>
+  </section>
 
-<cv-switch size="large">Large toggle</cv-switch>
+  <section class="switch-demo-section" aria-labelledby="switch-demo-states">
+    <div class="switch-demo-section-header">
+      <span class="switch-demo-kicker">States</span>
+      <h4 id="switch-demo-states">Default, checked, disabled, and loading variants</h4>
+    </div>
 
-<cv-switch help-text="Reduces blue light emission after sunset"> Night mode </cv-switch>
+    <div class="switch-demo-state-grid">
+      <div class="switch-demo-cell">
+        <span class="switch-demo-label">Off</span>
+        <cv-switch>Mask previews</cv-switch>
+      </div>
 
-<cv-switch>
-  Airplane mode
-  <span slot="help-text">Disables all wireless connections</span>
-</cv-switch>
+      <div class="switch-demo-cell">
+        <span class="switch-demo-label">On</span>
+        <cv-switch checked>Relay pairing</cv-switch>
+      </div>
 
-<cv-switch checked>
-  Wi-Fi
-  <cv-icon slot="toggled" name="wifi-on"></cv-icon>
-  <cv-icon slot="untoggled" name="wifi-off"></cv-icon>
-</cv-switch>
+      <div class="switch-demo-cell">
+        <span class="switch-demo-label">Disabled off</span>
+        <cv-switch disabled>Remote unlock</cv-switch>
+      </div>
 
-<cv-switch>
-  Sound
-  <span slot="toggled">ON</span>
-  <span slot="untoggled">OFF</span>
-</cv-switch>
+      <div class="switch-demo-cell">
+        <span class="switch-demo-label">Disabled on</span>
+        <cv-switch checked disabled>Policy enforced</cv-switch>
+      </div>
+
+      <div class="switch-demo-cell">
+        <span class="switch-demo-label">Loading off</span>
+        <cv-switch loading>Saving visibility</cv-switch>
+      </div>
+
+      <div class="switch-demo-cell">
+        <span class="switch-demo-label">Loading on</span>
+        <cv-switch checked loading>Sync in progress</cv-switch>
+      </div>
+    </div>
+  </section>
+
+  <section class="switch-demo-section" aria-labelledby="switch-demo-density">
+    <div class="switch-demo-section-header">
+      <span class="switch-demo-kicker">Density</span>
+      <h4 id="switch-demo-density">Size scale and row rhythm</h4>
+    </div>
+
+    <div class="switch-demo-size-grid">
+      <div class="switch-demo-cell">
+        <span class="switch-demo-label">Small</span>
+        <cv-switch size="small" checked>Compact row</cv-switch>
+      </div>
+
+      <div class="switch-demo-cell">
+        <span class="switch-demo-label">Medium</span>
+        <cv-switch checked>Default row</cv-switch>
+      </div>
+
+      <div class="switch-demo-cell">
+        <span class="switch-demo-label">Large</span>
+        <cv-switch size="large" checked>Primary setting</cv-switch>
+      </div>
+    </div>
+  </section>
+
+  <section class="switch-demo-section" aria-labelledby="switch-demo-content">
+    <div class="switch-demo-section-header">
+      <span class="switch-demo-kicker">Content</span>
+      <h4 id="switch-demo-content">Help text, attribute help, and track slots</h4>
+    </div>
+
+    <div class="switch-demo-content-grid">
+      <div class="switch-demo-panel">
+        <cv-switch help-text="Reduces non-essential surface detail after sunset"> Night mode </cv-switch>
+
+        <cv-switch checked>
+          Network access
+          <span slot="help-text">Slot content overrides the help-text attribute path.</span>
+        </cv-switch>
+      </div>
+
+      <div class="switch-demo-panel">
+        <cv-switch checked size="large">
+          Sound
+          <span class="switch-demo-track-text" slot="toggled">ON</span>
+          <span class="switch-demo-track-text" slot="untoggled">OFF</span>
+        </cv-switch>
+
+        <cv-switch size="large">
+          Visibility
+          <span class="switch-demo-track-text" slot="toggled">YES</span>
+          <span class="switch-demo-track-text" slot="untoggled">NO</span>
+        </cv-switch>
+      </div>
+    </div>
+  </section>
+
+  <section class="switch-demo-section" aria-labelledby="switch-demo-form">
+    <div class="switch-demo-section-header">
+      <span class="switch-demo-kicker">Form grouping</span>
+      <h4 id="switch-demo-form">Switches inside a fieldset</h4>
+    </div>
+
+    <cv-fieldset class="switch-demo-fieldset">
+      <span slot="legend">Vault behavior</span>
+      <span slot="description">Grouped settings preserve native fieldset semantics.</span>
+
+      <cv-switch name="unlock-notice" checked>Warn before opening hidden vault</cv-switch>
+      <cv-switch name="local-only">Keep notes on this device only</cv-switch>
+      <cv-switch name="admin-policy" checked disabled>Organization policy lock</cv-switch>
+    </cv-fieldset>
+  </section>
+</div>
 ```

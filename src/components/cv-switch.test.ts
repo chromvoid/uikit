@@ -37,6 +37,8 @@ const getBase = (sw: CVSwitch) => sw.shadowRoot!.querySelector('[part="base"]') 
 
 const getControl = (sw: CVSwitch) => sw.shadowRoot!.querySelector('[part="control"]') as HTMLElement
 
+const getLoader = (sw: CVSwitch) => sw.shadowRoot!.querySelector('[part="loader"]') as HTMLElement | null
+
 const hasElementInternals =
   typeof (HTMLElement.prototype as {attachInternals?: unknown}).attachInternals === 'function'
 
@@ -67,6 +69,18 @@ describe('cv-switch', () => {
       const control = getControl(sw)
       const thumb = control.querySelector('[part="thumb"]')
       expect(thumb).not.toBeNull()
+    })
+
+    it('does NOT render [part="loader"] when not loading', async () => {
+      const sw = await createSwitch()
+      expect(getLoader(sw)).toBeNull()
+    })
+
+    it('renders [part="loader"] with aria-hidden="true" when loading', async () => {
+      const sw = await createSwitch({loading: true})
+      const loader = getLoader(sw)
+      expect(loader).not.toBeNull()
+      expect(loader!.getAttribute('aria-hidden')).toBe('true')
     })
 
     it('renders [part="label"] with default <slot> inside base', async () => {
@@ -144,6 +158,7 @@ describe('cv-switch', () => {
       const sw = await createSwitch()
       expect(sw.checked).toBe(false)
       expect(sw.disabled).toBe(false)
+      expect(sw.loading).toBe(false)
       expect(sw.size).toBe('medium')
       expect(sw.helpText).toBe('')
     })
@@ -152,10 +167,11 @@ describe('cv-switch', () => {
   // --- 3. Attribute reflection ---
 
   describe('attribute reflection', () => {
-    it('boolean attributes reflect: checked, disabled', async () => {
-      const sw = await createSwitch({checked: true, disabled: true})
+    it('boolean attributes reflect: checked, disabled, loading', async () => {
+      const sw = await createSwitch({checked: true, disabled: true, loading: true})
       expect(sw.hasAttribute('checked')).toBe(true)
       expect(sw.hasAttribute('disabled')).toBe(true)
+      expect(sw.hasAttribute('loading')).toBe(true)
     })
 
     it('string attributes reflect: size', async () => {
@@ -187,6 +203,11 @@ describe('cv-switch', () => {
       expect(getControl(sw).getAttribute('tabindex')).toBe('-1')
     })
 
+    it('tabindex="-1" when loading', async () => {
+      const sw = await createSwitch({loading: true})
+      expect(getControl(sw).getAttribute('tabindex')).toBe('-1')
+    })
+
     it('aria-checked reflects checked state', async () => {
       const sw = await createSwitch()
       expect(getControl(sw).getAttribute('aria-checked')).toBe('false')
@@ -203,6 +224,19 @@ describe('cv-switch', () => {
       sw.disabled = true
       await settle(sw)
       expect(getControl(sw).getAttribute('aria-disabled')).toBe('true')
+    })
+
+    it('aria-disabled="true" when loading', async () => {
+      const sw = await createSwitch({loading: true})
+      expect(getControl(sw).getAttribute('aria-disabled')).toBe('true')
+    })
+
+    it('aria-busy="true" when loading and absent when not loading', async () => {
+      const sw = await createSwitch({loading: true})
+      expect(getControl(sw).getAttribute('aria-busy')).toBe('true')
+
+      const sw2 = await createSwitch()
+      expect(getControl(sw2).hasAttribute('aria-busy')).toBe(false)
     })
 
     it('no aria-describedby when help-text is absent', async () => {
@@ -397,7 +431,43 @@ describe('cv-switch', () => {
     })
   })
 
-  // --- 8. Dynamic state updates ---
+  // --- 8. Loading blocks activation ---
+
+  describe('loading blocks activation', () => {
+    it('click, host click, Enter, and Space do not toggle or emit events when loading', async () => {
+      const sw = await createSwitch({loading: true})
+      let inputCount = 0
+      let changeCount = 0
+      sw.addEventListener('cv-input', () => inputCount++)
+      sw.addEventListener('cv-change', () => changeCount++)
+
+      getControl(sw).dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+      sw.click()
+      getControl(sw).dispatchEvent(new KeyboardEvent('keydown', {key: 'Enter', bubbles: true}))
+      getControl(sw).dispatchEvent(new KeyboardEvent('keydown', {key: ' ', bubbles: true}))
+      await settle(sw)
+
+      expect(sw.checked).toBe(false)
+      expect(getControl(sw).getAttribute('aria-checked')).toBe('false')
+      expect(inputCount).toBe(0)
+      expect(changeCount).toBe(0)
+    })
+
+    it('allows controlled checked updates while loading', async () => {
+      const sw = await createSwitch({loading: true})
+      let changeCount = 0
+      sw.addEventListener('cv-change', () => changeCount++)
+
+      sw.checked = true
+      await settle(sw)
+
+      expect(sw.checked).toBe(true)
+      expect(getControl(sw).getAttribute('aria-checked')).toBe('true')
+      expect(changeCount).toBe(0)
+    })
+  })
+
+  // --- 9. Dynamic state updates ---
 
   describe('dynamic state updates', () => {
     it('runtime disabled syncs aria-disabled', async () => {
@@ -411,6 +481,28 @@ describe('cv-switch', () => {
       sw.disabled = false
       await settle(sw)
       expect(getControl(sw).getAttribute('aria-disabled')).toBe('false')
+    })
+
+    it('runtime loading syncs aria-busy, aria-disabled, tabindex, and loader', async () => {
+      const sw = await createSwitch()
+      expect(getControl(sw).hasAttribute('aria-busy')).toBe(false)
+      expect(getControl(sw).getAttribute('aria-disabled')).toBe('false')
+      expect(getControl(sw).getAttribute('tabindex')).toBe('0')
+      expect(getLoader(sw)).toBeNull()
+
+      sw.loading = true
+      await settle(sw)
+      expect(getControl(sw).getAttribute('aria-busy')).toBe('true')
+      expect(getControl(sw).getAttribute('aria-disabled')).toBe('true')
+      expect(getControl(sw).getAttribute('tabindex')).toBe('-1')
+      expect(getLoader(sw)).not.toBeNull()
+
+      sw.loading = false
+      await settle(sw)
+      expect(getControl(sw).hasAttribute('aria-busy')).toBe(false)
+      expect(getControl(sw).getAttribute('aria-disabled')).toBe('false')
+      expect(getControl(sw).getAttribute('tabindex')).toBe('0')
+      expect(getLoader(sw)).toBeNull()
     })
 
     it('runtime checked syncs aria-checked', async () => {
@@ -440,7 +532,7 @@ describe('cv-switch', () => {
     })
   })
 
-  // --- 9. Size attribute ---
+  // --- 10. Size attribute ---
 
   describe('size attribute', () => {
     it('defaults to "medium"', async () => {
@@ -462,7 +554,7 @@ describe('cv-switch', () => {
     })
   })
 
-  // --- 10. Toggled / untoggled slot visibility ---
+  // --- 11. Toggled / untoggled slot visibility ---
 
   describe('toggled/untoggled slot visibility', () => {
     it('toggled part is hidden when unchecked', async () => {
@@ -540,7 +632,7 @@ describe('cv-switch', () => {
     })
   })
 
-  // --- 11. Help text ---
+  // --- 12. Help text ---
 
   describe('help text', () => {
     it('help-text attribute renders help text content', async () => {
@@ -608,7 +700,7 @@ describe('cv-switch', () => {
     })
   })
 
-  // --- 12. Headless contract delegation ---
+  // --- 13. Headless contract delegation ---
 
   describe('headless contract delegation', () => {
     it('control element receives role from headless getSwitchProps()', async () => {
@@ -632,6 +724,12 @@ describe('cv-switch', () => {
       const sw = await createSwitch({disabled: true})
       const control = getControl(sw)
       expect(control.getAttribute('aria-disabled')).toBe('true')
+    })
+
+    it('control element receives aria-busy from headless getSwitchProps()', async () => {
+      const sw = await createSwitch({loading: true})
+      const control = getControl(sw)
+      expect(control.getAttribute('aria-busy')).toBe('true')
     })
 
     it('control element receives tabindex from headless getSwitchProps()', async () => {
@@ -675,6 +773,18 @@ describe('cv-switch', () => {
       expect(value).toBe('enabled')
     })
 
+    it('keeps checked form value while loading', async () => {
+      const sw = await createSwitch({checked: true, loading: true})
+      sw.value = 'enabled'
+      await settle(sw)
+
+      const value = (
+        sw as unknown as {getFormAssociatedValue(): string | File | FormData | null}
+      ).getFormAssociatedValue()
+
+      expect(value).toBe('enabled')
+    })
+
     it('treats required switch as invalid until checked', async () => {
       const sw = await createSwitch({required: true})
 
@@ -709,7 +819,7 @@ describe('cv-switch', () => {
     })
   })
 
-  // --- 13. Corner cases ---
+  // --- 14. Corner cases ---
 
   describe('corner cases', () => {
     it('clicking the label area toggles the switch', async () => {
@@ -800,12 +910,8 @@ describe('cv-switch', () => {
     it('modifier + Space/Enter does not toggle the switch', async () => {
       const sw = await createSwitch()
 
-      getControl(sw).dispatchEvent(
-        new KeyboardEvent('keydown', {key: ' ', ctrlKey: true, bubbles: true}),
-      )
-      getControl(sw).dispatchEvent(
-        new KeyboardEvent('keydown', {key: 'Enter', metaKey: true, bubbles: true}),
-      )
+      getControl(sw).dispatchEvent(new KeyboardEvent('keydown', {key: ' ', ctrlKey: true, bubbles: true}))
+      getControl(sw).dispatchEvent(new KeyboardEvent('keydown', {key: 'Enter', metaKey: true, bubbles: true}))
       await settle(sw)
 
       expect(sw.checked).toBe(false)
