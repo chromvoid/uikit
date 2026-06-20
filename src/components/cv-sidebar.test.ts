@@ -7,6 +7,12 @@ import {resetBodyScrollLockForTesting} from './scroll-lock'
 CVSidebar.define()
 CVSidebarItem.define()
 
+const stylesToText = () =>
+  (CVSidebar.styles as Array<{cssText?: string}>).map((style) => style.cssText ?? '').join('\n')
+
+const transitionsToText = (cssText: string) =>
+  (cssText.match(/transition(?:-[a-z-]+)?:[^;]+;/g) ?? []).join('\n')
+
 const originalIntersectionObserver = globalThis.IntersectionObserver
 const originalInnerHeight = window.innerHeight
 const originalScrollTo = window.scrollTo
@@ -595,6 +601,38 @@ describe('cv-sidebar', () => {
       const el = await createSidebar({collapsed: true})
       expect(el.hasAttribute('collapsed')).toBe(true)
       expect(el.hasAttribute('expanded')).toBe(false)
+    })
+
+    it('stylesheet keeps collapsed desktop rail compact', () => {
+      const cssText = stylesToText()
+
+      expect(cssText).toMatch(
+        /:host\(:not\(\[mobile\]\)\)\s*{[\s\S]*inline-size:\s*var\(--cv-sidebar-inline-size/,
+      )
+      expect(cssText).toMatch(
+        /:host\(\[collapsed\]:not\(\[mobile\]\)\)\s*{[\s\S]*inline-size:\s*var\(--cv-sidebar-rail-inline-size/,
+      )
+      expect(cssText).toMatch(
+        /:host\(\[collapsed\]:not\(\[mobile\]\)\) slot\[name='header'\]\s*{[\s\S]*display:\s*none;/,
+      )
+      expect(cssText).toMatch(
+        /:host\(\[collapsed\]:not\(\[mobile\]\)\) \[part='footer'\]\s*{[\s\S]*display:\s*none;/,
+      )
+    })
+
+    it('stylesheet keeps sidebar motion off layout dimensions', () => {
+      const cssText = stylesToText()
+      const transitionText = transitionsToText(cssText)
+
+      expect(transitionText).not.toMatch(/\b(?:inline-size|width|grid-template-columns)\b/)
+      expect(cssText).toMatch(/\[part='overlay'\]\s*{[\s\S]*transition:[\s\S]*opacity[\s\S]*display/)
+      expect(cssText).toMatch(
+        /:host\(\[mobile\]\) \[part='panel'\]\s*{[\s\S]*transition:[\s\S]*opacity[\s\S]*transform[\s\S]*display/,
+      )
+      expect(cssText).toContain('transition-behavior: allow-discrete')
+      expect(cssText).toMatch(
+        /@media \(prefers-reduced-motion: reduce\)\s*{[\s\S]*\[part='overlay'\],[\s\S]*:host\(\[mobile\]\) \[part='panel'\],[\s\S]*\[part='toggle'\]\s*{[\s\S]*transition:\s*none;/,
+      )
     })
   })
 
@@ -1298,8 +1336,7 @@ describe('cv-sidebar', () => {
       // Removing the href reflects null onto the property; collecting scrollspy
       // bindings must null-guard it instead of calling null.startsWith().
       item.removeAttribute('href')
-      const collect = (el as unknown as {collectScrollspyBindings: () => unknown[]})
-        .collectScrollspyBindings
+      const collect = (el as unknown as {collectScrollspyBindings: () => unknown[]}).collectScrollspyBindings
       expect(() => collect.call(el)).not.toThrow()
     })
 

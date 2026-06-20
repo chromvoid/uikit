@@ -91,11 +91,24 @@ export class CVSidebarItem extends LitElement {
         flex-shrink: 0;
       }
 
+      [part='suffix'] {
+        opacity: 1;
+        transform: translateX(0);
+        transition:
+          opacity var(--cv-duration-fast, 120ms) var(--cv-easing-standard, ease),
+          transform var(--cv-duration-fast, 120ms) var(--cv-easing-standard, ease);
+      }
+
       [part='label'] {
         position: relative;
         z-index: 1;
         flex: 1;
         min-inline-size: 0;
+        opacity: 1;
+        transform: translateX(0);
+        transition:
+          opacity var(--cv-duration-fast, 120ms) var(--cv-easing-standard, ease),
+          transform var(--cv-duration-fast, 120ms) var(--cv-easing-standard, ease);
       }
 
       :host([data-sidebar-collapsed]:not([data-sidebar-mobile])) [part='base'] {
@@ -113,10 +126,22 @@ export class CVSidebarItem extends LitElement {
         clip: rect(0 0 0 0);
         overflow: hidden;
         white-space: nowrap;
+        opacity: 0;
+        transform: translateX(-4px);
       }
 
       :host([data-sidebar-collapsed]:not([data-sidebar-mobile])) [part='suffix'] {
         display: none;
+        opacity: 0;
+        transform: translateX(-4px);
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        [part='label'],
+        [part='suffix'] {
+          transition: none;
+          transform: none;
+        }
       }
     `,
   ]

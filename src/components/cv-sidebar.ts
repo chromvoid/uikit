@@ -153,15 +153,26 @@ export class CVSidebar extends ReatomLitElement {
         position: relative;
       }
 
+      :host(:not([mobile])) {
+        inline-size: var(--cv-sidebar-inline-size, 280px);
+      }
+
       [part='overlay'] {
         position: fixed;
         inset: 0;
         z-index: calc(var(--cv-sidebar-z-index, 30) + 10);
         background: var(--cv-sidebar-overlay-color, var(--cv-color-overlay));
+        opacity: 1;
+        transition:
+          opacity var(--cv-sidebar-transition-duration, var(--cv-duration-normal, 200ms))
+            var(--cv-sidebar-transition-easing, var(--cv-easing-standard, ease)),
+          display var(--cv-sidebar-transition-duration, var(--cv-duration-normal, 200ms)) allow-discrete;
+        transition-behavior: allow-discrete;
       }
 
       [part='overlay'][hidden] {
         display: none;
+        opacity: 0;
       }
 
       [part='panel'] {
@@ -179,6 +190,10 @@ export class CVSidebar extends ReatomLitElement {
         inline-size: var(--cv-sidebar-rail-inline-size, 56px);
       }
 
+      :host([collapsed]:not([mobile])) {
+        inline-size: var(--cv-sidebar-rail-inline-size, 56px);
+      }
+
       :host([collapsed]:not([mobile])) [part='header'] {
         box-sizing: border-box;
         inline-size: var(--cv-sidebar-rail-inline-size, 56px);
@@ -190,6 +205,10 @@ export class CVSidebar extends ReatomLitElement {
       }
 
       :host([collapsed]:not([mobile])) slot[name='header'] {
+        display: none;
+      }
+
+      :host([collapsed]:not([mobile])) [part='footer'] {
         display: none;
       }
 
@@ -214,10 +233,33 @@ export class CVSidebar extends ReatomLitElement {
         inset-inline-start: 0;
         z-index: calc(var(--cv-sidebar-z-index, 30) + 10);
         inline-size: var(--cv-sidebar-inline-size, 280px);
+        opacity: 1;
+        transform: translateX(0);
+        transition:
+          opacity var(--cv-sidebar-transition-duration, var(--cv-duration-normal, 200ms))
+            var(--cv-sidebar-transition-easing, var(--cv-easing-standard, ease)),
+          transform var(--cv-sidebar-transition-duration, var(--cv-duration-normal, 200ms))
+            var(--cv-sidebar-transition-easing, var(--cv-easing-standard, ease)),
+          display var(--cv-sidebar-transition-duration, var(--cv-duration-normal, 200ms)) allow-discrete;
+        transition-behavior: allow-discrete;
+        will-change: opacity, transform;
       }
 
       :host([mobile]:not([overlay-open])) [part='panel'] {
         display: none;
+        opacity: 0;
+        transform: translateX(-8px);
+      }
+
+      @starting-style {
+        [part='overlay']:not([hidden]) {
+          opacity: 0;
+        }
+
+        :host([mobile][overlay-open]) [part='panel'] {
+          opacity: 0;
+          transform: translateX(-8px);
+        }
       }
 
       [part='header'] {
@@ -273,8 +315,14 @@ export class CVSidebar extends ReatomLitElement {
       }
 
       @media (prefers-reduced-motion: reduce) {
+        [part='overlay'],
+        :host([mobile]) [part='panel'],
         [part='toggle'] {
           transition: none;
+        }
+
+        :host([mobile]) [part='panel'] {
+          transform: none;
         }
       }
     `,

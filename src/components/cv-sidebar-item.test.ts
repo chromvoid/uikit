@@ -10,6 +10,12 @@ const settle = async (element: CVSidebarItem) => {
   await element.updateComplete
 }
 
+const stylesToText = () =>
+  (CVSidebarItem.styles as Array<{cssText?: string}>).map((style) => style.cssText ?? '').join('\n')
+
+const transitionsToText = (cssText: string) =>
+  (cssText.match(/transition(?:-[a-z-]+)?:[^;]+;/g) ?? []).join('\n')
+
 const createItem = async (attrs?: Partial<CVSidebarItem>) => {
   const el = document.createElement('cv-sidebar-item') as CVSidebarItem
   if (attrs) Object.assign(el, attrs)
@@ -123,5 +129,31 @@ describe('cv-sidebar-item', () => {
         .map((node) => node.textContent)
         .join(''),
     ).toContain('Threats')
+  })
+
+  it('stylesheet keeps collapsed rail labels visually hidden but accessible', () => {
+    const cssText = stylesToText()
+    const collapsedLabelRule =
+      cssText.match(
+        /:host\(\[data-sidebar-collapsed\]:not\(\[data-sidebar-mobile\]\)\) \[part='label'\]\s*{(?<body>[\s\S]*?)}/,
+      )?.groups?.body ?? ''
+
+    expect(collapsedLabelRule).toContain('clip: rect(0 0 0 0);')
+    expect(collapsedLabelRule).toContain('white-space: nowrap;')
+    expect(collapsedLabelRule).toContain('opacity: 0;')
+    expect(collapsedLabelRule).toContain('transform: translateX(-4px);')
+    expect(collapsedLabelRule).not.toMatch(/display:\s*none/)
+  })
+
+  it('stylesheet reveals labels and suffixes with non-layout motion', () => {
+    const cssText = stylesToText()
+    const transitionText = transitionsToText(cssText)
+
+    expect(transitionText).not.toMatch(/\b(?:inline-size|width|grid-template-columns)\b/)
+    expect(cssText).toMatch(/\[part='label'\]\s*{[\s\S]*transition:[\s\S]*opacity[\s\S]*transform/)
+    expect(cssText).toMatch(/\[part='suffix'\]\s*{[\s\S]*transition:[\s\S]*opacity[\s\S]*transform/)
+    expect(cssText).toMatch(
+      /@media \(prefers-reduced-motion: reduce\)\s*{[\s\S]*\[part='label'\],[\s\S]*\[part='suffix'\]\s*{[\s\S]*transition:\s*none;[\s\S]*transform:\s*none;/,
+    )
   })
 })
