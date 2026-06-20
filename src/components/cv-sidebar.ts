@@ -172,8 +172,6 @@ export class CVSidebar extends ReatomLitElement {
         block-size: 100%;
         background: var(--cv-sidebar-background, var(--cv-color-surface, #141923));
         border-inline-end: 1px solid var(--cv-sidebar-border-color, var(--cv-color-border, #2a3245));
-        transition: inline-size var(--cv-sidebar-transition-duration, var(--cv-duration-normal, 200ms))
-          var(--cv-sidebar-transition-easing, var(--cv-easing-standard, ease));
         overflow: hidden;
       }
 
@@ -226,8 +224,16 @@ export class CVSidebar extends ReatomLitElement {
         display: flex;
         align-items: center;
         gap: var(--cv-space-2, 8px);
+        min-inline-size: 0;
         padding-block: var(--cv-sidebar-padding-block, var(--cv-space-3, 12px));
         padding-inline: var(--cv-sidebar-padding-inline, var(--cv-space-3, 12px));
+      }
+
+      ::slotted([slot='header']) {
+        min-inline-size: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
 
       [part='toggle'] {
@@ -243,6 +249,11 @@ export class CVSidebar extends ReatomLitElement {
         color: var(--cv-color-text-muted, #9aa6bf);
         cursor: pointer;
         margin-inline-start: auto;
+        transition:
+          background-color var(--cv-sidebar-transition-duration, var(--cv-duration-normal, 200ms))
+            var(--cv-sidebar-transition-easing, var(--cv-easing-standard, ease)),
+          color var(--cv-sidebar-transition-duration, var(--cv-duration-normal, 200ms))
+            var(--cv-sidebar-transition-easing, var(--cv-easing-standard, ease));
       }
 
       [part='toggle']:focus-visible {
@@ -259,6 +270,12 @@ export class CVSidebar extends ReatomLitElement {
       [part='footer'] {
         padding-block: var(--cv-sidebar-padding-block, var(--cv-space-3, 12px));
         padding-inline: var(--cv-sidebar-padding-inline, var(--cv-space-3, 12px));
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        [part='toggle'] {
+          transition: none;
+        }
       }
     `,
   ]
