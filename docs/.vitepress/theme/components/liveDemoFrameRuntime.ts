@@ -74,7 +74,12 @@ function runDemoScript(script: HTMLScriptElement): void {
 function measurePreviewHeight(preview: HTMLElement): number {
   const rect = preview.getBoundingClientRect()
   return Math.ceil(
-    Math.max(rect.height, preview.scrollHeight, document.body.scrollHeight, document.documentElement.scrollHeight),
+    Math.max(
+      rect.height,
+      preview.scrollHeight,
+      document.body.scrollHeight,
+      document.documentElement.scrollHeight,
+    ),
   )
 }
 
