@@ -107,7 +107,7 @@ keyboard behavior, and events.
 This snippet is static because `cv-option` is a child element; live selection
 and keyboard behavior are demonstrated on `cv-listbox`.
 
-```xml
+```html
 <cv-listbox aria-label="Storage locations">
   <!-- Basic value + label text -->
   <cv-option value="vault">Vault</cv-option>

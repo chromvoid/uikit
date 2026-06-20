@@ -12,113 +12,109 @@ These examples focus on listbox-level behavior and collection structure. For
 option label composition, prefix/suffix slots, and rich option content, see
 [`cv-option`](./option.md).
 
-### Basic single-select
-
-Default listbox behavior: one focused list, one selected option.
-
 ```html
-<cv-listbox aria-label="Fruits">
-  <cv-option value="apple">Apple</cv-option>
-  <cv-option value="banana">Banana</cv-option>
-  <cv-option value="cherry">Cherry</cv-option>
-</cv-listbox>
-```
+<div class="listbox-demo-board" data-live-demo-height="760">
+  <!-- Basic single-select: one focused list, one selected option. -->
+  <section class="listbox-demo-example" aria-labelledby="listbox-demo-basic">
+    <h3 id="listbox-demo-basic">Basic single-select</h3>
+    <p>Default listbox behavior with one selected option.</p>
+    <cv-listbox aria-label="Fruits">
+      <cv-option value="apple">Apple</cv-option>
+      <cv-option value="banana">Banana</cv-option>
+      <cv-option value="cherry">Cherry</cv-option>
+    </cv-listbox>
+  </section>
 
-### Multiple selection
+  <!-- Multiple selection: the user can keep several options selected. -->
+  <section class="listbox-demo-example" aria-labelledby="listbox-demo-multiple">
+    <h3 id="listbox-demo-multiple">Multiple selection</h3>
+    <p>Use selection-mode="multiple" for independent toggles.</p>
+    <cv-listbox selection-mode="multiple" aria-label="Toppings">
+      <cv-option value="cheese">Cheese</cv-option>
+      <cv-option value="peppers">Peppers</cv-option>
+      <cv-option value="onions">Onions</cv-option>
+      <cv-option value="olives" disabled>Olives</cv-option>
+    </cv-listbox>
+  </section>
 
-Use `selection-mode="multiple"` when the user can keep several options selected.
+  <!-- Pre-selected options: declare initial state on child options. -->
+  <section class="listbox-demo-example" aria-labelledby="listbox-demo-selected">
+    <h3 id="listbox-demo-selected">Pre-selected options</h3>
+    <p>Initial selection can be declared with selected.</p>
+    <cv-listbox selection-mode="multiple" aria-label="Languages">
+      <cv-option value="js" selected>JavaScript</cv-option>
+      <cv-option value="ts" selected>TypeScript</cv-option>
+      <cv-option value="py">Python</cv-option>
+      <cv-option value="rs">Rust</cv-option>
+    </cv-listbox>
+  </section>
 
-```html
-<cv-listbox selection-mode="multiple" aria-label="Toppings">
-  <cv-option value="cheese">Cheese</cv-option>
-  <cv-option value="peppers">Peppers</cv-option>
-  <cv-option value="onions">Onions</cv-option>
-  <cv-option value="olives" disabled>Olives</cv-option>
-</cv-listbox>
-```
+  <!-- Roving tabindex: options receive DOM focus directly. -->
+  <section class="listbox-demo-example" aria-labelledby="listbox-demo-roving">
+    <h3 id="listbox-demo-roving">Roving tabindex focus</h3>
+    <p>Switch focus strategy when options should receive focus.</p>
+    <cv-listbox focus-strategy="roving-tabindex" aria-label="Colors">
+      <cv-option value="red">Red</cv-option>
+      <cv-option value="green">Green</cv-option>
+      <cv-option value="blue">Blue</cv-option>
+    </cv-listbox>
+  </section>
 
-### Pre-selected options
+  <!-- Horizontal orientation: compact alignment or segmented-list patterns. -->
+  <section class="listbox-demo-example" aria-labelledby="listbox-demo-horizontal">
+    <h3 id="listbox-demo-horizontal">Horizontal orientation</h3>
+    <p>Use orientation="horizontal" for compact groups.</p>
+    <cv-listbox orientation="horizontal" aria-label="Alignment">
+      <cv-option value="left">Left</cv-option>
+      <cv-option value="center">Center</cv-option>
+      <cv-option value="right">Right</cv-option>
+    </cv-listbox>
+  </section>
 
-Initial selection can be declared on child options with `selected`.
+  <!-- Range selection: Shift+Arrow and Shift+Space multi-select workflows. -->
+  <section class="listbox-demo-example" aria-labelledby="listbox-demo-range">
+    <h3 id="listbox-demo-range">Range selection</h3>
+    <p>Enable range-selection for keyboard range workflows.</p>
+    <cv-listbox selection-mode="multiple" range-selection aria-label="Files">
+      <cv-option value="file1">document.pdf</cv-option>
+      <cv-option value="file2">image.png</cv-option>
+      <cv-option value="file3">notes.txt</cv-option>
+      <cv-option value="file4">data.csv</cv-option>
+    </cv-listbox>
+  </section>
 
-```html
-<cv-listbox selection-mode="multiple" aria-label="Languages">
-  <cv-option value="js" selected>JavaScript</cv-option>
-  <cv-option value="ts" selected>TypeScript</cv-option>
-  <cv-option value="py">Python</cv-option>
-  <cv-option value="rs">Rust</cv-option>
-</cv-listbox>
-```
+  <!-- Option groups: related options preserve one navigation order. -->
+  <section class="listbox-demo-example" aria-labelledby="listbox-demo-groups">
+    <h3 id="listbox-demo-groups">Option groups</h3>
+    <p>Group related options with cv-listbox-group.</p>
+    <cv-listbox aria-label="City">
+      <cv-listbox-group label="North America">
+        <cv-option value="nyc">New York</cv-option>
+        <cv-option value="la">Los Angeles</cv-option>
+        <cv-option value="tor">Toronto</cv-option>
+      </cv-listbox-group>
+      <cv-listbox-group label="Europe">
+        <cv-option value="lon">London</cv-option>
+        <cv-option value="par">Paris</cv-option>
+        <cv-option value="ber">Berlin</cv-option>
+      </cv-listbox-group>
+    </cv-listbox>
+  </section>
 
-### Roving tabindex focus
-
-Switch to DOM-roving focus when options themselves should receive keyboard focus.
-
-```html
-<cv-listbox focus-strategy="roving-tabindex" aria-label="Colors">
-  <cv-option value="red">Red</cv-option>
-  <cv-option value="green">Green</cv-option>
-  <cv-option value="blue">Blue</cv-option>
-</cv-listbox>
-```
-
-### Horizontal orientation
-
-Use horizontal orientation for compact alignment or segmented-list patterns.
-
-```html
-<cv-listbox orientation="horizontal" aria-label="Alignment">
-  <cv-option value="left">Left</cv-option>
-  <cv-option value="center">Center</cv-option>
-  <cv-option value="right">Right</cv-option>
-</cv-listbox>
-```
-
-### Range selection
-
-Enable range selection for Shift+Arrow and Shift+Space multi-select workflows.
-
-```html
-<cv-listbox selection-mode="multiple" range-selection aria-label="Files">
-  <cv-option value="file1">document.pdf</cv-option>
-  <cv-option value="file2">image.png</cv-option>
-  <cv-option value="file3">notes.txt</cv-option>
-  <cv-option value="file4">data.csv</cv-option>
-</cv-listbox>
-```
-
-### Option groups
-
-Group related options with `cv-listbox-group` while preserving one navigation order.
-
-```html
-<cv-listbox aria-label="City">
-  <cv-listbox-group label="North America">
-    <cv-option value="nyc">New York</cv-option>
-    <cv-option value="la">Los Angeles</cv-option>
-    <cv-option value="tor">Toronto</cv-option>
-  </cv-listbox-group>
-  <cv-listbox-group label="Europe">
-    <cv-option value="lon">London</cv-option>
-    <cv-option value="par">Paris</cv-option>
-    <cv-option value="ber">Berlin</cv-option>
-  </cv-listbox-group>
-</cv-listbox>
-```
-
-### Mixed grouped and ungrouped options
-
-Ungrouped options can appear alongside grouped sections in the same listbox.
-
-```html
-<cv-listbox aria-label="Items">
-  <cv-option value="misc1">Miscellaneous A</cv-option>
-  <cv-listbox-group label="Category 1">
-    <cv-option value="cat1a">Item 1A</cv-option>
-    <cv-option value="cat1b">Item 1B</cv-option>
-  </cv-listbox-group>
-  <cv-option value="misc2">Miscellaneous B</cv-option>
-</cv-listbox>
+  <!-- Mixed structure: ungrouped options can sit beside grouped sections. -->
+  <section class="listbox-demo-example" aria-labelledby="listbox-demo-mixed">
+    <h3 id="listbox-demo-mixed">Mixed grouped and ungrouped options</h3>
+    <p>Ungrouped options can appear alongside grouped sections.</p>
+    <cv-listbox aria-label="Items">
+      <cv-option value="misc1">Miscellaneous A</cv-option>
+      <cv-listbox-group label="Category 1">
+        <cv-option value="cat1a">Item 1A</cv-option>
+        <cv-option value="cat1b">Item 1B</cv-option>
+      </cv-listbox-group>
+      <cv-option value="misc2">Miscellaneous B</cv-option>
+    </cv-listbox>
+  </section>
+</div>
 ```
 
 ## Anatomy
