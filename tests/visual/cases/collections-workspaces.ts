@@ -1,3 +1,4 @@
+import {setIconBasePath} from '../../../src/components/cv-icon'
 import type {UikitVisualCase} from '../component-visual-types'
 import {visualCase, waitForElementUpdate} from './helpers'
 

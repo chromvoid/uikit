@@ -26,6 +26,9 @@ export class CVCarouselSlide extends LitElement {
     css`
       :host {
         display: block;
+        flex: 0 0 var(--cv-carousel-slide-inline-size, 100%);
+        scroll-snap-align: center;
+        scroll-snap-stop: always;
       }
 
       :host([hidden]) {
@@ -39,10 +42,23 @@ export class CVCarouselSlide extends LitElement {
         border-radius: var(--cv-radius-md, 10px);
         border: 1px solid var(--cv-color-border, #2a3245);
         background: var(--cv-color-surface, #141923);
+        color: var(--cv-color-text, #e8ecf6);
+        transition:
+          border-color 120ms ease,
+          opacity 120ms ease;
+      }
+
+      :host([inert]) {
+        pointer-events: none;
+      }
+
+      :host([aria-hidden='true']) [part='base'] {
+        opacity: 0.72;
       }
 
       :host([active]) [part='base'] {
         border-color: var(--cv-color-primary, #65d7ff);
+        opacity: 1;
       }
     `,
   ]

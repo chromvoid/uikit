@@ -5,6 +5,7 @@ import type {PropertyValues} from 'lit'
 import {html} from '../reatom-lit/index.js'
 import {ReatomLitElement} from '../reatom-lit/ReatomLitElement'
 import {CVCarouselSlide} from './cv-carousel-slide'
+import {CVIcon} from './cv-icon'
 
 export interface CVCarouselEventDetail {
   activeIndex: number
@@ -55,9 +56,10 @@ export class CVCarousel extends ReatomLitElement {
   private readonly idBase = `cv-carousel-${++cvCarouselNonce}`
   private slideRecords: CarouselSlideRecord[] = []
   private model: CarouselModel
-  private swipeStartX = 0
-  private swipeStartY = 0
-  private isSwiping = false
+  private scrollSyncFrame: number | null = null
+  private programmaticScrollReleaseTimer: ReturnType<typeof setTimeout> | null = null
+  private isProgrammaticScroll = false
+  private lastScrolledActiveIndex = -1
 
   constructor() {
     super()
@@ -79,47 +81,127 @@ export class CVCarousel extends ReatomLitElement {
     css`
       :host {
         display: block;
+        --cv-carousel-gap: var(--cv-space-3, 12px);
+        --cv-carousel-control-size: 48px;
+        --cv-carousel-control-radius: var(--cv-radius-md, 10px);
+        --cv-carousel-indicator-size: 10px;
+        --cv-carousel-indicator-target-size: var(--cv-carousel-control-size);
+        --cv-carousel-scroll-padding: var(--cv-space-2, 8px);
+        --cv-carousel-slide-inline-size: min(100%, 42rem);
+        --cv-carousel-mobile-peek: 32px;
       }
 
       [part='base'] {
         display: grid;
-        gap: var(--cv-space-2, 8px);
+        gap: var(--cv-carousel-gap);
       }
 
       [part='controls'] {
         display: flex;
         flex-wrap: wrap;
-        gap: var(--cv-space-1, 4px);
+        justify-content: flex-end;
+        gap: var(--cv-space-2, 8px);
       }
 
       [part='slides'] {
-        display: grid;
-        gap: var(--cv-space-2, 8px);
+        display: flex;
+        gap: var(--cv-carousel-gap);
+        overflow-x: auto;
+        overscroll-behavior-inline: contain;
+        scroll-padding-inline: var(--cv-carousel-scroll-padding);
+        scroll-snap-type: x mandatory;
+        scrollbar-width: none;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      [part='slides']::-webkit-scrollbar {
+        display: none;
+      }
+
+      [part='slides'] slot {
+        display: contents;
       }
 
       [part='indicators'] {
         display: flex;
         flex-wrap: wrap;
+        justify-content: center;
         gap: var(--cv-space-1, 4px);
       }
 
       button[part~='control'],
       button[part~='indicator'] {
-        min-block-size: 32px;
-        min-inline-size: 32px;
-        border-radius: var(--cv-radius-sm, 6px);
+        appearance: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+        font: inherit;
+        line-height: 1;
         border: 1px solid var(--cv-color-border, #2a3245);
         background: var(--cv-color-surface, #141923);
         color: var(--cv-color-text, #e8ecf6);
+        cursor: pointer;
+        transition:
+          border-color 120ms ease,
+          background 120ms ease,
+          color 120ms ease,
+          transform 120ms ease;
       }
 
-      button[part~='indicator'][data-active='true'] {
+      button[part~='control'] {
+        min-block-size: var(--cv-carousel-control-size);
+        min-inline-size: var(--cv-carousel-control-size);
+        border-radius: var(--cv-carousel-control-radius);
+      }
+
+      button[part~='indicator'] {
+        min-block-size: var(--cv-carousel-indicator-target-size);
+        min-inline-size: var(--cv-carousel-indicator-target-size);
+        border-color: transparent;
+        background: transparent;
+        border-radius: 999px;
+      }
+
+      button[part~='control']:hover,
+      button[part~='indicator']:hover {
         border-color: var(--cv-color-primary, #65d7ff);
+        color: var(--cv-color-primary, #65d7ff);
+      }
+
+      button[part~='control']:focus-visible,
+      button[part~='indicator']:focus-visible {
+        outline: 2px solid var(--cv-color-primary, #65d7ff);
+        outline-offset: 2px;
+      }
+
+      [part='indicator-dot'] {
+        display: block;
+        inline-size: var(--cv-carousel-indicator-size);
+        block-size: var(--cv-carousel-indicator-size);
+        border-radius: 999px;
+        background: var(--cv-color-border, #2a3245);
+        transition:
+          background 120ms ease,
+          inline-size 120ms ease;
+      }
+
+      button[part~='indicator'][data-active='true'] [part='indicator-dot'] {
+        inline-size: calc(var(--cv-carousel-indicator-size) * 2.4);
+        background: var(--cv-color-primary, #65d7ff);
+      }
+
+      @media (max-width: 640px) {
+        :host {
+          --cv-carousel-scroll-padding: var(--cv-space-2, 8px);
+          --cv-carousel-slide-inline-size: calc(100% - var(--cv-carousel-mobile-peek));
+        }
       }
     `,
   ]
 
   static define() {
+    CVIcon.define()
     if (!customElements.get(this.elementName)) {
       customElements.define(this.elementName, this)
     }
@@ -134,6 +216,8 @@ export class CVCarousel extends ReatomLitElement {
     // Stop the self-rescheduling autoplay timer chain so it does not keep
     // running (and rescheduling) after the element leaves the DOM.
     this.model.actions.pause()
+    this.cancelPendingScrollSync()
+    this.clearProgrammaticScrollReleaseTimer()
     super.disconnectedCallback()
   }
 
@@ -202,6 +286,7 @@ export class CVCarousel extends ReatomLitElement {
     }
 
     this.syncSlideElements()
+    this.scrollActiveSlideIntoView()
   }
 
   next(): void {
@@ -313,6 +398,7 @@ export class CVCarousel extends ReatomLitElement {
       initialPaused: previous.paused,
     })
 
+    this.lastScrolledActiveIndex = -1
     this.syncSlideElements()
     this.syncControlledValuesFromModel()
 
@@ -332,7 +418,8 @@ export class CVCarousel extends ReatomLitElement {
       record.element.setAttribute('aria-hidden', props['aria-hidden'])
       record.element.setAttribute('data-active', props['data-active'])
       record.element.active = props['data-active'] === 'true'
-      record.element.hidden = props['aria-hidden'] === 'true'
+      record.element.hidden = false
+      record.element.toggleAttribute('inert', props['aria-hidden'] === 'true')
     }
   }
 
@@ -453,7 +540,11 @@ export class CVCarousel extends ReatomLitElement {
     this.applyInteractionResult(previous)
   }
 
-  private handleIndicatorClick = (index: number) => {
+  private handleIndicatorClick(event: Event) {
+    const target = event.currentTarget as HTMLElement | null
+    const index = Number(target?.dataset['index'])
+    if (!Number.isInteger(index)) return
+
     const previous = this.captureSnapshot()
     this.model.contracts.getIndicatorProps(index).onClick()
     this.applyInteractionResult(previous)
@@ -463,43 +554,118 @@ export class CVCarousel extends ReatomLitElement {
     this.rebuildModelFromSlot(true, true)
   }
 
-  private static readonly SWIPE_THRESHOLD = 30
-
-  private handleSlidesPointerDown(event: PointerEvent) {
-    this.swipeStartX = event.clientX
-    this.swipeStartY = event.clientY
-    this.isSwiping = true
+  private handleSlidesScroll(event: Event) {
+    if (this.isProgrammaticScroll) return
+    const target = event.currentTarget
+    if (!(target instanceof HTMLElement)) return
+    this.scheduleScrollSync(target)
   }
 
-  private handleSlidesPointerMove(event: PointerEvent) {
-    if (!this.isSwiping) return
-    // Track end position via the last pointermove; pointerup will use its own clientX
-    void event
+  private handleSlidesScrollEnd() {
+    this.clearProgrammaticScrollGuard()
   }
 
-  private handleSlidesPointerUp(event: PointerEvent) {
-    if (!this.isSwiping) return
-    this.isSwiping = false
+  private scheduleScrollSync(slidesContainer: HTMLElement): void {
+    if (this.scrollSyncFrame != null) return
 
-    const deltaX = event.clientX - this.swipeStartX
-    const deltaY = event.clientY - this.swipeStartY
-    const absDeltaX = Math.abs(deltaX)
-    const absDeltaY = Math.abs(deltaY)
+    this.scrollSyncFrame = this.requestAnimationFrame(() => {
+      this.scrollSyncFrame = null
+      this.syncActiveSlideFromScroll(slidesContainer)
+    })
+  }
 
-    // Ignore vertical drags and short drags below threshold
-    if (absDeltaX < CVCarousel.SWIPE_THRESHOLD || absDeltaY > absDeltaX) return
+  private syncActiveSlideFromScroll(slidesContainer: HTMLElement): void {
+    const nearestIndex = this.findNearestSlideIndex(slidesContainer)
+    if (nearestIndex == null || nearestIndex === this.model.state.activeSlideIndex()) return
 
-    if (deltaX > 0) {
-      this.prev()
-    } else {
-      this.next()
+    const previous = this.captureSnapshot()
+    this.model.actions.moveTo(nearestIndex)
+    this.applyInteractionResult(previous)
+  }
+
+  private findNearestSlideIndex(slidesContainer: HTMLElement): number | null {
+    if (this.slideRecords.length === 0) return null
+
+    const containerRect = slidesContainer.getBoundingClientRect()
+    const containerCenter = containerRect.left + containerRect.width / 2
+    let nearestIndex = 0
+    let nearestDistance = Number.POSITIVE_INFINITY
+
+    for (const [index, record] of this.slideRecords.entries()) {
+      const rect = record.element.getBoundingClientRect()
+      const slideCenter = rect.left + rect.width / 2
+      const distance = Math.abs(slideCenter - containerCenter)
+
+      if (distance < nearestDistance) {
+        nearestDistance = distance
+        nearestIndex = index
+      }
     }
+
+    return Number.isFinite(nearestDistance) ? nearestIndex : null
   }
 
-  private handleSlidesPointerCancel() {
-    // Reset swipe tracking when the gesture is cancelled (e.g. pointer capture
-    // lost) so a stale isSwiping flag does not leak into the next interaction.
-    this.isSwiping = false
+  private scrollActiveSlideIntoView(): void {
+    const activeIndex = this.model.state.activeSlideIndex()
+    if (activeIndex === this.lastScrolledActiveIndex) return
+
+    const record = this.slideRecords[activeIndex]
+    if (!record || typeof record.element.scrollIntoView !== 'function') return
+
+    this.lastScrolledActiveIndex = activeIndex
+    this.isProgrammaticScroll = true
+    record.element.scrollIntoView({
+      behavior: this.getScrollBehavior(),
+      block: 'nearest',
+      inline: 'center',
+    })
+    this.scheduleProgrammaticScrollRelease()
+  }
+
+  private getScrollBehavior(): ScrollBehavior {
+    if (typeof window.matchMedia !== 'function') return 'auto'
+    return window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'
+  }
+
+  private requestAnimationFrame(callback: FrameRequestCallback): number {
+    if (typeof window.requestAnimationFrame === 'function') {
+      return window.requestAnimationFrame(callback)
+    }
+
+    return window.setTimeout(() => callback(0), 0)
+  }
+
+  private cancelAnimationFrame(handle: number): void {
+    if (typeof window.cancelAnimationFrame === 'function') {
+      window.cancelAnimationFrame(handle)
+      return
+    }
+
+    window.clearTimeout(handle)
+  }
+
+  private scheduleProgrammaticScrollRelease(): void {
+    this.clearProgrammaticScrollReleaseTimer()
+    this.programmaticScrollReleaseTimer = setTimeout(() => {
+      this.clearProgrammaticScrollGuard()
+    }, 400)
+  }
+
+  private clearProgrammaticScrollGuard(): void {
+    this.clearProgrammaticScrollReleaseTimer()
+    this.isProgrammaticScroll = false
+  }
+
+  private clearProgrammaticScrollReleaseTimer(): void {
+    if (this.programmaticScrollReleaseTimer == null) return
+    clearTimeout(this.programmaticScrollReleaseTimer)
+    this.programmaticScrollReleaseTimer = null
+  }
+
+  private cancelPendingScrollSync(): void {
+    if (this.scrollSyncFrame == null) return
+    this.cancelAnimationFrame(this.scrollSyncFrame)
+    this.scrollSyncFrame = null
   }
 
   protected override render() {
@@ -508,6 +674,7 @@ export class CVCarousel extends ReatomLitElement {
     const prevProps = this.model.contracts.getPrevButtonProps()
     const nextProps = this.model.contracts.getNextButtonProps()
     const playPauseProps = this.model.contracts.getPlayPauseButtonProps()
+    const playPauseIcon = this.model.state.isPaused() ? 'circle-play' : 'pause-circle'
 
     return html`
       <section
@@ -532,10 +699,11 @@ export class CVCarousel extends ReatomLitElement {
             tabindex=${prevProps.tabindex}
             aria-controls=${prevProps['aria-controls']}
             aria-label=${prevProps['aria-label']}
+            title=${prevProps['aria-label']}
             part="control prev"
             @click=${this.handlePrevClick}
           >
-            Prev
+            <cv-icon name="chevron-left" size="m" aria-hidden="true"></cv-icon>
           </button>
 
           <button
@@ -544,10 +712,11 @@ export class CVCarousel extends ReatomLitElement {
             tabindex=${nextProps.tabindex}
             aria-controls=${nextProps['aria-controls']}
             aria-label=${nextProps['aria-label']}
+            title=${nextProps['aria-label']}
             part="control next"
             @click=${this.handleNextClick}
           >
-            Next
+            <cv-icon name="chevron-right" size="m" aria-hidden="true"></cv-icon>
           </button>
 
           <button
@@ -556,10 +725,11 @@ export class CVCarousel extends ReatomLitElement {
             tabindex=${playPauseProps.tabindex}
             aria-controls=${playPauseProps['aria-controls']}
             aria-label=${playPauseProps['aria-label']}
+            title=${playPauseProps['aria-label']}
             part="control play-pause"
             @click=${this.handlePlayPauseClick}
           >
-            ${this.model.state.isPaused() ? 'Play' : 'Pause'}
+            <cv-icon name=${playPauseIcon} size="m" aria-hidden="true"></cv-icon>
           </button>
         </div>
 
@@ -568,10 +738,8 @@ export class CVCarousel extends ReatomLitElement {
           role=${slideGroupProps.role}
           aria-label=${slideGroupProps['aria-label'] ?? nothing}
           part="slides"
-          @pointerdown=${this.handleSlidesPointerDown}
-          @pointermove=${this.handleSlidesPointerMove}
-          @pointerup=${this.handleSlidesPointerUp}
-          @pointercancel=${this.handleSlidesPointerCancel}
+          @scroll=${this.handleSlidesScroll}
+          @scrollend=${this.handleSlidesScrollEnd}
         >
           <slot @slotchange=${this.handleSlotChange}></slot>
         </div>
@@ -588,10 +756,11 @@ export class CVCarousel extends ReatomLitElement {
                 aria-label=${indicatorProps['aria-label']}
                 aria-current=${indicatorProps['aria-current'] ?? nothing}
                 data-active=${indicatorProps['data-active']}
+                data-index=${index}
                 part="indicator"
-                @click=${() => this.handleIndicatorClick(index)}
+                @click=${this.handleIndicatorClick}
               >
-                ${index + 1}
+                <span part="indicator-dot" aria-hidden="true"></span>
               </button>
             `
           })}

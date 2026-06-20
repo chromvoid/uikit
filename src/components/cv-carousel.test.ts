@@ -3,19 +3,6 @@ import {afterEach, describe, expect, it, vi} from 'vitest'
 import {CVCarousel} from './cv-carousel'
 import {CVCarouselSlide} from './cv-carousel-slide'
 
-// Polyfill PointerEvent for jsdom which does not support it
-if (typeof globalThis['PointerEvent'] === 'undefined') {
-  ;(globalThis as Record<string, unknown>)['PointerEvent'] = class PointerEvent extends MouseEvent {
-    readonly pointerId: number
-    readonly pointerType: string
-    constructor(type: string, init?: PointerEventInit) {
-      super(type, init)
-      this.pointerId = init?.pointerId ?? 0
-      this.pointerType = init?.pointerType ?? ''
-    }
-  }
-}
-
 CVCarousel.define()
 CVCarouselSlide.define()
 
@@ -33,6 +20,36 @@ const createSlide = (value: string, label: string) => {
   slide.textContent = label
   return slide
 }
+
+type TestRect = Pick<DOMRect, 'left' | 'top' | 'width' | 'height'>
+
+const mockRect = (element: Element, rect: TestRect) => {
+  Object.defineProperty(element, 'getBoundingClientRect', {
+    configurable: true,
+    value: () =>
+      ({
+        x: rect.left,
+        y: rect.top,
+        left: rect.left,
+        top: rect.top,
+        width: rect.width,
+        height: rect.height,
+        right: rect.left + rect.width,
+        bottom: rect.top + rect.height,
+        toJSON: () => ({}),
+      }) as DOMRect,
+  })
+}
+
+const waitForFrame = async () =>
+  new Promise<void>((resolve) => {
+    if (typeof window.requestAnimationFrame === 'function') {
+      window.requestAnimationFrame(() => resolve())
+      return
+    }
+
+    resolve()
+  })
 
 async function mountCarousel(
   params: {
@@ -108,10 +125,13 @@ describe('cv-carousel', () => {
       expect(controls).not.toBeNull()
       expect(prev).not.toBeNull()
       expect(prev.tagName.toLowerCase()).toBe('button')
+      expect(prev.querySelector('cv-icon')?.getAttribute('name')).toBe('chevron-left')
       expect(next).not.toBeNull()
       expect(next.tagName.toLowerCase()).toBe('button')
+      expect(next.querySelector('cv-icon')?.getAttribute('name')).toBe('chevron-right')
       expect(playPause).not.toBeNull()
       expect(playPause.tagName.toLowerCase()).toBe('button')
+      expect(playPause.querySelector('cv-icon')?.getAttribute('name')).toBe('pause-circle')
     })
 
     it('renders prev button with both "control" and "prev" parts', async () => {
@@ -149,6 +169,8 @@ describe('cv-carousel', () => {
       for (const indicator of indicators) {
         expect(indicator.tagName.toLowerCase()).toBe('button')
         expect(indicator.getAttribute('part')).toBe('indicator')
+        expect(indicator.textContent?.trim()).toBe('')
+        expect(indicator.querySelector('[part="indicator-dot"]')).not.toBeNull()
       }
     })
   })
@@ -594,15 +616,22 @@ describe('cv-carousel', () => {
 
       expect(slides[0]!.getAttribute('aria-hidden')).toBe('false')
       expect(slides[0]!.active).toBe(true)
+      expect(slides[0]!.hidden).toBe(false)
+      expect(slides[0]!.hasAttribute('inert')).toBe(false)
 
       expect(slides[1]!.getAttribute('aria-hidden')).toBe('true')
+      expect(slides[1]!.hidden).toBe(false)
+      expect(slides[1]!.hasAttribute('inert')).toBe(true)
       expect(slides[2]!.getAttribute('aria-hidden')).toBe('true')
+      expect(slides[2]!.hidden).toBe(false)
+      expect(slides[2]!.hasAttribute('inert')).toBe(true)
 
       carousel.activeIndex = 2
       await settle(carousel)
 
       expect(slides[2]!.getAttribute('aria-hidden')).toBe('false')
       expect(slides[2]!.active).toBe(true)
+      expect(slides[2]!.hasAttribute('inert')).toBe(false)
     })
   })
 
@@ -800,78 +829,74 @@ describe('cv-carousel', () => {
     })
   })
 
-  // --- Swipe gesture ---
+  // --- Native scroll sync ---
 
-  describe('swipe gesture', () => {
-    it('horizontal swipe left-to-right triggers movePrev()', async () => {
-      const {carousel, slidesContainer} = await mountCarousel()
-      carousel.activeIndex = 1
-      await settle(carousel)
+  describe('native scroll sync', () => {
+    it('scrolls the active slide into view after model-driven navigation', async () => {
+      const {carousel, next, slides} = await mountCarousel()
+      const scrollIntoView = vi.fn()
+      Object.defineProperty(slides[1]!, 'scrollIntoView', {
+        configurable: true,
+        value: scrollIntoView,
+      })
 
-      // Simulate a swipe: pointerdown -> pointermove -> pointerup (right direction = prev)
-      slidesContainer.dispatchEvent(
-        new PointerEvent('pointerdown', {clientX: 100, clientY: 200, bubbles: true, composed: true}),
-      )
-      slidesContainer.dispatchEvent(
-        new PointerEvent('pointermove', {clientX: 200, clientY: 205, bubbles: true, composed: true}),
-      )
-      slidesContainer.dispatchEvent(
-        new PointerEvent('pointerup', {clientX: 200, clientY: 205, bubbles: true, composed: true}),
-      )
-      await settle(carousel)
-
-      expect(carousel.activeIndex).toBe(0)
-    })
-
-    it('horizontal swipe right-to-left triggers moveNext()', async () => {
-      const {carousel, slidesContainer} = await mountCarousel()
-
-      // Simulate a swipe: pointerdown -> pointermove -> pointerup (left direction = next)
-      slidesContainer.dispatchEvent(
-        new PointerEvent('pointerdown', {clientX: 200, clientY: 200, bubbles: true, composed: true}),
-      )
-      slidesContainer.dispatchEvent(
-        new PointerEvent('pointermove', {clientX: 100, clientY: 205, bubbles: true, composed: true}),
-      )
-      slidesContainer.dispatchEvent(
-        new PointerEvent('pointerup', {clientX: 100, clientY: 205, bubbles: true, composed: true}),
-      )
+      next.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
       await settle(carousel)
 
       expect(carousel.activeIndex).toBe(1)
+      expect(scrollIntoView).toHaveBeenCalledWith(
+        expect.objectContaining({
+          block: 'nearest',
+          inline: 'center',
+        }),
+      )
     })
 
-    it('vertical drag does not trigger navigation', async () => {
-      const {carousel, slidesContainer} = await mountCarousel()
+    it('updates active slide from the nearest native scroll-snap position', async () => {
+      const {carousel, slidesContainer, slides} = await mountCarousel()
+      const changes: number[] = []
+      carousel.addEventListener('cv-change', (event) => {
+        changes.push((event as unknown as CustomEvent<{activeIndex: number}>).detail.activeIndex)
+      })
 
-      // Simulate a predominantly vertical drag
-      slidesContainer.dispatchEvent(
-        new PointerEvent('pointerdown', {clientX: 200, clientY: 100, bubbles: true, composed: true}),
-      )
-      slidesContainer.dispatchEvent(
-        new PointerEvent('pointermove', {clientX: 205, clientY: 300, bubbles: true, composed: true}),
-      )
-      slidesContainer.dispatchEvent(
-        new PointerEvent('pointerup', {clientX: 205, clientY: 300, bubbles: true, composed: true}),
-      )
+      mockRect(slidesContainer, {left: 0, top: 0, width: 300, height: 160})
+      mockRect(slides[0]!, {left: -320, top: 0, width: 300, height: 160})
+      mockRect(slides[1]!, {left: 0, top: 0, width: 300, height: 160})
+      mockRect(slides[2]!, {left: 320, top: 0, width: 300, height: 160})
+
+      slidesContainer.dispatchEvent(new Event('scroll', {bubbles: true}))
+      await waitForFrame()
       await settle(carousel)
 
-      expect(carousel.activeIndex).toBe(0)
+      expect(carousel.activeIndex).toBe(1)
+      expect(carousel.value).toBe('s2')
+      expect(changes).toEqual([1])
     })
 
-    it('short horizontal drag below threshold does not trigger navigation', async () => {
-      const {carousel, slidesContainer} = await mountCarousel()
+    it('ignores native scroll events while a programmatic scroll is settling', async () => {
+      const {carousel, slidesContainer, slides} = await mountCarousel()
+      Object.defineProperty(slides[2]!, 'scrollIntoView', {
+        configurable: true,
+        value: vi.fn(),
+      })
 
-      // Simulate a very short horizontal drag
-      slidesContainer.dispatchEvent(
-        new PointerEvent('pointerdown', {clientX: 200, clientY: 200, bubbles: true, composed: true}),
-      )
-      slidesContainer.dispatchEvent(
-        new PointerEvent('pointermove', {clientX: 195, clientY: 200, bubbles: true, composed: true}),
-      )
-      slidesContainer.dispatchEvent(
-        new PointerEvent('pointerup', {clientX: 195, clientY: 200, bubbles: true, composed: true}),
-      )
+      carousel.activeIndex = 2
+      await settle(carousel)
+
+      mockRect(slidesContainer, {left: 0, top: 0, width: 300, height: 160})
+      mockRect(slides[0]!, {left: 0, top: 0, width: 300, height: 160})
+      mockRect(slides[1]!, {left: 320, top: 0, width: 300, height: 160})
+      mockRect(slides[2]!, {left: 640, top: 0, width: 300, height: 160})
+
+      slidesContainer.dispatchEvent(new Event('scroll', {bubbles: true}))
+      await waitForFrame()
+      await settle(carousel)
+
+      expect(carousel.activeIndex).toBe(2)
+
+      slidesContainer.dispatchEvent(new Event('scrollend', {bubbles: true}))
+      slidesContainer.dispatchEvent(new Event('scroll', {bubbles: true}))
+      await waitForFrame()
       await settle(carousel)
 
       expect(carousel.activeIndex).toBe(0)
@@ -887,11 +912,15 @@ describe('cv-carousel', () => {
       expect(slides[0]!.getAttribute('aria-hidden')).toBe('false')
       expect(slides[0]!.getAttribute('data-active')).toBe('true')
       expect(slides[0]!.active).toBe(true)
+      expect(slides[0]!.hidden).toBe(false)
+      expect(slides[0]!.hasAttribute('inert')).toBe(false)
 
       // Inactive slides
       expect(slides[1]!.getAttribute('aria-hidden')).toBe('true')
       expect(slides[1]!.getAttribute('data-active')).toBe('false')
       expect(slides[1]!.active).toBe(false)
+      expect(slides[1]!.hidden).toBe(false)
+      expect(slides[1]!.hasAttribute('inert')).toBe(true)
     })
 
     it('child slides update when parent active index changes', async () => {
@@ -902,8 +931,10 @@ describe('cv-carousel', () => {
 
       expect(slides[0]!.active).toBe(false)
       expect(slides[0]!.getAttribute('data-active')).toBe('false')
+      expect(slides[0]!.hasAttribute('inert')).toBe(true)
       expect(slides[2]!.active).toBe(true)
       expect(slides[2]!.getAttribute('data-active')).toBe('true')
+      expect(slides[2]!.hasAttribute('inert')).toBe(false)
     })
 
     it('auto-generates slide values when omitted', async () => {
@@ -1104,28 +1135,33 @@ describe('cv-carousel-slide', () => {
     })
   })
 
-  describe('regression: pointercancel resets swipe (Batch 2 #11)', () => {
-    it('clears stale isSwiping after pointercancel so a later swipe still works', async () => {
-      const {carousel, slidesContainer} = await mountCarousel()
+  describe('regression: programmatic scroll guard release', () => {
+    it('clears programmatic scroll guard on scrollend so later native scroll can sync state', async () => {
+      const {carousel, slidesContainer, slides} = await mountCarousel()
+      Object.defineProperty(slides[1]!, 'scrollIntoView', {
+        configurable: true,
+        value: vi.fn(),
+      })
 
-      slidesContainer.dispatchEvent(
-        new PointerEvent('pointerdown', {clientX: 200, clientY: 100, bubbles: true}),
-      )
-      // Gesture cancelled (e.g. pointer capture lost) without pointerup.
-      slidesContainer.dispatchEvent(new PointerEvent('pointercancel', {bubbles: true}))
+      carousel.activeIndex = 1
       await settle(carousel)
 
-      // A fresh swipe should be recognized (not blocked, not acting on stale start).
-      slidesContainer.dispatchEvent(
-        new PointerEvent('pointerdown', {clientX: 200, clientY: 100, bubbles: true}),
-      )
-      slidesContainer.dispatchEvent(
-        new PointerEvent('pointerup', {clientX: 100, clientY: 100, bubbles: true}),
-      )
-      await settle(carousel)
+      mockRect(slidesContainer, {left: 0, top: 0, width: 300, height: 160})
+      mockRect(slides[0]!, {left: 320, top: 0, width: 300, height: 160})
+      mockRect(slides[1]!, {left: -320, top: 0, width: 300, height: 160})
+      mockRect(slides[2]!, {left: 0, top: 0, width: 300, height: 160})
 
-      // Left swipe → next slide.
+      slidesContainer.dispatchEvent(new Event('scroll', {bubbles: true}))
+      await waitForFrame()
+      await settle(carousel)
       expect(carousel.activeIndex).toBe(1)
+
+      slidesContainer.dispatchEvent(new Event('scrollend', {bubbles: true}))
+      slidesContainer.dispatchEvent(new Event('scroll', {bubbles: true}))
+      await waitForFrame()
+      await settle(carousel)
+
+      expect(carousel.activeIndex).toBe(2)
     })
   })
 })
