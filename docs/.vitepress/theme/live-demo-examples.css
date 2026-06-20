@@ -283,6 +283,94 @@
   padding: 10px;
 }
 
+.live-demo-preview:has(.listbox-demo-board) {
+  display: block;
+  overflow: hidden;
+  padding: 10px;
+}
+
+.live-demo-preview:has(.theme-provider-demo-board) {
+  display: block;
+  overflow: hidden;
+  padding: 10px;
+}
+
+.theme-provider-demo-board {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+  gap: 12px;
+  inline-size: 100%;
+  min-inline-size: 0;
+}
+
+.theme-provider-demo-panel {
+  display: grid;
+  align-content: start;
+  justify-items: start;
+  gap: 12px;
+  min-block-size: 112px;
+  min-inline-size: 0;
+  padding: 16px;
+  border: 1px solid var(--cv-color-border, rgba(118, 181, 222, 0.18));
+  border-radius: 12px;
+  background: var(--cv-color-surface, rgba(13, 22, 35, 0.94));
+  color: var(--cv-color-text, #eef5ff);
+}
+
+.theme-provider-demo-panel > span {
+  color: var(--cv-color-text-muted, rgba(190, 206, 226, 0.74));
+  font-size: 0.85rem;
+  line-height: 1.4;
+}
+
+.listbox-demo-board {
+  display: grid;
+  container-type: inline-size;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr));
+  gap: 12px;
+  inline-size: 100%;
+  min-inline-size: 0;
+}
+
+.listbox-demo-example {
+  display: grid;
+  align-content: start;
+  gap: 10px;
+  min-inline-size: 0;
+  padding: 14px;
+  border: 1px solid rgba(118, 181, 222, 0.16);
+  border-radius: 12px;
+  background:
+    linear-gradient(180deg, rgba(13, 22, 35, 0.94), rgba(8, 14, 23, 0.94)),
+    radial-gradient(circle at 12% 0%, rgba(101, 215, 255, 0.075), transparent 38%);
+}
+
+.listbox-demo-example h3 {
+  margin: 0;
+  color: #eef5ff;
+  font-size: 0.98rem;
+  line-height: 1.25;
+  letter-spacing: 0;
+}
+
+.listbox-demo-example p {
+  margin: 0;
+  color: rgba(190, 206, 226, 0.74);
+  font-size: 0.82rem;
+  line-height: 1.45;
+}
+
+.listbox-demo-example cv-listbox {
+  inline-size: 100%;
+  min-inline-size: 0;
+}
+
+@container (max-width: 560px) {
+  .listbox-demo-example {
+    padding: 12px;
+  }
+}
+
 .dialog-demo-shell {
   display: grid;
   container-type: inline-size;
@@ -1526,9 +1614,10 @@
 }
 
 .switch-demo-fieldset {
+  box-sizing: border-box;
   inline-size: 100%;
   min-inline-size: 0;
-  padding: 0;
+  padding: 16px;
   --cv-fieldset-gap: 12px;
   --cv-fieldset-field-gap: 12px;
 }
@@ -1859,10 +1948,25 @@
 
 .live-demo-preview:has(.sidebar-demo-shell),
 .live-demo-preview:has(.sidebar-demo-rail),
-.live-demo-preview:has(.sidebar-demo-overlay) {
+.live-demo-preview:has(.sidebar-demo-overlay),
+.live-demo-preview:has(.sidebar-demo-showcase) {
   display: block;
   overflow: hidden;
   padding: 10px;
+}
+
+.sidebar-demo-showcase {
+  display: grid;
+  gap: 14px;
+  inline-size: 100%;
+  min-inline-size: 0;
+}
+
+.sidebar-demo-variants {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 310px), 1fr));
+  gap: 14px;
+  min-inline-size: 0;
 }
 
 .sidebar-demo-shell,
@@ -1942,6 +2046,10 @@
   --cv-sidebar-item-indicator-color: #65d7ff;
 }
 
+.sidebar-demo-shell cv-sidebar {
+  --cv-sidebar-inline-size: min(280px, 100%);
+}
+
 .sidebar-demo-shell cv-sidebar::part(panel),
 .sidebar-demo-rail cv-sidebar::part(panel),
 .sidebar-demo-overlay cv-sidebar::part(panel) {
@@ -1960,10 +2068,30 @@
   --cv-sidebar-item-font-size: 0.88rem;
 }
 
-.sidebar-demo-shell cv-icon,
-.sidebar-demo-rail cv-icon,
-.sidebar-demo-overlay cv-icon {
+.sidebar-demo-toggle-glyph {
+  display: inline-block;
+  inline-size: 16px;
+  block-size: 16px;
+  color: inherit;
+  background:
+    linear-gradient(currentColor 0 0) center 3px / 14px 1.5px no-repeat,
+    linear-gradient(currentColor 0 0) center 7px / 14px 1.5px no-repeat,
+    linear-gradient(currentColor 0 0) center 11px / 14px 1.5px no-repeat;
+}
+
+.sidebar-demo-item-glyph {
+  display: inline-grid;
+  place-items: center;
+  inline-size: 16px;
+  block-size: 16px;
+  border: 1px solid rgba(148, 233, 255, 0.32);
+  border-radius: 4px;
+  background: rgba(101, 215, 255, 0.08);
   color: #94e9ff;
+  font-family: var(--vp-font-family-mono);
+  font-size: 0.66rem;
+  font-weight: 700;
+  line-height: 1;
 }
 
 .sidebar-demo-brand,
@@ -2122,7 +2250,7 @@
   padding-inline-start: 0;
 }
 
-@container (max-width: 760px) {
+@container (max-width: 500px) {
   .sidebar-demo-shell cv-sidebar {
     --cv-sidebar-inline-size: 100%;
   }
@@ -2150,7 +2278,7 @@
   }
 }
 
-@media (max-width: 760px) {
+@media (max-width: 500px) {
   .sidebar-demo-shell {
     grid-template-columns: 1fr;
   }

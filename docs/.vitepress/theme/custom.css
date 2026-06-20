@@ -1351,6 +1351,23 @@ cv-card.live-demo-card::part(footer) {
   gap: 16px;
 }
 
+.live-demo-body {
+  position: relative;
+}
+
+.live-demo-body--frame-pending::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border: 1px solid var(--docs-border);
+  border-radius: 14px;
+  background:
+    linear-gradient(180deg, rgba(11, 18, 29, 0.96), rgba(8, 14, 23, 0.96)),
+    radial-gradient(circle at top left, rgba(125, 214, 255, 0.08), transparent 34%);
+  pointer-events: none;
+}
+
 .catalog-stat-body {
   gap: 8px;
 }
@@ -1439,12 +1456,27 @@ cv-card.live-demo-card:defined {
 }
 
 .live-demo-frame {
+  position: relative;
+  z-index: 1;
   display: block;
   inline-size: 100%;
   min-inline-size: 0;
   border: 1px solid var(--docs-border);
   border-radius: 14px;
   background: rgba(8, 14, 23, 0.96);
+  color-scheme: dark;
+  opacity: 0;
+  transition: opacity 140ms ease;
+}
+
+.live-demo-frame-host {
+  position: relative;
+  z-index: 1;
+  min-inline-size: 0;
+}
+
+.live-demo-frame--ready {
+  opacity: 1;
 }
 
 .live-demo-script-note {

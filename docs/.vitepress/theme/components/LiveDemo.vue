@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {computed, onMounted, onUnmounted, ref} from 'vue'
+import {computed, nextTick, onMounted, onUnmounted, ref, watch} from 'vue'
 
 import iframeRuntimeUrl from './liveDemoFrameRuntime.ts?worker&url'
 
@@ -10,13 +10,58 @@ const props = defineProps<{
 
 
 const DEFAULT_FRAME_HEIGHT = 160
+const MAX_POOLED_FRAMES = 2
 const RESIZE_MESSAGE_TYPE = 'cv-live-demo:resize'
+const RENDERED_MESSAGE_TYPE = 'cv-live-demo:rendered'
+const READY_MESSAGE_TYPE = 'cv-live-demo:ready'
+const RENDER_COMMAND_TYPE = 'cv-live-demo:render'
+const CLEAR_COMMAND_TYPE = 'cv-live-demo:clear'
 
 
 const container = ref<HTMLElement | null>(null)
-const iframe = ref<HTMLIFrameElement | null>(null)
-const hasScript = ref(false)
+const frameHost = ref<HTMLElement | null>(null)
 const frameHeight = ref(DEFAULT_FRAME_HEIGHT)
+const frameReady = ref(false)
+const mounted = ref(false)
+
+
+type FrameRender = {
+  id: string
+  html: string
+}
+
+
+type PooledFrame = {
+  element: HTMLIFrameElement
+  pooled: boolean
+  ready: boolean
+  busy: boolean
+  owner: symbol | null
+  pendingRender: FrameRender | null
+}
+
+
+type FramePoolState = {
+  idSequence: number
+  parkingLot: HTMLElement | null
+  frames: PooledFrame[]
+}
+
+
+declare global {
+  interface Window {
+    __cvLiveDemoFramePool?: FramePoolState
+  }
+}
+
+
+function getFramePoolState(): FramePoolState {
+  return (window.__cvLiveDemoFramePool ??= {
+    idSequence: 0,
+    parkingLot: null,
+    frames: [],
+  })
+}
 
 
 function decodeBase64Utf8(value: string): string {
@@ -27,12 +72,48 @@ function decodeBase64Utf8(value: string): string {
 
 const decoded = computed(() => decodeBase64Utf8(props.code))
 const highlightedHtml = computed(() => decodeBase64Utf8(props.highlighted))
+const hasScript = computed(() => /<script[\s>]/i.test(decoded.value))
 const isInline = computed(() => /\sdata-live-demo-inline(?:[\s=>]|$)/i.test(decoded.value))
 const minFrameHeight = computed(() => {
   const match = decoded.value.match(/\sdata-live-demo-height=["']?(\d{2,4})["']?/i)
   const parsedHeight = Number.parseInt(match?.[1] ?? '', 10)
   return Number.isFinite(parsedHeight) ? parsedHeight : DEFAULT_FRAME_HEIGHT
 })
+const frameOwner = Symbol('LiveDemo frame owner')
+let frameLease: PooledFrame | null = null
+let currentRenderId = ''
+let framePositionRaf = 0
+let frameHostObserver: ResizeObserver | null = null
+
+
+watch(
+  [decoded, minFrameHeight, isInline],
+  () => {
+    frameHeight.value = minFrameHeight.value
+    frameReady.value = isInline.value
+  },
+  {immediate: true},
+)
+
+
+watch(
+  [decoded, isInline],
+  () => {
+    if (!mounted.value) return
+
+    if (isInline.value) {
+      releaseCurrentFrame()
+      void nextTick(mountInlineDemo)
+      return
+    }
+
+    void nextTick(mountFrameDemo)
+  },
+  {flush: 'post'},
+)
+
+
+watch([frameHeight, frameReady], updateFrameElementState)
 
 
 function runDemoScript(script: HTMLScriptElement): void {
@@ -57,52 +138,91 @@ function runDemoScript(script: HTMLScriptElement): void {
 }
 
 
-function serializeJsonPayload(value: string): string {
-  return JSON.stringify(value)
-    .replace(/&/g, '\\u0026')
-    .replace(/</g, '\\u003c')
-    .replace(/>/g, '\\u003e')
-    .replace(/\u2028/g, '\\u2028')
-    .replace(/\u2029/g, '\\u2029')
-}
-
-
-function isFrameResizeMessage(data: unknown): data is {type: typeof RESIZE_MESSAGE_TYPE; height: number} {
+function isFrameResizeMessage(
+  data: unknown,
+): data is {type: typeof RESIZE_MESSAGE_TYPE; id: string; height: number} {
   return (
     typeof data === 'object' &&
     data !== null &&
     'type' in data &&
+    'id' in data &&
     'height' in data &&
     data.type === RESIZE_MESSAGE_TYPE &&
+    typeof data.id === 'string' &&
     typeof data.height === 'number' &&
     Number.isFinite(data.height)
   )
 }
 
 
-function handleFrameMessage(event: MessageEvent): void {
-  if (event.source !== iframe.value?.contentWindow || !isFrameResizeMessage(event.data)) return
-
-
-  frameHeight.value = Math.max(minFrameHeight.value, Math.ceil(event.data.height))
+function isFrameRenderedMessage(data: unknown): data is {type: typeof RENDERED_MESSAGE_TYPE; id: string} {
+  return (
+    typeof data === 'object' &&
+    data !== null &&
+    'type' in data &&
+    'id' in data &&
+    data.type === RENDERED_MESSAGE_TYPE &&
+    typeof data.id === 'string'
+  )
 }
 
 
-function renderFrameDemo(raw: string): void {
-  if (!iframe.value) return
+function isFrameReadyMessage(data: unknown): data is {type: typeof READY_MESSAGE_TYPE} {
+  return typeof data === 'object' && data !== null && 'type' in data && data.type === READY_MESSAGE_TYPE
+}
 
 
-  frameHeight.value = minFrameHeight.value
+function handleFrameMessage(event: MessageEvent): void {
+  if (!frameLease || event.source !== frameLease.element.contentWindow) return
 
 
-  const payload = serializeJsonPayload(raw)
+  if (isFrameReadyMessage(event.data)) {
+    frameLease.ready = true
+    flushFrameRender(frameLease)
+    return
+  }
+
+
+  if (isFrameRenderedMessage(event.data) && event.data.id === currentRenderId) {
+    frameReady.value = true
+    updateFrameElementState()
+    return
+  }
+
+
+  if (!isFrameResizeMessage(event.data) || event.data.id !== currentRenderId) return
+
+
+  frameHeight.value = Math.max(minFrameHeight.value, Math.ceil(event.data.height))
+  frameReady.value = true
+  updateFrameElementState()
+}
+
+
+function buildFrameSrcdoc(): string {
   const closingScript = '</' + 'script>'
-  iframe.value.srcdoc = `<!doctype html>
+  return `<!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <script id="live-demo-payload" type="application/json">${payload}${closingScript}
+    <style>
+      html {
+        min-block-size: 100%;
+        background: #070d16;
+        color-scheme: dark;
+      }
+
+      body {
+        min-block-size: 100%;
+        margin: 0;
+        background: #070d16;
+        color: #eef5ff;
+        font-family:
+          Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        overflow: hidden;
+      }
+    </style>
     <script type="module" src="${iframeRuntimeUrl}">${closingScript}
   </head>
   <body></body>
@@ -110,30 +230,237 @@ function renderFrameDemo(raw: string): void {
 }
 
 
-onMounted(() => {
-  const raw = decoded.value
-  hasScript.value = /<script[\s>]/i.test(raw)
+function getFrameParkingLot(): HTMLElement {
+  const state = getFramePoolState()
+  if (state.parkingLot?.isConnected) return state.parkingLot
 
-  if (!isInline.value) {
-    window.addEventListener('message', handleFrameMessage)
-    renderFrameDemo(raw)
-    return
+
+  state.parkingLot = document.createElement('div')
+  state.parkingLot.dataset.liveDemoFramePool = 'true'
+  state.parkingLot.style.cssText =
+    'position:fixed;inset:0;z-index:1;overflow:visible;pointer-events:none;contain:layout;'
+  document.body.append(state.parkingLot)
+  return state.parkingLot
+}
+
+
+function flushFrameRender(frame: PooledFrame): void {
+  if (!frame.ready || !frame.pendingRender) return
+
+
+  frame.element.contentWindow?.postMessage(
+    {type: RENDER_COMMAND_TYPE, id: frame.pendingRender.id, html: frame.pendingRender.html},
+    '*',
+  )
+  frame.pendingRender = null
+}
+
+
+function createPooledFrame(pooled: boolean): PooledFrame {
+  const element = document.createElement('iframe')
+  const frame: PooledFrame = {
+    element,
+    pooled,
+    ready: false,
+    busy: false,
+    owner: null,
+    pendingRender: null,
   }
 
-  if (!container.value) return
+
+  element.className = 'live-demo-frame'
+  element.title = 'Isolated live demo preview'
+  element.dataset.liveDemoFramePooled = pooled ? 'true' : 'false'
+  element.sandbox.add('allow-scripts', 'allow-same-origin')
+  element.srcdoc = buildFrameSrcdoc()
+  parkFrameElement(element)
+  element.addEventListener('load', () => {
+    frame.ready = true
+    flushFrameRender(frame)
+  })
+
+
+  return frame
+}
+
+
+function parkFrameElement(element: HTMLIFrameElement): void {
+  delete element.dataset.liveDemoFrameActive
+  element.className = 'live-demo-frame'
+  element.removeAttribute('height')
+  element.style.position = 'fixed'
+  element.style.inset = 'auto'
+  element.style.left = '-10000px'
+  element.style.top = '-10000px'
+  element.style.width = '0px'
+  element.style.height = '0px'
+  element.style.pointerEvents = 'none'
+  element.style.visibility = 'hidden'
+}
+
+
+function warmFramePool(): void {
+  if (typeof document === 'undefined') return
+
+
+  const state = getFramePoolState()
+  const parking = getFrameParkingLot()
+  while (state.frames.length < MAX_POOLED_FRAMES) {
+    const frame = createPooledFrame(true)
+    state.frames.push(frame)
+    parking.append(frame.element)
+  }
+}
+
+
+function acquireFrame(owner: symbol): PooledFrame {
+  warmFramePool()
+
+
+  const state = getFramePoolState()
+  let frame = state.frames.find((candidate) => !candidate.busy)
+  if (!frame) {
+    frame = createPooledFrame(false)
+    getFrameParkingLot().append(frame.element)
+  }
+  frame.busy = true
+  frame.owner = owner
+  frame.pendingRender = null
+  return frame
+}
+
+
+function releaseFrame(frame: PooledFrame, owner: symbol, renderId: string): void {
+  if (frame.owner !== owner) return
+
+
+  frame.element.contentWindow?.postMessage({type: CLEAR_COMMAND_TYPE, id: renderId}, '*')
+  parkFrameElement(frame.element)
+  frame.pendingRender = null
+  frame.owner = null
+  frame.busy = false
+
+
+  if (!frame.pooled) frame.element.remove()
+}
+
+
+function releaseCurrentFrame(): void {
+  if (!frameLease) return
+
+
+  releaseFrame(frameLease, frameOwner, currentRenderId)
+  frameLease = null
+  currentRenderId = ''
+}
+
+
+function updateFrameElementState(): void {
+  const frame = frameLease
+  if (frameHost.value) {
+    frameHost.value.style.blockSize = `${frameHeight.value}px`
+  }
+  if (!frame || !frameHost.value) return
+
+
+  const rect = frameHost.value.getBoundingClientRect()
+  frame.element.height = String(frameHeight.value)
+  frame.element.className = frameReady.value ? 'live-demo-frame live-demo-frame--ready' : 'live-demo-frame'
+  frame.element.dataset.liveDemoFrameActive = 'true'
+  frame.element.style.position = 'fixed'
+  frame.element.style.inset = 'auto'
+  frame.element.style.left = `${rect.left}px`
+  frame.element.style.top = `${rect.top}px`
+  frame.element.style.width = `${rect.width}px`
+  frame.element.style.height = `${frameHeight.value}px`
+  frame.element.style.pointerEvents = 'auto'
+  frame.element.style.visibility = 'visible'
+}
+
+
+function mountInlineDemo(): void {
+  if (!container.value || !isInline.value) return
+
 
   const template = document.createElement('template')
-  template.innerHTML = raw
+  template.innerHTML = decoded.value
   const scripts = [...template.content.querySelectorAll('script')]
   scripts.forEach((script) => script.remove())
 
+
   container.value.replaceChildren(template.content.cloneNode(true))
   scripts.forEach(runDemoScript)
+}
+
+
+function mountFrameDemo(): void {
+  if (!frameHost.value || isInline.value) return
+
+
+  if (!frameLease) {
+    frameLease = acquireFrame(frameOwner)
+  }
+
+
+  frameReady.value = false
+  currentRenderId = `live-demo-${++getFramePoolState().idSequence}`
+  frameLease.pendingRender = {id: currentRenderId, html: decoded.value}
+  updateFrameElementState()
+  observeFrameHost()
+  flushFrameRender(frameLease)
+}
+
+
+function scheduleFramePositionUpdate(): void {
+  if (framePositionRaf) return
+
+
+  framePositionRaf = window.requestAnimationFrame(() => {
+    framePositionRaf = 0
+    updateFrameElementState()
+  })
+}
+
+
+function observeFrameHost(): void {
+  frameHostObserver?.disconnect()
+  frameHostObserver = null
+
+
+  if (!frameHost.value || !('ResizeObserver' in window)) return
+
+
+  frameHostObserver = new ResizeObserver(scheduleFramePositionUpdate)
+  frameHostObserver.observe(frameHost.value)
+}
+
+
+onMounted(() => {
+  mounted.value = true
+  window.addEventListener('message', handleFrameMessage)
+  window.addEventListener('scroll', scheduleFramePositionUpdate, true)
+  window.addEventListener('resize', scheduleFramePositionUpdate)
+
+  if (isInline.value) {
+    mountInlineDemo()
+    return
+  }
+
+  void nextTick(mountFrameDemo)
 })
 
 
 onUnmounted(() => {
+  mounted.value = false
   window.removeEventListener('message', handleFrameMessage)
+  window.removeEventListener('scroll', scheduleFramePositionUpdate, true)
+  window.removeEventListener('resize', scheduleFramePositionUpdate)
+  frameHostObserver?.disconnect()
+  if (framePositionRaf) {
+    window.cancelAnimationFrame(framePositionRaf)
+    framePositionRaf = 0
+  }
+  releaseCurrentFrame()
 })
 </script>
 
@@ -154,15 +481,8 @@ onUnmounted(() => {
       </p>
     </div>
 
-    <div class="live-demo-body">
-      <iframe
-        v-if="!isInline"
-        ref="iframe"
-        class="live-demo-frame"
-        title="Isolated live demo preview"
-        sandbox="allow-scripts allow-same-origin"
-        :height="frameHeight"
-      />
+    <div class="live-demo-body" :class="{'live-demo-body--frame-pending': !isInline && !frameReady}">
+      <div v-if="!isInline" ref="frameHost" class="live-demo-frame-host" />
       <div v-else ref="container" class="live-demo-preview" />
     </div>
 
