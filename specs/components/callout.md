@@ -137,25 +137,123 @@ No `cv-input` or `cv-change` events are emitted. The callout has no user-modifia
 ## Usage
 
 ```html
-<cv-callout>This is an informational callout.</cv-callout>
+<div class="callout-demo-shell" data-demo="callout" data-live-demo-height="640">
+  <section class="callout-demo-hero" aria-labelledby="callout-demo-title">
+    <div class="callout-demo-copy">
+      <span class="callout-demo-kicker">Static guidance surface</span>
+      <h3 id="callout-demo-title">Use callout for durable context, not time-sensitive alerts.</h3>
+      <p>
+        A callout renders as <code>role="note"</code>, keeps all ARIA and close behavior in headless state,
+        and can be styled by semantic variant without becoming a live region.
+      </p>
+    </div>
 
-<cv-callout variant="success">Operation completed successfully.</cv-callout>
+    <dl class="callout-demo-metrics" aria-label="Callout contract summary">
+      <div>
+        <dt>Root role</dt>
+        <dd>note</dd>
+      </div>
+      <div>
+        <dt>Announcements</dt>
+        <dd>not live</dd>
+      </div>
+      <div>
+        <dt>Close event</dt>
+        <dd>cv-close</dd>
+      </div>
+    </dl>
+  </section>
 
-<cv-callout variant="warning">Please review before continuing.</cv-callout>
+  <section class="callout-demo-workbench" aria-labelledby="callout-demo-workbench-title">
+    <div class="callout-demo-section-header">
+      <span class="callout-demo-kicker">Vault review panel</span>
+      <h4 id="callout-demo-workbench-title">
+        Layer durable notes around a workflow without stealing focus or announcing new status.
+      </h4>
+    </div>
 
-<cv-callout variant="danger">This action cannot be undone.</cv-callout>
+    <div class="callout-demo-layout">
+      <div class="callout-demo-stack" aria-label="Callout examples in context">
+        <cv-callout variant="info">
+          <span slot="icon" class="callout-demo-icon">i</span>
+          Visible profile is safe to inspect. Hidden namespaces are not listed in this surface.
+        </cv-callout>
 
-<cv-callout variant="neutral">Additional context for this section.</cv-callout>
+        <cv-callout variant="success">
+          <span slot="icon" class="callout-demo-icon">OK</span>
+          USB relay trust boundary verified against the local device key.
+        </cv-callout>
 
-<cv-callout variant="warning" closable> This warning can be dismissed. </cv-callout>
+        <cv-callout variant="warning" closable data-demo-label="Recovery window">
+          <span slot="icon" class="callout-demo-icon">!</span>
+          Recovery window closes in 18 minutes. Dismiss only after the operator has acknowledged it.
+        </cv-callout>
 
-<cv-callout variant="info">
-  <icon-info slot="icon"></icon-info>
-  Callout with a leading icon.
-</cv-callout>
+        <cv-callout variant="danger" closable data-demo-label="Export block">
+          <span slot="icon" class="callout-demo-icon">X</span>
+          Full export is blocked while a coercion profile is active.
+        </cv-callout>
+      </div>
 
-<cv-callout variant="danger" closable>
-  <icon-alert-triangle slot="icon"></icon-alert-triangle>
-  Critical issue detected. Please take action.
-</cv-callout>
+      <aside class="callout-demo-side" aria-label="Callout variants and density">
+        <div class="callout-demo-chip-row" aria-label="Available variants">
+          <cv-badge variant="primary" size="small">info</cv-badge>
+          <cv-badge variant="success" size="small">success</cv-badge>
+          <cv-badge variant="warning" size="small">warning</cv-badge>
+          <cv-badge variant="danger" size="small">danger</cv-badge>
+          <cv-badge variant="neutral" size="small">neutral</cv-badge>
+        </div>
+
+        <cv-callout variant="neutral" density="compact">
+          <span slot="icon" class="callout-demo-icon">N</span>
+          Compact neutral note for route-level context.
+        </cv-callout>
+
+        <cv-callout variant="info" density="dense">
+          <span slot="icon" class="callout-demo-icon">D</span>
+          Dense inline note for secondary metadata.
+        </cv-callout>
+
+        <output class="callout-demo-readout" aria-live="polite" data-callout-readout>
+          Dismissible notes are open. Close one to see the cv-close event.
+        </output>
+
+        <button type="button" class="callout-demo-restore" data-callout-restore>Restore dismissed notes</button>
+      </aside>
+    </div>
+  </section>
+</div>
+
+<script>
+  document.querySelectorAll('.callout-demo-shell[data-demo="callout"]:not([data-ready])').forEach((shell) => {
+    shell.dataset.ready = 'true'
+
+    const readout = shell.querySelector('[data-callout-readout]')
+    const restore = shell.querySelector('[data-callout-restore]')
+    const closableNotes = Array.from(shell.querySelectorAll('cv-callout[closable]'))
+
+    const syncDismissedCount = (label) => {
+      const dismissed = closableNotes.filter((note) => note.open === false).length
+      shell.dataset.dismissed = String(dismissed)
+      if (readout) {
+        readout.textContent =
+          dismissed === 0
+            ? 'Dismissible notes are open. Close one to see the cv-close event.'
+            : `cv-close from ${label}. ${dismissed} dismissible note${dismissed === 1 ? '' : 's'} hidden.`
+      }
+    }
+
+    shell.addEventListener('cv-close', (event) => {
+      const note = event.target instanceof HTMLElement ? event.target.closest('cv-callout') : null
+      syncDismissedCount(note?.dataset.demoLabel || 'callout')
+    })
+
+    restore?.addEventListener('click', () => {
+      closableNotes.forEach((note) => {
+        note.open = true
+      })
+      syncDismissedCount('restore')
+    })
+  })
+</script>
 ```
