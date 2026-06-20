@@ -1,6 +1,7 @@
 # cv-tabs
 
-Tabbed interface for switching between related content panels.
+Tabbed interface for switching between related content panels. Use tabs when each panel is a peer view of
+the same object or workflow, not as a replacement for page navigation.
 
 **Headless:** [`createTabs`](https://github.com/chromvoid/headless-ui/blob/main/specs/components/tabs.md)
 
@@ -123,29 +124,116 @@ UIKit does not own tab selection logic; headless state is the source of truth.
 ## Usage
 
 ```html
-<cv-tabs value="tab-1">
-  <cv-tab slot="nav" value="tab-1">First</cv-tab>
-  <cv-tab slot="nav" value="tab-2">Second</cv-tab>
-  <cv-tab slot="nav" value="tab-3" disabled>Disabled</cv-tab>
+<div class="tabs-demo-shell">
+  <section class="tabs-demo-hero" aria-labelledby="tabs-demo-title">
+    <div class="tabs-demo-copy">
+      <span class="tabs-demo-kicker">Selection surface</span>
+      <h3 id="tabs-demo-title">One active panel inside a known context.</h3>
+      <p>
+        Tabs keep sibling views close together, expose selected and focused state through the headless model,
+        and preserve keyboard movement without forcing a route change.
+      </p>
+    </div>
 
-  <cv-tab-panel tab="tab-1">Content for first tab.</cv-tab-panel>
-  <cv-tab-panel tab="tab-2">Content for second tab.</cv-tab-panel>
-  <cv-tab-panel tab="tab-3">Content for disabled tab.</cv-tab-panel>
-</cv-tabs>
+    <dl class="tabs-demo-metrics" aria-label="Tabs behavior summary">
+      <div>
+        <dt>State</dt>
+        <dd>value</dd>
+      </div>
+      <div>
+        <dt>Keys</dt>
+        <dd>Arrows</dd>
+      </div>
+      <div>
+        <dt>Modes</dt>
+        <dd>Auto / manual</dd>
+      </div>
+    </dl>
+  </section>
 
-<cv-tabs orientation="vertical" activation-mode="manual">
-  <cv-tab slot="nav" value="overview">Overview</cv-tab>
-  <cv-tab slot="nav" value="history">History</cv-tab>
-  <cv-tab-panel tab="overview">Overview panel.</cv-tab-panel>
-  <cv-tab-panel tab="history">History panel.</cv-tab-panel>
-</cv-tabs>
+  <section class="tabs-demo-section" aria-labelledby="tabs-demo-horizontal-title">
+    <div class="tabs-demo-section-header">
+      <span class="tabs-demo-kicker">Horizontal</span>
+      <h4 id="tabs-demo-horizontal-title">Use for compact panels with the same visual weight</h4>
+    </div>
 
-<cv-tabs value="home">
-  <cv-tab slot="nav" value="home" closable>Home</cv-tab>
-  <cv-tab slot="nav" value="settings" closable>Settings</cv-tab>
-  <cv-tab-panel tab="home">Home content.</cv-tab-panel>
-  <cv-tab-panel tab="settings">Settings content.</cv-tab-panel>
-</cv-tabs>
+    <cv-tabs value="overview" aria-label="Vault record tabs">
+      <cv-tab slot="nav" value="overview">Overview</cv-tab>
+      <cv-tab slot="nav" value="history">History</cv-tab>
+      <cv-tab slot="nav" value="access">Access</cv-tab>
+      <cv-tab slot="nav" value="recovery" disabled>Recovery</cv-tab>
+
+      <cv-tab-panel tab="overview">
+        <div class="tabs-demo-panel-content">
+          <h5>Overview</h5>
+          <p>Show the current record summary, freshness, and the next safe action.</p>
+        </div>
+      </cv-tab-panel>
+      <cv-tab-panel tab="history">
+        <div class="tabs-demo-panel-content">
+          <h5>History</h5>
+          <p>Review recent changes without leaving the record detail surface.</p>
+        </div>
+      </cv-tab-panel>
+      <cv-tab-panel tab="access">
+        <div class="tabs-demo-panel-content">
+          <h5>Access</h5>
+          <p>Audit who can unlock or export this entry in the current vault context.</p>
+        </div>
+      </cv-tab-panel>
+      <cv-tab-panel tab="recovery">
+        <div class="tabs-demo-panel-content">
+          <h5>Recovery</h5>
+          <p>Disabled tabs stay visible when a state exists but is not available yet.</p>
+        </div>
+      </cv-tab-panel>
+    </cv-tabs>
+  </section>
+
+  <section class="tabs-demo-section" aria-labelledby="tabs-demo-vertical-title">
+    <div class="tabs-demo-section-header">
+      <span class="tabs-demo-kicker">Vertical manual</span>
+      <h4 id="tabs-demo-vertical-title">Use for longer labels and settings-style grouping</h4>
+    </div>
+
+    <cv-tabs value="policy" orientation="vertical" activation-mode="manual" aria-label="Vault policy tabs">
+      <cv-tab slot="nav" value="policy">Threat model</cv-tab>
+      <cv-tab slot="nav" value="devices">Trusted devices</cv-tab>
+      <cv-tab slot="nav" value="exports">Export policy</cv-tab>
+
+      <cv-tab-panel tab="policy">
+        <div class="tabs-demo-panel-content">
+          <h5>Threat model</h5>
+          <p>
+            In manual mode, arrow keys move focus first. Press Enter or Space to commit the selected panel.
+          </p>
+        </div>
+      </cv-tab-panel>
+      <cv-tab-panel tab="devices">
+        <div class="tabs-demo-panel-content">
+          <h5>Trusted devices</h5>
+          <p>Use the vertical layout when the tab list behaves like a local settings rail.</p>
+        </div>
+      </cv-tab-panel>
+      <cv-tab-panel tab="exports">
+        <div class="tabs-demo-panel-content">
+          <h5>Export policy</h5>
+          <p>Panels keep the same width as the container, so content does not jump between tabs.</p>
+        </div>
+      </cv-tab-panel>
+    </cv-tabs>
+  </section>
+
+  <section class="tabs-demo-note" aria-labelledby="tabs-demo-close-title">
+    <span class="tabs-demo-kicker">Closable tabs</span>
+    <h4 id="tabs-demo-close-title">Close buttons are opt-in, not a default tab affordance.</h4>
+    <p>
+      Add <code>closable</code> only for removable workspace tabs such as open files or temporary records. The
+      consumer must remove the matching <code>cv-tab</code> and <code>cv-tab-panel</code> after the
+      <code>cv-close</code> event.
+    </p>
+  </section>
+</div>
 ```
 
 ## Child Elements
