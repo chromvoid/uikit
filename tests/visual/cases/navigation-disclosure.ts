@@ -1,12 +1,13 @@
 import type {UikitVisualCase} from '../component-visual-types'
-import {setElementProps, visualCase} from './helpers'
+import {setElementProps, visualCase, waitForElementUpdate} from './helpers'
 
 export const navigationDisclosureCases: readonly UikitVisualCase[] = [
   visualCase({
     id: 'cv-accordion/states',
     component: 'cv-accordion',
-    title: 'Accordion single, multiple, expanded, disabled, and long content states',
-    states: ['single', 'multiple', 'expanded', 'disabled-item', 'long-content'],
+    title: 'Accordion single, multiple, expanded, disabled, custom icon, and long content states',
+    states: ['single', 'multiple', 'expanded', 'disabled-item', 'custom-icon', 'long-content'],
+    viewports: ['compact', 'default'],
     requiredSelectors: [
       'cv-accordion-item[value="identity"] [part="panel"]',
       'cv-accordion-item[value="one"] [part="panel"]',
@@ -20,7 +21,7 @@ export const navigationDisclosureCases: readonly UikitVisualCase[] = [
             <p>Expanded accordion panel content with body copy.</p>
           </cv-accordion-item>
           <cv-accordion-item value="recovery">
-            <span slot="trigger">Recovery</span>
+            <span slot="trigger">Recovery path with a longer trigger label that wraps under pressure</span>
             <p>Collapsed recovery content.</p>
           </cv-accordion-item>
           <cv-accordion-item value="disabled" disabled>
@@ -34,16 +35,22 @@ export const navigationDisclosureCases: readonly UikitVisualCase[] = [
             <p>First visible body.</p>
           </cv-accordion-item>
           <cv-accordion-item value="two">
-            <span slot="trigger">Second expanded section</span>
+            <span slot="trigger">Second expanded section with custom icons</span>
+            <span slot="expand-icon">+</span>
+            <span slot="collapse-icon">-</span>
             <p>Second visible body.</p>
           </cv-accordion-item>
         </cv-accordion>
       </div>
     `,
-    afterMount(root) {
-      setElementProps(root, 'cv-accordion[data-visual-id="multi"]', {
+    async afterMount(root) {
+      const multi = setElementProps<HTMLElement>(root, 'cv-accordion[data-visual-id="multi"]', {
         expandedValues: ['one', 'two'],
       })
+      await waitForElementUpdate(multi)
+      for (const item of root.querySelectorAll('cv-accordion-item')) {
+        await waitForElementUpdate(item)
+      }
     },
   }),
   visualCase({
@@ -133,18 +140,45 @@ export const navigationDisclosureCases: readonly UikitVisualCase[] = [
     component: 'cv-steps',
     title: 'Steps horizontal, vertical, current, complete, error, disabled, and selectable states',
     states: ['horizontal', 'vertical', 'current', 'complete', 'error', 'disabled', 'selectable'],
+    viewports: ['compact', 'default'],
+    requiredSelectors: [
+      'cv-steps[selectable]',
+      'cv-step[status="complete"]',
+      'cv-step[status="current"]',
+      'cv-step[status="error"]',
+      'cv-step[disabled]',
+    ],
     html: `
-      <div class="visual-grid">
+      <div class="visual-wide-grid">
         <cv-steps current="encrypt" selectable>
-          <cv-step value="prepare" status="complete">Prepare archive</cv-step>
-          <cv-step value="encrypt" status="current">Encrypt files</cv-step>
-          <cv-step value="upload" status="pending">Upload</cv-step>
-          <cv-step value="verify" status="error">Verify</cv-step>
+          <cv-step value="prepare" status="complete">
+            <span slot="marker">1</span>
+            Prepare archive
+          </cv-step>
+          <cv-step value="encrypt" status="current">
+            <span slot="marker">2</span>
+            Encrypt files
+          </cv-step>
+          <cv-step value="upload" status="pending">
+            <span slot="marker">3</span>
+            Upload bundle with a longer label
+          </cv-step>
+          <cv-step value="verify" status="error">
+            <span slot="marker">!</span>
+            Verify receipt
+          </cv-step>
         </cv-steps>
         <cv-steps orientation="vertical" current="two">
-          <cv-step value="one" status="complete">First vertical step</cv-step>
-          <cv-step value="two" status="current">Current vertical step</cv-step>
-          <cv-step value="three" disabled>Disabled vertical step</cv-step>
+          <cv-step value="one" status="complete">
+            <span slot="marker">✓</span>
+            First vertical step
+          </cv-step>
+          <cv-step value="two" status="current">
+            <span slot="marker">2</span>
+            Current vertical step
+          </cv-step>
+          <cv-step value="three" status="pending">Pending vertical step</cv-step>
+          <cv-step value="four" disabled>Disabled vertical step</cv-step>
         </cv-steps>
       </div>
     `,
@@ -167,9 +201,16 @@ export const navigationDisclosureCases: readonly UikitVisualCase[] = [
           <span slot="footer">v0.2 visual</span>
         </cv-sidebar>
         <cv-sidebar collapsed size="small" aria-label="Collapsed navigation">
-          <strong slot="header">CV</strong>
-          <cv-sidebar-item href="#one" active>A</cv-sidebar-item>
-          <cv-sidebar-item href="#two">B</cv-sidebar-item>
+          <strong slot="header">Threat Model</strong>
+          <cv-sidebar-item href="#one" active>
+            <span slot="prefix">A</span>
+            Assets
+            <span slot="suffix">live</span>
+          </cv-sidebar-item>
+          <cv-sidebar-item href="#two">
+            <span slot="prefix">B</span>
+            Boundaries
+          </cv-sidebar-item>
         </cv-sidebar>
       </div>
     `,

@@ -140,19 +140,21 @@ export const inputsSelectionCases: readonly UikitVisualCase[] = [
   visualCase({
     id: 'cv-number/states',
     component: 'cv-number',
-    title: 'Number input variants, stepper, bounded, clearable, invalid, disabled, readonly, required, and size states',
+    title: 'Number input variants, horizontal steppers, bounded edges, clearable, invalid, disabled, readonly, required, and size states',
     states: [
       'outlined',
       'filled',
       'stepper',
       'bounded',
+      'bounded-min',
+      'bounded-max',
       'clearable',
       'invalid',
       'disabled',
       'readonly',
       'required',
-      'small',
-      'large',
+      'small-stepper',
+      'large-stepper',
     ],
     html: `
       <div class="visual-grid">
@@ -160,13 +162,15 @@ export const inputsSelectionCases: readonly UikitVisualCase[] = [
         <cv-number variant="filled" value="64"></cv-number>
         <cv-number stepper aria-label="Quantity" value="12"></cv-number>
         <cv-number stepper aria-label="Bounded quantity" value="4" min="0" max="10"></cv-number>
+        <cv-number stepper aria-label="Minimum quantity" value="0" min="0" max="10"></cv-number>
+        <cv-number stepper aria-label="Maximum quantity" value="10" min="0" max="10"></cv-number>
         <cv-number clearable value="7"></cv-number>
         <cv-number invalid value="1000" max="100"></cv-number>
         <cv-number disabled value="5"></cv-number>
         <cv-number read-only value="9"></cv-number>
         <cv-number required value="1"></cv-number>
-        <cv-number size="small" value="1"></cv-number>
-        <cv-number size="large" value="99"></cv-number>
+        <cv-number stepper size="small" aria-label="Small quantity" value="1"></cv-number>
+        <cv-number stepper size="large" aria-label="Large quantity" value="99"></cv-number>
       </div>
     `,
   }),
@@ -445,38 +449,38 @@ export const inputsSelectionCases: readonly UikitVisualCase[] = [
     `,
   }),
   visualCase({
-    id: 'cv-date-time-picker/states',
-    component: 'cv-date-time-picker',
-    title: 'Date-time picker value, 12h/24h, invalid, disabled, and size states',
+    id: 'cv-date-picker/date-time-states',
+    component: 'cv-date-picker',
+    title: 'Date picker date-time mode value, 12h/24h, invalid, disabled, and size states',
     states: ['value', 'hour-cycle-12', 'hour-cycle-24', 'invalid', 'disabled', 'large'],
-    requiredSelectors: ['cv-date-time-picker[data-visual-id="invalid"][input-invalid]'],
+    requiredSelectors: ['cv-date-picker[data-visual-id="date-time-invalid"][input-invalid]'],
     html: `
       <div class="visual-grid">
-        <cv-date-time-picker value="2026-06-18T14:30"></cv-date-time-picker>
-        <cv-date-time-picker value="2026-06-18T14:30" hour-cycle="12"></cv-date-time-picker>
-        <cv-date-time-picker data-visual-id="invalid" value="2026-06-18T14:30"></cv-date-time-picker>
-        <cv-date-time-picker disabled value="2026-06-18T14:30"></cv-date-time-picker>
-        <cv-date-time-picker size="large" value="2026-12-24T09:15"></cv-date-time-picker>
+        <cv-date-picker mode="date-time" value="2026-06-18T14:30"></cv-date-picker>
+        <cv-date-picker mode="date-time" value="2026-06-18T14:30" hour-cycle="12"></cv-date-picker>
+        <cv-date-picker mode="date-time" data-visual-id="date-time-invalid" value="2026-06-18T14:30"></cv-date-picker>
+        <cv-date-picker mode="date-time" disabled value="2026-06-18T14:30"></cv-date-picker>
+        <cv-date-picker mode="date-time" size="large" value="2026-12-24T09:15"></cv-date-picker>
       </div>
     `,
     async afterMount(root) {
-      await setShadowInputValue(root, 'cv-date-time-picker[data-visual-id="invalid"]', 'bad-date-time')
+      await setShadowInputValue(root, 'cv-date-picker[data-visual-id="date-time-invalid"]', 'bad-date-time')
     },
   }),
   visualCase({
-    id: 'cv-date-time-picker/open',
-    component: 'cv-date-time-picker',
-    title: 'Date-time picker open dialog with time controls',
+    id: 'cv-date-picker/date-time-open',
+    component: 'cv-date-picker',
+    title: 'Date picker date-time mode open dialog with time controls',
     states: ['open', 'calendar-dialog', 'time-inputs'],
-    diagnosticsIgnoredSelectors: ['cv-date-time-picker[data-visual-id="open"]'],
+    diagnosticsIgnoredSelectors: ['cv-date-picker[data-visual-id="date-time-open"]'],
     requiredSelectors: [
-      'cv-date-time-picker[data-visual-id="open"] [part="dialog"]',
-      'cv-date-time-picker[data-visual-id="open"] [part="calendar-grid"]',
-      'cv-date-time-picker[data-visual-id="open"] [part="hour-input"]',
+      'cv-date-picker[data-visual-id="date-time-open"] [part="dialog"]',
+      'cv-date-picker[data-visual-id="date-time-open"] [part="calendar-grid"]',
+      'cv-date-picker[data-visual-id="date-time-open"] [part="hour-input"]',
     ],
     html: `
       <div class="visual-overlay-frame visual-overlay-frame--wide visual-overlay-frame--tall">
-        <cv-date-time-picker data-visual-id="open" open value="2026-06-18T14:30" hour-cycle="12"></cv-date-time-picker>
+        <cv-date-picker mode="date-time" data-visual-id="date-time-open" open value="2026-06-18T14:30" hour-cycle="12"></cv-date-picker>
       </div>
     `,
   }),
