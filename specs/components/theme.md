@@ -309,26 +309,43 @@ The light block overrides only color-varying tokens (colors, shadows, overlay). 
 
 ## Usage
 
-### Basic dark theme
-
 ```html
-<cv-theme-provider mode="dark">
-  <cv-button variant="primary">Save</cv-button>
-</cv-theme-provider>
-```
+<div class="theme-provider-demo-board">
+  <!-- Basic dark theme. -->
+  <cv-theme-provider mode="dark">
+    <section class="theme-provider-demo-panel">
+      <span>Dark mode scope</span>
+      <cv-button variant="primary">Save</cv-button>
+    </section>
+  </cv-theme-provider>
 
-### System-auto (default)
+  <!-- System-auto follows OS light/dark preference. -->
+  <cv-theme-provider>
+    <section class="theme-provider-demo-panel">
+      <span>System color mode</span>
+      <cv-badge variant="success" size="small">auto</cv-badge>
+    </section>
+  </cv-theme-provider>
 
-```html
-<cv-theme-provider>
-  <!-- Follows OS light/dark preference -->
-  <my-app></my-app>
-</cv-theme-provider>
-```
+  <!-- Named themes are registered through the runtime theme engine. -->
+  <cv-theme-provider data-theme-demo-brand>
+    <section class="theme-provider-demo-panel">
+      <span>Named brand theme</span>
+      <cv-button variant="primary">Branded</cv-button>
+    </section>
+  </cv-theme-provider>
 
-### Named theme via engine
+  <!-- Nested providers scope overrides to their own subtree. -->
+  <cv-theme-provider mode="dark">
+    <section class="theme-provider-demo-panel">
+      <span>Outer dark provider</span>
+      <cv-theme-provider data-theme-demo-sidebar>
+        <cv-badge variant="primary" size="small">sidebar scope</cv-badge>
+      </cv-theme-provider>
+    </section>
+  </cv-theme-provider>
+</div>
 
-```html
 <script type="module">
   import {defineTheme} from '@chromvoid/uikit/theme'
 
@@ -336,23 +353,15 @@ The light block overrides only color-varying tokens (colors, shadows, overlay). 
     '--cv-color-primary': '#ff6600',
     '--cv-color-bg': '#1a1a2e',
   })
+
+  defineTheme('sidebar-theme', {
+    '--cv-color-primary': '#b388ff',
+    '--cv-color-surface': '#181127',
+  })
+
+  document.querySelector('[data-theme-demo-brand]')?.setAttribute('theme', 'brand')
+  document.querySelector('[data-theme-demo-sidebar]')?.setAttribute('theme', 'sidebar-theme')
 </script>
-
-<cv-theme-provider theme="brand">
-  <cv-button variant="primary">Branded</cv-button>
-</cv-theme-provider>
-```
-
-### Nested providers (scoped override)
-
-```html
-<cv-theme-provider mode="dark">
-  <main>
-    <cv-theme-provider theme="sidebar-theme">
-      <nav><!-- tokens scoped to sidebar --></nav>
-    </cv-theme-provider>
-  </main>
-</cv-theme-provider>
 ```
 
 ### CSS targeting via data attribute
