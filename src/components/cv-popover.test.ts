@@ -164,6 +164,14 @@ describe('cv-popover', () => {
       expect(cssText).toMatch(/transition-behavior:\s*allow-discrete/)
       expect(cssText).toMatch(/@starting-style[\s\S]*\[part='content'\]:not\(\[hidden\]\)/)
     })
+
+    it('keeps closed native popover content hidden', () => {
+      const cssText = stylesToText()
+
+      expect(cssText).toMatch(
+        /\[part='content'\]\[popover\]:not\(:popover-open\)[\s\S]*display:\s*none/,
+      )
+    })
   })
 
   // --- Shadow DOM structure ---

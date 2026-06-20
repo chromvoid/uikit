@@ -234,6 +234,12 @@ export class CVPopover extends ReatomLitElement {
         transform: translate3d(0, -2px, 0);
       }
 
+      [part='content'][popover]:not(:popover-open) {
+        display: none;
+        opacity: 0;
+        transform: translate3d(0, -2px, 0);
+      }
+
       @starting-style {
         [part='content']:not([hidden]) {
           opacity: 0;
