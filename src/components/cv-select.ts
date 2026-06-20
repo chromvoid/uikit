@@ -82,6 +82,8 @@ export class CVSelect extends FormAssociatedReatomElement {
       open: {type: Boolean, reflect: true},
       selectionMode: {type: String, attribute: 'selection-mode', reflect: true},
       ariaLabel: {type: String, attribute: 'aria-label'},
+      ariaLabelledBy: {type: String, attribute: 'aria-labelledby'},
+      ariaDescribedBy: {type: String, attribute: 'aria-describedby'},
       closeOnSelect: {type: Boolean, attribute: 'close-on-select', reflect: true},
       placeholder: {type: String},
       disabled: {type: Boolean, reflect: true},
@@ -98,6 +100,8 @@ export class CVSelect extends FormAssociatedReatomElement {
   declare open: boolean
   declare selectionMode: ListboxSelectionMode
   declare ariaLabel: string
+  declare ariaLabelledBy: string
+  declare ariaDescribedBy: string
   declare closeOnSelect: boolean
   declare placeholder: string
   declare disabled: boolean
@@ -122,6 +126,8 @@ export class CVSelect extends FormAssociatedReatomElement {
     this.open = false
     this.selectionMode = 'single'
     this.ariaLabel = ''
+    this.ariaLabelledBy = ''
+    this.ariaDescribedBy = ''
     this.closeOnSelect = true
     this.placeholder = ''
     this.disabled = false
@@ -163,6 +169,7 @@ export class CVSelect extends FormAssociatedReatomElement {
 
       [part='trigger'] {
         gap: var(--cv-space-2, 8px);
+        justify-content: flex-start;
         min-block-size: var(--cv-select-min-height, 36px);
         padding: var(--cv-select-padding-block, var(--cv-space-2, 8px))
           var(--cv-select-padding-inline, var(--cv-space-3, 12px));
@@ -171,6 +178,14 @@ export class CVSelect extends FormAssociatedReatomElement {
         background: var(--cv-select-background);
         color: var(--cv-color-text, #e8ecf6);
         cursor: pointer;
+      }
+
+      [part='value'] {
+        flex: 1 1 auto;
+        min-inline-size: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
 
       [part='trigger']:focus-visible {
@@ -196,9 +211,17 @@ export class CVSelect extends FormAssociatedReatomElement {
 
       [part='chevron'] {
         opacity: 0.72;
+        transform-origin: center;
+        transition: transform var(--cv-duration-fast, 120ms) var(--cv-easing-standard, ease);
+      }
+
+      :host([open]) [part='chevron'] {
+        transform: rotate(180deg);
       }
 
       [part='clear-button'] {
+        inline-size: var(--cv-select-clear-button-size, 1.4em);
+        block-size: var(--cv-select-clear-button-size, 1.4em);
         border: none;
         background: none;
         color: inherit;
@@ -243,6 +266,12 @@ export class CVSelect extends FormAssociatedReatomElement {
         [part='listbox']:not([hidden]) {
           opacity: 0;
           transform: translate3d(0, -2px, 0);
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        [part='chevron'] {
+          transition: none;
         }
       }
     `,
@@ -905,7 +934,9 @@ export class CVSelect extends FormAssociatedReatomElement {
           aria-expanded=${triggerProps['aria-expanded']}
           aria-controls=${triggerProps['aria-controls']}
           aria-activedescendant=${triggerProps['aria-activedescendant'] ?? nothing}
-          aria-label=${triggerProps['aria-label'] ?? nothing}
+          aria-label=${this.ariaLabelledBy ? nothing : (triggerProps['aria-label'] ?? nothing)}
+          aria-labelledby=${this.ariaLabelledBy || nothing}
+          aria-describedby=${this.ariaDescribedBy || nothing}
           aria-disabled=${triggerProps['aria-disabled'] ?? nothing}
           aria-required=${triggerProps['aria-required'] ?? nothing}
           aria-invalid=${this.invalid ? 'true' : nothing}
@@ -916,7 +947,9 @@ export class CVSelect extends FormAssociatedReatomElement {
           @click=${this.handleTriggerClick}
           @keydown=${this.handleTriggerKeyDown}
         >
-          <slot name="trigger">${this.getValueText()}</slot>
+          <span part="value">
+            <slot name="trigger">${this.getValueText()}</slot>
+          </span>
           ${
             showClear
               ? html`
@@ -939,7 +972,8 @@ export class CVSelect extends FormAssociatedReatomElement {
           id=${listboxProps.id}
           role=${listboxProps.role}
           tabindex=${listboxProps.tabindex}
-          aria-label=${listboxProps['aria-label'] ?? nothing}
+          aria-label=${this.ariaLabelledBy ? nothing : (listboxProps['aria-label'] ?? nothing)}
+          aria-labelledby=${this.ariaLabelledBy || nothing}
           aria-multiselectable=${listboxProps['aria-multiselectable'] ?? nothing}
           aria-activedescendant=${listboxProps['aria-activedescendant'] ?? nothing}
           ?hidden=${listboxProps.hidden}

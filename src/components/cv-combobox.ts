@@ -133,6 +133,7 @@ export class CVCombobox extends ReatomLitElement {
       }
 
       [part='base'] {
+        position: relative;
         display: grid;
         gap: var(--cv-space-1, 4px);
       }
@@ -256,6 +257,11 @@ export class CVCombobox extends ReatomLitElement {
       }
 
       [part='listbox'] {
+        position: absolute;
+        inset-inline-start: 0;
+        inset-block-start: calc(100% + var(--cv-space-1, 4px));
+        z-index: 20;
+        min-inline-size: 100%;
         gap: var(--cv-space-1, 4px);
         max-block-size: 220px;
         overflow: auto;

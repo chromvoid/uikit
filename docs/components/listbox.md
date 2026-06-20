@@ -8,53 +8,90 @@ Standalone listbox widget for single or multiple selection from a list of option
 
 ## Usage
 
+These examples focus on listbox-level behavior and collection structure. For
+option label composition, prefix/suffix slots, and rich option content, see
+[`cv-option`](./option.md).
+
+### Basic single-select
+
+Default listbox behavior: one focused list, one selected option.
+
 ```html
-<!-- Basic single-select listbox -->
 <cv-listbox aria-label="Fruits">
   <cv-option value="apple">Apple</cv-option>
   <cv-option value="banana">Banana</cv-option>
   <cv-option value="cherry">Cherry</cv-option>
 </cv-listbox>
+```
 
-<!-- Multi-select listbox -->
+### Multiple selection
+
+Use `selection-mode="multiple"` when the user can keep several options selected.
+
+```html
 <cv-listbox selection-mode="multiple" aria-label="Toppings">
   <cv-option value="cheese">Cheese</cv-option>
   <cv-option value="peppers">Peppers</cv-option>
   <cv-option value="onions">Onions</cv-option>
   <cv-option value="olives" disabled>Olives</cv-option>
 </cv-listbox>
+```
 
-<!-- With pre-selected options -->
+### Pre-selected options
+
+Initial selection can be declared on child options with `selected`.
+
+```html
 <cv-listbox selection-mode="multiple" aria-label="Languages">
   <cv-option value="js" selected>JavaScript</cv-option>
   <cv-option value="ts" selected>TypeScript</cv-option>
   <cv-option value="py">Python</cv-option>
   <cv-option value="rs">Rust</cv-option>
 </cv-listbox>
+```
 
-<!-- Roving tabindex focus strategy -->
+### Roving tabindex focus
+
+Switch to DOM-roving focus when options themselves should receive keyboard focus.
+
+```html
 <cv-listbox focus-strategy="roving-tabindex" aria-label="Colors">
   <cv-option value="red">Red</cv-option>
   <cv-option value="green">Green</cv-option>
   <cv-option value="blue">Blue</cv-option>
 </cv-listbox>
+```
 
-<!-- Horizontal orientation -->
+### Horizontal orientation
+
+Use horizontal orientation for compact alignment or segmented-list patterns.
+
+```html
 <cv-listbox orientation="horizontal" aria-label="Alignment">
   <cv-option value="left">Left</cv-option>
   <cv-option value="center">Center</cv-option>
   <cv-option value="right">Right</cv-option>
 </cv-listbox>
+```
 
-<!-- With range selection -->
+### Range selection
+
+Enable range selection for Shift+Arrow and Shift+Space multi-select workflows.
+
+```html
 <cv-listbox selection-mode="multiple" range-selection aria-label="Files">
   <cv-option value="file1">document.pdf</cv-option>
   <cv-option value="file2">image.png</cv-option>
   <cv-option value="file3">notes.txt</cv-option>
   <cv-option value="file4">data.csv</cv-option>
 </cv-listbox>
+```
 
-<!-- With option groups -->
+### Option groups
+
+Group related options with `cv-listbox-group` while preserving one navigation order.
+
+```html
 <cv-listbox aria-label="City">
   <cv-listbox-group label="North America">
     <cv-option value="nyc">New York</cv-option>
@@ -67,8 +104,13 @@ Standalone listbox widget for single or multiple selection from a list of option
     <cv-option value="ber">Berlin</cv-option>
   </cv-listbox-group>
 </cv-listbox>
+```
 
-<!-- Mixed grouped and ungrouped options -->
+### Mixed grouped and ungrouped options
+
+Ungrouped options can appear alongside grouped sections in the same listbox.
+
+```html
 <cv-listbox aria-label="Items">
   <cv-option value="misc1">Miscellaneous A</cv-option>
   <cv-listbox-group label="Category 1">

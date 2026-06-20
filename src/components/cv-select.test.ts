@@ -60,6 +60,22 @@ describe('cv-select', () => {
       expect(cssText).toMatch(/\[part='listbox'\][\s\S]*transition:[\s\S]*display[\s\S]*allow-discrete/)
       expect(cssText).toMatch(/transition-behavior:\s*allow-discrete/)
     })
+
+    it('keeps value text flexible and trailing controls compact', () => {
+      const cssText = stylesToText()
+
+      expect(cssText).toMatch(/\[part='trigger'\]\s*{[\s\S]*justify-content:\s*flex-start/)
+      expect(cssText).toMatch(/\[part='value'\]\s*{[\s\S]*flex:\s*1 1 auto/)
+      expect(cssText).toMatch(/\[part='clear-button'\]\s*{[\s\S]*inline-size:\s*var\(--cv-select-clear-button-size/)
+    })
+
+    it('rotates the chevron when the select is open', () => {
+      const cssText = stylesToText()
+
+      expect(cssText).toMatch(
+        /:host\(\[open\]\)\s*\[part='chevron'\]\s*{[\s\S]*transform:\s*rotate\(180deg\)/,
+      )
+    })
   })
 
   // --- Shadow DOM structure ---
@@ -83,6 +99,14 @@ describe('cv-select', () => {
       const chevron = el.shadowRoot!.querySelector('[part="chevron"]')
       expect(chevron).not.toBeNull()
       expect(chevron!.getAttribute('aria-hidden')).toBe('true')
+    })
+
+    it('renders value wrapper around trigger slot', async () => {
+      const el = await createSelect()
+      const value = el.shadowRoot!.querySelector('[part="value"]')
+      const slot = value?.querySelector('slot[name="trigger"]')
+      expect(value).not.toBeNull()
+      expect(slot).not.toBeNull()
     })
 
     it('renders [part="listbox"]', async () => {
@@ -115,6 +139,8 @@ describe('cv-select', () => {
       expect(el.open).toBe(false)
       expect(el.selectionMode).toBe('single')
       expect(el.ariaLabel).toBe('')
+      expect(el.ariaLabelledBy).toBe('')
+      expect(el.ariaDescribedBy).toBe('')
       expect(el.closeOnSelect).toBe(true)
       expect(el.placeholder).toBe('')
       expect(el.disabled).toBe(false)
@@ -240,6 +266,22 @@ describe('cv-select', () => {
     it('trigger has aria-label when set', async () => {
       const el = await createSelect({ariaLabel: 'Pick a fruit'})
       expect(getTrigger(el).getAttribute('aria-label')).toBe('Pick a fruit')
+    })
+
+    it('uses external field aria linkage when provided', async () => {
+      const el = await createSelect({
+        ariaLabel: 'Fallback label',
+        ariaLabelledBy: 'field-label',
+        ariaDescribedBy: 'field-description',
+      })
+      const trigger = getTrigger(el)
+      const listbox = getListbox(el)
+
+      expect(trigger.getAttribute('aria-labelledby')).toBe('field-label')
+      expect(trigger.getAttribute('aria-describedby')).toBe('field-description')
+      expect(trigger.hasAttribute('aria-label')).toBe(false)
+      expect(listbox.getAttribute('aria-labelledby')).toBe('field-label')
+      expect(listbox.hasAttribute('aria-label')).toBe(false)
     })
 
     it('listbox has role="listbox"', async () => {

@@ -9,73 +9,116 @@ Single or multi-selection dropdown that composes a combobox trigger with a listb
 ## Usage
 
 ```html
-<!-- Basic single-select -->
-<cv-select placeholder="Choose a fruit">
-  <cv-select-option value="apple">Apple</cv-select-option>
-  <cv-select-option value="banana">Banana</cv-select-option>
-  <cv-select-option value="cherry">Cherry</cv-select-option>
-</cv-select>
+<div class="select-demo-grid">
+  <cv-field class="select-demo-cell">
+    <span slot="label">Basic</span>
+    <span slot="description">Empty single-select with placeholder text until a choice is made.</span>
+    <cv-select placeholder="Choose a fruit">
+      <cv-select-option value="apple">Apple</cv-select-option>
+      <cv-select-option value="banana">Banana</cv-select-option>
+      <cv-select-option value="cherry">Cherry</cv-select-option>
+    </cv-select>
+  </cv-field>
 
-<!-- Pre-selected value -->
-<cv-select value="banana">
-  <cv-select-option value="apple">Apple</cv-select-option>
-  <cv-select-option value="banana">Banana</cv-select-option>
-  <cv-select-option value="cherry">Cherry</cv-select-option>
-</cv-select>
+  <cv-field class="select-demo-cell">
+    <span slot="label">Pre-selected</span>
+    <span slot="description">Initial value is resolved against slotted options on connect.</span>
+    <cv-select value="banana">
+      <cv-select-option value="apple">Apple</cv-select-option>
+      <cv-select-option value="banana">Banana</cv-select-option>
+      <cv-select-option value="cherry">Cherry</cv-select-option>
+    </cv-select>
+  </cv-field>
 
-<!-- With size variant -->
-<cv-select size="small" placeholder="Small select">
-  <cv-select-option value="a">Option A</cv-select-option>
-  <cv-select-option value="b">Option B</cv-select-option>
-</cv-select>
+  <cv-field class="select-demo-cell">
+    <span slot="label">Small</span>
+    <span slot="description">Compact trigger keeps the same combobox and listbox contract.</span>
+    <cv-select size="small" placeholder="Small select">
+      <cv-select-option value="a">Option A</cv-select-option>
+      <cv-select-option value="b">Option B</cv-select-option>
+    </cv-select>
+  </cv-field>
 
-<!-- Disabled -->
-<cv-select disabled placeholder="Cannot interact">
-  <cv-select-option value="a">Option A</cv-select-option>
-</cv-select>
+  <cv-field class="select-demo-cell" disabled>
+    <span slot="label">Disabled</span>
+    <span slot="description">Disabled state blocks pointer and keyboard interaction.</span>
+    <cv-select placeholder="Cannot interact">
+      <cv-select-option value="a">Option A</cv-select-option>
+    </cv-select>
+  </cv-field>
 
-<!-- Clearable -->
-<cv-select clearable value="apple">
-  <cv-select-option value="apple">Apple</cv-select-option>
-  <cv-select-option value="banana">Banana</cv-select-option>
-</cv-select>
+  <cv-field class="select-demo-cell">
+    <span slot="label">Clearable</span>
+    <span slot="description">Clear control appears only while a selected value exists.</span>
+    <cv-select clearable value="apple">
+      <cv-select-option value="apple">Apple</cv-select-option>
+      <cv-select-option value="banana">Banana</cv-select-option>
+    </cv-select>
+  </cv-field>
 
-<!-- Required -->
-<cv-select required placeholder="Required field">
-  <cv-select-option value="yes">Yes</cv-select-option>
-  <cv-select-option value="no">No</cv-select-option>
-</cv-select>
+  <cv-field class="select-demo-cell" required>
+    <span slot="label">Required</span>
+    <span slot="description">Required participates in form validity until an option is selected.</span>
+    <cv-select placeholder="Required field">
+      <cv-select-option value="yes">Yes</cv-select-option>
+      <cv-select-option value="no">No</cv-select-option>
+    </cv-select>
+  </cv-field>
 
-<!-- Grouped options -->
-<cv-select placeholder="Choose a color">
-  <cv-select-group label="Warm">
-    <cv-select-option value="red">Red</cv-select-option>
-    <cv-select-option value="orange">Orange</cv-select-option>
-  </cv-select-group>
-  <cv-select-group label="Cool">
-    <cv-select-option value="blue">Blue</cv-select-option>
-    <cv-select-option value="green">Green</cv-select-option>
-  </cv-select-group>
-</cv-select>
+  <cv-field class="select-demo-cell select-demo-cell--wide">
+    <span slot="label">Grouped options</span>
+    <span slot="description">Groups preserve listbox semantics while separating related options.</span>
+    <cv-select placeholder="Choose a color">
+      <cv-select-group label="Warm">
+        <cv-select-option value="red">Red</cv-select-option>
+        <cv-select-option value="orange">Orange</cv-select-option>
+      </cv-select-group>
+      <cv-select-group label="Cool">
+        <cv-select-option value="blue">Blue</cv-select-option>
+        <cv-select-option value="green">Green</cv-select-option>
+      </cv-select-group>
+    </cv-select>
+  </cv-field>
 
-<!-- Multiple selection -->
-<cv-select selection-mode="multiple" placeholder="Select tags">
-  <cv-select-option value="a11y">Accessibility</cv-select-option>
-  <cv-select-option value="perf">Performance</cv-select-option>
-  <cv-select-option value="ux">UX</cv-select-option>
-</cv-select>
+  <cv-field class="select-demo-cell">
+    <span slot="label">Multiple</span>
+    <span slot="description">Multiple mode can expose selected labels and a compact clear control.</span>
+    <cv-select selection-mode="multiple" clearable placeholder="Select tags">
+      <cv-select-option value="a11y" selected>Accessibility</cv-select-option>
+      <cv-select-option value="perf">Performance</cv-select-option>
+      <cv-select-option value="ux">UX</cv-select-option>
+    </cv-select>
+  </cv-field>
 
-<!-- Disabled option -->
-<cv-select>
-  <cv-select-option value="active">Active</cv-select-option>
-  <cv-select-option value="archived" disabled>Archived</cv-select-option>
-</cv-select>
+  <cv-field class="select-demo-cell">
+    <span slot="label">Disabled option</span>
+    <span slot="description">Unavailable options stay visible but cannot become selected.</span>
+    <cv-select placeholder="Choose status">
+      <cv-select-option value="active">Active</cv-select-option>
+      <cv-select-option value="archived" disabled>Archived</cv-select-option>
+    </cv-select>
+  </cv-field>
 
-<!-- Keep open after selection -->
-<cv-select selection-mode="multiple" close-on-select="false">
-  <cv-select-option value="a">Option A</cv-select-option>
-  <cv-select-option value="b">Option B</cv-select-option>
-</cv-select>
+  <cv-field class="select-demo-cell select-demo-cell--wide">
+    <span slot="label">Persistent popup</span>
+    <span slot="description">Set closeOnSelect to false when multiple picks should keep the popup open.</span>
+    <cv-select
+      data-select-demo-keep-open
+      selection-mode="multiple"
+      placeholder="Pick options"
+    >
+      <cv-select-option value="a">Option A</cv-select-option>
+      <cv-select-option value="b">Option B</cv-select-option>
+    </cv-select>
+  </cv-field>
+</div>
+
+<script type="module">
+  const keepOpenSelect = document.querySelector('[data-select-demo-keep-open]')
+  if (keepOpenSelect) {
+    keepOpenSelect.closeOnSelect = false
+  }
+</script>
 ```
 
 ## Anatomy
@@ -84,7 +127,8 @@ Single or multi-selection dropdown that composes a combobox trigger with a listb
 <cv-select> (host)
 └── <div part="base">
     ├── <div part="trigger" role="combobox">
-    │   ├── <slot name="trigger"> ← fallback: selected label / placeholder
+    │   ├── <span part="value">
+    │   │   └── <slot name="trigger"> ← fallback: selected label / placeholder
     │   ├── <button part="clear-button" aria-hidden="true"> ← only when clearable + has value
     │   └── <span part="chevron" aria-hidden="true">
     └── <div part="listbox" role="listbox">
@@ -99,6 +143,8 @@ Single or multi-selection dropdown that composes a combobox trigger with a listb
 | `open`            | Boolean | `false`    | Whether the listbox popup is visible            |
 | `selection-mode`  | String  | `"single"` | Selection mode: `single` \| `multiple`          |
 | `aria-label`      | String  | `""`       | Accessible label for the trigger                |
+| `aria-labelledby` | String  | `""`       | External label id, typically from `cv-field`    |
+| `aria-describedby` | String | `""`       | External description id, typically from `cv-field` |
 | `close-on-select` | Boolean | `true`     | Close popup after an option is selected         |
 | `placeholder`     | String  | `""`       | Hint text when no option is selected            |
 | `disabled`        | Boolean | `false`    | Prevents all interaction                        |
@@ -133,24 +179,26 @@ Non-reflected properties:
 | -------------- | ---------- | -------------------------------------------------------------------- |
 | `base`         | `<div>`    | Root layout wrapper                                                  |
 | `trigger`      | `<div>`    | Combobox trigger that opens/closes the listbox                       |
+| `value`        | `<span>`   | Selected label / placeholder wrapper                                 |
 | `chevron`      | `<span>`   | Dropdown arrow indicator                                             |
 | `clear-button` | `<button>` | Clear value button (only rendered when `clearable` and value is set) |
 | `listbox`      | `<div>`    | Popup container holding options                                      |
 
 ## CSS Custom Properties
 
-| Property                     | Default                   | Description                       |
-| ---------------------------- | ------------------------- | --------------------------------- |
-| `--cv-select-inline-size`    | `260px`                   | Inline size of the host element   |
-| `--cv-select-min-height`     | `36px`                    | Minimum block size of the trigger |
-| `--cv-select-padding-inline` | `var(--cv-space-3, 12px)` | Horizontal padding of the trigger |
-| `--cv-select-padding-block`  | `var(--cv-space-2, 8px)`  | Vertical padding of the trigger   |
+| Property                        | Default                   | Description                                |
+| ------------------------------- | ------------------------- | ------------------------------------------ |
+| `--cv-select-inline-size`       | `260px`                   | Inline size of the host element            |
+| `--cv-select-min-height`        | `36px`                    | Minimum block size of the trigger          |
+| `--cv-select-padding-inline`    | `var(--cv-space-3, 12px)` | Horizontal padding of the trigger          |
+| `--cv-select-padding-block`     | `var(--cv-space-2, 8px)`  | Vertical padding of the trigger            |
+| `--cv-select-clear-button-size` | `1.4em`                   | Inline and block size of the clear button  |
 
 ## Visual States
 
 | Host selector                        | Description                                                     |
 | ------------------------------------ | --------------------------------------------------------------- |
-| `:host([open])`                      | Listbox popup is visible                                        |
+| `:host([open])`                      | Listbox popup is visible and the chevron rotates upward         |
 | `:host([selection-mode="multiple"])` | Multiple selection mode active                                  |
 | `:host([disabled])`                  | Reduced opacity, `cursor: not-allowed`, all interaction blocked |
 | `:host([required])`                  | Field is required                                               |

@@ -180,6 +180,17 @@ describe('cv-combobox', () => {
     expect(cssText).toMatch(/transition-behavior:\s*allow-discrete/)
   })
 
+  it('positions the popup listbox outside normal layout flow', () => {
+    const cssText = stylesToText()
+
+    expect(cssText).toMatch(/\[part='base'\]\s*{[\s\S]*position:\s*relative;/)
+    expect(cssText).toMatch(/\[part='listbox'\]\s*{[\s\S]*position:\s*absolute;/)
+    expect(cssText).toMatch(
+      /\[part='listbox'\]\s*{[\s\S]*inset-block-start:\s*calc\(100% \+ var\(--cv-space-1, 4px\)\);/,
+    )
+    expect(cssText).toMatch(/\[part='listbox'\]\s*{[\s\S]*min-inline-size:\s*100%;/)
+  })
+
   it('hides slotted options when the listbox contract marks them hidden', () => {
     const cssText = optionStylesToText()
 

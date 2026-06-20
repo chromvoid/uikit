@@ -8,69 +8,42 @@ Individual selectable option for use as a direct child of `cv-listbox` or `cv-li
 
 ## Usage
 
-```html
-<!-- Basic usage inside a listbox -->
-<cv-listbox aria-label="Fruits">
-  <cv-option value="apple">Apple</cv-option>
-  <cv-option value="banana">Banana</cv-option>
-  <cv-option value="cherry" disabled>Cherry (unavailable)</cv-option>
-</cv-listbox>
+`cv-option` is not a standalone control. Place it under `cv-listbox` or
+`cv-listbox-group`; the parent listbox owns ARIA attributes, selection,
+keyboard behavior, and events.
 
-<!-- With prefix icon -->
-<cv-listbox aria-label="Connections">
-  <cv-option value="wifi">
-    <icon-wifi slot="prefix"></icon-wifi>
-    Wi-Fi
-  </cv-option>
-  <cv-option value="ethernet">
-    <icon-ethernet slot="prefix"></icon-ethernet>
-    Ethernet
-  </cv-option>
-</cv-listbox>
+This snippet is static because `cv-option` is a child element; live selection
+and keyboard behavior are demonstrated on `cv-listbox`.
 
-<!-- With suffix badge -->
-<cv-listbox aria-label="Plans">
-  <cv-option value="free">
-    Free
-    <cv-badge slot="suffix">current</cv-badge>
-  </cv-option>
-  <cv-option value="pro">
-    Pro
-    <cv-badge slot="suffix" variant="primary">upgrade</cv-badge>
-  </cv-option>
-</cv-listbox>
+```xml
+<cv-listbox aria-label="Storage locations">
+  <!-- Basic value + label text -->
+  <cv-option value="vault">Vault</cv-option>
 
-<!-- With both prefix and suffix -->
-<cv-listbox aria-label="Files">
-  <cv-option value="doc">
-    <icon-file slot="prefix"></icon-file>
-    document.pdf
-    <span slot="suffix">12 KB</span>
-  </cv-option>
-  <cv-option value="img">
-    <icon-image slot="prefix"></icon-image>
-    photo.png
-    <span slot="suffix">4.2 MB</span>
-  </cv-option>
-</cv-listbox>
+  <!-- Disabled options stay in the collection but cannot be selected -->
+  <cv-option value="cloud" disabled>Cloud backup unavailable</cv-option>
 
-<!-- Pre-selected option -->
-<cv-listbox aria-label="Theme">
-  <cv-option value="light">Light</cv-option>
-  <cv-option value="dark" selected>Dark</cv-option>
-  <cv-option value="system">System</cv-option>
-</cv-listbox>
+  <!-- selected declares initial parent listbox selection -->
+  <cv-option value="device" selected>Local device</cv-option>
 
-<!-- Inside a group -->
-<cv-listbox aria-label="City">
-  <cv-listbox-group label="North America">
-    <cv-option value="nyc">New York</cv-option>
-    <cv-option value="la">Los Angeles</cv-option>
-  </cv-listbox-group>
-  <cv-listbox-group label="Europe">
-    <cv-option value="lon">London</cv-option>
-    <cv-option value="par">Paris</cv-option>
-  </cv-listbox-group>
+  <!-- Prefix slot -->
+  <cv-option value="archive">
+    <cv-icon slot="prefix" name="archive"></cv-icon>
+    Archive
+  </cv-option>
+
+  <!-- Suffix slot -->
+  <cv-option value="shared">
+    Shared workspace
+    <cv-badge slot="suffix">team</cv-badge>
+  </cv-option>
+
+  <!-- Prefix + suffix rich row -->
+  <cv-option value="cold-storage">
+    <cv-icon slot="prefix" name="snowflake"></cv-icon>
+    Cold storage
+    <span slot="suffix">12 GB</span>
+  </cv-option>
 </cv-listbox>
 ```
 
