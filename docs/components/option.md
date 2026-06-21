@@ -12,39 +12,199 @@ Individual selectable option for use as a direct child of `cv-listbox` or `cv-li
 `cv-listbox-group`; the parent listbox owns ARIA attributes, selection,
 keyboard behavior, and events.
 
-This snippet is static because `cv-option` is a child element; live selection
-and keyboard behavior are demonstrated on `cv-listbox`.
-
 ```html
-<cv-listbox aria-label="Storage locations">
-  <!-- Basic value + label text -->
-  <cv-option value="vault">Vault</cv-option>
+<div class="option-demo-shell usage-demo" data-demo="option" data-live-demo-height="940">
+  <section class="option-demo-hero usage-demo__hero" aria-labelledby="option-demo-title">
+    <div class="option-demo-copy usage-demo__copy">
+      <span class="option-demo-kicker usage-demo__kicker">Presentational option row</span>
+      <h3 id="option-demo-title">Compose labels, icons, and status chips while the parent owns selection.</h3>
+      <p>
+        <code>cv-option</code> renders the row surface only. <code>cv-listbox</code> assigns role, tabindex,
+        active state, selection, and the ARIA contract through its headless model.
+      </p>
+    </div>
 
-  <!-- Disabled options stay in the collection but cannot be selected -->
-  <cv-option value="cloud" disabled>Cloud backup unavailable</cv-option>
+    <dl class="option-demo-metrics usage-demo__metrics" aria-label="Option contract highlights">
+      <div>
+        <dt>Owns</dt>
+        <dd>slots, parts, visual state</dd>
+      </div>
+      <div>
+        <dt>Parent owns</dt>
+        <dd>ARIA, focus, keyboard, events</dd>
+      </div>
+      <div>
+        <dt>Content</dt>
+        <dd>plain labels or rich rows</dd>
+      </div>
+    </dl>
+  </section>
 
-  <!-- selected declares initial parent listbox selection -->
-  <cv-option value="device" selected>Local device</cv-option>
+  <section class="option-demo-workbench usage-demo__workbench" aria-labelledby="option-demo-workbench-title">
+    <div class="option-demo-section-header usage-demo__section-header">
+      <span class="option-demo-kicker usage-demo__kicker">Live parent contract</span>
+      <h4 id="option-demo-workbench-title">
+        The options below are interactive because they are registered by <code>cv-listbox</code>.
+      </h4>
+    </div>
 
-  <!-- Prefix slot -->
-  <cv-option value="archive">
-    <cv-icon slot="prefix" name="archive"></cv-icon>
-    Archive
-  </cv-option>
+    <div class="option-demo-layout">
+      <article
+        class="option-demo-panel option-demo-panel--primary usage-demo__panel usage-demo__panel--primary"
+        aria-labelledby="option-demo-list-title"
+      >
+        <header class="option-demo-panel-header usage-demo__panel-header usage-demo__panel-header--split">
+          <div>
+            <span class="option-demo-label usage-demo__label">Grouped listbox child rows</span>
+            <h5 id="option-demo-list-title">Vault route exposed to the UI</h5>
+          </div>
+          <cv-badge variant="primary" pill>parent-managed</cv-badge>
+        </header>
 
-  <!-- Suffix slot -->
-  <cv-option value="shared">
-    Shared workspace
-    <cv-badge slot="suffix">team</cv-badge>
-  </cv-option>
+        <cv-listbox class="option-demo-listbox" aria-label="Visible vault route">
+          <cv-listbox-group label="Visible layer">
+            <cv-option value="daily" data-label="Daily vault">
+              <span slot="prefix" class="option-demo-glyph">D</span>
+              <span class="option-demo-option-copy">
+                <strong>Daily vault</strong>
+                <small>Default work profile</small>
+              </span>
+              <cv-badge slot="suffix" variant="neutral" pill>stable</cv-badge>
+            </cv-option>
+            <cv-option value="travel" data-label="Travel profile" selected>
+              <span slot="prefix" class="option-demo-glyph option-demo-glyph--cyan">T</span>
+              <span class="option-demo-option-copy">
+                <strong>Travel profile</strong>
+                <small>Safe surface for inspection</small>
+              </span>
+              <cv-badge slot="suffix" variant="primary" pill>selected</cv-badge>
+            </cv-option>
+          </cv-listbox-group>
 
-  <!-- Prefix + suffix rich row -->
-  <cv-option value="cold-storage">
-    <cv-icon slot="prefix" name="snowflake"></cv-icon>
-    Cold storage
-    <span slot="suffix">12 GB</span>
-  </cv-option>
-</cv-listbox>
+          <cv-listbox-group label="Protected layer">
+            <cv-option value="sealed" data-label="Sealed core">
+              <span slot="prefix" class="option-demo-glyph option-demo-glyph--violet">S</span>
+              <span class="option-demo-option-copy">
+                <strong>Sealed core</strong>
+                <small>Shown after hardware proof</small>
+              </span>
+              <cv-badge slot="suffix" variant="success" pill>paired</cv-badge>
+            </cv-option>
+            <cv-option value="remote" data-label="Remote recovery" disabled>
+              <span slot="prefix" class="option-demo-glyph option-demo-glyph--muted">R</span>
+              <span class="option-demo-option-copy">
+                <strong>Remote recovery</strong>
+                <small>Disabled until quorum returns</small>
+              </span>
+              <cv-badge slot="suffix" variant="neutral" pill>disabled</cv-badge>
+            </cv-option>
+          </cv-listbox-group>
+        </cv-listbox>
+      </article>
+
+      <aside class="option-demo-side usage-demo__side" aria-label="Live option state">
+        <span class="option-demo-kicker usage-demo__kicker">Runtime readout</span>
+        <dl class="option-demo-state usage-demo__state usage-demo__state--compact">
+          <div>
+            <dt>Selected value</dt>
+            <dd data-option-selected>travel</dd>
+          </div>
+          <div>
+            <dt>Active value</dt>
+            <dd data-option-active>none</dd>
+          </div>
+          <div>
+            <dt>ARIA source</dt>
+            <dd><code>contracts.getOptionProps(id)</code></dd>
+          </div>
+        </dl>
+        <output class="option-demo-log usage-demo__log" aria-live="polite" data-option-log>
+          ready -> selected: travel
+        </output>
+      </aside>
+    </div>
+
+    <section class="option-demo-matrix usage-demo__stack" aria-labelledby="option-demo-matrix-title">
+      <div class="option-demo-section-header usage-demo__section-header">
+        <span class="option-demo-kicker usage-demo__kicker">Visual state matrix</span>
+        <h4 id="option-demo-matrix-title">
+          Host attributes and slots stay visible without faking a standalone control.
+        </h4>
+      </div>
+
+      <div
+        class="option-demo-state-grid usage-demo__matrix usage-demo__matrix--compact"
+        aria-label="Static option visual states"
+      >
+        <article class="option-demo-state-card usage-demo__mode">
+          <span class="option-demo-label usage-demo__label">Default</span>
+          <cv-option value="default">
+            <span slot="prefix" class="option-demo-glyph">A</span>
+            Plain row
+          </cv-option>
+        </article>
+
+        <article class="option-demo-state-card usage-demo__mode">
+          <span class="option-demo-label usage-demo__label">Selected</span>
+          <cv-option value="selected" selected>
+            <span slot="prefix" class="option-demo-glyph option-demo-glyph--cyan">B</span>
+            Selected row
+            <cv-badge slot="suffix" variant="primary" pill>on</cv-badge>
+          </cv-option>
+        </article>
+
+        <article class="option-demo-state-card usage-demo__mode">
+          <span class="option-demo-label usage-demo__label">Active</span>
+          <cv-option value="active" active>
+            <span slot="prefix" class="option-demo-glyph option-demo-glyph--violet">C</span>
+            Active row
+          </cv-option>
+        </article>
+
+        <article class="option-demo-state-card usage-demo__mode">
+          <span class="option-demo-label usage-demo__label">Disabled</span>
+          <cv-option value="disabled" disabled>
+            <span slot="prefix" class="option-demo-glyph option-demo-glyph--muted">D</span>
+            Disabled row
+            <cv-badge slot="suffix" variant="neutral" pill>locked</cv-badge>
+          </cv-option>
+        </article>
+      </div>
+    </section>
+  </section>
+</div>
+
+<script type="module">
+  document.querySelectorAll('.option-demo-shell[data-demo="option"]:not([data-ready])').forEach((shell) => {
+    shell.dataset.ready = 'true'
+
+    const listbox = shell.querySelector('.option-demo-listbox')
+    const selected = shell.querySelector('[data-option-selected]')
+    const active = shell.querySelector('[data-option-active]')
+    const log = shell.querySelector('[data-option-log]')
+
+    const getSelectedValues = () => {
+      if (listbox?.selectedValues?.length) return listbox.selectedValues
+      return listbox?.value ? [listbox.value] : []
+    }
+
+    const update = (type = 'ready', detail = {}) => {
+      const selectedValues = detail.selectedValues || getSelectedValues()
+      const activeValue =
+        detail.activeValue || listbox?.querySelector('cv-option[data-active="true"]')?.value || 'none'
+      const selectedText = selectedValues.length > 0 ? selectedValues.join(', ') : 'none'
+
+      if (selected) selected.textContent = selectedText
+      if (active) active.textContent = activeValue
+      if (log) log.textContent = `${type} -> selected: ${selectedText}; active: ${activeValue}`
+    }
+
+    listbox?.addEventListener('cv-input', (event) => update(event.type, event.detail))
+    listbox?.addEventListener('cv-change', (event) => update(event.type, event.detail))
+
+    requestAnimationFrame(() => update())
+  })
+</script>
 ```
 
 ## Anatomy
