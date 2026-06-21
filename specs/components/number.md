@@ -84,23 +84,23 @@ Numeric input field with ARIA spinbutton semantics, optional stepper controls, c
 
 ## CSS Custom Properties
 
-| Property                          | Default                                      | Description                                                     |
-| --------------------------------- | -------------------------------------------- | --------------------------------------------------------------- |
-| `--cv-number-height`              | `36px`                                       | Component block size                                            |
-| `--cv-number-padding-inline`      | `var(--cv-space-3, 12px)`                    | Horizontal padding inside the input container                   |
-| `--cv-number-font-size`           | `var(--cv-font-size-base, 14px)`             | Font size of the input text                                     |
-| `--cv-number-border-radius`       | `var(--cv-radius-sm, 6px)`                   | Border radius of the input container                            |
-| `--cv-number-border-color`        | `var(--cv-color-border, #2a3245)`            | Border color in default state                                   |
-| `--cv-number-background`          | `transparent`                                | Background color of the input container                         |
-| `--cv-number-color`               | `var(--cv-color-text, #e8ecf6)`              | Text color of the input value                                   |
-| `--cv-number-placeholder-color`   | `var(--cv-color-text-muted, #6b7a99)`        | Placeholder text color                                          |
-| `--cv-number-focus-ring`          | `0 0 0 2px var(--cv-color-primary, #65d7ff)` | Box-shadow applied on focus                                     |
-| `--cv-number-icon-size`           | `1em`                                        | Size of prefix/suffix/clear icons                               |
-| `--cv-number-gap`                 | `var(--cv-space-2, 8px)`                     | Spacing between inner elements (prefix, input, buttons, suffix) |
-| `--cv-number-transition-duration` | `var(--cv-duration-fast, 120ms)`             | Transition duration for state changes                           |
-| `--cv-number-stepper-width`       | `28px`                                       | Legacy fallback for horizontal stepper button inline size        |
-| `--cv-number-stepper-button-inline-size` | `var(--cv-number-stepper-width, 28px)` | Inline size of each horizontal stepper button                    |
-| `--cv-number-stepper-button-gap`  | `2px`                                        | Gap between horizontal stepper buttons                           |
+| Property                                 | Default                                      | Description                                                     |
+| ---------------------------------------- | -------------------------------------------- | --------------------------------------------------------------- |
+| `--cv-number-height`                     | `36px`                                       | Component block size                                            |
+| `--cv-number-padding-inline`             | `var(--cv-space-3, 12px)`                    | Horizontal padding inside the input container                   |
+| `--cv-number-font-size`                  | `var(--cv-font-size-base, 14px)`             | Font size of the input text                                     |
+| `--cv-number-border-radius`              | `var(--cv-radius-sm, 6px)`                   | Border radius of the input container                            |
+| `--cv-number-border-color`               | `var(--cv-color-border, #2a3245)`            | Border color in default state                                   |
+| `--cv-number-background`                 | `transparent`                                | Background color of the input container                         |
+| `--cv-number-color`                      | `var(--cv-color-text, #e8ecf6)`              | Text color of the input value                                   |
+| `--cv-number-placeholder-color`          | `var(--cv-color-text-muted, #6b7a99)`        | Placeholder text color                                          |
+| `--cv-number-focus-ring`                 | `0 0 0 2px var(--cv-color-primary, #65d7ff)` | Box-shadow applied on focus                                     |
+| `--cv-number-icon-size`                  | `1em`                                        | Size of prefix/suffix/clear icons                               |
+| `--cv-number-gap`                        | `var(--cv-space-2, 8px)`                     | Spacing between inner elements (prefix, input, buttons, suffix) |
+| `--cv-number-transition-duration`        | `var(--cv-duration-fast, 120ms)`             | Transition duration for state changes                           |
+| `--cv-number-stepper-width`              | `28px`                                       | Legacy fallback for horizontal stepper button inline size       |
+| `--cv-number-stepper-button-inline-size` | `var(--cv-number-stepper-width, 28px)`       | Inline size of each horizontal stepper button                   |
+| `--cv-number-stepper-button-gap`         | `2px`                                        | Gap between horizontal stepper buttons                          |
 
 Additionally, component styles depend on theme tokens through fallback values:
 
@@ -124,21 +124,21 @@ Additionally, component styles depend on theme tokens through fallback values:
 
 ## Visual States
 
-| Host selector                 | Description                                                                 |
-| ----------------------------- | --------------------------------------------------------------------------- |
-| `:host([disabled])`           | Reduced opacity (`0.55`), `cursor: not-allowed`, no interaction             |
-| `:host([read-only])`          | Normal opacity, `cursor: default`, input text not editable                  |
-| `:host([required])`           | No visual change by default (can be styled via part selectors)              |
-| `:host([focused])`            | Focus ring applied via `--cv-number-focus-ring`                             |
-| `:host([filled])`             | Indicates value differs from default (e.g., for floating label transitions) |
-| `:host([clearable])`          | Clear button space reserved in layout                                       |
-| `:host([stepper])`            | Stepper buttons rendered and visible                                        |
-| `:host([stepper-active="increment"])` | Transient pressed/step feedback for the increment button             |
-| `:host([stepper-active="decrement"])` | Transient pressed/step feedback for the decrement button             |
-| `:host([size="small"])`       | Small size overrides                                                        |
-| `:host([size="large"])`       | Large size overrides                                                        |
-| `:host([variant="outlined"])` | Visible border, transparent background                                      |
-| `:host([variant="filled"])`   | Subtle background (`--cv-color-surface`), no visible border                 |
+| Host selector                         | Description                                                                 |
+| ------------------------------------- | --------------------------------------------------------------------------- |
+| `:host([disabled])`                   | Reduced opacity (`0.55`), `cursor: not-allowed`, no interaction             |
+| `:host([read-only])`                  | Normal opacity, `cursor: default`, input text not editable                  |
+| `:host([required])`                   | No visual change by default (can be styled via part selectors)              |
+| `:host([focused])`                    | Focus ring applied via `--cv-number-focus-ring`                             |
+| `:host([filled])`                     | Indicates value differs from default (e.g., for floating label transitions) |
+| `:host([clearable])`                  | Clear button space reserved in layout                                       |
+| `:host([stepper])`                    | Stepper buttons rendered and visible                                        |
+| `:host([stepper-active="increment"])` | Transient pressed/step feedback for the increment button                    |
+| `:host([stepper-active="decrement"])` | Transient pressed/step feedback for the decrement button                    |
+| `:host([size="small"])`               | Small size overrides                                                        |
+| `:host([size="large"])`               | Large size overrides                                                        |
+| `:host([variant="outlined"])`         | Visible border, transparent background                                      |
+| `:host([variant="filled"])`           | Subtle background (`--cv-color-surface`), no visible border                 |
 
 ## Reactive State Mapping
 
@@ -211,12 +211,12 @@ UIKit does not own value management, clamping, snapping, draft commit logic, or 
 
 ## Events
 
-| Event       | Detail              | Description                                                                                                                                                                                         |
-| ----------- | ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Event       | Detail              | Description                                                                                                                                                                                                          |
+| ----------- | ------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `cv-change` | `{ value: number }` | Fires on committed value change from user interaction (stepper click, focused wheel step, touch swipe step, long-press step, keyboard step, draft commit on blur/Enter). Does not fire from programmatic `setValue`. |
-| `cv-clear`  | `{ }`               | Fires when the value is cleared via the clear button or `Escape` key                                                                                                                                |
-| `cv-focus`  | `{ }`               | Fires when the input receives focus                                                                                                                                                                 |
-| `cv-blur`   | `{ }`               | Fires when the input loses focus                                                                                                                                                                    |
+| `cv-clear`  | `{ }`               | Fires when the value is cleared via the clear button or `Escape` key                                                                                                                                                 |
+| `cv-focus`  | `{ }`               | Fires when the input receives focus                                                                                                                                                                                  |
+| `cv-blur`   | `{ }`               | Fires when the input loses focus                                                                                                                                                                                     |
 
 ## Imperative API
 
@@ -251,54 +251,276 @@ UIKit does not own value management, clamping, snapping, draft commit logic, or 
 ## Usage
 
 ```html
-<div class="number-demo-grid">
-  <cv-field class="number-demo-cell">
-    <span slot="label">Basic</span>
-    <cv-number value="0" placeholder="Enter a number"></cv-number>
-  </cv-field>
+<div class="number-demo-shell" data-demo="number" data-live-demo-height="900">
+  <section class="number-demo-hero" aria-labelledby="number-demo-title">
+    <div class="number-demo-copy">
+      <span class="number-demo-kicker">Numeric spinbutton primitive</span>
+      <h3 id="number-demo-title">
+        Clamp, step, clear, and serialize numeric state through one field surface.
+      </h3>
+      <p>
+        The headless number model owns draft text, bounds, step math, clear defaults, focus state, and ARIA
+        spinbutton attributes. UIKit renders the editable surface, slots, stepper controls, sizes, and form
+        integration.
+      </p>
+    </div>
 
-  <cv-field class="number-demo-cell">
-    <span slot="label">Range</span>
-    <cv-number value="5" min="0" max="100" step="5" large-step="25"></cv-number>
-  </cv-field>
+    <dl class="number-demo-metrics" aria-label="Number contract summary">
+      <div>
+        <dt>Range</dt>
+        <dd>min / max / step / large-step</dd>
+      </div>
+      <div>
+        <dt>Actions</dt>
+        <dd>arrows / page keys / stepper / clear</dd>
+      </div>
+      <div>
+        <dt>State</dt>
+        <dd>draft / focused / filled / invalid</dd>
+      </div>
+    </dl>
+  </section>
 
-  <cv-field class="number-demo-cell">
-    <span slot="label">Stepper</span>
-    <cv-number name="quantity" value="2" min="0" max="10" step="1" stepper></cv-number>
-  </cv-field>
+  <section class="number-demo-board" aria-label="Number examples in a vault policy form">
+    <form class="number-demo-form" data-number-form>
+      <div class="number-demo-form-head">
+        <div>
+          <span>Visible policy limits</span>
+          <strong>decoy-profile.local</strong>
+        </div>
+        <cv-badge variant="primary" pill>bounded input</cv-badge>
+      </div>
 
-  <cv-field class="number-demo-cell">
-    <span slot="label">Clearable</span>
-    <cv-number value="42" clearable></cv-number>
-  </cv-field>
+      <div class="number-demo-field-grid">
+        <cv-field required>
+          <span slot="label">Decoy quota</span>
+          <cv-number
+            data-number-primary
+            name="quota"
+            value="30"
+            default-value="30"
+            min="0"
+            max="100"
+            step="5"
+            large-step="25"
+            clearable
+            stepper
+          >
+            <span slot="suffix">GB</span>
+          </cv-number>
+          <span slot="description">Arrow keys step by 5. Page keys step by 25. Clear returns to 30.</span>
+        </cv-field>
 
-  <cv-field class="number-demo-cell">
-    <span slot="label">Affixes</span>
-    <cv-number value="19">
-      <span slot="prefix">$</span>
-      <span slot="suffix">.00</span>
-    </cv-number>
-  </cv-field>
+        <cv-field>
+          <span slot="label">HOTP counter</span>
+          <cv-number name="counter" value="12" min="0" max="999999" step="1" stepper clearable>
+            <span slot="prefix">#</span>
+          </cv-number>
+          <span slot="description"
+            >Stepper controls expose the same committed change event as keyboard steps.</span
+          >
+        </cv-field>
 
-  <cv-field class="number-demo-cell">
-    <span slot="label">Filled small</span>
-    <cv-number variant="filled" size="small" placeholder="0"></cv-number>
-  </cv-field>
+        <cv-field>
+          <span slot="label">Retry window</span>
+          <cv-number name="retry" variant="filled" value="3" min="1" max="10" step="1" clearable>
+            <span slot="suffix">tries</span>
+          </cv-number>
+          <span slot="description">Filled variant keeps the same headless range and form contract.</span>
+        </cv-field>
 
-  <cv-field class="number-demo-cell" disabled>
-    <span slot="label">Disabled</span>
-    <cv-number value="50"></cv-number>
-  </cv-field>
+        <cv-field>
+          <span slot="label">Timeout</span>
+          <cv-number name="timeout" value="45" min="5" max="120" step="5" large-step="30">
+            <span slot="suffix">sec</span>
+          </cv-number>
+          <span slot="description">Draft edits commit on Enter or blur, then snap through the model.</span>
+        </cv-field>
+      </div>
 
-  <cv-field class="number-demo-cell">
-    <span slot="label">Read-only</span>
-    <cv-number read-only value="100"></cv-number>
-  </cv-field>
+      <div class="number-demo-actions" aria-label="Programmatic number actions">
+        <cv-button type="button" size="small" data-number-action="step-up">Step up</cv-button>
+        <cv-button type="button" size="small" data-number-action="page-up">Page up</cv-button>
+        <cv-button type="button" size="small" variant="secondary" data-number-action="reset">Reset</cv-button>
+        <cv-button type="button" size="small" variant="secondary" data-number-action="validate"
+          >Validate</cv-button
+        >
+      </div>
+    </form>
 
-  <cv-field class="number-demo-cell" required>
-    <span slot="label">Age</span>
-    <cv-number min="18" max="120"></cv-number>
-    <span slot="description">Native validation stays linked to the field.</span>
-  </cv-field>
+    <aside class="number-demo-side" aria-label="Number event output">
+      <div class="number-demo-side-head">
+        <span class="number-demo-kicker">Event stream</span>
+        <h4>Committed numeric changes report a stable number value, not draft text.</h4>
+      </div>
+
+      <p class="number-demo-log" role="status" aria-live="polite" data-number-output>
+        Waiting for a committed number event.
+      </p>
+
+      <dl class="number-demo-live" aria-label="Live number state">
+        <div>
+          <dt>Primary value</dt>
+          <dd data-number-mirror>30 GB</dd>
+        </div>
+        <div>
+          <dt>Last event</dt>
+          <dd data-number-active>none</dd>
+        </div>
+        <div>
+          <dt>Range</dt>
+          <dd>0 to 100</dd>
+        </div>
+      </dl>
+    </aside>
+  </section>
+
+  <section class="number-demo-section" aria-labelledby="number-demo-matrix-title">
+    <div class="number-demo-section-header">
+      <span class="number-demo-kicker">Variants, bounds, and field states</span>
+      <h4 id="number-demo-matrix-title">
+        Use one number contract, then tune density, affordance, or validation through attributes.
+      </h4>
+    </div>
+
+    <div class="number-demo-matrix" aria-label="Number state matrix">
+      <div>
+        <span>Range edges</span>
+        <cv-number value="0" min="0" max="10" step="1" stepper></cv-number>
+        <cv-number value="10" min="0" max="10" step="1" stepper></cv-number>
+      </div>
+
+      <div>
+        <span>Size</span>
+        <cv-number size="small" value="8" min="0" max="16"></cv-number>
+        <cv-number value="16" min="0" max="32"></cv-number>
+        <cv-number size="large" value="32" min="0" max="64"></cv-number>
+      </div>
+
+      <div>
+        <span>Affixes</span>
+        <cv-number value="19" clearable>
+          <span slot="prefix">$</span>
+          <span slot="suffix">.00</span>
+        </cv-number>
+        <cv-number value="128" variant="filled" min="16" max="512">
+          <span slot="suffix">MB</span>
+        </cv-number>
+      </div>
+
+      <div>
+        <span>Validation</span>
+        <cv-field required invalid>
+          <span slot="label">Age gate</span>
+          <cv-number required invalid min="18" max="120" value="16"></cv-number>
+          <span slot="error">Value must be at least 18.</span>
+        </cv-field>
+      </div>
+
+      <div>
+        <span>Clear defaults</span>
+        <cv-number value="42" default-value="10" min="0" max="100" clearable stepper></cv-number>
+        <cv-number value="10" default-value="10" min="0" max="100" clearable></cv-number>
+      </div>
+
+      <div>
+        <span>Read state</span>
+        <cv-number read-only value="100"></cv-number>
+        <cv-field disabled>
+          <span slot="label">Disabled by field</span>
+          <cv-number value="50" stepper></cv-number>
+        </cv-field>
+      </div>
+    </div>
+  </section>
 </div>
+
+<script type="module">
+  document.querySelectorAll('.number-demo-shell[data-demo="number"]:not([data-ready])').forEach((shell) => {
+    shell.dataset.ready = 'true'
+
+    const form = shell.querySelector('[data-number-form]')
+    const output = shell.querySelector('[data-number-output]')
+    const mirror = shell.querySelector('[data-number-mirror]')
+    const active = shell.querySelector('[data-number-active]')
+    const primary = shell.querySelector('[data-number-primary]')
+    const eventLabels = {
+      'cv-change': 'change',
+      'cv-clear': 'clear',
+      'cv-focus': 'focus',
+      'cv-blur': 'blur',
+    }
+
+    const readNumber = (number) => {
+      if (!number) return 0
+      if (typeof number.getValue === 'function') return number.getValue()
+      return Number(number.value || number.getAttribute('value') || 0)
+    }
+
+    const syncMirror = () => {
+      if (!mirror) return
+      mirror.textContent = `${readNumber(primary)} GB`
+    }
+
+    const setOutput = (message) => {
+      if (output) output.textContent = message
+    }
+
+    const getFieldName = (number) => {
+      const label = number.closest('cv-field')?.querySelector('[slot="label"]')?.textContent?.trim()
+      return label || number.getAttribute('name') || 'number'
+    }
+
+    const report = (event) => {
+      const number = event.target instanceof HTMLElement ? event.target : null
+      if (!number?.matches('cv-number')) return
+
+      const name = getFieldName(number)
+      const label = eventLabels[event.type] ?? event.type
+      const value =
+        event instanceof CustomEvent && event.detail && 'value' in event.detail
+          ? event.detail.value
+          : readNumber(number)
+
+      if (active) active.textContent = `${label}: ${name}`
+      setOutput(`${label}: ${name} -> ${value}`)
+      syncMirror()
+    }
+
+    shell.querySelectorAll('[data-number-action]').forEach((button) => {
+      button.addEventListener('click', () => {
+        const action = button.getAttribute('data-number-action')
+        if (!primary) return
+
+        if (action === 'step-up') {
+          primary.stepUp()
+          setOutput(`action: Step up -> ${readNumber(primary)}`)
+        } else if (action === 'page-up') {
+          primary.pageUp()
+          setOutput(`action: Page up -> ${readNumber(primary)}`)
+        } else if (action === 'reset') {
+          primary.setValue(30)
+          setOutput('action: Reset -> 30')
+        } else if (action === 'validate') {
+          const valid = primary.reportValidity()
+          setOutput(`validation: ${valid ? 'valid' : 'invalid'} at ${readNumber(primary)}`)
+        }
+
+        if (active) active.textContent = `action: ${action}`
+        syncMirror()
+      })
+    })
+
+    form?.addEventListener('submit', (event) => {
+      event.preventDefault()
+      setOutput(`submit: quota=${readNumber(primary)}`)
+    })
+
+    Object.keys(eventLabels).forEach((eventName) => {
+      shell.addEventListener(eventName, report)
+    })
+
+    syncMirror()
+  })
+</script>
 ```
