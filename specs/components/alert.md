@@ -75,7 +75,10 @@ Passive live-region message that announces important updates without taking focu
 
 ```html
 <div class="alert-demo-shell usage-demo" data-demo="alert" data-live-demo-height="420">
-  <section class="alert-demo-hero usage-demo__hero" aria-labelledby="alert-demo-title">
+  <section
+    class="alert-demo-hero usage-demo__hero usage-demo__hero--split-balanced"
+    aria-labelledby="alert-demo-title"
+  >
     <div class="alert-demo-copy usage-demo__copy">
       <span class="alert-demo-kicker usage-demo__kicker">Passive live region</span>
       <h3 id="alert-demo-title">Announce operation status without moving focus.</h3>
@@ -85,7 +88,10 @@ Passive live-region message that announces important updates without taking focu
       </p>
     </div>
 
-    <dl class="alert-demo-metrics usage-demo__metrics" aria-label="Alert contract summary">
+    <dl
+      class="alert-demo-metrics usage-demo__metrics usage-demo__metrics--stacked"
+      aria-label="Alert contract summary"
+    >
       <div>
         <dt>Root role</dt>
         <dd>alert</dd>
@@ -118,7 +124,9 @@ Passive live-region message that announces important updates without taking focu
       </div>
 
       <cv-alert data-alert-region aria-live="polite" duration-ms="5200">
-        <span class="alert-demo-alert-meta" data-alert-meta>polite / auto-dismiss</span>
+        <span class="alert-demo-alert-meta usage-demo__meta usage-demo__status-pill" data-alert-meta
+          >polite / auto-dismiss</span
+        >
       </cv-alert>
     </div>
 
