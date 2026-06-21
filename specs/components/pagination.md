@@ -89,7 +89,10 @@ Page navigation with bounded previous/next actions and current-page announcement
     </dl>
   </section>
 
-  <section class="pagination-demo-section usage-demo__section" aria-labelledby="pagination-demo-controlled-title">
+  <section
+    class="pagination-demo-section usage-demo__section"
+    aria-labelledby="pagination-demo-controlled-title"
+  >
     <div class="pagination-demo-section-header usage-demo__section-header">
       <span class="pagination-demo-kicker usage-demo__kicker">Controlled list</span>
       <h4 id="pagination-demo-controlled-title">
@@ -103,7 +106,9 @@ Page navigation with bounded previous/next actions and current-page announcement
           <span class="pagination-demo-label">Audit records</span>
           <strong class="pagination-demo-result-title">Evidence package exports</strong>
         </div>
-        <output class="pagination-demo-output" aria-live="polite">Page 6 of 24 · records 126-150</output>
+        <output class="pagination-demo-output usage-demo__log" aria-live="polite"
+          >Page 6 of 24 · records 126-150</output
+        >
       </div>
 
       <div class="pagination-demo-scroll">
@@ -117,7 +122,10 @@ Page navigation with bounded previous/next actions and current-page announcement
     </div>
   </section>
 
-  <section class="pagination-demo-section usage-demo__section" aria-labelledby="pagination-demo-variants-title">
+  <section
+    class="pagination-demo-section usage-demo__section"
+    aria-labelledby="pagination-demo-variants-title"
+  >
     <div class="pagination-demo-section-header usage-demo__section-header">
       <span class="pagination-demo-kicker usage-demo__kicker">Variants</span>
       <h4 id="pagination-demo-variants-title">
