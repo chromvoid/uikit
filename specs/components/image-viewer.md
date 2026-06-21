@@ -5,16 +5,16 @@ Fullscreen image viewer shell for modal image inspection, gallery navigation, ac
 ## Usage
 
 ```html
-<div class="image-viewer-demo-shell" data-demo="image-viewer" data-live-demo-height="640">
+<div class="image-viewer-demo-shell usage-demo" data-demo="image-viewer" data-live-demo-height="640">
   <section class="image-viewer-demo-launch" aria-labelledby="image-viewer-demo-title">
-    <div class="image-viewer-demo-copy">
-      <span class="image-viewer-demo-kicker">Controlled gallery</span>
+    <div class="image-viewer-demo-copy usage-demo__copy">
+      <span class="image-viewer-demo-kicker usage-demo__kicker">Controlled gallery</span>
       <h3 id="image-viewer-demo-title">Inspect generated ChromVoid imagery with committed navigation</h3>
       <p>
         The shell owns image URLs, actions, and current index. The viewer emits intent events; this demo
         commits them back into component state.
       </p>
-      <div class="image-viewer-demo-actions">
+      <div class="image-viewer-demo-actions usage-demo__actions">
         <cv-button variant="primary" data-image-viewer-open>
           <cv-icon slot="prefix" name="maximize" size="s"></cv-icon>
           Open viewer
