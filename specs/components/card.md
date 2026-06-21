@@ -186,7 +186,7 @@ Events only fire when `expandable` is `true` and the state change is triggered b
     </dl>
   </section>
 
-  <section class="card-demo-board" aria-label="Card variants and states">
+  <section class="card-demo-board usage-demo__workbench" aria-label="Card variants and states">
     <cv-card class="card-demo-main-card" variant="elevated">
       <img slot="image" src="../images/card-preview.png" alt="Faceted encrypted workspace preview" />
       <div slot="header" class="card-demo-card-head">
