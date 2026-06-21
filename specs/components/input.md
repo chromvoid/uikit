@@ -224,7 +224,7 @@ UIKit does not own value management, type resolution, clearable logic, or passwo
     </dl>
   </section>
 
-  <section class="input-demo-board" aria-label="Input examples in a vault record form">
+  <section class="input-demo-board usage-demo__workbench" aria-label="Input examples in a vault record form">
     <form class="input-demo-form" data-input-form>
       <div class="input-demo-form-head">
         <div>
@@ -288,7 +288,7 @@ UIKit does not own value management, type resolution, clearable logic, or passwo
         Waiting for input. Type, blur, clear, or toggle the password control.
       </p>
 
-      <dl class="input-demo-live" aria-label="Live input state">
+      <dl class="input-demo-live usage-demo__state" aria-label="Live input state">
         <div>
           <dt>Primary value</dt>
           <dd data-input-mirror>border-relay.admin</dd>
