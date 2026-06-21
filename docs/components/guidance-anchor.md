@@ -9,10 +9,10 @@ Lightweight semantic anchor wrapper for product guidance registration.
 ## Usage
 
 ```html
-<div class="guidance-anchor-demo-shell" data-demo="guidance-anchor" data-live-demo-height="640">
+<div class="guidance-anchor-demo-shell usage-demo" data-demo="guidance-anchor" data-live-demo-height="640">
   <section class="guidance-anchor-demo-brief" aria-labelledby="guidance-anchor-demo-title">
-    <div class="guidance-anchor-demo-copy">
-      <span class="guidance-anchor-demo-kicker">Anchor registration</span>
+    <div class="guidance-anchor-demo-copy usage-demo__copy">
+      <span class="guidance-anchor-demo-kicker usage-demo__kicker">Anchor registration</span>
       <h3 id="guidance-anchor-demo-title">Connect guidance to the real product action.</h3>
       <p>
         The wrapper stays visually transparent. It publishes stable metadata so an app guidance host can
@@ -50,7 +50,7 @@ Lightweight semantic anchor wrapper for product guidance registration.
           <strong>Secure vault</strong>
         </div>
 
-        <div class="guidance-anchor-demo-actions" aria-label="File actions">
+        <div class="guidance-anchor-demo-actions usage-demo__actions" aria-label="File actions">
           <cv-button>New folder</cv-button>
           <cv-guidance-anchor anchor-id="files.create-or-upload" surface="files" owner="files">
             <span class="guidance-anchor-demo-target">
@@ -92,7 +92,7 @@ Lightweight semantic anchor wrapper for product guidance registration.
 
   <section class="guidance-anchor-demo-inspector" aria-labelledby="guidance-anchor-demo-event-title">
     <div>
-      <span class="guidance-anchor-demo-kicker">Observed event</span>
+      <span class="guidance-anchor-demo-kicker usage-demo__kicker">Observed event</span>
       <h4 id="guidance-anchor-demo-event-title">What the app guidance host receives</h4>
     </div>
     <output data-guidance-demo-log aria-live="polite">Waiting for anchor registration...</output>
