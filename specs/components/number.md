@@ -281,7 +281,10 @@ UIKit does not own value management, clamping, snapping, draft commit logic, or 
     </dl>
   </section>
 
-  <section class="number-demo-board" aria-label="Number examples in a vault policy form">
+  <section
+    class="number-demo-board usage-demo__workbench"
+    aria-label="Number examples in a vault policy form"
+  >
     <form class="number-demo-form" data-number-form>
       <div class="number-demo-form-head">
         <div>
@@ -358,7 +361,7 @@ UIKit does not own value management, clamping, snapping, draft commit logic, or 
         Waiting for a committed number event.
       </p>
 
-      <dl class="number-demo-live" aria-label="Live number state">
+      <dl class="number-demo-live usage-demo__state" aria-label="Live number state">
         <div>
           <dt>Primary value</dt>
           <dd data-number-mirror>30 GB</dd>
