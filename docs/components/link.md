@@ -241,7 +241,7 @@ Inline navigational element that directs the user to another page or resource.
       </div>
     </div>
 
-    <output class="link-demo-output" data-link-demo-output aria-live="polite">
+    <output class="link-demo-output usage-demo__log" data-link-demo-output aria-live="polite">
       press: waiting for activation
     </output>
   </section>

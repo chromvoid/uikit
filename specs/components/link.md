@@ -333,7 +333,7 @@ Additionally, component styles depend on theme tokens through fallback values:
       </div>
     </div>
 
-    <output class="link-demo-output" data-link-demo-output aria-live="polite">
+    <output class="link-demo-output usage-demo__log" data-link-demo-output aria-live="polite">
       press: waiting for activation
     </output>
   </section>
