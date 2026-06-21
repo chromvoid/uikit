@@ -117,7 +117,7 @@ Inline status marker with optional label and suffix content.
         </h4>
       </div>
 
-      <div class="status-indicator-demo-dot-list">
+      <div class="status-indicator-demo-dot-list usage-demo__compact-list">
         <div>
           <cv-status-indicator tone="success" decorative></cv-status-indicator>
           <span>Verified local index</span>
