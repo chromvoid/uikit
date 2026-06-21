@@ -110,7 +110,10 @@ the same object or workflow, not as a replacement for page navigation.
     </cv-tabs>
   </section>
 
-  <section class="tabs-demo-note" aria-labelledby="tabs-demo-close-title">
+  <section
+    class="tabs-demo-note usage-demo__band usage-demo__divider"
+    aria-labelledby="tabs-demo-close-title"
+  >
     <span class="tabs-demo-kicker usage-demo__kicker">Closable tabs</span>
     <h4 id="tabs-demo-close-title">Close buttons are opt-in, not a default tab affordance.</h4>
     <p>
