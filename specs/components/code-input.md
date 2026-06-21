@@ -85,7 +85,7 @@ Segmented short-code entry for PIN, OTP, pairing, and recovery codes.
         </p>
       </div>
 
-      <div class="code-input-demo-state-list">
+      <div class="code-input-demo-state-list usage-demo__compact-list">
         <cv-field>
           <span slot="label">Masked PIN</span>
           <cv-code-input purpose="pin" length="4" mask value="2048" size="small"></cv-code-input>
