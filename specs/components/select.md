@@ -158,10 +158,10 @@ All keyboard handlers are no-ops.
 ## Usage
 
 ```html
-<div class="select-demo-shell" data-demo="select" data-live-demo-height="820">
-  <header class="select-demo-hero">
-    <div class="select-demo-copy">
-      <span class="select-demo-kicker">Select-only combobox</span>
+<div class="select-demo-shell usage-demo" data-demo="select" data-live-demo-height="820">
+  <header class="select-demo-hero usage-demo__hero">
+    <div class="select-demo-copy usage-demo__copy">
+      <span class="select-demo-kicker usage-demo__kicker">Select-only combobox</span>
       <h3>Route a vault policy with grouped, multiple, clearable, and invalid states.</h3>
       <p>
         The demo keeps DOM focus on the trigger, mirrors selection through
@@ -170,7 +170,7 @@ All keyboard handlers are no-ops.
       </p>
     </div>
 
-    <dl class="select-demo-metrics" aria-label="Select contract coverage">
+    <dl class="select-demo-metrics usage-demo__metrics" aria-label="Select contract coverage">
       <div>
         <dt>Pattern</dt>
         <dd>APG select-only combobox</dd>
@@ -187,9 +187,9 @@ All keyboard handlers are no-ops.
   </header>
 
   <section class="select-demo-board" aria-label="Vault policy form">
-    <div class="select-demo-panel select-demo-panel--primary">
-      <div class="select-demo-section-header">
-        <span class="select-demo-kicker">Primary decision</span>
+    <div class="select-demo-panel select-demo-panel--primary usage-demo__panel">
+      <div class="select-demo-section-header usage-demo__section-header">
+        <span class="select-demo-kicker usage-demo__kicker">Primary decision</span>
         <h4>Choose the trust boundary before exposing any downstream route.</h4>
       </div>
 
@@ -231,8 +231,8 @@ All keyboard handlers are no-ops.
       </div>
     </div>
 
-    <aside class="select-demo-side" aria-label="Live select state">
-      <span class="select-demo-kicker">Event readout</span>
+    <aside class="select-demo-side usage-demo__side" aria-label="Live select state">
+      <span class="select-demo-kicker usage-demo__kicker">Event readout</span>
       <dl class="select-demo-state">
         <div>
           <dt>Values</dt>
@@ -243,15 +243,15 @@ All keyboard handlers are no-ops.
           <dd data-select-demo-active>none</dd>
         </div>
       </dl>
-      <output class="select-demo-log" data-select-demo-output>
+      <output class="select-demo-log usage-demo__log" data-select-demo-output>
         ready -> Trust boundary: hardware
       </output>
     </aside>
   </section>
 
   <section class="select-demo-cases" aria-label="Select state matrix">
-    <div class="select-demo-section-header">
-      <span class="select-demo-kicker">State matrix</span>
+    <div class="select-demo-section-header usage-demo__section-header">
+      <span class="select-demo-kicker usage-demo__kicker">State matrix</span>
       <h4>Common application cases stay visible without turning the demo into a control dump.</h4>
     </div>
 
