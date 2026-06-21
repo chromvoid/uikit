@@ -50,25 +50,25 @@ the same object or workflow, not as a replacement for page navigation.
       <cv-tab slot="nav" value="recovery" disabled>Recovery</cv-tab>
 
       <cv-tab-panel tab="overview">
-        <div class="tabs-demo-panel-content usage-demo__panel-content">
+        <div class="tabs-demo-panel-content usage-demo__panel-content usage-demo__body-copy usage-demo__flow">
           <h5>Overview</h5>
           <p>Show the current record summary, freshness, and the next safe action.</p>
         </div>
       </cv-tab-panel>
       <cv-tab-panel tab="history">
-        <div class="tabs-demo-panel-content usage-demo__panel-content">
+        <div class="tabs-demo-panel-content usage-demo__panel-content usage-demo__body-copy usage-demo__flow">
           <h5>History</h5>
           <p>Review recent changes without leaving the record detail surface.</p>
         </div>
       </cv-tab-panel>
       <cv-tab-panel tab="access">
-        <div class="tabs-demo-panel-content usage-demo__panel-content">
+        <div class="tabs-demo-panel-content usage-demo__panel-content usage-demo__body-copy usage-demo__flow">
           <h5>Access</h5>
           <p>Audit who can unlock or export this entry in the current vault context.</p>
         </div>
       </cv-tab-panel>
       <cv-tab-panel tab="recovery">
-        <div class="tabs-demo-panel-content usage-demo__panel-content">
+        <div class="tabs-demo-panel-content usage-demo__panel-content usage-demo__body-copy usage-demo__flow">
           <h5>Recovery</h5>
           <p>Disabled tabs stay visible when a state exists but is not available yet.</p>
         </div>
@@ -88,7 +88,7 @@ the same object or workflow, not as a replacement for page navigation.
       <cv-tab slot="nav" value="exports">Export policy</cv-tab>
 
       <cv-tab-panel tab="policy">
-        <div class="tabs-demo-panel-content usage-demo__panel-content">
+        <div class="tabs-demo-panel-content usage-demo__panel-content usage-demo__body-copy usage-demo__flow">
           <h5>Threat model</h5>
           <p>
             In manual mode, arrow keys move focus first. Press Enter or Space to commit the selected panel.
@@ -96,13 +96,13 @@ the same object or workflow, not as a replacement for page navigation.
         </div>
       </cv-tab-panel>
       <cv-tab-panel tab="devices">
-        <div class="tabs-demo-panel-content usage-demo__panel-content">
+        <div class="tabs-demo-panel-content usage-demo__panel-content usage-demo__body-copy usage-demo__flow">
           <h5>Trusted devices</h5>
           <p>Use the vertical layout when the tab list behaves like a local settings rail.</p>
         </div>
       </cv-tab-panel>
       <cv-tab-panel tab="exports">
-        <div class="tabs-demo-panel-content usage-demo__panel-content">
+        <div class="tabs-demo-panel-content usage-demo__panel-content usage-demo__body-copy usage-demo__flow">
           <h5>Export policy</h5>
           <p>Panels keep the same width as the container, so content does not jump between tabs.</p>
         </div>
@@ -111,7 +111,7 @@ the same object or workflow, not as a replacement for page navigation.
   </section>
 
   <section
-    class="tabs-demo-note usage-demo__band usage-demo__divider"
+    class="tabs-demo-note usage-demo__band usage-demo__divider usage-demo__body-copy usage-demo__flow"
     aria-labelledby="tabs-demo-close-title"
   >
     <span class="tabs-demo-kicker usage-demo__kicker">Closable tabs</span>
