@@ -47,10 +47,10 @@ This document is the UIKit surface contract for Grid.
 
 ## Slots
 
-| Slot      | Description                                                               |
-| --------- | ------------------------------------------------------------------------- |
-| `columns` | One or more `<cv-grid-column>` elements defining the column headers       |
-| `rows`    | One or more `<cv-grid-row>` elements containing `<cv-grid-cell>` children |
+| Slot      | Description                                                                                          |
+| --------- | ---------------------------------------------------------------------------------------------------- |
+| `columns` | One or more `<cv-grid-column class="usage-demo__column-label">` elements defining the column headers |
+| `rows`    | One or more `<cv-grid-row>` elements containing `<cv-grid-cell>` children                            |
 
 ## CSS Parts
 
@@ -216,14 +216,14 @@ The following features are explicitly out of scope for the current implementatio
     </p>
   </section>
 
-  <div class="grid-demo-toolbar" aria-label="Grid contract summary">
-    <span>role="grid"</span>
-    <span>selection-mode="multiple"</span>
-    <span>roving tabindex</span>
-    <span>PageUp/PageDown</span>
+  <div class="grid-demo-toolbar usage-demo__toolbar" aria-label="Grid contract summary">
+    <span class="usage-demo__tag usage-demo__tag--plain">role="grid"</span>
+    <span class="usage-demo__tag usage-demo__tag--plain">selection-mode="multiple"</span>
+    <span class="usage-demo__tag usage-demo__tag--plain">roving tabindex</span>
+    <span class="usage-demo__tag usage-demo__tag--plain">PageUp/PageDown</span>
   </div>
 
-  <div class="grid-demo-table-scroll">
+  <div class="grid-demo-table-scroll usage-demo__scroll-surface">
     <cv-grid
       id="grid-demo-matrix"
       aria-label="Vault authorization matrix"
@@ -233,10 +233,10 @@ The following features are explicitly out of scope for the current implementatio
       total-row-count="8"
       total-column-count="4"
     >
-      <cv-grid-column value="scope">Boundary</cv-grid-column>
-      <cv-grid-column value="owner">Owner</cv-grid-column>
-      <cv-grid-column value="state">State</cv-grid-column>
-      <cv-grid-column value="risk">Risk</cv-grid-column>
+      <cv-grid-column class="usage-demo__column-label" value="scope">Boundary</cv-grid-column>
+      <cv-grid-column class="usage-demo__column-label" value="owner">Owner</cv-grid-column>
+      <cv-grid-column class="usage-demo__column-label" value="state">State</cv-grid-column>
+      <cv-grid-column class="usage-demo__column-label" value="risk">Risk</cv-grid-column>
 
       <cv-grid-row value="vault">
         <cv-grid-cell column="scope">Primary vault</cv-grid-cell>
@@ -265,7 +265,7 @@ The following features are explicitly out of scope for the current implementatio
     </cv-grid>
   </div>
 
-  <output class="grid-demo-readout usage-demo__log" for="grid-demo-matrix" aria-live="polite">
+  <output class="grid-demo-readout usage-demo__readout" for="grid-demo-matrix" aria-live="polite">
     Active cell: vault::owner · Selected cells: 3
   </output>
 </div>
@@ -300,7 +300,7 @@ Column header definition. The parent `cv-grid` assigns `role="columnheader"`, `a
 #### Anatomy
 
 ```
-<cv-grid-column> (host)
+<cv-grid-column class="usage-demo__column-label"> (host)
 └── <slot>{label fallback}</slot>
 ```
 
