@@ -51,12 +51,12 @@ A read-only indicator that communicates determinate or indeterminate loading/com
       </header>
 
       <div class="progress-demo-primary-progress usage-demo__flow usage-demo__flow--loose">
-        <div class="progress-demo-progress-label">
+        <div class="progress-demo-progress-label usage-demo__baseline-row">
           <span class="usage-demo__meta usage-demo__label">Transfer window</span>
           <strong>1.8 GB / 2.4 GB</strong>
         </div>
         <cv-progress
-          class="progress-demo-main-progress"
+          class="progress-demo-main-progress usage-demo__progress-host"
           tone="upload"
           value="74"
           value-text="74%"
@@ -66,7 +66,7 @@ A read-only indicator that communicates determinate or indeterminate loading/com
         </cv-progress>
       </div>
 
-      <div class="progress-demo-proof-grid" aria-label="Current transfer details">
+      <div class="progress-demo-proof-grid usage-demo__grid--thirds" aria-label="Current transfer details">
         <div class="usage-demo__flow usage-demo__flow--tight">
           <span class="usage-demo__meta usage-demo__label">Range</span>
           <strong>0-100</strong>
@@ -88,7 +88,12 @@ A read-only indicator that communicates determinate or indeterminate loading/com
           <span class="usage-demo__meta usage-demo__label">Step 1</span>
           <strong>Encrypt chunks</strong>
         </div>
-        <cv-progress tone="success" value="100" aria-label="Encrypt chunks complete"></cv-progress>
+        <cv-progress
+          class="usage-demo__progress-host"
+          tone="success"
+          value="100"
+          aria-label="Encrypt chunks complete"
+        ></cv-progress>
       </div>
 
       <div class="progress-demo-step progress-demo-step--active usage-demo__flow usage-demo__flow--loose">
@@ -96,7 +101,12 @@ A read-only indicator that communicates determinate or indeterminate loading/com
           <span class="usage-demo__meta usage-demo__label">Step 2</span>
           <strong>Upload sealed archive</strong>
         </div>
-        <cv-progress tone="upload" value="74" aria-label="Upload sealed archive progress"></cv-progress>
+        <cv-progress
+          class="usage-demo__progress-host"
+          tone="upload"
+          value="74"
+          aria-label="Upload sealed archive progress"
+        ></cv-progress>
       </div>
 
       <div class="progress-demo-step usage-demo__flow usage-demo__flow--loose">
@@ -104,7 +114,12 @@ A read-only indicator that communicates determinate or indeterminate loading/com
           <span class="usage-demo__meta usage-demo__label">Step 3</span>
           <strong>Verify remote manifest</strong>
         </div>
-        <cv-progress tone="queued" value="16" aria-label="Verify remote manifest queued"></cv-progress>
+        <cv-progress
+          class="usage-demo__progress-host"
+          tone="queued"
+          value="16"
+          aria-label="Verify remote manifest queued"
+        ></cv-progress>
       </div>
     </aside>
   </section>
@@ -118,27 +133,55 @@ A read-only indicator that communicates determinate or indeterminate loading/com
     <div class="progress-demo-tone-grid">
       <div class="progress-demo-tone usage-demo__flow usage-demo__flow--loose">
         <span class="usage-demo__meta usage-demo__label">Default</span>
-        <cv-progress value="42" aria-label="Default determinate progress"></cv-progress>
+        <cv-progress
+          class="usage-demo__progress-host"
+          value="42"
+          aria-label="Default determinate progress"
+        ></cv-progress>
       </div>
       <div class="progress-demo-tone usage-demo__flow usage-demo__flow--loose">
         <span class="usage-demo__meta usage-demo__label">Queued</span>
-        <cv-progress tone="queued" value="28" aria-label="Queued progress"></cv-progress>
+        <cv-progress
+          class="usage-demo__progress-host"
+          tone="queued"
+          value="28"
+          aria-label="Queued progress"
+        ></cv-progress>
       </div>
       <div class="progress-demo-tone usage-demo__flow usage-demo__flow--loose">
         <span class="usage-demo__meta usage-demo__label">Success</span>
-        <cv-progress tone="success" value="100" aria-label="Completed progress"></cv-progress>
+        <cv-progress
+          class="usage-demo__progress-host"
+          tone="success"
+          value="100"
+          aria-label="Completed progress"
+        ></cv-progress>
       </div>
       <div class="progress-demo-tone usage-demo__flow usage-demo__flow--loose">
         <span class="usage-demo__meta usage-demo__label">Warning</span>
-        <cv-progress tone="warning" value="58" aria-label="Paused progress"></cv-progress>
+        <cv-progress
+          class="usage-demo__progress-host"
+          tone="warning"
+          value="58"
+          aria-label="Paused progress"
+        ></cv-progress>
       </div>
       <div class="progress-demo-tone usage-demo__flow usage-demo__flow--loose">
         <span class="usage-demo__meta usage-demo__label">Danger</span>
-        <cv-progress tone="danger" value="34" aria-label="Failed progress"></cv-progress>
+        <cv-progress
+          class="usage-demo__progress-host"
+          tone="danger"
+          value="34"
+          aria-label="Failed progress"
+        ></cv-progress>
       </div>
       <div class="progress-demo-tone usage-demo__flow usage-demo__flow--loose">
         <span class="usage-demo__meta usage-demo__label">Indeterminate</span>
-        <cv-progress indeterminate aria-label="Waiting for remote manifest"></cv-progress>
+        <cv-progress
+          class="usage-demo__progress-host"
+          indeterminate
+          aria-label="Waiting for remote manifest"
+        ></cv-progress>
       </div>
     </div>
   </section>
@@ -148,7 +191,7 @@ A read-only indicator that communicates determinate or indeterminate loading/com
 ## Anatomy
 
 ```
-<cv-progress> (host)
+<cv-progress class="usage-demo__progress-host"> (host)
 └── <div part="base" role="progressbar">
     └── <div part="indicator">
         └── <span part="label">
