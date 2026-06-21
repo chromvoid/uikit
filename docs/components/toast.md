@@ -71,14 +71,14 @@ Container that manages a queue of toast notifications with positioning, stacking
         </div>
       </div>
 
-      <div class="toast-demo-footer-actions" aria-label="Queue actions">
+      <div class="toast-demo-footer-actions usage-demo__actions" aria-label="Queue actions">
         <cv-button data-toast-action="burst">Queue burst</cv-button>
         <cv-button data-toast-action="clear">Clear queue</cv-button>
       </div>
     </div>
 
     <div class="toast-demo-stage" aria-label="Live toast region preview">
-      <div class="toast-demo-route-card">
+      <div class="toast-demo-route-card usage-demo__body-copy">
         <span class="toast-demo-kicker usage-demo__kicker">Visible route</span>
         <strong>travel-profile.visible</strong>
         <p>Task content stays interactive while feedback is announced from the toast region.</p>
