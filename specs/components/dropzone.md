@@ -51,11 +51,11 @@ None. Native drag/drop and upload events remain app-owned.
 ## Usage
 
 ```html
-<div class="dropzone-demo-shell" data-demo="dropzone" data-live-demo-height="820" data-theme="dark">
+<div class="dropzone-demo-shell usage-demo" data-demo="dropzone" data-live-demo-height="820" data-theme="dark">
   <cv-theme-provider mode="dark" class="dropzone-demo-theme">
-    <section class="dropzone-demo-hero" aria-labelledby="dropzone-demo-title">
-      <div class="dropzone-demo-copy">
-        <span class="dropzone-demo-kicker">Controlled drop boundary</span>
+    <section class="dropzone-demo-hero usage-demo__hero" aria-labelledby="dropzone-demo-title">
+      <div class="dropzone-demo-copy usage-demo__copy">
+        <span class="dropzone-demo-kicker usage-demo__kicker">Controlled drop boundary</span>
         <h3 id="dropzone-demo-title">Dropzone makes drag state visible without owning upload logic.</h3>
         <p>
           Route models own drag events, validation, encryption, and upload queues. The component owns only the
@@ -63,7 +63,7 @@ None. Native drag/drop and upload events remain app-owned.
         </p>
       </div>
 
-      <dl class="dropzone-demo-metrics" aria-label="Dropzone contract summary">
+      <dl class="dropzone-demo-metrics usage-demo__metrics" aria-label="Dropzone contract summary">
         <div>
           <dt>State source</dt>
           <dd>consumer model</dd>
@@ -79,9 +79,9 @@ None. Native drag/drop and upload events remain app-owned.
       </dl>
     </section>
 
-    <section class="dropzone-demo-workbench" aria-labelledby="dropzone-demo-workbench-title">
-      <div class="dropzone-demo-section-header">
-        <span class="dropzone-demo-kicker">Vault workspace</span>
+    <section class="dropzone-demo-workbench usage-demo__workbench" aria-labelledby="dropzone-demo-workbench-title">
+      <div class="dropzone-demo-section-header usage-demo__section-header">
+        <span class="dropzone-demo-kicker usage-demo__kicker">Vault workspace</span>
         <h4 id="dropzone-demo-workbench-title">
           Place the shell around real product content so the drop boundary reads as a temporary state, not a
           separate upload page.
@@ -134,7 +134,7 @@ None. Native drag/drop and upload events remain app-owned.
           </cv-dropzone>
 
           <aside class="dropzone-demo-pipeline" aria-label="Upload pipeline">
-            <span class="dropzone-demo-kicker">Upload pipeline</span>
+            <span class="dropzone-demo-kicker usage-demo__kicker">Upload pipeline</span>
             <ol>
               <li>
                 <strong>Inspect payload</strong>
@@ -155,9 +155,9 @@ None. Native drag/drop and upload events remain app-owned.
       </div>
     </section>
 
-    <section class="dropzone-demo-section" aria-labelledby="dropzone-demo-states-title">
-      <div class="dropzone-demo-section-header">
-        <span class="dropzone-demo-kicker">State matrix</span>
+    <section class="dropzone-demo-section usage-demo__section" aria-labelledby="dropzone-demo-states-title">
+      <div class="dropzone-demo-section-header usage-demo__section-header">
+        <span class="dropzone-demo-kicker usage-demo__kicker">State matrix</span>
         <h4 id="dropzone-demo-states-title">
           The same primitive covers idle, active, loading, and disabled states without taking ownership of
           drag/drop behavior.
