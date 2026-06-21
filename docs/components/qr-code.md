@@ -18,10 +18,10 @@ variant for visual hierarchy, a token-colored variant, and a branded variant wit
 in the center.
 
 ```html
-<div class="qr-demo-shell" data-demo="qr-code" data-live-demo-height="680">
-  <section class="qr-demo-hero" aria-labelledby="qr-demo-title">
-    <div class="qr-demo-copy">
-      <span class="qr-demo-kicker">Screen to device handoff</span>
+<div class="qr-demo-shell usage-demo" data-demo="qr-code" data-live-demo-height="680">
+  <section class="qr-demo-hero usage-demo__hero" aria-labelledby="qr-demo-title">
+    <div class="qr-demo-copy usage-demo__copy">
+      <span class="qr-demo-kicker usage-demo__kicker">Screen to device handoff</span>
       <h3 id="qr-demo-title">Make the transfer scannable without exposing sensitive payloads</h3>
       <p>
         Use the attribute form for public URLs. For setup secrets and recovery payloads, write
