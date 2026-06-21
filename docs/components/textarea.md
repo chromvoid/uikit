@@ -37,7 +37,10 @@ Multi-line text input with native textarea semantics and headless state delegati
     </dl>
   </section>
 
-  <section class="textarea-demo-board" aria-label="Textarea examples in a vault note form">
+  <section
+    class="textarea-demo-board usage-demo__workbench"
+    aria-label="Textarea examples in a vault note form"
+  >
     <form class="textarea-demo-form" data-textarea-form>
       <div class="textarea-demo-form-head">
         <div>
@@ -98,7 +101,7 @@ Multi-line text input with native textarea semantics and headless state delegati
         Waiting for textarea activity. Type, blur, or load a sample note.
       </p>
 
-      <dl class="textarea-demo-live" aria-label="Live textarea state">
+      <dl class="textarea-demo-live usage-demo__state" aria-label="Live textarea state">
         <div>
           <dt>Primary length</dt>
           <dd data-textarea-count>119 / 260</dd>
