@@ -16,10 +16,10 @@ This document is the UIKit surface contract for Radio Group.
 ## Usage
 
 ```html
-<div class="radio-demo-shell" data-demo="radio-group" data-live-demo-height="1080" data-theme="dark">
-  <section class="radio-demo-hero" aria-labelledby="radio-demo-title">
-    <div class="radio-demo-copy">
-      <span class="radio-demo-kicker">Single-choice control</span>
+<div class="radio-demo-shell usage-demo" data-demo="radio-group" data-live-demo-height="1080" data-theme="dark">
+  <section class="radio-demo-hero usage-demo__hero" aria-labelledby="radio-demo-title">
+    <div class="radio-demo-copy usage-demo__copy">
+      <span class="radio-demo-kicker usage-demo__kicker">Single-choice control</span>
       <h3 id="radio-demo-title">Use radio-group when the answer must be exactly one branch.</h3>
       <p>
         The group owns roving focus, ARIA, form value, and change events. Each <code>cv-radio</code> stays
@@ -27,7 +27,7 @@ This document is the UIKit surface contract for Radio Group.
       </p>
     </div>
 
-    <dl class="radio-demo-metrics" aria-label="Radio group contract summary">
+    <dl class="radio-demo-metrics usage-demo__metrics" aria-label="Radio group contract summary">
       <div>
         <dt>Keyboard</dt>
         <dd>Arrow keys, Home, End, Space</dd>
@@ -43,17 +43,17 @@ This document is the UIKit surface contract for Radio Group.
     </dl>
   </section>
 
-  <section class="radio-demo-workbench" aria-labelledby="radio-demo-workbench-title">
-    <div class="radio-demo-section-header">
-      <span class="radio-demo-kicker">Vault route picker</span>
+  <section class="radio-demo-workbench usage-demo__workbench" aria-labelledby="radio-demo-workbench-title">
+    <div class="radio-demo-section-header usage-demo__section-header">
+      <span class="radio-demo-kicker usage-demo__kicker">Vault route picker</span>
       <h4 id="radio-demo-workbench-title">
         Select one visible branch while the group keeps form semantics and focus order.
       </h4>
     </div>
 
     <div class="radio-demo-board">
-      <form class="radio-demo-panel radio-demo-panel--primary" aria-label="Vault route selection">
-        <header class="radio-demo-panel-header">
+      <form class="radio-demo-panel radio-demo-panel--primary usage-demo__panel" aria-label="Vault route selection">
+        <header class="radio-demo-panel-header usage-demo__panel-header">
           <div>
             <span class="radio-demo-label">Decision point</span>
             <strong>Unlock target for this session</strong>
@@ -90,7 +90,7 @@ This document is the UIKit surface contract for Radio Group.
         </output>
       </form>
 
-      <aside class="radio-demo-panel radio-demo-panel--contract" aria-label="Current radio group contract">
+      <aside class="radio-demo-panel radio-demo-panel--contract usage-demo__panel" aria-label="Current radio group contract">
         <span class="radio-demo-label">Live contract</span>
         <dl class="radio-demo-live">
           <div>
@@ -114,9 +114,9 @@ This document is the UIKit surface contract for Radio Group.
     </div>
   </section>
 
-  <section class="radio-demo-section" aria-labelledby="radio-demo-states-title">
-    <div class="radio-demo-section-header">
-      <span class="radio-demo-kicker">States and variants</span>
+  <section class="radio-demo-section usage-demo__section" aria-labelledby="radio-demo-states-title">
+    <div class="radio-demo-section-header usage-demo__section-header">
+      <span class="radio-demo-kicker usage-demo__kicker">States and variants</span>
       <h4 id="radio-demo-states-title">
         Default radios, segmented controls, descriptions, disabled groups, and size scale.
       </h4>
