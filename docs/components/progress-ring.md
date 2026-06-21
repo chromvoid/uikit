@@ -9,45 +9,103 @@ A read-only circular indicator that communicates determinate or indeterminate lo
 ## Usage
 
 ```html
-<!-- Basic determinate -->
-<cv-progress-ring value="40" aria-label="Upload progress"></cv-progress-ring>
+<div class="progress-ring-demo-shell" data-live-demo-height="680">
+  <section class="progress-ring-demo-hero" aria-labelledby="progress-ring-demo-title">
+    <div class="progress-ring-demo-copy">
+      <span class="progress-ring-demo-kicker">cv-progress-ring</span>
+      <h3 id="progress-ring-demo-title">Compact progress for auditable operations.</h3>
+      <p>
+        Use the ring when the surrounding surface already explains the operation and the UI needs a precise,
+        read-only status signal: determinate percentage, custom range, complete state, or indeterminate work.
+      </p>
+    </div>
 
-<!-- With label slot -->
-<cv-progress-ring value="72" aria-label="Download">72%</cv-progress-ring>
+    <div class="progress-ring-demo-stage" aria-label="Vault sync progress summary">
+      <div class="progress-ring-demo-stage-ring">
+        <cv-progress-ring
+          class="progress-ring-demo-ring progress-ring-demo-ring--hero"
+          value="72"
+          value-text="72 percent synced"
+          aria-label="Vault sync progress"
+          >72%</cv-progress-ring
+        >
+        <span class="progress-ring-demo-stage-label">Vault sync</span>
+      </div>
 
-<!-- Custom range -->
-<cv-progress-ring value="3" min="0" max="10" aria-label="Steps completed"> 3/10 </cv-progress-ring>
+      <dl class="progress-ring-demo-telemetry">
+        <div>
+          <dt>Value</dt>
+          <dd>72 / 100</dd>
+        </div>
+        <div>
+          <dt>Contract</dt>
+          <dd><code>role="progressbar"</code></dd>
+        </div>
+        <div>
+          <dt>Source</dt>
+          <dd>headless state</dd>
+        </div>
+      </dl>
+    </div>
+  </section>
 
-<!-- Custom aria-valuetext -->
-<cv-progress-ring value="3" max="10" value-text="Step 3 of 10" aria-label="Wizard progress">
-</cv-progress-ring>
+  <section class="progress-ring-demo-states" aria-label="Progress ring states">
+    <article class="progress-ring-demo-state">
+      <cv-progress-ring
+        class="progress-ring-demo-ring progress-ring-demo-ring--state"
+        value="34"
+        value-text="34 percent indexed"
+        aria-label="Indexing progress"
+        >34%</cv-progress-ring
+      >
+      <div>
+        <strong>Determinate</strong>
+        <span><code>value</code>, <code>min</code>, and <code>max</code> drive percentage and ARIA.</span>
+      </div>
+    </article>
 
-<!-- Indeterminate -->
-<cv-progress-ring indeterminate aria-label="Loading"></cv-progress-ring>
+    <article class="progress-ring-demo-state">
+      <cv-progress-ring
+        class="progress-ring-demo-ring progress-ring-demo-ring--range"
+        value="6"
+        min="0"
+        max="8"
+        value-text="6 of 8 shards sealed"
+        aria-label="Shard sealing progress"
+        >6/8</cv-progress-ring
+      >
+      <div>
+        <strong>Custom range</strong>
+        <span>Non-percentage work can keep the visible label and assistive text aligned.</span>
+      </div>
+    </article>
 
-<!-- Custom sizing and stroke widths -->
-<cv-progress-ring
-  value="60"
-  aria-label="Battery"
-  style="
-    --cv-progress-ring-size: 120px;
-    --cv-progress-ring-track-width: 8px;
-    --cv-progress-ring-indicator-width: 8px;
-    --cv-progress-ring-indicator-color: limegreen;
-  "
-  >60%</cv-progress-ring
->
+    <article class="progress-ring-demo-state">
+      <cv-progress-ring
+        class="progress-ring-demo-ring progress-ring-demo-ring--complete"
+        value="100"
+        aria-label="Verification complete"
+        >OK</cv-progress-ring
+      >
+      <div>
+        <strong>Complete</strong>
+        <span><code>data-complete</code> switches the indicator to the success token.</span>
+      </div>
+    </article>
 
-<!-- Small ring with thin stroke -->
-<cv-progress-ring
-  value="80"
-  aria-label="Completion"
-  style="
-    --cv-progress-ring-size: 40px;
-    --cv-progress-ring-track-width: 2px;
-    --cv-progress-ring-indicator-width: 3px;
-  "
-></cv-progress-ring>
+    <article class="progress-ring-demo-state">
+      <cv-progress-ring
+        class="progress-ring-demo-ring progress-ring-demo-ring--state"
+        indeterminate
+        aria-label="Checking transport"
+      ></cv-progress-ring>
+      <div>
+        <strong>Indeterminate</strong>
+        <span>Use while progress is real but the current value is not measurable.</span>
+      </div>
+    </article>
+  </section>
+</div>
 ```
 
 ## Anatomy
