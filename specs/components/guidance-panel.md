@@ -75,10 +75,10 @@ Product-agnostic guidance body layout for coach marks, inline hints, warnings, a
 ## Usage
 
 ```html
-<div class="guidance-panel-demo-shell" data-demo="guidance-panel" data-live-demo-height="760">
+<div class="guidance-panel-demo-shell usage-demo" data-demo="guidance-panel" data-live-demo-height="760">
   <section class="guidance-panel-demo-brief" aria-labelledby="guidance-panel-demo-title">
-    <div class="guidance-panel-demo-copy">
-      <span class="guidance-panel-demo-kicker">Guidance body primitive</span>
+    <div class="guidance-panel-demo-copy usage-demo__copy">
+      <span class="guidance-panel-demo-kicker usage-demo__kicker">Guidance body primitive</span>
       <h3 id="guidance-panel-demo-title">One readable panel for every guidance placement.</h3>
       <p>
         Use the panel when the product needs to explain a next step, a warning, or a blocked action. The app
@@ -102,7 +102,7 @@ Product-agnostic guidance body layout for coach marks, inline hints, warnings, a
   <section class="guidance-panel-demo-product" aria-labelledby="guidance-panel-demo-product-title">
     <header class="guidance-panel-demo-toolbar">
       <div>
-        <span class="guidance-panel-demo-kicker">Vault setup</span>
+        <span class="guidance-panel-demo-kicker usage-demo__kicker">Vault setup</span>
         <h4 id="guidance-panel-demo-product-title">The same panel body in product context</h4>
       </div>
       <span class="guidance-panel-demo-status">3 placements</span>
@@ -168,7 +168,7 @@ Product-agnostic guidance body layout for coach marks, inline hints, warnings, a
 
   <section class="guidance-panel-demo-note" aria-labelledby="guidance-panel-demo-note-title">
     <div>
-      <span class="guidance-panel-demo-kicker">Accessibility boundary</span>
+      <span class="guidance-panel-demo-kicker usage-demo__kicker">Accessibility boundary</span>
       <h4 id="guidance-panel-demo-note-title">The panel is content, not a dialog.</h4>
     </div>
     <p>
