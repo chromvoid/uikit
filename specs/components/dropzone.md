@@ -51,7 +51,12 @@ None. Native drag/drop and upload events remain app-owned.
 ## Usage
 
 ```html
-<div class="dropzone-demo-shell usage-demo" data-demo="dropzone" data-live-demo-height="820" data-theme="dark">
+<div
+  class="dropzone-demo-shell usage-demo"
+  data-demo="dropzone"
+  data-live-demo-height="820"
+  data-theme="dark"
+>
   <cv-theme-provider mode="dark" class="dropzone-demo-theme">
     <section class="dropzone-demo-hero usage-demo__hero" aria-labelledby="dropzone-demo-title">
       <div class="dropzone-demo-copy usage-demo__copy">
@@ -79,7 +84,10 @@ None. Native drag/drop and upload events remain app-owned.
       </dl>
     </section>
 
-    <section class="dropzone-demo-workbench usage-demo__workbench" aria-labelledby="dropzone-demo-workbench-title">
+    <section
+      class="dropzone-demo-workbench usage-demo__workbench"
+      aria-labelledby="dropzone-demo-workbench-title"
+    >
       <div class="dropzone-demo-section-header usage-demo__section-header">
         <span class="dropzone-demo-kicker usage-demo__kicker">Vault workspace</span>
         <h4 id="dropzone-demo-workbench-title">
