@@ -11,106 +11,286 @@ Vertically stacked set of interactive sections that expand or collapse to reveal
 Use `cv-accordion` for a true grouped composite: related sections with controlled expansion state, roving focus, heading semantics, multiple expanded values, or a rule that at least one section stays open. Use `cv-disclosure` or native `<details>/<summary>` for independent one-off reveals.
 
 ```html
-<!-- Controlled single mode (default) -->
-<cv-accordion value="identity" aria-label="Credential sections">
-  <cv-accordion-item value="identity">
-    <span slot="trigger">Identity</span>
-    <p>Username, display name, and login URL.</p>
-  </cv-accordion-item>
-  <cv-accordion-item value="recovery">
-    <span slot="trigger">Recovery</span>
-    <p>Backup codes and recovery contact notes.</p>
-  </cv-accordion-item>
-</cv-accordion>
+<div class="accordion-demo-shell usage-demo" data-demo="accordion" data-live-demo-height="980">
+  <section class="accordion-demo-hero usage-demo__hero" aria-labelledby="accordion-demo-title">
+    <div class="accordion-demo-copy usage-demo__copy">
+      <span class="accordion-demo-kicker usage-demo__kicker">Composite disclosure</span>
+      <h3 id="accordion-demo-title">Group related sections with one source of expansion state.</h3>
+      <p>
+        Use <code>cv-accordion</code> when sections belong to one workflow: the parent owns
+        <code>value</code>, <code>expandedValues</code>, heading level, roving focus, and the optional "at
+        least one open" rule.
+      </p>
+    </div>
 
-<!-- Multiple mode with a controlled expandedValues property -->
-<cv-accordion id="security-accordion" allow-multiple aria-label="Security checks">
-  <cv-accordion-item value="password">
-    <span slot="trigger">Password policy</span>
-    <p>Length, rotation, and breach-monitoring requirements.</p>
-  </cv-accordion-item>
-  <cv-accordion-item value="devices">
-    <span slot="trigger">Trusted devices</span>
-    <p>Devices that can unlock this workspace.</p>
-  </cv-accordion-item>
-</cv-accordion>
+    <dl class="accordion-demo-metrics usage-demo__metrics" aria-label="Accordion contract summary">
+      <div>
+        <dt>Single mode</dt>
+        <dd><code>value</code></dd>
+      </div>
+      <div>
+        <dt>Multiple mode</dt>
+        <dd><code>expandedValues</code></dd>
+      </div>
+      <div>
+        <dt>Keyboard</dt>
+        <dd>roving focus</dd>
+      </div>
+    </dl>
+  </section>
+
+  <section
+    class="accordion-demo-workbench usage-demo__workbench"
+    aria-labelledby="accordion-demo-workbench-title"
+  >
+    <div class="accordion-demo-panel usage-demo__panel usage-demo__panel--primary">
+      <div class="accordion-demo-section-header usage-demo__section-header">
+        <span class="accordion-demo-kicker usage-demo__kicker">Vault review flow</span>
+        <h4 id="accordion-demo-workbench-title">
+          Single mode keeps one operational section in view while preserving heading semantics.
+        </h4>
+      </div>
+
+      <cv-accordion
+        data-accordion-primary
+        value="identity"
+        aria-label="Vault review sections"
+        reveal-expanded
+      >
+        <cv-accordion-item value="identity">
+          <span class="accordion-demo-trigger usage-demo__trigger" slot="trigger">
+            <span>Identity layer</span>
+            <small>visible route, label, and decoy profile</small>
+          </span>
+          <div class="accordion-demo-panel-copy usage-demo__prose">
+            <p>The visible workspace exposes only the route and profile that should be inspectable.</p>
+            <ul class="usage-demo__detail-list">
+              <li>Displayed name: travel-profile.visible</li>
+              <li>Route state: exposed to local unlock</li>
+              <li>Hidden namespaces: not mounted</li>
+            </ul>
+          </div>
+        </cv-accordion-item>
+
+        <cv-accordion-item value="recovery">
+          <span class="accordion-demo-trigger usage-demo__trigger" slot="trigger">
+            <span>Recovery policy</span>
+            <small>operator handoff and fallback window</small>
+          </span>
+          <div class="accordion-demo-panel-copy usage-demo__prose">
+            <p>
+              Recovery instructions stay grouped with their policy instead of being split into loose
+              disclosures.
+            </p>
+            <ul class="usage-demo__detail-list">
+              <li>Handoff window: 18 minutes</li>
+              <li>Fallback contact: local-only note</li>
+              <li>Export rule: blocked while coercion profile is active</li>
+            </ul>
+          </div>
+        </cv-accordion-item>
+
+        <cv-accordion-item value="hardware">
+          <span class="accordion-demo-trigger usage-demo__trigger" slot="trigger">
+            <span>Hardware boundary</span>
+            <small>sealed core and trusted device check</small>
+          </span>
+          <div class="accordion-demo-panel-copy usage-demo__prose">
+            <p>
+              The component does not own business rules; it exposes interaction state so the caller can bind
+              policy UI.
+            </p>
+            <ul class="usage-demo__detail-list">
+              <li>Trusted device: paired</li>
+              <li>Relay writes: disabled by local policy</li>
+              <li>Seal state: hidden layer unavailable</li>
+            </ul>
+          </div>
+        </cv-accordion-item>
+      </cv-accordion>
+    </div>
+
+    <aside class="accordion-demo-side usage-demo__side" aria-label="Accordion state inspector">
+      <div class="accordion-demo-side-head usage-demo__side-head">
+        <span class="accordion-demo-kicker usage-demo__kicker">State inspector</span>
+        <h4>Interact with the accordion and watch emitted state.</h4>
+      </div>
+
+      <dl class="accordion-demo-state usage-demo__state" aria-label="Current accordion state">
+        <div>
+          <dt>value</dt>
+          <dd data-accordion-value>identity</dd>
+        </div>
+        <div>
+          <dt>values</dt>
+          <dd data-accordion-values>identity</dd>
+        </div>
+        <div>
+          <dt>activeId</dt>
+          <dd data-accordion-active>idle</dd>
+        </div>
+        <div>
+          <dt>event</dt>
+          <dd data-accordion-event>initial</dd>
+        </div>
+      </dl>
+
+      <div class="accordion-demo-actions usage-demo__actions" aria-label="Accordion demo actions">
+        <cv-button data-accordion-open="identity" variant="primary">Identity</cv-button>
+        <cv-button data-accordion-open="recovery">Recovery</cv-button>
+        <cv-button data-accordion-open="hardware">Hardware</cv-button>
+      </div>
+
+      <p class="accordion-demo-log usage-demo__log" role="status" aria-live="polite" data-accordion-log>
+        Waiting for accordion interaction.
+      </p>
+    </aside>
+  </section>
+
+  <section class="accordion-demo-section usage-demo__section" aria-labelledby="accordion-demo-modes-title">
+    <div class="accordion-demo-section-header usage-demo__section-header">
+      <span class="accordion-demo-kicker usage-demo__kicker">Modes and edge states</span>
+      <h4 id="accordion-demo-modes-title">
+        Multiple sections, custom icons, disabled items, and required-open behavior use the same item
+        contract.
+      </h4>
+    </div>
+
+    <div
+      class="accordion-demo-matrix usage-demo__matrix usage-demo__matrix--wide"
+      aria-label="Accordion usage modes"
+    >
+      <div class="accordion-demo-mode usage-demo__mode">
+        <span class="accordion-demo-mode-label usage-demo__label">allow-multiple</span>
+        <cv-accordion data-accordion-multiple allow-multiple aria-label="Security checks">
+          <cv-accordion-item value="local">
+            <span slot="trigger">Local policy</span>
+            <p>Local-only rules can stay visible with another section.</p>
+          </cv-accordion-item>
+          <cv-accordion-item value="remote">
+            <span slot="trigger">Remote relay</span>
+            <p>Relay state can remain open while local policy is inspected.</p>
+          </cv-accordion-item>
+        </cv-accordion>
+      </div>
+
+      <div class="accordion-demo-mode usage-demo__mode">
+        <span class="accordion-demo-mode-label usage-demo__label">heading-level + icons</span>
+        <cv-accordion heading-level="4" aria-label="Custom icon section">
+          <cv-accordion-item value="custom">
+            <span slot="trigger">Custom indicator slots</span>
+            <span slot="expand-icon">+</span>
+            <span slot="collapse-icon">-</span>
+            <p>
+              Provide <code>expand-icon</code> and <code>collapse-icon</code> slots when the default chevron
+              is not enough.
+            </p>
+          </cv-accordion-item>
+        </cv-accordion>
+      </div>
+
+      <div class="accordion-demo-mode usage-demo__mode">
+        <span class="accordion-demo-mode-label usage-demo__label">disabled item</span>
+        <cv-accordion aria-label="Disabled section example">
+          <cv-accordion-item value="available">
+            <span slot="trigger">Available check</span>
+            <p>This section can be toggled normally.</p>
+          </cv-accordion-item>
+          <cv-accordion-item value="locked" disabled>
+            <span slot="trigger">Locked by policy</span>
+            <p>This section cannot be toggled.</p>
+          </cv-accordion-item>
+        </cv-accordion>
+      </div>
+
+      <div class="accordion-demo-mode usage-demo__mode">
+        <span class="accordion-demo-mode-label usage-demo__label">required-open</span>
+        <cv-accordion data-accordion-required value="intro" aria-label="Required setup">
+          <cv-accordion-item value="intro">
+            <span slot="trigger">Setup baseline</span>
+            <p>At least one setup section remains expanded.</p>
+          </cv-accordion-item>
+          <cv-accordion-item value="limits">
+            <span slot="trigger">Limits</span>
+            <p>Set <code>allowZeroExpanded</code> as a JS property when it must be false.</p>
+          </cv-accordion-item>
+        </cv-accordion>
+      </div>
+    </div>
+  </section>
+</div>
 
 <script type="module">
-  document.querySelector('#security-accordion').expandedValues = ['password', 'devices']
+  document
+    .querySelectorAll('.accordion-demo-shell[data-demo="accordion"]:not([data-ready])')
+    .forEach((shell) => {
+      shell.dataset.ready = 'true'
+
+      const primary = shell.querySelector('[data-accordion-primary]')
+      const multi = shell.querySelector('[data-accordion-multiple]')
+      const required = shell.querySelector('[data-accordion-required]')
+      const value = shell.querySelector('[data-accordion-value]')
+      const values = shell.querySelector('[data-accordion-values]')
+      const active = shell.querySelector('[data-accordion-active]')
+      const eventName = shell.querySelector('[data-accordion-event]')
+      const log = shell.querySelector('[data-accordion-log]')
+
+      const setText = (target, nextValue) => {
+        if (target) target.textContent = nextValue
+      }
+
+      const formatValues = (nextValues) => (nextValues.length > 0 ? nextValues.join(', ') : 'none')
+
+      const updateInspector = (eventType, detail) => {
+        const nextValue = detail?.value ?? primary?.value ?? null
+        const nextValues = detail?.values ?? primary?.expandedValues ?? []
+        const nextActive = detail?.activeId ?? 'idle'
+
+        setText(value, nextValue || 'none')
+        setText(values, formatValues(nextValues))
+        setText(active, nextActive || 'idle')
+        setText(eventName, eventType)
+        setText(log, `${eventType}: value=${nextValue || 'none'}, values=${formatValues(nextValues)}`)
+      }
+
+      if (multi) {
+        multi.expandedValues = ['local', 'remote']
+      }
+
+      if (required) {
+        required.allowZeroExpanded = false
+      }
+
+      primary?.addEventListener('cv-input', (event) => {
+        updateInspector('cv-input', event.detail)
+      })
+
+      primary?.addEventListener('cv-change', (event) => {
+        updateInspector('cv-change', event.detail)
+      })
+
+      shell.querySelectorAll('[data-accordion-open]').forEach((button) => {
+        button.addEventListener('click', async () => {
+          const nextValue = button.getAttribute('data-accordion-open') ?? ''
+          if (!primary || !nextValue) return
+
+          primary.value = nextValue
+          await primary.updateComplete
+          updateInspector('set value', {
+            value: primary.value || null,
+            values: primary.expandedValues ?? [],
+            activeId: null,
+          })
+        })
+      })
+
+      updateInspector('initial', {
+        value: primary?.value || null,
+        values: primary?.expandedValues ?? [],
+        activeId: null,
+      })
+    })
 </script>
-
-<!-- One section must stay open.
-     In plain HTML, set allowZeroExpanded as a JS property because
-     boolean attributes cannot represent false. -->
-<cv-accordion id="required-accordion" value="intro" aria-label="Required setup">
-  <cv-accordion-item value="intro">
-    <span slot="trigger">Introduction</span>
-    <p>Read this before changing the setup.</p>
-  </cv-accordion-item>
-  <cv-accordion-item value="details">
-    <span slot="trigger">Details</span>
-    <p>Configuration rules and operational notes.</p>
-  </cv-accordion-item>
-</cv-accordion>
-
-<script type="module">
-  document.querySelector('#required-accordion').allowZeroExpanded = false
-</script>
-
-<!-- Custom heading level -->
-<cv-accordion heading-level="4">
-  <cv-accordion-item value="s1">
-    <span slot="trigger">Under an h3</span>
-    <p>Content here.</p>
-  </cv-accordion-item>
-</cv-accordion>
-
-<!-- Custom icons -->
-<cv-accordion>
-  <cv-accordion-item value="custom">
-    <span slot="trigger">Custom icons</span>
-    <span slot="expand-icon">
-      <svg
-        viewBox="0 0 24 24"
-        aria-hidden="true"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-      >
-        <path d="M5 12h14"></path>
-        <path d="M12 5v14"></path>
-      </svg>
-    </span>
-    <span slot="collapse-icon">
-      <svg
-        viewBox="0 0 24 24"
-        aria-hidden="true"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-      >
-        <path d="M5 12h14"></path>
-      </svg>
-    </span>
-    <p>Content with plus/minus icons.</p>
-  </cv-accordion-item>
-</cv-accordion>
-
-<!-- Disabled item -->
-<cv-accordion>
-  <cv-accordion-item value="enabled">
-    <span slot="trigger">Enabled</span>
-    <p>This section works.</p>
-  </cv-accordion-item>
-  <cv-accordion-item value="locked" disabled>
-    <span slot="trigger">Locked</span>
-    <p>This section cannot be toggled.</p>
-  </cv-accordion-item>
-</cv-accordion>
 ```
 
 ## Anatomy
