@@ -70,6 +70,12 @@ describe('cv-link', () => {
       const link = await createLink()
       expect(link.href).toBe('')
     })
+
+    it('target and rel default to empty strings', async () => {
+      const link = await createLink()
+      expect(link.target).toBe('')
+      expect(link.rel).toBe('')
+    })
   })
 
   // --- Attribute reflection ---
@@ -85,6 +91,12 @@ describe('cv-link', () => {
       link.href = '/new'
       await settle(link)
       expect(link.getAttribute('href')).toBe('/new')
+    })
+
+    it('target and rel attributes reflect to the DOM', async () => {
+      const link = await createLink({target: '_blank', rel: 'noopener noreferrer'})
+      expect(link.getAttribute('target')).toBe('_blank')
+      expect(link.getAttribute('rel')).toBe('noopener noreferrer')
     })
   })
 
@@ -156,6 +168,13 @@ describe('cv-link', () => {
       const link = await createLink({href: '/about'})
       const base = getBase(link)
       expect(base.getAttribute('href')).toBe('/about')
+    })
+
+    it('target and rel are forwarded to the inner anchor element', async () => {
+      const link = await createLink({target: '_blank', rel: 'noopener noreferrer'})
+      const base = getBase(link)
+      expect(base.getAttribute('target')).toBe('_blank')
+      expect(base.getAttribute('rel')).toBe('noopener noreferrer')
     })
 
     it('no aria-disabled attribute exists (link has no disabled state)', async () => {
@@ -239,6 +258,18 @@ describe('cv-link', () => {
       link.removeAttribute('href')
       await settle(link)
       expect(getBase(link).hasAttribute('href')).toBe(false)
+    })
+
+    it('clearing target and rel removes them from the inner anchor', async () => {
+      const link = await createLink({target: '_blank', rel: 'noopener noreferrer'})
+      expect(getBase(link).getAttribute('target')).toBe('_blank')
+      expect(getBase(link).getAttribute('rel')).toBe('noopener noreferrer')
+
+      link.target = ''
+      link.rel = ''
+      await settle(link)
+      expect(getBase(link).hasAttribute('target')).toBe(false)
+      expect(getBase(link).hasAttribute('rel')).toBe(false)
     })
   })
 

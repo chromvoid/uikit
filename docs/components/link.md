@@ -9,23 +9,256 @@ Inline navigational element that directs the user to another page or resource.
 ## Usage
 
 ```html
-<cv-link href="/about">About us</cv-link>
+<div class="link-demo-shell" data-demo="link" data-live-demo-height="640">
+  <section class="link-demo-hero" aria-labelledby="link-demo-title">
+    <div class="link-demo-copy">
+      <span class="link-demo-kicker">Navigation primitive</span>
+      <h3 id="link-demo-title">Use links for route changes and resource jumps, not disabled actions.</h3>
+      <p>
+        The component keeps a native anchor in the shadow tree, forwards <code>href</code>, and exposes a
+        <code>press</code> event while slots handle product-context affordances.
+      </p>
+    </div>
 
-<cv-link href="/docs">
-  <icon-book slot="prefix"></icon-book>
-  Documentation
-</cv-link>
+    <dl class="link-demo-metrics" aria-label="Link contract summary">
+      <div>
+        <dt>Root</dt>
+        <dd>native anchor</dd>
+      </div>
+      <div>
+        <dt>Activation</dt>
+        <dd>click and Enter</dd>
+      </div>
+      <div>
+        <dt>Disabled</dt>
+        <dd>not supported</dd>
+      </div>
+    </dl>
+  </section>
 
-<cv-link href="/settings">
-  Settings
-  <icon-arrow-right slot="suffix"></icon-arrow-right>
-</cv-link>
+  <section class="link-demo-workbench" aria-labelledby="link-demo-workbench-title">
+    <div class="link-demo-section-header">
+      <span class="link-demo-kicker">Product copy</span>
+      <h4 id="link-demo-workbench-title">Keep inline navigation readable inside dense vault text</h4>
+    </div>
 
-<cv-link href="/home">
-  <icon-home slot="prefix"></icon-home>
-  Home
-  <icon-external slot="suffix"></icon-external>
-</cv-link>
+    <div class="link-demo-layout">
+      <article class="link-demo-reader" aria-label="Inline link examples">
+        <p>
+          Before installing, read the
+          <cv-link href="https://chromvoid.com/ru/threat-model/" target="_blank" rel="noopener noreferrer"
+            >public threat model</cv-link
+          >
+          and keep deniable namespaces outside the visible route until a matching scenario is selected.
+        </p>
+        <p>
+          Use the
+          <cv-link
+            class="link-demo-link--violet"
+            href="https://chromvoid.com/ru/#architecture"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <svg
+              slot="prefix"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"></path>
+              <path d="M14 2v6h6"></path>
+              <path d="M8 13h8"></path>
+              <path d="M8 17h5"></path>
+            </svg>
+            architecture section
+          </cv-link>
+          when a route needs concrete storage, transport, and boundary details.
+        </p>
+        <p>
+          If the destination is not available, render text or a button with disabled semantics instead of a
+          fake disabled link.
+        </p>
+      </article>
+
+      <aside class="link-demo-route-panel" aria-label="Route link examples">
+        <div class="link-demo-route-head">
+          <span class="link-demo-label">Site routes</span>
+          <span class="link-demo-status">3 real links</span>
+        </div>
+
+        <div class="link-demo-route-list">
+          <cv-link
+            class="link-demo-route-link"
+            href="https://chromvoid.com/ru/features/mounted-vault/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <svg
+              slot="prefix"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <ellipse cx="12" cy="5" rx="9" ry="3"></ellipse>
+              <path d="M3 5v14c0 1.7 4 3 9 3s9-1.3 9-3V5"></path>
+              <path d="M3 12c0 1.7 4 3 9 3s9-1.3 9-3"></path>
+            </svg>
+            Open Mounted Vault
+          </cv-link>
+
+          <cv-link
+            class="link-demo-route-link link-demo-route-link--quiet"
+            href="https://chromvoid.com/ru/features/browser-extension/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Browser Extension
+            <svg
+              slot="suffix"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path d="m9 18 6-6-6-6"></path>
+            </svg>
+          </cv-link>
+
+          <cv-link
+            class="link-demo-route-link link-demo-route-link--external"
+            href="https://chromvoid.com/ru/features/remote/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Remote Access
+            <svg
+              slot="suffix"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M15 3h6v6"></path>
+              <path d="M10 14 21 3"></path>
+              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+            </svg>
+          </cv-link>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <section class="link-demo-states" aria-labelledby="link-demo-states-title">
+    <div class="link-demo-section-header">
+      <span class="link-demo-kicker">Slots and tone</span>
+      <h4 id="link-demo-states-title">Prefix, suffix, quiet, and event feedback in one compact surface</h4>
+    </div>
+
+    <div class="link-demo-sample-grid" aria-label="Link presentation variants">
+      <div class="link-demo-sample">
+        <span class="link-demo-label">Inline default</span>
+        <cv-link href="https://chromvoid.com/ru/#how" target="_blank" rel="noopener noreferrer"
+          >How it works</cv-link
+        >
+      </div>
+
+      <div class="link-demo-sample">
+        <span class="link-demo-label">Prefix icon</span>
+        <cv-link href="https://chromvoid.com/ru/threat-model/" target="_blank" rel="noopener noreferrer">
+          <svg
+            slot="prefix"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"></path>
+            <path d="M14 2v6h6"></path>
+            <path d="M8 13h8"></path>
+            <path d="M8 17h5"></path>
+          </svg>
+          Read threat model
+        </cv-link>
+      </div>
+
+      <div class="link-demo-sample">
+        <span class="link-demo-label">Quiet route</span>
+        <cv-link
+          class="link-demo-link--quiet"
+          href="https://chromvoid.com/ru/#download"
+          target="_blank"
+          rel="noopener noreferrer"
+          >Download matrix</cv-link
+        >
+      </div>
+
+      <div class="link-demo-sample">
+        <span class="link-demo-label">Suffix affordance</span>
+        <cv-link href="https://chromvoid.com/ru/#pricing" target="_blank" rel="noopener noreferrer">
+          Pricing and modules
+          <svg
+            slot="suffix"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <path d="m9 18 6-6-6-6"></path>
+          </svg>
+        </cv-link>
+      </div>
+    </div>
+
+    <output class="link-demo-output" data-link-demo-output aria-live="polite">
+      press: waiting for activation
+    </output>
+  </section>
+</div>
+
+<script>
+  document.querySelectorAll('.link-demo-shell[data-demo="link"]:not([data-ready])').forEach((shell) => {
+    shell.dataset.ready = 'true'
+    const output = shell.querySelector('[data-link-demo-output]')
+
+    shell.addEventListener('press', (event) => {
+      const detail = event.detail || {}
+      if (!output) return
+      output.textContent = `press: ${detail.href || '(empty href)'}`
+    })
+  })
+</script>
 ```
 
 ## Anatomy
@@ -46,6 +279,8 @@ Inline navigational element that directs the user to another page or resource.
 | Attribute | Type   | Default | Description                                        |
 | --------- | ------ | ------- | -------------------------------------------------- |
 | `href`    | String | `""`    | Target URL; reflected to the inner anchor's `href` |
+| `target`  | String | `""`    | Browsing context; reflected to the inner anchor    |
+| `rel`     | String | `""`    | Link relationship; reflected to the inner anchor   |
 
 ## Slots
 
@@ -98,9 +333,11 @@ Additionally, component styles depend on theme tokens through fallback values:
 
 `cv-link` is a visual adapter over headless `createLink`.
 
-| UIKit Property | Direction      | Headless Binding                          |
-| -------------- | -------------- | ----------------------------------------- |
-| `href`         | attr -> option | passed as `href` in `createLink(options)` |
+| UIKit Property | Direction      | Headless Binding                            |
+| -------------- | -------------- | ------------------------------------------- |
+| `href`         | attr -> option | passed as `href` in `createLink(options)`   |
+| `target`       | attr -> DOM    | reflected directly to inner anchor by UIKit |
+| `rel`          | attr -> DOM    | reflected directly to inner anchor by UIKit |
 
 | Headless State | Direction | DOM Reflection                          |
 | -------------- | --------- | --------------------------------------- |

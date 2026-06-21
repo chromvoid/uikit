@@ -17,10 +17,14 @@ export class CVLink extends ReatomLitElement {
   static get properties() {
     return {
       href: {type: String, reflect: true},
+      rel: {type: String, reflect: true},
+      target: {type: String, reflect: true},
     }
   }
 
   declare href: string
+  declare rel: string
+  declare target: string
 
   private readonly idBase = `cv-link-${++cvLinkNonce}`
   private model: LinkModel
@@ -28,6 +32,8 @@ export class CVLink extends ReatomLitElement {
   constructor() {
     super()
     this.href = ''
+    this.rel = ''
+    this.target = ''
     this.model = this.createModel()
   }
 
@@ -111,6 +117,8 @@ export class CVLink extends ReatomLitElement {
       <a
         id=${props.id}
         href=${props.href ?? nothing}
+        rel=${this.rel || nothing}
+        target=${this.target || nothing}
         part="base"
         @click=${this.handleClick}
         @keydown=${this.handleKeyDown}
