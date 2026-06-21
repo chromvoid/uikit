@@ -9,10 +9,10 @@ A read-only indicator that communicates determinate or indeterminate loading/com
 ## Usage
 
 ```html
-<div class="progress-demo-shell" data-demo="progress" data-live-demo-height="640">
-  <section class="progress-demo-hero" aria-labelledby="progress-demo-title">
-    <div class="progress-demo-copy">
-      <span class="progress-demo-kicker">Linear operation state</span>
+<div class="progress-demo-shell usage-demo" data-demo="progress" data-live-demo-height="640">
+  <section class="progress-demo-hero usage-demo__hero" aria-labelledby="progress-demo-title">
+    <div class="progress-demo-copy usage-demo__copy">
+      <span class="progress-demo-kicker usage-demo__kicker">Linear operation state</span>
       <h3 id="progress-demo-title">Track a running job without turning it into an interaction.</h3>
       <p>
         Use <code>cv-progress</code> for read-only work: encrypted exports, verification passes, sync queues,
@@ -21,7 +21,7 @@ A read-only indicator that communicates determinate or indeterminate loading/com
       </p>
     </div>
 
-    <dl class="progress-demo-metrics" aria-label="Progress contract summary">
+    <dl class="progress-demo-metrics usage-demo__metrics" aria-label="Progress contract summary">
       <div>
         <dt>Semantics</dt>
         <dd>role="progressbar"</dd>
@@ -37,11 +37,11 @@ A read-only indicator that communicates determinate or indeterminate loading/com
     </dl>
   </section>
 
-  <section class="progress-demo-workbench" aria-labelledby="progress-demo-workbench-title">
-    <div class="progress-demo-panel">
-      <header class="progress-demo-panel-head">
+  <section class="progress-demo-workbench usage-demo__workbench" aria-labelledby="progress-demo-workbench-title">
+    <div class="progress-demo-panel usage-demo__panel">
+      <header class="progress-demo-panel-head usage-demo__panel-head">
         <div>
-          <span class="progress-demo-kicker">Encrypted export</span>
+          <span class="progress-demo-kicker usage-demo__kicker">Encrypted export</span>
           <h4 id="progress-demo-workbench-title">media-archive.cvault</h4>
         </div>
         <cv-badge variant="primary" pulse>Running</cv-badge>
@@ -107,8 +107,8 @@ A read-only indicator that communicates determinate or indeterminate loading/com
   </section>
 
   <section class="progress-demo-tones" aria-labelledby="progress-demo-tones-title">
-    <div class="progress-demo-section-header">
-      <span class="progress-demo-kicker">State palette</span>
+    <div class="progress-demo-section-header usage-demo__section-header">
+      <span class="progress-demo-kicker usage-demo__kicker">State palette</span>
       <h4 id="progress-demo-tones-title">Choose tone by operation state, not decoration.</h4>
     </div>
 
