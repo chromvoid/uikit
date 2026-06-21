@@ -63,7 +63,7 @@ This document is the UIKit surface contract for Radio Group.
       >
         <header class="radio-demo-panel-header usage-demo__panel-header">
           <div>
-            <span class="radio-demo-label">Decision point</span>
+            <span class="radio-demo-label usage-demo__meta usage-demo__label">Decision point</span>
             <strong>Unlock target for this session</strong>
           </div>
           <cv-badge variant="primary">required</cv-badge>
@@ -93,7 +93,7 @@ This document is the UIKit surface contract for Radio Group.
           </cv-radio>
         </cv-radio-group>
 
-        <output class="radio-demo-output usage-demo__log" aria-live="polite">
+        <output class="radio-demo-output usage-demo__readout usage-demo__readout--steady" aria-live="polite">
           Selected route: Hidden namespace · value=hidden
         </output>
       </form>
@@ -102,7 +102,7 @@ This document is the UIKit surface contract for Radio Group.
         class="radio-demo-panel radio-demo-panel--contract usage-demo__panel"
         aria-label="Current radio group contract"
       >
-        <span class="radio-demo-label">Live contract</span>
+        <span class="radio-demo-label usage-demo__meta usage-demo__label">Live contract</span>
         <dl class="radio-demo-live usage-demo__state">
           <div>
             <dt>value</dt>
@@ -135,7 +135,7 @@ This document is the UIKit surface contract for Radio Group.
 
     <div class="radio-demo-state-grid">
       <div class="radio-demo-cell radio-demo-cell--wide">
-        <span class="radio-demo-label">Segmented density</span>
+        <span class="radio-demo-label usage-demo__meta usage-demo__label">Segmented density</span>
         <cv-radio-group variant="segmented" value="manual" aria-label="Unlock mode">
           <cv-radio value="auto">Auto</cv-radio>
           <cv-radio value="manual">Manual</cv-radio>
@@ -144,7 +144,7 @@ This document is the UIKit surface contract for Radio Group.
       </div>
 
       <div class="radio-demo-cell">
-        <span class="radio-demo-label">Horizontal default</span>
+        <span class="radio-demo-label usage-demo__meta usage-demo__label">Horizontal default</span>
         <cv-radio-group value="local" aria-label="Sync target">
           <cv-radio value="local">Local</cv-radio>
           <cv-radio value="relay">Relay</cv-radio>
@@ -153,7 +153,7 @@ This document is the UIKit surface contract for Radio Group.
       </div>
 
       <div class="radio-demo-cell">
-        <span class="radio-demo-label">With descriptions</span>
+        <span class="radio-demo-label usage-demo__meta usage-demo__label">With descriptions</span>
         <cv-radio-group value="owner" orientation="vertical" aria-label="Recovery owner">
           <cv-radio value="owner">
             Owner key
@@ -167,7 +167,7 @@ This document is the UIKit surface contract for Radio Group.
       </div>
 
       <div class="radio-demo-cell radio-demo-cell--muted">
-        <span class="radio-demo-label">Disabled group</span>
+        <span class="radio-demo-label usage-demo__meta usage-demo__label">Disabled group</span>
         <cv-radio-group value="policy" disabled aria-label="Locked policy">
           <cv-radio value="policy">Policy</cv-radio>
           <cv-radio value="manual">Manual</cv-radio>
@@ -175,7 +175,7 @@ This document is the UIKit surface contract for Radio Group.
       </div>
 
       <div class="radio-demo-cell radio-demo-cell--wide">
-        <span class="radio-demo-label">Size scale</span>
+        <span class="radio-demo-label usage-demo__meta usage-demo__label">Size scale</span>
         <cv-radio-group value="medium" aria-label="Radio size examples">
           <cv-radio value="small" size="small">Small</cv-radio>
           <cv-radio value="medium" size="medium">Medium</cv-radio>
