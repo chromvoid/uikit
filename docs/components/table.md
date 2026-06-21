@@ -9,10 +9,10 @@ Data table for displaying structured tabular content with optional sorting, row 
 ## Usage
 
 ```html
-<div class="table-demo-shell" data-demo="table" data-live-demo-height="760">
-  <section class="table-demo-hero" aria-labelledby="table-demo-title">
-    <div class="table-demo-copy">
-      <span class="table-demo-kicker">Structured vault data</span>
+<div class="table-demo-shell usage-demo" data-demo="table" data-live-demo-height="760">
+  <section class="table-demo-hero usage-demo__hero" aria-labelledby="table-demo-title">
+    <div class="table-demo-copy usage-demo__copy">
+      <span class="table-demo-kicker usage-demo__kicker">Structured vault data</span>
       <h3 id="table-demo-title">Use table for scan-first records, not freeform cards.</h3>
       <p>
         Sort state, row selection, sticky headers, density modifiers, and grid keyboard navigation all stay on
@@ -20,7 +20,7 @@ Data table for displaying structured tabular content with optional sorting, row 
       </p>
     </div>
 
-    <dl class="table-demo-metrics" aria-label="Table behavior summary">
+    <dl class="table-demo-metrics usage-demo__metrics" aria-label="Table behavior summary">
       <div>
         <dt>Root</dt>
         <dd>table / grid</dd>
@@ -36,9 +36,9 @@ Data table for displaying structured tabular content with optional sorting, row 
     </dl>
   </section>
 
-  <section class="table-demo-workbench" aria-labelledby="table-demo-workbench-title">
-    <div class="table-demo-section-header">
-      <span class="table-demo-kicker">Operational inventory</span>
+  <section class="table-demo-workbench usage-demo__workbench" aria-labelledby="table-demo-workbench-title">
+    <div class="table-demo-section-header usage-demo__section-header">
+      <span class="table-demo-kicker usage-demo__kicker">Operational inventory</span>
       <h4 id="table-demo-workbench-title">Sortable status table with selected vault layers</h4>
     </div>
 
