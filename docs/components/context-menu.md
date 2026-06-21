@@ -33,7 +33,7 @@ Contextual menu triggered by right-click, keyboard invocation, or imperative `op
   <cv-menu-item value="rename">
     <cv-icon slot="prefix" name="pencil"></cv-icon>
     Rename
-    <span slot="suffix">F2</span>
+    <span class="usage-demo__adornment" slot="suffix">F2</span>
   </cv-menu-item>
 </cv-context-menu>
 

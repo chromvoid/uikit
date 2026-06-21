@@ -182,7 +182,7 @@ UIKit does not own activation or navigation logic; headless state is the source 
   <cv-menu-item value="rename">
     <cv-icon slot="prefix" name="pencil"></cv-icon>
     Rename
-    <span slot="suffix">F2</span>
+    <span class="usage-demo__adornment" slot="suffix">F2</span>
   </cv-menu-item>
 </cv-context-menu>
 
