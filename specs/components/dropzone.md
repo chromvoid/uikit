@@ -51,21 +51,166 @@ None. Native drag/drop and upload events remain app-owned.
 ## Usage
 
 ```html
-<cv-dropzone active message="Release files to upload">
-  <cv-empty-state
-    variant="dropzone"
-    icon="upload"
-    headline="Secure upload area"
-    description="Drag files here or choose them from the file picker."
-  ></cv-empty-state>
-</cv-dropzone>
+<div class="dropzone-demo-shell" data-demo="dropzone" data-live-demo-height="820" data-theme="dark">
+  <cv-theme-provider mode="dark" class="dropzone-demo-theme">
+    <section class="dropzone-demo-hero" aria-labelledby="dropzone-demo-title">
+      <div class="dropzone-demo-copy">
+        <span class="dropzone-demo-kicker">Controlled drop boundary</span>
+        <h3 id="dropzone-demo-title">Dropzone makes drag state visible without owning upload logic.</h3>
+        <p>
+          Route models own drag events, validation, encryption, and upload queues. The component owns only the
+          stable shell, active overlay, loading overlay, and disabled semantics.
+        </p>
+      </div>
 
-<cv-dropzone loading loading-label="Encrypting files">
-  <cv-empty-state
-    variant="dropzone"
-    icon="lock"
-    headline="Preparing upload"
-    description="The content area stays stable while upload progress is active."
-  ></cv-empty-state>
-</cv-dropzone>
+      <dl class="dropzone-demo-metrics" aria-label="Dropzone contract summary">
+        <div>
+          <dt>State source</dt>
+          <dd>consumer model</dd>
+        </div>
+        <div>
+          <dt>Visual states</dt>
+          <dd>idle / active / loading / disabled</dd>
+        </div>
+        <div>
+          <dt>Events</dt>
+          <dd>none</dd>
+        </div>
+      </dl>
+    </section>
+
+    <section class="dropzone-demo-workbench" aria-labelledby="dropzone-demo-workbench-title">
+      <div class="dropzone-demo-section-header">
+        <span class="dropzone-demo-kicker">Vault workspace</span>
+        <h4 id="dropzone-demo-workbench-title">
+          Place the shell around real product content so the drop boundary reads as a temporary state, not a
+          separate upload page.
+        </h4>
+      </div>
+
+      <div class="dropzone-demo-product" aria-label="Dropzone around a visible vault file list">
+        <header class="dropzone-demo-product-header">
+          <div>
+            <span class="dropzone-demo-label">Visible route</span>
+            <strong>travel-profile.files</strong>
+          </div>
+          <cv-badge variant="primary" size="small">drop target armed</cv-badge>
+        </header>
+
+        <div class="dropzone-demo-layout">
+          <cv-dropzone class="dropzone-demo-main-zone" active>
+            <div class="dropzone-demo-file-list" aria-label="Files visible beneath the dropzone">
+              <article>
+                <span class="dropzone-demo-file-mark" aria-hidden="true"></span>
+                <div>
+                  <strong>border-entry-checklist.pdf</strong>
+                  <small>1.4 MB / visible namespace</small>
+                </div>
+                <cv-badge variant="success" size="small">synced</cv-badge>
+              </article>
+              <article>
+                <span class="dropzone-demo-file-mark" aria-hidden="true"></span>
+                <div>
+                  <strong>source-contact-notes.txt</strong>
+                  <small>18 KB / local only</small>
+                </div>
+                <cv-badge variant="warning" size="small">pending</cv-badge>
+              </article>
+              <article>
+                <span class="dropzone-demo-file-mark" aria-hidden="true"></span>
+                <div>
+                  <strong>device-route-proof.json</strong>
+                  <small>42 KB / audit trail</small>
+                </div>
+                <cv-badge variant="neutral" size="small">sealed</cv-badge>
+              </article>
+            </div>
+
+            <div slot="message" class="dropzone-demo-overlay">
+              <span class="dropzone-demo-target-glyph" aria-hidden="true"></span>
+              <strong>Release encrypted bundle</strong>
+              <small>Files are staged in this visible route. Validation and commit stay app-owned.</small>
+            </div>
+          </cv-dropzone>
+
+          <aside class="dropzone-demo-pipeline" aria-label="Upload pipeline">
+            <span class="dropzone-demo-kicker">Upload pipeline</span>
+            <ol>
+              <li>
+                <strong>Inspect payload</strong>
+                <span>Read file metadata from the app-owned drag event.</span>
+              </li>
+              <li>
+                <strong>Encrypt locally</strong>
+                <span>Keep plaintext out of transport and relay layers.</span>
+              </li>
+              <li>
+                <strong>Commit visible route</strong>
+                <span>Write only after the operator confirms the target.</span>
+              </li>
+            </ol>
+            <cv-button preset="action-primary-subtle" size="small">Open file picker</cv-button>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <section class="dropzone-demo-section" aria-labelledby="dropzone-demo-states-title">
+      <div class="dropzone-demo-section-header">
+        <span class="dropzone-demo-kicker">State matrix</span>
+        <h4 id="dropzone-demo-states-title">
+          The same primitive covers idle, active, loading, and disabled states without taking ownership of
+          drag/drop behavior.
+        </h4>
+      </div>
+
+      <div class="dropzone-demo-state-grid" aria-label="Dropzone visual state examples">
+        <article class="dropzone-demo-state-card">
+          <span class="dropzone-demo-label">Idle</span>
+          <cv-dropzone class="dropzone-demo-state-zone" message="Drop files here">
+            <div class="dropzone-demo-target">
+              <span class="dropzone-demo-target-glyph" aria-hidden="true"></span>
+              <strong>Ready for staged files</strong>
+              <p>Underlying content stays visible until the route model marks drag active.</p>
+            </div>
+          </cv-dropzone>
+        </article>
+
+        <article class="dropzone-demo-state-card">
+          <span class="dropzone-demo-label">Active</span>
+          <cv-dropzone class="dropzone-demo-state-zone" active>
+            <div class="dropzone-demo-target">
+              <strong>Current file list</strong>
+              <p>This content is intentionally de-emphasized while the drop overlay is visible.</p>
+            </div>
+            <div slot="message" class="dropzone-demo-state-message">
+              <strong>Release to stage</strong>
+              <small>Import is still pending confirmation.</small>
+            </div>
+          </cv-dropzone>
+        </article>
+
+        <article class="dropzone-demo-state-card">
+          <span class="dropzone-demo-label">Loading</span>
+          <cv-dropzone class="dropzone-demo-state-zone" loading loading-label="Encrypting bundle">
+            <div class="dropzone-demo-target">
+              <strong>Upload queue locked</strong>
+              <p>The shell keeps dimensions stable while processing is active.</p>
+            </div>
+          </cv-dropzone>
+        </article>
+
+        <article class="dropzone-demo-state-card">
+          <span class="dropzone-demo-label">Disabled</span>
+          <cv-dropzone class="dropzone-demo-state-zone" disabled message="Storage unavailable">
+            <div class="dropzone-demo-target">
+              <strong>Storage unavailable</strong>
+              <p>Disabled semantics are visible without inventing an app-level fallback.</p>
+            </div>
+          </cv-dropzone>
+        </article>
+      </div>
+    </section>
+  </cv-theme-provider>
+</div>
 ```
