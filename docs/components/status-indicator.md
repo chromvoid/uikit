@@ -11,14 +11,19 @@ Inline status marker with optional label and suffix content.
   <section class="status-indicator-demo-hero usage-demo__hero" aria-labelledby="status-indicator-demo-title">
     <div class="status-indicator-demo-copy usage-demo__copy">
       <span class="status-indicator-demo-kicker usage-demo__kicker">Inline state signal</span>
-      <h3 id="status-indicator-demo-title">Mark live connection, vault, and policy state without adding a control.</h3>
+      <h3 id="status-indicator-demo-title">
+        Mark live connection, vault, and policy state without adding a control.
+      </h3>
       <p>
         Use <code>cv-status-indicator</code> when the surrounding row already owns the action. The indicator
         contributes semantic status text, optional pulse, and compact suffix context.
       </p>
     </div>
 
-    <dl class="status-indicator-demo-metrics usage-demo__metrics" aria-label="Status indicator contract summary">
+    <dl
+      class="status-indicator-demo-metrics usage-demo__metrics"
+      aria-label="Status indicator contract summary"
+    >
       <div>
         <dt>Semantics</dt>
         <dd>role="status"</dd>
@@ -34,7 +39,10 @@ Inline status marker with optional label and suffix content.
     </dl>
   </section>
 
-  <section class="status-indicator-demo-board" aria-label="Status indicator workflow examples">
+  <section
+    class="status-indicator-demo-board usage-demo__workbench"
+    aria-label="Status indicator workflow examples"
+  >
     <div class="status-indicator-demo-panel usage-demo__panel">
       <header class="status-indicator-demo-panel-head usage-demo__panel-head">
         <div>
@@ -98,10 +106,15 @@ Inline status marker with optional label and suffix content.
       </div>
     </div>
 
-    <aside class="status-indicator-demo-side usage-demo__side" aria-labelledby="status-indicator-demo-decorative-title">
+    <aside
+      class="status-indicator-demo-side usage-demo__side"
+      aria-labelledby="status-indicator-demo-decorative-title"
+    >
       <div class="status-indicator-demo-section-header usage-demo__section-header">
         <span class="status-indicator-demo-kicker usage-demo__kicker">Marker-only</span>
-        <h4 id="status-indicator-demo-decorative-title">Use decorative dots when adjacent text carries the label.</h4>
+        <h4 id="status-indicator-demo-decorative-title">
+          Use decorative dots when adjacent text carries the label.
+        </h4>
       </div>
 
       <div class="status-indicator-demo-dot-list">
@@ -125,10 +138,15 @@ Inline status marker with optional label and suffix content.
     </aside>
   </section>
 
-  <section class="status-indicator-demo-tones" aria-labelledby="status-indicator-demo-tones-title">
+  <section
+    class="status-indicator-demo-tones usage-demo__section"
+    aria-labelledby="status-indicator-demo-tones-title"
+  >
     <div class="status-indicator-demo-section-header usage-demo__section-header">
       <span class="status-indicator-demo-kicker usage-demo__kicker">Tone and size matrix</span>
-      <h4 id="status-indicator-demo-tones-title">Keep color semantic; use size for density, not importance.</h4>
+      <h4 id="status-indicator-demo-tones-title">
+        Keep color semantic; use size for density, not importance.
+      </h4>
     </div>
 
     <div class="status-indicator-demo-tone-grid" aria-label="Status indicator tone and size examples">
