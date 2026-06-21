@@ -149,7 +149,7 @@ chips without emitting events.
 
     <div class="chip-group-demo-keyboard-grid">
       <div class="chip-group-demo-panel usage-demo__panel">
-        <span class="chip-group-demo-label">Horizontal</span>
+        <span class="chip-group-demo-label usage-demo__meta usage-demo__label">Horizontal</span>
         <cv-chip-group selection-mode="single" value="usb" aria-label="Transport" orientation="horizontal">
           <cv-chip value="usb">USB</cv-chip>
           <cv-chip value="webrtc">WebRTC</cv-chip>
@@ -158,7 +158,7 @@ chips without emitting events.
       </div>
 
       <div class="chip-group-demo-panel usage-demo__panel">
-        <span class="chip-group-demo-label">Vertical</span>
+        <span class="chip-group-demo-label usage-demo__meta usage-demo__label">Vertical</span>
         <cv-chip-group selection-mode="single" value="strict" aria-label="Policy" orientation="vertical">
           <cv-chip value="strict">Strict</cv-chip>
           <cv-chip value="balanced">Balanced</cv-chip>
