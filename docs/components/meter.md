@@ -140,7 +140,7 @@ Graphical display of a numeric value within a known range, such as disk usage or
     </aside>
   </section>
 
-  <section class="meter-demo-rules" aria-labelledby="meter-demo-rules-title">
+  <section class="meter-demo-rules usage-demo__section" aria-labelledby="meter-demo-rules-title">
     <div class="meter-demo-section-header usage-demo__section-header">
       <span class="meter-demo-kicker usage-demo__kicker">Decision rules</span>
       <h4 id="meter-demo-rules-title">The visual shape is similar, but the accessibility contract is not.</h4>
