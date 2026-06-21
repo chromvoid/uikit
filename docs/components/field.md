@@ -38,16 +38,16 @@ linkage for one slotted control.
   </section>
 
   <section class="field-demo-workbench usage-demo__workbench">
-    <form class="field-demo-form" aria-label="Vault access field examples">
+    <form class="field-demo-form usage-demo__flow" aria-label="Vault access field examples">
       <div class="field-demo-form-head">
-        <div>
-          <span>Production form</span>
+        <div class="usage-demo__flow usage-demo__flow--loose">
+          <span class="usage-demo__meta usage-demo__label">Production form</span>
           <h4>Vault access details</h4>
         </div>
         <cv-badge variant="primary">required</cv-badge>
       </div>
 
-      <div class="field-demo-control-grid">
+      <div class="field-demo-control-grid usage-demo__grid--comfortable">
         <cv-field class="field-demo-field" required>
           <span slot="label">Vault alias</span>
           <cv-input name="vault-alias" value="border-core"></cv-input>
@@ -97,30 +97,30 @@ linkage for one slotted control.
       </div>
     </form>
 
-    <aside class="field-demo-contract" aria-label="Field accessibility contract">
+    <aside class="field-demo-contract usage-demo__flow" aria-label="Field accessibility contract">
       <div class="field-demo-section-header usage-demo__section-header">
-        <span>Contract</span>
+        <span class="usage-demo__meta usage-demo__label">Contract</span>
         <h4><code>cv-field</code> owns structure and linkage. The consumer still owns validation rules.</h4>
       </div>
 
       <dl class="field-demo-contract-list">
-        <div>
-          <dt>label slot</dt>
+        <div class="usage-demo__flow usage-demo__flow--loose">
+          <dt class="usage-demo__meta usage-demo__label">label slot</dt>
           <dd>Creates a real label and sets <code>aria-labelledby</code> on the control.</dd>
         </div>
-        <div>
-          <dt>description slot</dt>
+        <div class="usage-demo__flow usage-demo__flow--loose">
+          <dt class="usage-demo__meta usage-demo__label">description slot</dt>
           <dd>Adds helper text to the control's <code>aria-describedby</code> chain.</dd>
         </div>
-        <div>
-          <dt>error slot</dt>
+        <div class="usage-demo__flow usage-demo__flow--loose">
+          <dt class="usage-demo__meta usage-demo__label">error slot</dt>
           <dd>
             Joins <code>aria-describedby</code> and announces with <code>role="alert"</code> only when
             invalid.
           </dd>
         </div>
-        <div>
-          <dt>state attrs</dt>
+        <div class="usage-demo__flow usage-demo__flow--loose">
+          <dt class="usage-demo__meta usage-demo__label">state attrs</dt>
           <dd>
             Reflects <code>required</code>, <code>disabled</code>, and <code>invalid</code> onto the direct
             child control.
@@ -129,10 +129,10 @@ linkage for one slotted control.
       </dl>
 
       <div class="field-demo-flow" aria-label="Invalid state flow">
-        <span>invalid</span>
-        <span>aria-invalid</span>
-        <span>error id</span>
-        <span>alert role</span>
+        <span class="usage-demo__meta">invalid</span>
+        <span class="usage-demo__meta">aria-invalid</span>
+        <span class="usage-demo__meta">error id</span>
+        <span class="usage-demo__meta">alert role</span>
       </div>
     </aside>
   </section>
