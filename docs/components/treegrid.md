@@ -36,7 +36,10 @@ Hierarchical tabular data grid combining multi-column structure with tree expans
     </dl>
   </section>
 
-  <section class="treegrid-demo-workbench usage-demo__workbench" aria-labelledby="treegrid-demo-workbench-title">
+  <section
+    class="treegrid-demo-workbench usage-demo__workbench"
+    aria-labelledby="treegrid-demo-workbench-title"
+  >
     <div class="treegrid-demo-section-header usage-demo__section-header">
       <span class="treegrid-demo-kicker usage-demo__kicker">Vault trust map</span>
       <h4 id="treegrid-demo-workbench-title">Branch rows reveal visible and hidden operating layers</h4>
@@ -138,7 +141,7 @@ Hierarchical tabular data grid combining multi-column structure with tree expans
       </cv-treegrid>
     </div>
 
-    <output class="treegrid-demo-readout" for="treegrid-demo-map" aria-live="polite">
+    <output class="treegrid-demo-readout usage-demo__log" for="treegrid-demo-map" aria-live="polite">
       Active cell: visible-surface::status | Selected rows: none | Expanded branches: none
     </output>
   </section>
