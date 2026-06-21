@@ -35,7 +35,7 @@ Generic loading placeholder for blocks, text rows, and circular media.
     </dl>
   </section>
 
-  <section class="skeleton-demo-board" aria-labelledby="skeleton-demo-board-title">
+  <section class="skeleton-demo-board usage-demo__workbench" aria-labelledby="skeleton-demo-board-title">
     <div class="skeleton-demo-section-header usage-demo__section-header">
       <span class="skeleton-demo-kicker usage-demo__kicker">Vault list placeholder</span>
       <h4 id="skeleton-demo-board-title">Match the loading surface to the content that will replace it.</h4>
