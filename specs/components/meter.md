@@ -132,10 +132,10 @@ The UIKit layer does not construct any ARIA attributes directly.
 ## Usage
 
 ```html
-<div class="meter-demo-shell" data-demo="meter" data-theme="dark" data-live-demo-height="780">
-  <section class="meter-demo-hero" aria-labelledby="meter-demo-title">
-    <div class="meter-demo-copy">
-      <span class="meter-demo-kicker">Known range measurement</span>
+<div class="meter-demo-shell usage-demo" data-demo="meter" data-theme="dark" data-live-demo-height="780">
+  <section class="meter-demo-hero usage-demo__hero" aria-labelledby="meter-demo-title">
+    <div class="meter-demo-copy usage-demo__copy">
+      <span class="meter-demo-kicker usage-demo__kicker">Known range measurement</span>
       <h3 id="meter-demo-title">Measure a condition. Do not imply a task is running.</h3>
       <p>
         Use <code>cv-meter</code> for capacity, quality, pressure, strength, or saturation values that already
@@ -144,7 +144,7 @@ The UIKit layer does not construct any ARIA attributes directly.
       </p>
     </div>
 
-    <dl class="meter-demo-metrics" aria-label="Meter contract summary">
+    <dl class="meter-demo-metrics usage-demo__metrics" aria-label="Meter contract summary">
       <div>
         <dt>Semantics</dt>
         <dd>role="meter"</dd>
@@ -160,11 +160,11 @@ The UIKit layer does not construct any ARIA attributes directly.
     </dl>
   </section>
 
-  <section class="meter-demo-workbench" aria-labelledby="meter-demo-workbench-title">
-    <div class="meter-demo-panel">
-      <header class="meter-demo-panel-head">
+  <section class="meter-demo-workbench usage-demo__workbench" aria-labelledby="meter-demo-workbench-title">
+    <div class="meter-demo-panel usage-demo__panel">
+      <header class="meter-demo-panel-head usage-demo__panel-head">
         <div>
-          <span class="meter-demo-kicker">Storage pressure</span>
+          <span class="meter-demo-kicker usage-demo__kicker">Storage pressure</span>
           <h4 id="meter-demo-workbench-title">remote-vault-01</h4>
         </div>
         <cv-badge variant="warning">Measured</cv-badge>
@@ -221,8 +221,8 @@ The UIKit layer does not construct any ARIA attributes directly.
     </div>
 
     <aside class="meter-demo-compare" aria-labelledby="meter-demo-compare-title">
-      <div class="meter-demo-section-header">
-        <span class="meter-demo-kicker">Meter vs progress</span>
+      <div class="meter-demo-section-header usage-demo__section-header">
+        <span class="meter-demo-kicker usage-demo__kicker">Meter vs progress</span>
         <h4 id="meter-demo-compare-title">Choose by meaning, not by shape.</h4>
       </div>
 
@@ -264,8 +264,8 @@ The UIKit layer does not construct any ARIA attributes directly.
   </section>
 
   <section class="meter-demo-rules" aria-labelledby="meter-demo-rules-title">
-    <div class="meter-demo-section-header">
-      <span class="meter-demo-kicker">Decision rules</span>
+    <div class="meter-demo-section-header usage-demo__section-header">
+      <span class="meter-demo-kicker usage-demo__kicker">Decision rules</span>
       <h4 id="meter-demo-rules-title">The visual shape is similar, but the accessibility contract is not.</h4>
     </div>
 
