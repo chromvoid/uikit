@@ -182,54 +182,143 @@ Normal (non-toggle) buttons rely on the native `click` event.
 ## Usage
 
 ```html
-<cv-button>Click me</cv-button>
+<div class="button-demo-shell" data-demo="button" data-live-demo-height="780">
+  <section class="button-demo-hero" aria-labelledby="button-demo-title">
+    <div class="button-demo-copy">
+      <span class="button-demo-kicker">Action primitive</span>
+      <h3 id="button-demo-title">Use button when a user commits intent, changes mode, or starts a safe action.</h3>
+      <p>
+        The component keeps activation, toggle, disabled, loading, and form behavior in the headless button
+        model. UIKit owns only the action surface, slots, variants, and sizing.
+      </p>
+    </div>
 
-<cv-button variant="primary">Save</cv-button>
+    <dl class="button-demo-metrics" aria-label="Button contract summary">
+      <div>
+        <dt>Variants</dt>
+        <dd>default / primary / danger / ghost</dd>
+      </div>
+      <div>
+        <dt>States</dt>
+        <dd>disabled / loading / pressed</dd>
+      </div>
+      <div>
+        <dt>Slots</dt>
+        <dd>prefix + suffix</dd>
+      </div>
+    </dl>
+  </section>
 
-<cv-button variant="danger" outline>Delete</cv-button>
+  <section class="button-demo-board" aria-label="Button examples in a vault workflow">
+    <div class="button-demo-command">
+      <div class="button-demo-command-head">
+        <div>
+          <span>Visible vault route</span>
+          <strong>travel-profile.visible</strong>
+        </div>
+        <span class="button-demo-status">safe action window</span>
+      </div>
 
-<cv-button variant="primary" outline size="small">Small outline</cv-button>
+      <div class="button-demo-layer">
+        <span>Operator decision</span>
+        <p>Commit the visible profile, inspect routing proof, or block relay writes before export.</p>
+      </div>
 
-<cv-button pill>Rounded</cv-button>
+      <div class="button-demo-actions" aria-label="Primary action examples">
+        <cv-button preset="action-primary">
+          <svg class="button-demo-icon" slot="prefix" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M20 6 9 17l-5-5"></path>
+          </svg>
+          Commit visible profile
+        </cv-button>
 
-<cv-button variant="danger" loading>Deleting…</cv-button>
+        <cv-button outline>
+          Inspect route
+          <svg class="button-demo-icon" slot="suffix" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="m9 18 6-6-6-6"></path>
+          </svg>
+        </cv-button>
 
-<cv-button toggle pressed>Bold</cv-button>
+        <cv-button variant="ghost" outline>
+          <svg class="button-demo-icon" slot="prefix" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 5v14"></path>
+            <path d="M5 12h14"></path>
+          </svg>
+          Export proof
+        </cv-button>
 
-<cv-button>
-  <svg
-    slot="prefix"
-    width="16"
-    height="16"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    stroke-width="2"
-    stroke-linecap="round"
-    stroke-linejoin="round"
-    aria-hidden="true"
-  >
-    <path d="M12 5v14"></path>
-    <path d="M5 12h14"></path>
-  </svg>
-  Add item
-</cv-button>
+        <cv-button variant="danger" outline>
+          <svg class="button-demo-icon" slot="prefix" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M18 6 6 18"></path>
+            <path d="m6 6 12 12"></path>
+          </svg>
+          Disable relay
+        </cv-button>
+      </div>
+    </div>
 
-<cv-button>
-  Settings
-  <svg
-    slot="suffix"
-    width="16"
-    height="16"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    stroke-width="2"
-    stroke-linecap="round"
-    stroke-linejoin="round"
-    aria-hidden="true"
-  >
-    <path d="m9 18 6-6-6-6"></path>
-  </svg>
-</cv-button>
+    <aside class="button-demo-side" aria-label="Button state examples">
+      <div class="button-demo-side-head">
+        <span class="button-demo-kicker">State map</span>
+        <h4>Each state changes affordance without changing the contract.</h4>
+      </div>
+
+      <div class="button-demo-state-list">
+        <div>
+          <span>Loading blocks action</span>
+          <cv-button variant="primary" loading>Committing</cv-button>
+        </div>
+        <div>
+          <span>Disabled stays visible</span>
+          <cv-button disabled>Unavailable</cv-button>
+        </div>
+        <div>
+          <span>Toggle reflects pressed</span>
+          <cv-button toggle pressed>Policy pinned</cv-button>
+        </div>
+      </div>
+    </aside>
+  </section>
+
+  <section class="button-demo-section" aria-labelledby="button-demo-matrix-title">
+    <div class="button-demo-section-header">
+      <span class="button-demo-kicker">Variants, sizes, and shape</span>
+      <h4 id="button-demo-matrix-title">Use one action hierarchy, then tune emphasis with variant and modifier.</h4>
+    </div>
+
+    <div class="button-demo-matrix" aria-label="Button variant and size matrix">
+      <div>
+        <span>Default</span>
+        <cv-button>Review policy</cv-button>
+        <cv-button outline>Quiet secondary</cv-button>
+      </div>
+      <div>
+        <span>Primary</span>
+        <cv-button variant="primary">Save trust route</cv-button>
+        <cv-button variant="primary" outline>Primary outline</cv-button>
+      </div>
+      <div>
+        <span>Danger</span>
+        <cv-button variant="danger">Block export</cv-button>
+        <cv-button variant="danger" outline>Danger outline</cv-button>
+      </div>
+      <div>
+        <span>Ghost</span>
+        <cv-button variant="ghost">Open details</cv-button>
+        <cv-button variant="ghost" outline>Ghost outline</cv-button>
+      </div>
+      <div>
+        <span>Size</span>
+        <cv-button size="small">Small</cv-button>
+        <cv-button>Medium</cv-button>
+        <cv-button size="large">Large</cv-button>
+      </div>
+      <div>
+        <span>Shape and preset</span>
+        <cv-button pill>Rounded action</cv-button>
+        <cv-button preset="action-primary-subtle">Subtle primary</cv-button>
+      </div>
+    </div>
+  </section>
+</div>
 ```
