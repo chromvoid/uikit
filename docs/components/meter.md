@@ -9,26 +9,167 @@ Graphical display of a numeric value within a known range, such as disk usage or
 ## Usage
 
 ```html
-<!-- Basic percentage meter -->
-<cv-meter value="75"></cv-meter>
+<div class="meter-demo-shell" data-demo="meter" data-theme="dark" data-live-demo-height="780">
+  <section class="meter-demo-hero" aria-labelledby="meter-demo-title">
+    <div class="meter-demo-copy">
+      <span class="meter-demo-kicker">Known range measurement</span>
+      <h3 id="meter-demo-title">Measure a condition. Do not imply a task is running.</h3>
+      <p>
+        Use <code>cv-meter</code> for capacity, quality, pressure, strength, or saturation values that already
+        exist inside a bounded range. The component owns meter semantics and threshold status; the caller owns
+        the measured value.
+      </p>
+    </div>
 
-<!-- With explicit range -->
-<cv-meter value="6" min="0" max="10"></cv-meter>
+    <dl class="meter-demo-metrics" aria-label="Meter contract summary">
+      <div>
+        <dt>Semantics</dt>
+        <dd>role="meter"</dd>
+      </div>
+      <div>
+        <dt>Status zones</dt>
+        <dd>low / optimum / high</dd>
+      </div>
+      <div>
+        <dt>No fallback</dt>
+        <dd>not indeterminate</dd>
+      </div>
+    </dl>
+  </section>
 
-<!-- With thresholds for status zones -->
-<cv-meter value="30" low="25" high="75" optimum="50"></cv-meter>
+  <section class="meter-demo-workbench" aria-labelledby="meter-demo-workbench-title">
+    <div class="meter-demo-panel">
+      <header class="meter-demo-panel-head">
+        <div>
+          <span class="meter-demo-kicker">Storage pressure</span>
+          <h4 id="meter-demo-workbench-title">remote-vault-01</h4>
+        </div>
+        <cv-badge variant="warning">Measured</cv-badge>
+      </header>
 
-<!-- With accessible label -->
-<cv-meter value="80" aria-label="Disk usage"></cv-meter>
+      <div class="meter-demo-primary-reading">
+        <div class="meter-demo-reading-label">
+          <span>Capacity used</span>
+          <strong>82 GB / 100 GB</strong>
+        </div>
+        <cv-meter
+          class="meter-demo-main-meter"
+          value="82"
+          min="0"
+          max="100"
+          low="55"
+          high="80"
+          optimum="42"
+          value-text="82 percent used, high pressure"
+          aria-label="Remote vault capacity used"
+        >
+          high
+        </cv-meter>
+        <div class="meter-demo-scale" aria-hidden="true">
+          <span>low</span>
+          <span>optimum</span>
+          <span>high</span>
+        </div>
+      </div>
 
-<!-- With custom value text -->
-<cv-meter value="80" value-text="80% used"></cv-meter>
+      <div class="meter-demo-zone-grid" aria-label="Meter threshold examples">
+        <div>
+          <span>Low</span>
+          <cv-meter value="34" low="45" high="80" optimum="62" aria-label="Low threshold example"
+            >34</cv-meter
+          >
+          <strong>Below target</strong>
+        </div>
+        <div>
+          <span>Optimum</span>
+          <cv-meter value="58" low="35" high="85" optimum="55" aria-label="Optimum threshold example"
+            >58</cv-meter
+          >
+          <strong>Healthy range</strong>
+        </div>
+        <div>
+          <span>High</span>
+          <cv-meter value="91" low="30" high="80" optimum="50" aria-label="High threshold example"
+            >91</cv-meter
+          >
+          <strong>Pressure zone</strong>
+        </div>
+      </div>
+    </div>
 
-<!-- With custom label content in default slot -->
-<cv-meter value="65"> 65% </cv-meter>
+    <aside class="meter-demo-compare" aria-labelledby="meter-demo-compare-title">
+      <div class="meter-demo-section-header">
+        <span class="meter-demo-kicker">Meter vs progress</span>
+        <h4 id="meter-demo-compare-title">Choose by meaning, not by shape.</h4>
+      </div>
 
-<!-- Danger zone example (value exceeds high threshold) -->
-<cv-meter value="92" low="20" high="80" optimum="50"> Critical </cv-meter>
+      <div class="meter-demo-compare-grid">
+        <div class="meter-demo-compare-card meter-demo-compare-card--meter">
+          <span>cv-meter</span>
+          <strong>Static measurement</strong>
+          <cv-meter
+            value="64"
+            low="30"
+            high="80"
+            optimum="60"
+            value-text="64 percent strength"
+            aria-label="Password strength meter"
+          >
+            64
+          </cv-meter>
+          <p>Answers "how much is the measured condition?" and can map the value into threshold zones.</p>
+        </div>
+
+        <div class="meter-demo-compare-card meter-demo-compare-card--progress">
+          <span>cv-progress</span>
+          <strong>Operation progress</strong>
+          <cv-progress
+            value="64"
+            tone="upload"
+            value-text="64 percent uploaded"
+            aria-label="Archive upload progress"
+          >
+            64%
+          </cv-progress>
+          <cv-progress indeterminate aria-label="Manifest verification is still waiting"></cv-progress>
+          <p>
+            Answers "how far has the job advanced?" and can be indeterminate while work has no known value.
+          </p>
+        </div>
+      </div>
+    </aside>
+  </section>
+
+  <section class="meter-demo-rules" aria-labelledby="meter-demo-rules-title">
+    <div class="meter-demo-section-header">
+      <span class="meter-demo-kicker">Decision rules</span>
+      <h4 id="meter-demo-rules-title">The visual shape is similar, but the accessibility contract is not.</h4>
+    </div>
+
+    <dl class="meter-demo-rule-grid" aria-label="When to use meter or progress">
+      <div>
+        <dt>Use meter for</dt>
+        <dd>disk usage, password strength, queue saturation, memory pressure</dd>
+      </div>
+      <div>
+        <dt>Use progress for</dt>
+        <dd>upload, export, sync, verification, loading or completion state</dd>
+      </div>
+      <div>
+        <dt>Meter contract</dt>
+        <dd>
+          <code>value</code> plus optional <code>low</code>, <code>high</code>, and <code>optimum</code>
+        </dd>
+      </div>
+      <div>
+        <dt>Progress contract</dt>
+        <dd>
+          <code>value</code> while determinate, or <code>indeterminate</code> when the amount is unknown
+        </dd>
+      </div>
+    </dl>
+  </section>
+</div>
 ```
 
 ## Anatomy
