@@ -46,7 +46,7 @@ Single keyboard keycap primitive.
           <span>Command surface</span>
           <strong>visible-vault.navigator</strong>
         </div>
-        <span class="kbd-demo-status">passive hints only</span>
+        <span class="kbd-demo-status usage-demo__meta usage-demo__label">passive hints only</span>
       </div>
 
       <div class="kbd-demo-command-list" aria-label="Single key usage examples">
