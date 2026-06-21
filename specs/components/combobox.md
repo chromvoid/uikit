@@ -288,7 +288,11 @@ These behaviors are optional and currently not required on `cv-combobox`:
 ## Usage
 
 ```html
-<div class="combobox-demo-shell usage-demo" data-demo="combobox" data-live-demo-height="1180">
+<div
+  class="combobox-demo-shell usage-demo usage-demo__dark-preview"
+  data-demo="combobox"
+  data-live-demo-height="1180"
+>
   <section class="combobox-demo-hero usage-demo__hero" aria-labelledby="combobox-demo-title">
     <div class="combobox-demo-copy usage-demo__copy">
       <span class="combobox-demo-kicker usage-demo__kicker">Search and select primitive</span>
@@ -343,7 +347,7 @@ These behaviors are optional and currently not required on `cv-combobox`:
             placeholder="Search routes"
             aria-label="Visible route"
           >
-            <span slot="prefix" aria-hidden="true">route</span>
+            <span class="usage-demo__adornment" slot="prefix" aria-hidden="true">route</span>
             <cv-combobox-option value="relay">Relay endpoint</cv-combobox-option>
             <cv-combobox-option value="gateway">Gateway unlock</cv-combobox-option>
             <cv-combobox-option value="import">Credential import</cv-combobox-option>
