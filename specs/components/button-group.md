@@ -48,7 +48,7 @@ Action grouping for related buttons.
     </div>
 
     <div class="button-group-demo-surface">
-      <header class="button-group-demo-surface-header">
+      <header class="button-group-demo-surface-header usage-demo__surface-header">
         <div>
           <span class="button-group-demo-label">Visible route</span>
           <strong>border-checkpoint.visible</strong>
@@ -56,7 +56,7 @@ Action grouping for related buttons.
         <span class="button-group-demo-pill">3 independent actions</span>
       </header>
 
-      <div class="button-group-demo-primary-action">
+      <div class="button-group-demo-primary-action usage-demo__body-copy">
         <cv-button-group attached aria-label="Visible vault actions">
           <cv-button variant="primary" preset="action-primary">Open</cv-button>
           <cv-button>Lock</cv-button>
@@ -65,7 +65,10 @@ Action grouping for related buttons.
         <p>Joined edges make the cluster scan as one footer control without changing each button contract.</p>
       </div>
 
-      <div class="button-group-demo-proof-grid" aria-label="Action grouping details">
+      <div
+        class="button-group-demo-proof-grid usage-demo__grid--compact"
+        aria-label="Action grouping details"
+      >
         <div>
           <span>Group label</span>
           <strong>Visible vault actions</strong>
@@ -93,8 +96,8 @@ Action grouping for related buttons.
       </h4>
     </div>
 
-    <div class="button-group-demo-mode-grid">
-      <div class="button-group-demo-mode">
+    <div class="button-group-demo-mode-grid usage-demo__grid--comfortable">
+      <div class="button-group-demo-mode usage-demo__body-copy usage-demo__soft-card usage-demo__flow">
         <span class="button-group-demo-label">Loose horizontal</span>
         <cv-button-group aria-label="Audit filters">
           <cv-button size="small">Details</cv-button>
@@ -104,7 +107,7 @@ Action grouping for related buttons.
         <p>Use spacing when each action should keep a distinct surface.</p>
       </div>
 
-      <div class="button-group-demo-mode">
+      <div class="button-group-demo-mode usage-demo__body-copy usage-demo__soft-card usage-demo__flow">
         <span class="button-group-demo-label">Attached vertical</span>
         <cv-button-group attached orientation="vertical" aria-label="Review actions">
           <cv-button size="small">Approve</cv-button>
@@ -114,7 +117,7 @@ Action grouping for related buttons.
         <p>Use a vertical stack for side panels, review queues, and narrow mobile slots.</p>
       </div>
 
-      <div class="button-group-demo-mode">
+      <div class="button-group-demo-mode usage-demo__body-copy usage-demo__soft-card usage-demo__flow">
         <span class="button-group-demo-label">Mixed emphasis</span>
         <cv-button-group attached aria-label="Relay controls">
           <cv-button size="small" variant="primary">Enable</cv-button>
