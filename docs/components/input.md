@@ -9,10 +9,10 @@ Single-line text input control supporting text-like types, clearable behavior, a
 ## Usage
 
 ```html
-<div class="input-demo-shell" data-demo="input" data-live-demo-height="860">
-  <section class="input-demo-hero" aria-labelledby="input-demo-title">
-    <div class="input-demo-copy">
-      <span class="input-demo-kicker">Text entry primitive</span>
+<div class="input-demo-shell usage-demo" data-demo="input" data-live-demo-height="860">
+  <section class="input-demo-hero usage-demo__hero" aria-labelledby="input-demo-title">
+    <div class="input-demo-copy usage-demo__copy">
+      <span class="input-demo-kicker usage-demo__kicker">Text entry primitive</span>
       <h3 id="input-demo-title">Use input when a visible value needs native editing and headless state.</h3>
       <p>
         The headless input model owns value, focus, clearing, readonly/disabled state, password visibility,
@@ -20,7 +20,7 @@ Single-line text input control supporting text-like types, clearable behavior, a
       </p>
     </div>
 
-    <dl class="input-demo-metrics" aria-label="Input contract summary">
+    <dl class="input-demo-metrics usage-demo__metrics" aria-label="Input contract summary">
       <div>
         <dt>States</dt>
         <dd>focused / filled / invalid / readonly / disabled</dd>
@@ -90,13 +90,13 @@ Single-line text input control supporting text-like types, clearable behavior, a
       </div>
     </form>
 
-    <aside class="input-demo-side" aria-label="Input event output">
-      <div class="input-demo-side-head">
-        <span class="input-demo-kicker">Event stream</span>
+    <aside class="input-demo-side usage-demo__side" aria-label="Input event output">
+      <div class="input-demo-side-head usage-demo__side-head">
+        <span class="input-demo-kicker usage-demo__kicker">Event stream</span>
         <h4>Interact with any active field to inspect the public contract.</h4>
       </div>
 
-      <p class="input-demo-log" role="status" aria-live="polite" data-input-output>
+      <p class="input-demo-log usage-demo__log" role="status" aria-live="polite" data-input-output>
         Waiting for input. Type, blur, clear, or toggle the password control.
       </p>
 
@@ -113,9 +113,9 @@ Single-line text input control supporting text-like types, clearable behavior, a
     </aside>
   </section>
 
-  <section class="input-demo-section" aria-labelledby="input-demo-matrix-title">
-    <div class="input-demo-section-header">
-      <span class="input-demo-kicker">Variants, sizes, and field states</span>
+  <section class="input-demo-section usage-demo__section" aria-labelledby="input-demo-matrix-title">
+    <div class="input-demo-section-header usage-demo__section-header">
+      <span class="input-demo-kicker usage-demo__kicker">Variants, sizes, and field states</span>
       <h4 id="input-demo-matrix-title">
         Keep one input contract, then tune emphasis with variant, size, slots, or field state.
       </h4>
