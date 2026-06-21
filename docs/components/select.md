@@ -16,8 +16,8 @@ Single or multi-selection dropdown that composes a combobox trigger with a listb
       <h3>Route a vault policy with grouped, multiple, clearable, and invalid states.</h3>
       <p>
         The demo keeps DOM focus on the trigger, mirrors selection through
-        <code>cv-input</code> and <code>cv-change</code>, and shows the control inside
-        field labels, descriptions, and errors.
+        <code>cv-input</code> and <code>cv-change</code>, and shows the control inside field labels,
+        descriptions, and errors.
       </p>
     </div>
 
@@ -37,7 +37,7 @@ Single or multi-selection dropdown that composes a combobox trigger with a listb
     </dl>
   </header>
 
-  <section class="select-demo-board" aria-label="Vault policy form">
+  <section class="select-demo-board usage-demo__workbench" aria-label="Vault policy form">
     <div class="select-demo-panel select-demo-panel--primary usage-demo__panel">
       <div class="select-demo-section-header usage-demo__section-header">
         <span class="select-demo-kicker usage-demo__kicker">Primary decision</span>
@@ -84,7 +84,7 @@ Single or multi-selection dropdown that composes a combobox trigger with a listb
 
     <aside class="select-demo-side usage-demo__side" aria-label="Live select state">
       <span class="select-demo-kicker usage-demo__kicker">Event readout</span>
-      <dl class="select-demo-state">
+      <dl class="select-demo-state usage-demo__state">
         <div>
           <dt>Values</dt>
           <dd data-select-demo-values>hardware</dd>
@@ -100,7 +100,7 @@ Single or multi-selection dropdown that composes a combobox trigger with a listb
     </aside>
   </section>
 
-  <section class="select-demo-cases" aria-label="Select state matrix">
+  <section class="select-demo-cases usage-demo__section" aria-label="Select state matrix">
     <div class="select-demo-section-header usage-demo__section-header">
       <span class="select-demo-kicker usage-demo__kicker">State matrix</span>
       <h4>Common application cases stay visible without turning the demo into a control dump.</h4>
@@ -151,11 +151,7 @@ Single or multi-selection dropdown that composes a combobox trigger with a listb
 
 <script type="module">
   const formatSelectValues = (select) => {
-    const values = select.selectedValues?.length
-      ? select.selectedValues
-      : select.value
-        ? [select.value]
-        : []
+    const values = select.selectedValues?.length ? select.selectedValues : select.value ? [select.value] : []
 
     return values.length > 0 ? values.join(', ') : 'none'
   }
@@ -169,11 +165,8 @@ Single or multi-selection dropdown that composes a combobox trigger with a listb
     const primary = shell.querySelector('[data-select-demo-primary]')
 
     const emitState = (select, type, detail = {}) => {
-      const label = select
-        .closest('cv-field')
-        ?.querySelector('[slot="label"]')
-        ?.textContent
-        ?.trim() || 'Select'
+      const label =
+        select.closest('cv-field')?.querySelector('[slot="label"]')?.textContent?.trim() || 'Select'
       const selected = formatSelectValues(select)
 
       if (values) values.textContent = selected
