@@ -70,7 +70,7 @@ This document is the UIKit surface contract for `cv-date-picker`.
           placeholder="Select access window"
           open
         >
-          <span slot="prefix" aria-hidden="true">UTC</span>
+          <span class="usage-demo__adornment" slot="prefix" aria-hidden="true">UTC</span>
         </cv-date-picker>
       </cv-field>
     </div>
@@ -124,7 +124,7 @@ This document is the UIKit surface contract for `cv-date-picker`.
           max="2026-06-30"
           aria-label="Date only"
         >
-          <span slot="prefix" aria-hidden="true">D</span>
+          <span class="usage-demo__adornment" slot="prefix" aria-hidden="true">D</span>
         </cv-date-picker>
       </cv-field>
 
@@ -138,7 +138,7 @@ This document is the UIKit surface contract for `cv-date-picker`.
           hour-cycle="24"
           aria-label="UTC review"
         >
-          <span slot="prefix" aria-hidden="true">Z</span>
+          <span class="usage-demo__adornment" slot="prefix" aria-hidden="true">Z</span>
         </cv-date-picker>
       </cv-field>
 
@@ -161,7 +161,7 @@ This document is the UIKit surface contract for `cv-date-picker`.
           >Locale changes formatting/parsing context without changing the public value contract.</span
         >
         <cv-date-picker value="2026-06-21T09:00" locale="ru-RU" minute-step="30" aria-label="Localized date">
-          <span slot="suffix" aria-hidden="true">RU</span>
+          <span class="usage-demo__adornment" slot="suffix" aria-hidden="true">RU</span>
         </cv-date-picker>
       </cv-field>
 
