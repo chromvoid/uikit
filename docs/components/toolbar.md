@@ -37,7 +37,10 @@ Container of interactive elements that provides a single tab stop and arrow-key 
     </dl>
   </section>
 
-  <section class="toolbar-demo-workbench usage-demo__workbench" aria-labelledby="toolbar-demo-workbench-title">
+  <section
+    class="toolbar-demo-workbench usage-demo__workbench"
+    aria-labelledby="toolbar-demo-workbench-title"
+  >
     <div class="toolbar-demo-section-header usage-demo__section-header">
       <span class="toolbar-demo-kicker usage-demo__kicker">Record command strip</span>
       <h4 id="toolbar-demo-workbench-title">
