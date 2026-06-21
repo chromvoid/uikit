@@ -154,11 +154,12 @@ None.
 
         <cv-task-list label="Encrypted export tasks" density="compact">
           <div role="listitem" class="operation-queue-demo-task operation-queue-demo-task--active">
-            <div class="operation-queue-demo-task-copy">
+            <div class="operation-queue-demo-task-copy usage-demo__micro-copy">
               <span>Step 1</span>
               <strong>Encrypt media archive</strong>
               <small>Chunk 18 of 25 sealed locally</small>
               <cv-progress
+                class="usage-demo__progress-host"
                 tone="upload"
                 value="72"
                 value-text="72%"
@@ -171,7 +172,7 @@ None.
           </div>
 
           <div role="listitem" class="operation-queue-demo-task operation-queue-demo-task--done">
-            <div class="operation-queue-demo-task-copy">
+            <div class="operation-queue-demo-task-copy usage-demo__micro-copy">
               <span>Step 2</span>
               <strong>Verify metadata manifest</strong>
               <small>Checksums match before upload</small>
@@ -180,7 +181,7 @@ None.
           </div>
 
           <div role="listitem" class="operation-queue-demo-task operation-queue-demo-task--queued">
-            <div class="operation-queue-demo-task-copy">
+            <div class="operation-queue-demo-task-copy usage-demo__micro-copy">
               <span>Step 3</span>
               <strong>Upload sealed backup</strong>
               <small>Waiting for the next transfer slot</small>
@@ -192,6 +193,7 @@ None.
         <div slot="footer" class="operation-queue-demo-footer">
           <span>1.8 GB of 2.4 GB transferred</span>
           <cv-progress
+            class="usage-demo__progress-host"
             tone="upload"
             value="74"
             value-text="74%"
