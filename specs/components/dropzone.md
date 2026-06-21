@@ -97,12 +97,14 @@ None. Native drag/drop and upload events remain app-owned.
       </div>
 
       <div class="dropzone-demo-product" aria-label="Dropzone around a visible vault file list">
-        <header class="dropzone-demo-product-header">
+        <header class="dropzone-demo-product-header usage-demo__product-header">
           <div>
             <span class="dropzone-demo-label">Visible route</span>
             <strong>travel-profile.files</strong>
           </div>
-          <cv-badge variant="primary" size="small">drop target armed</cv-badge>
+          <cv-badge class="usage-demo__dense-badge" variant="primary" size="small"
+            >drop target armed</cv-badge
+          >
         </header>
 
         <div class="dropzone-demo-layout">
@@ -114,7 +116,7 @@ None. Native drag/drop and upload events remain app-owned.
                   <strong>border-entry-checklist.pdf</strong>
                   <small>1.4 MB / visible namespace</small>
                 </div>
-                <cv-badge variant="success" size="small">synced</cv-badge>
+                <cv-badge class="usage-demo__dense-badge" variant="success" size="small">synced</cv-badge>
               </article>
               <article>
                 <span class="dropzone-demo-file-mark" aria-hidden="true"></span>
@@ -122,7 +124,7 @@ None. Native drag/drop and upload events remain app-owned.
                   <strong>source-contact-notes.txt</strong>
                   <small>18 KB / local only</small>
                 </div>
-                <cv-badge variant="warning" size="small">pending</cv-badge>
+                <cv-badge class="usage-demo__dense-badge" variant="warning" size="small">pending</cv-badge>
               </article>
               <article>
                 <span class="dropzone-demo-file-mark" aria-hidden="true"></span>
@@ -130,7 +132,7 @@ None. Native drag/drop and upload events remain app-owned.
                   <strong>device-route-proof.json</strong>
                   <small>42 KB / audit trail</small>
                 </div>
-                <cv-badge variant="neutral" size="small">sealed</cv-badge>
+                <cv-badge class="usage-demo__dense-badge" variant="neutral" size="small">sealed</cv-badge>
               </article>
             </div>
 
