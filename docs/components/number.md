@@ -9,10 +9,10 @@ Numeric input field with ARIA spinbutton semantics, optional stepper controls, c
 ## Usage
 
 ```html
-<div class="number-demo-shell" data-demo="number" data-live-demo-height="900">
-  <section class="number-demo-hero" aria-labelledby="number-demo-title">
-    <div class="number-demo-copy">
-      <span class="number-demo-kicker">Numeric spinbutton primitive</span>
+<div class="number-demo-shell usage-demo" data-demo="number" data-live-demo-height="900">
+  <section class="number-demo-hero usage-demo__hero" aria-labelledby="number-demo-title">
+    <div class="number-demo-copy usage-demo__copy">
+      <span class="number-demo-kicker usage-demo__kicker">Numeric spinbutton primitive</span>
       <h3 id="number-demo-title">
         Clamp, step, clear, and serialize numeric state through one field surface.
       </h3>
@@ -23,7 +23,7 @@ Numeric input field with ARIA spinbutton semantics, optional stepper controls, c
       </p>
     </div>
 
-    <dl class="number-demo-metrics" aria-label="Number contract summary">
+    <dl class="number-demo-metrics usage-demo__metrics" aria-label="Number contract summary">
       <div>
         <dt>Range</dt>
         <dd>min / max / step / large-step</dd>
@@ -96,7 +96,7 @@ Numeric input field with ARIA spinbutton semantics, optional stepper controls, c
         </cv-field>
       </div>
 
-      <div class="number-demo-actions" aria-label="Programmatic number actions">
+      <div class="number-demo-actions usage-demo__actions" aria-label="Programmatic number actions">
         <cv-button type="button" size="small" data-number-action="step-up">Step up</cv-button>
         <cv-button type="button" size="small" data-number-action="page-up">Page up</cv-button>
         <cv-button type="button" size="small" variant="secondary" data-number-action="reset">Reset</cv-button>
@@ -106,13 +106,13 @@ Numeric input field with ARIA spinbutton semantics, optional stepper controls, c
       </div>
     </form>
 
-    <aside class="number-demo-side" aria-label="Number event output">
-      <div class="number-demo-side-head">
-        <span class="number-demo-kicker">Event stream</span>
+    <aside class="number-demo-side usage-demo__side" aria-label="Number event output">
+      <div class="number-demo-side-head usage-demo__side-head">
+        <span class="number-demo-kicker usage-demo__kicker">Event stream</span>
         <h4>Committed numeric changes report a stable number value, not draft text.</h4>
       </div>
 
-      <p class="number-demo-log" role="status" aria-live="polite" data-number-output>
+      <p class="number-demo-log usage-demo__log" role="status" aria-live="polite" data-number-output>
         Waiting for a committed number event.
       </p>
 
@@ -133,9 +133,9 @@ Numeric input field with ARIA spinbutton semantics, optional stepper controls, c
     </aside>
   </section>
 
-  <section class="number-demo-section" aria-labelledby="number-demo-matrix-title">
-    <div class="number-demo-section-header">
-      <span class="number-demo-kicker">Variants, bounds, and field states</span>
+  <section class="number-demo-section usage-demo__section" aria-labelledby="number-demo-matrix-title">
+    <div class="number-demo-section-header usage-demo__section-header">
+      <span class="number-demo-kicker usage-demo__kicker">Variants, bounds, and field states</span>
       <h4 id="number-demo-matrix-title">
         Use one number contract, then tune density, affordance, or validation through attributes.
       </h4>
