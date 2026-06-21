@@ -48,7 +48,7 @@ This document is the UIKit surface contract for Feed.
     </dl>
   </section>
 
-  <section class="feed-demo-board" aria-label="Interactive feed demo">
+  <section class="feed-demo-board usage-demo__workbench" aria-label="Interactive feed demo">
     <div class="feed-demo-toolbar" aria-label="Feed demo controls">
       <cv-button data-feed-action="newer" variant="primary">Load newer</cv-button>
       <cv-button data-feed-action="older">Load older</cv-button>
