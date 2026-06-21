@@ -7,10 +7,10 @@ Segmented short-code entry for PIN, OTP, pairing, and recovery codes.
 ## Usage
 
 ```html
-<div class="code-input-demo-shell" data-demo="code-input" data-live-demo-height="780">
-  <section class="code-input-demo-hero" aria-labelledby="code-input-demo-title">
-    <div class="code-input-demo-copy">
-      <span class="code-input-demo-kicker">Segmented secret entry</span>
+<div class="code-input-demo-shell usage-demo" data-demo="code-input" data-live-demo-height="780">
+  <section class="code-input-demo-hero usage-demo__hero" aria-labelledby="code-input-demo-title">
+    <div class="code-input-demo-copy usage-demo__copy">
+      <span class="code-input-demo-kicker usage-demo__kicker">Segmented secret entry</span>
       <h3 id="code-input-demo-title">Collect short codes without losing form semantics or paste behavior.</h3>
       <p>
         <code>cv-code-input</code> wraps the headless model for OTP, PIN, pairing, and recovery flows. The
@@ -18,7 +18,7 @@ Segmented short-code entry for PIN, OTP, pairing, and recovery codes.
       </p>
     </div>
 
-    <dl class="code-input-demo-metrics" aria-label="Code input contract highlights">
+    <dl class="code-input-demo-metrics usage-demo__metrics" aria-label="Code input contract highlights">
       <div>
         <dt>Paste</dt>
         <dd>distributed from the focused segment</dd>
@@ -34,9 +34,9 @@ Segmented short-code entry for PIN, OTP, pairing, and recovery codes.
     </dl>
   </section>
 
-  <form class="code-input-demo-workbench" aria-label="Pairing code verification" data-code-form>
-    <section class="code-input-demo-panel" aria-labelledby="code-input-panel-title">
-      <div class="code-input-demo-panel-head">
+  <form class="code-input-demo-workbench usage-demo__workbench" aria-label="Pairing code verification" data-code-form>
+    <section class="code-input-demo-panel usage-demo__panel" aria-labelledby="code-input-panel-title">
+      <div class="code-input-demo-panel-head usage-demo__panel-head">
         <div>
           <span>Vault pairing challenge</span>
           <h4 id="code-input-panel-title">Device token from trusted display</h4>
@@ -59,18 +59,18 @@ Segmented short-code entry for PIN, OTP, pairing, and recovery codes.
         <span slot="description">Type or paste a full token. Completion is reported through <code>cv-complete</code>.</span>
       </cv-field>
 
-      <div class="code-input-demo-actions" aria-label="Code input demo actions">
+      <div class="code-input-demo-actions usage-demo__actions" aria-label="Code input demo actions">
         <cv-button size="small" data-code-action="pairing">Fill pairing token</cv-button>
         <cv-button size="small" outline data-code-action="otp">Use OTP sample</cv-button>
         <cv-button size="small" variant="ghost" data-code-action="clear">Clear</cv-button>
       </div>
 
-      <p class="code-input-demo-log" role="status" aria-live="polite" data-code-output>
+      <p class="code-input-demo-log usage-demo__log" role="status" aria-live="polite" data-code-output>
         Waiting for input. Focus any segment, paste a code, or use a sample action.
       </p>
     </section>
 
-    <aside class="code-input-demo-side" aria-label="Code input usage states">
+    <aside class="code-input-demo-side usage-demo__side" aria-label="Code input usage states">
       <div class="code-input-demo-contract">
         <span>Model boundary</span>
         <strong>state.value() stays normalized</strong>
