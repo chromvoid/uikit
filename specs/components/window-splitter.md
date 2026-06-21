@@ -231,7 +231,7 @@ Both events are dispatched as `CustomEvent` with `bubbles: true` and `composed: 
       </h4>
     </div>
 
-    <div class="window-splitter-demo-toolbar" aria-label="Active splitter capabilities">
+    <div class="window-splitter-demo-toolbar usage-demo__toolbar" aria-label="Active splitter capabilities">
       <span>orientation="vertical"</span>
       <span>snap="25% 50% 75%"</span>
       <span>cv-input + cv-change</span>
@@ -306,7 +306,7 @@ Both events are dispatched as `CustomEvent` with `bubbles: true` and `composed: 
       </cv-window-splitter>
     </div>
 
-    <div class="window-splitter-demo-status">
+    <div class="window-splitter-demo-status usage-demo__compact-list">
       <div>
         <output
           class="window-splitter-demo-readout usage-demo__log"
@@ -334,7 +334,10 @@ Both events are dispatched as `CustomEvent` with `bubbles: true` and `composed: 
     </div>
   </section>
 
-  <section class="window-splitter-demo-secondary" aria-labelledby="window-splitter-demo-fixed-title">
+  <section
+    class="window-splitter-demo-secondary usage-demo__single-layout"
+    aria-labelledby="window-splitter-demo-fixed-title"
+  >
     <div class="window-splitter-demo-section-header usage-demo__section-header">
       <span class="window-splitter-demo-kicker usage-demo__kicker">Fixed toggle mode</span>
       <h4 id="window-splitter-demo-fixed-title">
