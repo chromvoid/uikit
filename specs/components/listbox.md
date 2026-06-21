@@ -171,10 +171,10 @@ in one operational surface. For option label composition, prefix/suffix slots,
 and rich option content, see [`cv-option`](./option.md).
 
 ```html
-<div class="listbox-demo-shell" data-demo="listbox" data-live-demo-height="860">
-  <section class="listbox-demo-hero" aria-labelledby="listbox-demo-title">
-    <div class="listbox-demo-copy">
-      <span class="listbox-demo-kicker">Collection selection primitive</span>
+<div class="listbox-demo-shell usage-demo" data-demo="listbox" data-live-demo-height="860">
+  <section class="listbox-demo-hero usage-demo__hero" aria-labelledby="listbox-demo-title">
+    <div class="listbox-demo-copy usage-demo__copy">
+      <span class="listbox-demo-kicker usage-demo__kicker">Collection selection primitive</span>
       <h3 id="listbox-demo-title">Choose one visible route, then compose the export fields.</h3>
       <p>
         <code>cv-listbox</code> adapts the headless model into DOM focus, ARIA state, grouped options, and
@@ -182,7 +182,7 @@ and rich option content, see [`cv-option`](./option.md).
       </p>
     </div>
 
-    <dl class="listbox-demo-metrics" aria-label="Listbox contract summary">
+    <dl class="listbox-demo-metrics usage-demo__metrics" aria-label="Listbox contract summary">
       <div>
         <dt>Default focus</dt>
         <dd><code>aria-activedescendant</code> on the listbox root</dd>
@@ -198,9 +198,9 @@ and rich option content, see [`cv-option`](./option.md).
     </dl>
   </section>
 
-  <section class="listbox-demo-workbench" aria-labelledby="listbox-demo-workbench-title">
-    <div class="listbox-demo-section-header">
-      <span class="listbox-demo-kicker">Interactive contract</span>
+  <section class="listbox-demo-workbench usage-demo__workbench" aria-labelledby="listbox-demo-workbench-title">
+    <div class="listbox-demo-section-header usage-demo__section-header">
+      <span class="listbox-demo-kicker usage-demo__kicker">Interactive contract</span>
       <h4 id="listbox-demo-workbench-title">
         Grouped single-select and multi-select examples share one event readout.
       </h4>
@@ -208,10 +208,10 @@ and rich option content, see [`cv-option`](./option.md).
 
     <div class="listbox-demo-layout">
       <article
-        class="listbox-demo-panel listbox-demo-panel--primary"
+        class="listbox-demo-panel listbox-demo-panel--primary usage-demo__panel"
         aria-labelledby="listbox-demo-route-title"
       >
-        <header class="listbox-demo-panel-header">
+        <header class="listbox-demo-panel-header usage-demo__panel-header">
           <div>
             <span class="listbox-demo-label">Single select with groups</span>
             <h5 id="listbox-demo-route-title">Visible profile route</h5>
@@ -259,8 +259,8 @@ and rich option content, see [`cv-option`](./option.md).
         </cv-listbox>
       </article>
 
-      <article class="listbox-demo-panel" aria-labelledby="listbox-demo-export-title">
-        <header class="listbox-demo-panel-header">
+      <article class="listbox-demo-panel usage-demo__panel" aria-labelledby="listbox-demo-export-title">
+        <header class="listbox-demo-panel-header usage-demo__panel-header">
           <div>
             <span class="listbox-demo-label">Multiple select with range</span>
             <h5 id="listbox-demo-export-title">Export field set</h5>
