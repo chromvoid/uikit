@@ -9,7 +9,11 @@ Numeric input field with ARIA spinbutton semantics, optional stepper controls, c
 ## Usage
 
 ```html
-<div class="number-demo-shell usage-demo" data-demo="number" data-live-demo-height="900">
+<div
+  class="number-demo-shell usage-demo usage-demo__dark-preview"
+  data-demo="number"
+  data-live-demo-height="900"
+>
   <section class="number-demo-hero usage-demo__hero" aria-labelledby="number-demo-title">
     <div class="number-demo-copy usage-demo__copy">
       <span class="number-demo-kicker usage-demo__kicker">Numeric spinbutton primitive</span>
@@ -68,7 +72,7 @@ Numeric input field with ARIA spinbutton semantics, optional stepper controls, c
             clearable
             stepper
           >
-            <span slot="suffix">GB</span>
+            <span class="usage-demo__adornment" slot="suffix">GB</span>
           </cv-number>
           <span slot="description">Arrow keys step by 5. Page keys step by 25. Clear returns to 30.</span>
         </cv-field>
@@ -85,7 +89,7 @@ Numeric input field with ARIA spinbutton semantics, optional stepper controls, c
             stepper
             clearable
           >
-            <span slot="prefix">#</span>
+            <span class="usage-demo__adornment" slot="prefix">#</span>
           </cv-number>
           <span slot="description"
             >Stepper controls expose the same committed change event as keyboard steps.</span
@@ -104,7 +108,7 @@ Numeric input field with ARIA spinbutton semantics, optional stepper controls, c
             step="1"
             clearable
           >
-            <span slot="suffix">tries</span>
+            <span class="usage-demo__adornment" slot="suffix">tries</span>
           </cv-number>
           <span slot="description">Filled variant keeps the same headless range and form contract.</span>
         </cv-field>
@@ -120,7 +124,7 @@ Numeric input field with ARIA spinbutton semantics, optional stepper controls, c
             step="5"
             large-step="30"
           >
-            <span slot="suffix">sec</span>
+            <span class="usage-demo__adornment" slot="suffix">sec</span>
           </cv-number>
           <span slot="description">Draft edits commit on Enter or blur, then snap through the model.</span>
         </cv-field>
@@ -188,11 +192,11 @@ Numeric input field with ARIA spinbutton semantics, optional stepper controls, c
       <div class="usage-demo__case">
         <span class="usage-demo__meta">Affixes</span>
         <cv-number class="usage-demo__text-control" value="19" clearable>
-          <span slot="prefix">$</span>
-          <span slot="suffix">.00</span>
+          <span class="usage-demo__adornment" slot="prefix">$</span>
+          <span class="usage-demo__adornment" slot="suffix">.00</span>
         </cv-number>
         <cv-number class="usage-demo__text-control" value="128" variant="filled" min="16" max="512">
-          <span slot="suffix">MB</span>
+          <span class="usage-demo__adornment" slot="suffix">MB</span>
         </cv-number>
       </div>
 
