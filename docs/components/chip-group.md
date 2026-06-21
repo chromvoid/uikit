@@ -50,11 +50,14 @@ selection state, keeps child `selected` states in sync, and adds roving keyboard
         <cv-chip value="notes">Notes</cv-chip>
         <cv-chip value="media" disabled>Media</cv-chip>
       </cv-chip-group>
-      <output class="chip-group-demo-output" aria-live="polite">Current value: all</output>
+      <output class="chip-group-demo-output usage-demo__log" aria-live="polite">Current value: all</output>
     </div>
   </section>
 
-  <section class="chip-group-demo-section usage-demo__section" aria-labelledby="chip-group-demo-multiple-title">
+  <section
+    class="chip-group-demo-section usage-demo__section"
+    aria-labelledby="chip-group-demo-multiple-title"
+  >
     <div class="chip-group-demo-section-header usage-demo__section-header">
       <span class="chip-group-demo-kicker usage-demo__kicker">Multiple selection</span>
       <h4 id="chip-group-demo-multiple-title">Selected chips serialize into the host value</h4>
@@ -67,11 +70,16 @@ selection state, keeps child `selected` states in sync, and adds roving keyboard
         <cv-chip value="shared">Shared</cv-chip>
         <cv-chip value="archived">Archived</cv-chip>
       </cv-chip-group>
-      <output class="chip-group-demo-output" aria-live="polite">Current value: local otp</output>
+      <output class="chip-group-demo-output usage-demo__log" aria-live="polite"
+        >Current value: local otp</output
+      >
     </div>
   </section>
 
-  <section class="chip-group-demo-section usage-demo__section" aria-labelledby="chip-group-demo-keyboard-title">
+  <section
+    class="chip-group-demo-section usage-demo__section"
+    aria-labelledby="chip-group-demo-keyboard-title"
+  >
     <div class="chip-group-demo-section-header usage-demo__section-header">
       <span class="chip-group-demo-kicker usage-demo__kicker">Keyboard flow</span>
       <h4 id="chip-group-demo-keyboard-title">Orientation controls the arrow-key direction</h4>
@@ -100,18 +108,20 @@ selection state, keeps child `selected` states in sync, and adds roving keyboard
 </div>
 
 <script>
-  document.querySelectorAll('.chip-group-demo-shell[data-demo="chip-group"]:not([data-ready])').forEach((shell) => {
-    shell.dataset.ready = 'true'
-    shell.querySelectorAll('cv-chip-group').forEach((group) => {
-      const panel = group.closest('.chip-group-demo-panel')
-      const output = panel?.querySelector('.chip-group-demo-output')
-      group.addEventListener('cv-change', (event) => {
-        if (!output) return
-        const value = Array.isArray(event.detail.value) ? event.detail.value.join(' ') : event.detail.value
-        output.textContent = `Current value: ${value || 'empty'}`
+  document
+    .querySelectorAll('.chip-group-demo-shell[data-demo="chip-group"]:not([data-ready])')
+    .forEach((shell) => {
+      shell.dataset.ready = 'true'
+      shell.querySelectorAll('cv-chip-group').forEach((group) => {
+        const panel = group.closest('.chip-group-demo-panel')
+        const output = panel?.querySelector('.chip-group-demo-output')
+        group.addEventListener('cv-change', (event) => {
+          if (!output) return
+          const value = Array.isArray(event.detail.value) ? event.detail.value.join(' ') : event.detail.value
+          output.textContent = `Current value: ${value || 'empty'}`
+        })
       })
     })
-  })
 </script>
 ```
 
@@ -143,9 +153,9 @@ Shadow structure:
 
 ## Slots
 
-| Slot        | Description               |
-| ----------- | ------------------------- |
-| `(default)` | Slotted `cv-chip` items   |
+| Slot        | Description             |
+| ----------- | ----------------------- |
+| `(default)` | Slotted `cv-chip` items |
 
 ## CSS Parts
 
@@ -173,8 +183,8 @@ chips without emitting events.
 
 ## Selection modes
 
-| Mode       | Behavior                                                                 |
-| ---------- | ------------------------------------------------------------------------ |
-| `none`     | Chips still emit their own `cv-chip-action`; the group does not select   |
-| `single`   | One selected value at a time; clicking the selected chip clears it       |
-| `multiple` | Adds or removes values; host `value` serializes them with spaces         |
+| Mode       | Behavior                                                               |
+| ---------- | ---------------------------------------------------------------------- |
+| `none`     | Chips still emit their own `cv-chip-action`; the group does not select |
+| `single`   | One selected value at a time; clicking the selected chip clears it     |
+| `multiple` | Adds or removes values; host `value` serializes them with spaces       |
