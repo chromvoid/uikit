@@ -96,7 +96,7 @@ None. The spinner is purely presentational and does not emit events.
     </dl>
   </section>
 
-  <section class="spinner-demo-board" aria-labelledby="spinner-demo-board-title">
+  <section class="spinner-demo-board usage-demo__workbench" aria-labelledby="spinner-demo-board-title">
     <div class="spinner-demo-stage" role="status" aria-live="polite">
       <div class="spinner-demo-stage-head">
         <div>

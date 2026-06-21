@@ -36,7 +36,7 @@ Indeterminate loading spinner with SVG track and indicator animation.
     </dl>
   </section>
 
-  <section class="spinner-demo-board" aria-labelledby="spinner-demo-board-title">
+  <section class="spinner-demo-board usage-demo__workbench" aria-labelledby="spinner-demo-board-title">
     <div class="spinner-demo-stage" role="status" aria-live="polite">
       <div class="spinner-demo-stage-head">
         <div>
