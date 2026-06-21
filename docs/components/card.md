@@ -9,10 +9,10 @@ Visual container that groups related content into a cohesive unit, with an optio
 ## Usage
 
 ```html
-<div class="card-demo-shell" data-demo="card">
-  <section class="card-demo-hero" aria-labelledby="card-demo-title">
-    <div class="card-demo-copy">
-      <span class="card-demo-kicker">Container primitive</span>
+<div class="card-demo-shell usage-demo" data-demo="card">
+  <section class="card-demo-hero usage-demo__hero" aria-labelledby="card-demo-title">
+    <div class="card-demo-copy usage-demo__copy">
+      <span class="card-demo-kicker usage-demo__kicker">Container primitive</span>
       <h3 id="card-demo-title">
         Use card to bind media, state, body copy, and actions into one scannable unit.
       </h3>
@@ -22,7 +22,7 @@ Visual container that groups related content into a cohesive unit, with an optio
       </p>
     </div>
 
-    <dl class="card-demo-metrics" aria-label="Card contract summary">
+    <dl class="card-demo-metrics usage-demo__metrics" aria-label="Card contract summary">
       <div>
         <dt>Variants</dt>
         <dd>elevated / outlined / filled</dd>
@@ -68,13 +68,13 @@ Visual container that groups related content into a cohesive unit, with an optio
         </div>
       </div>
 
-      <div slot="footer" class="card-demo-actions">
+      <div slot="footer" class="card-demo-actions usage-demo__actions">
         <cv-button variant="primary" size="small">Open review</cv-button>
         <cv-button variant="ghost" size="small" outline>Export proof</cv-button>
       </div>
     </cv-card>
 
-    <div class="card-demo-side" aria-label="Compact card variants">
+    <div class="card-demo-side usage-demo__side" aria-label="Compact card variants">
       <cv-card variant="outlined" class="card-demo-compact-card">
         <div slot="header" class="card-demo-card-head">
           <span>Relay boundary</span>
