@@ -162,7 +162,7 @@ Container that manages a queue of toast notifications with positioning, stacking
     </div>
 
     <aside class="toast-demo-side usage-demo__side" aria-label="Toast queue state">
-      <dl class="toast-demo-state" aria-label="Current toast state">
+      <dl class="toast-demo-state usage-demo__state" aria-label="Current toast state">
         <div>
           <dt>Visible</dt>
           <dd data-toast-visible>0</dd>
