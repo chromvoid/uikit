@@ -245,7 +245,7 @@ UIKit does not own value management, type resolution, clearable logic, or passwo
             clearable
             autocomplete="off"
           >
-            <span slot="prefix" aria-hidden="true">cv://</span>
+            <span class="usage-demo__adornment" slot="prefix" aria-hidden="true">cv://</span>
           </cv-input>
           <span slot="description">Clearable text input with a prefix slot and live value events.</span>
         </cv-field>
@@ -273,7 +273,7 @@ UIKit does not own value management, type resolution, clearable logic, or passwo
             value="decoy-key-4589"
             autocomplete="off"
           >
-            <span slot="prefix" aria-hidden="true">key</span>
+            <span class="usage-demo__adornment" slot="prefix" aria-hidden="true">key</span>
           </cv-input>
           <span slot="description">Password visibility is part of the input model, not local DOM state.</span>
         </cv-field>
@@ -342,11 +342,11 @@ UIKit does not own value management, type resolution, clearable logic, or passwo
       <div class="usage-demo__case">
         <span class="usage-demo__meta">Affixes</span>
         <cv-input class="usage-demo__text-control" value="chromvoid">
-          <span slot="prefix" aria-hidden="true">@</span>
-          <span slot="suffix">.app</span>
+          <span class="usage-demo__adornment" slot="prefix" aria-hidden="true">@</span>
+          <span class="usage-demo__adornment" slot="suffix">.app</span>
         </cv-input>
         <cv-input class="usage-demo__text-control" value="/vault/visible" clearable>
-          <span slot="prefix" aria-hidden="true">path</span>
+          <span class="usage-demo__adornment" slot="prefix" aria-hidden="true">path</span>
         </cv-input>
       </div>
 
