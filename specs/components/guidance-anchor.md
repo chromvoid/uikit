@@ -59,7 +59,10 @@ Both events bubble and are composed so an app-level guidance host can observe an
 
 ```html
 <div class="guidance-anchor-demo-shell usage-demo" data-demo="guidance-anchor" data-live-demo-height="640">
-  <section class="guidance-anchor-demo-brief" aria-labelledby="guidance-anchor-demo-title">
+  <section
+    class="guidance-anchor-demo-brief usage-demo__single-start"
+    aria-labelledby="guidance-anchor-demo-title"
+  >
     <div class="guidance-anchor-demo-copy usage-demo__copy">
       <span class="guidance-anchor-demo-kicker usage-demo__kicker">Anchor registration</span>
       <h3 id="guidance-anchor-demo-title">Connect guidance to the real product action.</h3>
@@ -71,15 +74,15 @@ Both events bubble and are composed so an app-level guidance host can observe an
 
     <dl class="guidance-anchor-demo-flow" aria-label="Guidance anchor contract">
       <div>
-        <dt>Action</dt>
+        <dt class="usage-demo__meta">Action</dt>
         <dd>Upload file</dd>
       </div>
       <div>
-        <dt>Anchor id</dt>
+        <dt class="usage-demo__meta">Anchor id</dt>
         <dd>files.create-or-upload</dd>
       </div>
       <div>
-        <dt>Host receives</dt>
+        <dt class="usage-demo__meta">Host receives</dt>
         <dd>register event</dd>
       </div>
     </dl>
@@ -93,9 +96,9 @@ Both events bubble and are composed so an app-level guidance host can observe an
 
   <template data-guidance-demo-template>
     <div class="guidance-anchor-demo-product">
-      <header class="guidance-anchor-demo-toolbar">
+      <header class="guidance-anchor-demo-toolbar usage-demo__split-row">
         <div class="guidance-anchor-demo-title">
-          <span>Files</span>
+          <span class="usage-demo__meta usage-demo__label">Files</span>
           <strong>Secure vault</strong>
         </div>
 
@@ -109,19 +112,19 @@ Both events bubble and are composed so an app-level guidance host can observe an
         </div>
       </header>
 
-      <div class="guidance-anchor-demo-content">
-        <div class="guidance-anchor-demo-list" aria-label="File list preview">
+      <div class="guidance-anchor-demo-content usage-demo__single-start">
+        <div class="guidance-anchor-demo-list usage-demo__inline-card-list" aria-label="File list preview">
           <div>
             <span class="guidance-anchor-demo-file">Recovery-codes.txt</span>
-            <span class="guidance-anchor-demo-meta">encrypted</span>
+            <span class="guidance-anchor-demo-meta usage-demo__meta usage-demo__label">encrypted</span>
           </div>
           <div>
             <span class="guidance-anchor-demo-file">Border-notes.md</span>
-            <span class="guidance-anchor-demo-meta">local vault</span>
+            <span class="guidance-anchor-demo-meta usage-demo__meta usage-demo__label">local vault</span>
           </div>
           <div>
             <span class="guidance-anchor-demo-file">Client-archive.zip</span>
-            <span class="guidance-anchor-demo-meta">sealed</span>
+            <span class="guidance-anchor-demo-meta usage-demo__meta usage-demo__label">sealed</span>
           </div>
         </div>
 
@@ -144,7 +147,12 @@ Both events bubble and are composed so an app-level guidance host can observe an
       <span class="guidance-anchor-demo-kicker usage-demo__kicker">Observed event</span>
       <h4 id="guidance-anchor-demo-event-title">What the app guidance host receives</h4>
     </div>
-    <output data-guidance-demo-log aria-live="polite">Waiting for anchor registration...</output>
+    <output
+      class="usage-demo__readout usage-demo__readout--truncate"
+      data-guidance-demo-log
+      aria-live="polite"
+      >Waiting for anchor registration...</output
+    >
     <cv-button size="small" data-guidance-demo-remount>Remount anchor</cv-button>
   </section>
 </div>
