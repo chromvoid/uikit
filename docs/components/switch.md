@@ -46,32 +46,32 @@ Toggle control that represents an on/off state, visually distinct from a checkbo
 
     <div class="switch-demo-state-grid">
       <div class="switch-demo-cell">
-        <span class="switch-demo-label">Off</span>
+        <span class="switch-demo-label usage-demo__meta usage-demo__label">Off</span>
         <cv-switch>Mask previews</cv-switch>
       </div>
 
       <div class="switch-demo-cell">
-        <span class="switch-demo-label">On</span>
+        <span class="switch-demo-label usage-demo__meta usage-demo__label">On</span>
         <cv-switch checked>Relay pairing</cv-switch>
       </div>
 
       <div class="switch-demo-cell">
-        <span class="switch-demo-label">Disabled off</span>
+        <span class="switch-demo-label usage-demo__meta usage-demo__label">Disabled off</span>
         <cv-switch disabled>Remote unlock</cv-switch>
       </div>
 
       <div class="switch-demo-cell">
-        <span class="switch-demo-label">Disabled on</span>
+        <span class="switch-demo-label usage-demo__meta usage-demo__label">Disabled on</span>
         <cv-switch checked disabled>Policy enforced</cv-switch>
       </div>
 
       <div class="switch-demo-cell">
-        <span class="switch-demo-label">Loading off</span>
+        <span class="switch-demo-label usage-demo__meta usage-demo__label">Loading off</span>
         <cv-switch loading>Saving visibility</cv-switch>
       </div>
 
       <div class="switch-demo-cell">
-        <span class="switch-demo-label">Loading on</span>
+        <span class="switch-demo-label usage-demo__meta usage-demo__label">Loading on</span>
         <cv-switch checked loading>Sync in progress</cv-switch>
       </div>
     </div>
@@ -85,17 +85,17 @@ Toggle control that represents an on/off state, visually distinct from a checkbo
 
     <div class="switch-demo-size-grid">
       <div class="switch-demo-cell">
-        <span class="switch-demo-label">Small</span>
+        <span class="switch-demo-label usage-demo__meta usage-demo__label">Small</span>
         <cv-switch size="small" checked>Compact row</cv-switch>
       </div>
 
       <div class="switch-demo-cell">
-        <span class="switch-demo-label">Medium</span>
+        <span class="switch-demo-label usage-demo__meta usage-demo__label">Medium</span>
         <cv-switch checked>Default row</cv-switch>
       </div>
 
       <div class="switch-demo-cell">
-        <span class="switch-demo-label">Large</span>
+        <span class="switch-demo-label usage-demo__meta usage-demo__label">Large</span>
         <cv-switch size="large" checked>Primary setting</cv-switch>
       </div>
     </div>
@@ -120,14 +120,14 @@ Toggle control that represents an on/off state, visually distinct from a checkbo
       <div class="switch-demo-panel usage-demo__panel">
         <cv-switch checked size="large">
           Sound
-          <span class="switch-demo-track-text" slot="toggled">ON</span>
-          <span class="switch-demo-track-text" slot="untoggled">OFF</span>
+          <span class="switch-demo-track-text usage-demo__meta usage-demo__label" slot="toggled">ON</span>
+          <span class="switch-demo-track-text usage-demo__meta usage-demo__label" slot="untoggled">OFF</span>
         </cv-switch>
 
         <cv-switch size="large">
           Visibility
-          <span class="switch-demo-track-text" slot="toggled">YES</span>
-          <span class="switch-demo-track-text" slot="untoggled">NO</span>
+          <span class="switch-demo-track-text usage-demo__meta usage-demo__label" slot="toggled">YES</span>
+          <span class="switch-demo-track-text usage-demo__meta usage-demo__label" slot="untoggled">NO</span>
         </cv-switch>
       </div>
     </div>
