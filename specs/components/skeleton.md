@@ -50,10 +50,10 @@ None. The component is presentational.
 ## Usage
 
 ```html
-<div class="skeleton-demo-shell" data-demo="skeleton" data-live-demo-height="620">
-  <section class="skeleton-demo-hero" aria-labelledby="skeleton-demo-title">
-    <div class="skeleton-demo-copy">
-      <span class="skeleton-demo-kicker">Loading contract</span>
+<div class="skeleton-demo-shell usage-demo" data-demo="skeleton" data-live-demo-height="620">
+  <section class="skeleton-demo-hero usage-demo__hero" aria-labelledby="skeleton-demo-title">
+    <div class="skeleton-demo-copy usage-demo__copy">
+      <span class="skeleton-demo-kicker usage-demo__kicker">Loading contract</span>
       <h3 id="skeleton-demo-title">Reserve the final interface shape before data arrives.</h3>
       <p>
         Use <code>cv-skeleton</code> when the layout is known but encrypted records, thumbnails, or remote
@@ -62,7 +62,7 @@ None. The component is presentational.
       </p>
     </div>
 
-    <dl class="skeleton-demo-metrics" aria-label="Skeleton contract summary">
+    <dl class="skeleton-demo-metrics usage-demo__metrics" aria-label="Skeleton contract summary">
       <div>
         <dt>Variants</dt>
         <dd>block / text / circle</dd>
@@ -79,8 +79,8 @@ None. The component is presentational.
   </section>
 
   <section class="skeleton-demo-board" aria-labelledby="skeleton-demo-board-title">
-    <div class="skeleton-demo-section-header">
-      <span class="skeleton-demo-kicker">Vault list placeholder</span>
+    <div class="skeleton-demo-section-header usage-demo__section-header">
+      <span class="skeleton-demo-kicker usage-demo__kicker">Vault list placeholder</span>
       <h4 id="skeleton-demo-board-title">Match the loading surface to the content that will replace it.</h4>
     </div>
 
