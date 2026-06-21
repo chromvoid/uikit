@@ -318,7 +318,10 @@ These behaviors are optional and currently not required on `cv-combobox`:
     </dl>
   </section>
 
-  <section class="combobox-demo-board" aria-label="Combobox examples in a vault routing form">
+  <section
+    class="combobox-demo-board usage-demo__workbench"
+    aria-label="Combobox examples in a vault routing form"
+  >
     <form class="combobox-demo-panel usage-demo__panel" data-combobox-form>
       <div class="combobox-demo-panel-head usage-demo__panel-head">
         <div>
@@ -409,7 +412,7 @@ These behaviors are optional and currently not required on `cv-combobox`:
         Waiting for interaction. Type, pick an option, toggle a tag, or clear a value.
       </p>
 
-      <dl class="combobox-demo-live" aria-label="Live combobox state">
+      <dl class="combobox-demo-live usage-demo__state" aria-label="Live combobox state">
         <div>
           <dt>Selection</dt>
           <dd data-combobox-selected>relay</dd>
