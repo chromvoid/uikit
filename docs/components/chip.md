@@ -22,19 +22,19 @@ Use `cv-chip` when the visible token does something: activates a filter editor, 
     </div>
 
     <div class="chip-demo-rack" aria-label="Chip behavior examples">
-      <div class="chip-demo-cell chip-demo-cell--good">
-        <span class="chip-demo-label">Applied filter</span>
+      <div class="chip-demo-cell chip-demo-cell--good usage-demo__body-copy usage-demo__soft-card">
+        <span class="chip-demo-label usage-demo__meta usage-demo__label">Applied filter</span>
         <cv-chip value="local" selected removable>
-          <span slot="prefix">#</span>
+          <span class="usage-demo__adornment" slot="prefix">#</span>
           Local vault
         </cv-chip>
         <p>Selected token with a remove affordance.</p>
       </div>
 
-      <div class="chip-demo-cell">
-        <span class="chip-demo-label">Quick action</span>
+      <div class="chip-demo-cell usage-demo__body-copy usage-demo__soft-card">
+        <span class="chip-demo-label usage-demo__meta usage-demo__label">Quick action</span>
         <cv-chip value="filter-rule">
-          <span slot="prefix">+</span>
+          <span class="usage-demo__adornment" slot="prefix">+</span>
           Add rule
         </cv-chip>
         <p>Clickable token that can open a focused editor.</p>
@@ -49,33 +49,33 @@ Use `cv-chip` when the visible token does something: activates a filter editor, 
     </div>
 
     <div class="chip-demo-state-grid">
-      <div class="chip-demo-cell">
-        <span class="chip-demo-label">Action</span>
+      <div class="chip-demo-cell usage-demo__body-copy usage-demo__soft-card">
+        <span class="chip-demo-label usage-demo__meta usage-demo__label">Action</span>
         <cv-chip value="edit-filter">Open filter</cv-chip>
       </div>
 
-      <div class="chip-demo-cell">
-        <span class="chip-demo-label">Selected</span>
+      <div class="chip-demo-cell usage-demo__body-copy usage-demo__soft-card">
+        <span class="chip-demo-label usage-demo__meta usage-demo__label">Selected</span>
         <cv-chip value="work" selected>Work</cv-chip>
       </div>
 
-      <div class="chip-demo-cell">
-        <span class="chip-demo-label">Removable</span>
+      <div class="chip-demo-cell usage-demo__body-copy usage-demo__soft-card">
+        <span class="chip-demo-label usage-demo__meta usage-demo__label">Removable</span>
         <cv-chip value="otp" removable>OTP seeds</cv-chip>
       </div>
 
-      <div class="chip-demo-cell">
-        <span class="chip-demo-label">Disabled</span>
+      <div class="chip-demo-cell usage-demo__body-copy usage-demo__soft-card">
+        <span class="chip-demo-label usage-demo__meta usage-demo__label">Disabled</span>
         <cv-chip value="remote" disabled>Remote sync</cv-chip>
       </div>
 
-      <div class="chip-demo-cell">
-        <span class="chip-demo-label">Small</span>
+      <div class="chip-demo-cell usage-demo__body-copy usage-demo__soft-card">
+        <span class="chip-demo-label usage-demo__meta usage-demo__label">Small</span>
         <cv-chip value="small" size="small">Compact</cv-chip>
       </div>
 
-      <div class="chip-demo-cell">
-        <span class="chip-demo-label">Large pill</span>
+      <div class="chip-demo-cell usage-demo__body-copy usage-demo__soft-card">
+        <span class="chip-demo-label usage-demo__meta usage-demo__label">Large pill</span>
         <cv-chip value="large" size="large" pill selected>Threat model</cv-chip>
       </div>
     </div>
