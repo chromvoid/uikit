@@ -170,7 +170,7 @@ Inline navigational element that directs the user to another page or resource.
     </div>
   </section>
 
-  <section class="link-demo-states" aria-labelledby="link-demo-states-title">
+  <section class="link-demo-states usage-demo__single-layout" aria-labelledby="link-demo-states-title">
     <div class="link-demo-section-header usage-demo__section-header">
       <span class="link-demo-kicker usage-demo__kicker">Slots and tone</span>
       <h4 id="link-demo-states-title">Prefix, suffix, quiet, and event feedback in one compact surface</h4>
