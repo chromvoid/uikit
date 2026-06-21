@@ -62,10 +62,10 @@ None. The component is display-only.
 ## Usage
 
 ```html
-<div class="status-indicator-demo-shell" data-demo="status-indicator" data-live-demo-height="700">
-  <section class="status-indicator-demo-hero" aria-labelledby="status-indicator-demo-title">
-    <div class="status-indicator-demo-copy">
-      <span class="status-indicator-demo-kicker">Inline state signal</span>
+<div class="status-indicator-demo-shell usage-demo" data-demo="status-indicator" data-live-demo-height="700">
+  <section class="status-indicator-demo-hero usage-demo__hero" aria-labelledby="status-indicator-demo-title">
+    <div class="status-indicator-demo-copy usage-demo__copy">
+      <span class="status-indicator-demo-kicker usage-demo__kicker">Inline state signal</span>
       <h3 id="status-indicator-demo-title">Mark live connection, vault, and policy state without adding a control.</h3>
       <p>
         Use <code>cv-status-indicator</code> when the surrounding row already owns the action. The indicator
@@ -73,7 +73,7 @@ None. The component is display-only.
       </p>
     </div>
 
-    <dl class="status-indicator-demo-metrics" aria-label="Status indicator contract summary">
+    <dl class="status-indicator-demo-metrics usage-demo__metrics" aria-label="Status indicator contract summary">
       <div>
         <dt>Semantics</dt>
         <dd>role="status"</dd>
@@ -90,10 +90,10 @@ None. The component is display-only.
   </section>
 
   <section class="status-indicator-demo-board" aria-label="Status indicator workflow examples">
-    <div class="status-indicator-demo-panel">
-      <header class="status-indicator-demo-panel-head">
+    <div class="status-indicator-demo-panel usage-demo__panel">
+      <header class="status-indicator-demo-panel-head usage-demo__panel-head">
         <div>
-          <span class="status-indicator-demo-kicker">Session rail</span>
+          <span class="status-indicator-demo-kicker usage-demo__kicker">Session rail</span>
           <h4>Visible route state</h4>
         </div>
         <cv-status-indicator tone="success" pulse>
@@ -153,9 +153,9 @@ None. The component is display-only.
       </div>
     </div>
 
-    <aside class="status-indicator-demo-side" aria-labelledby="status-indicator-demo-decorative-title">
-      <div class="status-indicator-demo-section-header">
-        <span class="status-indicator-demo-kicker">Marker-only</span>
+    <aside class="status-indicator-demo-side usage-demo__side" aria-labelledby="status-indicator-demo-decorative-title">
+      <div class="status-indicator-demo-section-header usage-demo__section-header">
+        <span class="status-indicator-demo-kicker usage-demo__kicker">Marker-only</span>
         <h4 id="status-indicator-demo-decorative-title">Use decorative dots when adjacent text carries the label.</h4>
       </div>
 
@@ -181,8 +181,8 @@ None. The component is display-only.
   </section>
 
   <section class="status-indicator-demo-tones" aria-labelledby="status-indicator-demo-tones-title">
-    <div class="status-indicator-demo-section-header">
-      <span class="status-indicator-demo-kicker">Tone and size matrix</span>
+    <div class="status-indicator-demo-section-header usage-demo__section-header">
+      <span class="status-indicator-demo-kicker usage-demo__kicker">Tone and size matrix</span>
       <h4 id="status-indicator-demo-tones-title">Keep color semantic; use size for density, not importance.</h4>
     </div>
 
