@@ -111,53 +111,254 @@ Events fire only on user-initiated state changes (click, keyboard). Programmatic
 Use `cv-disclosure` for one local reveal: advanced settings, optional help, or a single FAQ answer. Prefer native `<details>/<summary>` for static content that does not need ChromVoid styling, events, or headless state. Use `cv-accordion` instead when the UI is a coordinated set of sections with controlled value(s), roving focus, heading levels, or "at least one open" rules.
 
 ```html
-<!-- Single optional reveal -->
-<cv-disclosure>
-  <span slot="trigger">Why is this field optional?</span>
-  The value is only needed when this record must match an external system.
-</cv-disclosure>
+<div class="disclosure-demo-shell usage-demo" data-demo="disclosure" data-live-demo-height="960">
+  <section class="disclosure-demo-hero usage-demo__hero" aria-labelledby="disclosure-demo-title">
+    <div class="disclosure-demo-copy usage-demo__copy">
+      <span class="disclosure-demo-kicker usage-demo__kicker">Single reveal primitive</span>
+      <h3 id="disclosure-demo-title">Reveal one local piece of context without creating an accordion.</h3>
+      <p>
+        Use <code>cv-disclosure</code> when a route needs ChromVoid styling, headless state, events, or
+        lightweight name-based exclusivity. Keep true composite section navigation in
+        <code>cv-accordion</code>.
+      </p>
+    </div>
 
-<!-- Initially open advanced settings -->
-<cv-disclosure open>
-  <span slot="trigger">Advanced SSH options</span>
-  <p>Override the default key comment and rotation reminder.</p>
-</cv-disclosure>
+    <dl class="disclosure-demo-metrics usage-demo__metrics" aria-label="Disclosure contract summary">
+      <div>
+        <dt>State</dt>
+        <dd><code>open</code> reflects headless state</dd>
+      </div>
+      <div>
+        <dt>Keyboard</dt>
+        <dd>Enter, Space, ArrowLeft/Right/Up/Down</dd>
+      </div>
+      <div>
+        <dt>Grouping</dt>
+        <dd><code>name</code> closes matching peers only</dd>
+      </div>
+    </dl>
+  </section>
 
-<!-- Disabled -->
-<cv-disclosure disabled>
-  <span slot="trigger">Locked section</span>
-  Cannot be toggled.
-</cv-disclosure>
+  <section
+    class="disclosure-demo-workbench usage-demo__workbench"
+    aria-labelledby="disclosure-demo-workbench-title"
+  >
+    <div class="disclosure-demo-panel usage-demo__panel usage-demo__panel--primary">
+      <div class="disclosure-demo-section-header usage-demo__section-header">
+        <span class="disclosure-demo-kicker usage-demo__kicker">Vault note</span>
+        <h4 id="disclosure-demo-workbench-title">
+          A single disclosure keeps optional operational context near the control that needs it.
+        </h4>
+      </div>
 
-<!-- Lightweight exclusive disclosure group.
-     Opening one named disclosure closes matching peers.
-     This is not a full accordion: no roving focus, no value/expandedValues
-     contract, and no allow-zero-expanded invariant. -->
-<cv-disclosure name="security-notes">
-  <span slot="trigger">Recovery phrase notes</span>
-  <p>Explain where the phrase is stored and who can access it.</p>
-</cv-disclosure>
+      <div class="disclosure-demo-stack usage-demo__stack">
+        <cv-disclosure data-disclosure-primary open>
+          <span class="disclosure-demo-trigger usage-demo__trigger" slot="trigger">
+            <span>Visible profile note</span>
+            <small>one local reveal, no roving focus</small>
+          </span>
+          <div class="disclosure-demo-panel-copy usage-demo__prose">
+            <p>
+              The visible profile can explain what an operator is allowed to inspect without mounting hidden
+              namespaces or turning this note into a composite section group.
+            </p>
+            <ul class="usage-demo__detail-list">
+              <li>Rendered state: reflected through <code>open</code></li>
+              <li>Events: user interaction fires <code>cv-input</code> and <code>cv-change</code></li>
+              <li>Programmatic methods: <code>show()</code> and <code>hide()</code> stay silent</li>
+            </ul>
+          </div>
+        </cv-disclosure>
 
-<cv-disclosure name="security-notes">
-  <span slot="trigger">Hardware token notes</span>
-  <p>Describe the fallback token and enrollment date.</p>
-</cv-disclosure>
+        <div class="disclosure-demo-group" aria-label="Named disclosure group">
+          <div class="disclosure-demo-group-header usage-demo__prose">
+            <span class="disclosure-demo-kicker usage-demo__kicker">Named peers</span>
+            <p>
+              Opening one matching <code>name</code> closes the others, but this is still not a full
+              accordion.
+            </p>
+          </div>
 
-<cv-disclosure name="security-notes">
-  <span slot="trigger">Audit notes</span>
-  <p>Keep the visible trail short and specific.</p>
-</cv-disclosure>
+          <cv-disclosure data-disclosure-group-item name="security-notes" open>
+            <span class="disclosure-demo-trigger usage-demo__trigger" slot="trigger">
+              <span>Recovery phrase notes</span>
+              <small>shared name: security-notes</small>
+            </span>
+            <p>Explain where the visible phrase note is stored and who can inspect it.</p>
+          </cv-disclosure>
 
-<!-- Custom animation timing via a class or component stylesheet -->
-<style>
-  .slow-disclosure {
-    --cv-disclosure-duration: 300ms;
-    --cv-disclosure-easing: cubic-bezier(0.4, 0, 0.2, 1);
-  }
-</style>
+          <cv-disclosure data-disclosure-group-item name="security-notes">
+            <span class="disclosure-demo-trigger usage-demo__trigger" slot="trigger">
+              <span>Hardware token notes</span>
+              <small>shared name: security-notes</small>
+            </span>
+            <p>Describe fallback token enrollment without exposing hidden route material.</p>
+          </cv-disclosure>
 
-<cv-disclosure class="slow-disclosure">
-  <span slot="trigger">Slow reveal</span>
-  Content with custom animation.
-</cv-disclosure>
+          <cv-disclosure data-disclosure-group-item name="security-notes">
+            <span class="disclosure-demo-trigger usage-demo__trigger" slot="trigger">
+              <span>Audit notes</span>
+              <small>shared name: security-notes</small>
+            </span>
+            <p>Keep the visible trail short, specific, and scoped to the current profile.</p>
+          </cv-disclosure>
+        </div>
+      </div>
+    </div>
+
+    <aside class="disclosure-demo-side usage-demo__side" aria-label="Disclosure state inspector">
+      <div class="disclosure-demo-side-head usage-demo__side-head">
+        <span class="disclosure-demo-kicker usage-demo__kicker">State inspector</span>
+        <h4>Interact with the disclosures and watch the adapter boundary stay narrow.</h4>
+      </div>
+
+      <dl class="disclosure-demo-state usage-demo__state" aria-label="Current disclosure state">
+        <div>
+          <dt>primary open</dt>
+          <dd data-disclosure-open>true</dd>
+        </div>
+        <div>
+          <dt>group open</dt>
+          <dd data-disclosure-group>Recovery phrase notes</dd>
+        </div>
+        <div>
+          <dt>event</dt>
+          <dd data-disclosure-event>initial</dd>
+        </div>
+        <div>
+          <dt>source</dt>
+          <dd data-disclosure-source>render</dd>
+        </div>
+      </dl>
+
+      <div class="disclosure-demo-actions usage-demo__actions" aria-label="Disclosure demo actions">
+        <cv-button data-disclosure-action="show" variant="primary">show()</cv-button>
+        <cv-button data-disclosure-action="hide">hide()</cv-button>
+      </div>
+
+      <p class="disclosure-demo-log usage-demo__log" role="status" aria-live="polite" data-disclosure-log>
+        Waiting for disclosure interaction.
+      </p>
+    </aside>
+  </section>
+
+  <section class="disclosure-demo-section usage-demo__section" aria-labelledby="disclosure-demo-states-title">
+    <div class="disclosure-demo-section-header usage-demo__section-header">
+      <span class="disclosure-demo-kicker usage-demo__kicker">Boundaries and states</span>
+      <h4 id="disclosure-demo-states-title">
+        Closed, open, disabled, and native static content all have different contracts.
+      </h4>
+    </div>
+
+    <div class="disclosure-demo-matrix usage-demo__matrix" aria-label="Disclosure state examples">
+      <div class="disclosure-demo-mode usage-demo__mode">
+        <span class="disclosure-demo-mode-label usage-demo__label">closed</span>
+        <cv-disclosure>
+          <span slot="trigger">Why is this field optional?</span>
+          <p>The value is only needed when this record must match an external system.</p>
+        </cv-disclosure>
+      </div>
+
+      <div class="disclosure-demo-mode usage-demo__mode">
+        <span class="disclosure-demo-mode-label usage-demo__label">open + slower motion</span>
+        <cv-disclosure class="disclosure-demo-slow" open>
+          <span slot="trigger">Advanced SSH options</span>
+          <p>Override the default key comment and rotation reminder.</p>
+        </cv-disclosure>
+      </div>
+
+      <div class="disclosure-demo-mode usage-demo__mode">
+        <span class="disclosure-demo-mode-label usage-demo__label">disabled</span>
+        <cv-disclosure disabled>
+          <span slot="trigger">Locked by policy</span>
+          <p>This section cannot be toggled while the route is sealed.</p>
+        </cv-disclosure>
+      </div>
+
+      <div class="disclosure-demo-mode disclosure-demo-mode--native usage-demo__mode">
+        <span class="disclosure-demo-mode-label usage-demo__label">static native fallback</span>
+        <details class="disclosure-demo-native">
+          <summary>Static support note</summary>
+          <p>
+            Use native <code>details</code>/<code>summary</code> when no UIKit styling or events are needed.
+          </p>
+        </details>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script type="module">
+  document
+    .querySelectorAll('.disclosure-demo-shell[data-demo="disclosure"]:not([data-ready])')
+    .forEach((shell) => {
+      shell.dataset.ready = 'true'
+
+      const primary = shell.querySelector('[data-disclosure-primary]')
+      const groupItems = [...shell.querySelectorAll('[data-disclosure-group-item]')]
+      const open = shell.querySelector('[data-disclosure-open]')
+      const group = shell.querySelector('[data-disclosure-group]')
+      const eventName = shell.querySelector('[data-disclosure-event]')
+      const source = shell.querySelector('[data-disclosure-source]')
+      const log = shell.querySelector('[data-disclosure-log]')
+
+      const setText = (target, value) => {
+        if (target) target.textContent = value
+      }
+
+      const getLabel = (item) => item?.querySelector('[slot="trigger"] span')?.textContent?.trim() || 'none'
+
+      const getOpenGroupLabel = () => {
+        const activeItem = groupItems.find((item) => item.open)
+        return getLabel(activeItem)
+      }
+
+      const updateInspector = (nextEvent, nextSource) => {
+        const isOpen = Boolean(primary?.open)
+        const groupLabel = getOpenGroupLabel()
+
+        setText(open, isOpen ? 'true' : 'false')
+        setText(group, groupLabel)
+        setText(eventName, nextEvent)
+        setText(source, nextSource)
+        setText(log, `${nextEvent}: primary=${isOpen ? 'open' : 'closed'}, group=${groupLabel}`)
+      }
+
+      const scheduleInspectorUpdate = (nextEvent, nextSource) => {
+        window.requestAnimationFrame(() => {
+          window.requestAnimationFrame(() => {
+            updateInspector(nextEvent, nextSource)
+          })
+        })
+      }
+
+      primary?.addEventListener('cv-input', () => {
+        scheduleInspectorUpdate('cv-input', 'user')
+      })
+
+      primary?.addEventListener('cv-change', () => {
+        scheduleInspectorUpdate('cv-change', 'user')
+      })
+
+      groupItems.forEach((item) => {
+        item.addEventListener('cv-change', () => {
+          scheduleInspectorUpdate('cv-change', `name=${item.name || 'none'}`)
+        })
+      })
+
+      shell.querySelector('[data-disclosure-action="show"]')?.addEventListener('click', async () => {
+        primary?.show()
+        await primary?.updateComplete
+        updateInspector('show()', 'imperative')
+      })
+
+      shell.querySelector('[data-disclosure-action="hide"]')?.addEventListener('click', async () => {
+        primary?.hide()
+        await primary?.updateComplete
+        updateInspector('hide()', 'imperative')
+      })
+
+      updateInspector('initial', 'render')
+    })
+</script>
 ```
