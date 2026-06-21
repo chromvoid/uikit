@@ -49,7 +49,7 @@ Container of interactive elements that provides a single tab stop and arrow-key 
     </div>
 
     <div class="toolbar-demo-surface">
-      <header class="toolbar-demo-surface-header">
+      <header class="toolbar-demo-surface-header usage-demo__surface-header">
         <div>
           <span class="toolbar-demo-label">Vault record</span>
           <strong>Border checkpoint profile</strong>
@@ -147,7 +147,7 @@ Container of interactive elements that provides a single tab stop and arrow-key 
       </cv-toolbar>
     </div>
 
-    <div class="toolbar-demo-boundary">
+    <div class="toolbar-demo-boundary usage-demo__body-copy usage-demo__surface usage-demo__flow">
       <span class="toolbar-demo-kicker usage-demo__kicker">Boundary</span>
       <h4>Toolbar is not a button group.</h4>
       <div class="toolbar-demo-boundary-grid">
