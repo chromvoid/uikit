@@ -21,11 +21,16 @@ Fullscreen image viewer shell for modal image inspection, gallery navigation, ac
           <cv-icon slot="prefix" name="maximize" size="s"></cv-icon>
           Open viewer
         </cv-button>
-        <output data-image-viewer-output aria-live="polite">Ready</output>
+        <output
+          class="usage-demo__readout usage-demo__readout--cyan usage-demo__readout--truncate"
+          data-image-viewer-output
+          aria-live="polite"
+          >Ready</output
+        >
       </div>
     </div>
 
-    <div class="image-viewer-demo-gallery" aria-label="Generated gallery images">
+    <div class="image-viewer-demo-gallery usage-demo__grid" aria-label="Generated gallery images">
       <button type="button" class="image-viewer-demo-shot" data-image-viewer-index="0">
         <img data-image-viewer-thumb="chromvoid-mobile-vault-thumb.png" alt="" width="320" height="180" />
         <span>Mobile vault workspace</span>
