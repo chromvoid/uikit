@@ -7,10 +7,10 @@ Action grouping for related buttons.
 ## Usage
 
 ```html
-<div class="button-group-demo-shell" data-demo="button-group">
-  <section class="button-group-demo-hero" aria-labelledby="button-group-demo-title">
-    <div class="button-group-demo-copy">
-      <span class="button-group-demo-kicker">Grouped actions</span>
+<div class="button-group-demo-shell usage-demo" data-demo="button-group">
+  <section class="button-group-demo-hero usage-demo__hero" aria-labelledby="button-group-demo-title">
+    <div class="button-group-demo-copy usage-demo__copy">
+      <span class="button-group-demo-kicker usage-demo__kicker">Grouped actions</span>
       <h3 id="button-group-demo-title">
         Use button group when separate actions should read as one command unit.
       </h3>
@@ -20,7 +20,7 @@ Action grouping for related buttons.
       </p>
     </div>
 
-    <dl class="button-group-demo-metrics" aria-label="Button group contract summary">
+    <dl class="button-group-demo-metrics usage-demo__metrics" aria-label="Button group contract summary">
       <div>
         <dt>Semantics</dt>
         <dd>role="group"</dd>
@@ -36,9 +36,9 @@ Action grouping for related buttons.
     </dl>
   </section>
 
-  <section class="button-group-demo-workbench" aria-labelledby="button-group-demo-workbench-title">
-    <div class="button-group-demo-section-header">
-      <span class="button-group-demo-kicker">Vault action footer</span>
+  <section class="button-group-demo-workbench usage-demo__workbench" aria-labelledby="button-group-demo-workbench-title">
+    <div class="button-group-demo-section-header usage-demo__section-header">
+      <span class="button-group-demo-kicker usage-demo__kicker">Vault action footer</span>
       <h4 id="button-group-demo-workbench-title">
         Attach related actions when the visual unit is stronger than three separate buttons.
       </h4>
@@ -80,8 +80,8 @@ Action grouping for related buttons.
   </section>
 
   <section class="button-group-demo-modes" aria-labelledby="button-group-demo-modes-title">
-    <div class="button-group-demo-section-header">
-      <span class="button-group-demo-kicker">Layouts and emphasis</span>
+    <div class="button-group-demo-section-header usage-demo__section-header">
+      <span class="button-group-demo-kicker usage-demo__kicker">Layouts and emphasis</span>
       <h4 id="button-group-demo-modes-title">
         Switch orientation and attachment to match the workflow density.
       </h4>
