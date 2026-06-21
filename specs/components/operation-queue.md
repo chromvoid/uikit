@@ -94,10 +94,10 @@ None.
 ## Usage
 
 ```html
-<div class="operation-queue-demo-shell" data-demo="operation-queue" data-live-demo-height="820">
-  <section class="operation-queue-demo-hero" aria-labelledby="operation-queue-demo-title">
-    <div class="operation-queue-demo-copy">
-      <span class="operation-queue-demo-kicker">Batch operation surface</span>
+<div class="operation-queue-demo-shell usage-demo" data-demo="operation-queue" data-live-demo-height="820">
+  <section class="operation-queue-demo-hero usage-demo__hero" aria-labelledby="operation-queue-demo-title">
+    <div class="operation-queue-demo-copy usage-demo__copy">
+      <span class="operation-queue-demo-kicker usage-demo__kicker">Batch operation surface</span>
       <h3 id="operation-queue-demo-title">
         Show the queue, the batch decision, and the next safe action together.
       </h3>
@@ -107,7 +107,7 @@ None.
       </p>
     </div>
 
-    <dl class="operation-queue-demo-metrics" aria-label="Operation queue contract summary">
+    <dl class="operation-queue-demo-metrics usage-demo__metrics" aria-label="Operation queue contract summary">
       <div>
         <dt>Shell</dt>
         <dd>section + aria-busy</dd>
@@ -123,10 +123,10 @@ None.
     </dl>
   </section>
 
-  <section class="operation-queue-demo-workbench" aria-labelledby="operation-queue-demo-workbench-title">
+  <section class="operation-queue-demo-workbench usage-demo__workbench" aria-labelledby="operation-queue-demo-workbench-title">
     <div class="operation-queue-demo-board">
-      <div class="operation-queue-demo-section-header">
-        <span class="operation-queue-demo-kicker">Encrypted export queue</span>
+      <div class="operation-queue-demo-section-header usage-demo__section-header">
+        <span class="operation-queue-demo-kicker usage-demo__kicker">Encrypted export queue</span>
         <h4 id="operation-queue-demo-workbench-title">
           The shell owns the batch frame; task data stays with the workflow.
         </h4>
@@ -197,9 +197,9 @@ None.
       </cv-operation-queue>
     </div>
 
-    <aside class="operation-queue-demo-side" aria-label="Operation queue tone and density examples">
-      <div class="operation-queue-demo-section-header">
-        <span class="operation-queue-demo-kicker">Secondary states</span>
+    <aside class="operation-queue-demo-side usage-demo__side" aria-label="Operation queue tone and density examples">
+      <div class="operation-queue-demo-section-header usage-demo__section-header">
+        <span class="operation-queue-demo-kicker usage-demo__kicker">Secondary states</span>
         <h4>Tone marks aggregate state; density controls how much queue detail stays visible.</h4>
       </div>
 
