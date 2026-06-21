@@ -171,7 +171,7 @@ The UIKit layer does not construct any ARIA attributes directly.
       </header>
 
       <div class="meter-demo-primary-reading usage-demo__flow usage-demo__flow--loose">
-        <div class="meter-demo-reading-label">
+        <div class="meter-demo-reading-label usage-demo__baseline-row">
           <span class="usage-demo__meta usage-demo__label">Capacity used</span>
           <strong>82 GB / 100 GB</strong>
         </div>
@@ -195,7 +195,7 @@ The UIKit layer does not construct any ARIA attributes directly.
         </div>
       </div>
 
-      <div class="meter-demo-zone-grid" aria-label="Meter threshold examples">
+      <div class="meter-demo-zone-grid usage-demo__grid--thirds" aria-label="Meter threshold examples">
         <div class="usage-demo__flow usage-demo__flow--loose">
           <span class="usage-demo__meta usage-demo__label">Low</span>
           <cv-meter value="34" low="45" high="80" optimum="62" aria-label="Low threshold example"
@@ -251,6 +251,7 @@ The UIKit layer does not construct any ARIA attributes directly.
           <span class="usage-demo__meta usage-demo__label">cv-progress</span>
           <strong>Operation progress</strong>
           <cv-progress
+            class="usage-demo__progress-host"
             value="64"
             tone="upload"
             value-text="64 percent uploaded"
@@ -258,7 +259,11 @@ The UIKit layer does not construct any ARIA attributes directly.
           >
             64%
           </cv-progress>
-          <cv-progress indeterminate aria-label="Manifest verification is still waiting"></cv-progress>
+          <cv-progress
+            class="usage-demo__progress-host"
+            indeterminate
+            aria-label="Manifest verification is still waiting"
+          ></cv-progress>
           <p>
             Answers "how far has the job advanced?" and can be indeterminate while work has no known value.
           </p>
