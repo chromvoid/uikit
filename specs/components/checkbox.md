@@ -142,32 +142,32 @@ No component-specific custom properties. Styling uses design tokens:
 
     <div class="checkbox-demo-state-grid">
       <div class="checkbox-demo-cell">
-        <span class="checkbox-demo-label">Unchecked</span>
+        <span class="checkbox-demo-label usage-demo__meta usage-demo__label">Unchecked</span>
         <cv-checkbox name="export" value="logs">Export audit log</cv-checkbox>
       </div>
 
       <div class="checkbox-demo-cell">
-        <span class="checkbox-demo-label">Checked</span>
+        <span class="checkbox-demo-label usage-demo__meta usage-demo__label">Checked</span>
         <cv-checkbox checked name="export" value="vault">Include vault manifest</cv-checkbox>
       </div>
 
       <div class="checkbox-demo-cell">
-        <span class="checkbox-demo-label">Indeterminate</span>
+        <span class="checkbox-demo-label usage-demo__meta usage-demo__label">Indeterminate</span>
         <cv-checkbox indeterminate name="export" value="records">Partial record selection</cv-checkbox>
       </div>
 
       <div class="checkbox-demo-cell">
-        <span class="checkbox-demo-label">Required</span>
+        <span class="checkbox-demo-label usage-demo__meta usage-demo__label">Required</span>
         <cv-checkbox required name="confirm" value="accepted">Operator confirmation</cv-checkbox>
       </div>
 
       <div class="checkbox-demo-cell">
-        <span class="checkbox-demo-label">Read-only</span>
+        <span class="checkbox-demo-label usage-demo__meta usage-demo__label">Read-only</span>
         <cv-checkbox read-only checked name="policy" value="locked">Policy inherited</cv-checkbox>
       </div>
 
       <div class="checkbox-demo-cell">
-        <span class="checkbox-demo-label">Disabled</span>
+        <span class="checkbox-demo-label usage-demo__meta usage-demo__label">Disabled</span>
         <cv-checkbox disabled name="storage" value="remote">Remote sync unavailable</cv-checkbox>
       </div>
     </div>
@@ -186,7 +186,7 @@ No component-specific custom properties. Styling uses design tokens:
       <div class="checkbox-demo-panel usage-demo__panel">
         <div class="checkbox-demo-toolbar">
           <cv-checkbox indeterminate aria-label="Select visible vault entries">3 of 7 selected</cv-checkbox>
-          <span class="checkbox-demo-token">aria-checked="mixed"</span>
+          <span class="checkbox-demo-token usage-demo__meta usage-demo__label">aria-checked="mixed"</span>
         </div>
 
         <div class="checkbox-demo-list">
