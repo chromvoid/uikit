@@ -323,7 +323,7 @@ The light block overrides only color-varying tokens (colors, shadows, overlay). 
   <cv-theme-provider>
     <section class="theme-provider-demo-panel usage-demo__panel">
       <span>System color mode</span>
-      <cv-badge variant="success" size="small">auto</cv-badge>
+      <cv-badge class="usage-demo__dense-badge" variant="success" size="small">auto</cv-badge>
     </section>
   </cv-theme-provider>
 
@@ -340,7 +340,7 @@ The light block overrides only color-varying tokens (colors, shadows, overlay). 
     <section class="theme-provider-demo-panel usage-demo__panel">
       <span>Outer dark provider</span>
       <cv-theme-provider data-theme-demo-sidebar>
-        <cv-badge variant="primary" size="small">sidebar scope</cv-badge>
+        <cv-badge class="usage-demo__dense-badge" variant="primary" size="small">sidebar scope</cv-badge>
       </cv-theme-provider>
     </section>
   </cv-theme-provider>
