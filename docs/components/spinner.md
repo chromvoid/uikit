@@ -9,17 +9,113 @@ Indeterminate loading spinner with SVG track and indicator animation.
 ## Usage
 
 ```html
-<!-- Default spinner -->
-<cv-spinner></cv-spinner>
+<div class="spinner-demo-shell" data-demo="spinner" data-live-demo-height="760">
+  <section class="spinner-demo-hero" aria-labelledby="spinner-demo-title">
+    <div class="spinner-demo-copy">
+      <span class="spinner-demo-kicker">Indeterminate feedback</span>
+      <h3 id="spinner-demo-title">Use spinner when work is active but progress cannot be measured.</h3>
+      <p>
+        Keep the spinner close to the control or region it represents. The visible surface stays small; the
+        accessible label carries the actual loading task for assistive technology.
+      </p>
+    </div>
 
-<!-- Custom accessible label -->
-<cv-spinner label="Saving changes"></cv-spinner>
+    <dl class="spinner-demo-metrics" aria-label="Spinner contract summary">
+      <div>
+        <dt>ARIA</dt>
+        <dd>progressbar with label</dd>
+      </div>
+      <div>
+        <dt>Mode</dt>
+        <dd>indeterminate only</dd>
+      </div>
+      <div>
+        <dt>Sizing</dt>
+        <dd>CSS font-size</dd>
+      </div>
+    </dl>
+  </section>
 
-<!-- Sized via CSS font-size -->
-<cv-spinner style="font-size: 2rem;"></cv-spinner>
+  <section class="spinner-demo-board" aria-labelledby="spinner-demo-board-title">
+    <div class="spinner-demo-stage" role="status" aria-live="polite">
+      <div class="spinner-demo-stage-head">
+        <div>
+          <span>Vault handoff</span>
+          <strong id="spinner-demo-board-title">Checking relay route before export</strong>
+        </div>
+        <span class="spinner-demo-badge">pending</span>
+      </div>
 
-<!-- Themed via custom properties -->
-<cv-spinner style="--cv-spinner-indicator-color: #ff7d86; --cv-spinner-speed: 800ms;"></cv-spinner>
+      <div class="spinner-demo-core">
+        <div class="spinner-demo-grid" aria-hidden="true"></div>
+        <cv-spinner class="spinner-demo-core-spinner" label="Loading vault handoff status"></cv-spinner>
+      </div>
+
+      <div class="spinner-demo-step-list" aria-label="Loading checkpoints">
+        <div>
+          <span>01</span>
+          <p>visible vault selected</p>
+        </div>
+        <div>
+          <span>02</span>
+          <p>relay policy resolving</p>
+        </div>
+        <div>
+          <span>03</span>
+          <p>proof channel waiting</p>
+        </div>
+      </div>
+    </div>
+
+    <aside class="spinner-demo-side" aria-label="Spinner placement examples">
+      <div class="spinner-demo-side-head">
+        <span class="spinner-demo-kicker">Placement</span>
+        <h4>Match scale to the surface that is blocked.</h4>
+      </div>
+
+      <div class="spinner-demo-inline-status">
+        <cv-spinner class="spinner-demo-spinner-xs" label="Checking route"></cv-spinner>
+        <span>Checking route</span>
+      </div>
+
+      <div class="spinner-demo-inline-status spinner-demo-inline-status--violet">
+        <cv-spinner class="spinner-demo-spinner-sm" label="Preparing hidden layer"></cv-spinner>
+        <span>Preparing hidden layer</span>
+      </div>
+
+      <div class="spinner-demo-inline-status spinner-demo-inline-status--amber">
+        <cv-spinner class="spinner-demo-spinner-md" label="Waiting for device response"></cv-spinner>
+        <span>Waiting for device</span>
+      </div>
+    </aside>
+  </section>
+
+  <section class="spinner-demo-section" aria-labelledby="spinner-demo-scale-title">
+    <div class="spinner-demo-section-header">
+      <span class="spinner-demo-kicker">Scale and tone</span>
+      <h4 id="spinner-demo-scale-title">Size from the owning layout and reserve color for status meaning.</h4>
+    </div>
+
+    <div class="spinner-demo-matrix" aria-label="Spinner scale and tone matrix">
+      <div>
+        <span>Toolbar</span>
+        <cv-spinner class="spinner-demo-spinner-xs" label="Loading toolbar action"></cv-spinner>
+      </div>
+      <div>
+        <span>Inline</span>
+        <cv-spinner class="spinner-demo-spinner-sm" label="Loading inline status"></cv-spinner>
+      </div>
+      <div>
+        <span>Panel</span>
+        <cv-spinner class="spinner-demo-spinner-md" label="Loading panel"></cv-spinner>
+      </div>
+      <div>
+        <span>Blocking region</span>
+        <cv-spinner class="spinner-demo-spinner-lg" label="Loading blocking region"></cv-spinner>
+      </div>
+    </div>
+  </section>
+</div>
 ```
 
 ## Anatomy
