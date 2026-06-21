@@ -38,7 +38,7 @@ Non-interactive status indicator that displays short labels, counts, or colored 
 
   <section class="badge-demo-board usage-demo__workbench" aria-label="Vault state badge examples">
     <div class="badge-demo-record">
-      <div class="badge-demo-record-head">
+      <div class="badge-demo-record-head usage-demo__surface-header">
         <div>
           <span>Vault surface</span>
           <strong>travel-profile.visible</strong>
@@ -91,7 +91,7 @@ Non-interactive status indicator that displays short labels, counts, or colored 
         <h4>When a label is already nearby, use a labelled dot.</h4>
       </div>
 
-      <div class="badge-demo-dot-list">
+      <div class="badge-demo-dot-list usage-demo__compact-list">
         <div>
           <cv-badge variant="success" dot aria-label="Synced"></cv-badge>
           <span>Synced to local index</span>
@@ -152,7 +152,7 @@ Non-interactive status indicator that displays short labels, counts, or colored 
       </div>
       <div>
         <span>Size</span>
-        <cv-badge variant="primary" size="small">3</cv-badge>
+        <cv-badge class="usage-demo__dense-badge" variant="primary" size="small">3</cv-badge>
         <cv-badge variant="primary">12</cv-badge>
         <cv-badge variant="primary" size="large" pill>99+</cv-badge>
       </div>
