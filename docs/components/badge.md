@@ -9,10 +9,10 @@ Non-interactive status indicator that displays short labels, counts, or colored 
 ## Usage
 
 ```html
-<div class="badge-demo-shell" data-demo="badge" data-live-demo-height="720">
-  <section class="badge-demo-hero" aria-labelledby="badge-demo-title">
-    <div class="badge-demo-copy">
-      <span class="badge-demo-kicker">Passive status</span>
+<div class="badge-demo-shell usage-demo" data-demo="badge" data-live-demo-height="720">
+  <section class="badge-demo-hero usage-demo__hero" aria-labelledby="badge-demo-title">
+    <div class="badge-demo-copy usage-demo__copy">
+      <span class="badge-demo-kicker usage-demo__kicker">Passive status</span>
       <h3 id="badge-demo-title">Use badges for state, counts, and compact risk labels.</h3>
       <p>
         Badge stays non-interactive: it can announce dynamic changes, mark decorative labels, or collapse into
@@ -20,7 +20,7 @@ Non-interactive status indicator that displays short labels, counts, or colored 
       </p>
     </div>
 
-    <dl class="badge-demo-metrics" aria-label="Badge contract highlights">
+    <dl class="badge-demo-metrics usage-demo__metrics" aria-label="Badge contract highlights">
       <div>
         <dt>Interaction</dt>
         <dd>none</dd>
@@ -85,9 +85,9 @@ Non-interactive status indicator that displays short labels, counts, or colored 
       </div>
     </div>
 
-    <aside class="badge-demo-panel" aria-label="Status dot examples">
-      <div class="badge-demo-panel-head">
-        <span class="badge-demo-kicker">Dot mode</span>
+    <aside class="badge-demo-panel usage-demo__panel" aria-label="Status dot examples">
+      <div class="badge-demo-panel-head usage-demo__panel-head">
+        <span class="badge-demo-kicker usage-demo__kicker">Dot mode</span>
         <h4>When a label is already nearby, use a labelled dot.</h4>
       </div>
 
@@ -112,9 +112,9 @@ Non-interactive status indicator that displays short labels, counts, or colored 
     </aside>
   </section>
 
-  <section class="badge-demo-section" aria-labelledby="badge-demo-variants-title">
-    <div class="badge-demo-section-header">
-      <span class="badge-demo-kicker">Variants and sizes</span>
+  <section class="badge-demo-section usage-demo__section" aria-labelledby="badge-demo-variants-title">
+    <div class="badge-demo-section-header usage-demo__section-header">
+      <span class="badge-demo-kicker usage-demo__kicker">Variants and sizes</span>
       <h4 id="badge-demo-variants-title">One component covers passive labels, counts, and semantic tone.</h4>
     </div>
 
