@@ -72,11 +72,11 @@ Static supplementary content block that highlights important information using `
 
       <aside class="callout-demo-side usage-demo__side" aria-label="Callout variants and density">
         <div class="callout-demo-chip-row" aria-label="Available variants">
-          <cv-badge variant="primary" size="small">info</cv-badge>
-          <cv-badge variant="success" size="small">success</cv-badge>
-          <cv-badge variant="warning" size="small">warning</cv-badge>
-          <cv-badge variant="danger" size="small">danger</cv-badge>
-          <cv-badge variant="neutral" size="small">neutral</cv-badge>
+          <cv-badge class="usage-demo__dense-badge" variant="primary" size="small">info</cv-badge>
+          <cv-badge class="usage-demo__dense-badge" variant="success" size="small">success</cv-badge>
+          <cv-badge class="usage-demo__dense-badge" variant="warning" size="small">warning</cv-badge>
+          <cv-badge class="usage-demo__dense-badge" variant="danger" size="small">danger</cv-badge>
+          <cv-badge class="usage-demo__dense-badge" variant="neutral" size="small">neutral</cv-badge>
         </div>
 
         <cv-callout variant="neutral" density="compact">
