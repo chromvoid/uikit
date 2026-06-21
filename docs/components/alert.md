@@ -9,24 +9,183 @@ Passive live-region message that announces important updates without taking focu
 ## Usage
 
 ```html
-<div class="example-row">
-  <cv-button id="save-settings" variant="primary">Save settings</cv-button>
-  <cv-button id="hide-alert">Hide alert</cv-button>
+<div class="alert-demo-shell" data-demo="alert" data-live-demo-height="420">
+  <section class="alert-demo-hero" aria-labelledby="alert-demo-title">
+    <div class="alert-demo-copy">
+      <span class="alert-demo-kicker">Passive live region</span>
+      <h3 id="alert-demo-title">Announce operation status without moving focus.</h3>
+      <p>
+        Use <code>cv-alert</code> for time-sensitive state changes. The component owns the live-region
+        contract, while the caller decides message priority and auto-dismiss timing.
+      </p>
+    </div>
+
+    <dl class="alert-demo-metrics" aria-label="Alert contract summary">
+      <div>
+        <dt>Root role</dt>
+        <dd>alert</dd>
+      </div>
+      <div>
+        <dt>Priority</dt>
+        <dd>assertive / polite</dd>
+      </div>
+      <div>
+        <dt>Focus</dt>
+        <dd>never moved</dd>
+      </div>
+    </dl>
+  </section>
+
+  <section class="alert-demo-workbench" aria-labelledby="alert-demo-workbench-title">
+    <div class="alert-demo-panel">
+      <div class="alert-demo-section-header">
+        <span class="alert-demo-kicker">Vault sync panel</span>
+        <h4 id="alert-demo-workbench-title">
+          Trigger status changes from a workflow and watch the same live region update.
+        </h4>
+      </div>
+
+      <div class="alert-demo-actions" aria-label="Alert scenarios">
+        <cv-button data-alert-action="saved" variant="primary">Save policy</cv-button>
+        <cv-button data-alert-action="warning">Warn operator</cv-button>
+        <cv-button data-alert-action="critical" variant="danger">Block export</cv-button>
+        <cv-button data-alert-action="hide">Hide alert</cv-button>
+      </div>
+
+      <cv-alert data-alert-region aria-live="polite" duration-ms="5200">
+        <span class="alert-demo-alert-meta" data-alert-meta>polite / auto-dismiss</span>
+      </cv-alert>
+    </div>
+
+    <aside class="alert-demo-side" aria-label="Alert state and event output">
+      <dl class="alert-demo-state" aria-label="Current alert state">
+        <div>
+          <dt>Visible</dt>
+          <dd data-alert-visible>false</dd>
+        </div>
+        <div>
+          <dt>aria-live</dt>
+          <dd data-alert-priority>polite</dd>
+        </div>
+        <div>
+          <dt>duration-ms</dt>
+          <dd data-alert-duration>5200</dd>
+        </div>
+        <div>
+          <dt>Last event</dt>
+          <dd data-alert-event>idle</dd>
+        </div>
+      </dl>
+
+      <p class="alert-demo-log" role="status" aria-live="polite" data-alert-log>
+        Waiting for an alert update. Trigger a scenario from the workflow panel.
+      </p>
+    </aside>
+  </section>
 </div>
 
-<cv-alert id="saved-alert" aria-live="polite" duration-ms="4000"></cv-alert>
-
 <script type="module">
-  const alert = document.getElementById('saved-alert')
-  const saveButton = document.getElementById('save-settings')
-  const hideButton = document.getElementById('hide-alert')
+  const scenarios = {
+    saved: {
+      state: 'success',
+      ariaLive: 'polite',
+      durationMs: 5200,
+      meta: 'polite / auto-dismiss',
+      message: 'Vault policy saved. Visible profile settings were updated.',
+    },
+    warning: {
+      state: 'warning',
+      ariaLive: 'polite',
+      durationMs: 0,
+      meta: 'polite / persistent',
+      message: 'Recovery window closes in 18 minutes. Confirm operator handoff before leaving.',
+    },
+    critical: {
+      state: 'critical',
+      ariaLive: 'assertive',
+      durationMs: 0,
+      meta: 'assertive / persistent',
+      message: 'Export blocked. Coercion profile is active and hidden namespaces stay unavailable.',
+    },
+  }
 
-  saveButton.addEventListener('click', () => {
-    alert.show('Settings saved. The live region announced the update.')
-  })
+  document.querySelectorAll('.alert-demo-shell[data-demo="alert"]:not([data-ready])').forEach((shell) => {
+    shell.dataset.ready = 'true'
 
-  hideButton.addEventListener('click', () => {
-    alert.hide()
+    const alert = shell.querySelector('[data-alert-region]')
+    const meta = shell.querySelector('[data-alert-meta]')
+    const visible = shell.querySelector('[data-alert-visible]')
+    const priority = shell.querySelector('[data-alert-priority]')
+    const duration = shell.querySelector('[data-alert-duration]')
+    const lastEvent = shell.querySelector('[data-alert-event]')
+    const log = shell.querySelector('[data-alert-log]')
+
+    const setText = (target, value) => {
+      if (target) target.textContent = value
+    }
+
+    const updateState = (detail, eventName) => {
+      const nextVisible = Boolean(detail?.visible)
+      const message = String(detail?.message ?? '')
+
+      if (!nextVisible) {
+        delete shell.dataset.alertState
+      }
+
+      setText(visible, nextVisible ? 'true' : 'false')
+      setText(priority, alert?.ariaLive ?? 'polite')
+      setText(duration, String(alert?.durationMs ?? 0))
+      setText(lastEvent, eventName)
+
+      if (log) {
+        log.textContent = nextVisible
+          ? `${eventName}: ${message}`
+          : `${eventName}: alert hidden, live region is idle.`
+      }
+    }
+
+    const showScenario = async (name) => {
+      const scenario = scenarios[name]
+      if (!alert || !scenario) return
+
+      shell.dataset.alertState = scenario.state
+      alert.ariaLive = scenario.ariaLive
+      alert.durationMs = scenario.durationMs
+      setText(meta, scenario.meta)
+      setText(priority, scenario.ariaLive)
+      setText(duration, String(scenario.durationMs))
+
+      await alert.updateComplete
+      alert.show(scenario.message)
+    }
+
+    shell.querySelector('[data-alert-action="saved"]')?.addEventListener('click', () => {
+      void showScenario('saved')
+    })
+
+    shell.querySelector('[data-alert-action="warning"]')?.addEventListener('click', () => {
+      void showScenario('warning')
+    })
+
+    shell.querySelector('[data-alert-action="critical"]')?.addEventListener('click', () => {
+      void showScenario('critical')
+    })
+
+    shell.querySelector('[data-alert-action="hide"]')?.addEventListener('click', () => {
+      alert?.hide()
+    })
+
+    alert?.addEventListener('cv-input', (event) => {
+      updateState(event.detail, 'cv-input')
+    })
+
+    alert?.addEventListener('cv-change', (event) => {
+      updateState(event.detail, 'cv-change')
+    })
+
+    window.setTimeout(() => {
+      void showScenario('warning')
+    }, 260)
   })
 </script>
 ```
