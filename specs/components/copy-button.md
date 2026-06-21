@@ -216,7 +216,7 @@ Events are dispatched by the UIKit adapter by providing `onCopy` and `onError` c
 
   <section class="copy-button-demo-workbench usage-demo__workbench" aria-label="Vault record copy actions">
     <div class="copy-button-demo-record">
-      <div class="copy-button-demo-record-head">
+      <div class="copy-button-demo-record-head usage-demo__surface-header">
         <div>
           <span>Vault record</span>
           <strong>border-relay.admin</strong>

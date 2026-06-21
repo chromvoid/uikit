@@ -38,7 +38,7 @@ Button that copies a value to the system clipboard with three-state visual feedb
 
   <section class="copy-button-demo-workbench usage-demo__workbench" aria-label="Vault record copy actions">
     <div class="copy-button-demo-record">
-      <div class="copy-button-demo-record-head">
+      <div class="copy-button-demo-record-head usage-demo__surface-header">
         <div>
           <span>Vault record</span>
           <strong>border-relay.admin</strong>
