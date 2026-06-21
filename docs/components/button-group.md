@@ -84,7 +84,10 @@ Action grouping for related buttons.
     </div>
   </section>
 
-  <section class="button-group-demo-modes" aria-labelledby="button-group-demo-modes-title">
+  <section
+    class="button-group-demo-modes usage-demo__band usage-demo__divider"
+    aria-labelledby="button-group-demo-modes-title"
+  >
     <div class="button-group-demo-section-header usage-demo__section-header">
       <span class="button-group-demo-kicker usage-demo__kicker">Layouts and emphasis</span>
       <h4 id="button-group-demo-modes-title">
