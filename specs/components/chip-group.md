@@ -72,10 +72,10 @@ chips without emitting events.
 ## Usage
 
 ```html
-<div class="chip-group-demo-shell" data-demo="chip-group">
-  <section class="chip-group-demo-hero" aria-labelledby="chip-group-demo-title">
-    <div class="chip-group-demo-copy">
-      <span class="chip-group-demo-kicker">Selection model</span>
+<div class="chip-group-demo-shell usage-demo" data-demo="chip-group">
+  <section class="chip-group-demo-hero usage-demo__hero" aria-labelledby="chip-group-demo-title">
+    <div class="chip-group-demo-copy usage-demo__copy">
+      <span class="chip-group-demo-kicker usage-demo__kicker">Selection model</span>
       <h3 id="chip-group-demo-title">Use groups when chips form one choice system.</h3>
       <p>
         The group owns selection, updates child chip states, and emits form-like input/change events only
@@ -83,7 +83,7 @@ chips without emitting events.
       </p>
     </div>
 
-    <dl class="chip-group-demo-metrics" aria-label="Chip group behavior summary">
+    <dl class="chip-group-demo-metrics usage-demo__metrics" aria-label="Chip group behavior summary">
       <div>
         <dt>Single</dt>
         <dd>One value</dd>
@@ -99,13 +99,13 @@ chips without emitting events.
     </dl>
   </section>
 
-  <section class="chip-group-demo-section" aria-labelledby="chip-group-demo-single-title">
-    <div class="chip-group-demo-section-header">
-      <span class="chip-group-demo-kicker">Single selection</span>
+  <section class="chip-group-demo-section usage-demo__section" aria-labelledby="chip-group-demo-single-title">
+    <div class="chip-group-demo-section-header usage-demo__section-header">
+      <span class="chip-group-demo-kicker usage-demo__kicker">Single selection</span>
       <h4 id="chip-group-demo-single-title">One active facet at a time</h4>
     </div>
 
-    <div class="chip-group-demo-panel">
+    <div class="chip-group-demo-panel usage-demo__panel">
       <cv-chip-group selection-mode="single" value="all" aria-label="Content filter">
         <cv-chip value="all">All</cv-chip>
         <cv-chip value="files">Files</cv-chip>
@@ -116,13 +116,13 @@ chips without emitting events.
     </div>
   </section>
 
-  <section class="chip-group-demo-section" aria-labelledby="chip-group-demo-multiple-title">
-    <div class="chip-group-demo-section-header">
-      <span class="chip-group-demo-kicker">Multiple selection</span>
+  <section class="chip-group-demo-section usage-demo__section" aria-labelledby="chip-group-demo-multiple-title">
+    <div class="chip-group-demo-section-header usage-demo__section-header">
+      <span class="chip-group-demo-kicker usage-demo__kicker">Multiple selection</span>
       <h4 id="chip-group-demo-multiple-title">Selected chips serialize into the host value</h4>
     </div>
 
-    <div class="chip-group-demo-panel">
+    <div class="chip-group-demo-panel usage-demo__panel">
       <cv-chip-group selection-mode="multiple" value="local otp" aria-label="Vault facets">
         <cv-chip value="local" removable>Local</cv-chip>
         <cv-chip value="otp" removable>OTP seeds</cv-chip>
@@ -133,14 +133,14 @@ chips without emitting events.
     </div>
   </section>
 
-  <section class="chip-group-demo-section" aria-labelledby="chip-group-demo-keyboard-title">
-    <div class="chip-group-demo-section-header">
-      <span class="chip-group-demo-kicker">Keyboard flow</span>
+  <section class="chip-group-demo-section usage-demo__section" aria-labelledby="chip-group-demo-keyboard-title">
+    <div class="chip-group-demo-section-header usage-demo__section-header">
+      <span class="chip-group-demo-kicker usage-demo__kicker">Keyboard flow</span>
       <h4 id="chip-group-demo-keyboard-title">Orientation controls the arrow-key direction</h4>
     </div>
 
     <div class="chip-group-demo-keyboard-grid">
-      <div class="chip-group-demo-panel">
+      <div class="chip-group-demo-panel usage-demo__panel">
         <span class="chip-group-demo-label">Horizontal</span>
         <cv-chip-group selection-mode="single" value="usb" aria-label="Transport" orientation="horizontal">
           <cv-chip value="usb">USB</cv-chip>
@@ -149,7 +149,7 @@ chips without emitting events.
         </cv-chip-group>
       </div>
 
-      <div class="chip-group-demo-panel">
+      <div class="chip-group-demo-panel usage-demo__panel">
         <span class="chip-group-demo-label">Vertical</span>
         <cv-chip-group selection-mode="single" value="strict" aria-label="Policy" orientation="vertical">
           <cv-chip value="strict">Strict</cv-chip>
