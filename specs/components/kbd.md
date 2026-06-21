@@ -36,10 +36,10 @@ None. The component does not listen for keyboard shortcuts.
 ## Usage
 
 ```html
-<div class="kbd-demo-shell" data-demo="kbd" data-live-demo-height="760">
-  <section class="kbd-demo-hero" aria-labelledby="kbd-demo-title">
-    <div class="kbd-demo-copy">
-      <span class="kbd-demo-kicker">Keycap primitive</span>
+<div class="kbd-demo-shell usage-demo" data-demo="kbd" data-live-demo-height="760">
+  <section class="kbd-demo-hero usage-demo__hero" aria-labelledby="kbd-demo-title">
+    <div class="kbd-demo-copy usage-demo__copy">
+      <span class="kbd-demo-kicker usage-demo__kicker">Keycap primitive</span>
       <h3 id="kbd-demo-title">Use kbd for one physical key, then compose shortcuts at the consumer boundary.</h3>
       <p>
         The component renders a native <code>kbd</code> node, keeps the label stable, and stays passive. Shortcut
@@ -47,7 +47,7 @@ None. The component does not listen for keyboard shortcuts.
       </p>
     </div>
 
-    <dl class="kbd-demo-metrics" aria-label="Keyboard keycap contract summary">
+    <dl class="kbd-demo-metrics usage-demo__metrics" aria-label="Keyboard keycap contract summary">
       <div>
         <dt>Element</dt>
         <dd>native <code>&lt;kbd&gt;</code></dd>
@@ -117,9 +117,9 @@ None. The component does not listen for keyboard shortcuts.
       </div>
     </div>
 
-    <aside class="kbd-demo-side" aria-label="Keyboard key size and tone examples">
-      <div class="kbd-demo-side-head">
-        <span class="kbd-demo-kicker">Sizing and tone</span>
+    <aside class="kbd-demo-side usage-demo__side" aria-label="Keyboard key size and tone examples">
+      <div class="kbd-demo-side-head usage-demo__side-head">
+        <span class="kbd-demo-kicker usage-demo__kicker">Sizing and tone</span>
         <h4>Keep short labels compact, then give long labels enough fixed breathing room.</h4>
       </div>
 
@@ -150,9 +150,9 @@ None. The component does not listen for keyboard shortcuts.
     </aside>
   </section>
 
-  <section class="kbd-demo-section" aria-labelledby="kbd-demo-matrix-title">
-    <div class="kbd-demo-section-header">
-      <span class="kbd-demo-kicker">Composition boundary</span>
+  <section class="kbd-demo-section usage-demo__section" aria-labelledby="kbd-demo-matrix-title">
+    <div class="kbd-demo-section-header usage-demo__section-header">
+      <span class="kbd-demo-kicker usage-demo__kicker">Composition boundary</span>
       <h4 id="kbd-demo-matrix-title">
         Render individual keycaps here; let shortcut-aware surfaces decide platform labels and separators.
       </h4>
