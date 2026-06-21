@@ -170,7 +170,10 @@ Keys `ArrowUp`, `ArrowDown`, `ArrowLeft`, `ArrowRight`, `Home`, `End`, `Enter`, 
     </dl>
   </section>
 
-  <section class="treeview-demo-workbench usage-demo__workbench" aria-labelledby="treeview-demo-workbench-title">
+  <section
+    class="treeview-demo-workbench usage-demo__workbench"
+    aria-labelledby="treeview-demo-workbench-title"
+  >
     <div class="treeview-demo-section-header usage-demo__section-header">
       <span class="treeview-demo-kicker usage-demo__kicker">Operational navigation</span>
       <h4 id="treeview-demo-workbench-title">Vault namespace tree with selected export scopes</h4>
@@ -367,7 +370,11 @@ Keys `ArrowUp`, `ArrowDown`, `ArrowLeft`, `ArrowRight`, `Home`, `End`, `Enter`, 
       <span>Ctrl+A selects all in multiple mode</span>
     </div>
 
-    <output class="treeview-demo-readout" for="treeview-demo-vault treeview-demo-access" aria-live="polite">
+    <output
+      class="treeview-demo-readout usage-demo__log"
+      for="treeview-demo-vault treeview-demo-access"
+      aria-live="polite"
+    >
       Vault focus: awaiting selection | Export bundle: none
     </output>
   </section>
