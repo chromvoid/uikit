@@ -17,69 +17,315 @@ This document is the UIKit surface contract for Combobox.
 ## Usage
 
 ```html
-<!-- Basic editable combobox -->
-<cv-combobox aria-label="Search" data-live-demo-height="420">
-  <cv-combobox-option value="a">Alpha</cv-combobox-option>
-  <cv-combobox-option value="b">Beta</cv-combobox-option>
-  <cv-combobox-option value="c" disabled>Gamma</cv-combobox-option>
-</cv-combobox>
+<div class="combobox-demo-shell" data-demo="combobox" data-live-demo-height="1180">
+  <section class="combobox-demo-hero" aria-labelledby="combobox-demo-title">
+    <div class="combobox-demo-copy">
+      <span class="combobox-demo-kicker">Search and select primitive</span>
+      <h3 id="combobox-demo-title">
+        Use combobox when a controlled choice also needs filtering, grouping, or tags.
+      </h3>
+      <p>
+        The headless model owns input value, active option, popup state, selection, and ARIA contracts. UIKit
+        renders the editable field, select-only trigger, clear control, grouped listbox, and selected tag
+        surface.
+      </p>
+    </div>
 
-<!-- Select-only combobox -->
-<cv-combobox type="select-only" aria-label="Country" placeholder="Select a country">
-  <cv-combobox-option value="us">United States</cv-combobox-option>
-  <cv-combobox-option value="uk">United Kingdom</cv-combobox-option>
-  <cv-combobox-option value="de">Germany</cv-combobox-option>
-</cv-combobox>
+    <dl class="combobox-demo-metrics" aria-label="Combobox contract summary">
+      <div>
+        <dt>Modes</dt>
+        <dd>editable / select-only</dd>
+      </div>
+      <div>
+        <dt>Selection</dt>
+        <dd>single / multiple / grouped</dd>
+      </div>
+      <div>
+        <dt>Events</dt>
+        <dd>input / change / clear</dd>
+      </div>
+    </dl>
+  </section>
 
-<!-- Multi-select editable -->
-<cv-combobox multiple aria-label="Tags" placeholder="Add tags...">
-  <cv-combobox-option value="js">JavaScript</cv-combobox-option>
-  <cv-combobox-option value="ts">TypeScript</cv-combobox-option>
-  <cv-combobox-option value="py">Python</cv-combobox-option>
-  <cv-combobox-option value="rs">Rust</cv-combobox-option>
-</cv-combobox>
+  <section class="combobox-demo-board" aria-label="Combobox examples in a vault routing form">
+    <form class="combobox-demo-panel" data-combobox-form>
+      <div class="combobox-demo-panel-head">
+        <div>
+          <span>Visible profile routing</span>
+          <strong>relay.surface / browser tags / operator handoff</strong>
+        </div>
+        <cv-badge variant="primary" pill>live contract</cv-badge>
+      </div>
 
-<!-- Multi-select select-only with max tags -->
-<cv-combobox type="select-only" multiple max-tags-visible="2" aria-label="Assignees">
-  <cv-combobox-option value="alice">Alice</cv-combobox-option>
-  <cv-combobox-option value="bob">Bob</cv-combobox-option>
-  <cv-combobox-option value="carol">Carol</cv-combobox-option>
-  <cv-combobox-option value="dave">Dave</cv-combobox-option>
-</cv-combobox>
+      <div class="combobox-demo-field-grid">
+        <cv-field required>
+          <span slot="label">Visible route</span>
+          <cv-combobox
+            data-combobox-primary
+            clearable
+            value="relay"
+            input-value="Relay endpoint"
+            placeholder="Search routes"
+            aria-label="Visible route"
+          >
+            <span slot="prefix" aria-hidden="true">route</span>
+            <cv-combobox-option value="relay">Relay endpoint</cv-combobox-option>
+            <cv-combobox-option value="gateway">Gateway unlock</cv-combobox-option>
+            <cv-combobox-option value="import">Credential import</cv-combobox-option>
+            <cv-combobox-option value="archive" disabled>Archive export disabled</cv-combobox-option>
+          </cv-combobox>
+          <span slot="description"
+            >Editable mode filters options while keeping the committed selection explicit.</span
+          >
+        </cv-field>
 
-<!-- Clearable combobox -->
-<cv-combobox clearable aria-label="Fruit">
-  <cv-combobox-option value="apple">Apple</cv-combobox-option>
-  <cv-combobox-option value="banana">Banana</cv-combobox-option>
-  <cv-combobox-option value="cherry">Cherry</cv-combobox-option>
-</cv-combobox>
+        <cv-field>
+          <span slot="label">Layer tags</span>
+          <cv-combobox
+            multiple
+            clearable
+            max-tags-visible="2"
+            value="browser otp recovery"
+            placeholder="Add tags"
+            aria-label="Layer tags"
+          >
+            <cv-combobox-option value="browser">Browser</cv-combobox-option>
+            <cv-combobox-option value="otp">OTP</cv-combobox-option>
+            <cv-combobox-option value="recovery">Recovery</cv-combobox-option>
+            <cv-combobox-option value="shared">Shared vault</cv-combobox-option>
+          </cv-combobox>
+          <span slot="description">Multiple selection renders tags and keeps the popup open by default.</span>
+        </cv-field>
 
-<!-- Grouped options -->
-<cv-combobox aria-label="City">
-  <cv-combobox-group label="North America">
-    <cv-combobox-option value="nyc">New York</cv-combobox-option>
-    <cv-combobox-option value="la">Los Angeles</cv-combobox-option>
-    <cv-combobox-option value="tor">Toronto</cv-combobox-option>
-  </cv-combobox-group>
-  <cv-combobox-group label="Europe">
-    <cv-combobox-option value="lon">London</cv-combobox-option>
-    <cv-combobox-option value="par">Paris</cv-combobox-option>
-    <cv-combobox-option value="ber">Berlin</cv-combobox-option>
-  </cv-combobox-group>
-</cv-combobox>
+        <cv-field>
+          <span slot="label">Operator</span>
+          <cv-combobox type="select-only" value="alex" placeholder="Assign operator" aria-label="Operator">
+            <cv-combobox-option value="alex">Alex - security review</cv-combobox-option>
+            <cv-combobox-option value="maria">Maria - legal hold</cv-combobox-option>
+            <cv-combobox-option value="ops">Ops queue</cv-combobox-option>
+          </cv-combobox>
+          <span slot="description"
+            >Select-only mode follows the combobox trigger pattern without text filtering.</span
+          >
+        </cv-field>
 
-<!-- With prefix/suffix slots -->
-<cv-combobox aria-label="Search" clearable>
-  <icon-search slot="prefix"></icon-search>
-  <cv-combobox-option value="a">Alpha</cv-combobox-option>
-  <cv-combobox-option value="b">Beta</cv-combobox-option>
-</cv-combobox>
+        <cv-field>
+          <span slot="label">Jurisdiction</span>
+          <cv-combobox placeholder="Filter jurisdiction" aria-label="Jurisdiction">
+            <cv-combobox-group label="Low-friction review">
+              <cv-combobox-option value="helsinki">Helsinki</cv-combobox-option>
+              <cv-combobox-option value="reykjavik">Reykjavik</cv-combobox-option>
+            </cv-combobox-group>
+            <cv-combobox-group label="Manual approval">
+              <cv-combobox-option value="border">Border crossing</cv-combobox-option>
+              <cv-combobox-option value="seizure">Device seizure</cv-combobox-option>
+            </cv-combobox-group>
+          </cv-combobox>
+          <span slot="description"
+            >Groups keep navigation flat while preserving labeled listbox structure.</span
+          >
+        </cv-field>
+      </div>
+    </form>
 
-<!-- Small size -->
-<cv-combobox size="small" aria-label="Quick select">
-  <cv-combobox-option value="a">Alpha</cv-combobox-option>
-  <cv-combobox-option value="b">Beta</cv-combobox-option>
-</cv-combobox>
+    <aside class="combobox-demo-side" aria-label="Combobox event output">
+      <div class="combobox-demo-side-head">
+        <span class="combobox-demo-kicker">Event stream</span>
+        <h4>Interact with any combobox to inspect the public state emitted by the component.</h4>
+      </div>
+
+      <p class="combobox-demo-log" role="status" aria-live="polite" data-combobox-output>
+        Waiting for interaction. Type, pick an option, toggle a tag, or clear a value.
+      </p>
+
+      <dl class="combobox-demo-live" aria-label="Live combobox state">
+        <div>
+          <dt>Selection</dt>
+          <dd data-combobox-selected>relay</dd>
+        </div>
+        <div>
+          <dt>Input</dt>
+          <dd data-combobox-input>Relay endpoint</dd>
+        </div>
+        <div>
+          <dt>Popup</dt>
+          <dd data-combobox-open>closed</dd>
+        </div>
+      </dl>
+
+      <div class="combobox-demo-open-card">
+        <span>Open grouped listbox</span>
+        <cv-combobox
+          open
+          type="select-only"
+          value="work"
+          placeholder="Select vault"
+          aria-label="Open vault selector"
+        >
+          <cv-combobox-group label="Vaults">
+            <cv-combobox-option value="personal">Personal vault</cv-combobox-option>
+            <cv-combobox-option value="work">Work vault</cv-combobox-option>
+            <cv-combobox-option value="decoy">Visible decoy vault</cv-combobox-option>
+          </cv-combobox-group>
+        </cv-combobox>
+      </div>
+    </aside>
+  </section>
+
+  <section class="combobox-demo-section" aria-labelledby="combobox-demo-matrix-title">
+    <div class="combobox-demo-section-header">
+      <span class="combobox-demo-kicker">State matrix</span>
+      <h4 id="combobox-demo-matrix-title">
+        One component covers typed filtering, trigger-only selection, tag overflow, invalid input, grouping,
+        and sizing.
+      </h4>
+    </div>
+
+    <div class="combobox-demo-matrix" aria-label="Combobox state matrix">
+      <div>
+        <span>Editable filter</span>
+        <cv-combobox input-value="gate" placeholder="Type to filter" aria-label="Editable filter">
+          <cv-combobox-option value="gateway">Gateway</cv-combobox-option>
+          <cv-combobox-option value="gatekeeper">Gatekeeper</cv-combobox-option>
+          <cv-combobox-option value="relay">Relay</cv-combobox-option>
+        </cv-combobox>
+      </div>
+
+      <div>
+        <span>Select-only</span>
+        <cv-combobox type="select-only" value="hardware" placeholder="Choose boundary" aria-label="Boundary">
+          <cv-combobox-option value="software">Software only</cv-combobox-option>
+          <cv-combobox-option value="hardware">Hardware-assisted</cv-combobox-option>
+        </cv-combobox>
+      </div>
+
+      <div>
+        <span>Tag overflow</span>
+        <cv-combobox
+          multiple
+          clearable
+          max-tags-visible="1"
+          value="legal source hardware"
+          placeholder="Tags"
+          aria-label="Tag overflow"
+        >
+          <cv-combobox-option value="legal">Legal</cv-combobox-option>
+          <cv-combobox-option value="source">Source</cv-combobox-option>
+          <cv-combobox-option value="hardware">Hardware</cv-combobox-option>
+        </cv-combobox>
+      </div>
+
+      <div>
+        <span>Invalid</span>
+        <cv-field invalid>
+          <span slot="label">Policy route</span>
+          <cv-combobox
+            invalid
+            input-value="unknown relay"
+            placeholder="Search route"
+            aria-label="Invalid route"
+          >
+            <cv-combobox-option value="relay">Relay endpoint</cv-combobox-option>
+          </cv-combobox>
+          <span slot="error">Route is not available in this visible profile.</span>
+        </cv-field>
+      </div>
+
+      <div>
+        <span>Disabled option</span>
+        <cv-combobox value="active" placeholder="Choose state" aria-label="Disabled option">
+          <cv-combobox-option value="active">Active</cv-combobox-option>
+          <cv-combobox-option value="archived" disabled>Archived policy</cv-combobox-option>
+        </cv-combobox>
+      </div>
+
+      <div>
+        <span>Sizes</span>
+        <cv-combobox size="small" value="s" placeholder="Small" aria-label="Small combobox">
+          <cv-combobox-option value="s">Small</cv-combobox-option>
+          <cv-combobox-option value="m">Medium</cv-combobox-option>
+        </cv-combobox>
+        <cv-combobox size="large" value="l" placeholder="Large" aria-label="Large combobox">
+          <cv-combobox-option value="m">Medium</cv-combobox-option>
+          <cv-combobox-option value="l">Large</cv-combobox-option>
+        </cv-combobox>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script type="module">
+  document
+    .querySelectorAll('.combobox-demo-shell[data-demo="combobox"]:not([data-ready])')
+    .forEach((shell) => {
+      shell.dataset.ready = 'true'
+
+      const form = shell.querySelector('[data-combobox-form]')
+      const output = shell.querySelector('[data-combobox-output]')
+      const selected = shell.querySelector('[data-combobox-selected]')
+      const input = shell.querySelector('[data-combobox-input]')
+      const popup = shell.querySelector('[data-combobox-open]')
+
+      const eventLabels = {
+        'cv-input': 'input',
+        'cv-change': 'change',
+        'cv-clear': 'clear',
+      }
+
+      const getFieldName = (combobox) => {
+        const label = combobox.closest('cv-field')?.querySelector('[slot="label"]')?.textContent?.trim()
+        return label || combobox.getAttribute('aria-label') || 'combobox'
+      }
+
+      const readState = (combobox, detail = {}) => {
+        const selectedIds = Array.isArray(detail.selectedIds) ? detail.selectedIds : []
+        const value = typeof detail.value === 'string' ? detail.value : combobox.value || ''
+        const inputValue =
+          typeof detail.inputValue === 'string' ? detail.inputValue : combobox.inputValue || ''
+        const open = typeof detail.open === 'boolean' ? detail.open : combobox.open
+
+        return {
+          selection: selectedIds.length > 0 ? selectedIds.join(', ') : value || 'none',
+          inputValue: inputValue || 'empty',
+          popup: open ? 'open' : 'closed',
+        }
+      }
+
+      const updateState = (combobox, detail = {}) => {
+        const state = readState(combobox, detail)
+
+        if (selected) selected.textContent = state.selection
+        if (input) input.textContent = state.inputValue
+        if (popup) popup.textContent = state.popup
+
+        shell.dataset.comboboxState =
+          state.popup === 'open' ? 'open' : state.selection === 'none' ? 'idle' : 'selected'
+        return state
+      }
+
+      const report = (event) => {
+        const combobox = event.target instanceof HTMLElement ? event.target : null
+        if (!combobox?.matches('cv-combobox')) return
+
+        const state = updateState(combobox, event.detail)
+        const name = getFieldName(combobox)
+        const label = eventLabels[event.type] ?? event.type
+
+        if (output) {
+          output.textContent = `${label}: ${name} -> ${state.selection}; input ${state.inputValue}; popup ${state.popup}`
+        }
+      }
+
+      form?.addEventListener('submit', (event) => {
+        event.preventDefault()
+        if (output) output.textContent = 'submit: form boundary reached without changing combobox state.'
+      })
+
+      Object.keys(eventLabels).forEach((eventName) => {
+        shell.addEventListener(eventName, report)
+      })
+    })
+</script>
 ```
 
 ## Anatomy
