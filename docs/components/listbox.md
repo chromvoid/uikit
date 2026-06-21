@@ -8,113 +8,204 @@ Standalone listbox widget for single or multiple selection from a list of option
 
 ## Usage
 
-These examples focus on listbox-level behavior and collection structure. For
-option label composition, prefix/suffix slots, and rich option content, see
-[`cv-option`](./option.md).
+The demo keeps the headless contract visible: active focus, selected values,
+group labels, range selection, and alternate focus/orientation modes are shown
+in one operational surface. For option label composition, prefix/suffix slots,
+and rich option content, see [`cv-option`](./option.md).
 
 ```html
-<div class="listbox-demo-board" data-live-demo-height="760">
-  <!-- Basic single-select: one focused list, one selected option. -->
-  <section class="listbox-demo-example" aria-labelledby="listbox-demo-basic">
-    <h3 id="listbox-demo-basic">Basic single-select</h3>
-    <p>Default listbox behavior with one selected option.</p>
-    <cv-listbox aria-label="Fruits">
-      <cv-option value="apple">Apple</cv-option>
-      <cv-option value="banana">Banana</cv-option>
-      <cv-option value="cherry">Cherry</cv-option>
-    </cv-listbox>
+<div class="listbox-demo-shell" data-demo="listbox" data-live-demo-height="860">
+  <section class="listbox-demo-hero" aria-labelledby="listbox-demo-title">
+    <div class="listbox-demo-copy">
+      <span class="listbox-demo-kicker">Collection selection primitive</span>
+      <h3 id="listbox-demo-title">Choose one visible route, then compose the export fields.</h3>
+      <p>
+        <code>cv-listbox</code> adapts the headless model into DOM focus, ARIA state, grouped options, and
+        keyboard selection without owning the visual content inside each option.
+      </p>
+    </div>
+
+    <dl class="listbox-demo-metrics" aria-label="Listbox contract summary">
+      <div>
+        <dt>Default focus</dt>
+        <dd><code>aria-activedescendant</code> on the listbox root</dd>
+      </div>
+      <div>
+        <dt>Selection modes</dt>
+        <dd>single, multiple, optional range</dd>
+      </div>
+      <div>
+        <dt>Keyboard</dt>
+        <dd>arrows, Home/End, typeahead, Space/Enter</dd>
+      </div>
+    </dl>
   </section>
 
-  <!-- Multiple selection: the user can keep several options selected. -->
-  <section class="listbox-demo-example" aria-labelledby="listbox-demo-multiple">
-    <h3 id="listbox-demo-multiple">Multiple selection</h3>
-    <p>Use selection-mode="multiple" for independent toggles.</p>
-    <cv-listbox selection-mode="multiple" aria-label="Toppings">
-      <cv-option value="cheese">Cheese</cv-option>
-      <cv-option value="peppers">Peppers</cv-option>
-      <cv-option value="onions">Onions</cv-option>
-      <cv-option value="olives" disabled>Olives</cv-option>
-    </cv-listbox>
-  </section>
+  <section class="listbox-demo-workbench" aria-labelledby="listbox-demo-workbench-title">
+    <div class="listbox-demo-section-header">
+      <span class="listbox-demo-kicker">Interactive contract</span>
+      <h4 id="listbox-demo-workbench-title">
+        Grouped single-select and multi-select examples share one event readout.
+      </h4>
+    </div>
 
-  <!-- Pre-selected options: declare initial state on child options. -->
-  <section class="listbox-demo-example" aria-labelledby="listbox-demo-selected">
-    <h3 id="listbox-demo-selected">Pre-selected options</h3>
-    <p>Initial selection can be declared with selected.</p>
-    <cv-listbox selection-mode="multiple" aria-label="Languages">
-      <cv-option value="js" selected>JavaScript</cv-option>
-      <cv-option value="ts" selected>TypeScript</cv-option>
-      <cv-option value="py">Python</cv-option>
-      <cv-option value="rs">Rust</cv-option>
-    </cv-listbox>
-  </section>
+    <div class="listbox-demo-layout">
+      <article
+        class="listbox-demo-panel listbox-demo-panel--primary"
+        aria-labelledby="listbox-demo-route-title"
+      >
+        <header class="listbox-demo-panel-header">
+          <div>
+            <span class="listbox-demo-label">Single select with groups</span>
+            <h5 id="listbox-demo-route-title">Visible profile route</h5>
+          </div>
+          <cv-badge variant="primary">active root</cv-badge>
+        </header>
 
-  <!-- Roving tabindex: options receive DOM focus directly. -->
-  <section class="listbox-demo-example" aria-labelledby="listbox-demo-roving">
-    <h3 id="listbox-demo-roving">Roving tabindex focus</h3>
-    <p>Switch focus strategy when options should receive focus.</p>
-    <cv-listbox focus-strategy="roving-tabindex" aria-label="Colors">
-      <cv-option value="red">Red</cv-option>
-      <cv-option value="green">Green</cv-option>
-      <cv-option value="blue">Blue</cv-option>
-    </cv-listbox>
-  </section>
+        <cv-listbox class="listbox-demo-primary" aria-label="Visible vault route">
+          <cv-listbox-group label="Visible surfaces">
+            <cv-option value="daily" data-label="Daily vault">
+              <span slot="prefix" class="listbox-demo-glyph">D</span>
+              <span class="listbox-demo-option-copy">
+                <strong>Daily vault</strong>
+                <small>Default work profile</small>
+              </span>
+              <cv-badge slot="suffix" variant="neutral">stable</cv-badge>
+            </cv-option>
+            <cv-option value="travel" data-label="Travel profile" selected>
+              <span slot="prefix" class="listbox-demo-glyph listbox-demo-glyph--violet">T</span>
+              <span class="listbox-demo-option-copy">
+                <strong>Travel profile</strong>
+                <small>Deniable border route</small>
+              </span>
+              <cv-badge slot="suffix" variant="primary">visible</cv-badge>
+            </cv-option>
+          </cv-listbox-group>
+          <cv-listbox-group label="Hidden layers">
+            <cv-option value="sealed" data-label="Sealed core">
+              <span slot="prefix" class="listbox-demo-glyph">S</span>
+              <span class="listbox-demo-option-copy">
+                <strong>Sealed core</strong>
+                <small>Requires hardware proof</small>
+              </span>
+              <cv-badge slot="suffix" variant="success">paired</cv-badge>
+            </cv-option>
+            <cv-option value="remote" data-label="Remote recovery" disabled>
+              <span slot="prefix" class="listbox-demo-glyph listbox-demo-glyph--muted">R</span>
+              <span class="listbox-demo-option-copy">
+                <strong>Remote recovery</strong>
+                <small>Disabled until quorum returns</small>
+              </span>
+              <cv-badge slot="suffix" variant="neutral">disabled</cv-badge>
+            </cv-option>
+          </cv-listbox-group>
+        </cv-listbox>
+      </article>
 
-  <!-- Horizontal orientation: compact alignment or segmented-list patterns. -->
-  <section class="listbox-demo-example" aria-labelledby="listbox-demo-horizontal">
-    <h3 id="listbox-demo-horizontal">Horizontal orientation</h3>
-    <p>Use orientation="horizontal" for compact groups.</p>
-    <cv-listbox orientation="horizontal" aria-label="Alignment">
-      <cv-option value="left">Left</cv-option>
-      <cv-option value="center">Center</cv-option>
-      <cv-option value="right">Right</cv-option>
-    </cv-listbox>
-  </section>
+      <article class="listbox-demo-panel" aria-labelledby="listbox-demo-export-title">
+        <header class="listbox-demo-panel-header">
+          <div>
+            <span class="listbox-demo-label">Multiple select with range</span>
+            <h5 id="listbox-demo-export-title">Export field set</h5>
+          </div>
+          <cv-badge variant="neutral">Shift + Arrow</cv-badge>
+        </header>
 
-  <!-- Range selection: Shift+Arrow and Shift+Space multi-select workflows. -->
-  <section class="listbox-demo-example" aria-labelledby="listbox-demo-range">
-    <h3 id="listbox-demo-range">Range selection</h3>
-    <p>Enable range-selection for keyboard range workflows.</p>
-    <cv-listbox selection-mode="multiple" range-selection aria-label="Files">
-      <cv-option value="file1">document.pdf</cv-option>
-      <cv-option value="file2">image.png</cv-option>
-      <cv-option value="file3">notes.txt</cv-option>
-      <cv-option value="file4">data.csv</cv-option>
-    </cv-listbox>
-  </section>
+        <cv-listbox selection-mode="multiple" range-selection aria-label="Export fields">
+          <cv-option value="name" data-label="Record name" selected>
+            <span slot="prefix" class="listbox-demo-glyph">N</span>
+            <span class="listbox-demo-option-copy">
+              <strong>Record name</strong>
+              <small>Shown in review table</small>
+            </span>
+          </cv-option>
+          <cv-option value="owner" data-label="Owner" selected>
+            <span slot="prefix" class="listbox-demo-glyph">O</span>
+            <span class="listbox-demo-option-copy">
+              <strong>Owner</strong>
+              <small>Operational accountability</small>
+            </span>
+          </cv-option>
+          <cv-option value="risk" data-label="Risk flag">
+            <span slot="prefix" class="listbox-demo-glyph listbox-demo-glyph--violet">R</span>
+            <span class="listbox-demo-option-copy">
+              <strong>Risk flag</strong>
+              <small>Visible in elevated review</small>
+            </span>
+          </cv-option>
+          <cv-option value="raw" data-label="Raw secret" disabled>
+            <span slot="prefix" class="listbox-demo-glyph listbox-demo-glyph--muted">X</span>
+            <span class="listbox-demo-option-copy">
+              <strong>Raw secret</strong>
+              <small>Never exported from this route</small>
+            </span>
+          </cv-option>
+        </cv-listbox>
+      </article>
+    </div>
 
-  <!-- Option groups: related options preserve one navigation order. -->
-  <section class="listbox-demo-example" aria-labelledby="listbox-demo-groups">
-    <h3 id="listbox-demo-groups">Option groups</h3>
-    <p>Group related options with cv-listbox-group.</p>
-    <cv-listbox aria-label="City">
-      <cv-listbox-group label="North America">
-        <cv-option value="nyc">New York</cv-option>
-        <cv-option value="la">Los Angeles</cv-option>
-        <cv-option value="tor">Toronto</cv-option>
-      </cv-listbox-group>
-      <cv-listbox-group label="Europe">
-        <cv-option value="lon">London</cv-option>
-        <cv-option value="par">Paris</cv-option>
-        <cv-option value="ber">Berlin</cv-option>
-      </cv-listbox-group>
-    </cv-listbox>
-  </section>
+    <output class="listbox-demo-readout" aria-live="polite" data-listbox-readout>
+      Selection events appear here.
+    </output>
 
-  <!-- Mixed structure: ungrouped options can sit beside grouped sections. -->
-  <section class="listbox-demo-example" aria-labelledby="listbox-demo-mixed">
-    <h3 id="listbox-demo-mixed">Mixed grouped and ungrouped options</h3>
-    <p>Ungrouped options can appear alongside grouped sections.</p>
-    <cv-listbox aria-label="Items">
-      <cv-option value="misc1">Miscellaneous A</cv-option>
-      <cv-listbox-group label="Category 1">
-        <cv-option value="cat1a">Item 1A</cv-option>
-        <cv-option value="cat1b">Item 1B</cv-option>
-      </cv-listbox-group>
-      <cv-option value="misc2">Miscellaneous B</cv-option>
-    </cv-listbox>
+    <div class="listbox-demo-mode-grid" aria-label="Listbox mode examples">
+      <article class="listbox-demo-mode" aria-labelledby="listbox-demo-horizontal-title">
+        <span class="listbox-demo-label">Horizontal orientation</span>
+        <h5 id="listbox-demo-horizontal-title">Review lane</h5>
+        <cv-listbox orientation="horizontal" aria-label="Review lane">
+          <cv-option value="all" data-label="All" selected>All</cv-option>
+          <cv-option value="paired" data-label="Paired">Paired</cv-option>
+          <cv-option value="blocked" data-label="Blocked">Blocked</cv-option>
+        </cv-listbox>
+      </article>
+
+      <article class="listbox-demo-mode" aria-labelledby="listbox-demo-roving-title">
+        <span class="listbox-demo-label">Roving tabindex</span>
+        <h5 id="listbox-demo-roving-title">Direct option focus</h5>
+        <cv-listbox focus-strategy="roving-tabindex" aria-label="Review depth">
+          <cv-option value="summary" data-label="Summary" selected>Summary</cv-option>
+          <cv-option value="proof" data-label="Proof">Proof</cv-option>
+          <cv-option value="events" data-label="Events">Events</cv-option>
+        </cv-listbox>
+      </article>
+    </div>
   </section>
 </div>
+
+<script>
+  document.querySelectorAll('.listbox-demo-shell[data-demo="listbox"]:not([data-ready])').forEach((shell) => {
+    shell.dataset.ready = 'true'
+
+    const readout = shell.querySelector('[data-listbox-readout]')
+    const getLabel = (option) =>
+      option?.dataset.label || option?.textContent?.trim().replace(/\s+/g, ' ') || 'none'
+    const getSelectedLabels = (listbox) =>
+      Array.from(listbox?.querySelectorAll('cv-option') ?? [])
+        .filter((option) => option.selected || option.hasAttribute('selected'))
+        .map(getLabel)
+
+    const update = () => {
+      if (!readout) return
+
+      const route = shell.querySelector('.listbox-demo-primary')
+      const fields = shell.querySelector('cv-listbox[selection-mode="multiple"]')
+      const routeActive = getLabel(route?.querySelector('cv-option[data-active="true"]'))
+      const routeSelected = getSelectedLabels(route)[0] || 'none'
+      const fieldSelected = getSelectedLabels(fields)
+
+      readout.textContent = `Route: ${routeSelected}. Active option: ${routeActive}. Export fields: ${
+        fieldSelected.length > 0 ? fieldSelected.join(', ') : 'none'
+      }.`
+    }
+
+    shell.querySelectorAll('cv-listbox').forEach((listbox) => {
+      listbox.addEventListener('cv-input', update)
+      listbox.addEventListener('cv-change', update)
+    })
+
+    requestAnimationFrame(update)
+  })
+</script>
 ```
 
 ## Anatomy
