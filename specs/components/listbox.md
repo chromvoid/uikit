@@ -198,7 +198,10 @@ and rich option content, see [`cv-option`](./option.md).
     </dl>
   </section>
 
-  <section class="listbox-demo-workbench usage-demo__workbench" aria-labelledby="listbox-demo-workbench-title">
+  <section
+    class="listbox-demo-workbench usage-demo__workbench"
+    aria-labelledby="listbox-demo-workbench-title"
+  >
     <div class="listbox-demo-section-header usage-demo__section-header">
       <span class="listbox-demo-kicker usage-demo__kicker">Interactive contract</span>
       <h4 id="listbox-demo-workbench-title">
@@ -301,7 +304,7 @@ and rich option content, see [`cv-option`](./option.md).
       </article>
     </div>
 
-    <output class="listbox-demo-readout" aria-live="polite" data-listbox-readout>
+    <output class="listbox-demo-readout usage-demo__log" aria-live="polite" data-listbox-readout>
       Selection events appear here.
     </output>
 
