@@ -41,18 +41,19 @@ Multi-line text input with native textarea semantics and headless state delegati
     class="textarea-demo-board usage-demo__workbench"
     aria-label="Textarea examples in a vault note form"
   >
-    <form class="textarea-demo-form" data-textarea-form>
-      <div class="textarea-demo-form-head">
+    <form class="textarea-demo-form usage-demo__form" data-textarea-form>
+      <div class="textarea-demo-form-head usage-demo__form-head">
         <div>
-          <span>Visible vault note</span>
+          <span class="usage-demo__meta">Visible vault note</span>
           <strong>border-check / field report</strong>
         </div>
         <cv-badge variant="primary" pill>live contract</cv-badge>
       </div>
 
-      <cv-field required>
+      <cv-field class="usage-demo__field" required>
         <span slot="label">Operator note</span>
         <cv-textarea
+          class="usage-demo__text-control"
           data-textarea-primary
           name="operator-note"
           rows="7"
@@ -67,10 +68,11 @@ Multi-line text input with native textarea semantics and headless state delegati
         <cv-button data-textarea-action="clear" variant="ghost" outline>Clear note</cv-button>
       </div>
 
-      <div class="textarea-demo-field-grid">
-        <cv-field invalid>
+      <div class="textarea-demo-field-grid usage-demo__field-grid">
+        <cv-field class="usage-demo__field" invalid>
           <span slot="label">Policy review</span>
           <cv-textarea
+            class="usage-demo__text-control"
             variant="filled"
             resize="none"
             rows="4"
@@ -79,9 +81,10 @@ Multi-line text input with native textarea semantics and headless state delegati
           <span slot="error">Visible notes cannot expose hidden-layer identifiers.</span>
         </cv-field>
 
-        <cv-field>
+        <cv-field class="usage-demo__field">
           <span slot="label">Readonly audit excerpt</span>
           <cv-textarea
+            class="usage-demo__text-control"
             readonly
             rows="4"
             value="Signed snapshot: visible profile matched expected decoy route."
@@ -127,54 +130,97 @@ Multi-line text input with native textarea semantics and headless state delegati
       </h4>
     </div>
 
-    <div class="textarea-demo-matrix" aria-label="Textarea state matrix">
-      <div>
-        <span>Variant</span>
-        <cv-textarea rows="3" placeholder="Outlined default"></cv-textarea>
-        <cv-textarea variant="filled" rows="3" value="Filled surface"></cv-textarea>
+    <div class="textarea-demo-matrix usage-demo__field-grid" aria-label="Textarea state matrix">
+      <div class="usage-demo__case">
+        <span class="usage-demo__meta">Variant</span>
+        <cv-textarea class="usage-demo__text-control" rows="3" placeholder="Outlined default"></cv-textarea>
+        <cv-textarea
+          class="usage-demo__text-control"
+          variant="filled"
+          rows="3"
+          value="Filled surface"
+        ></cv-textarea>
       </div>
 
-      <div>
-        <span>Size</span>
-        <cv-textarea size="small" rows="2" resize="none" value="Small note"></cv-textarea>
-        <cv-textarea rows="2" resize="none" value="Medium note"></cv-textarea>
-        <cv-textarea size="large" rows="2" resize="none" value="Large note"></cv-textarea>
+      <div class="usage-demo__case">
+        <span class="usage-demo__meta">Size</span>
+        <cv-textarea
+          class="usage-demo__text-control"
+          size="small"
+          rows="2"
+          resize="none"
+          value="Small note"
+        ></cv-textarea>
+        <cv-textarea
+          class="usage-demo__text-control"
+          rows="2"
+          resize="none"
+          value="Medium note"
+        ></cv-textarea>
+        <cv-textarea
+          class="usage-demo__text-control"
+          size="large"
+          rows="2"
+          resize="none"
+          value="Large note"
+        ></cv-textarea>
       </div>
 
-      <div>
-        <span>Resize</span>
-        <cv-textarea rows="3" value="Vertical resize enabled"></cv-textarea>
-        <cv-textarea resize="none" rows="3" value="Resize disabled for fixed layouts"></cv-textarea>
+      <div class="usage-demo__case">
+        <span class="usage-demo__meta">Resize</span>
+        <cv-textarea class="usage-demo__text-control" rows="3" value="Vertical resize enabled"></cv-textarea>
+        <cv-textarea
+          class="usage-demo__text-control"
+          resize="none"
+          rows="3"
+          value="Resize disabled for fixed layouts"
+        ></cv-textarea>
       </div>
 
-      <div>
-        <span>Validation</span>
-        <cv-field required invalid>
+      <div class="usage-demo__case usage-demo__case--danger">
+        <span class="usage-demo__meta">Validation</span>
+        <cv-field class="usage-demo__field" required invalid>
           <span slot="label">Disclosure note</span>
-          <cv-textarea minlength="12" rows="3" value="Too short"></cv-textarea>
+          <cv-textarea
+            class="usage-demo__text-control"
+            minlength="12"
+            rows="3"
+            value="Too short"
+          ></cv-textarea>
           <span slot="error">Provide enough context for the visible route.</span>
         </cv-field>
       </div>
 
-      <div>
-        <span>Read state</span>
-        <cv-textarea readonly rows="3" value="Readonly but focusable"></cv-textarea>
-        <cv-field disabled>
+      <div class="usage-demo__case">
+        <span class="usage-demo__meta">Read state</span>
+        <cv-textarea
+          class="usage-demo__text-control"
+          readonly
+          rows="3"
+          value="Readonly but focusable"
+        ></cv-textarea>
+        <cv-field class="usage-demo__field" disabled>
           <span slot="label">Disabled by field</span>
-          <cv-textarea rows="3" value="Locked by policy"></cv-textarea>
+          <cv-textarea class="usage-demo__text-control" rows="3" value="Locked by policy"></cv-textarea>
         </cv-field>
       </div>
 
-      <div>
-        <span>Native constraints</span>
+      <div class="usage-demo__case">
+        <span class="usage-demo__meta">Native constraints</span>
         <cv-textarea
+          class="usage-demo__text-control"
           required
           minlength="8"
           maxlength="80"
           rows="3"
           placeholder="Required with min/max"
         ></cv-textarea>
-        <cv-textarea cols="34" rows="3" value="Cols remains a native attribute for forms."></cv-textarea>
+        <cv-textarea
+          class="usage-demo__text-control"
+          cols="34"
+          rows="3"
+          value="Cols remains a native attribute for forms."
+        ></cv-textarea>
       </div>
     </div>
   </section>
