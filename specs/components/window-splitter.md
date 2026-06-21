@@ -201,7 +201,10 @@ Both events are dispatched as `CustomEvent` with `bubbles: true` and `composed: 
       </p>
     </div>
 
-    <dl class="window-splitter-demo-metrics usage-demo__metrics" aria-label="Window splitter behavior summary">
+    <dl
+      class="window-splitter-demo-metrics usage-demo__metrics"
+      aria-label="Window splitter behavior summary"
+    >
       <div>
         <dt>Role</dt>
         <dd>separator</dd>
@@ -217,7 +220,10 @@ Both events are dispatched as `CustomEvent` with `bubbles: true` and `composed: 
     </dl>
   </section>
 
-  <section class="window-splitter-demo-workbench usage-demo__workbench" aria-labelledby="window-splitter-demo-workbench-title">
+  <section
+    class="window-splitter-demo-workbench usage-demo__workbench"
+    aria-labelledby="window-splitter-demo-workbench-title"
+  >
     <div class="window-splitter-demo-section-header usage-demo__section-header">
       <span class="window-splitter-demo-kicker usage-demo__kicker">Vault review workspace</span>
       <h4 id="window-splitter-demo-workbench-title">
@@ -303,7 +309,7 @@ Both events are dispatched as `CustomEvent` with `bubbles: true` and `composed: 
     <div class="window-splitter-demo-status">
       <div>
         <output
-          class="window-splitter-demo-readout"
+          class="window-splitter-demo-readout usage-demo__log"
           for="window-splitter-demo-vault"
           aria-live="polite"
           data-splitter-output
@@ -357,7 +363,7 @@ Both events are dispatched as `CustomEvent` with `bubbles: true` and `composed: 
     </cv-window-splitter>
 
     <output
-      class="window-splitter-demo-readout"
+      class="window-splitter-demo-readout usage-demo__log"
       for="window-splitter-demo-fixed"
       aria-live="polite"
       data-fixed-output
