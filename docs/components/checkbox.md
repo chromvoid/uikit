@@ -16,10 +16,10 @@ This document is the UIKit surface contract for Checkbox.
 ## Usage
 
 ```html
-<div class="checkbox-demo-shell">
-  <section class="checkbox-demo-hero" aria-labelledby="checkbox-demo-title">
-    <div class="checkbox-demo-copy">
-      <span class="checkbox-demo-kicker">State contract</span>
+<div class="checkbox-demo-shell usage-demo">
+  <section class="checkbox-demo-hero usage-demo__hero" aria-labelledby="checkbox-demo-title">
+    <div class="checkbox-demo-copy usage-demo__copy">
+      <span class="checkbox-demo-kicker usage-demo__kicker">State contract</span>
       <h3 id="checkbox-demo-title">Tri-state selection with form semantics</h3>
       <p>
         Checkbox presents boolean and indeterminate state, forwards ARIA to the interactive element, and
@@ -27,7 +27,7 @@ This document is the UIKit surface contract for Checkbox.
       </p>
     </div>
 
-    <dl class="checkbox-demo-metrics" aria-label="Checkbox state summary">
+    <dl class="checkbox-demo-metrics usage-demo__metrics" aria-label="Checkbox state summary">
       <div>
         <dt>Toggle</dt>
         <dd>Space / click</dd>
@@ -43,9 +43,9 @@ This document is the UIKit surface contract for Checkbox.
     </dl>
   </section>
 
-  <section class="checkbox-demo-section" aria-labelledby="checkbox-demo-states-title">
-    <div class="checkbox-demo-section-header">
-      <span class="checkbox-demo-kicker">Visual states</span>
+  <section class="checkbox-demo-section usage-demo__section" aria-labelledby="checkbox-demo-states-title">
+    <div class="checkbox-demo-section-header usage-demo__section-header">
+      <span class="checkbox-demo-kicker usage-demo__kicker">Visual states</span>
       <h4 id="checkbox-demo-states-title">Default, checked, mixed, required, read-only, disabled</h4>
     </div>
 
@@ -83,16 +83,16 @@ This document is the UIKit surface contract for Checkbox.
   </section>
 
   <section
-    class="checkbox-demo-section checkbox-demo-section--workflow"
+    class="checkbox-demo-section checkbox-demo-section--workflow usage-demo__section"
     aria-labelledby="checkbox-demo-flow-title"
   >
-    <div class="checkbox-demo-section-header">
-      <span class="checkbox-demo-kicker">Grouped use</span>
+    <div class="checkbox-demo-section-header usage-demo__section-header">
+      <span class="checkbox-demo-kicker usage-demo__kicker">Grouped use</span>
       <h4 id="checkbox-demo-flow-title">Bulk selection and vault setup patterns</h4>
     </div>
 
     <div class="checkbox-demo-workflow-grid">
-      <div class="checkbox-demo-panel">
+      <div class="checkbox-demo-panel usage-demo__panel">
         <div class="checkbox-demo-toolbar">
           <cv-checkbox indeterminate aria-label="Select visible vault entries">3 of 7 selected</cv-checkbox>
           <span class="checkbox-demo-token">aria-checked="mixed"</span>
@@ -105,7 +105,7 @@ This document is the UIKit surface contract for Checkbox.
         </div>
       </div>
 
-      <form class="checkbox-demo-panel checkbox-demo-form" aria-label="Vault creation checklist">
+      <form class="checkbox-demo-panel checkbox-demo-form usage-demo__panel" aria-label="Vault creation checklist">
         <cv-checkbox checked name="vault-policy" value="local-unlock">Require local unlock</cv-checkbox>
         <cv-checkbox name="vault-policy" value="recovery-code">Generate recovery code</cv-checkbox>
         <cv-checkbox required name="vault-policy" value="acknowledged">Acknowledge threat model</cv-checkbox>
