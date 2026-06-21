@@ -123,7 +123,7 @@ Passive live-region message that announces important updates without taking focu
     </div>
 
     <aside class="alert-demo-side usage-demo__side" aria-label="Alert state and event output">
-      <dl class="alert-demo-state" aria-label="Current alert state">
+      <dl class="alert-demo-state usage-demo__state" aria-label="Current alert state">
         <div>
           <dt>Visible</dt>
           <dd data-alert-visible>false</dd>
