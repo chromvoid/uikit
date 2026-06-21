@@ -174,7 +174,7 @@ Badge is non-interactive. No `input`, `change`, or custom events are emitted.
     </dl>
   </section>
 
-  <section class="badge-demo-board" aria-label="Vault state badge examples">
+  <section class="badge-demo-board usage-demo__workbench" aria-label="Vault state badge examples">
     <div class="badge-demo-record">
       <div class="badge-demo-record-head">
         <div>
