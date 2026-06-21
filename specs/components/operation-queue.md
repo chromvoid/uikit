@@ -94,55 +94,142 @@ None.
 ## Usage
 
 ```html
-<cv-operation-queue label="Encrypted export queue" busy tone="info">
-  <cv-status-indicator slot="icon" tone="info" pulse decorative></cv-status-indicator>
-  <span slot="summary">Encrypted export - 2 active / 1 queued</span>
-  <cv-button slot="actions" size="small" variant="ghost">Pause</cv-button>
-
-  <cv-task-list label="Transfer tasks" density="compact">
-    <div role="listitem">
-      <div>
-        <strong>Encrypt media archive</strong><br />
-        <span>Chunk 18 of 25 - 72%</span>
-        <cv-progress value="72" value-text="72%" aria-label="Encrypt media archive progress"></cv-progress>
-      </div>
-      <cv-badge variant="primary" pulse>Running</cv-badge>
+<div class="operation-queue-demo-shell" data-demo="operation-queue" data-live-demo-height="820">
+  <section class="operation-queue-demo-hero" aria-labelledby="operation-queue-demo-title">
+    <div class="operation-queue-demo-copy">
+      <span class="operation-queue-demo-kicker">Batch operation surface</span>
+      <h3 id="operation-queue-demo-title">
+        Show the queue, the batch decision, and the next safe action together.
+      </h3>
+      <p>
+        Use <code>cv-operation-queue</code> when several long-running tasks need one operational frame: an
+        aggregate state, batch actions, task rows, empty placement, and footer progress.
+      </p>
     </div>
 
-    <div role="listitem">
+    <dl class="operation-queue-demo-metrics" aria-label="Operation queue contract summary">
       <div>
-        <strong>Verify metadata manifest</strong><br />
-        <span>Checksums match before transfer</span>
+        <dt>Shell</dt>
+        <dd>section + aria-busy</dd>
       </div>
-      <cv-badge variant="success">Done</cv-badge>
+      <div>
+        <dt>Slots</dt>
+        <dd>summary / actions / footer</dd>
+      </div>
+      <div>
+        <dt>State</dt>
+        <dd>busy / tone / empty</dd>
+      </div>
+    </dl>
+  </section>
+
+  <section class="operation-queue-demo-workbench" aria-labelledby="operation-queue-demo-workbench-title">
+    <div class="operation-queue-demo-board">
+      <div class="operation-queue-demo-section-header">
+        <span class="operation-queue-demo-kicker">Encrypted export queue</span>
+        <h4 id="operation-queue-demo-workbench-title">
+          The shell owns the batch frame; task data stays with the workflow.
+        </h4>
+      </div>
+
+      <cv-operation-queue
+        class="operation-queue-demo-primary"
+        label="Encrypted export operation queue"
+        busy
+        tone="info"
+      >
+        <cv-status-indicator slot="icon" tone="info" pulse decorative></cv-status-indicator>
+        <span slot="summary" class="operation-queue-demo-summary">
+          <strong>media-archive.cvault</strong>
+          <span>2 active / 1 queued / retry window open</span>
+        </span>
+        <cv-button slot="actions" size="small" variant="ghost">Pause</cv-button>
+        <cv-button slot="actions" size="small" variant="danger" outline>Cancel batch</cv-button>
+
+        <cv-task-list label="Encrypted export tasks" density="compact">
+          <div role="listitem" class="operation-queue-demo-task operation-queue-demo-task--active">
+            <div class="operation-queue-demo-task-copy">
+              <span>Step 1</span>
+              <strong>Encrypt media archive</strong>
+              <small>Chunk 18 of 25 sealed locally</small>
+              <cv-progress
+                tone="upload"
+                value="72"
+                value-text="72%"
+                aria-label="Encrypt media archive progress"
+              >
+                72%
+              </cv-progress>
+            </div>
+            <cv-badge variant="primary" pulse>Running</cv-badge>
+          </div>
+
+          <div role="listitem" class="operation-queue-demo-task operation-queue-demo-task--done">
+            <div class="operation-queue-demo-task-copy">
+              <span>Step 2</span>
+              <strong>Verify metadata manifest</strong>
+              <small>Checksums match before upload</small>
+            </div>
+            <cv-badge variant="success">Done</cv-badge>
+          </div>
+
+          <div role="listitem" class="operation-queue-demo-task operation-queue-demo-task--queued">
+            <div class="operation-queue-demo-task-copy">
+              <span>Step 3</span>
+              <strong>Upload sealed backup</strong>
+              <small>Waiting for the next transfer slot</small>
+            </div>
+            <cv-button size="small" variant="ghost">Cancel</cv-button>
+          </div>
+        </cv-task-list>
+
+        <div slot="footer" class="operation-queue-demo-footer">
+          <span>1.8 GB of 2.4 GB transferred</span>
+          <cv-progress
+            tone="upload"
+            value="74"
+            value-text="74%"
+            aria-label="Encrypted export transfer progress"
+          >
+            74%
+          </cv-progress>
+        </div>
+      </cv-operation-queue>
     </div>
 
-    <div role="listitem">
-      <div>
-        <strong>Upload encrypted backup</strong><br />
-        <span>Waiting for network slot</span>
+    <aside class="operation-queue-demo-side" aria-label="Operation queue tone and density examples">
+      <div class="operation-queue-demo-section-header">
+        <span class="operation-queue-demo-kicker">Secondary states</span>
+        <h4>Tone marks aggregate state; density controls how much queue detail stays visible.</h4>
       </div>
-      <cv-button size="small" variant="ghost">Cancel</cv-button>
-    </div>
-  </cv-task-list>
 
-  <div slot="footer">
-    <span>1.8 GB of 2.4 GB transferred - retry window open</span>
-    <cv-progress
-      tone="upload"
-      value="74"
-      value-text="74%"
-      aria-label="Encrypted export transfer progress"
-    ></cv-progress>
-  </div>
-</cv-operation-queue>
+      <cv-operation-queue label="Remote manifest paused" tone="warning" density="compact">
+        <cv-status-indicator slot="icon" tone="warning" decorative></cv-status-indicator>
+        <span slot="summary" class="operation-queue-demo-summary">
+          <strong>Manifest verification paused</strong>
+          <span>Waiting for remote lease renewal</span>
+        </span>
+        <span slot="footer">1 active / resumes after connectivity check</span>
+      </cv-operation-queue>
 
-<cv-operation-queue label="No background operations" empty>
-  <cv-empty-state
-    slot="empty"
-    icon="check"
-    headline="Queue is clear"
-    description="New uploads, exports, and sync jobs will appear here."
-  ></cv-empty-state>
-</cv-operation-queue>
+      <cv-operation-queue label="Export complete" tone="success" density="compact">
+        <cv-status-indicator slot="icon" tone="success" decorative></cv-status-indicator>
+        <span slot="summary" class="operation-queue-demo-summary">
+          <strong>Export package complete</strong>
+          <span>4 operations completed</span>
+        </span>
+        <span slot="footer">Remote manifest verified now</span>
+      </cv-operation-queue>
+
+      <cv-operation-queue label="No background operations" empty>
+        <cv-empty-state
+          slot="empty"
+          icon="check"
+          headline="Queue is clear"
+          description="New uploads, exports, and sync jobs will appear here."
+        ></cv-empty-state>
+      </cv-operation-queue>
+    </aside>
+  </section>
+</div>
 ```
