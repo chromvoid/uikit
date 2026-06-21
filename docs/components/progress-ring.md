@@ -49,7 +49,7 @@ A read-only circular indicator that communicates determinate or indeterminate lo
     </div>
   </section>
 
-  <section class="progress-ring-demo-states" aria-label="Progress ring states">
+  <section class="progress-ring-demo-states usage-demo__band" aria-label="Progress ring states">
     <article class="progress-ring-demo-state">
       <cv-progress-ring
         class="progress-ring-demo-ring progress-ring-demo-ring--state"
