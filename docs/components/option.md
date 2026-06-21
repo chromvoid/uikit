@@ -48,7 +48,7 @@ keyboard behavior, and events.
       </h4>
     </div>
 
-    <div class="option-demo-layout">
+    <div class="option-demo-layout usage-demo__single-layout">
       <article
         class="option-demo-panel option-demo-panel--primary usage-demo__panel usage-demo__panel--primary"
         aria-labelledby="option-demo-list-title"
@@ -62,18 +62,20 @@ keyboard behavior, and events.
         </header>
 
         <cv-listbox class="option-demo-listbox" aria-label="Visible vault route">
-          <cv-listbox-group label="Visible layer">
+          <cv-listbox-group class="usage-demo__listbox-group-label" label="Visible layer">
             <cv-option value="daily" data-label="Daily vault">
-              <span slot="prefix" class="option-demo-glyph">D</span>
-              <span class="option-demo-option-copy">
+              <span slot="prefix" class="option-demo-glyph usage-demo__adornment">D</span>
+              <span class="option-demo-option-copy usage-demo__micro-copy">
                 <strong>Daily vault</strong>
                 <small>Default work profile</small>
               </span>
               <cv-badge slot="suffix" variant="neutral" pill>stable</cv-badge>
             </cv-option>
             <cv-option value="travel" data-label="Travel profile" selected>
-              <span slot="prefix" class="option-demo-glyph option-demo-glyph--cyan">T</span>
-              <span class="option-demo-option-copy">
+              <span slot="prefix" class="option-demo-glyph option-demo-glyph--cyan usage-demo__adornment"
+                >T</span
+              >
+              <span class="option-demo-option-copy usage-demo__micro-copy">
                 <strong>Travel profile</strong>
                 <small>Safe surface for inspection</small>
               </span>
@@ -81,18 +83,22 @@ keyboard behavior, and events.
             </cv-option>
           </cv-listbox-group>
 
-          <cv-listbox-group label="Protected layer">
+          <cv-listbox-group class="usage-demo__listbox-group-label" label="Protected layer">
             <cv-option value="sealed" data-label="Sealed core">
-              <span slot="prefix" class="option-demo-glyph option-demo-glyph--violet">S</span>
-              <span class="option-demo-option-copy">
+              <span slot="prefix" class="option-demo-glyph option-demo-glyph--violet usage-demo__adornment"
+                >S</span
+              >
+              <span class="option-demo-option-copy usage-demo__micro-copy">
                 <strong>Sealed core</strong>
                 <small>Shown after hardware proof</small>
               </span>
               <cv-badge slot="suffix" variant="success" pill>paired</cv-badge>
             </cv-option>
             <cv-option value="remote" data-label="Remote recovery" disabled>
-              <span slot="prefix" class="option-demo-glyph option-demo-glyph--muted">R</span>
-              <span class="option-demo-option-copy">
+              <span slot="prefix" class="option-demo-glyph option-demo-glyph--muted usage-demo__adornment"
+                >R</span
+              >
+              <span class="option-demo-option-copy usage-demo__micro-copy">
                 <strong>Remote recovery</strong>
                 <small>Disabled until quorum returns</small>
               </span>
@@ -139,7 +145,7 @@ keyboard behavior, and events.
         <article class="option-demo-state-card usage-demo__mode">
           <span class="option-demo-label usage-demo__label">Default</span>
           <cv-option value="default">
-            <span slot="prefix" class="option-demo-glyph">A</span>
+            <span slot="prefix" class="option-demo-glyph usage-demo__adornment">A</span>
             Plain row
           </cv-option>
         </article>
@@ -147,7 +153,9 @@ keyboard behavior, and events.
         <article class="option-demo-state-card usage-demo__mode">
           <span class="option-demo-label usage-demo__label">Selected</span>
           <cv-option value="selected" selected>
-            <span slot="prefix" class="option-demo-glyph option-demo-glyph--cyan">B</span>
+            <span slot="prefix" class="option-demo-glyph option-demo-glyph--cyan usage-demo__adornment"
+              >B</span
+            >
             Selected row
             <cv-badge slot="suffix" variant="primary" pill>on</cv-badge>
           </cv-option>
@@ -156,7 +164,9 @@ keyboard behavior, and events.
         <article class="option-demo-state-card usage-demo__mode">
           <span class="option-demo-label usage-demo__label">Active</span>
           <cv-option value="active" active>
-            <span slot="prefix" class="option-demo-glyph option-demo-glyph--violet">C</span>
+            <span slot="prefix" class="option-demo-glyph option-demo-glyph--violet usage-demo__adornment"
+              >C</span
+            >
             Active row
           </cv-option>
         </article>
@@ -164,7 +174,9 @@ keyboard behavior, and events.
         <article class="option-demo-state-card usage-demo__mode">
           <span class="option-demo-label usage-demo__label">Disabled</span>
           <cv-option value="disabled" disabled>
-            <span slot="prefix" class="option-demo-glyph option-demo-glyph--muted">D</span>
+            <span slot="prefix" class="option-demo-glyph option-demo-glyph--muted usage-demo__adornment"
+              >D</span
+            >
             Disabled row
             <cv-badge slot="suffix" variant="neutral" pill>locked</cv-badge>
           </cv-option>
