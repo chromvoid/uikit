@@ -4,6 +4,7 @@ const CV_TAG_RE = /<cv-[\w-]+/
 const LIVE_DEMO_LANGS = new Set(['html', 'xml'])
 // Explicit docs-only escape hatch for examples that should show source without a live preview.
 const SOURCE_ONLY_DEMO_RE = /\sdata-live-demo-source-only(?:[\s=>]|$)/i
+const SOURCE_ONLY_INFO_RE = /(?:^|\s)(?:source-only|live-demo-source-only)(?:\s|$)/i
 
 export function liveDemoPlugin(md: MarkdownIt): void {
   const defaultFence =
@@ -11,10 +12,16 @@ export function liveDemoPlugin(md: MarkdownIt): void {
 
   md.renderer.rules.fence = (tokens, idx, options, env, self) => {
     const token = tokens[idx]
-    const lang = token.info.trim().split(/\s+/)[0]
+    const info = token.info.trim()
+    const lang = info.split(/\s+/)[0]
     const raw = token.content
 
-    if (!LIVE_DEMO_LANGS.has(lang) || !CV_TAG_RE.test(raw) || SOURCE_ONLY_DEMO_RE.test(raw)) {
+    if (
+      !LIVE_DEMO_LANGS.has(lang) ||
+      !CV_TAG_RE.test(raw) ||
+      SOURCE_ONLY_INFO_RE.test(info) ||
+      SOURCE_ONLY_DEMO_RE.test(raw)
+    ) {
       return defaultFence(tokens, idx, options, env, self)
     }
 

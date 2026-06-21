@@ -91,14 +91,9 @@ function transformDemoModuleSource(source: string): string {
 
 function measurePreviewHeight(preview: HTMLElement): number {
   const rect = preview.getBoundingClientRect()
-  return Math.ceil(
-    Math.max(
-      rect.height,
-      preview.scrollHeight,
-      document.body.scrollHeight,
-      document.documentElement.scrollHeight,
-    ),
-  )
+  // In an iframe, documentElement.scrollHeight is at least the current viewport height.
+  // Including it makes demos grow after upgrade/layout changes but prevents them from shrinking.
+  return Math.ceil(Math.max(rect.height, preview.scrollHeight, document.body.scrollHeight))
 }
 
 function postPreviewHeight(preview: HTMLElement, id: string): void {
