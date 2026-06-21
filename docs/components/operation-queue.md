@@ -24,7 +24,10 @@ The queue shell owns layout, accessibility shell semantics, busy/tone styling, e
       </p>
     </div>
 
-    <dl class="operation-queue-demo-metrics usage-demo__metrics" aria-label="Operation queue contract summary">
+    <dl
+      class="operation-queue-demo-metrics usage-demo__metrics"
+      aria-label="Operation queue contract summary"
+    >
       <div>
         <dt>Shell</dt>
         <dd>section + aria-busy</dd>
@@ -40,8 +43,11 @@ The queue shell owns layout, accessibility shell semantics, busy/tone styling, e
     </dl>
   </section>
 
-  <section class="operation-queue-demo-workbench usage-demo__workbench" aria-labelledby="operation-queue-demo-workbench-title">
-    <div class="operation-queue-demo-board">
+  <section
+    class="operation-queue-demo-workbench usage-demo__workbench"
+    aria-labelledby="operation-queue-demo-workbench-title"
+  >
+    <div class="operation-queue-demo-board usage-demo__workbench">
       <div class="operation-queue-demo-section-header usage-demo__section-header">
         <span class="operation-queue-demo-kicker usage-demo__kicker">Encrypted export queue</span>
         <h4 id="operation-queue-demo-workbench-title">
@@ -114,7 +120,10 @@ The queue shell owns layout, accessibility shell semantics, busy/tone styling, e
       </cv-operation-queue>
     </div>
 
-    <aside class="operation-queue-demo-side usage-demo__side" aria-label="Operation queue tone and density examples">
+    <aside
+      class="operation-queue-demo-side usage-demo__side"
+      aria-label="Operation queue tone and density examples"
+    >
       <div class="operation-queue-demo-section-header usage-demo__section-header">
         <span class="operation-queue-demo-kicker usage-demo__kicker">Secondary states</span>
         <h4>Tone marks aggregate state; density controls how much queue detail stays visible.</h4>
