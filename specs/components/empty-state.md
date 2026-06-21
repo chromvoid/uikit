@@ -51,7 +51,12 @@ None. The component is presentational.
 ## Usage
 
 ```html
-<div class="empty-state-demo-shell usage-demo" data-demo="empty-state" data-live-demo-height="760" data-theme="dark">
+<div
+  class="empty-state-demo-shell usage-demo"
+  data-demo="empty-state"
+  data-live-demo-height="760"
+  data-theme="dark"
+>
   <cv-theme-provider mode="dark" class="empty-state-demo-theme">
     <section class="empty-state-demo-hero usage-demo__hero" aria-labelledby="empty-state-demo-title">
       <div class="empty-state-demo-copy usage-demo__copy">
@@ -81,7 +86,10 @@ None. The component is presentational.
       </dl>
     </section>
 
-    <section class="empty-state-demo-workbench usage-demo__workbench" aria-labelledby="empty-state-demo-workbench-title">
+    <section
+      class="empty-state-demo-workbench usage-demo__workbench"
+      aria-labelledby="empty-state-demo-workbench-title"
+    >
       <div class="empty-state-demo-section-header usage-demo__section-header">
         <span class="empty-state-demo-kicker usage-demo__kicker">Vault workspace</span>
         <h4 id="empty-state-demo-workbench-title">
@@ -121,7 +129,10 @@ None. The component is presentational.
       </div>
     </section>
 
-    <section class="empty-state-demo-section usage-demo__section" aria-labelledby="empty-state-demo-variants-title">
+    <section
+      class="empty-state-demo-section usage-demo__section"
+      aria-labelledby="empty-state-demo-variants-title"
+    >
       <div class="empty-state-demo-section-header usage-demo__section-header">
         <span class="empty-state-demo-kicker usage-demo__kicker">State matrix</span>
         <h4 id="empty-state-demo-variants-title">
