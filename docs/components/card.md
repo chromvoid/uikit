@@ -43,7 +43,7 @@ Visual container that groups related content into a cohesive unit, with an optio
       <img slot="image" src="../images/card-preview.png" alt="Faceted encrypted workspace preview" />
       <div slot="header" class="card-demo-card-head">
         <span>Border vault review</span>
-        <cv-badge variant="success" size="small">verified</cv-badge>
+        <cv-badge class="usage-demo__dense-badge" variant="success" size="small">verified</cv-badge>
       </div>
 
       <div class="card-demo-body">
@@ -52,7 +52,7 @@ Visual container that groups related content into a cohesive unit, with an optio
           enters a matching threat model.
         </p>
 
-        <div class="card-demo-proof-grid" aria-label="Review details">
+        <div class="card-demo-proof-grid usage-demo__grid--compact" aria-label="Review details">
           <span>
             <strong>3</strong>
             exposed entries
@@ -78,7 +78,7 @@ Visual container that groups related content into a cohesive unit, with an optio
       <cv-card variant="outlined" class="card-demo-compact-card">
         <div slot="header" class="card-demo-card-head">
           <span>Relay boundary</span>
-          <cv-badge variant="primary" size="small">active</cv-badge>
+          <cv-badge class="usage-demo__dense-badge" variant="primary" size="small">active</cv-badge>
         </div>
         <p>Outlined cards keep a quiet surface while still separating trust-boundary metadata.</p>
       </cv-card>
@@ -86,7 +86,7 @@ Visual container that groups related content into a cohesive unit, with an optio
       <cv-card variant="filled" class="card-demo-compact-card">
         <div slot="header" class="card-demo-card-head">
           <span>Sync window</span>
-          <cv-badge variant="warning" size="small">18 min</cv-badge>
+          <cv-badge class="usage-demo__dense-badge" variant="warning" size="small">18 min</cv-badge>
         </div>
         <p>Filled cards work for secondary status where elevation would overstate priority.</p>
       </cv-card>
@@ -94,7 +94,7 @@ Visual container that groups related content into a cohesive unit, with an optio
       <cv-card expandable class="card-demo-disclosure-card" variant="outlined">
         <div slot="header" class="card-demo-card-head">
           <span>Compatibility disclosure</span>
-          <cv-badge variant="neutral" size="small">legacy</cv-badge>
+          <cv-badge class="usage-demo__dense-badge" variant="neutral" size="small">legacy</cv-badge>
         </div>
         <p>
           Expandable cards remain supported for existing flows. For new single-section reveal UI, prefer
