@@ -167,7 +167,7 @@ Controlled progress display for linear, step-based flows.
           <span class="steps-demo-step-meta">Disabled until review passes.</span>
         </cv-step>
       </cv-steps>
-      <output class="steps-demo-output" aria-live="polite">Selected step: device</output>
+      <output class="steps-demo-output usage-demo__log" aria-live="polite">Selected step: device</output>
     </div>
   </section>
 </div>
