@@ -32,7 +32,7 @@ Product-agnostic guidance body layout for coach marks, inline hints, warnings, a
   </section>
 
   <section class="guidance-panel-demo-product" aria-labelledby="guidance-panel-demo-product-title">
-    <header class="guidance-panel-demo-toolbar">
+    <header class="guidance-panel-demo-toolbar usage-demo__split-row">
       <div>
         <span class="guidance-panel-demo-kicker usage-demo__kicker">Vault setup</span>
         <h4 id="guidance-panel-demo-product-title">The same panel body in product context</h4>
@@ -42,7 +42,7 @@ Product-agnostic guidance body layout for coach marks, inline hints, warnings, a
 
     <div class="guidance-panel-demo-grid">
       <div class="guidance-panel-demo-workspace" aria-label="Guided vault setup preview">
-        <div class="guidance-panel-demo-vault-row">
+        <div class="guidance-panel-demo-vault-row usage-demo__inline-card-row">
           <span>
             <strong>Recovery key</strong>
             <small>generated locally</small>
@@ -50,7 +50,9 @@ Product-agnostic guidance body layout for coach marks, inline hints, warnings, a
           <span class="guidance-panel-demo-state">done</span>
         </div>
 
-        <div class="guidance-panel-demo-vault-row guidance-panel-demo-vault-row--active">
+        <div
+          class="guidance-panel-demo-vault-row guidance-panel-demo-vault-row--active usage-demo__inline-card-row"
+        >
           <span>
             <strong>First secret</strong>
             <small>waiting for user action</small>
