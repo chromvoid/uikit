@@ -40,16 +40,16 @@ Graphical display of a numeric value within a known range, such as disk usage or
   <section class="meter-demo-workbench usage-demo__workbench" aria-labelledby="meter-demo-workbench-title">
     <div class="meter-demo-panel usage-demo__panel">
       <header class="meter-demo-panel-head usage-demo__panel-head">
-        <div>
+        <div class="usage-demo__flow usage-demo__flow--tight">
           <span class="meter-demo-kicker usage-demo__kicker">Storage pressure</span>
           <h4 id="meter-demo-workbench-title">remote-vault-01</h4>
         </div>
         <cv-badge variant="warning">Measured</cv-badge>
       </header>
 
-      <div class="meter-demo-primary-reading">
+      <div class="meter-demo-primary-reading usage-demo__flow usage-demo__flow--loose">
         <div class="meter-demo-reading-label">
-          <span>Capacity used</span>
+          <span class="usage-demo__meta usage-demo__label">Capacity used</span>
           <strong>82 GB / 100 GB</strong>
         </div>
         <cv-meter
@@ -65,7 +65,7 @@ Graphical display of a numeric value within a known range, such as disk usage or
         >
           high
         </cv-meter>
-        <div class="meter-demo-scale" aria-hidden="true">
+        <div class="meter-demo-scale usage-demo__meta usage-demo__label" aria-hidden="true">
           <span>low</span>
           <span>optimum</span>
           <span>high</span>
@@ -73,22 +73,22 @@ Graphical display of a numeric value within a known range, such as disk usage or
       </div>
 
       <div class="meter-demo-zone-grid" aria-label="Meter threshold examples">
-        <div>
-          <span>Low</span>
+        <div class="usage-demo__flow usage-demo__flow--loose">
+          <span class="usage-demo__meta usage-demo__label">Low</span>
           <cv-meter value="34" low="45" high="80" optimum="62" aria-label="Low threshold example"
             >34</cv-meter
           >
           <strong>Below target</strong>
         </div>
-        <div>
-          <span>Optimum</span>
+        <div class="usage-demo__flow usage-demo__flow--loose">
+          <span class="usage-demo__meta usage-demo__label">Optimum</span>
           <cv-meter value="58" low="35" high="85" optimum="55" aria-label="Optimum threshold example"
             >58</cv-meter
           >
           <strong>Healthy range</strong>
         </div>
-        <div>
-          <span>High</span>
+        <div class="usage-demo__flow usage-demo__flow--loose">
+          <span class="usage-demo__meta usage-demo__label">High</span>
           <cv-meter value="91" low="30" high="80" optimum="50" aria-label="High threshold example"
             >91</cv-meter
           >
@@ -97,15 +97,17 @@ Graphical display of a numeric value within a known range, such as disk usage or
       </div>
     </div>
 
-    <aside class="meter-demo-compare" aria-labelledby="meter-demo-compare-title">
+    <aside class="meter-demo-compare usage-demo__flow" aria-labelledby="meter-demo-compare-title">
       <div class="meter-demo-section-header usage-demo__section-header">
         <span class="meter-demo-kicker usage-demo__kicker">Meter vs progress</span>
         <h4 id="meter-demo-compare-title">Choose by meaning, not by shape.</h4>
       </div>
 
-      <div class="meter-demo-compare-grid">
-        <div class="meter-demo-compare-card meter-demo-compare-card--meter">
-          <span>cv-meter</span>
+      <div class="meter-demo-compare-grid usage-demo__field-grid">
+        <div
+          class="meter-demo-compare-card meter-demo-compare-card--meter usage-demo__flow usage-demo__flow--loose"
+        >
+          <span class="usage-demo__meta usage-demo__label">cv-meter</span>
           <strong>Static measurement</strong>
           <cv-meter
             value="64"
@@ -120,8 +122,10 @@ Graphical display of a numeric value within a known range, such as disk usage or
           <p>Answers "how much is the measured condition?" and can map the value into threshold zones.</p>
         </div>
 
-        <div class="meter-demo-compare-card meter-demo-compare-card--progress">
-          <span>cv-progress</span>
+        <div
+          class="meter-demo-compare-card meter-demo-compare-card--progress usage-demo__flow usage-demo__flow--loose"
+        >
+          <span class="usage-demo__meta usage-demo__label">cv-progress</span>
           <strong>Operation progress</strong>
           <cv-progress
             value="64"
@@ -147,22 +151,22 @@ Graphical display of a numeric value within a known range, such as disk usage or
     </div>
 
     <dl class="meter-demo-rule-grid" aria-label="When to use meter or progress">
-      <div>
-        <dt>Use meter for</dt>
+      <div class="usage-demo__flow usage-demo__flow--loose">
+        <dt class="usage-demo__meta usage-demo__label">Use meter for</dt>
         <dd>disk usage, password strength, queue saturation, memory pressure</dd>
       </div>
-      <div>
-        <dt>Use progress for</dt>
+      <div class="usage-demo__flow usage-demo__flow--loose">
+        <dt class="usage-demo__meta usage-demo__label">Use progress for</dt>
         <dd>upload, export, sync, verification, loading or completion state</dd>
       </div>
-      <div>
-        <dt>Meter contract</dt>
+      <div class="usage-demo__flow usage-demo__flow--loose">
+        <dt class="usage-demo__meta usage-demo__label">Meter contract</dt>
         <dd>
           <code>value</code> plus optional <code>low</code>, <code>high</code>, and <code>optimum</code>
         </dd>
       </div>
-      <div>
-        <dt>Progress contract</dt>
+      <div class="usage-demo__flow usage-demo__flow--loose">
+        <dt class="usage-demo__meta usage-demo__label">Progress contract</dt>
         <dd>
           <code>value</code> while determinate, or <code>indeterminate</code> when the amount is unknown
         </dd>
