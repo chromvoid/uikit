@@ -127,15 +127,15 @@ in the center.
         Use the attribute form for public URLs. For setup secrets and recovery payloads, write
         <code>.value</code> from app state so the encoded data never has to be reflected in markup.
       </p>
-      <div class="qr-demo-signal-row" aria-label="QR code reliability guidance">
-        <span class="qr-demo-signal">High contrast</span>
-        <span class="qr-demo-signal">Quiet zone kept</span>
-        <span class="qr-demo-signal">Logo requires H</span>
+      <div class="qr-demo-signal-row usage-demo__baseline-row" aria-label="QR code reliability guidance">
+        <span class="qr-demo-signal usage-demo__meta usage-demo__label">High contrast</span>
+        <span class="qr-demo-signal usage-demo__meta usage-demo__label">Quiet zone kept</span>
+        <span class="qr-demo-signal usage-demo__meta usage-demo__label">Logo requires H</span>
       </div>
     </div>
 
     <figure class="qr-demo-feature">
-      <span class="qr-demo-feature-label">Public pairing URL</span>
+      <span class="qr-demo-feature-label usage-demo__meta usage-demo__label">Public pairing URL</span>
       <cv-qr-code
         class="qr-demo-featured"
         value="https://chromvoid.com/pair?device=vault"
