@@ -1,6 +1,6 @@
 # cv-shortcut
 
-Display primitive for keyboard shortcut labels.
+Command-hint primitive for keyboard shortcut labels.
 
 Shortcut resolution, platform-specific labels, and command matching remain owned by consumers. `cv-shortcut` only renders a label or key list.
 
@@ -39,15 +39,222 @@ When `label` and `keys` are empty, the default slot is rendered instead.
 | `key`       | Inner `cv-kbd` keycap     |
 | `separator` | Separator between keycaps |
 
+## CSS Custom Properties
+
+| Property                            | Default                                           | Description                  |
+| ----------------------------------- | ------------------------------------------------- | ---------------------------- |
+| `--cv-shortcut-gap`                 | `var(--cv-space-1, 4px)`                          | Gap between keys/separators  |
+| `--cv-shortcut-separator-color`     | `var(--cv-color-text-muted, #9aa6bd)`             | Separator text color         |
+| `--cv-shortcut-separator-font-size` | `0.8em`                                           | Separator font size          |
+| `--cv-kbd-*`                        | inherited by inner `cv-kbd` keycaps where defined | Keycap sizing, color, border |
+
 ## Events
 
 None.
 
 ## Usage
 
-Use `label` for static markup with the default `+` separator. Use `keys` for explicit key lists, either as a comma-separated attribute or as a JavaScript property; a non-empty `keys` value is rendered instead of parsing `label`.
+Use `cv-shortcut` as secondary command metadata in menus, command rows, toolbars, and dense panels. Do not use it as a button or as a keyboard listener. Resolve platform-specific shortcuts in the owning model or application code, then pass the rendered keys into the component.
 
 ```html
+<div class="shortcut-demo-shell" data-demo="shortcut" data-live-demo-height="760">
+  <section class="shortcut-demo-hero" aria-labelledby="shortcut-demo-title">
+    <div class="shortcut-demo-copy">
+      <span class="shortcut-demo-kicker">Command metadata</span>
+      <h3 id="shortcut-demo-title">Shortcut labels should read as hints, not as controls.</h3>
+      <p>
+        The component keeps keycap rendering stable while shortcut matching, platform resolution, and command
+        execution stay in the consuming surface.
+      </p>
+    </div>
+
+    <dl class="shortcut-demo-metrics" aria-label="Shortcut component responsibility split">
+      <div>
+        <dt>Renders</dt>
+        <dd>label or keys</dd>
+      </div>
+      <div>
+        <dt>Owns</dt>
+        <dd>no command state</dd>
+      </div>
+      <div>
+        <dt>Fits</dt>
+        <dd>menus / rows / hints</dd>
+      </div>
+    </dl>
+  </section>
+
+  <section class="shortcut-demo-workbench" aria-labelledby="shortcut-demo-workbench-title">
+    <div class="shortcut-demo-section-header">
+      <span class="shortcut-demo-kicker">Vault command surface</span>
+      <h4 id="shortcut-demo-workbench-title">
+        Platform mapping changes the label, but the visual contract stays identical
+      </h4>
+    </div>
+
+    <div class="shortcut-demo-platforms" role="group" aria-label="Shortcut platform preview">
+      <button type="button" data-shortcut-platform="macos" aria-pressed="true">macOS</button>
+      <button type="button" data-shortcut-platform="windows" aria-pressed="false">Windows</button>
+      <button type="button" data-shortcut-platform="linux" aria-pressed="false">Linux</button>
+      <button type="button" data-shortcut-platform="web" aria-pressed="false">Web</button>
+    </div>
+
+    <div class="shortcut-demo-grid">
+      <div class="shortcut-demo-command-panel" aria-label="Command row shortcut examples">
+        <header class="shortcut-demo-panel-header">
+          <div>
+            <span class="shortcut-demo-label">Active route</span>
+            <strong>Hidden vault review</strong>
+          </div>
+          <output data-shortcut-readout aria-live="polite">Previewing macOS bindings</output>
+        </header>
+
+        <button type="button" class="shortcut-demo-command shortcut-demo-command--active">
+          <span class="shortcut-demo-command-glyph" aria-hidden="true">P</span>
+          <span class="shortcut-demo-command-copy">
+            <strong>Open command palette</strong>
+            <span>Search routes, tools, and vault actions.</span>
+          </span>
+          <cv-shortcut data-shortcut-id="palette" keys="Meta,K"></cv-shortcut>
+        </button>
+
+        <button type="button" class="shortcut-demo-command">
+          <span class="shortcut-demo-command-glyph shortcut-demo-command-glyph--violet" aria-hidden="true">R</span>
+          <span class="shortcut-demo-command-copy">
+            <strong>Reveal selected field</strong>
+            <span>Temporary visibility for the focused secret.</span>
+          </span>
+          <cv-shortcut data-shortcut-id="reveal" keys="Meta,Shift,R"></cv-shortcut>
+        </button>
+
+        <button type="button" class="shortcut-demo-command">
+          <span class="shortcut-demo-command-glyph" aria-hidden="true">F</span>
+          <span class="shortcut-demo-command-copy">
+            <strong>Focus vault search</strong>
+            <span>Move directly to the current vault filter.</span>
+          </span>
+          <cv-shortcut data-shortcut-id="search" keys="Meta,F"></cv-shortcut>
+        </button>
+      </div>
+
+      <aside class="shortcut-demo-side" aria-label="Shortcut usage contexts">
+        <div class="shortcut-demo-context">
+          <span class="shortcut-demo-label">Menu suffix</span>
+          <cv-menu open close-on-select="false" aria-label="Shortcut menu example">
+            <cv-menu-item value="copy">
+              Copy visible value
+              <cv-shortcut slot="suffix" data-shortcut-id="copy" keys="Meta,C"></cv-shortcut>
+            </cv-menu-item>
+            <cv-menu-item value="escape">
+              Close overlay
+              <cv-shortcut slot="suffix" data-shortcut-id="close" keys="Esc"></cv-shortcut>
+            </cv-menu-item>
+          </cv-menu>
+        </div>
+
+        <div class="shortcut-demo-context">
+          <span class="shortcut-demo-label">Programmatic keys</span>
+          <p>
+            Consumers may assign a string array property when the binding comes from a registry instead of
+            static markup.
+          </p>
+          <div class="shortcut-demo-programmatic">
+            <span>Open quick switcher</span>
+            <cv-shortcut data-programmatic-shortcut></cv-shortcut>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </section>
+</div>
+
+<script>
+  document.querySelectorAll('.shortcut-demo-shell[data-demo="shortcut"]:not([data-ready])').forEach((shell) => {
+    shell.dataset.ready = 'true'
+
+    const readout = shell.querySelector('[data-shortcut-readout]')
+    const platformButtons = [...shell.querySelectorAll('[data-shortcut-platform]')]
+    const platformLabels = {
+      macos: 'macOS',
+      windows: 'Windows',
+      linux: 'Linux',
+      web: 'Web',
+    }
+    const bindings = {
+      macos: {
+        palette: ['Meta', 'K'],
+        reveal: ['Meta', 'Shift', 'R'],
+        search: ['Meta', 'F'],
+        copy: ['Meta', 'C'],
+        close: ['Esc'],
+        programmatic: ['Meta', 'Shift', 'P'],
+      },
+      windows: {
+        palette: ['Ctrl', 'K'],
+        reveal: ['Ctrl', 'Shift', 'R'],
+        search: ['Ctrl', 'F'],
+        copy: ['Ctrl', 'C'],
+        close: ['Esc'],
+        programmatic: ['Ctrl', 'Shift', 'P'],
+      },
+      linux: {
+        palette: ['Ctrl', 'K'],
+        reveal: ['Ctrl', 'Shift', 'R'],
+        search: ['Ctrl', 'F'],
+        copy: ['Ctrl', 'C'],
+        close: ['Esc'],
+        programmatic: ['Ctrl', 'Shift', 'P'],
+      },
+      web: {
+        palette: ['Ctrl', '/'],
+        reveal: ['Shift', 'Enter'],
+        search: ['/'],
+        copy: ['Ctrl', 'C'],
+        close: ['Esc'],
+        programmatic: ['Alt', 'P'],
+      },
+    }
+
+    const setShortcutKeys = (shortcut, keys, platform) => {
+      shortcut.keys = keys
+      shortcut.setAttribute('aria-label', `${platformLabels[platform]} shortcut: ${keys.join(' plus ')}`)
+    }
+
+    const applyPlatform = (platform) => {
+      shell.dataset.platform = platform
+      platformButtons.forEach((button) => {
+        button.setAttribute('aria-pressed', String(button.dataset.shortcutPlatform === platform))
+      })
+
+      shell.querySelectorAll('[data-shortcut-id]').forEach((shortcut) => {
+        const id = shortcut.dataset.shortcutId
+        setShortcutKeys(shortcut, bindings[platform][id], platform)
+      })
+
+      const programmaticShortcut = shell.querySelector('[data-programmatic-shortcut]')
+      if (programmaticShortcut) {
+        setShortcutKeys(programmaticShortcut, bindings[platform].programmatic, platform)
+      }
+
+      if (readout) {
+        readout.textContent = `Previewing ${platformLabels[platform]} bindings`
+      }
+    }
+
+    platformButtons.forEach((button) => {
+      button.addEventListener('click', () => applyPlatform(button.dataset.shortcutPlatform))
+    })
+
+    applyPlatform('macos')
+  })
+</script>
+```
+
+### Rendering inputs
+
+Use `label` for static markup with the default `+` separator. Use `keys` for explicit key lists, either as a comma-separated attribute or as a JavaScript property; a non-empty `keys` value is rendered instead of parsing `label`.
+
+```html live-demo-source-only
 <cv-shortcut label="Ctrl + K"></cv-shortcut>
 <cv-shortcut keys="Shift,Enter" separator="/"></cv-shortcut>
 
@@ -56,3 +263,9 @@ Use `label` for static markup with the default `+` separator. Use `keys` for exp
   document.querySelector('#programmatic-shortcut').keys = ['Meta', 'Shift', 'P']
 </script>
 ```
+
+### Usage guidance
+
+- Pair shortcuts with visible command labels; never rely on keycaps alone.
+- Keep platform detection and command matching outside `cv-shortcut`.
+- Use `aria-label` when rendered key text is abbreviated or symbolic.
