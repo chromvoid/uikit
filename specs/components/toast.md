@@ -83,37 +83,284 @@ Container that manages a queue of toast notifications with positioning, stacking
 ## Usage
 
 ```html
-<!-- Basic usage (imperative API via controller) -->
-<div class="toast-demo-surface" data-live-demo-height="560">
-  <div class="example-row">
-    <cv-button id="toast-save" variant="primary">Show saved</cv-button>
-    <cv-button id="toast-error" variant="danger">Show error</cv-button>
-    <cv-button id="toast-clear">Clear</cv-button>
-  </div>
+<div class="toast-demo-shell" data-demo="toast" data-live-demo-height="760">
+  <section class="toast-demo-hero" aria-labelledby="toast-demo-title">
+    <div class="toast-demo-copy">
+      <span class="toast-demo-kicker">Queued live feedback</span>
+      <h3 id="toast-demo-title">Use toast for non-blocking workflow feedback that can stack, pause, and expire.</h3>
+      <p>
+        The region owns queue visibility, ARIA contracts, and auto-dismiss timing. Callers push domain events into
+        the controller and keep focus on the current task.
+      </p>
+    </div>
 
-  <cv-toast-region id="demo-toast-region" max-visible="2"></cv-toast-region>
+    <dl class="toast-demo-metrics" aria-label="Toast contract summary">
+      <div>
+        <dt>Region role</dt>
+        <dd>region / polite</dd>
+      </div>
+      <div>
+        <dt>Visible limit</dt>
+        <dd>max-visible</dd>
+      </div>
+      <div>
+        <dt>Item roles</dt>
+        <dd>status / alert</dd>
+      </div>
+    </dl>
+  </section>
+
+  <section class="toast-demo-workbench" aria-label="Toast queue workbench">
+    <div class="toast-demo-panel">
+      <div class="toast-demo-section-header">
+        <span class="toast-demo-kicker">Vault workflow events</span>
+        <h4>Push realistic status changes into one region and inspect queue state.</h4>
+      </div>
+
+      <div class="toast-demo-actions" aria-label="Toast scenarios">
+        <cv-button data-toast-action="saved" variant="primary">Save profile</cv-button>
+        <cv-button data-toast-action="route">Route proof</cv-button>
+        <cv-button data-toast-action="warning">Warn handoff</cv-button>
+        <cv-button data-toast-action="error" variant="danger">Block export</cv-button>
+        <cv-button data-toast-action="loading">Relay sync</cv-button>
+      </div>
+
+      <div class="toast-demo-controls" aria-label="Toast region controls">
+        <div class="toast-demo-control-group">
+          <span class="toast-demo-label">Position</span>
+          <div class="toast-demo-segment" role="group" aria-label="Toast position">
+            <button type="button" data-toast-position="top-end" aria-pressed="true">Top end</button>
+            <button type="button" data-toast-position="bottom-end" aria-pressed="false">Bottom end</button>
+            <button type="button" data-toast-position="bottom-center" aria-pressed="false">Bottom center</button>
+          </div>
+        </div>
+
+        <div class="toast-demo-control-group">
+          <span class="toast-demo-label">Max visible</span>
+          <div class="toast-demo-segment" role="group" aria-label="Maximum visible toasts">
+            <button type="button" data-toast-limit="2" aria-pressed="false">2</button>
+            <button type="button" data-toast-limit="3" aria-pressed="true">3</button>
+            <button type="button" data-toast-limit="4" aria-pressed="false">4</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="toast-demo-footer-actions" aria-label="Queue actions">
+        <cv-button data-toast-action="burst">Queue burst</cv-button>
+        <cv-button data-toast-action="clear">Clear queue</cv-button>
+      </div>
+    </div>
+
+    <div class="toast-demo-stage" aria-label="Live toast region preview">
+      <div class="toast-demo-route-card">
+        <span class="toast-demo-kicker">Visible route</span>
+        <strong>travel-profile.visible</strong>
+        <p>Task content stays interactive while feedback is announced from the toast region.</p>
+      </div>
+
+      <cv-toast-region data-toast-region position="top-end" max-visible="3"></cv-toast-region>
+    </div>
+
+    <aside class="toast-demo-side" aria-label="Toast queue state">
+      <dl class="toast-demo-state" aria-label="Current toast state">
+        <div>
+          <dt>Visible</dt>
+          <dd data-toast-visible>0</dd>
+        </div>
+        <div>
+          <dt>Queued</dt>
+          <dd data-toast-queued>0</dd>
+        </div>
+        <div>
+          <dt>Position</dt>
+          <dd data-toast-current-position>top-end</dd>
+        </div>
+        <div>
+          <dt>Last event</dt>
+          <dd data-toast-event>idle</dd>
+        </div>
+      </dl>
+
+      <p class="toast-demo-log" role="status" aria-live="polite" data-toast-log>
+        Waiting for a workflow event. Push a scenario or queue a burst.
+      </p>
+    </aside>
 </div>
 
 <script type="module">
-  const region = document.getElementById('demo-toast-region')
-  const saveButton = document.getElementById('toast-save')
-  const errorButton = document.getElementById('toast-error')
-  const clearButton = document.getElementById('toast-clear')
-
-  const showSaved = () => {
-    region.controller.push({message: 'File saved', level: 'success', durationMs: 0})
+  const scenarios = {
+    saved: {
+      level: 'success',
+      icon: 'check-circle-fill',
+      title: 'Visible profile saved',
+      message: 'Policy and route labels were written to the visible namespace.',
+      durationMs: 0,
+      progress: false,
+    },
+    route: {
+      level: 'info',
+      icon: 'info',
+      title: 'Route proof ready',
+      message: 'Relay path proof is available without opening a blocking dialog.',
+      durationMs: 0,
+      progress: false,
+      actions: ['Inspect', 'Pin'],
+    },
+    warning: {
+      level: 'warning',
+      icon: 'exclamation-triangle',
+      title: 'Handoff window closing',
+      message: 'Confirm operator handoff before leaving the recovery route.',
+      durationMs: 0,
+      progress: false,
+    },
+    error: {
+      level: 'error',
+      icon: 'x-circle-fill',
+      title: 'Export blocked',
+      message: 'Coercion profile is active. Hidden namespaces stay unavailable.',
+      durationMs: 0,
+      progress: false,
+    },
+    loading: {
+      level: 'loading',
+      title: 'Relay sync in progress',
+      message: 'Timers pause while the pointer is over the stack.',
+      durationMs: 8200,
+      progress: true,
+      closable: false,
+    },
   }
 
-  const showError = () => {
-    region.controller.push({message: 'Connection lost', level: 'error', durationMs: 0})
-  }
+  document.querySelectorAll('.toast-demo-shell[data-demo="toast"]:not([data-ready])').forEach((shell) => {
+    shell.dataset.ready = 'true'
 
-  saveButton.addEventListener('click', showSaved)
-  errorButton.addEventListener('click', showError)
-  clearButton.addEventListener('click', () => region.controller.clear())
+    const region = shell.querySelector('[data-toast-region]')
+    const visible = shell.querySelector('[data-toast-visible]')
+    const queued = shell.querySelector('[data-toast-queued]')
+    const currentPosition = shell.querySelector('[data-toast-current-position]')
+    const lastEvent = shell.querySelector('[data-toast-event]')
+    const log = shell.querySelector('[data-toast-log]')
+    const positionButtons = [...shell.querySelectorAll('[data-toast-position]')]
+    const limitButtons = [...shell.querySelectorAll('[data-toast-limit]')]
 
-  showSaved()
-  showError()
+    const setText = (target, value) => {
+      if (target) target.textContent = value
+    }
+
+    const items = () => region?.controller.model.state.items() ?? []
+    const visibleItems = () => region?.controller.model.state.visibleItems() ?? []
+
+    const syncState = (eventName) => {
+      const itemCount = items().length
+      const visibleCount = visibleItems().length
+
+      shell.dataset.toastQueue = itemCount > 0 ? 'active' : 'empty'
+      setText(visible, String(visibleCount))
+      setText(queued, String(Math.max(itemCount - visibleCount, 0)))
+      setText(currentPosition, region?.position ?? 'top-end')
+      setText(lastEvent, eventName)
+    }
+
+    const updatePressed = (buttons, attr, value) => {
+      buttons.forEach((button) => {
+        button.setAttribute('aria-pressed', button.getAttribute(attr) === value ? 'true' : 'false')
+      })
+    }
+
+    const pushScenario = (name) => {
+      const scenario = scenarios[name]
+      if (!region || !scenario) return
+
+      const toast = {
+        ...scenario,
+        actions: scenario.actions?.map((label) => ({
+          label,
+          onClick: () => {
+            setText(log, `${label}: action handled inside the toast item.`)
+            syncState(`action:${label.toLowerCase()}`)
+          },
+        })),
+      }
+
+      region.controller.push(toast)
+      setText(log, `${scenario.title}: ${scenario.message}`)
+      syncState(`push:${name}`)
+    }
+
+    const queueBurst = () => {
+      ;['saved', 'route', 'warning', 'error'].forEach(pushScenario)
+      setText(log, 'Burst queued four events. The newest items stay visible first.')
+      syncState('burst')
+    }
+
+    const setPosition = (position) => {
+      if (!region) return
+      region.position = position
+      region.setAttribute('position', position)
+      updatePressed(positionButtons, 'data-toast-position', position)
+      syncState('position')
+    }
+
+    const setMaxVisible = async (value) => {
+      if (!region) return
+      region.maxVisible = value
+      region.setAttribute('max-visible', String(value))
+      await region.updateComplete
+      updatePressed(limitButtons, 'data-toast-limit', String(value))
+      syncState('max-visible')
+    }
+
+    shell.querySelector('[data-toast-action="saved"]')?.addEventListener('click', () => {
+      pushScenario('saved')
+    })
+
+    shell.querySelector('[data-toast-action="route"]')?.addEventListener('click', () => {
+      pushScenario('route')
+    })
+
+    shell.querySelector('[data-toast-action="warning"]')?.addEventListener('click', () => {
+      pushScenario('warning')
+    })
+
+    shell.querySelector('[data-toast-action="error"]')?.addEventListener('click', () => {
+      pushScenario('error')
+    })
+
+    shell.querySelector('[data-toast-action="loading"]')?.addEventListener('click', () => {
+      pushScenario('loading')
+    })
+
+    shell.querySelector('[data-toast-action="burst"]')?.addEventListener('click', queueBurst)
+
+    shell.querySelector('[data-toast-action="clear"]')?.addEventListener('click', () => {
+      region?.controller.clear()
+      setText(log, 'Queue cleared. The region is idle.')
+      syncState('clear')
+    })
+
+    positionButtons.forEach((button) => {
+      button.addEventListener('click', () => {
+        setPosition(button.getAttribute('data-toast-position') ?? 'top-end')
+      })
+    })
+
+    limitButtons.forEach((button) => {
+      button.addEventListener('click', () => {
+        void setMaxVisible(Number(button.getAttribute('data-toast-limit') ?? '3'))
+      })
+    })
+
+    region?.addEventListener('cv-close', (event) => {
+      setText(log, `cv-close: ${event.detail.id} left the queue.`)
+      syncState('cv-close')
+    })
+
+    window.setTimeout(() => {
+      pushScenario('saved')
+      pushScenario('warning')
+    }, 220)
+  })
 </script>
 ```
 
