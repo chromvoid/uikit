@@ -152,10 +152,10 @@ Keys `ArrowUp`, `ArrowDown`, `ArrowLeft`, `ArrowRight`, `Home`, `End`, `Enter`, 
 ## Usage
 
 ```html
-<div class="treegrid-demo-shell" data-demo="treegrid" data-live-demo-height="760">
-  <section class="treegrid-demo-hero" aria-labelledby="treegrid-demo-title">
-    <div class="treegrid-demo-copy">
-      <span class="treegrid-demo-kicker">Hierarchical grid adapter</span>
+<div class="treegrid-demo-shell usage-demo" data-demo="treegrid" data-live-demo-height="760">
+  <section class="treegrid-demo-hero usage-demo__hero" aria-labelledby="treegrid-demo-title">
+    <div class="treegrid-demo-copy usage-demo__copy">
+      <span class="treegrid-demo-kicker usage-demo__kicker">Hierarchical grid adapter</span>
       <h3 id="treegrid-demo-title">Map nested vault layers without losing column context.</h3>
       <p>
         Treegrid keeps row hierarchy, expansion state, row selection, active-cell focus, and column semantics
@@ -163,7 +163,7 @@ Keys `ArrowUp`, `ArrowDown`, `ArrowLeft`, `ArrowRight`, `Home`, `End`, `Enter`, 
       </p>
     </div>
 
-    <dl class="treegrid-demo-metrics" aria-label="Treegrid behavior summary">
+    <dl class="treegrid-demo-metrics usage-demo__metrics" aria-label="Treegrid behavior summary">
       <div>
         <dt>Root</dt>
         <dd>treegrid</dd>
@@ -179,9 +179,9 @@ Keys `ArrowUp`, `ArrowDown`, `ArrowLeft`, `ArrowRight`, `Home`, `End`, `Enter`, 
     </dl>
   </section>
 
-  <section class="treegrid-demo-workbench" aria-labelledby="treegrid-demo-workbench-title">
-    <div class="treegrid-demo-section-header">
-      <span class="treegrid-demo-kicker">Vault trust map</span>
+  <section class="treegrid-demo-workbench usage-demo__workbench" aria-labelledby="treegrid-demo-workbench-title">
+    <div class="treegrid-demo-section-header usage-demo__section-header">
+      <span class="treegrid-demo-kicker usage-demo__kicker">Vault trust map</span>
       <h4 id="treegrid-demo-workbench-title">Branch rows reveal visible and hidden operating layers</h4>
     </div>
 
