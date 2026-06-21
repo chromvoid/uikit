@@ -143,10 +143,10 @@ Keys `ArrowUp`, `ArrowDown`, `ArrowLeft`, `ArrowRight`, `Home`, `End`, `Enter`, 
 ## Usage
 
 ```html
-<div class="treeview-demo-shell" data-demo="treeview" data-live-demo-height="780">
-  <section class="treeview-demo-hero" aria-labelledby="treeview-demo-title">
-    <div class="treeview-demo-copy">
-      <span class="treeview-demo-kicker">APG tree adapter</span>
+<div class="treeview-demo-shell usage-demo" data-demo="treeview" data-live-demo-height="780">
+  <section class="treeview-demo-hero usage-demo__hero" aria-labelledby="treeview-demo-title">
+    <div class="treeview-demo-copy usage-demo__copy">
+      <span class="treeview-demo-kicker usage-demo__kicker">APG tree adapter</span>
       <h3 id="treeview-demo-title">Hierarchy, selection, and expansion stay on one headless contract.</h3>
       <p>
         Use treeview when the user needs to scan nested vault scopes, move through branches with arrow keys,
@@ -154,7 +154,7 @@ Keys `ArrowUp`, `ArrowDown`, `ArrowLeft`, `ArrowRight`, `Home`, `End`, `Enter`, 
       </p>
     </div>
 
-    <dl class="treeview-demo-metrics" aria-label="Treeview behavior summary">
+    <dl class="treeview-demo-metrics usage-demo__metrics" aria-label="Treeview behavior summary">
       <div>
         <dt>Root role</dt>
         <dd>tree</dd>
@@ -170,15 +170,15 @@ Keys `ArrowUp`, `ArrowDown`, `ArrowLeft`, `ArrowRight`, `Home`, `End`, `Enter`, 
     </dl>
   </section>
 
-  <section class="treeview-demo-workbench" aria-labelledby="treeview-demo-workbench-title">
-    <div class="treeview-demo-section-header">
-      <span class="treeview-demo-kicker">Operational navigation</span>
+  <section class="treeview-demo-workbench usage-demo__workbench" aria-labelledby="treeview-demo-workbench-title">
+    <div class="treeview-demo-section-header usage-demo__section-header">
+      <span class="treeview-demo-kicker usage-demo__kicker">Operational navigation</span>
       <h4 id="treeview-demo-workbench-title">Vault namespace tree with selected export scopes</h4>
     </div>
 
     <div class="treeview-demo-layout">
-      <article class="treeview-demo-panel" aria-labelledby="treeview-demo-vault-title">
-        <header class="treeview-demo-panel-header">
+      <article class="treeview-demo-panel usage-demo__panel" aria-labelledby="treeview-demo-vault-title">
+        <header class="treeview-demo-panel-header usage-demo__panel-header">
           <div>
             <span class="treeview-demo-label">Single select</span>
             <h5 id="treeview-demo-vault-title">Vault namespaces</h5>
@@ -279,8 +279,8 @@ Keys `ArrowUp`, `ArrowDown`, `ArrowLeft`, `ArrowRight`, `Home`, `End`, `Enter`, 
         </cv-treeview>
       </article>
 
-      <article class="treeview-demo-panel" aria-labelledby="treeview-demo-access-title">
-        <header class="treeview-demo-panel-header">
+      <article class="treeview-demo-panel usage-demo__panel" aria-labelledby="treeview-demo-access-title">
+        <header class="treeview-demo-panel-header usage-demo__panel-header">
           <div>
             <span class="treeview-demo-label">Multiple select</span>
             <h5 id="treeview-demo-access-title">Export scope</h5>
