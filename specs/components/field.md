@@ -8,10 +8,10 @@ linkage for one slotted control.
 ## Usage
 
 ```html
-<div class="field-demo-shell" data-live-demo-height="760">
-  <section class="field-demo-hero" aria-labelledby="field-demo-title">
-    <div class="field-demo-copy">
-      <span class="field-demo-kicker">cv-field / form anatomy</span>
+<div class="field-demo-shell usage-demo" data-live-demo-height="760">
+  <section class="field-demo-hero usage-demo__hero" aria-labelledby="field-demo-title">
+    <div class="field-demo-copy usage-demo__copy">
+      <span class="field-demo-kicker usage-demo__kicker">cv-field / form anatomy</span>
       <h3 id="field-demo-title">One wrapper keeps field text, validation, and control state aligned.</h3>
       <p>
         Use <code>cv-field</code> around one direct UIKit control when a label, helper copy, error message, or
@@ -19,7 +19,7 @@ linkage for one slotted control.
       </p>
     </div>
 
-    <dl class="field-demo-metrics" aria-label="Field contract summary">
+    <dl class="field-demo-metrics usage-demo__metrics" aria-label="Field contract summary">
       <div>
         <dt>Owns</dt>
         <dd>label and meta ids</dd>
@@ -35,7 +35,7 @@ linkage for one slotted control.
     </dl>
   </section>
 
-  <section class="field-demo-workbench">
+  <section class="field-demo-workbench usage-demo__workbench">
     <form class="field-demo-form" aria-label="Vault access field examples">
       <div class="field-demo-form-head">
         <div>
@@ -96,7 +96,7 @@ linkage for one slotted control.
     </form>
 
     <aside class="field-demo-contract" aria-label="Field accessibility contract">
-      <div class="field-demo-section-header">
+      <div class="field-demo-section-header usage-demo__section-header">
         <span>Contract</span>
         <h4><code>cv-field</code> owns structure and linkage. The consumer still owns validation rules.</h4>
       </div>
