@@ -17,10 +17,10 @@ This document is the UIKit surface contract for Combobox.
 ## Usage
 
 ```html
-<div class="combobox-demo-shell" data-demo="combobox" data-live-demo-height="1180">
-  <section class="combobox-demo-hero" aria-labelledby="combobox-demo-title">
-    <div class="combobox-demo-copy">
-      <span class="combobox-demo-kicker">Search and select primitive</span>
+<div class="combobox-demo-shell usage-demo" data-demo="combobox" data-live-demo-height="1180">
+  <section class="combobox-demo-hero usage-demo__hero" aria-labelledby="combobox-demo-title">
+    <div class="combobox-demo-copy usage-demo__copy">
+      <span class="combobox-demo-kicker usage-demo__kicker">Search and select primitive</span>
       <h3 id="combobox-demo-title">
         Use combobox when a controlled choice also needs filtering, grouping, or tags.
       </h3>
@@ -31,7 +31,7 @@ This document is the UIKit surface contract for Combobox.
       </p>
     </div>
 
-    <dl class="combobox-demo-metrics" aria-label="Combobox contract summary">
+    <dl class="combobox-demo-metrics usage-demo__metrics" aria-label="Combobox contract summary">
       <div>
         <dt>Modes</dt>
         <dd>editable / select-only</dd>
@@ -48,8 +48,8 @@ This document is the UIKit surface contract for Combobox.
   </section>
 
   <section class="combobox-demo-board" aria-label="Combobox examples in a vault routing form">
-    <form class="combobox-demo-panel" data-combobox-form>
-      <div class="combobox-demo-panel-head">
+    <form class="combobox-demo-panel usage-demo__panel" data-combobox-form>
+      <div class="combobox-demo-panel-head usage-demo__panel-head">
         <div>
           <span>Visible profile routing</span>
           <strong>relay.surface / browser tags / operator handoff</strong>
@@ -128,13 +128,13 @@ This document is the UIKit surface contract for Combobox.
       </div>
     </form>
 
-    <aside class="combobox-demo-side" aria-label="Combobox event output">
-      <div class="combobox-demo-side-head">
-        <span class="combobox-demo-kicker">Event stream</span>
+    <aside class="combobox-demo-side usage-demo__side" aria-label="Combobox event output">
+      <div class="combobox-demo-side-head usage-demo__side-head">
+        <span class="combobox-demo-kicker usage-demo__kicker">Event stream</span>
         <h4>Interact with any combobox to inspect the public state emitted by the component.</h4>
       </div>
 
-      <p class="combobox-demo-log" role="status" aria-live="polite" data-combobox-output>
+      <p class="combobox-demo-log usage-demo__log" role="status" aria-live="polite" data-combobox-output>
         Waiting for interaction. Type, pick an option, toggle a tag, or clear a value.
       </p>
 
@@ -172,9 +172,9 @@ This document is the UIKit surface contract for Combobox.
     </aside>
   </section>
 
-  <section class="combobox-demo-section" aria-labelledby="combobox-demo-matrix-title">
-    <div class="combobox-demo-section-header">
-      <span class="combobox-demo-kicker">State matrix</span>
+  <section class="combobox-demo-section usage-demo__section" aria-labelledby="combobox-demo-matrix-title">
+    <div class="combobox-demo-section-header usage-demo__section-header">
+      <span class="combobox-demo-kicker usage-demo__kicker">State matrix</span>
       <h4 id="combobox-demo-matrix-title">
         One component covers typed filtering, trigger-only selection, tag overflow, invalid input, grouping,
         and sizing.
