@@ -76,7 +76,11 @@ None.
 ## Usage
 
 ```html
-<div class="task-list-demo-shell usage-demo" data-demo="task-list" data-live-demo-height="760">
+<div
+  class="task-list-demo-shell usage-demo usage-demo__dark-preview"
+  data-demo="task-list"
+  data-live-demo-height="760"
+>
   <section class="task-list-demo-hero usage-demo__hero" aria-labelledby="task-list-demo-title">
     <div class="task-list-demo-copy usage-demo__copy">
       <span class="task-list-demo-kicker usage-demo__kicker">Transfer surface</span>
@@ -114,7 +118,12 @@ None.
         <div class="task-list-demo-row-main">
           <strong>Encrypt vault-export.zip</strong>
           <span>Chunk 18 of 25 - ChaCha20 stream sealed</span>
-          <cv-progress value="72" value-text="72%" aria-label="Encrypt vault export progress"></cv-progress>
+          <cv-progress
+            class="usage-demo__progress-host"
+            value="72"
+            value-text="72%"
+            aria-label="Encrypt vault export progress"
+          ></cv-progress>
         </div>
         <cv-badge variant="primary" pulse>72%</cv-badge>
       </div>
@@ -124,6 +133,7 @@ None.
           <strong>Verify metadata manifest</strong>
           <span>Checksums match the local catalog snapshot</span>
           <cv-progress
+            class="usage-demo__progress-host"
             tone="success"
             value="100"
             value-text="Complete"
@@ -138,6 +148,7 @@ None.
           <strong>Upload encrypted backup</strong>
           <span>Waiting for a network slot before retrying</span>
           <cv-progress
+            class="usage-demo__progress-host"
             tone="queued"
             value="0"
             value-text="Queued"
