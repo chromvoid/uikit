@@ -48,10 +48,10 @@ No component-specific events. Navigation uses standard link click behavior.
 ## Usage
 
 ```html
-<div class="breadcrumb-demo-shell" data-demo="breadcrumb">
-  <section class="breadcrumb-demo-hero" aria-labelledby="breadcrumb-demo-title">
-    <div class="breadcrumb-demo-copy">
-      <span class="breadcrumb-demo-kicker">Navigation landmark</span>
+<div class="breadcrumb-demo-shell usage-demo" data-demo="breadcrumb">
+  <section class="breadcrumb-demo-hero usage-demo__hero" aria-labelledby="breadcrumb-demo-title">
+    <div class="breadcrumb-demo-copy usage-demo__copy">
+      <span class="breadcrumb-demo-kicker usage-demo__kicker">Navigation landmark</span>
       <h3 id="breadcrumb-demo-title">Show where the user is, not what they should do next.</h3>
       <p>
         Breadcrumbs expose one hierarchy trail, keep the current page marked with `aria-current`, and
@@ -59,7 +59,7 @@ No component-specific events. Navigation uses standard link click behavior.
       </p>
     </div>
 
-    <dl class="breadcrumb-demo-metrics" aria-label="Breadcrumb behavior summary">
+    <dl class="breadcrumb-demo-metrics usage-demo__metrics" aria-label="Breadcrumb behavior summary">
       <div>
         <dt>Root</dt>
         <dd>navigation landmark</dd>
@@ -75,13 +75,13 @@ No component-specific events. Navigation uses standard link click behavior.
     </dl>
   </section>
 
-  <section class="breadcrumb-demo-section" aria-labelledby="breadcrumb-demo-default-title">
-    <div class="breadcrumb-demo-section-header">
-      <span class="breadcrumb-demo-kicker">Default path</span>
+  <section class="breadcrumb-demo-section usage-demo__section" aria-labelledby="breadcrumb-demo-default-title">
+    <div class="breadcrumb-demo-section-header usage-demo__section-header">
+      <span class="breadcrumb-demo-kicker usage-demo__kicker">Default path</span>
       <h4 id="breadcrumb-demo-default-title">The last item becomes current when no value is set</h4>
     </div>
 
-    <div class="breadcrumb-demo-panel breadcrumb-demo-panel--primary">
+    <div class="breadcrumb-demo-panel breadcrumb-demo-panel--primary usage-demo__panel">
       <cv-breadcrumb aria-label="Vault path">
         <cv-breadcrumb-item value="workspace" href="#workspace">
           <cv-icon name="database" size="s" slot="prefix"></cv-icon>
@@ -93,13 +93,13 @@ No component-specific events. Navigation uses standard link click behavior.
     </div>
   </section>
 
-  <section class="breadcrumb-demo-section breadcrumb-demo-controlled" aria-labelledby="breadcrumb-demo-controlled-title">
-    <div class="breadcrumb-demo-section-header">
-      <span class="breadcrumb-demo-kicker">Controlled current item</span>
+  <section class="breadcrumb-demo-section breadcrumb-demo-controlled usage-demo__section" aria-labelledby="breadcrumb-demo-controlled-title">
+    <div class="breadcrumb-demo-section-header usage-demo__section-header">
+      <span class="breadcrumb-demo-kicker usage-demo__kicker">Controlled current item</span>
       <h4 id="breadcrumb-demo-controlled-title">Set `value` when the route state owns the active segment</h4>
     </div>
 
-    <div class="breadcrumb-demo-panel">
+    <div class="breadcrumb-demo-panel usage-demo__panel">
       <cv-breadcrumb value="vaults" aria-label="Controlled path">
         <cv-breadcrumb-item value="workspace" href="#workspace">Workspace</cv-breadcrumb-item>
         <cv-breadcrumb-item value="vaults" href="#vaults">Vaults</cv-breadcrumb-item>
@@ -109,15 +109,15 @@ No component-specific events. Navigation uses standard link click behavior.
     </div>
   </section>
 
-  <section class="breadcrumb-demo-section" aria-labelledby="breadcrumb-demo-slots-title">
-    <div class="breadcrumb-demo-section-header">
-      <span class="breadcrumb-demo-kicker">Overflow and slots</span>
+  <section class="breadcrumb-demo-section usage-demo__section" aria-labelledby="breadcrumb-demo-slots-title">
+    <div class="breadcrumb-demo-section-header usage-demo__section-header">
+      <span class="breadcrumb-demo-kicker usage-demo__kicker">Overflow and slots</span>
       <h4 id="breadcrumb-demo-slots-title">Keep long paths on one rail; show slot decoration separately</h4>
     </div>
 
     <div class="breadcrumb-demo-grid">
-      <div class="breadcrumb-demo-panel breadcrumb-demo-panel--path breadcrumb-demo-panel--wide">
-        <div class="breadcrumb-demo-panel-heading">
+      <div class="breadcrumb-demo-panel breadcrumb-demo-panel--path breadcrumb-demo-panel--wide usage-demo__panel">
+        <div class="breadcrumb-demo-panel-heading usage-demo__panel-heading">
           <span class="breadcrumb-demo-label">Overflow rail</span>
           <p class="breadcrumb-demo-note">Long middle segments truncate on one line instead of turning into paragraph-like rows.</p>
         </div>
@@ -132,8 +132,8 @@ No component-specific events. Navigation uses standard link click behavior.
         </cv-breadcrumb>
       </div>
 
-      <div class="breadcrumb-demo-panel breadcrumb-demo-panel--path">
-        <div class="breadcrumb-demo-panel-heading">
+      <div class="breadcrumb-demo-panel breadcrumb-demo-panel--path usage-demo__panel">
+        <div class="breadcrumb-demo-panel-heading usage-demo__panel-heading">
           <span class="breadcrumb-demo-label">Prefix and suffix</span>
           <p class="breadcrumb-demo-note">Affixes support a segment without changing the path rhythm.</p>
         </div>
@@ -149,8 +149,8 @@ No component-specific events. Navigation uses standard link click behavior.
         </cv-breadcrumb>
       </div>
 
-      <div class="breadcrumb-demo-panel breadcrumb-demo-panel--path">
-        <div class="breadcrumb-demo-panel-heading">
+      <div class="breadcrumb-demo-panel breadcrumb-demo-panel--path usage-demo__panel">
+        <div class="breadcrumb-demo-panel-heading usage-demo__panel-heading">
           <span class="breadcrumb-demo-label">Custom separator</span>
           <p class="breadcrumb-demo-note">A custom separator should still read as one continuous path.</p>
         </div>
