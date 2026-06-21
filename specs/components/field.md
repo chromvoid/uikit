@@ -36,8 +36,11 @@ linkage for one slotted control.
   </section>
 
   <section class="field-demo-workbench usage-demo__workbench">
-    <form class="field-demo-form usage-demo__flow" aria-label="Vault access field examples">
-      <div class="field-demo-form-head">
+    <form
+      class="field-demo-form usage-demo__flow usage-demo__surface"
+      aria-label="Vault access field examples"
+    >
+      <div class="field-demo-form-head usage-demo__panel-head">
         <div class="usage-demo__flow usage-demo__flow--loose">
           <span class="usage-demo__meta usage-demo__label">Production form</span>
           <h4>Vault access details</h4>
@@ -46,20 +49,20 @@ linkage for one slotted control.
       </div>
 
       <div class="field-demo-control-grid usage-demo__grid--comfortable">
-        <cv-field class="field-demo-field" required>
+        <cv-field class="field-demo-field usage-demo__field" required>
           <span slot="label">Vault alias</span>
           <cv-input name="vault-alias" value="border-core"></cv-input>
           <span slot="description">Required is mirrored to the slotted control.</span>
         </cv-field>
 
-        <cv-field class="field-demo-field" required invalid>
+        <cv-field class="field-demo-field usage-demo__field" required invalid>
           <span slot="label">Recovery email</span>
           <cv-input name="recovery-email" type="email" value="alex@" invalid></cv-input>
           <span slot="description">Helper copy stays linked before the error id.</span>
           <span slot="error">Enter a complete email address before saving.</span>
         </cv-field>
 
-        <cv-field class="field-demo-field">
+        <cv-field class="field-demo-field usage-demo__field">
           <span slot="label">Trust zone</span>
           <cv-select name="trust-zone" value="hardware" placeholder="Choose a zone">
             <cv-select-option value="software">Software vault</cv-select-option>
@@ -71,13 +74,13 @@ linkage for one slotted control.
           >
         </cv-field>
 
-        <cv-field class="field-demo-field" disabled>
+        <cv-field class="field-demo-field usage-demo__field" disabled>
           <span slot="label">Organization policy</span>
           <cv-input name="policy" value="Locked by host policy"></cv-input>
           <span slot="description">Disabled state is propagated to supported direct child controls.</span>
         </cv-field>
 
-        <cv-field class="field-demo-field field-demo-field--wide">
+        <cv-field class="field-demo-field usage-demo__field field-demo-field--wide">
           <span slot="label">Operator note</span>
           <cv-textarea
             name="operator-note"
@@ -87,7 +90,7 @@ linkage for one slotted control.
           <span slot="description">Meta copy remains below the control in vertical layout.</span>
         </cv-field>
 
-        <cv-field class="field-demo-field field-demo-field--wide" orientation="horizontal">
+        <cv-field class="field-demo-field usage-demo__field field-demo-field--wide" orientation="horizontal">
           <span slot="label">Pairing code</span>
           <cv-code-input purpose="pairing" charset="alphanumeric" length="6" value="CV7A9K"></cv-code-input>
           <span slot="description">Horizontal layout keeps the label in the first column.</span>
@@ -95,22 +98,25 @@ linkage for one slotted control.
       </div>
     </form>
 
-    <aside class="field-demo-contract usage-demo__flow" aria-label="Field accessibility contract">
+    <aside
+      class="field-demo-contract usage-demo__flow usage-demo__surface"
+      aria-label="Field accessibility contract"
+    >
       <div class="field-demo-section-header usage-demo__section-header">
         <span class="usage-demo__meta usage-demo__label">Contract</span>
         <h4><code>cv-field</code> owns structure and linkage. The consumer still owns validation rules.</h4>
       </div>
 
       <dl class="field-demo-contract-list">
-        <div class="usage-demo__flow usage-demo__flow--loose">
+        <div class="usage-demo__flow usage-demo__flow--loose usage-demo__soft-card">
           <dt class="usage-demo__meta usage-demo__label">label slot</dt>
           <dd>Creates a real label and sets <code>aria-labelledby</code> on the control.</dd>
         </div>
-        <div class="usage-demo__flow usage-demo__flow--loose">
+        <div class="usage-demo__flow usage-demo__flow--loose usage-demo__soft-card">
           <dt class="usage-demo__meta usage-demo__label">description slot</dt>
           <dd>Adds helper text to the control's <code>aria-describedby</code> chain.</dd>
         </div>
-        <div class="usage-demo__flow usage-demo__flow--loose">
+        <div class="usage-demo__flow usage-demo__flow--loose usage-demo__soft-card">
           <dt class="usage-demo__meta usage-demo__label">error slot</dt>
           <dd>
             Joins <code>aria-describedby</code> and announces with <code>role="alert"</code> only when
@@ -127,10 +133,10 @@ linkage for one slotted control.
       </dl>
 
       <div class="field-demo-flow" aria-label="Invalid state flow">
-        <span class="usage-demo__meta">invalid</span>
-        <span class="usage-demo__meta">aria-invalid</span>
-        <span class="usage-demo__meta">error id</span>
-        <span class="usage-demo__meta">alert role</span>
+        <span class="usage-demo__meta usage-demo__status-pill">invalid</span>
+        <span class="usage-demo__meta usage-demo__status-pill">aria-invalid</span>
+        <span class="usage-demo__meta usage-demo__status-pill">error id</span>
+        <span class="usage-demo__meta usage-demo__status-pill">alert role</span>
       </div>
     </aside>
   </section>
