@@ -43,19 +43,20 @@ Numeric input field with ARIA spinbutton semantics, optional stepper controls, c
     class="number-demo-board usage-demo__workbench"
     aria-label="Number examples in a vault policy form"
   >
-    <form class="number-demo-form" data-number-form>
-      <div class="number-demo-form-head">
+    <form class="number-demo-form usage-demo__form" data-number-form>
+      <div class="number-demo-form-head usage-demo__form-head">
         <div>
-          <span>Visible policy limits</span>
+          <span class="usage-demo__meta">Visible policy limits</span>
           <strong>decoy-profile.local</strong>
         </div>
         <cv-badge variant="primary" pill>bounded input</cv-badge>
       </div>
 
-      <div class="number-demo-field-grid">
-        <cv-field required>
+      <div class="number-demo-field-grid usage-demo__field-grid">
+        <cv-field class="usage-demo__field" required>
           <span slot="label">Decoy quota</span>
           <cv-number
+            class="usage-demo__text-control"
             data-number-primary
             name="quota"
             value="30"
@@ -72,9 +73,18 @@ Numeric input field with ARIA spinbutton semantics, optional stepper controls, c
           <span slot="description">Arrow keys step by 5. Page keys step by 25. Clear returns to 30.</span>
         </cv-field>
 
-        <cv-field>
+        <cv-field class="usage-demo__field">
           <span slot="label">HOTP counter</span>
-          <cv-number name="counter" value="12" min="0" max="999999" step="1" stepper clearable>
+          <cv-number
+            class="usage-demo__text-control"
+            name="counter"
+            value="12"
+            min="0"
+            max="999999"
+            step="1"
+            stepper
+            clearable
+          >
             <span slot="prefix">#</span>
           </cv-number>
           <span slot="description"
@@ -82,17 +92,34 @@ Numeric input field with ARIA spinbutton semantics, optional stepper controls, c
           >
         </cv-field>
 
-        <cv-field>
+        <cv-field class="usage-demo__field">
           <span slot="label">Retry window</span>
-          <cv-number name="retry" variant="filled" value="3" min="1" max="10" step="1" clearable>
+          <cv-number
+            class="usage-demo__text-control"
+            name="retry"
+            variant="filled"
+            value="3"
+            min="1"
+            max="10"
+            step="1"
+            clearable
+          >
             <span slot="suffix">tries</span>
           </cv-number>
           <span slot="description">Filled variant keeps the same headless range and form contract.</span>
         </cv-field>
 
-        <cv-field>
+        <cv-field class="usage-demo__field">
           <span slot="label">Timeout</span>
-          <cv-number name="timeout" value="45" min="5" max="120" step="5" large-step="30">
+          <cv-number
+            class="usage-demo__text-control"
+            name="timeout"
+            value="45"
+            min="5"
+            max="120"
+            step="5"
+            large-step="30"
+          >
             <span slot="suffix">sec</span>
           </cv-number>
           <span slot="description">Draft edits commit on Enter or blur, then snap through the model.</span>
@@ -144,52 +171,74 @@ Numeric input field with ARIA spinbutton semantics, optional stepper controls, c
       </h4>
     </div>
 
-    <div class="number-demo-matrix" aria-label="Number state matrix">
-      <div>
-        <span>Range edges</span>
-        <cv-number value="0" min="0" max="10" step="1" stepper></cv-number>
-        <cv-number value="10" min="0" max="10" step="1" stepper></cv-number>
+    <div class="number-demo-matrix usage-demo__field-grid" aria-label="Number state matrix">
+      <div class="usage-demo__case">
+        <span class="usage-demo__meta">Range edges</span>
+        <cv-number class="usage-demo__text-control" value="0" min="0" max="10" step="1" stepper></cv-number>
+        <cv-number class="usage-demo__text-control" value="10" min="0" max="10" step="1" stepper></cv-number>
       </div>
 
-      <div>
-        <span>Size</span>
-        <cv-number size="small" value="8" min="0" max="16"></cv-number>
-        <cv-number value="16" min="0" max="32"></cv-number>
-        <cv-number size="large" value="32" min="0" max="64"></cv-number>
+      <div class="usage-demo__case">
+        <span class="usage-demo__meta">Size</span>
+        <cv-number class="usage-demo__text-control" size="small" value="8" min="0" max="16"></cv-number>
+        <cv-number class="usage-demo__text-control" value="16" min="0" max="32"></cv-number>
+        <cv-number class="usage-demo__text-control" size="large" value="32" min="0" max="64"></cv-number>
       </div>
 
-      <div>
-        <span>Affixes</span>
-        <cv-number value="19" clearable>
+      <div class="usage-demo__case">
+        <span class="usage-demo__meta">Affixes</span>
+        <cv-number class="usage-demo__text-control" value="19" clearable>
           <span slot="prefix">$</span>
           <span slot="suffix">.00</span>
         </cv-number>
-        <cv-number value="128" variant="filled" min="16" max="512">
+        <cv-number class="usage-demo__text-control" value="128" variant="filled" min="16" max="512">
           <span slot="suffix">MB</span>
         </cv-number>
       </div>
 
-      <div>
-        <span>Validation</span>
-        <cv-field required invalid>
+      <div class="usage-demo__case usage-demo__case--danger">
+        <span class="usage-demo__meta">Validation</span>
+        <cv-field class="usage-demo__field" required invalid>
           <span slot="label">Age gate</span>
-          <cv-number required invalid min="18" max="120" value="16"></cv-number>
+          <cv-number
+            class="usage-demo__text-control"
+            required
+            invalid
+            min="18"
+            max="120"
+            value="16"
+          ></cv-number>
           <span slot="error">Value must be at least 18.</span>
         </cv-field>
       </div>
 
-      <div>
-        <span>Clear defaults</span>
-        <cv-number value="42" default-value="10" min="0" max="100" clearable stepper></cv-number>
-        <cv-number value="10" default-value="10" min="0" max="100" clearable></cv-number>
+      <div class="usage-demo__case">
+        <span class="usage-demo__meta">Clear defaults</span>
+        <cv-number
+          class="usage-demo__text-control"
+          value="42"
+          default-value="10"
+          min="0"
+          max="100"
+          clearable
+          stepper
+        ></cv-number>
+        <cv-number
+          class="usage-demo__text-control"
+          value="10"
+          default-value="10"
+          min="0"
+          max="100"
+          clearable
+        ></cv-number>
       </div>
 
-      <div>
-        <span>Read state</span>
-        <cv-number read-only value="100"></cv-number>
-        <cv-field disabled>
+      <div class="usage-demo__case">
+        <span class="usage-demo__meta">Read state</span>
+        <cv-number class="usage-demo__text-control" read-only value="100"></cv-number>
+        <cv-field class="usage-demo__field" disabled>
           <span slot="label">Disabled by field</span>
-          <cv-number value="50" stepper></cv-number>
+          <cv-number class="usage-demo__text-control" value="50" stepper></cv-number>
         </cv-field>
       </div>
     </div>
