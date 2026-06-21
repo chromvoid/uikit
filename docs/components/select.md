@@ -9,111 +9,193 @@ Single or multi-selection dropdown that composes a combobox trigger with a listb
 ## Usage
 
 ```html
-<div class="select-demo-grid" data-live-demo-height="420">
-  <cv-field class="select-demo-cell">
-    <span slot="label">Basic</span>
-    <span slot="description">Empty single-select with placeholder text until a choice is made.</span>
-    <cv-select placeholder="Choose a fruit">
-      <cv-select-option value="apple">Apple</cv-select-option>
-      <cv-select-option value="banana">Banana</cv-select-option>
-      <cv-select-option value="cherry">Cherry</cv-select-option>
-    </cv-select>
-  </cv-field>
+<div class="select-demo-shell" data-demo="select" data-live-demo-height="820">
+  <header class="select-demo-hero">
+    <div class="select-demo-copy">
+      <span class="select-demo-kicker">Select-only combobox</span>
+      <h3>Route a vault policy with grouped, multiple, clearable, and invalid states.</h3>
+      <p>
+        The demo keeps DOM focus on the trigger, mirrors selection through
+        <code>cv-input</code> and <code>cv-change</code>, and shows the control inside
+        field labels, descriptions, and errors.
+      </p>
+    </div>
 
-  <cv-field class="select-demo-cell">
-    <span slot="label">Pre-selected</span>
-    <span slot="description">Initial value is resolved against slotted options on connect.</span>
-    <cv-select value="banana">
-      <cv-select-option value="apple">Apple</cv-select-option>
-      <cv-select-option value="banana">Banana</cv-select-option>
-      <cv-select-option value="cherry">Cherry</cv-select-option>
-    </cv-select>
-  </cv-field>
+    <dl class="select-demo-metrics" aria-label="Select contract coverage">
+      <div>
+        <dt>Pattern</dt>
+        <dd>APG select-only combobox</dd>
+      </div>
+      <div>
+        <dt>Modes</dt>
+        <dd>Single + multiple</dd>
+      </div>
+      <div>
+        <dt>State</dt>
+        <dd>Open, disabled, invalid, clearable</dd>
+      </div>
+    </dl>
+  </header>
 
-  <cv-field class="select-demo-cell">
-    <span slot="label">Small</span>
-    <span slot="description">Compact trigger keeps the same combobox and listbox contract.</span>
-    <cv-select size="small" placeholder="Small select">
-      <cv-select-option value="a">Option A</cv-select-option>
-      <cv-select-option value="b">Option B</cv-select-option>
-    </cv-select>
-  </cv-field>
+  <section class="select-demo-board" aria-label="Vault policy form">
+    <div class="select-demo-panel select-demo-panel--primary">
+      <div class="select-demo-section-header">
+        <span class="select-demo-kicker">Primary decision</span>
+        <h4>Choose the trust boundary before exposing any downstream route.</h4>
+      </div>
 
-  <cv-field class="select-demo-cell" disabled>
-    <span slot="label">Disabled</span>
-    <span slot="description">Disabled state blocks pointer and keyboard interaction.</span>
-    <cv-select placeholder="Cannot interact">
-      <cv-select-option value="a">Option A</cv-select-option>
-    </cv-select>
-  </cv-field>
+      <cv-field class="select-demo-field select-demo-field--wide">
+        <span slot="label">Trust boundary</span>
+        <span slot="description">Grouped options demonstrate section labels inside the popup.</span>
+        <cv-select data-select-demo-primary clearable value="hardware" placeholder="Choose boundary">
+          <cv-select-group label="Local">
+            <cv-select-option value="hardware">Hardware core</cv-select-option>
+            <cv-select-option value="device">Device-bound vault</cv-select-option>
+          </cv-select-group>
+          <cv-select-group label="Deniable">
+            <cv-select-option value="visible">Visible layer</cv-select-option>
+            <cv-select-option value="hidden">Hidden layer</cv-select-option>
+          </cv-select-group>
+        </cv-select>
+      </cv-field>
 
-  <cv-field class="select-demo-cell">
-    <span slot="label">Clearable</span>
-    <span slot="description">Clear control appears only while a selected value exists.</span>
-    <cv-select clearable value="apple">
-      <cv-select-option value="apple">Apple</cv-select-option>
-      <cv-select-option value="banana">Banana</cv-select-option>
-    </cv-select>
-  </cv-field>
+      <div class="select-demo-field-grid">
+        <cv-field class="select-demo-field" required invalid>
+          <span slot="label">Review gate</span>
+          <span slot="description">Required + invalid state is delegated by <code>cv-field</code>.</span>
+          <span slot="error">Select an approval path before release.</span>
+          <cv-select placeholder="Required choice">
+            <cv-select-option value="owner">Owner approval</cv-select-option>
+            <cv-select-option value="quorum">Quorum approval</cv-select-option>
+          </cv-select>
+        </cv-field>
 
-  <cv-field class="select-demo-cell" required>
-    <span slot="label">Required</span>
-    <span slot="description">Required participates in form validity until an option is selected.</span>
-    <cv-select placeholder="Required field">
-      <cv-select-option value="yes">Yes</cv-select-option>
-      <cv-select-option value="no">No</cv-select-option>
-    </cv-select>
-  </cv-field>
+        <cv-field class="select-demo-field">
+          <span slot="label">Session TTL</span>
+          <span slot="description">Small size keeps dense forms compact.</span>
+          <cv-select size="small" value="15m" placeholder="TTL">
+            <cv-select-option value="5m">5 minutes</cv-select-option>
+            <cv-select-option value="15m">15 minutes</cv-select-option>
+            <cv-select-option value="1h">1 hour</cv-select-option>
+          </cv-select>
+        </cv-field>
+      </div>
+    </div>
 
-  <cv-field class="select-demo-cell select-demo-cell--wide">
-    <span slot="label">Grouped options</span>
-    <span slot="description">Groups preserve listbox semantics while separating related options.</span>
-    <cv-select placeholder="Choose a color">
-      <cv-select-group label="Warm">
-        <cv-select-option value="red">Red</cv-select-option>
-        <cv-select-option value="orange">Orange</cv-select-option>
-      </cv-select-group>
-      <cv-select-group label="Cool">
-        <cv-select-option value="blue">Blue</cv-select-option>
-        <cv-select-option value="green">Green</cv-select-option>
-      </cv-select-group>
-    </cv-select>
-  </cv-field>
+    <aside class="select-demo-side" aria-label="Live select state">
+      <span class="select-demo-kicker">Event readout</span>
+      <dl class="select-demo-state">
+        <div>
+          <dt>Values</dt>
+          <dd data-select-demo-values>hardware</dd>
+        </div>
+        <div>
+          <dt>Active option</dt>
+          <dd data-select-demo-active>none</dd>
+        </div>
+      </dl>
+      <output class="select-demo-log" data-select-demo-output>
+        ready -> Trust boundary: hardware
+      </output>
+    </aside>
+  </section>
 
-  <cv-field class="select-demo-cell">
-    <span slot="label">Multiple</span>
-    <span slot="description">Multiple mode can expose selected labels and a compact clear control.</span>
-    <cv-select selection-mode="multiple" clearable placeholder="Select tags">
-      <cv-select-option value="a11y" selected>Accessibility</cv-select-option>
-      <cv-select-option value="perf">Performance</cv-select-option>
-      <cv-select-option value="ux">UX</cv-select-option>
-    </cv-select>
-  </cv-field>
+  <section class="select-demo-cases" aria-label="Select state matrix">
+    <div class="select-demo-section-header">
+      <span class="select-demo-kicker">State matrix</span>
+      <h4>Common application cases stay visible without turning the demo into a control dump.</h4>
+    </div>
 
-  <cv-field class="select-demo-cell">
-    <span slot="label">Disabled option</span>
-    <span slot="description">Unavailable options stay visible but cannot become selected.</span>
-    <cv-select placeholder="Choose status">
-      <cv-select-option value="active">Active</cv-select-option>
-      <cv-select-option value="archived" disabled>Archived</cv-select-option>
-    </cv-select>
-  </cv-field>
+    <div class="select-demo-case-grid">
+      <cv-field class="select-demo-field">
+        <span slot="label">Multiple tags</span>
+        <span slot="description">Selected options are reflected through <code>selectedValues</code>.</span>
+        <cv-select selection-mode="multiple" clearable placeholder="Select tags">
+          <cv-select-option value="a11y" selected>Accessibility</cv-select-option>
+          <cv-select-option value="forms" selected>Forms</cv-select-option>
+          <cv-select-option value="keyboard">Keyboard</cv-select-option>
+          <cv-select-option value="testing">Testing</cv-select-option>
+        </cv-select>
+      </cv-field>
 
-  <cv-field class="select-demo-cell select-demo-cell--wide">
-    <span slot="label">Persistent popup</span>
-    <span slot="description">Set closeOnSelect to false when multiple picks should keep the popup open.</span>
-    <cv-select data-select-demo-keep-open selection-mode="multiple" placeholder="Pick options">
-      <cv-select-option value="a">Option A</cv-select-option>
-      <cv-select-option value="b">Option B</cv-select-option>
-    </cv-select>
-  </cv-field>
+      <cv-field class="select-demo-field">
+        <span slot="label">Persistent popup</span>
+        <span slot="description">Multiple mode can keep the listbox open after selection.</span>
+        <cv-select data-select-demo-keep-open selection-mode="multiple" placeholder="Pick checks">
+          <cv-select-option value="aria">ARIA contract</cv-select-option>
+          <cv-select-option value="events">Event payload</cv-select-option>
+          <cv-select-option value="form">Form value</cv-select-option>
+        </cv-select>
+      </cv-field>
+
+      <cv-field class="select-demo-field" disabled>
+        <span slot="label">Disabled field</span>
+        <span slot="description">The parent field forwards disabled state to the select.</span>
+        <cv-select value="locked" placeholder="Cannot interact">
+          <cv-select-option value="locked">Locked by policy</cv-select-option>
+        </cv-select>
+      </cv-field>
+
+      <cv-field class="select-demo-field">
+        <span slot="label">Disabled option</span>
+        <span slot="description">Unavailable choices stay visible but cannot be selected.</span>
+        <cv-select value="active" placeholder="Choose status">
+          <cv-select-option value="active">Active route</cv-select-option>
+          <cv-select-option value="archived" disabled>Archived route</cv-select-option>
+          <cv-select-option value="pending">Pending review</cv-select-option>
+        </cv-select>
+      </cv-field>
+    </div>
+  </section>
 </div>
 
 <script type="module">
-  const keepOpenSelect = document.querySelector('[data-select-demo-keep-open]')
-  if (keepOpenSelect) {
-    keepOpenSelect.closeOnSelect = false
+  const formatSelectValues = (select) => {
+    const values = select.selectedValues?.length
+      ? select.selectedValues
+      : select.value
+        ? [select.value]
+        : []
+
+    return values.length > 0 ? values.join(', ') : 'none'
   }
+
+  document.querySelectorAll('.select-demo-shell[data-demo="select"]:not([data-ready])').forEach((shell) => {
+    shell.dataset.ready = 'true'
+
+    const output = shell.querySelector('[data-select-demo-output]')
+    const values = shell.querySelector('[data-select-demo-values]')
+    const active = shell.querySelector('[data-select-demo-active]')
+    const primary = shell.querySelector('[data-select-demo-primary]')
+
+    const emitState = (select, type, detail = {}) => {
+      const label = select
+        .closest('cv-field')
+        ?.querySelector('[slot="label"]')
+        ?.textContent
+        ?.trim() || 'Select'
+      const selected = formatSelectValues(select)
+
+      if (values) values.textContent = selected
+      if (active) active.textContent = detail.activeId || 'none'
+      if (output) {
+        output.textContent = `${type} -> ${label}: ${selected} (${detail.open ? 'open' : 'closed'})`
+      }
+    }
+
+    shell.querySelectorAll('[data-select-demo-keep-open]').forEach((select) => {
+      select.closeOnSelect = false
+    })
+
+    shell.querySelectorAll('cv-select').forEach((select) => {
+      select.addEventListener('cv-input', (event) => emitState(select, event.type, event.detail))
+      select.addEventListener('cv-change', (event) => emitState(select, event.type, event.detail))
+    })
+
+    if (primary) {
+      requestAnimationFrame(() => emitState(primary, 'ready', {activeId: null, open: primary.open}))
+    }
+  })
 </script>
 ```
 
