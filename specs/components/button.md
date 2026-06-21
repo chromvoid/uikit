@@ -186,7 +186,9 @@ Normal (non-toggle) buttons rely on the native `click` event.
   <section class="button-demo-hero usage-demo__hero" aria-labelledby="button-demo-title">
     <div class="button-demo-copy usage-demo__copy">
       <span class="button-demo-kicker usage-demo__kicker">Action primitive</span>
-      <h3 id="button-demo-title">Use button when a user commits intent, changes mode, or starts a safe action.</h3>
+      <h3 id="button-demo-title">
+        Use button when a user commits intent, changes mode, or starts a safe action.
+      </h3>
       <p>
         The component keeps activation, toggle, disabled, loading, and form behavior in the headless button
         model. UIKit owns only the action surface, slots, variants, and sizing.
@@ -209,7 +211,7 @@ Normal (non-toggle) buttons rely on the native `click` event.
     </dl>
   </section>
 
-  <section class="button-demo-board" aria-label="Button examples in a vault workflow">
+  <section class="button-demo-board usage-demo__workbench" aria-label="Button examples in a vault workflow">
     <div class="button-demo-command">
       <div class="button-demo-command-head">
         <div>
@@ -283,7 +285,9 @@ Normal (non-toggle) buttons rely on the native `click` event.
   <section class="button-demo-section usage-demo__section" aria-labelledby="button-demo-matrix-title">
     <div class="button-demo-section-header usage-demo__section-header">
       <span class="button-demo-kicker usage-demo__kicker">Variants, sizes, and shape</span>
-      <h4 id="button-demo-matrix-title">Use one action hierarchy, then tune emphasis with variant and modifier.</h4>
+      <h4 id="button-demo-matrix-title">
+        Use one action hierarchy, then tune emphasis with variant and modifier.
+      </h4>
     </div>
 
     <div class="button-demo-matrix" aria-label="Button variant and size matrix">
