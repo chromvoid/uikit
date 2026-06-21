@@ -21,13 +21,13 @@ This document is the UIKit surface contract for Radio Group.
 
 ## Attributes
 
-| Attribute     | Type    | Default        | Description                                      |
-| ------------- | ------- | -------------- | ------------------------------------------------ |
-| `value`       | String  | `""`           | Value of the currently selected radio            |
-| `orientation` | String  | `"horizontal"` | Layout: `horizontal` \| `vertical`               |
-| `variant`     | String  | `"default"`    | Visual variant: `default` \| `segmented`         |
-| `disabled`    | Boolean | `false`        | Prevents interaction for all radios              |
-| `aria-label`  | String  | `""`           | Accessible label for the group                   |
+| Attribute     | Type    | Default        | Description                              |
+| ------------- | ------- | -------------- | ---------------------------------------- |
+| `value`       | String  | `""`           | Value of the currently selected radio    |
+| `orientation` | String  | `"horizontal"` | Layout: `horizontal` \| `vertical`       |
+| `variant`     | String  | `"default"`    | Visual variant: `default` \| `segmented` |
+| `disabled`    | Boolean | `false`        | Prevents interaction for all radios      |
+| `aria-label`  | String  | `""`           | Accessible label for the group           |
 
 ## Slots
 
@@ -88,41 +88,203 @@ This document is the UIKit surface contract for Radio Group.
 ## Usage
 
 ```html
-<cv-radio-group value="opt-1">
-  <cv-radio value="opt-1">Option 1</cv-radio>
-  <cv-radio value="opt-2">Option 2</cv-radio>
-  <cv-radio value="opt-3" disabled>Option 3</cv-radio>
-</cv-radio-group>
+<div class="radio-demo-shell" data-demo="radio-group" data-live-demo-height="1080" data-theme="dark">
+  <section class="radio-demo-hero" aria-labelledby="radio-demo-title">
+    <div class="radio-demo-copy">
+      <span class="radio-demo-kicker">Single-choice control</span>
+      <h3 id="radio-demo-title">Use radio-group when the answer must be exactly one branch.</h3>
+      <p>
+        The group owns roving focus, ARIA, form value, and change events. Each <code>cv-radio</code> stays
+        presentational, so product screens can render options without duplicating selection logic.
+      </p>
+    </div>
 
-<cv-radio-group orientation="vertical" aria-label="Payment method">
-  <cv-radio value="card">Credit card</cv-radio>
-  <cv-radio value="paypal">PayPal</cv-radio>
-  <cv-radio value="bank">Bank transfer</cv-radio>
-</cv-radio-group>
+    <dl class="radio-demo-metrics" aria-label="Radio group contract summary">
+      <div>
+        <dt>Keyboard</dt>
+        <dd>Arrow keys, Home, End, Space</dd>
+      </div>
+      <div>
+        <dt>State</dt>
+        <dd>single value</dd>
+      </div>
+      <div>
+        <dt>Events</dt>
+        <dd>cv-input / cv-change</dd>
+      </div>
+    </dl>
+  </section>
 
-<cv-radio-group disabled>
-  <cv-radio value="a">Disabled A</cv-radio>
-  <cv-radio value="b">Disabled B</cv-radio>
-</cv-radio-group>
+  <section class="radio-demo-workbench" aria-labelledby="radio-demo-workbench-title">
+    <div class="radio-demo-section-header">
+      <span class="radio-demo-kicker">Vault route picker</span>
+      <h4 id="radio-demo-workbench-title">
+        Select one visible branch while the group keeps form semantics and focus order.
+      </h4>
+    </div>
 
-<cv-radio-group value="med">
-  <cv-radio value="sm" size="small">Small radio</cv-radio>
-  <cv-radio value="med" size="medium">Medium radio</cv-radio>
-  <cv-radio value="lg" size="large">Large radio</cv-radio>
-</cv-radio-group>
+    <div class="radio-demo-board">
+      <form class="radio-demo-panel radio-demo-panel--primary" aria-label="Vault route selection">
+        <header class="radio-demo-panel-header">
+          <div>
+            <span class="radio-demo-label">Decision point</span>
+            <strong>Unlock target for this session</strong>
+          </div>
+          <cv-badge variant="primary">required</cv-badge>
+        </header>
 
-<cv-radio-group value="with-desc">
-  <cv-radio value="with-desc">
-    Primary option
-    <span slot="description">Additional details about this option</span>
-  </cv-radio>
-  <cv-radio value="other">Other option</cv-radio>
-</cv-radio-group>
+        <cv-radio-group
+          class="radio-demo-primary"
+          name="vault-route"
+          value="hidden"
+          orientation="vertical"
+          required
+          aria-label="Vault route"
+        >
+          <cv-radio value="visible">
+            Visible vault
+            <span slot="description"
+              >Open the ordinary workspace that can be shown under routine review.</span
+            >
+          </cv-radio>
+          <cv-radio value="hidden">
+            Hidden namespace
+            <span slot="description">Continue into the protected branch after local policy has passed.</span>
+          </cv-radio>
+          <cv-radio value="decoy" disabled>
+            Decoy profile
+            <span slot="description">Unavailable because the current route is already mounted.</span>
+          </cv-radio>
+        </cv-radio-group>
 
-<cv-radio-group variant="segmented" value="login" aria-label="Entry type">
-  <cv-radio value="login">Login</cv-radio>
-  <cv-radio value="payment_card">Payment card</cv-radio>
-</cv-radio-group>
+        <output class="radio-demo-output" aria-live="polite">
+          Selected route: Hidden namespace · value=hidden
+        </output>
+      </form>
+
+      <aside class="radio-demo-panel radio-demo-panel--contract" aria-label="Current radio group contract">
+        <span class="radio-demo-label">Live contract</span>
+        <dl class="radio-demo-live">
+          <div>
+            <dt>value</dt>
+            <dd data-radio-current-value>hidden</dd>
+          </div>
+          <div>
+            <dt>activeId</dt>
+            <dd data-radio-current-active>hidden</dd>
+          </div>
+          <div>
+            <dt>orientation</dt>
+            <dd>vertical</dd>
+          </div>
+          <div>
+            <dt>disabled item</dt>
+            <dd>decoy</dd>
+          </div>
+        </dl>
+      </aside>
+    </div>
+  </section>
+
+  <section class="radio-demo-section" aria-labelledby="radio-demo-states-title">
+    <div class="radio-demo-section-header">
+      <span class="radio-demo-kicker">States and variants</span>
+      <h4 id="radio-demo-states-title">
+        Default radios, segmented controls, descriptions, disabled groups, and size scale.
+      </h4>
+    </div>
+
+    <div class="radio-demo-state-grid">
+      <div class="radio-demo-cell radio-demo-cell--wide">
+        <span class="radio-demo-label">Segmented density</span>
+        <cv-radio-group variant="segmented" value="manual" aria-label="Unlock mode">
+          <cv-radio value="auto">Auto</cv-radio>
+          <cv-radio value="manual">Manual</cv-radio>
+          <cv-radio value="sealed">Sealed</cv-radio>
+        </cv-radio-group>
+      </div>
+
+      <div class="radio-demo-cell">
+        <span class="radio-demo-label">Horizontal default</span>
+        <cv-radio-group value="local" aria-label="Sync target">
+          <cv-radio value="local">Local</cv-radio>
+          <cv-radio value="relay">Relay</cv-radio>
+          <cv-radio value="usb">USB</cv-radio>
+        </cv-radio-group>
+      </div>
+
+      <div class="radio-demo-cell">
+        <span class="radio-demo-label">With descriptions</span>
+        <cv-radio-group value="owner" orientation="vertical" aria-label="Recovery owner">
+          <cv-radio value="owner">
+            Owner key
+            <span slot="description">Primary recovery material.</span>
+          </cv-radio>
+          <cv-radio value="delegate">
+            Delegate key
+            <span slot="description">Secondary approval path.</span>
+          </cv-radio>
+        </cv-radio-group>
+      </div>
+
+      <div class="radio-demo-cell radio-demo-cell--muted">
+        <span class="radio-demo-label">Disabled group</span>
+        <cv-radio-group value="policy" disabled aria-label="Locked policy">
+          <cv-radio value="policy">Policy</cv-radio>
+          <cv-radio value="manual">Manual</cv-radio>
+        </cv-radio-group>
+      </div>
+
+      <div class="radio-demo-cell radio-demo-cell--wide">
+        <span class="radio-demo-label">Size scale</span>
+        <cv-radio-group value="medium" aria-label="Radio size examples">
+          <cv-radio value="small" size="small">Small</cv-radio>
+          <cv-radio value="medium" size="medium">Medium</cv-radio>
+          <cv-radio value="large" size="large">Large</cv-radio>
+        </cv-radio-group>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>
+  document
+    .querySelectorAll('.radio-demo-shell[data-demo="radio-group"]:not([data-ready])')
+    .forEach((shell) => {
+      shell.dataset.ready = 'true'
+
+      const group = shell.querySelector('.radio-demo-primary')
+      const output = shell.querySelector('.radio-demo-output')
+      const valueNode = shell.querySelector('[data-radio-current-value]')
+      const activeNode = shell.querySelector('[data-radio-current-active]')
+      const labels = {
+        visible: 'Visible vault',
+        hidden: 'Hidden namespace',
+        decoy: 'Decoy profile',
+      }
+
+      const renderState = (detail = {}) => {
+        const value = detail.value || group?.value || 'hidden'
+        const activeId = detail.activeId || value
+        const label = labels[value] || value
+
+        if (output) {
+          output.textContent = `Selected route: ${label} · value=${value}`
+        }
+        if (valueNode) {
+          valueNode.textContent = value
+        }
+        if (activeNode) {
+          activeNode.textContent = activeId
+        }
+      }
+
+      group?.addEventListener('cv-change', (event) => {
+        renderState(event.detail)
+      })
+      renderState()
+    })
+</script>
 ```
 
 ## Child Elements
@@ -190,14 +352,14 @@ Individual radio option within a radio group. Purely presentational — all stat
 
 #### Visual States
 
-| Host selector           | Description                                     |
-| ----------------------- | ----------------------------------------------- |
-| `:host([checked])`      | Primary-tinted indicator border, dot visible    |
-| `:host([disabled])`     | Reduced opacity (`0.55`), `cursor: not-allowed` |
-| `:host([active])`       | Focused radio in roving tabindex model          |
-| `:host(:focus-visible)` | Focus ring on the host element                  |
-| `:host([size="small"])` | Small size overrides                            |
-| `:host([size="large"])` | Large size overrides                            |
+| Host selector                  | Description                                            |
+| ------------------------------ | ------------------------------------------------------ |
+| `:host([checked])`             | Primary-tinted indicator border, dot visible           |
+| `:host([disabled])`            | Reduced opacity (`0.55`), `cursor: not-allowed`        |
+| `:host([active])`              | Focused radio in roving tabindex model                 |
+| `:host(:focus-visible)`        | Focus ring on the host element                         |
+| `:host([size="small"])`        | Small size overrides                                   |
+| `:host([size="large"])`        | Large size overrides                                   |
 | `:host([variant="segmented"])` | Button-like segmented radio without circular indicator |
 
 #### Events
