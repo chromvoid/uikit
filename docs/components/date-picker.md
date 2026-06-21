@@ -17,41 +17,227 @@ This document is the UIKit surface contract for `cv-date-picker`.
 ## Usage
 
 ```html
-<cv-date-picker
-  data-live-demo-height="420"
-  mode="date"
-  aria-label="Flight date"
-  placeholder="Select departure date"
-  min="2026-01-01"
-  max="2026-12-31"
->
-  <icon-calendar slot="prefix"></icon-calendar>
-</cv-date-picker>
+<div class="date-demo-shell usage-demo" data-demo="date-picker" data-live-demo-height="960">
+  <header class="date-demo-hero usage-demo__hero">
+    <div class="date-demo-copy usage-demo__copy">
+      <span class="date-demo-kicker usage-demo__kicker">Date and date-time picker</span>
+      <h3>Schedule a vault exposure window with draft calendar edits and explicit commit.</h3>
+      <p>
+        The picker combines an editable combobox trigger, popup calendar, optional time segments, range
+        checks, and form-associated value submission. Calendar edits stay draft-only until <code>Apply</code>.
+      </p>
+    </div>
 
-<cv-date-picker
-  mode="date-time"
-  aria-label="Flight date"
-  placeholder="Select departure date and time"
-  locale="en-US"
-  minute-step="15"
-  open
->
-  <icon-calendar slot="prefix"></icon-calendar>
-  <icon-clock slot="suffix"></icon-clock>
-</cv-date-picker>
+    <dl class="date-demo-metrics usage-demo__metrics" aria-label="Date picker contract coverage">
+      <div>
+        <dt>Modes</dt>
+        <dd><code>date</code> and <code>date-time</code></dd>
+      </div>
+      <div>
+        <dt>Commit</dt>
+        <dd>typed value or dialog draft</dd>
+      </div>
+      <div>
+        <dt>Constraints</dt>
+        <dd>locale, range, minute step, UTC</dd>
+      </div>
+    </dl>
+  </header>
 
-<cv-date-picker
-  mode="date-time"
-  time-zone="utc"
-  hour-cycle="24"
-  min="2026-01-01T00:00"
-  max="2026-12-31T23:59"
-  disabled
-></cv-date-picker>
+  <section class="date-demo-board usage-demo__workbench" aria-label="Date picker workbench">
+    <div class="date-demo-panel date-demo-panel--primary usage-demo__panel usage-demo__panel--primary">
+      <div class="date-demo-section-header usage-demo__section-header">
+        <span class="date-demo-kicker usage-demo__kicker">Primary control</span>
+        <h4>Pick the visible window, tune time in 15 minute steps, then commit the draft.</h4>
+      </div>
 
-<cv-date-picker locale="ru-RU" size="large">
-  <icon-schedule slot="suffix"></icon-schedule>
-</cv-date-picker>
+      <cv-field class="date-demo-field">
+        <span slot="label">Visible access window</span>
+        <span slot="description">
+          The dialog is open by default so the calendar, time row, and footer actions are visible immediately.
+        </span>
+        <cv-date-picker
+          data-date-demo-primary
+          name="visible-window"
+          value="2026-06-21T14:30"
+          mode="date-time"
+          min="2026-06-01T00:00"
+          max="2026-07-31T23:59"
+          minute-step="15"
+          hour-cycle="24"
+          locale="en-US"
+          aria-label="Visible access window"
+          placeholder="Select access window"
+          open
+        >
+          <span slot="prefix" aria-hidden="true">UTC</span>
+        </cv-date-picker>
+      </cv-field>
+    </div>
+
+    <aside
+      class="date-demo-side usage-demo__side usage-demo__side--accent"
+      aria-label="Date picker event output"
+    >
+      <span class="date-demo-kicker usage-demo__kicker">Event readout</span>
+      <dl
+        class="date-demo-state usage-demo__state usage-demo__state--single"
+        aria-label="Live date picker state"
+      >
+        <div>
+          <dt>Committed</dt>
+          <dd data-date-demo-value>2026-06-21T14:30</dd>
+        </div>
+        <div>
+          <dt>Input</dt>
+          <dd data-date-demo-input>2026-06-21T14:30</dd>
+        </div>
+        <div>
+          <dt>Source</dt>
+          <dd data-date-demo-source>initial</dd>
+        </div>
+        <div>
+          <dt>State</dt>
+          <dd data-date-demo-state>open</dd>
+        </div>
+      </dl>
+      <output class="date-demo-log usage-demo__log" data-date-demo-output>
+        ready -> visible-window: 2026-06-21T14:30
+      </output>
+    </aside>
+  </section>
+
+  <section class="date-demo-cases usage-demo__section" aria-label="Date picker state matrix">
+    <div class="date-demo-section-header usage-demo__section-header">
+      <span class="date-demo-kicker usage-demo__kicker">Modes and edge states</span>
+      <h4>Show the public surface without hiding the cases consumers must design around.</h4>
+    </div>
+
+    <div class="date-demo-case-grid usage-demo__grid">
+      <cv-field class="date-demo-field usage-demo__card">
+        <span slot="label">Date only</span>
+        <span slot="description">Public value is normalized to <code>YYYY-MM-DD</code>.</span>
+        <cv-date-picker
+          mode="date"
+          value="2026-06-24"
+          min="2026-06-01"
+          max="2026-06-30"
+          aria-label="Date only"
+        >
+          <span slot="prefix" aria-hidden="true">D</span>
+        </cv-date-picker>
+      </cv-field>
+
+      <cv-field class="date-demo-field usage-demo__card">
+        <span slot="label">UTC review</span>
+        <span slot="description">The model uses UTC parsing and 24 hour time.</span>
+        <cv-date-picker
+          value="2026-06-21T22:45"
+          time-zone="utc"
+          minute-step="15"
+          hour-cycle="24"
+          aria-label="UTC review"
+        >
+          <span slot="prefix" aria-hidden="true">Z</span>
+        </cv-date-picker>
+      </cv-field>
+
+      <cv-field class="date-demo-field date-demo-field--warning usage-demo__card">
+        <span slot="label">Out of range</span>
+        <span slot="description"
+          >Invalid typed or external values reflect through <code>input-invalid</code>.</span
+        >
+        <cv-date-picker
+          value="2026-05-28T09:00"
+          min="2026-06-01T00:00"
+          max="2026-06-30T23:59"
+          aria-label="Out of range date"
+        ></cv-date-picker>
+      </cv-field>
+
+      <cv-field class="date-demo-field usage-demo__card">
+        <span slot="label">Localized value</span>
+        <span slot="description"
+          >Locale changes formatting/parsing context without changing the public value contract.</span
+        >
+        <cv-date-picker value="2026-06-21T09:00" locale="ru-RU" minute-step="30" aria-label="Localized date">
+          <span slot="suffix" aria-hidden="true">RU</span>
+        </cv-date-picker>
+      </cv-field>
+
+      <cv-field class="date-demo-field usage-demo__card">
+        <span slot="label">Readonly</span>
+        <span slot="description">The value remains focusable while mutating actions are blocked.</span>
+        <cv-date-picker
+          value="2026-07-03T18:00"
+          readonly
+          aria-label="Readonly access window"
+        ></cv-date-picker>
+      </cv-field>
+
+      <cv-field class="date-demo-field usage-demo__card" disabled>
+        <span slot="label">Disabled</span>
+        <span slot="description">Disabled controls do not accept interaction or submit form value.</span>
+        <cv-date-picker
+          value="2026-07-10T08:00"
+          disabled
+          aria-label="Disabled access window"
+        ></cv-date-picker>
+      </cv-field>
+    </div>
+  </section>
+</div>
+
+<script type="module">
+  const formatDateValue = (value) => value || 'empty'
+  const getDatePickerState = (picker, detail = {}) => {
+    if (detail.invalid || picker.inputInvalid) return 'invalid'
+    return (detail.open ?? picker.open) ? 'open' : 'closed'
+  }
+
+  document
+    .querySelectorAll('.date-demo-shell[data-demo="date-picker"]:not([data-ready])')
+    .forEach((shell) => {
+      shell.dataset.ready = 'true'
+
+      const primary = shell.querySelector('[data-date-demo-primary]')
+      const committed = shell.querySelector('[data-date-demo-value]')
+      const input = shell.querySelector('[data-date-demo-input]')
+      const source = shell.querySelector('[data-date-demo-source]')
+      const state = shell.querySelector('[data-date-demo-state]')
+      const output = shell.querySelector('[data-date-demo-output]')
+
+      if (!primary) return
+
+      const report = (type, detail = {}) => {
+        const committedValue = detail.value ?? primary.value ?? ''
+        const inputValue = detail.inputValue ?? primary.value ?? ''
+        const sourceValue = detail.source ?? type.replace(/^cv-/, '')
+        const stateValue = getDatePickerState(primary, detail)
+
+        if (committed) committed.textContent = formatDateValue(committedValue)
+        if (input) input.textContent = formatDateValue(inputValue)
+        if (source) source.textContent = sourceValue
+        if (state) state.textContent = stateValue
+        if (output)
+          output.textContent = `${type} -> visible-window: ${formatDateValue(committedValue)} (${stateValue})`
+      }
+
+      primary.addEventListener('cv-input', (event) => report(event.type, event.detail))
+      primary.addEventListener('cv-change', (event) => report(event.type, event.detail))
+
+      const stateEvents = ['pointerup', 'keyup', 'focusout']
+      stateEvents.forEach((eventName) => {
+        primary.addEventListener(eventName, () => {
+          requestAnimationFrame(() => report('state', {value: primary.value, inputValue: primary.value}))
+        })
+      })
+
+      requestAnimationFrame(() =>
+        report('ready', {value: primary.value, inputValue: primary.value, open: primary.open}),
+      )
+    })
+</script>
 ```
 
 ## Anatomy
