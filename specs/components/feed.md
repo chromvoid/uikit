@@ -168,10 +168,10 @@ Keyboard events are forwarded to `actions.handleKeyDown(event)`. The return valu
 ## Usage
 
 ```html
-<div class="feed-demo-shell" data-demo="feed" data-live-demo-height="780">
-  <section class="feed-demo-hero" aria-labelledby="feed-demo-title">
-    <div class="feed-demo-copy">
-      <span class="feed-demo-kicker">Bidirectional stream</span>
+<div class="feed-demo-shell usage-demo" data-demo="feed" data-live-demo-height="780">
+  <section class="feed-demo-hero usage-demo__hero" aria-labelledby="feed-demo-title">
+    <div class="feed-demo-copy usage-demo__copy">
+      <span class="feed-demo-kicker usage-demo__kicker">Bidirectional stream</span>
       <h3 id="feed-demo-title">Feed emits load requests; consumers slot in new articles.</h3>
       <p>
         This is not virtualization. Scroll sentinels request more records, then the wrapper appends or
@@ -236,7 +236,7 @@ Keyboard events are forwarded to `actions.handleKeyDown(event)`. The return valu
         <button type="button" class="feed-demo-boundary" data-feed-after>Focus target after feed</button>
       </div>
 
-      <aside class="feed-demo-log" aria-label="Feed event log">
+      <aside class="feed-demo-log usage-demo__log" aria-label="Feed event log">
         <span class="feed-demo-label">Event log</span>
         <ol data-feed-events aria-live="polite"></ol>
       </aside>
