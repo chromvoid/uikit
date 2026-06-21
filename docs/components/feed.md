@@ -28,21 +28,21 @@ This document is the UIKit surface contract for Feed.
       </p>
     </div>
 
-    <dl class="feed-demo-status" aria-label="Feed runtime state">
+    <dl class="feed-demo-status usage-demo__grid--compact" aria-label="Feed runtime state">
       <div>
-        <dt>Loaded</dt>
+        <dt class="usage-demo__meta usage-demo__label">Loaded</dt>
         <dd data-feed-loaded>3 articles</dd>
       </div>
       <div>
-        <dt>Active</dt>
+        <dt class="usage-demo__meta usage-demo__label">Active</dt>
         <dd data-feed-active>Latest device handoff</dd>
       </div>
       <div>
-        <dt>Busy</dt>
+        <dt class="usage-demo__meta usage-demo__label">Busy</dt>
         <dd data-feed-busy>false</dd>
       </div>
       <div>
-        <dt>Last event</dt>
+        <dt class="usage-demo__meta usage-demo__label">Last event</dt>
         <dd data-feed-last>Ready</dd>
       </div>
     </dl>
@@ -59,7 +59,7 @@ This document is the UIKit surface contract for Feed.
     </div>
 
     <div class="feed-demo-main">
-      <div class="feed-demo-frame">
+      <div class="feed-demo-frame usage-demo__grid">
         <button type="button" class="feed-demo-boundary" data-feed-before>Focus target before feed</button>
 
         <div class="feed-demo-scroll-wrap">
@@ -86,7 +86,7 @@ This document is the UIKit surface contract for Feed.
       </div>
 
       <aside class="feed-demo-log usage-demo__log" aria-label="Feed event log">
-        <span class="feed-demo-label">Event log</span>
+        <span class="feed-demo-label usage-demo__meta usage-demo__label">Event log</span>
         <ol data-feed-events aria-live="polite"></ol>
       </aside>
     </div>
@@ -202,7 +202,7 @@ This document is the UIKit surface contract for Feed.
             <h4>${record.title}</h4>
             <p>${record.body}</p>
           </div>
-          <span>${record.meta}</span>
+          <span class="feed-demo-meta usage-demo__status-pill">${record.meta}</span>
         </article>
       `
       return article
