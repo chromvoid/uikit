@@ -34,7 +34,11 @@ Segmented short-code entry for PIN, OTP, pairing, and recovery codes.
     </dl>
   </section>
 
-  <form class="code-input-demo-workbench usage-demo__workbench" aria-label="Pairing code verification" data-code-form>
+  <form
+    class="code-input-demo-workbench usage-demo__workbench"
+    aria-label="Pairing code verification"
+    data-code-form
+  >
     <section class="code-input-demo-panel usage-demo__panel" aria-labelledby="code-input-panel-title">
       <div class="code-input-demo-panel-head usage-demo__panel-head">
         <div>
@@ -56,7 +60,9 @@ Segmented short-code entry for PIN, OTP, pairing, and recovery codes.
           required
           autocomplete="off"
         ></cv-code-input>
-        <span slot="description">Type or paste a full token. Completion is reported through <code>cv-complete</code>.</span>
+        <span slot="description"
+          >Type or paste a full token. Completion is reported through <code>cv-complete</code>.</span
+        >
       </cv-field>
 
       <div class="code-input-demo-actions usage-demo__actions" aria-label="Code input demo actions">
@@ -74,7 +80,9 @@ Segmented short-code entry for PIN, OTP, pairing, and recovery codes.
       <div class="code-input-demo-contract">
         <span>Model boundary</span>
         <strong>state.value() stays normalized</strong>
-        <p>UIKit renders the segments. The headless model owns charset filtering, focus index, and no-op gates.</p>
+        <p>
+          UIKit renders the segments. The headless model owns charset filtering, focus index, and no-op gates.
+        </p>
       </div>
 
       <div class="code-input-demo-state-list">
@@ -85,7 +93,13 @@ Segmented short-code entry for PIN, OTP, pairing, and recovery codes.
 
         <cv-field invalid>
           <span slot="label">Recovery mismatch</span>
-          <cv-code-input purpose="recovery" charset="alphanumeric" length="6" value="A7K2M9" invalid></cv-code-input>
+          <cv-code-input
+            purpose="recovery"
+            charset="alphanumeric"
+            length="6"
+            value="A7K2M9"
+            invalid
+          ></cv-code-input>
           <span slot="error">The recovery code no longer matches this vault.</span>
         </cv-field>
 
@@ -96,7 +110,13 @@ Segmented short-code entry for PIN, OTP, pairing, and recovery codes.
 
         <cv-field>
           <span slot="label">Readonly audit code</span>
-          <cv-code-input purpose="pairing" charset="alphanumeric" length="6" value="RD3K9X" readonly></cv-code-input>
+          <cv-code-input
+            purpose="pairing"
+            charset="alphanumeric"
+            length="6"
+            value="RD3K9X"
+            readonly
+          ></cv-code-input>
         </cv-field>
       </div>
     </aside>
@@ -173,7 +193,10 @@ Segmented short-code entry for PIN, OTP, pairing, and recovery codes.
       shell.addEventListener('cv-input', (event) => {
         if (event.target !== main) return
         const {value, complete} = event.detail
-        setOutput(`cv-input: value="${value || 'empty'}", complete=${String(complete)}.`, complete ? 'complete' : 'typing')
+        setOutput(
+          `cv-input: value="${value || 'empty'}", complete=${String(complete)}.`,
+          complete ? 'complete' : 'typing',
+        )
       })
 
       shell.addEventListener('cv-change', (event) => {
