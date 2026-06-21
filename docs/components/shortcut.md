@@ -52,7 +52,11 @@ Use `cv-shortcut` as secondary command metadata in menus, command rows, toolbars
       </h4>
     </div>
 
-    <div class="shortcut-demo-platforms" role="group" aria-label="Shortcut platform preview">
+    <div
+      class="shortcut-demo-platforms usage-demo__toolbar"
+      role="group"
+      aria-label="Shortcut platform preview"
+    >
       <button type="button" data-shortcut-platform="macos" aria-pressed="true">macOS</button>
       <button type="button" data-shortcut-platform="windows" aria-pressed="false">Windows</button>
       <button type="button" data-shortcut-platform="linux" aria-pressed="false">Linux</button>
@@ -61,7 +65,7 @@ Use `cv-shortcut` as secondary command metadata in menus, command rows, toolbars
 
     <div class="shortcut-demo-grid">
       <div class="shortcut-demo-command-panel" aria-label="Command row shortcut examples">
-        <header class="shortcut-demo-panel-header usage-demo__panel-header">
+        <header class="shortcut-demo-panel-header usage-demo__panel-header usage-demo__surface-header">
           <div>
             <span class="shortcut-demo-label">Active route</span>
             <strong>Hidden vault review</strong>
@@ -69,7 +73,10 @@ Use `cv-shortcut` as secondary command metadata in menus, command rows, toolbars
           <output data-shortcut-readout aria-live="polite">Previewing macOS bindings</output>
         </header>
 
-        <button type="button" class="shortcut-demo-command shortcut-demo-command--active">
+        <button
+          type="button"
+          class="shortcut-demo-command shortcut-demo-command--active usage-demo__inline-card-row"
+        >
           <span class="shortcut-demo-command-glyph" aria-hidden="true">P</span>
           <span class="shortcut-demo-command-copy">
             <strong>Open command palette</strong>
@@ -78,7 +85,7 @@ Use `cv-shortcut` as secondary command metadata in menus, command rows, toolbars
           <cv-shortcut data-shortcut-id="palette" keys="Meta,K"></cv-shortcut>
         </button>
 
-        <button type="button" class="shortcut-demo-command">
+        <button type="button" class="shortcut-demo-command usage-demo__inline-card-row">
           <span class="shortcut-demo-command-glyph shortcut-demo-command-glyph--violet" aria-hidden="true"
             >R</span
           >
@@ -89,7 +96,7 @@ Use `cv-shortcut` as secondary command metadata in menus, command rows, toolbars
           <cv-shortcut data-shortcut-id="reveal" keys="Meta,Shift,R"></cv-shortcut>
         </button>
 
-        <button type="button" class="shortcut-demo-command">
+        <button type="button" class="shortcut-demo-command usage-demo__inline-card-row">
           <span class="shortcut-demo-command-glyph" aria-hidden="true">F</span>
           <span class="shortcut-demo-command-copy">
             <strong>Focus vault search</strong>
@@ -100,7 +107,7 @@ Use `cv-shortcut` as secondary command metadata in menus, command rows, toolbars
       </div>
 
       <aside class="shortcut-demo-side usage-demo__side" aria-label="Shortcut usage contexts">
-        <div class="shortcut-demo-context">
+        <div class="shortcut-demo-context usage-demo__body-copy">
           <span class="shortcut-demo-label">Menu suffix</span>
           <cv-menu open close-on-select="false" aria-label="Shortcut menu example">
             <cv-menu-item value="copy">
@@ -114,13 +121,13 @@ Use `cv-shortcut` as secondary command metadata in menus, command rows, toolbars
           </cv-menu>
         </div>
 
-        <div class="shortcut-demo-context">
+        <div class="shortcut-demo-context usage-demo__body-copy">
           <span class="shortcut-demo-label">Programmatic keys</span>
           <p>
             Consumers may assign a string array property when the binding comes from a registry instead of
             static markup.
           </p>
-          <div class="shortcut-demo-programmatic">
+          <div class="shortcut-demo-programmatic usage-demo__body-copy usage-demo__soft-card">
             <span>Open quick switcher</span>
             <cv-shortcut data-programmatic-shortcut></cv-shortcut>
           </div>
