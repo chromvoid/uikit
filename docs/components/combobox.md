@@ -52,18 +52,19 @@ This document is the UIKit surface contract for Combobox.
     aria-label="Combobox examples in a vault routing form"
   >
     <form class="combobox-demo-panel usage-demo__panel" data-combobox-form>
-      <div class="combobox-demo-panel-head usage-demo__panel-head">
+      <div class="combobox-demo-panel-head usage-demo__panel-head usage-demo__form-head">
         <div>
-          <span>Visible profile routing</span>
+          <span class="usage-demo__meta">Visible profile routing</span>
           <strong>relay.surface / browser tags / operator handoff</strong>
         </div>
         <cv-badge variant="primary" pill>live contract</cv-badge>
       </div>
 
-      <div class="combobox-demo-field-grid">
-        <cv-field required>
+      <div class="combobox-demo-field-grid usage-demo__field-grid">
+        <cv-field class="usage-demo__field" required>
           <span slot="label">Visible route</span>
           <cv-combobox
+            class="usage-demo__select-control"
             data-combobox-primary
             clearable
             value="relay"
@@ -82,9 +83,10 @@ This document is the UIKit surface contract for Combobox.
           >
         </cv-field>
 
-        <cv-field>
+        <cv-field class="usage-demo__field">
           <span slot="label">Layer tags</span>
           <cv-combobox
+            class="usage-demo__select-control"
             multiple
             clearable
             max-tags-visible="2"
@@ -100,9 +102,15 @@ This document is the UIKit surface contract for Combobox.
           <span slot="description">Multiple selection renders tags and keeps the popup open by default.</span>
         </cv-field>
 
-        <cv-field>
+        <cv-field class="usage-demo__field">
           <span slot="label">Operator</span>
-          <cv-combobox type="select-only" value="alex" placeholder="Assign operator" aria-label="Operator">
+          <cv-combobox
+            class="usage-demo__select-control"
+            type="select-only"
+            value="alex"
+            placeholder="Assign operator"
+            aria-label="Operator"
+          >
             <cv-combobox-option value="alex">Alex - security review</cv-combobox-option>
             <cv-combobox-option value="maria">Maria - legal hold</cv-combobox-option>
             <cv-combobox-option value="ops">Ops queue</cv-combobox-option>
@@ -112,9 +120,13 @@ This document is the UIKit surface contract for Combobox.
           >
         </cv-field>
 
-        <cv-field>
+        <cv-field class="usage-demo__field">
           <span slot="label">Jurisdiction</span>
-          <cv-combobox placeholder="Filter jurisdiction" aria-label="Jurisdiction">
+          <cv-combobox
+            class="usage-demo__select-control"
+            placeholder="Filter jurisdiction"
+            aria-label="Jurisdiction"
+          >
             <cv-combobox-group label="Low-friction review">
               <cv-combobox-option value="helsinki">Helsinki</cv-combobox-option>
               <cv-combobox-option value="reykjavik">Reykjavik</cv-combobox-option>
@@ -156,9 +168,10 @@ This document is the UIKit surface contract for Combobox.
         </div>
       </dl>
 
-      <div class="combobox-demo-open-card">
-        <span>Open grouped listbox</span>
+      <div class="combobox-demo-open-card usage-demo__case">
+        <span class="usage-demo__meta">Open grouped listbox</span>
         <cv-combobox
+          class="usage-demo__select-control"
           open
           type="select-only"
           value="work"
@@ -184,27 +197,39 @@ This document is the UIKit surface contract for Combobox.
       </h4>
     </div>
 
-    <div class="combobox-demo-matrix" aria-label="Combobox state matrix">
-      <div>
-        <span>Editable filter</span>
-        <cv-combobox input-value="gate" placeholder="Type to filter" aria-label="Editable filter">
+    <div class="combobox-demo-matrix usage-demo__field-grid" aria-label="Combobox state matrix">
+      <div class="usage-demo__case">
+        <span class="usage-demo__meta">Editable filter</span>
+        <cv-combobox
+          class="usage-demo__select-control"
+          input-value="gate"
+          placeholder="Type to filter"
+          aria-label="Editable filter"
+        >
           <cv-combobox-option value="gateway">Gateway</cv-combobox-option>
           <cv-combobox-option value="gatekeeper">Gatekeeper</cv-combobox-option>
           <cv-combobox-option value="relay">Relay</cv-combobox-option>
         </cv-combobox>
       </div>
 
-      <div>
-        <span>Select-only</span>
-        <cv-combobox type="select-only" value="hardware" placeholder="Choose boundary" aria-label="Boundary">
+      <div class="usage-demo__case">
+        <span class="usage-demo__meta">Select-only</span>
+        <cv-combobox
+          class="usage-demo__select-control"
+          type="select-only"
+          value="hardware"
+          placeholder="Choose boundary"
+          aria-label="Boundary"
+        >
           <cv-combobox-option value="software">Software only</cv-combobox-option>
           <cv-combobox-option value="hardware">Hardware-assisted</cv-combobox-option>
         </cv-combobox>
       </div>
 
-      <div>
-        <span>Tag overflow</span>
+      <div class="usage-demo__case">
+        <span class="usage-demo__meta">Tag overflow</span>
         <cv-combobox
+          class="usage-demo__select-control"
           multiple
           clearable
           max-tags-visible="1"
@@ -218,11 +243,12 @@ This document is the UIKit surface contract for Combobox.
         </cv-combobox>
       </div>
 
-      <div>
-        <span>Invalid</span>
-        <cv-field invalid>
+      <div class="usage-demo__case usage-demo__case--danger">
+        <span class="usage-demo__meta">Invalid</span>
+        <cv-field class="usage-demo__field" invalid>
           <span slot="label">Policy route</span>
           <cv-combobox
+            class="usage-demo__select-control"
             invalid
             input-value="unknown relay"
             placeholder="Search route"
@@ -234,21 +260,38 @@ This document is the UIKit surface contract for Combobox.
         </cv-field>
       </div>
 
-      <div>
-        <span>Disabled option</span>
-        <cv-combobox value="active" placeholder="Choose state" aria-label="Disabled option">
+      <div class="usage-demo__case">
+        <span class="usage-demo__meta">Disabled option</span>
+        <cv-combobox
+          class="usage-demo__select-control"
+          value="active"
+          placeholder="Choose state"
+          aria-label="Disabled option"
+        >
           <cv-combobox-option value="active">Active</cv-combobox-option>
           <cv-combobox-option value="archived" disabled>Archived policy</cv-combobox-option>
         </cv-combobox>
       </div>
 
-      <div>
-        <span>Sizes</span>
-        <cv-combobox size="small" value="s" placeholder="Small" aria-label="Small combobox">
+      <div class="usage-demo__case">
+        <span class="usage-demo__meta">Sizes</span>
+        <cv-combobox
+          class="usage-demo__select-control"
+          size="small"
+          value="s"
+          placeholder="Small"
+          aria-label="Small combobox"
+        >
           <cv-combobox-option value="s">Small</cv-combobox-option>
           <cv-combobox-option value="m">Medium</cv-combobox-option>
         </cv-combobox>
-        <cv-combobox size="large" value="l" placeholder="Large" aria-label="Large combobox">
+        <cv-combobox
+          class="usage-demo__select-control"
+          size="large"
+          value="l"
+          placeholder="Large"
+          aria-label="Large combobox"
+        >
           <cv-combobox-option value="m">Medium</cv-combobox-option>
           <cv-combobox-option value="l">Large</cv-combobox-option>
         </cv-combobox>
