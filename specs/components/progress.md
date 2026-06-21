@@ -129,7 +129,10 @@ None. `cv-progress` is a read-only indicator with no user-modifiable state.
     </dl>
   </section>
 
-  <section class="progress-demo-workbench usage-demo__workbench" aria-labelledby="progress-demo-workbench-title">
+  <section
+    class="progress-demo-workbench usage-demo__workbench"
+    aria-labelledby="progress-demo-workbench-title"
+  >
     <div class="progress-demo-panel usage-demo__panel">
       <header class="progress-demo-panel-head usage-demo__panel-head">
         <div>
@@ -198,7 +201,7 @@ None. `cv-progress` is a read-only indicator with no user-modifiable state.
     </aside>
   </section>
 
-  <section class="progress-demo-tones" aria-labelledby="progress-demo-tones-title">
+  <section class="progress-demo-tones usage-demo__section" aria-labelledby="progress-demo-tones-title">
     <div class="progress-demo-section-header usage-demo__section-header">
       <span class="progress-demo-kicker usage-demo__kicker">State palette</span>
       <h4 id="progress-demo-tones-title">Choose tone by operation state, not decoration.</h4>
