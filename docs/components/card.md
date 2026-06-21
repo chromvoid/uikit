@@ -9,30 +9,101 @@ Visual container that groups related content into a cohesive unit, with an optio
 ## Usage
 
 ```html
-<!-- Basic elevated card -->
-<cv-card>
-  <span slot="header">Security report</span>
-  <p>Last scan completed successfully. No vault integrity issues were found.</p>
-  <div slot="footer">
-    <cv-button size="small">Open report</cv-button>
-  </div>
-</cv-card>
+<div class="card-demo-shell" data-demo="card">
+  <section class="card-demo-hero" aria-labelledby="card-demo-title">
+    <div class="card-demo-copy">
+      <span class="card-demo-kicker">Container primitive</span>
+      <h3 id="card-demo-title">
+        Use card to bind media, state, body copy, and actions into one scannable unit.
+      </h3>
+      <p>
+        The component owns slot layout and disclosure contracts. Product surfaces can tune density and color
+        through custom properties without moving behavior out of the headless model.
+      </p>
+    </div>
 
-<!-- Outlined media card -->
-<cv-card class="card-demo-media-card" variant="outlined">
-  <img slot="image" src="../images/card-preview.png" alt="Abstract encrypted landscape preview" />
-  <span slot="header">Encrypted workspace</span>
-  <p>Use the image slot for local product media, diagrams, or previews.</p>
-</cv-card>
+    <dl class="card-demo-metrics" aria-label="Card contract summary">
+      <div>
+        <dt>Variants</dt>
+        <dd>elevated / outlined / filled</dd>
+      </div>
+      <div>
+        <dt>Slots</dt>
+        <dd>image, header, body, footer</dd>
+      </div>
+      <div>
+        <dt>Events</dt>
+        <dd>cv-input + cv-change</dd>
+      </div>
+    </dl>
+  </section>
 
-<!-- Filled status card -->
-<cv-card variant="filled">
-  <span slot="header">Sync settings</span>
-  <p>Device keys are synchronized across trusted sessions.</p>
-  <div slot="footer">
-    <cv-badge variant="success">Healthy</cv-badge>
-  </div>
-</cv-card>
+  <section class="card-demo-board" aria-label="Card variants and states">
+    <cv-card class="card-demo-main-card" variant="elevated">
+      <img slot="image" src="../images/card-preview.png" alt="Faceted encrypted workspace preview" />
+      <div slot="header" class="card-demo-card-head">
+        <span>Border vault review</span>
+        <cv-badge variant="success" size="small">verified</cv-badge>
+      </div>
+
+      <div class="card-demo-body">
+        <p>
+          Visible profile audit completed. Deniable namespaces stay outside this surface until the operator
+          enters a matching threat model.
+        </p>
+
+        <div class="card-demo-proof-grid" aria-label="Review details">
+          <span>
+            <strong>3</strong>
+            exposed entries
+          </span>
+          <span>
+            <strong>0</strong>
+            integrity warnings
+          </span>
+          <span>
+            <strong>2</strong>
+            paired devices
+          </span>
+        </div>
+      </div>
+
+      <div slot="footer" class="card-demo-actions">
+        <cv-button variant="primary" size="small">Open review</cv-button>
+        <cv-button variant="ghost" size="small" outline>Export proof</cv-button>
+      </div>
+    </cv-card>
+
+    <div class="card-demo-side" aria-label="Compact card variants">
+      <cv-card variant="outlined" class="card-demo-compact-card">
+        <div slot="header" class="card-demo-card-head">
+          <span>Relay boundary</span>
+          <cv-badge variant="primary" size="small">active</cv-badge>
+        </div>
+        <p>Outlined cards keep a quiet surface while still separating trust-boundary metadata.</p>
+      </cv-card>
+
+      <cv-card variant="filled" class="card-demo-compact-card">
+        <div slot="header" class="card-demo-card-head">
+          <span>Sync window</span>
+          <cv-badge variant="warning" size="small">18 min</cv-badge>
+        </div>
+        <p>Filled cards work for secondary status where elevation would overstate priority.</p>
+      </cv-card>
+
+      <cv-card expandable class="card-demo-disclosure-card" variant="outlined">
+        <div slot="header" class="card-demo-card-head">
+          <span>Compatibility disclosure</span>
+          <cv-badge variant="neutral" size="small">legacy</cv-badge>
+        </div>
+        <p>
+          Expandable cards remain supported for existing flows. For new single-section reveal UI, prefer
+          <code>cv-disclosure</code>.
+        </p>
+      </cv-card>
+    </div>
+  </section>
+</div>
 ```
 
 ## Anatomy
@@ -192,7 +263,7 @@ Use `cv-card` for static grouped content. For a single reveal/hide interaction, 
 remains compatible for existing surfaces, but it is not the preferred pattern for new disclosure UI.
 
 ```html
-<cv-card expandable>
+<cv-card expandable expanded>
   <span slot="header">Compatibility disclosure</span>
   <p>This fallback keeps existing expandable cards working while new flows use disclosure primitives.</p>
 </cv-card>

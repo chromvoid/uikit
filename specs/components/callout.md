@@ -218,7 +218,9 @@ No `cv-input` or `cv-change` events are emitted. The callout has no user-modifia
           Dismissible notes are open. Close one to see the cv-close event.
         </output>
 
-        <button type="button" class="callout-demo-restore" data-callout-restore>Restore dismissed notes</button>
+        <button type="button" class="callout-demo-restore" data-callout-restore>
+          Restore dismissed notes
+        </button>
       </aside>
     </div>
   </section>
