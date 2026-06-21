@@ -154,7 +154,7 @@ No component-specific events. Navigation uses standard link click behavior.
           </cv-breadcrumb-item>
           <cv-breadcrumb-item value="access" href="#access">
             Access policy
-            <span slot="suffix">beta</span>
+            <span class="usage-demo__adornment" slot="suffix">beta</span>
           </cv-breadcrumb-item>
         </cv-breadcrumb>
       </div>
