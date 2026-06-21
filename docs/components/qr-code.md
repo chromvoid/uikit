@@ -49,7 +49,7 @@ in the center.
     </figure>
   </section>
 
-  <div class="qr-demo-board" aria-label="QR code rendering variants">
+  <div class="qr-demo-board usage-demo__workbench" aria-label="QR code rendering variants">
     <figure class="qr-demo-card">
       <cv-qr-code value="https://chromvoid.com" aria-label="ChromVoid website QR code"></cv-qr-code>
       <figcaption>
