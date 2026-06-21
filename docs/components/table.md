@@ -42,7 +42,7 @@ Data table for displaying structured tabular content with optional sorting, row 
       <h4 id="table-demo-workbench-title">Sortable status table with selected vault layers</h4>
     </div>
 
-    <div class="table-demo-toolbar" aria-label="Active table capabilities">
+    <div class="table-demo-toolbar usage-demo__toolbar" aria-label="Active table capabilities">
       <span>striped</span>
       <span>compact</span>
       <span>bordered</span>
@@ -50,7 +50,7 @@ Data table for displaying structured tabular content with optional sorting, row 
       <span>interactive</span>
     </div>
 
-    <div class="table-demo-scroll">
+    <div class="table-demo-scroll usage-demo__scroll-surface">
       <cv-table
         id="table-demo-vaults"
         aria-label="Vault layer inventory"
@@ -66,17 +66,46 @@ Data table for displaying structured tabular content with optional sorting, row 
         total-row-count="6"
         total-column-count="5"
       >
-        <cv-table-column slot="columns" value="layer" label="Layer" sortable></cv-table-column>
-        <cv-table-column slot="columns" value="owner" label="Owner" sortable></cv-table-column>
-        <cv-table-column slot="columns" value="state" label="State"></cv-table-column>
-        <cv-table-column slot="columns" value="exposure" label="Exposure"></cv-table-column>
-        <cv-table-column slot="columns" value="ttl" label="TTL"></cv-table-column>
+        <cv-table-column
+          class="usage-demo__column-label"
+          slot="columns"
+          value="layer"
+          label="Layer"
+          sortable
+        ></cv-table-column>
+        <cv-table-column
+          class="usage-demo__column-label"
+          slot="columns"
+          value="owner"
+          label="Owner"
+          sortable
+        ></cv-table-column>
+        <cv-table-column
+          class="usage-demo__column-label"
+          slot="columns"
+          value="state"
+          label="State"
+        ></cv-table-column>
+        <cv-table-column
+          class="usage-demo__column-label"
+          slot="columns"
+          value="exposure"
+          label="Exposure"
+        ></cv-table-column>
+        <cv-table-column
+          class="usage-demo__column-label"
+          slot="columns"
+          value="ttl"
+          label="TTL"
+        ></cv-table-column>
 
         <cv-table-row slot="rows" value="primary-vault">
           <cv-table-cell column="layer" row-header>Primary vault</cv-table-cell>
           <cv-table-cell column="owner">Alex</cv-table-cell>
           <cv-table-cell column="state"
-            ><cv-badge variant="success" size="small">Verified</cv-badge></cv-table-cell
+            ><cv-badge class="usage-demo__dense-badge" variant="success" size="small"
+              >Verified</cv-badge
+            ></cv-table-cell
           >
           <cv-table-cell column="exposure">Hidden</cv-table-cell>
           <cv-table-cell column="ttl">30 days</cv-table-cell>
@@ -85,7 +114,9 @@ Data table for displaying structured tabular content with optional sorting, row 
           <cv-table-cell column="layer" row-header>Decoy surface</cv-table-cell>
           <cv-table-cell column="owner">Traveler</cv-table-cell>
           <cv-table-cell column="state"
-            ><cv-badge variant="primary" size="small">Visible</cv-badge></cv-table-cell
+            ><cv-badge class="usage-demo__dense-badge" variant="primary" size="small"
+              >Visible</cv-badge
+            ></cv-table-cell
           >
           <cv-table-cell column="exposure">Inspectable</cv-table-cell>
           <cv-table-cell column="ttl">Active</cv-table-cell>
@@ -94,7 +125,9 @@ Data table for displaying structured tabular content with optional sorting, row 
           <cv-table-cell column="layer" row-header>Relay core</cv-table-cell>
           <cv-table-cell column="owner">Device</cv-table-cell>
           <cv-table-cell column="state"
-            ><cv-badge variant="success" size="small">Paired</cv-badge></cv-table-cell
+            ><cv-badge class="usage-demo__dense-badge" variant="success" size="small"
+              >Paired</cv-badge
+            ></cv-table-cell
           >
           <cv-table-cell column="exposure">Hardware</cv-table-cell>
           <cv-table-cell column="ttl">Session</cv-table-cell>
@@ -103,7 +136,9 @@ Data table for displaying structured tabular content with optional sorting, row 
           <cv-table-cell column="layer" row-header>Legal archive</cv-table-cell>
           <cv-table-cell column="owner">Counsel</cv-table-cell>
           <cv-table-cell column="state"
-            ><cv-badge variant="warning" size="small">Review</cv-badge></cv-table-cell
+            ><cv-badge class="usage-demo__dense-badge" variant="warning" size="small"
+              >Review</cv-badge
+            ></cv-table-cell
           >
           <cv-table-cell column="exposure">Shared</cv-table-cell>
           <cv-table-cell column="ttl">7 days</cv-table-cell>
@@ -112,7 +147,9 @@ Data table for displaying structured tabular content with optional sorting, row 
           <cv-table-cell column="layer" row-header>Recovery share</cv-table-cell>
           <cv-table-cell column="owner">Maria</cv-table-cell>
           <cv-table-cell column="state"
-            ><cv-badge variant="neutral" size="small">Dormant</cv-badge></cv-table-cell
+            ><cv-badge class="usage-demo__dense-badge" variant="neutral" size="small"
+              >Dormant</cv-badge
+            ></cv-table-cell
           >
           <cv-table-cell column="exposure">Sealed</cv-table-cell>
           <cv-table-cell column="ttl">90 days</cv-table-cell>
@@ -121,7 +158,9 @@ Data table for displaying structured tabular content with optional sorting, row 
           <cv-table-cell column="layer" row-header>Expired export</cv-table-cell>
           <cv-table-cell column="owner">Legacy</cv-table-cell>
           <cv-table-cell column="state"
-            ><cv-badge variant="danger" size="small">Blocked</cv-badge></cv-table-cell
+            ><cv-badge class="usage-demo__dense-badge" variant="danger" size="small"
+              >Blocked</cv-badge
+            ></cv-table-cell
           >
           <cv-table-cell column="exposure">None</cv-table-cell>
           <cv-table-cell column="ttl">Expired</cv-table-cell>
@@ -227,7 +266,7 @@ Data table for displaying structured tabular content with optional sorting, row 
 └── <div part="base" role="table|grid">
     ├── <div role="rowgroup" part="head">
     │   └── <div role="row" part="head-row">
-    │       └── <slot name="columns">       ← accepts <cv-table-column> children
+    │       └── <slot name="columns">       ← accepts <cv-table-column class="usage-demo__column-label"> children
     └── <div role="rowgroup" part="body" @cv-table-row-slotchange>
         └── <slot name="rows">               ← accepts <cv-table-row> children
 ```
@@ -252,10 +291,10 @@ Data table for displaying structured tabular content with optional sorting, row 
 
 ## Slots
 
-| Slot      | Description                                          |
-| --------- | ---------------------------------------------------- |
-| `columns` | `<cv-table-column>` children defining column headers |
-| `rows`    | `<cv-table-row>` children containing table data rows |
+| Slot      | Description                                                                           |
+| --------- | ------------------------------------------------------------------------------------- |
+| `columns` | `<cv-table-column class="usage-demo__column-label">` children defining column headers |
+| `rows`    | `<cv-table-row>` children containing table data rows                                  |
 
 ## CSS Parts
 
@@ -404,7 +443,7 @@ Column header definition within the table header row.
 #### Anatomy
 
 ```
-<cv-table-column> (host)
+<cv-table-column class="usage-demo__column-label"> (host)
 └── <span part="base">
     ├── <slot>${label}</slot>
     └── sort indicator (▲/▼)     ← only when sort-direction is ascending/descending
