@@ -302,7 +302,7 @@ UIKit does not own sort, selection, or navigation logic; headless state is the s
       </cv-table>
     </div>
 
-    <output class="table-demo-readout" for="table-demo-vaults" aria-live="polite">
+    <output class="table-demo-readout usage-demo__log" for="table-demo-vaults" aria-live="polite">
       Sort: layer ascending | Selected: none | Focus: awaiting grid navigation
     </output>
   </section>
