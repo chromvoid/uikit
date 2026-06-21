@@ -76,10 +76,10 @@ None.
 ## Usage
 
 ```html
-<div class="task-list-demo-shell" data-demo="task-list" data-live-demo-height="760">
-  <section class="task-list-demo-hero" aria-labelledby="task-list-demo-title">
-    <div class="task-list-demo-copy">
-      <span class="task-list-demo-kicker">Transfer surface</span>
+<div class="task-list-demo-shell usage-demo" data-demo="task-list" data-live-demo-height="760">
+  <section class="task-list-demo-hero usage-demo__hero" aria-labelledby="task-list-demo-title">
+    <div class="task-list-demo-copy usage-demo__copy">
+      <span class="task-list-demo-kicker usage-demo__kicker">Transfer surface</span>
       <h3 id="task-list-demo-title">Keep every queued operation scannable while the batch is still moving.</h3>
       <p>
         <code>cv-task-list</code> owns the accessible list shell, busy state, empty state placement, and
@@ -87,7 +87,7 @@ None.
       </p>
     </div>
 
-    <dl class="task-list-demo-metrics" aria-label="Queue summary">
+    <dl class="task-list-demo-metrics usage-demo__metrics" aria-label="Queue summary">
       <div>
         <dt>Active</dt>
         <dd>2 encrypted tasks</dd>
@@ -148,7 +148,7 @@ None.
       <span slot="footer" class="task-list-demo-footer">2 active / 1 queued / updated now</span>
     </cv-task-list>
 
-    <div class="task-list-demo-side">
+    <div class="task-list-demo-side usage-demo__side">
       <cv-task-list class="task-list-demo-compact-list" label="Verification lane" density="compact">
         <span slot="header" class="task-list-demo-title">Verification lane</span>
 
