@@ -196,7 +196,10 @@ No component-specific custom properties. Styling uses design tokens:
         </div>
       </div>
 
-      <form class="checkbox-demo-panel checkbox-demo-form usage-demo__panel" aria-label="Vault creation checklist">
+      <form
+        class="checkbox-demo-panel checkbox-demo-form usage-demo__panel"
+        aria-label="Vault creation checklist"
+      >
         <cv-checkbox checked name="vault-policy" value="local-unlock">Require local unlock</cv-checkbox>
         <cv-checkbox name="vault-policy" value="recovery-code">Generate recovery code</cv-checkbox>
         <cv-checkbox required name="vault-policy" value="acknowledged">Acknowledge threat model</cv-checkbox>
