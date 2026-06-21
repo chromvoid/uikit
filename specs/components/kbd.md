@@ -36,5 +36,155 @@ None. The component does not listen for keyboard shortcuts.
 ## Usage
 
 ```html
-<cv-kbd>Esc</cv-kbd> <cv-kbd tone="strong">Enter</cv-kbd>
+<div class="kbd-demo-shell" data-demo="kbd" data-live-demo-height="760">
+  <section class="kbd-demo-hero" aria-labelledby="kbd-demo-title">
+    <div class="kbd-demo-copy">
+      <span class="kbd-demo-kicker">Keycap primitive</span>
+      <h3 id="kbd-demo-title">Use kbd for one physical key, then compose shortcuts at the consumer boundary.</h3>
+      <p>
+        The component renders a native <code>kbd</code> node, keeps the label stable, and stays passive. Shortcut
+        matching, platform labels, and command execution remain outside this primitive.
+      </p>
+    </div>
+
+    <dl class="kbd-demo-metrics" aria-label="Keyboard keycap contract summary">
+      <div>
+        <dt>Element</dt>
+        <dd>native <code>&lt;kbd&gt;</code></dd>
+      </div>
+      <div>
+        <dt>Variants</dt>
+        <dd>small / medium / large</dd>
+      </div>
+      <div>
+        <dt>Events</dt>
+        <dd>none</dd>
+      </div>
+    </dl>
+  </section>
+
+  <section class="kbd-demo-board" aria-label="Keyboard hint examples in a vault workflow">
+    <div class="kbd-demo-console">
+      <div class="kbd-demo-console-head">
+        <div>
+          <span>Command surface</span>
+          <strong>visible-vault.navigator</strong>
+        </div>
+        <span class="kbd-demo-status">passive hints only</span>
+      </div>
+
+      <div class="kbd-demo-command-list" aria-label="Single key usage examples">
+        <div class="kbd-demo-command-row">
+          <div>
+            <span>Dismiss overlay</span>
+            <strong>Cancel the visible action without changing vault state.</strong>
+          </div>
+          <div class="kbd-demo-key-group" aria-label="Escape key">
+            <cv-kbd tone="strong">Esc</cv-kbd>
+          </div>
+        </div>
+
+        <div class="kbd-demo-command-row">
+          <div>
+            <span>Confirm focused action</span>
+            <strong>Commit only after the active control already owns focus.</strong>
+          </div>
+          <div class="kbd-demo-key-group" aria-label="Enter key">
+            <cv-kbd tone="strong">Enter</cv-kbd>
+          </div>
+        </div>
+
+        <div class="kbd-demo-command-row">
+          <div>
+            <span>Move selection</span>
+            <strong>Keep local navigation readable beside list, grid, and tree surfaces.</strong>
+          </div>
+          <div class="kbd-demo-key-group" aria-label="Arrow up and arrow down keys">
+            <cv-kbd>↑</cv-kbd>
+            <cv-kbd>↓</cv-kbd>
+          </div>
+        </div>
+
+        <div class="kbd-demo-command-row">
+          <div>
+            <span>Focus search</span>
+            <strong>Use a single-key hint when the feature model owns the handler path.</strong>
+          </div>
+          <div class="kbd-demo-key-group" aria-label="Slash key">
+            <cv-kbd>/</cv-kbd>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <aside class="kbd-demo-side" aria-label="Keyboard key size and tone examples">
+      <div class="kbd-demo-side-head">
+        <span class="kbd-demo-kicker">Sizing and tone</span>
+        <h4>Keep short labels compact, then give long labels enough fixed breathing room.</h4>
+      </div>
+
+      <div class="kbd-demo-lane">
+        <span>Size</span>
+        <div class="kbd-demo-key-group">
+          <cv-kbd size="small">S</cv-kbd>
+          <cv-kbd>M</cv-kbd>
+          <cv-kbd size="large">L</cv-kbd>
+        </div>
+      </div>
+
+      <div class="kbd-demo-lane">
+        <span>Tone</span>
+        <div class="kbd-demo-key-group">
+          <cv-kbd>Tab</cv-kbd>
+          <cv-kbd tone="strong">Space</cv-kbd>
+        </div>
+      </div>
+
+      <div class="kbd-demo-lane">
+        <span>Long labels</span>
+        <div class="kbd-demo-key-group">
+          <cv-kbd class="kbd-demo-key--wide">Backspace</cv-kbd>
+          <cv-kbd class="kbd-demo-key--wide" tone="strong">Page Down</cv-kbd>
+        </div>
+      </div>
+    </aside>
+  </section>
+
+  <section class="kbd-demo-section" aria-labelledby="kbd-demo-matrix-title">
+    <div class="kbd-demo-section-header">
+      <span class="kbd-demo-kicker">Composition boundary</span>
+      <h4 id="kbd-demo-matrix-title">
+        Render individual keycaps here; let shortcut-aware surfaces decide platform labels and separators.
+      </h4>
+    </div>
+
+    <div class="kbd-demo-matrix" aria-label="Keyboard keycap composition examples">
+      <div>
+        <span>Modifier keys</span>
+        <div class="kbd-demo-key-group">
+          <cv-kbd>Ctrl</cv-kbd>
+          <cv-kbd>Shift</cv-kbd>
+          <cv-kbd>Alt</cv-kbd>
+          <cv-kbd>⌘</cv-kbd>
+        </div>
+      </div>
+      <div>
+        <span>Navigation keys</span>
+        <div class="kbd-demo-key-group">
+          <cv-kbd>Home</cv-kbd>
+          <cv-kbd>End</cv-kbd>
+          <cv-kbd>PgUp</cv-kbd>
+          <cv-kbd>PgDn</cv-kbd>
+        </div>
+      </div>
+      <div>
+        <span>Strong emphasis</span>
+        <div class="kbd-demo-key-group">
+          <cv-kbd tone="strong">Enter</cv-kbd>
+          <cv-kbd tone="strong">Esc</cv-kbd>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
 ```
