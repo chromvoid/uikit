@@ -9,7 +9,12 @@ Grouped form wrapper using native fieldset/legend semantics.
 ## Usage
 
 ```html
-<div class="fieldset-demo-shell usage-demo" data-demo="fieldset" data-live-demo-height="900" data-theme="dark">
+<div
+  class="fieldset-demo-shell usage-demo"
+  data-demo="fieldset"
+  data-live-demo-height="900"
+  data-theme="dark"
+>
   <section class="fieldset-demo-hero usage-demo__hero" aria-labelledby="fieldset-demo-title">
     <div class="fieldset-demo-copy usage-demo__copy">
       <span class="fieldset-demo-kicker usage-demo__kicker">Form grouping primitive</span>
@@ -38,7 +43,7 @@ Grouped form wrapper using native fieldset/legend semantics.
     </dl>
   </section>
 
-  <section class="fieldset-demo-board" aria-labelledby="fieldset-demo-form-title">
+  <section class="fieldset-demo-board usage-demo__workbench" aria-labelledby="fieldset-demo-form-title">
     <div class="fieldset-demo-section-header usage-demo__section-header">
       <span class="fieldset-demo-kicker usage-demo__kicker">Vault setup form</span>
       <h4 id="fieldset-demo-form-title">
