@@ -39,10 +39,10 @@ Update `current` from the owning route/model after receiving the event.
 ## Usage
 
 ```html
-<div class="steps-demo-shell" data-demo="steps">
-  <section class="steps-demo-hero" aria-labelledby="steps-demo-title">
-    <div class="steps-demo-copy">
-      <span class="steps-demo-kicker">Progress model</span>
+<div class="steps-demo-shell usage-demo" data-demo="steps">
+  <section class="steps-demo-hero usage-demo__hero" aria-labelledby="steps-demo-title">
+    <div class="steps-demo-copy usage-demo__copy">
+      <span class="steps-demo-kicker usage-demo__kicker">Progress model</span>
       <h3 id="steps-demo-title">Use steps when the user is inside one ordered flow.</h3>
       <p>
         Set <code>current</code> on <code>cv-steps</code>, set explicit status on each <code>cv-step</code>,
@@ -50,7 +50,7 @@ Update `current` from the owning route/model after receiving the event.
       </p>
     </div>
 
-    <dl class="steps-demo-metrics" aria-label="Steps behavior summary">
+    <dl class="steps-demo-metrics usage-demo__metrics" aria-label="Steps behavior summary">
       <div>
         <dt>State</dt>
         <dd>current</dd>
@@ -66,13 +66,13 @@ Update `current` from the owning route/model after receiving the event.
     </dl>
   </section>
 
-  <section class="steps-demo-section" aria-labelledby="steps-demo-horizontal-title">
-    <div class="steps-demo-section-header">
-      <span class="steps-demo-kicker">Horizontal flow</span>
+  <section class="steps-demo-section usage-demo__section" aria-labelledby="steps-demo-horizontal-title">
+    <div class="steps-demo-section-header usage-demo__section-header">
+      <span class="steps-demo-kicker usage-demo__kicker">Horizontal flow</span>
       <h4 id="steps-demo-horizontal-title">Use for compact setup, import, and publish flows</h4>
     </div>
 
-    <div class="steps-demo-panel">
+    <div class="steps-demo-panel usage-demo__panel">
       <cv-steps current="encrypt" aria-label="Vault export progress">
         <cv-step value="prepare" status="complete">
           <span slot="marker">1</span>
@@ -98,14 +98,14 @@ Update `current` from the owning route/model after receiving the event.
     </div>
   </section>
 
-  <section class="steps-demo-section" aria-labelledby="steps-demo-vertical-title">
-    <div class="steps-demo-section-header">
-      <span class="steps-demo-kicker">Vertical checklist</span>
+  <section class="steps-demo-section usage-demo__section" aria-labelledby="steps-demo-vertical-title">
+    <div class="steps-demo-section-header usage-demo__section-header">
+      <span class="steps-demo-kicker usage-demo__kicker">Vertical checklist</span>
       <h4 id="steps-demo-vertical-title">Use when labels need room or each step needs detail</h4>
     </div>
 
     <div class="steps-demo-grid">
-      <div class="steps-demo-panel">
+      <div class="steps-demo-panel usage-demo__panel">
         <span class="steps-demo-label">Pairing workflow</span>
         <cv-steps orientation="vertical" current="proof" aria-label="Device pairing progress">
           <cv-step value="host" status="complete">
@@ -128,7 +128,7 @@ Update `current` from the owning route/model after receiving the event.
         </cv-steps>
       </div>
 
-      <div class="steps-demo-panel">
+      <div class="steps-demo-panel usage-demo__panel">
         <span class="steps-demo-label">State matrix</span>
         <cv-steps orientation="vertical" current="current" aria-label="Step visual states">
           <cv-step value="done" status="complete">
@@ -161,15 +161,15 @@ Update `current` from the owning route/model after receiving the event.
     </div>
   </section>
 
-  <section class="steps-demo-section" aria-labelledby="steps-demo-selectable-title">
-    <div class="steps-demo-section-header">
-      <span class="steps-demo-kicker">Selectable</span>
+  <section class="steps-demo-section usage-demo__section" aria-labelledby="steps-demo-selectable-title">
+    <div class="steps-demo-section-header usage-demo__section-header">
+      <span class="steps-demo-kicker usage-demo__kicker">Selectable</span>
       <h4 id="steps-demo-selectable-title">
         Listen for selection, then update the controlled <code>current</code> value
       </h4>
     </div>
 
-    <div class="steps-demo-panel steps-demo-panel--interactive">
+    <div class="steps-demo-panel steps-demo-panel--interactive usage-demo__panel">
       <cv-steps
         class="steps-demo-selectable"
         current="device"
