@@ -189,28 +189,28 @@ Lightweight sidebar navigation item that adapts to expanded and collapsed rail m
       <span slot="toggle" class="sidebar-demo-toggle-glyph" aria-hidden="true"></span>
 
       <cv-sidebar-item href="#assets" active>
-        <span slot="prefix" class="sidebar-demo-item-glyph">A</span>
+        <span slot="prefix" class="sidebar-demo-item-glyph usage-demo__adornment">A</span>
         Assets
-        <cv-badge slot="suffix" variant="primary" size="small">live</cv-badge>
+        <cv-badge class="usage-demo__dense-badge" slot="suffix" variant="primary" size="small">live</cv-badge>
       </cv-sidebar-item>
 
       <cv-sidebar-item href="#trust-boundaries">
-        <span slot="prefix" class="sidebar-demo-item-glyph">T</span>
+        <span slot="prefix" class="sidebar-demo-item-glyph usage-demo__adornment">T</span>
         Trust boundaries
       </cv-sidebar-item>
 
       <cv-sidebar-item href="#deniable-vaults">
-        <span slot="prefix" class="sidebar-demo-item-glyph">D</span>
+        <span slot="prefix" class="sidebar-demo-item-glyph usage-demo__adornment">D</span>
         Deniable vaults
       </cv-sidebar-item>
 
       <cv-sidebar-item href="#host-state">
-        <span slot="prefix" class="sidebar-demo-item-glyph">H</span>
+        <span slot="prefix" class="sidebar-demo-item-glyph usage-demo__adornment">H</span>
         Host state
       </cv-sidebar-item>
 
       <cv-sidebar-item href="#out-of-scope" disabled>
-        <span slot="prefix" class="sidebar-demo-item-glyph">L</span>
+        <span slot="prefix" class="sidebar-demo-item-glyph usage-demo__adornment">L</span>
         Out of scope
       </cv-sidebar-item>
 
@@ -255,15 +255,15 @@ Lightweight sidebar navigation item that adapts to expanded and collapsed rail m
         <span slot="toggle" class="sidebar-demo-toggle-glyph" aria-hidden="true"></span>
 
         <cv-sidebar-item href="#assets" active>
-          <span slot="prefix" class="sidebar-demo-item-glyph">A</span>
+          <span slot="prefix" class="sidebar-demo-item-glyph usage-demo__adornment">A</span>
           Assets
         </cv-sidebar-item>
         <cv-sidebar-item href="#trust-boundaries">
-          <span slot="prefix" class="sidebar-demo-item-glyph">T</span>
+          <span slot="prefix" class="sidebar-demo-item-glyph usage-demo__adornment">T</span>
           Trust boundaries
         </cv-sidebar-item>
         <cv-sidebar-item href="#deniable-vaults">
-          <span slot="prefix" class="sidebar-demo-item-glyph">D</span>
+          <span slot="prefix" class="sidebar-demo-item-glyph usage-demo__adornment">D</span>
           Deniable vaults
         </cv-sidebar-item>
       </cv-sidebar>
@@ -299,15 +299,15 @@ Lightweight sidebar navigation item that adapts to expanded and collapsed rail m
         <span slot="toggle" class="sidebar-demo-close-glyph" aria-hidden="true"></span>
 
         <cv-sidebar-item href="#assets" active>
-          <span slot="prefix" class="sidebar-demo-item-glyph">A</span>
+          <span slot="prefix" class="sidebar-demo-item-glyph usage-demo__adornment">A</span>
           Assets
         </cv-sidebar-item>
         <cv-sidebar-item href="#trust-boundaries">
-          <span slot="prefix" class="sidebar-demo-item-glyph">T</span>
+          <span slot="prefix" class="sidebar-demo-item-glyph usage-demo__adornment">T</span>
           Trust boundaries
         </cv-sidebar-item>
         <cv-sidebar-item href="#host-state">
-          <span slot="prefix" class="sidebar-demo-item-glyph">H</span>
+          <span slot="prefix" class="sidebar-demo-item-glyph usage-demo__adornment">H</span>
           Host state
         </cv-sidebar-item>
       </cv-sidebar>
