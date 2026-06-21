@@ -85,13 +85,13 @@ Property-only guidance:
 
 ## CSS Custom Properties
 
-| Property                                | Default                          | Description                         |
-| --------------------------------------- | -------------------------------- | ----------------------------------- |
-| `--cv-qr-code-size`                     | `192px`                          | Host inline and block size          |
-| `--cv-qr-code-background`               | `var(--cv-color-qr-background)`  | QR background and quiet-zone color  |
-| `--cv-qr-code-foreground`               | `var(--cv-color-qr-foreground)`  | QR module color                     |
-| `--cv-qr-code-logo-backdrop-background` | `var(--cv-qr-code-background)`   | Center logo backdrop color          |
-| `--cv-qr-code-logo-radius`              | `var(--cv-radius-md)`            | Border radius for the logo backdrop |
+| Property                                | Default                         | Description                         |
+| --------------------------------------- | ------------------------------- | ----------------------------------- |
+| `--cv-qr-code-size`                     | `192px`                         | Host inline and block size          |
+| `--cv-qr-code-background`               | `var(--cv-color-qr-background)` | QR background and quiet-zone color  |
+| `--cv-qr-code-foreground`               | `var(--cv-color-qr-foreground)` | QR module color                     |
+| `--cv-qr-code-logo-backdrop-background` | `var(--cv-qr-code-background)`  | Center logo backdrop color          |
+| `--cv-qr-code-logo-radius`              | `var(--cv-radius-md)`           | Border radius for the logo backdrop |
 
 Custom colors should point to existing ChromVoid `--cv-*` tokens and must preserve strong contrast
 between foreground and background so scanners can read the generated QR code.
@@ -118,63 +118,95 @@ variant for visual hierarchy, a token-colored variant, and a branded variant wit
 in the center.
 
 ```html
-<div class="qr-demo-board">
-  <figure class="qr-demo-card">
-    <cv-qr-code value="https://chromvoid.com" aria-label="ChromVoid website QR code"></cv-qr-code>
-    <figcaption>
-      <strong>Standard link</strong>
-      <span>Default square modules and quiet zone for public, non-secret URLs.</span>
-    </figcaption>
-  </figure>
+<div class="qr-demo-shell" data-demo="qr-code" data-live-demo-height="680">
+  <section class="qr-demo-hero" aria-labelledby="qr-demo-title">
+    <div class="qr-demo-copy">
+      <span class="qr-demo-kicker">Screen to device handoff</span>
+      <h3 id="qr-demo-title">Make the transfer scannable without exposing sensitive payloads</h3>
+      <p>
+        Use the attribute form for public URLs. For setup secrets and recovery payloads, write
+        <code>.value</code> from app state so the encoded data never has to be reflected in markup.
+      </p>
+      <div class="qr-demo-signal-row" aria-label="QR code reliability guidance">
+        <span class="qr-demo-signal">High contrast</span>
+        <span class="qr-demo-signal">Quiet zone kept</span>
+        <span class="qr-demo-signal">Logo requires H</span>
+      </div>
+    </div>
 
-  <figure class="qr-demo-card">
-    <cv-qr-code
-      value="https://chromvoid.com"
-      error-correction="H"
-      module-shape="dot"
-      aria-label="ChromVoid dotted QR code"
-    ></cv-qr-code>
-    <figcaption>
-      <strong>Custom shape</strong>
-      <span>Dot modules keep the QR readable while giving docs and setup screens a softer rhythm.</span>
-    </figcaption>
-  </figure>
+    <figure class="qr-demo-feature">
+      <span class="qr-demo-feature-label">Public pairing URL</span>
+      <cv-qr-code
+        class="qr-demo-featured"
+        value="https://chromvoid.com/pair?device=vault"
+        error-correction="H"
+        module-shape="rounded"
+        aria-label="ChromVoid pairing URL QR code"
+      >
+        <img slot="logo" src="/assets/landing/icon-64x64-tight.png" alt="" />
+      </cv-qr-code>
+      <figcaption>Branded handoff with visible quiet zone and high error correction.</figcaption>
+    </figure>
+  </section>
 
-  <figure class="qr-demo-card">
-    <cv-qr-code
-      class="qr-demo-colored"
-      value="https://chromvoid.com"
-      error-correction="H"
-      module-shape="dot"
-      aria-label="ChromVoid colored QR code"
-    ></cv-qr-code>
-    <figcaption>
-      <strong>Colored dots</strong>
-      <span>Set <code>--cv-qr-code-foreground</code> on the host to recolor the QR modules.</span>
-    </figcaption>
-  </figure>
+  <div class="qr-demo-board" aria-label="QR code rendering variants">
+    <figure class="qr-demo-card">
+      <cv-qr-code value="https://chromvoid.com" aria-label="ChromVoid website QR code"></cv-qr-code>
+      <figcaption>
+        <strong>Standard link</strong>
+        <span>Default square modules for public, non-secret URLs.</span>
+      </figcaption>
+    </figure>
 
-  <figure class="qr-demo-card">
-    <cv-qr-code
-      class="qr-demo-branded"
-      value="https://chromvoid.com"
-      error-correction="H"
-      module-shape="rounded"
-      aria-label="ChromVoid branded QR code"
-    >
-      <img slot="logo" src="/assets/landing/icon-64x64-tight.png" alt="" />
-    </cv-qr-code>
-    <figcaption>
-      <strong>Branded handoff</strong>
-      <span>Centered logo with high error correction for public share or onboarding surfaces.</span>
-    </figcaption>
-  </figure>
+    <figure class="qr-demo-card">
+      <cv-qr-code
+        value="https://chromvoid.com"
+        error-correction="H"
+        module-shape="dot"
+        aria-label="ChromVoid dotted QR code"
+      ></cv-qr-code>
+      <figcaption>
+        <strong>Custom shape</strong>
+        <span>Dot modules keep the payload readable while softening the surface.</span>
+      </figcaption>
+    </figure>
+
+    <figure class="qr-demo-card">
+      <cv-qr-code
+        class="qr-demo-colored"
+        value="https://chromvoid.com"
+        error-correction="H"
+        module-shape="dot"
+        aria-label="ChromVoid colored QR code"
+      ></cv-qr-code>
+      <figcaption>
+        <strong>Token color</strong>
+        <span>Use QR-specific custom properties and preserve scanner contrast.</span>
+      </figcaption>
+    </figure>
+
+    <figure class="qr-demo-card">
+      <cv-qr-code
+        class="qr-demo-branded"
+        value="https://chromvoid.com"
+        error-correction="H"
+        module-shape="rounded"
+        aria-label="ChromVoid branded QR code"
+      >
+        <img slot="logo" src="/assets/landing/icon-64x64-tight.png" alt="" />
+      </cv-qr-code>
+      <figcaption>
+        <strong>Branded handoff</strong>
+        <span>Use high error correction when a centered logo overlays modules.</span>
+      </figcaption>
+    </figure>
+  </div>
 </div>
 ```
 
 ### Markup Patterns
 
-```html
+```html source-only
 <!-- Non-secret declarative value -->
 <cv-qr-code value="https://chromvoid.com" aria-label="ChromVoid website QR code"></cv-qr-code>
 
