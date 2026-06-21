@@ -89,7 +89,10 @@ Grouped form wrapper using native fieldset/legend semantics.
       </cv-fieldset>
     </form>
 
-    <aside class="fieldset-demo-proof" aria-label="Fieldset behavior boundaries">
+    <aside
+      class="fieldset-demo-proof usage-demo__soft-card usage-demo__flow"
+      aria-label="Fieldset behavior boundaries"
+    >
       <span class="fieldset-demo-label">Contract boundary</span>
       <ol>
         <li>
