@@ -76,55 +76,99 @@ None.
 ## Usage
 
 ```html
-<cv-task-list label="Secure import queue" busy>
-  <strong slot="header">Secure import queue</strong>
-  <cv-badge slot="header" variant="primary" pulse>Running</cv-badge>
-
-  <div role="listitem">
-    <div>
-      <strong>Encrypt vault-export.zip</strong><br />
-      <span>72% - chunk 18 of 25</span>
-      <cv-progress value="72" value-text="72%" aria-label="Encrypt vault-export.zip progress"></cv-progress>
+<div class="task-list-demo-shell" data-demo="task-list" data-live-demo-height="760">
+  <section class="task-list-demo-hero" aria-labelledby="task-list-demo-title">
+    <div class="task-list-demo-copy">
+      <span class="task-list-demo-kicker">Transfer surface</span>
+      <h3 id="task-list-demo-title">Keep every queued operation scannable while the batch is still moving.</h3>
+      <p>
+        <code>cv-task-list</code> owns the accessible list shell, busy state, empty state placement, and
+        row density. Product code keeps ownership of task data, retry/cancel actions, and progress math.
+      </p>
     </div>
-    <cv-badge variant="primary">Running</cv-badge>
-  </div>
 
-  <div role="listitem">
-    <div>
-      <strong>Verify metadata manifest</strong><br />
-      <span>Checksums match</span>
+    <dl class="task-list-demo-metrics" aria-label="Queue summary">
+      <div>
+        <dt>Active</dt>
+        <dd>2 encrypted tasks</dd>
+      </div>
+      <div>
+        <dt>Payload</dt>
+        <dd>1.8 GB / 2.4 GB</dd>
+      </div>
+      <div>
+        <dt>Window</dt>
+        <dd>Retry open</dd>
+      </div>
+    </dl>
+  </section>
+
+  <section class="task-list-demo-board" aria-label="Task list presentation">
+    <cv-task-list class="task-list-demo-main-list" label="Deniable export transfer tasks" busy>
+      <span slot="header" class="task-list-demo-title">Deniable export transfer</span>
+      <cv-badge slot="header" variant="primary" pulse>Running</cv-badge>
+
+      <div class="task-list-demo-row task-list-demo-row--active" role="listitem">
+        <div class="task-list-demo-row-main">
+          <strong>Encrypt vault-export.zip</strong>
+          <span>Chunk 18 of 25 - ChaCha20 stream sealed</span>
+          <cv-progress value="72" value-text="72%" aria-label="Encrypt vault export progress"></cv-progress>
+        </div>
+        <cv-badge variant="primary" pulse>72%</cv-badge>
+      </div>
+
+      <div class="task-list-demo-row task-list-demo-row--success" role="listitem">
+        <div class="task-list-demo-row-main">
+          <strong>Verify metadata manifest</strong>
+          <span>Checksums match the local catalog snapshot</span>
+          <cv-progress
+            tone="success"
+            value="100"
+            value-text="Complete"
+            aria-label="Metadata manifest verification progress"
+          ></cv-progress>
+        </div>
+        <cv-badge variant="success">Done</cv-badge>
+      </div>
+
+      <div class="task-list-demo-row task-list-demo-row--queued" role="listitem">
+        <div class="task-list-demo-row-main">
+          <strong>Upload encrypted backup</strong>
+          <span>Waiting for a network slot before retrying</span>
+          <cv-progress
+            tone="queued"
+            value="0"
+            value-text="Queued"
+            aria-label="Encrypted backup upload queue progress"
+          ></cv-progress>
+        </div>
+        <cv-button size="small" variant="ghost">Cancel</cv-button>
+      </div>
+
+      <span slot="footer" class="task-list-demo-footer">2 active / 1 queued / updated now</span>
+    </cv-task-list>
+
+    <div class="task-list-demo-side">
+      <cv-task-list class="task-list-demo-compact-list" label="Verification lane" density="compact">
+        <span slot="header" class="task-list-demo-title">Verification lane</span>
+
+        <div class="task-list-demo-compact-row" role="listitem">
+          <span>Rotate local key shard</span>
+          <cv-badge variant="warning">Queued</cv-badge>
+        </div>
+        <div class="task-list-demo-compact-row" role="listitem">
+          <span>Publish audit marker</span>
+          <cv-badge variant="success">Done</cv-badge>
+        </div>
+      </cv-task-list>
+
+      <cv-task-list class="task-list-demo-empty-list" label="Empty task queue" empty>
+        <div slot="empty" class="task-list-demo-empty-content">
+          <strong>Queue is clear</strong>
+          <span>New imports, exports, and sync jobs will appear here.</span>
+        </div>
+      </cv-task-list>
     </div>
-    <cv-badge variant="success">Done</cv-badge>
-  </div>
-
-  <div role="listitem">
-    <div>
-      <strong>Upload encrypted backup</strong><br />
-      <span>Waiting for network</span>
-    </div>
-    <cv-button size="small" variant="ghost">Cancel</cv-button>
-  </div>
-
-  <span slot="footer">2 active / 1 queued / updated now</span>
-</cv-task-list>
-
-<cv-task-list label="Compact sync queue" density="compact">
-  <strong slot="header">Compact sync queue</strong>
-  <div role="listitem">
-    <span>Rotate local key shard</span>
-    <cv-badge variant="warning">Queued</cv-badge>
-  </div>
-  <div role="listitem">
-    <span>Publish audit marker</span>
-    <cv-badge variant="success">Done</cv-badge>
-  </div>
-</cv-task-list>
-
-<cv-task-list label="Empty task queue" empty>
-  <cv-empty-state
-    slot="empty"
-    headline="No queued tasks"
-    description="New imports and exports will appear here."
-  ></cv-empty-state>
-</cv-task-list>
+  </section>
+</div>
 ```
