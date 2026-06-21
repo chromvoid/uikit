@@ -76,7 +76,7 @@ Controlled progress display for linear, step-based flows.
 
     <div class="steps-demo-grid">
       <div class="steps-demo-panel usage-demo__panel">
-        <span class="steps-demo-label">Pairing workflow</span>
+        <span class="steps-demo-label usage-demo__meta usage-demo__label">Pairing workflow</span>
         <cv-steps orientation="vertical" current="proof" aria-label="Device pairing progress">
           <cv-step value="host" status="complete">
             <span slot="marker">✓</span>
@@ -99,7 +99,7 @@ Controlled progress display for linear, step-based flows.
       </div>
 
       <div class="steps-demo-panel usage-demo__panel">
-        <span class="steps-demo-label">State matrix</span>
+        <span class="steps-demo-label usage-demo__meta usage-demo__label">State matrix</span>
         <cv-steps orientation="vertical" current="current" aria-label="Step visual states">
           <cv-step value="done" status="complete">
             <span slot="marker">✓</span>
