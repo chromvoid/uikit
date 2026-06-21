@@ -9,10 +9,10 @@ Grouped form wrapper using native fieldset/legend semantics.
 ## Usage
 
 ```html
-<div class="fieldset-demo-shell" data-demo="fieldset" data-live-demo-height="900" data-theme="dark">
-  <section class="fieldset-demo-hero" aria-labelledby="fieldset-demo-title">
-    <div class="fieldset-demo-copy">
-      <span class="fieldset-demo-kicker">Form grouping primitive</span>
+<div class="fieldset-demo-shell usage-demo" data-demo="fieldset" data-live-demo-height="900" data-theme="dark">
+  <section class="fieldset-demo-hero usage-demo__hero" aria-labelledby="fieldset-demo-title">
+    <div class="fieldset-demo-copy usage-demo__copy">
+      <span class="fieldset-demo-kicker usage-demo__kicker">Form grouping primitive</span>
       <h3 id="fieldset-demo-title">
         Fieldset keeps related controls behind one native legend, description, and error boundary.
       </h3>
@@ -22,7 +22,7 @@ Grouped form wrapper using native fieldset/legend semantics.
       </p>
     </div>
 
-    <dl class="fieldset-demo-metrics" aria-label="Fieldset contract summary">
+    <dl class="fieldset-demo-metrics usage-demo__metrics" aria-label="Fieldset contract summary">
       <div>
         <dt>Semantics</dt>
         <dd>fieldset + legend</dd>
@@ -39,8 +39,8 @@ Grouped form wrapper using native fieldset/legend semantics.
   </section>
 
   <section class="fieldset-demo-board" aria-labelledby="fieldset-demo-form-title">
-    <div class="fieldset-demo-section-header">
-      <span class="fieldset-demo-kicker">Vault setup form</span>
+    <div class="fieldset-demo-section-header usage-demo__section-header">
+      <span class="fieldset-demo-kicker usage-demo__kicker">Vault setup form</span>
       <h4 id="fieldset-demo-form-title">
         Group controls by the decision they support, not by visual convenience.
       </h4>
@@ -105,9 +105,9 @@ Grouped form wrapper using native fieldset/legend semantics.
     </aside>
   </section>
 
-  <section class="fieldset-demo-section" aria-labelledby="fieldset-demo-states-title">
-    <div class="fieldset-demo-section-header">
-      <span class="fieldset-demo-kicker">State matrix</span>
+  <section class="fieldset-demo-section usage-demo__section" aria-labelledby="fieldset-demo-states-title">
+    <div class="fieldset-demo-section-header usage-demo__section-header">
+      <span class="fieldset-demo-kicker usage-demo__kicker">State matrix</span>
       <h4 id="fieldset-demo-states-title">
         Keep group-level validation, compact choice rows, and disabled policy boundaries explicit.
       </h4>
