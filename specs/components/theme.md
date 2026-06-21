@@ -310,7 +310,7 @@ The light block overrides only color-varying tokens (colors, shadows, overlay). 
 ## Usage
 
 ```html
-<div class="theme-provider-demo-board">
+<div class="theme-provider-demo-board usage-demo__workbench">
   <!-- Basic dark theme. -->
   <cv-theme-provider mode="dark">
     <section class="theme-provider-demo-panel usage-demo__panel">
