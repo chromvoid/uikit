@@ -92,10 +92,10 @@ None. `cv-progress-ring` is a read-only indicator with no user-modifiable state.
 ## Usage
 
 ```html
-<div class="progress-ring-demo-shell" data-live-demo-height="680">
-  <section class="progress-ring-demo-hero" aria-labelledby="progress-ring-demo-title">
-    <div class="progress-ring-demo-copy">
-      <span class="progress-ring-demo-kicker">cv-progress-ring</span>
+<div class="progress-ring-demo-shell usage-demo" data-live-demo-height="680">
+  <section class="progress-ring-demo-hero usage-demo__hero" aria-labelledby="progress-ring-demo-title">
+    <div class="progress-ring-demo-copy usage-demo__copy">
+      <span class="progress-ring-demo-kicker usage-demo__kicker">cv-progress-ring</span>
       <h3 id="progress-ring-demo-title">Compact progress for auditable operations.</h3>
       <p>
         Use the ring when the surrounding surface already explains the operation and the UI needs a precise,
