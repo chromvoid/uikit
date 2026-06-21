@@ -38,12 +38,12 @@ Indeterminate loading spinner with SVG track and indicator animation.
 
   <section class="spinner-demo-board usage-demo__workbench" aria-labelledby="spinner-demo-board-title">
     <div class="spinner-demo-stage" role="status" aria-live="polite">
-      <div class="spinner-demo-stage-head">
+      <div class="spinner-demo-stage-head usage-demo__surface-header">
         <div>
           <span>Vault handoff</span>
           <strong id="spinner-demo-board-title">Checking relay route before export</strong>
         </div>
-        <span class="spinner-demo-badge">pending</span>
+        <span class="spinner-demo-badge usage-demo__meta usage-demo__label">pending</span>
       </div>
 
       <div class="spinner-demo-core">
@@ -51,7 +51,7 @@ Indeterminate loading spinner with SVG track and indicator animation.
         <cv-spinner class="spinner-demo-core-spinner" label="Loading vault handoff status"></cv-spinner>
       </div>
 
-      <div class="spinner-demo-step-list" aria-label="Loading checkpoints">
+      <div class="spinner-demo-step-list usage-demo__compact-list" aria-label="Loading checkpoints">
         <div>
           <span>01</span>
           <p>visible vault selected</p>
