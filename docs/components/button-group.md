@@ -38,7 +38,10 @@ Action grouping for related buttons.
     </dl>
   </section>
 
-  <section class="button-group-demo-workbench usage-demo__workbench" aria-labelledby="button-group-demo-workbench-title">
+  <section
+    class="button-group-demo-workbench usage-demo__workbench"
+    aria-labelledby="button-group-demo-workbench-title"
+  >
     <div class="button-group-demo-section-header usage-demo__section-header">
       <span class="button-group-demo-kicker usage-demo__kicker">Vault action footer</span>
       <h4 id="button-group-demo-workbench-title">
