@@ -11,10 +11,10 @@ Shortcut resolution, platform-specific labels, and command matching remain owned
 Use `cv-shortcut` as secondary command metadata in menus, command rows, toolbars, and dense panels. Do not use it as a button or as a keyboard listener. Resolve platform-specific shortcuts in the owning model or application code, then pass the rendered keys into the component.
 
 ```html
-<div class="shortcut-demo-shell" data-demo="shortcut" data-live-demo-height="760">
-  <section class="shortcut-demo-hero" aria-labelledby="shortcut-demo-title">
-    <div class="shortcut-demo-copy">
-      <span class="shortcut-demo-kicker">Command metadata</span>
+<div class="shortcut-demo-shell usage-demo" data-demo="shortcut" data-live-demo-height="760">
+  <section class="shortcut-demo-hero usage-demo__hero" aria-labelledby="shortcut-demo-title">
+    <div class="shortcut-demo-copy usage-demo__copy">
+      <span class="shortcut-demo-kicker usage-demo__kicker">Command metadata</span>
       <h3 id="shortcut-demo-title">Shortcut labels should read as hints, not as controls.</h3>
       <p>
         The component keeps keycap rendering stable while shortcut matching, platform resolution, and command
@@ -22,7 +22,7 @@ Use `cv-shortcut` as secondary command metadata in menus, command rows, toolbars
       </p>
     </div>
 
-    <dl class="shortcut-demo-metrics" aria-label="Shortcut component responsibility split">
+    <dl class="shortcut-demo-metrics usage-demo__metrics" aria-label="Shortcut component responsibility split">
       <div>
         <dt>Renders</dt>
         <dd>label or keys</dd>
@@ -38,9 +38,9 @@ Use `cv-shortcut` as secondary command metadata in menus, command rows, toolbars
     </dl>
   </section>
 
-  <section class="shortcut-demo-workbench" aria-labelledby="shortcut-demo-workbench-title">
-    <div class="shortcut-demo-section-header">
-      <span class="shortcut-demo-kicker">Vault command surface</span>
+  <section class="shortcut-demo-workbench usage-demo__workbench" aria-labelledby="shortcut-demo-workbench-title">
+    <div class="shortcut-demo-section-header usage-demo__section-header">
+      <span class="shortcut-demo-kicker usage-demo__kicker">Vault command surface</span>
       <h4 id="shortcut-demo-workbench-title">
         Platform mapping changes the label, but the visual contract stays identical
       </h4>
@@ -55,7 +55,7 @@ Use `cv-shortcut` as secondary command metadata in menus, command rows, toolbars
 
     <div class="shortcut-demo-grid">
       <div class="shortcut-demo-command-panel" aria-label="Command row shortcut examples">
-        <header class="shortcut-demo-panel-header">
+        <header class="shortcut-demo-panel-header usage-demo__panel-header">
           <div>
             <span class="shortcut-demo-label">Active route</span>
             <strong>Hidden vault review</strong>
@@ -91,7 +91,7 @@ Use `cv-shortcut` as secondary command metadata in menus, command rows, toolbars
         </button>
       </div>
 
-      <aside class="shortcut-demo-side" aria-label="Shortcut usage contexts">
+      <aside class="shortcut-demo-side usage-demo__side" aria-label="Shortcut usage contexts">
         <div class="shortcut-demo-context">
           <span class="shortcut-demo-label">Menu suffix</span>
           <cv-menu open close-on-select="false" aria-label="Shortcut menu example">
