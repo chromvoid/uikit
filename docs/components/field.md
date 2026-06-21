@@ -10,31 +10,132 @@ linkage for one slotted control.
 ## Usage
 
 ```html
-<div class="field-demo-grid">
-  <cv-field>
-    <span slot="label">Username</span>
-    <cv-input placeholder="alex"></cv-input>
-    <span slot="description">Visible label and helper text are linked to the control.</span>
-  </cv-field>
+<div class="field-demo-shell" data-live-demo-height="760">
+  <section class="field-demo-hero" aria-labelledby="field-demo-title">
+    <div class="field-demo-copy">
+      <span class="field-demo-kicker">cv-field / form anatomy</span>
+      <h3 id="field-demo-title">One wrapper keeps field text, validation, and control state aligned.</h3>
+      <p>
+        Use <code>cv-field</code> around one direct UIKit control when a label, helper copy, error message, or
+        propagated state needs to stay connected through ARIA.
+      </p>
+    </div>
 
-  <cv-field required invalid>
-    <span slot="label">Email</span>
-    <cv-input type="email" value="not-an-email"></cv-input>
-    <span slot="description">Required state is propagated to the slotted control.</span>
-    <span slot="error">Enter a valid email address.</span>
-  </cv-field>
+    <dl class="field-demo-metrics" aria-label="Field contract summary">
+      <div>
+        <dt>Owns</dt>
+        <dd>label and meta ids</dd>
+      </div>
+      <div>
+        <dt>Passes</dt>
+        <dd>required, disabled, invalid</dd>
+      </div>
+      <div>
+        <dt>Leaves out</dt>
+        <dd>validation rules and values</dd>
+      </div>
+    </dl>
+  </section>
 
-  <cv-field disabled>
-    <span slot="label">Disabled field</span>
-    <cv-input value="Locked value"></cv-input>
-    <span slot="description">Disabled state is propagated to the slotted control.</span>
-  </cv-field>
+  <section class="field-demo-workbench">
+    <form class="field-demo-form" aria-label="Vault access field examples">
+      <div class="field-demo-form-head">
+        <div>
+          <span>Production form</span>
+          <h4>Vault access details</h4>
+        </div>
+        <cv-badge variant="primary">required</cv-badge>
+      </div>
 
-  <cv-field orientation="horizontal">
-    <span slot="label">Horizontal</span>
-    <cv-input value="Aligned control"></cv-input>
-    <span slot="description">The label stays in the first column, while meta text follows the control.</span>
-  </cv-field>
+      <div class="field-demo-control-grid">
+        <cv-field class="field-demo-field" required>
+          <span slot="label">Vault alias</span>
+          <cv-input name="vault-alias" value="border-core"></cv-input>
+          <span slot="description">Required is mirrored to the slotted control.</span>
+        </cv-field>
+
+        <cv-field class="field-demo-field" required invalid>
+          <span slot="label">Recovery email</span>
+          <cv-input name="recovery-email" type="email" value="alex@" invalid></cv-input>
+          <span slot="description">Helper copy stays linked before the error id.</span>
+          <span slot="error">Enter a complete email address before saving.</span>
+        </cv-field>
+
+        <cv-field class="field-demo-field">
+          <span slot="label">Trust zone</span>
+          <cv-select name="trust-zone" value="hardware" placeholder="Choose a zone">
+            <cv-select-option value="software">Software vault</cv-select-option>
+            <cv-select-option value="hardware">Hardware core</cv-select-option>
+            <cv-select-option value="remote">Remote escrow</cv-select-option>
+          </cv-select>
+          <span slot="description"
+            >The default slot can host select, textarea, code input, or another control.</span
+          >
+        </cv-field>
+
+        <cv-field class="field-demo-field" disabled>
+          <span slot="label">Organization policy</span>
+          <cv-input name="policy" value="Locked by host policy"></cv-input>
+          <span slot="description">Disabled state is propagated to supported direct child controls.</span>
+        </cv-field>
+
+        <cv-field class="field-demo-field field-demo-field--wide">
+          <span slot="label">Operator note</span>
+          <cv-textarea
+            name="operator-note"
+            rows="3"
+            value="Keep recovery contact separate from visible vault metadata."
+          ></cv-textarea>
+          <span slot="description">Meta copy remains below the control in vertical layout.</span>
+        </cv-field>
+
+        <cv-field class="field-demo-field field-demo-field--wide" orientation="horizontal">
+          <span slot="label">Pairing code</span>
+          <cv-code-input purpose="pairing" charset="alphanumeric" length="6" value="CV7A9K"></cv-code-input>
+          <span slot="description">Horizontal layout keeps the label in the first column.</span>
+        </cv-field>
+      </div>
+    </form>
+
+    <aside class="field-demo-contract" aria-label="Field accessibility contract">
+      <div class="field-demo-section-header">
+        <span>Contract</span>
+        <h4><code>cv-field</code> owns structure and linkage. The consumer still owns validation rules.</h4>
+      </div>
+
+      <dl class="field-demo-contract-list">
+        <div>
+          <dt>label slot</dt>
+          <dd>Creates a real label and sets <code>aria-labelledby</code> on the control.</dd>
+        </div>
+        <div>
+          <dt>description slot</dt>
+          <dd>Adds helper text to the control's <code>aria-describedby</code> chain.</dd>
+        </div>
+        <div>
+          <dt>error slot</dt>
+          <dd>
+            Joins <code>aria-describedby</code> and announces with <code>role="alert"</code> only when
+            invalid.
+          </dd>
+        </div>
+        <div>
+          <dt>state attrs</dt>
+          <dd>
+            Reflects <code>required</code>, <code>disabled</code>, and <code>invalid</code> onto the direct
+            child control.
+          </dd>
+        </div>
+      </dl>
+
+      <div class="field-demo-flow" aria-label="Invalid state flow">
+        <span>invalid</span>
+        <span>aria-invalid</span>
+        <span>error id</span>
+        <span>alert role</span>
+      </div>
+    </aside>
+  </section>
 </div>
 ```
 
@@ -50,14 +151,52 @@ linkage for one slotted control.
 
 ## Attributes
 
-| Attribute     | Type      | Default     | Description                                   |
-| ------------- | --------- | ----------- | --------------------------------------------- | ------------------ | ------------ |
-| `for`         | String    | auto        | Explicit id of the control to label           |
-| `required`    | Boolean   | `false`     | Propagated to supported direct child controls |
-| `disabled`    | Boolean   | `false`     | Propagated to supported direct child controls |
-| `invalid`     | Boolean   | `false`     | Propagated as invalid/aria-invalid            |
-| `size`        | `small    | medium      | large`                                        | `medium`           | Density hint |
-| `orientation` | `vertical | horizontal` | `vertical`                                    | Layout orientation |
+| Attribute     | Type                           | Default      | Description                                       |
+| ------------- | ------------------------------ | ------------ | ------------------------------------------------- |
+| `for`         | String                         | auto         | Explicit id of the control to label               |
+| `required`    | Boolean                        | `false`      | Propagated to supported direct child controls     |
+| `disabled`    | Boolean                        | `false`      | Propagated to supported direct child controls     |
+| `invalid`     | Boolean                        | `false`      | Propagated as `invalid` and `aria-invalid="true"` |
+| `size`        | `small` \| `medium` \| `large` | `"medium"`   | Density hint exposed for composed field styling   |
+| `orientation` | `vertical` \| `horizontal`     | `"vertical"` | Layout orientation                                |
+
+## Slots
+
+| Slot          | Description                                   |
+| ------------- | --------------------------------------------- |
+| `label`       | Visible label content                         |
+| `(default)`   | One direct control owned by the field wrapper |
+| `description` | Helper text linked through `aria-describedby` |
+| `error`       | Validation text linked only while `invalid`   |
+
+## CSS Parts
+
+| Part          | Element   | Description          |
+| ------------- | --------- | -------------------- |
+| `label`       | `<label>` | Label wrapper        |
+| `control`     | `<div>`   | Default slot wrapper |
+| `description` | `<div>`   | Helper text wrapper  |
+| `error`       | `<div>`   | Error text wrapper   |
+
+## CSS Custom Properties
+
+| Property                       | Default                               | Description                    |
+| ------------------------------ | ------------------------------------- | ------------------------------ |
+| `--cv-field-gap`               | `var(--cv-space-1, 4px)`              | Vertical spacing between parts |
+| `--cv-field-horizontal-gap`    | `var(--cv-space-3, 12px)`             | Horizontal layout column gap   |
+| `--cv-field-label-color`       | `var(--cv-color-text, #e8ecf6)`       | Label text color               |
+| `--cv-field-label-font-size`   | `var(--cv-font-size-sm, 13px)`        | Label text size                |
+| `--cv-field-meta-font-size`    | `var(--cv-font-size-xs, 12px)`        | Description and error size     |
+| `--cv-field-description-color` | `var(--cv-color-text-muted, #9aa6bf)` | Description text color         |
+| `--cv-field-error-color`       | `var(--cv-color-danger, #ff6b6b)`     | Error text color               |
+
+## Accessibility Contract
+
+- When the label slot has content, the control receives `aria-labelledby`.
+- When the description slot has content, the control receives `aria-describedby`.
+- When `invalid` and the error slot both exist, the error id is appended to `aria-describedby`.
+- The error wrapper receives `role="alert"` only while the field is invalid.
+- If the slotted control has no id, `cv-field` assigns one so the label can target it.
 
 ## Events
 
