@@ -213,12 +213,12 @@ Normal (non-toggle) buttons rely on the native `click` event.
 
   <section class="button-demo-board usage-demo__workbench" aria-label="Button examples in a vault workflow">
     <div class="button-demo-command">
-      <div class="button-demo-command-head">
+      <div class="button-demo-command-head usage-demo__action-head">
         <div>
           <span>Visible vault route</span>
           <strong>travel-profile.visible</strong>
         </div>
-        <span class="button-demo-status">safe action window</span>
+        <span class="button-demo-status usage-demo__meta usage-demo__label">safe action window</span>
       </div>
 
       <div class="button-demo-layer">
@@ -265,7 +265,7 @@ Normal (non-toggle) buttons rely on the native `click` event.
         <h4>Each state changes affordance without changing the contract.</h4>
       </div>
 
-      <div class="button-demo-state-list">
+      <div class="button-demo-state-list usage-demo__compact-list">
         <div>
           <span>Loading blocks action</span>
           <cv-button variant="primary" loading>Committing</cv-button>
