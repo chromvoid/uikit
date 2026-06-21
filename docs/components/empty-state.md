@@ -7,11 +7,11 @@ Reusable empty-result or empty-panel state with optional icon, body copy, and ac
 ## Usage
 
 ```html
-<div class="empty-state-demo-shell" data-demo="empty-state" data-live-demo-height="760" data-theme="dark">
+<div class="empty-state-demo-shell usage-demo" data-demo="empty-state" data-live-demo-height="760" data-theme="dark">
   <cv-theme-provider mode="dark" class="empty-state-demo-theme">
-    <section class="empty-state-demo-hero" aria-labelledby="empty-state-demo-title">
-      <div class="empty-state-demo-copy">
-        <span class="empty-state-demo-kicker">No-result boundary</span>
+    <section class="empty-state-demo-hero usage-demo__hero" aria-labelledby="empty-state-demo-title">
+      <div class="empty-state-demo-copy usage-demo__copy">
+        <span class="empty-state-demo-kicker usage-demo__kicker">No-result boundary</span>
         <h3 id="empty-state-demo-title">
           Empty states explain what is missing, why it is safe, and which recovery path is available.
         </h3>
@@ -21,7 +21,7 @@ Reusable empty-result or empty-panel state with optional icon, body copy, and ac
         </p>
       </div>
 
-      <dl class="empty-state-demo-metrics" aria-label="Empty state contract summary">
+      <dl class="empty-state-demo-metrics usage-demo__metrics" aria-label="Empty state contract summary">
         <div>
           <dt>Semantics</dt>
           <dd>status surface</dd>
@@ -37,9 +37,9 @@ Reusable empty-result or empty-panel state with optional icon, body copy, and ac
       </dl>
     </section>
 
-    <section class="empty-state-demo-workbench" aria-labelledby="empty-state-demo-workbench-title">
-      <div class="empty-state-demo-section-header">
-        <span class="empty-state-demo-kicker">Vault workspace</span>
+    <section class="empty-state-demo-workbench usage-demo__workbench" aria-labelledby="empty-state-demo-workbench-title">
+      <div class="empty-state-demo-section-header usage-demo__section-header">
+        <span class="empty-state-demo-kicker usage-demo__kicker">Vault workspace</span>
         <h4 id="empty-state-demo-workbench-title">
           Place the empty state inside the surface it is explaining, not as an isolated illustration.
         </h4>
@@ -69,7 +69,7 @@ Reusable empty-result or empty-panel state with optional icon, body copy, and ac
           <p class="empty-state-demo-note">
             Keep the copy specific to the current route. Do not reveal whether another vault namespace exists.
           </p>
-          <div slot="actions" class="empty-state-demo-actions">
+          <div slot="actions" class="empty-state-demo-actions usage-demo__actions">
             <cv-button preset="action-primary">Clear filters</cv-button>
             <cv-button variant="ghost">Create folder</cv-button>
           </div>
@@ -77,9 +77,9 @@ Reusable empty-result or empty-panel state with optional icon, body copy, and ac
       </div>
     </section>
 
-    <section class="empty-state-demo-section" aria-labelledby="empty-state-demo-variants-title">
-      <div class="empty-state-demo-section-header">
-        <span class="empty-state-demo-kicker">State matrix</span>
+    <section class="empty-state-demo-section usage-demo__section" aria-labelledby="empty-state-demo-variants-title">
+      <div class="empty-state-demo-section-header usage-demo__section-header">
+        <span class="empty-state-demo-kicker usage-demo__kicker">State matrix</span>
         <h4 id="empty-state-demo-variants-title">
           Use the same primitive for empty, filtered, drop, and unavailable cases.
         </h4>
