@@ -265,7 +265,7 @@ The following features are explicitly out of scope for the current implementatio
     </cv-grid>
   </div>
 
-  <output class="grid-demo-readout" for="grid-demo-matrix" aria-live="polite">
+  <output class="grid-demo-readout usage-demo__log" for="grid-demo-matrix" aria-live="polite">
     Active cell: vault::owner · Selected cells: 3
   </output>
 </div>
