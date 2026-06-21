@@ -98,12 +98,12 @@ None. The component is presentational.
       </div>
 
       <div class="empty-state-demo-product" aria-label="Empty state in a filtered vault view">
-        <header class="empty-state-demo-product-header">
+        <header class="empty-state-demo-product-header usage-demo__product-header">
           <div>
             <span class="empty-state-demo-label">Visible route</span>
             <strong>travel-profile.files</strong>
           </div>
-          <cv-badge variant="warning" size="small">filtered</cv-badge>
+          <cv-badge class="usage-demo__dense-badge" variant="warning" size="small">filtered</cv-badge>
         </header>
 
         <div class="empty-state-demo-toolbar" aria-hidden="true">
