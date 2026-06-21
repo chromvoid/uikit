@@ -206,9 +206,9 @@ The following features are explicitly out of scope for the current implementatio
 ## Usage
 
 ```html
-<div class="grid-demo-shell" data-demo="grid" data-live-demo-height="720">
-  <section class="grid-demo-hero" aria-labelledby="grid-demo-title">
-    <p class="grid-demo-kicker">APG grid adapter</p>
+<div class="grid-demo-shell usage-demo" data-demo="grid" data-live-demo-height="720">
+  <section class="grid-demo-hero usage-demo__hero" aria-labelledby="grid-demo-title">
+    <p class="grid-demo-kicker usage-demo__kicker">APG grid adapter</p>
     <h2 id="grid-demo-title">Vault authorization matrix</h2>
     <p>
       Cell focus, multi-selection, disabled states, and event detail all come from the same headless grid
