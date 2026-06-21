@@ -9,10 +9,10 @@ Multi-line text input with native textarea semantics and headless state delegati
 ## Usage
 
 ```html
-<div class="textarea-demo-shell" data-demo="textarea" data-live-demo-height="980">
-  <section class="textarea-demo-hero" aria-labelledby="textarea-demo-title">
-    <div class="textarea-demo-copy">
-      <span class="textarea-demo-kicker">Multi-line field primitive</span>
+<div class="textarea-demo-shell usage-demo" data-demo="textarea" data-live-demo-height="980">
+  <section class="textarea-demo-hero usage-demo__hero" aria-labelledby="textarea-demo-title">
+    <div class="textarea-demo-copy usage-demo__copy">
+      <span class="textarea-demo-kicker usage-demo__kicker">Multi-line field primitive</span>
       <h3 id="textarea-demo-title">Use textarea when a visible note needs native editing and form state.</h3>
       <p>
         The headless textarea model owns value, focus, disabled/readonly state, geometry, resize, and length
@@ -21,7 +21,7 @@ Multi-line text input with native textarea semantics and headless state delegati
       </p>
     </div>
 
-    <dl class="textarea-demo-metrics" aria-label="Textarea contract summary">
+    <dl class="textarea-demo-metrics usage-demo__metrics" aria-label="Textarea contract summary">
       <div>
         <dt>States</dt>
         <dd>focused / filled / invalid / readonly / disabled</dd>
@@ -59,7 +59,7 @@ Multi-line text input with native textarea semantics and headless state delegati
         <span slot="description">Edit this note to inspect value, focus, and commit events.</span>
       </cv-field>
 
-      <div class="textarea-demo-actions" aria-label="Textarea sample actions">
+      <div class="textarea-demo-actions usage-demo__actions" aria-label="Textarea sample actions">
         <cv-button data-textarea-action="checkpoint" variant="primary">Load checkpoint note</cv-button>
         <cv-button data-textarea-action="clear" variant="ghost" outline>Clear note</cv-button>
       </div>
@@ -88,13 +88,13 @@ Multi-line text input with native textarea semantics and headless state delegati
       </div>
     </form>
 
-    <aside class="textarea-demo-side" aria-label="Textarea event output">
-      <div class="textarea-demo-side-head">
-        <span class="textarea-demo-kicker">Event stream</span>
+    <aside class="textarea-demo-side usage-demo__side" aria-label="Textarea event output">
+      <div class="textarea-demo-side-head usage-demo__side-head">
+        <span class="textarea-demo-kicker usage-demo__kicker">Event stream</span>
         <h4>Interact with the primary note to inspect the public textarea contract.</h4>
       </div>
 
-      <p class="textarea-demo-log" role="status" aria-live="polite" data-textarea-output>
+      <p class="textarea-demo-log usage-demo__log" role="status" aria-live="polite" data-textarea-output>
         Waiting for textarea activity. Type, blur, or load a sample note.
       </p>
 
@@ -115,9 +115,9 @@ Multi-line text input with native textarea semantics and headless state delegati
     </aside>
   </section>
 
-  <section class="textarea-demo-section" aria-labelledby="textarea-demo-matrix-title">
-    <div class="textarea-demo-section-header">
-      <span class="textarea-demo-kicker">Variants, size, and field states</span>
+  <section class="textarea-demo-section usage-demo__section" aria-labelledby="textarea-demo-matrix-title">
+    <div class="textarea-demo-section-header usage-demo__section-header">
+      <span class="textarea-demo-kicker usage-demo__kicker">Variants, size, and field states</span>
       <h4 id="textarea-demo-matrix-title">
         Keep one textarea contract, then tune emphasis with field state, variant, size, resize, and native
         constraints.
