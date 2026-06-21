@@ -164,7 +164,10 @@ No `cv-input` or `cv-change` events are emitted. The callout has no user-modifia
     </dl>
   </section>
 
-  <section class="callout-demo-workbench usage-demo__workbench" aria-labelledby="callout-demo-workbench-title">
+  <section
+    class="callout-demo-workbench usage-demo__workbench"
+    aria-labelledby="callout-demo-workbench-title"
+  >
     <div class="callout-demo-section-header usage-demo__section-header">
       <span class="callout-demo-kicker usage-demo__kicker">Vault review panel</span>
       <h4 id="callout-demo-workbench-title">
@@ -214,7 +217,7 @@ No `cv-input` or `cv-change` events are emitted. The callout has no user-modifia
           Dense inline note for secondary metadata.
         </cv-callout>
 
-        <output class="callout-demo-readout" aria-live="polite" data-callout-readout>
+        <output class="callout-demo-readout usage-demo__log" aria-live="polite" data-callout-readout>
           Dismissible notes are open. Close one to see the cv-close event.
         </output>
 
