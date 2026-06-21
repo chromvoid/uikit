@@ -270,7 +270,7 @@ function createPooledFrame(pooled: boolean): PooledFrame {
   element.className = 'live-demo-frame'
   element.title = 'Isolated live demo preview'
   element.dataset.liveDemoFramePooled = pooled ? 'true' : 'false'
-  element.sandbox.add('allow-scripts', 'allow-same-origin')
+  element.sandbox.add('allow-scripts', 'allow-same-origin', 'allow-popups', 'allow-popups-to-escape-sandbox')
   element.srcdoc = buildFrameSrcdoc()
   parkFrameElement(element)
   element.addEventListener('load', () => {
