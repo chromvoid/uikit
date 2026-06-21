@@ -71,7 +71,7 @@ Use `cv-disclosure` for one local reveal: advanced settings, optional help, or a
         </cv-disclosure>
 
         <div class="disclosure-demo-group" aria-label="Named disclosure group">
-          <div class="disclosure-demo-group-header usage-demo__prose">
+          <div class="disclosure-demo-group-header usage-demo__prose usage-demo__body-copy">
             <span class="disclosure-demo-kicker usage-demo__kicker">Named peers</span>
             <p>
               Opening one matching <code>name</code> closes the others, but this is still not a full
@@ -177,7 +177,7 @@ Use `cv-disclosure` for one local reveal: advanced settings, optional help, or a
 
       <div class="disclosure-demo-mode disclosure-demo-mode--native usage-demo__mode">
         <span class="disclosure-demo-mode-label usage-demo__label">static native fallback</span>
-        <details class="disclosure-demo-native">
+        <details class="disclosure-demo-native usage-demo__body-copy">
           <summary>Static support note</summary>
           <p>
             Use native <code>details</code>/<code>summary</code> when no UIKit styling or events are needed.
