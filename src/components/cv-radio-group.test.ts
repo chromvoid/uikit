@@ -53,6 +53,27 @@ describe('cv-radio-group', () => {
     expect(radios[2]!.getAttribute('role')).toBe('radio')
   })
 
+  it('preserves child value attributes when radio properties are not hydrated yet', async () => {
+    CVRadio.define()
+    CVRadioGroup.define()
+
+    const group = document.createElement('cv-radio-group') as CVRadioGroup
+    group.value = 'attribute-value'
+
+    const radio = document.createElement('cv-radio') as CVRadio
+    radio.setAttribute('value', 'attribute-value')
+    radio.value = ''
+    radio.textContent = 'Attribute value'
+    group.append(radio)
+
+    document.body.append(group)
+    await settle(group)
+
+    expect(group.value).toBe('attribute-value')
+    expect(radio.value).toBe('attribute-value')
+    expect(radio.checked).toBe(true)
+  })
+
   it('supports keyboard navigation and emits input/change when value changes', async () => {
     const {group, radios} = await mountRadioGroup()
 

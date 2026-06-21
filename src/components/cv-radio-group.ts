@@ -229,8 +229,13 @@ export class CVRadioGroup extends FormAssociatedReatomElement {
   }
 
   private ensureRadioValue(radio: CVRadio, index: number): string {
-    const normalized = radio.value?.trim()
-    if (normalized) return normalized
+    const normalized = (radio.value || radio.getAttribute('value') || '').trim()
+    if (normalized) {
+      if (radio.value !== normalized) {
+        radio.value = normalized
+      }
+      return normalized
+    }
 
     const fallback = `radio-${index + 1}`
     radio.value = fallback
@@ -328,8 +333,7 @@ export class CVRadioGroup extends FormAssociatedReatomElement {
 
       const keydown = (event: Event) => {
         const keyboardEvent = event as KeyboardEvent
-        const hasModifier =
-          keyboardEvent.ctrlKey || keyboardEvent.metaKey || keyboardEvent.altKey
+        const hasModifier = keyboardEvent.ctrlKey || keyboardEvent.metaKey || keyboardEvent.altKey
         // Only swallow navigation keys we own; let everything else (modifier combos,
         // typing, parent shortcuts) bubble normally.
         if (!hasModifier && radioGroupNavigationKeys.has(keyboardEvent.key)) {

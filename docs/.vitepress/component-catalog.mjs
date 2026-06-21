@@ -48,7 +48,7 @@ export const componentGroups = [
       {name: 'cv-textarea', slug: 'textarea', spec: 'textarea'},
       {name: 'cv-number', slug: 'number', spec: 'number'},
       {name: 'cv-checkbox', slug: 'checkbox', spec: 'checkbox'},
-      {name: 'cv-radio', slug: 'radio', spec: 'radio'},
+      {name: 'cv-radio-group', slug: 'radio-group', spec: 'radio'},
       {name: 'cv-switch', slug: 'switch', spec: 'switch'},
       {name: 'cv-select', slug: 'select', spec: 'select'},
       {name: 'cv-combobox', slug: 'combobox', spec: 'combobox'},
