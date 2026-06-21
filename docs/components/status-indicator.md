@@ -45,7 +45,7 @@ Inline status marker with optional label and suffix content.
   >
     <div class="status-indicator-demo-panel usage-demo__panel">
       <header class="status-indicator-demo-panel-head usage-demo__panel-head">
-        <div>
+        <div class="usage-demo__flow usage-demo__flow--loose">
           <span class="status-indicator-demo-kicker usage-demo__kicker">Session rail</span>
           <h4>Visible route state</h4>
         </div>
@@ -56,8 +56,8 @@ Inline status marker with optional label and suffix content.
       </header>
 
       <div class="status-indicator-demo-row">
-        <div>
-          <span>Transport</span>
+        <div class="usage-demo__flow usage-demo__flow--loose">
+          <span class="usage-demo__meta usage-demo__label">Transport</span>
           <strong>Hardware channel negotiated</strong>
         </div>
         <cv-status-indicator tone="primary">
@@ -68,8 +68,8 @@ Inline status marker with optional label and suffix content.
       </div>
 
       <div class="status-indicator-demo-row status-indicator-demo-row--info">
-        <div>
-          <span>Catalog sync</span>
+        <div class="usage-demo__flow usage-demo__flow--loose">
+          <span class="usage-demo__meta usage-demo__label">Catalog sync</span>
           <strong>Remote manifest is being reconciled</strong>
         </div>
         <cv-status-indicator tone="info" pulse>
@@ -79,24 +79,24 @@ Inline status marker with optional label and suffix content.
       </div>
 
       <div class="status-indicator-demo-row status-indicator-demo-row--success">
-        <div>
-          <span>Visible vault</span>
+        <div class="usage-demo__flow usage-demo__flow--loose">
+          <span class="usage-demo__meta usage-demo__label">Visible vault</span>
           <strong>Decoy profile is mounted for the current route</strong>
         </div>
         <cv-status-indicator tone="success">Verified</cv-status-indicator>
       </div>
 
       <div class="status-indicator-demo-row status-indicator-demo-row--warning">
-        <div>
-          <span>Policy review</span>
+        <div class="usage-demo__flow usage-demo__flow--loose">
+          <span class="usage-demo__meta usage-demo__label">Policy review</span>
           <strong>Operator handoff expires soon</strong>
         </div>
         <cv-status-indicator tone="warning" pulse>Pending review</cv-status-indicator>
       </div>
 
       <div class="status-indicator-demo-row status-indicator-demo-row--danger">
-        <div>
-          <span>Remote writes</span>
+        <div class="usage-demo__flow usage-demo__flow--loose">
+          <span class="usage-demo__meta usage-demo__label">Remote writes</span>
           <strong>Blocked by local coercion profile</strong>
         </div>
         <cv-status-indicator tone="danger">
@@ -150,33 +150,33 @@ Inline status marker with optional label and suffix content.
     </div>
 
     <div class="status-indicator-demo-tone-grid" aria-label="Status indicator tone and size examples">
-      <div>
-        <span>Neutral</span>
+      <div class="usage-demo__flow">
+        <span class="usage-demo__meta usage-demo__label">Neutral</span>
         <cv-status-indicator tone="neutral" size="small">Idle</cv-status-indicator>
         <cv-status-indicator tone="neutral">Queued</cv-status-indicator>
       </div>
-      <div>
-        <span>Primary</span>
+      <div class="usage-demo__flow">
+        <span class="usage-demo__meta usage-demo__label">Primary</span>
         <cv-status-indicator tone="primary">Active</cv-status-indicator>
         <cv-status-indicator tone="primary" pulse>Streaming</cv-status-indicator>
       </div>
-      <div>
-        <span>Info</span>
+      <div class="usage-demo__flow">
+        <span class="usage-demo__meta usage-demo__label">Info</span>
         <cv-status-indicator tone="info">Scanning</cv-status-indicator>
         <cv-status-indicator tone="info" size="large">Observed</cv-status-indicator>
       </div>
-      <div>
-        <span>Success</span>
+      <div class="usage-demo__flow">
+        <span class="usage-demo__meta usage-demo__label">Success</span>
         <cv-status-indicator tone="success">Synced</cv-status-indicator>
         <cv-status-indicator tone="success" pulse>Paired</cv-status-indicator>
       </div>
-      <div>
-        <span>Warning</span>
+      <div class="usage-demo__flow">
+        <span class="usage-demo__meta usage-demo__label">Warning</span>
         <cv-status-indicator tone="warning">Pending</cv-status-indicator>
         <cv-status-indicator tone="warning" size="small">Review</cv-status-indicator>
       </div>
-      <div>
-        <span>Danger</span>
+      <div class="usage-demo__flow">
+        <span class="usage-demo__meta usage-demo__label">Danger</span>
         <cv-status-indicator tone="danger">Blocked</cv-status-indicator>
         <cv-status-indicator tone="danger" size="large">Critical</cv-status-indicator>
       </div>
