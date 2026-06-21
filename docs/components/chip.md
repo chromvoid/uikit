@@ -10,10 +10,10 @@ Use `cv-chip` when the visible token does something: activates a filter editor, 
 ## Usage
 
 ```html
-<div class="chip-demo-shell" data-demo="chip">
-  <section class="chip-demo-hero" aria-labelledby="chip-demo-title">
-    <div class="chip-demo-copy">
-      <span class="chip-demo-kicker">Interactive token</span>
+<div class="chip-demo-shell usage-demo" data-demo="chip">
+  <section class="chip-demo-hero usage-demo__hero" aria-labelledby="chip-demo-title">
+    <div class="chip-demo-copy usage-demo__copy">
+      <span class="chip-demo-kicker usage-demo__kicker">Interactive token</span>
       <h3 id="chip-demo-title">Use chips when the label is also a control.</h3>
       <p>
         A chip carries a stable value, optional selected state, and optional remove action in the same
@@ -42,9 +42,9 @@ Use `cv-chip` when the visible token does something: activates a filter editor, 
     </div>
   </section>
 
-  <section class="chip-demo-section" aria-labelledby="chip-demo-states-title">
-    <div class="chip-demo-section-header">
-      <span class="chip-demo-kicker">States</span>
+  <section class="chip-demo-section usage-demo__section" aria-labelledby="chip-demo-states-title">
+    <div class="chip-demo-section-header usage-demo__section-header">
+      <span class="chip-demo-kicker usage-demo__kicker">States</span>
       <h4 id="chip-demo-states-title">Action, selected, removable, disabled, and size variants</h4>
     </div>
 
@@ -81,9 +81,9 @@ Use `cv-chip` when the visible token does something: activates a filter editor, 
     </div>
   </section>
 
-  <section class="chip-demo-section" aria-labelledby="chip-demo-events-title">
-    <div class="chip-demo-section-header">
-      <span class="chip-demo-kicker">Event contract</span>
+  <section class="chip-demo-section usage-demo__section" aria-labelledby="chip-demo-events-title">
+    <div class="chip-demo-section-header usage-demo__section-header">
+      <span class="chip-demo-kicker usage-demo__kicker">Event contract</span>
       <h4 id="chip-demo-events-title">Activation and removal emit different events</h4>
     </div>
 
