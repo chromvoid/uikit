@@ -237,13 +237,7 @@ UIKit does not own value management, type resolution, clearable logic, or passwo
       <div class="input-demo-field-grid">
         <cv-field required>
           <span slot="label">Visible alias</span>
-          <cv-input
-            data-input-primary
-            name="alias"
-            value="border-relay.admin"
-            clearable
-            autocomplete="off"
-          >
+          <cv-input data-input-primary name="alias" value="border-relay.admin" clearable autocomplete="off">
             <span slot="prefix" aria-hidden="true">cv://</span>
           </cv-input>
           <span slot="description">Clearable text input with a prefix slot and live value events.</span>

@@ -9,62 +9,227 @@ Single-line text input control supporting text-like types, clearable behavior, a
 ## Usage
 
 ```html
-<div class="input-demo-grid">
-  <cv-field class="input-demo-cell">
-    <span slot="label">Basic</span>
-    <cv-input placeholder="Enter text"></cv-input>
-  </cv-field>
+<div class="input-demo-shell" data-demo="input" data-live-demo-height="860">
+  <section class="input-demo-hero" aria-labelledby="input-demo-title">
+    <div class="input-demo-copy">
+      <span class="input-demo-kicker">Text entry primitive</span>
+      <h3 id="input-demo-title">Use input when a visible value needs native editing and headless state.</h3>
+      <p>
+        The headless input model owns value, focus, clearing, readonly/disabled state, password visibility,
+        and form validity. UIKit renders the field surface, slots, size, variant, and preset density.
+      </p>
+    </div>
 
-  <cv-field class="input-demo-cell">
-    <span slot="label">Value</span>
-    <cv-input value="Stored value"></cv-input>
-  </cv-field>
+    <dl class="input-demo-metrics" aria-label="Input contract summary">
+      <div>
+        <dt>States</dt>
+        <dd>focused / filled / invalid / readonly / disabled</dd>
+      </div>
+      <div>
+        <dt>Actions</dt>
+        <dd>input / change / clear / password toggle</dd>
+      </div>
+      <div>
+        <dt>Surface</dt>
+        <dd>outlined / filled / search-mobile</dd>
+      </div>
+    </dl>
+  </section>
 
-  <cv-field class="input-demo-cell">
-    <span slot="label">Clearable</span>
-    <cv-input clearable value="Hello world"></cv-input>
-  </cv-field>
+  <section class="input-demo-board" aria-label="Input examples in a vault record form">
+    <form class="input-demo-form" data-input-form>
+      <div class="input-demo-form-head">
+        <div>
+          <span>Visible vault record</span>
+          <strong>border-relay.admin</strong>
+        </div>
+        <cv-badge variant="primary" pill>editable route</cv-badge>
+      </div>
 
-  <cv-field class="input-demo-cell">
-    <span slot="label">Password</span>
-    <cv-input type="password" password-toggle placeholder="Password"></cv-input>
-  </cv-field>
+      <div class="input-demo-field-grid">
+        <cv-field required>
+          <span slot="label">Visible alias</span>
+          <cv-input data-input-primary name="alias" value="border-relay.admin" clearable autocomplete="off">
+            <span slot="prefix" aria-hidden="true">cv://</span>
+          </cv-input>
+          <span slot="description">Clearable text input with a prefix slot and live value events.</span>
+        </cv-field>
 
-  <cv-field class="input-demo-cell">
-    <span slot="label">Search</span>
-    <cv-input variant="filled" size="small" placeholder="Search..."></cv-input>
-  </cv-field>
+        <cv-field>
+          <span slot="label">Recovery email</span>
+          <cv-input
+            name="email"
+            type="email"
+            value="alex@chromvoid.local"
+            clearable
+            autocomplete="email"
+          ></cv-input>
+          <span slot="description">Text-like native types keep keyboard and validation hints intact.</span>
+        </cv-field>
 
-  <cv-field class="input-demo-cell">
-    <span slot="label">Affixes</span>
-    <cv-input value="chromvoid">
-      <span slot="prefix" aria-hidden="true">@</span>
-      <span slot="suffix">.app</span>
-    </cv-input>
-  </cv-field>
+        <cv-field>
+          <span slot="label">Local secret</span>
+          <cv-input type="password" password-toggle clearable value="decoy-key-4589" autocomplete="off">
+            <span slot="prefix" aria-hidden="true">key</span>
+          </cv-input>
+          <span slot="description">Password visibility is part of the input model, not local DOM state.</span>
+        </cv-field>
 
-  <cv-field class="input-demo-cell" disabled>
-    <span slot="label">Disabled</span>
-    <cv-input value="Cannot edit"></cv-input>
-  </cv-field>
+        <cv-field>
+          <span slot="label">Search visible layer</span>
+          <cv-input
+            preset="search-mobile"
+            variant="filled"
+            type="search"
+            placeholder="Search visible vault"
+            value="relay"
+            clearable
+          ></cv-input>
+          <span slot="description">The mobile search preset changes density through component tokens.</span>
+        </cv-field>
+      </div>
+    </form>
 
-  <cv-field class="input-demo-cell">
-    <span slot="label">Readonly</span>
-    <cv-input readonly value="Read only value"></cv-input>
-  </cv-field>
+    <aside class="input-demo-side" aria-label="Input event output">
+      <div class="input-demo-side-head">
+        <span class="input-demo-kicker">Event stream</span>
+        <h4>Interact with any active field to inspect the public contract.</h4>
+      </div>
 
-  <cv-field class="input-demo-cell" required>
-    <span slot="label">Email</span>
-    <cv-input type="email" placeholder="Email address"></cv-input>
-  </cv-field>
+      <p class="input-demo-log" role="status" aria-live="polite" data-input-output>
+        Waiting for input. Type, blur, clear, or toggle the password control.
+      </p>
 
-  <cv-field class="input-demo-cell">
-    <span slot="label">Large clearable</span>
-    <cv-input size="large" clearable value="Vault name">
-      <span slot="clear-icon" aria-hidden="true">x</span>
-    </cv-input>
-  </cv-field>
+      <dl class="input-demo-live" aria-label="Live input state">
+        <div>
+          <dt>Primary value</dt>
+          <dd data-input-mirror>border-relay.admin</dd>
+        </div>
+        <div>
+          <dt>Last field</dt>
+          <dd data-input-active>none</dd>
+        </div>
+      </dl>
+    </aside>
+  </section>
+
+  <section class="input-demo-section" aria-labelledby="input-demo-matrix-title">
+    <div class="input-demo-section-header">
+      <span class="input-demo-kicker">Variants, sizes, and field states</span>
+      <h4 id="input-demo-matrix-title">
+        Keep one input contract, then tune emphasis with variant, size, slots, or field state.
+      </h4>
+    </div>
+
+    <div class="input-demo-matrix" aria-label="Input state matrix">
+      <div>
+        <span>Variant</span>
+        <cv-input placeholder="Outlined default"></cv-input>
+        <cv-input variant="filled" value="Filled surface"></cv-input>
+      </div>
+
+      <div>
+        <span>Size</span>
+        <cv-input size="small" value="Small"></cv-input>
+        <cv-input value="Medium"></cv-input>
+        <cv-input size="large" value="Large"></cv-input>
+      </div>
+
+      <div>
+        <span>Affixes</span>
+        <cv-input value="chromvoid">
+          <span slot="prefix" aria-hidden="true">@</span>
+          <span slot="suffix">.app</span>
+        </cv-input>
+        <cv-input value="/vault/visible" clearable>
+          <span slot="prefix" aria-hidden="true">path</span>
+        </cv-input>
+      </div>
+
+      <div>
+        <span>Validation</span>
+        <cv-field required invalid>
+          <span slot="label">Policy route</span>
+          <cv-input value="unknown relay"></cv-input>
+          <span slot="error">Route is not available in the visible profile.</span>
+        </cv-field>
+      </div>
+
+      <div>
+        <span>Read state</span>
+        <cv-input readonly value="Readonly but focusable"></cv-input>
+        <cv-field disabled>
+          <span slot="label">Disabled by field</span>
+          <cv-input value="Locked by policy"></cv-input>
+        </cv-field>
+      </div>
+
+      <div>
+        <span>Native type</span>
+        <cv-input type="url" value="https://relay.chromvoid.local" clearable></cv-input>
+        <cv-input type="tel" placeholder="+1 555 0100"></cv-input>
+      </div>
+    </div>
+  </section>
 </div>
+
+<script type="module">
+  document.querySelectorAll('.input-demo-shell[data-demo="input"]:not([data-ready])').forEach((shell) => {
+    shell.dataset.ready = 'true'
+
+    const form = shell.querySelector('[data-input-form]')
+    const output = shell.querySelector('[data-input-output]')
+    const mirror = shell.querySelector('[data-input-mirror]')
+    const active = shell.querySelector('[data-input-active]')
+    const primaryInput = shell.querySelector('[data-input-primary]')
+    const eventLabels = {
+      'cv-input': 'input',
+      'cv-change': 'change',
+      'cv-clear': 'clear',
+      'cv-focus': 'focus',
+      'cv-blur': 'blur',
+    }
+
+    const setOutput = (message) => {
+      if (output) output.textContent = message
+    }
+
+    const getFieldName = (input) => {
+      const label = input.closest('cv-field')?.querySelector('[slot="label"]')?.textContent?.trim()
+      return label || input.getAttribute('name') || 'input'
+    }
+
+    const formatValue = (input, value) => {
+      if (input?.type === 'password') return `${value.length} characters`
+      return value || 'empty'
+    }
+
+    const report = (event) => {
+      const input = event.target instanceof HTMLElement ? event.target : null
+      if (!input?.matches('cv-input')) return
+
+      const name = getFieldName(input)
+      const label = eventLabels[event.type] ?? event.type
+      const value = 'value' in event.detail ? String(event.detail.value) : input.value || ''
+
+      if (active) active.textContent = name
+      setOutput(`${label}: ${name} -> ${formatValue(input, value)}`)
+    }
+
+    primaryInput?.addEventListener('cv-input', (event) => {
+      if (mirror) mirror.textContent = event.detail.value || 'empty'
+    })
+
+    form?.addEventListener('submit', (event) => {
+      event.preventDefault()
+      setOutput('submit: native Enter handling reached the form boundary.')
+    })
+
+    Object.keys(eventLabels).forEach((eventName) => {
+      shell.addEventListener(eventName, report)
+    })
+  })
+</script>
 ```
 
 ## Anatomy
