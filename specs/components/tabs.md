@@ -124,7 +124,7 @@ UIKit does not own tab selection logic; headless state is the source of truth.
 ## Usage
 
 ```html
-<div class="tabs-demo-shell">
+<div class="tabs-demo-shell" data-demo="tabs">
   <section class="tabs-demo-hero" aria-labelledby="tabs-demo-title">
     <div class="tabs-demo-copy">
       <span class="tabs-demo-kicker">Selection surface</span>
