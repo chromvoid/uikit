@@ -1,0 +1,471 @@
+.toast-demo-shell {
+  display: grid;
+  container-type: inline-size;
+  inline-size: 100%;
+  min-inline-size: 0;
+  overflow: hidden;
+  border: 1px solid rgba(118, 181, 222, 0.18);
+  border-radius: 16px;
+  color: var(--toast-demo-muted);
+  --toast-demo-text: #eef5ff;
+  --toast-demo-muted: rgba(190, 206, 226, 0.76);
+  --toast-demo-soft: rgba(190, 206, 226, 0.58);
+  --toast-demo-border: rgba(118, 181, 222, 0.18);
+  --toast-demo-panel: rgba(238, 245, 255, 0.052);
+  --toast-demo-cyan: #65d7ff;
+  --toast-demo-green: #5beba0;
+  --toast-demo-amber: #ffc857;
+  --toast-demo-red: #ff7d86;
+  background:
+    linear-gradient(180deg, rgba(12, 20, 32, 0.98), rgba(7, 13, 22, 0.98)),
+    linear-gradient(135deg, rgba(101, 215, 255, 0.075), transparent 44%),
+    linear-gradient(315deg, rgba(179, 136, 255, 0.055), transparent 46%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.04),
+    0 18px 42px rgba(0, 0, 0, 0.22);
+}
+
+.toast-demo-shell,
+.toast-demo-shell * {
+  box-sizing: border-box;
+}
+
+.toast-demo-shell cv-button {
+  --cv-color-text: var(--toast-demo-text);
+  --cv-color-text-muted: var(--toast-demo-muted);
+  --cv-color-surface: rgba(238, 245, 255, 0.06);
+  --cv-color-border: rgba(143, 220, 255, 0.22);
+  --cv-color-primary: var(--toast-demo-cyan);
+  --cv-color-primary-dark: #3caecc;
+  --cv-color-danger: var(--toast-demo-red);
+  --cv-color-on-primary: #071018;
+  --cv-button-text-color: var(--toast-demo-text);
+}
+
+.toast-demo-hero,
+.toast-demo-workbench {
+  display: grid;
+  gap: 20px;
+  min-inline-size: 0;
+  padding: clamp(20px, 4cqi, 28px);
+}
+
+.toast-demo-hero {
+  border-bottom: 1px solid var(--toast-demo-border);
+}
+
+.toast-demo-copy,
+.toast-demo-section-header,
+.toast-demo-panel,
+.toast-demo-side,
+.toast-demo-control-group,
+.toast-demo-route-card {
+  display: grid;
+  align-content: start;
+  gap: 10px;
+  min-inline-size: 0;
+}
+
+.toast-demo-kicker,
+.toast-demo-label,
+.toast-demo-metrics dt,
+.toast-demo-state dt,
+.toast-demo-state dd,
+.toast-demo-log,
+.toast-demo-segment button {
+  font-family: var(--vp-font-family-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.toast-demo-kicker,
+.toast-demo-label {
+  color: #94e9ff;
+}
+
+.toast-demo-copy h3,
+.toast-demo-section-header h4 {
+  margin: 0;
+  color: var(--toast-demo-text);
+  letter-spacing: 0;
+}
+
+.toast-demo-copy h3 {
+  max-inline-size: 34ch;
+  font-size: clamp(1.18rem, 5cqi, 1.55rem);
+  line-height: 1.1;
+  text-wrap: balance;
+}
+
+.toast-demo-section-header h4 {
+  max-inline-size: 64ch;
+  font-family: var(--vp-font-family-base);
+  font-size: 1rem;
+  line-height: 1.32;
+}
+
+.toast-demo-copy p,
+.toast-demo-route-card p {
+  margin: 0;
+  color: var(--toast-demo-muted);
+  font-size: 0.92rem;
+  line-height: 1.58;
+}
+
+.toast-demo-copy p {
+  max-inline-size: 68ch;
+}
+
+.toast-demo-metrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 148px), 1fr));
+  gap: 14px;
+  min-inline-size: 0;
+  margin: 0;
+}
+
+.toast-demo-metrics div,
+.toast-demo-panel,
+.toast-demo-stage,
+.toast-demo-side {
+  border: 1px solid var(--toast-demo-border);
+  border-radius: 14px;
+  background:
+    linear-gradient(180deg, var(--toast-demo-panel), rgba(238, 245, 255, 0.026)), rgba(7, 13, 22, 0.32);
+}
+
+.toast-demo-metrics div {
+  display: grid;
+  gap: 4px;
+  min-inline-size: 0;
+  padding: 16px;
+}
+
+.toast-demo-metrics dt,
+.toast-demo-state dt {
+  color: var(--toast-demo-soft);
+}
+
+.toast-demo-metrics dd,
+.toast-demo-state dd {
+  min-inline-size: 0;
+  margin: 0;
+  color: var(--toast-demo-text);
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+
+.toast-demo-metrics dd {
+  font-size: 0.9rem;
+}
+
+.toast-demo-panel,
+.toast-demo-side {
+  padding: 14px;
+}
+
+.toast-demo-panel {
+  gap: 16px;
+  background:
+    linear-gradient(180deg, rgba(7, 13, 22, 0.52), rgba(7, 13, 22, 0.8)),
+    linear-gradient(90deg, rgba(101, 215, 255, 0.055), transparent 44%);
+}
+
+.toast-demo-actions,
+.toast-demo-footer-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  min-inline-size: 0;
+}
+
+.toast-demo-actions cv-button,
+.toast-demo-footer-actions cv-button {
+  --cv-button-min-height: 38px;
+  --cv-button-border-radius: 10px;
+  --cv-button-padding-inline: 12px;
+}
+
+.toast-demo-actions cv-button[data-toast-action='warning'] {
+  --cv-button-accent-color: var(--toast-demo-amber);
+}
+
+.toast-demo-actions cv-button[data-toast-action='loading'],
+.toast-demo-footer-actions cv-button {
+  --cv-button-accent-color: var(--toast-demo-cyan);
+  --cv-button-background: rgba(238, 245, 255, 0.045);
+  --cv-button-text-color: rgba(226, 239, 255, 0.88);
+}
+
+.toast-demo-controls {
+  display: grid;
+  gap: 12px;
+  min-inline-size: 0;
+}
+
+.toast-demo-segment {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  min-inline-size: 0;
+}
+
+.toast-demo-segment button {
+  min-block-size: 32px;
+  max-inline-size: 100%;
+  padding: 6px 9px;
+  border: 1px solid rgba(143, 220, 255, 0.18);
+  border-radius: 10px;
+  background: rgba(238, 245, 255, 0.045);
+  color: rgba(226, 239, 255, 0.78);
+  cursor: pointer;
+  line-height: 1.2;
+}
+
+.toast-demo-segment button:hover {
+  border-color: rgba(143, 220, 255, 0.36);
+  color: var(--toast-demo-text);
+}
+
+.toast-demo-segment button:focus-visible {
+  outline: 2px solid var(--toast-demo-cyan);
+  outline-offset: 2px;
+}
+
+.toast-demo-segment button[aria-pressed='true'] {
+  border-color: rgba(101, 215, 255, 0.54);
+  background: rgba(101, 215, 255, 0.12);
+  color: #dff8ff;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.toast-demo-stage {
+  position: relative;
+  display: grid;
+  min-block-size: 360px;
+  min-inline-size: 0;
+  overflow: hidden;
+  background:
+    linear-gradient(rgba(143, 220, 255, 0.075) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(143, 220, 255, 0.052) 1px, transparent 1px),
+    linear-gradient(180deg, rgba(9, 15, 25, 0.74), rgba(6, 11, 19, 0.94));
+  background-size:
+    48px 48px,
+    48px 48px,
+    auto;
+}
+
+.toast-demo-stage::before {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(120deg, rgba(101, 215, 255, 0.14), transparent 32%),
+    linear-gradient(300deg, rgba(179, 136, 255, 0.1), transparent 38%);
+  content: '';
+  pointer-events: none;
+}
+
+.toast-demo-route-card {
+  position: absolute;
+  inset-inline: 16px;
+  inset-block-end: 16px;
+  max-inline-size: 360px;
+  padding: 16px;
+  border: 1px solid rgba(143, 220, 255, 0.18);
+  border-radius: 12px;
+  background: rgba(7, 13, 22, 0.76);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035);
+}
+
+.toast-demo-route-card strong {
+  color: var(--toast-demo-text);
+  font-family: var(--vp-font-family-mono);
+  font-size: 0.94rem;
+  letter-spacing: 0;
+  overflow-wrap: anywhere;
+}
+
+.toast-demo-stage cv-toast-region {
+  --cv-toast-region-position: absolute;
+  --cv-toast-region-inset: 16px;
+  --cv-toast-region-width: min(370px, calc(100% - 32px));
+  --cv-toast-region-max-width: min(370px, calc(100% - 32px));
+  --cv-toast-region-gap: 10px;
+  --cv-toast-padding-block: 12px;
+  --cv-toast-padding-inline: 14px;
+  --cv-toast-border-radius: 12px;
+  --cv-toast-gap: 10px;
+  --cv-toast-background: rgba(12, 20, 32, 0.96);
+  --cv-toast-border-color: rgba(143, 220, 255, 0.22);
+  --cv-toast-color: rgba(238, 245, 255, 0.94);
+  --cv-toast-shadow: 0 18px 34px rgba(0, 0, 0, 0.34);
+  --cv-color-border: rgba(143, 220, 255, 0.22);
+  --cv-color-surface-glass: rgba(238, 245, 255, 0.06);
+  --cv-color-surface-elevated: rgba(12, 20, 32, 0.96);
+  --cv-color-text: rgba(238, 245, 255, 0.94);
+  --cv-color-text-muted: rgba(190, 206, 226, 0.78);
+  --cv-color-primary: var(--toast-demo-cyan);
+  --cv-color-success: var(--toast-demo-green);
+  --cv-color-warning: var(--toast-demo-amber);
+  --cv-color-danger: var(--toast-demo-red);
+  --cv-color-success-border-strong: rgba(91, 235, 160, 0.58);
+  --cv-color-warning-border-strong: rgba(255, 200, 87, 0.62);
+  --cv-color-danger-border-strong: rgba(255, 125, 134, 0.64);
+  --cv-color-primary-border-strong: rgba(101, 215, 255, 0.6);
+  --cv-gradient-progress-primary: linear-gradient(90deg, #65d7ff, #b388ff);
+  --cv-gradient-progress-success: linear-gradient(90deg, #5beba0, #65d7ff);
+  --cv-gradient-progress-warning: linear-gradient(90deg, #ffc857, #65d7ff);
+  --cv-gradient-progress-danger: linear-gradient(90deg, #ff7d86, #b388ff);
+}
+
+.toast-demo-side {
+  gap: 14px;
+}
+
+.toast-demo-state {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  min-inline-size: 0;
+  margin: 0;
+}
+
+.toast-demo-state div {
+  display: grid;
+  gap: 4px;
+  min-inline-size: 0;
+  min-block-size: 66px;
+  padding: 12px;
+  border: 1px solid rgba(118, 181, 222, 0.14);
+  border-radius: 12px;
+  background: rgba(238, 245, 255, 0.042);
+}
+
+.toast-demo-state dd,
+.toast-demo-log {
+  text-transform: none;
+}
+
+.toast-demo-log {
+  min-inline-size: 0;
+  min-block-size: 82px;
+  margin: 0;
+  padding: 12px 14px;
+  border: 1px solid rgba(143, 220, 255, 0.18);
+  border-radius: 12px;
+  background: rgba(238, 245, 255, 0.046);
+  color: rgba(226, 239, 255, 0.86);
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
+.toast-demo-shell[data-toast-queue='active'] .toast-demo-log {
+  border-color: rgba(101, 215, 255, 0.34);
+  color: #dff8ff;
+}
+
+@container (min-width: 860px) {
+.toast-demo-hero {
+    grid-template-columns: minmax(0, 1.06fr) minmax(260px, 0.72fr);
+  }
+
+.toast-demo-metrics {
+    grid-template-columns: 1fr;
+  }
+
+.toast-demo-workbench {
+    grid-template-columns: minmax(270px, 0.74fr) minmax(360px, 1fr);
+    align-items: start;
+  }
+
+.toast-demo-side {
+    grid-column: 1 / -1;
+  }
+}
+
+@container (min-width: 1040px) {
+.toast-demo-workbench {
+    grid-template-columns: minmax(270px, 0.54fr) minmax(360px, 1fr) minmax(248px, 0.44fr);
+  }
+
+.toast-demo-side {
+    grid-column: auto;
+  }
+}
+
+@media (max-width: 640px) {
+.toast-demo-hero,
+  .toast-demo-workbench {
+    padding: 16px;
+  }
+
+.toast-demo-panel,
+  .toast-demo-side {
+    padding: 12px;
+  }
+
+.toast-demo-stage {
+    min-block-size: 420px;
+  }
+
+.toast-demo-route-card {
+    inset-inline: 12px;
+    inset-block-end: 12px;
+  }
+
+.toast-demo-stage cv-toast-region {
+    --cv-toast-region-inset: 12px;
+    --cv-toast-region-width: calc(100% - 24px);
+    --cv-toast-region-max-width: calc(100% - 24px);
+  }
+
+.toast-demo-state {
+    grid-template-columns: 1fr;
+  }
+}
+
+@container (max-width: 420px) {
+.toast-demo-stage {
+    min-block-size: 590px;
+  }
+}
+
+.toast-demo-surface {
+  position: relative;
+  display: grid;
+  align-content: start;
+  gap: 16px;
+  inline-size: min(100%, 720px);
+  min-block-size: 220px;
+  overflow: hidden;
+  padding: 16px;
+  border: 1px solid rgba(103, 150, 188, 0.22);
+  border-radius: 14px;
+  background:
+    linear-gradient(180deg, rgba(9, 16, 25, 0.82), rgba(7, 12, 20, 0.9)),
+    radial-gradient(circle at 88% 18%, rgba(101, 215, 255, 0.08), transparent 34%);
+}
+
+.toast-demo-surface .example-row {
+  margin: 0;
+  padding-inline-end: min(340px, 48%);
+}
+
+.toast-demo-surface cv-toast-region {
+  --cv-toast-region-position: absolute;
+  --cv-toast-region-inset: 16px;
+  --cv-toast-region-width: min(320px, calc(100% - 32px));
+  --cv-toast-region-max-width: calc(100% - 32px);
+  --cv-toast-region-z-index: 1;
+}
+
+@media (max-width: 640px) {
+.toast-demo-surface {
+    padding-block-start: 136px;
+  }
+
+.toast-demo-surface .example-row {
+    padding-inline-end: 0;
+  }
+}

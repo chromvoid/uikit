@@ -1,0 +1,497 @@
+.dropzone-demo-theme {
+  display: block;
+}
+
+.dropzone-demo-shell {
+  display: grid;
+  container-type: inline-size;
+  inline-size: 100%;
+  min-inline-size: 0;
+  overflow: hidden;
+  border: 1px solid var(--cv-color-border-glass);
+  border-radius: var(--cv-radius-4);
+  background:
+    linear-gradient(135deg, var(--cv-color-primary-subtle), transparent 42%),
+    linear-gradient(315deg, var(--cv-color-accent-surface), transparent 46%), var(--cv-gradient-surface-deep);
+  color: var(--cv-color-text-muted);
+  box-shadow: var(--cv-shadow-glass);
+}
+
+.dropzone-demo-shell,
+.dropzone-demo-shell * {
+  box-sizing: border-box;
+}
+
+.dropzone-demo-hero,
+.dropzone-demo-workbench,
+.dropzone-demo-section {
+  display: grid;
+  gap: var(--cv-space-5);
+  min-inline-size: 0;
+  padding: clamp(var(--cv-space-5), 4cqi, var(--cv-space-7));
+}
+
+.dropzone-demo-hero,
+.dropzone-demo-workbench {
+  border-bottom: 1px solid var(--cv-color-border-faint);
+}
+
+.dropzone-demo-hero {
+  background:
+    linear-gradient(90deg, var(--cv-color-surface-glass-subtle), transparent 72%),
+    var(--cv-color-surface-glass-subtle);
+}
+
+.dropzone-demo-copy,
+.dropzone-demo-section-header,
+.dropzone-demo-product,
+.dropzone-demo-pipeline,
+.dropzone-demo-state-card,
+.dropzone-demo-target {
+  display: grid;
+  align-content: start;
+  min-inline-size: 0;
+}
+
+.dropzone-demo-copy,
+.dropzone-demo-section-header {
+  gap: var(--cv-space-2);
+}
+
+.dropzone-demo-kicker,
+.dropzone-demo-label,
+.dropzone-demo-metrics dt,
+.dropzone-demo-pipeline li span,
+.dropzone-demo-file-list small {
+  font-family: var(--cv-font-family-code);
+  font-size: var(--cv-font-size-xs);
+  letter-spacing: 0;
+}
+
+.dropzone-demo-kicker,
+.dropzone-demo-label {
+  color: var(--cv-color-primary);
+  text-transform: uppercase;
+}
+
+.dropzone-demo-copy h3,
+.dropzone-demo-section-header h4 {
+  margin: 0;
+  color: var(--cv-color-text-strongest);
+  letter-spacing: 0;
+}
+
+.dropzone-demo-copy h3 {
+  max-inline-size: 34ch;
+  font-size: clamp(var(--cv-font-size-lg), 5cqi, var(--cv-font-size-2xl));
+  line-height: 1.12;
+  text-wrap: balance;
+}
+
+.dropzone-demo-section-header h4 {
+  max-inline-size: 68ch;
+  font-family: var(--cv-font-family-body);
+  font-size: var(--cv-font-size-base);
+  line-height: 1.34;
+}
+
+.dropzone-demo-copy p {
+  max-inline-size: 70ch;
+  margin: 0;
+  color: var(--cv-color-text-muted);
+  font-size: var(--cv-font-size-sm);
+  line-height: 1.56;
+}
+
+.dropzone-demo-metrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 148px), 1fr));
+  gap: var(--cv-space-3);
+  min-inline-size: 0;
+  margin: 0;
+}
+
+.dropzone-demo-metrics div,
+.dropzone-demo-product,
+.dropzone-demo-pipeline,
+.dropzone-demo-state-card {
+  border: 1px solid var(--cv-color-border-glass);
+  border-radius: var(--cv-radius-3);
+  background: var(--cv-color-surface-glass-subtle);
+}
+
+.dropzone-demo-metrics div {
+  display: grid;
+  gap: var(--cv-space-1);
+  min-inline-size: 0;
+  padding: var(--cv-space-4);
+}
+
+.dropzone-demo-metrics dt {
+  color: var(--cv-color-text-subtle);
+  text-transform: uppercase;
+}
+
+.dropzone-demo-metrics dd {
+  min-inline-size: 0;
+  margin: 0;
+  color: var(--cv-color-text-strong);
+  font-size: var(--cv-font-size-sm);
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+
+.dropzone-demo-product {
+  gap: var(--cv-space-4);
+  padding: var(--cv-space-4);
+  background:
+    linear-gradient(180deg, var(--cv-color-surface-secondary-glass), var(--cv-color-surface-glass-subtle)),
+    var(--cv-color-bg);
+}
+
+.dropzone-demo-product-header {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--cv-space-3);
+  align-items: start;
+  justify-content: space-between;
+  min-inline-size: 0;
+}
+
+.dropzone-demo-product-header > div {
+  display: grid;
+  gap: var(--cv-space-1);
+  min-inline-size: 0;
+}
+
+.dropzone-demo-product-header strong {
+  min-inline-size: 0;
+  color: var(--cv-color-text-strongest);
+  font-size: var(--cv-font-size-base);
+  line-height: 1.28;
+  overflow-wrap: anywhere;
+}
+
+.dropzone-demo-layout {
+  display: grid;
+  gap: var(--cv-space-3);
+  min-inline-size: 0;
+}
+
+.dropzone-demo-main-zone {
+  display: block;
+  min-block-size: 360px;
+  --cv-dropzone-overlay-border: 1px dashed var(--cv-color-primary);
+  --cv-dropzone-overlay-radius: var(--cv-radius-3);
+  --cv-dropzone-overlay-background:
+    linear-gradient(180deg, var(--cv-color-overlay), var(--cv-color-surface-secondary-glass-strong)),
+    var(--cv-color-primary-surface);
+  --cv-dropzone-overlay-color: var(--cv-color-text-strongest);
+  --cv-dropzone-overlay-padding: var(--cv-space-6);
+  --cv-dropzone-loading-background: var(--cv-color-surface-secondary-glass-strong);
+}
+
+.dropzone-demo-main-zone::part(base),
+.dropzone-demo-main-zone::part(content),
+.dropzone-demo-state-zone::part(base),
+.dropzone-demo-state-zone::part(content) {
+  block-size: 100%;
+}
+
+.dropzone-demo-main-zone::part(base),
+.dropzone-demo-state-zone::part(base) {
+  border-radius: var(--cv-radius-3);
+  overflow: hidden;
+}
+
+.dropzone-demo-main-zone::part(overlay),
+.dropzone-demo-state-zone::part(overlay) {
+  inset: 1px;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+.dropzone-demo-file-list {
+  display: grid;
+  align-content: start;
+  gap: var(--cv-space-3);
+  min-block-size: 360px;
+  min-inline-size: 0;
+  padding: var(--cv-space-4);
+  border: 1px solid var(--cv-color-border-faint);
+  border-radius: var(--cv-radius-3);
+  background:
+    linear-gradient(180deg, var(--cv-color-surface-glass), var(--cv-color-surface-glass-subtle)),
+    var(--cv-gradient-surface-deep);
+}
+
+.dropzone-demo-file-list article {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: var(--cv-space-3);
+  align-items: center;
+  min-inline-size: 0;
+  padding: var(--cv-space-3);
+  border: 1px solid var(--cv-color-border-faint);
+  border-radius: var(--cv-radius-2);
+  background: var(--cv-color-surface-highlight);
+}
+
+.dropzone-demo-file-mark {
+  display: block;
+  inline-size: 30px;
+  block-size: 36px;
+  border: 1px solid var(--cv-color-primary-border);
+  border-radius: var(--cv-radius-1);
+  background:
+    linear-gradient(135deg, transparent 0 64%, var(--cv-color-primary-surface-strong) 65%),
+    var(--cv-color-surface-secondary-glass);
+}
+
+.dropzone-demo-file-list article > div {
+  display: grid;
+  gap: var(--cv-space-1);
+  min-inline-size: 0;
+}
+
+.dropzone-demo-file-list strong {
+  min-inline-size: 0;
+  color: var(--cv-color-text-strongest);
+  font-size: var(--cv-font-size-sm);
+  line-height: 1.28;
+  overflow-wrap: anywhere;
+}
+
+.dropzone-demo-file-list small {
+  color: var(--cv-color-text-subtle);
+  line-height: 1.3;
+  overflow-wrap: anywhere;
+}
+
+.dropzone-demo-overlay,
+.dropzone-demo-state-message {
+  display: grid;
+  justify-items: center;
+  gap: var(--cv-space-2);
+  min-inline-size: 0;
+}
+
+.dropzone-demo-overlay strong,
+.dropzone-demo-state-message strong,
+.dropzone-demo-target strong {
+  color: var(--cv-color-text-strongest);
+  font-size: var(--cv-font-size-base);
+  line-height: 1.26;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+
+.dropzone-demo-overlay small,
+.dropzone-demo-state-message small,
+.dropzone-demo-target p {
+  max-inline-size: 42ch;
+  margin: 0;
+  color: var(--cv-color-text-muted);
+  font-size: var(--cv-font-size-sm);
+  line-height: 1.5;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+
+.dropzone-demo-target-glyph {
+  position: relative;
+  display: block;
+  inline-size: 52px;
+  block-size: 52px;
+  border: 1px solid var(--cv-color-primary-border-strong);
+  border-radius: var(--cv-radius-3);
+  background:
+    linear-gradient(135deg, var(--cv-color-primary-surface-strong), transparent 62%),
+    var(--cv-color-surface-secondary-glass);
+  color: var(--cv-color-primary);
+  box-shadow: 0 0 0 6px var(--cv-color-primary-surface);
+}
+
+.dropzone-demo-target-glyph::before,
+.dropzone-demo-target-glyph::after {
+  position: absolute;
+  content: '';
+  inset-inline-start: 50%;
+}
+
+.dropzone-demo-target-glyph::before {
+  inset-block-start: 27px;
+  inline-size: 24px;
+  block-size: 12px;
+  border: 2px solid currentColor;
+  border-block-start: 0;
+  border-radius: 0 0 var(--cv-radius-1) var(--cv-radius-1);
+  transform: translateX(-50%);
+}
+
+.dropzone-demo-target-glyph::after {
+  inset-block-start: 15px;
+  inline-size: 14px;
+  block-size: 14px;
+  border-inline-start: 2px solid currentColor;
+  border-block-start: 2px solid currentColor;
+  transform: translateX(-50%) rotate(45deg);
+}
+
+.dropzone-demo-pipeline {
+  gap: var(--cv-space-4);
+  padding: var(--cv-space-4);
+  background:
+    linear-gradient(180deg, var(--cv-color-accent-surface), transparent 62%),
+    var(--cv-color-surface-glass-subtle);
+}
+
+.dropzone-demo-pipeline ol {
+  display: grid;
+  gap: var(--cv-space-3);
+  min-inline-size: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.dropzone-demo-pipeline li {
+  display: grid;
+  gap: var(--cv-space-1);
+  min-inline-size: 0;
+  padding-inline-start: var(--cv-space-4);
+  border-inline-start: 2px solid var(--cv-color-primary-border);
+}
+
+.dropzone-demo-pipeline li strong {
+  color: var(--cv-color-text-strong);
+  font-size: var(--cv-font-size-sm);
+  line-height: 1.32;
+}
+
+.dropzone-demo-pipeline li span {
+  color: var(--cv-color-text-subtle);
+  line-height: 1.45;
+}
+
+.dropzone-demo-pipeline cv-button {
+  justify-self: start;
+  --cv-button-min-height: 34px;
+}
+
+.dropzone-demo-state-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr));
+  gap: var(--cv-space-3);
+  min-inline-size: 0;
+}
+
+.dropzone-demo-state-card {
+  gap: var(--cv-space-3);
+  padding: var(--cv-space-4);
+}
+
+.dropzone-demo-state-zone {
+  display: block;
+  min-block-size: 198px;
+  --cv-dropzone-overlay-border: 1px dashed var(--cv-color-primary);
+  --cv-dropzone-overlay-radius: var(--cv-radius-2);
+  --cv-dropzone-overlay-background: var(--cv-color-primary-surface-strong);
+  --cv-dropzone-overlay-color: var(--cv-color-text-strongest);
+  --cv-dropzone-loading-background: var(--cv-color-surface-secondary-glass-strong);
+}
+
+.dropzone-demo-state-zone::part(base) {
+  border: 1px solid var(--cv-color-border-faint);
+  background: var(--cv-gradient-surface-deep);
+}
+
+.dropzone-demo-state-zone::part(loading-overlay) {
+  inset: 1px;
+  gap: var(--cv-space-2);
+  border: 1px dashed var(--cv-color-accent-border);
+  border-radius: calc(var(--cv-radius-2) - 1px);
+  background:
+    linear-gradient(180deg, var(--cv-color-accent-surface), var(--cv-color-surface-secondary-glass-strong)),
+    var(--cv-color-surface-2);
+}
+
+.dropzone-demo-target {
+  justify-items: center;
+  gap: var(--cv-space-2);
+  min-block-size: 198px;
+  padding: var(--cv-space-4);
+  place-content: center;
+  border-radius: var(--cv-radius-2);
+  background: var(--cv-color-surface-glass-subtle);
+}
+
+.dropzone-demo-target .dropzone-demo-target-glyph {
+  inline-size: 42px;
+  block-size: 42px;
+  border-radius: var(--cv-radius-2);
+  box-shadow: 0 0 0 4px var(--cv-color-primary-surface);
+}
+
+.dropzone-demo-target .dropzone-demo-target-glyph::before {
+  inset-block-start: 23px;
+  inline-size: 20px;
+  block-size: 9px;
+}
+
+.dropzone-demo-target .dropzone-demo-target-glyph::after {
+  inset-block-start: 12px;
+  inline-size: 12px;
+  block-size: 12px;
+}
+
+.dropzone-demo-shell cv-badge {
+  --cv-badge-border-radius: var(--cv-radius-1);
+  --cv-badge-font-size: 0.68rem;
+}
+
+@container (min-width: 780px) {
+.dropzone-demo-hero {
+    grid-template-columns: minmax(0, 1.08fr) minmax(250px, 0.62fr);
+  }
+
+.dropzone-demo-metrics {
+    grid-template-columns: 1fr;
+  }
+
+.dropzone-demo-layout {
+    grid-template-columns: minmax(0, 1fr) minmax(238px, 0.34fr);
+  }
+}
+
+@media (max-width: 640px) {
+.dropzone-demo-hero,
+  .dropzone-demo-workbench,
+  .dropzone-demo-section {
+    padding: var(--cv-space-4);
+  }
+
+.dropzone-demo-copy h3 {
+    font-size: var(--cv-font-size-xl);
+  }
+
+.dropzone-demo-product,
+  .dropzone-demo-pipeline,
+  .dropzone-demo-state-card {
+    padding: var(--cv-space-3);
+  }
+
+.dropzone-demo-main-zone,
+  .dropzone-demo-file-list {
+    min-block-size: 310px;
+  }
+
+.dropzone-demo-file-list article {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+
+.dropzone-demo-file-list article cv-badge {
+    grid-column: 2;
+    justify-self: start;
+  }
+}

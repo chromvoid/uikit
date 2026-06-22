@@ -4,7 +4,7 @@ import {unoUtilities} from '@chromvoid/uikit/styles/uno-utilities'
 import {applyTheme, defineTheme} from '@chromvoid/uikit/theme'
 
 import '@chromvoid/uikit/theme/tokens.css'
-import liveDemoExamplesCss from '../live-demo-examples.css?raw'
+import {loadLiveDemoCss} from './liveDemoStyles'
 
 setUnoUtilities(unoUtilities)
 registerUikit()
@@ -24,6 +24,7 @@ Object.assign(window, {
 
 let cleanupCurrentDemo: (() => void) | null = null
 let activeRenderId = ''
+let demoStyleElement: HTMLStyleElement | null = null
 
 function installFrameStyles(): void {
   const style = document.createElement('style')
@@ -49,10 +50,15 @@ function installFrameStyles(): void {
     }
   `
   document.head.append(style)
+}
 
-  const demoStyle = document.createElement('style')
-  demoStyle.textContent = liveDemoExamplesCss
-  document.head.append(demoStyle)
+function setDemoStyles(css: string): void {
+  if (!css && !demoStyleElement) return
+
+  demoStyleElement ??= document.createElement('style')
+  demoStyleElement.dataset.liveDemoStyles = 'true'
+  demoStyleElement.textContent = css
+  document.head.append(demoStyleElement)
 }
 
 function runDemoScript(script: HTMLScriptElement): void {
@@ -143,12 +149,18 @@ function clearDemo(): void {
   cleanupCurrentDemo?.()
   cleanupCurrentDemo = null
   activeRenderId = ''
+  setDemoStyles('')
   document.body.replaceChildren()
 }
 
-function mountDemo(raw: string, id: string): void {
+async function mountDemo(raw: string, id: string, styleKeys: string[]): Promise<void> {
   clearDemo()
   activeRenderId = id
+
+  const css = await loadLiveDemoCss(styleKeys)
+  if (activeRenderId !== id) return
+
+  setDemoStyles(css)
   if (!raw.trim()) return
 
   const template = document.createElement('template')
@@ -168,16 +180,19 @@ function mountDemo(raw: string, id: string): void {
 
 function isRenderCommand(
   data: unknown,
-): data is {type: typeof RENDER_COMMAND_TYPE; id: string; html: string} {
+): data is {type: typeof RENDER_COMMAND_TYPE; id: string; html: string; styleKeys: string[]} {
   return (
     typeof data === 'object' &&
     data !== null &&
     'type' in data &&
     'id' in data &&
     'html' in data &&
+    'styleKeys' in data &&
     data.type === RENDER_COMMAND_TYPE &&
     typeof data.id === 'string' &&
-    typeof data.html === 'string'
+    typeof data.html === 'string' &&
+    Array.isArray(data.styleKeys) &&
+    data.styleKeys.every((key) => typeof key === 'string')
   )
 }
 
@@ -195,7 +210,7 @@ function handleParentMessage(event: MessageEvent): void {
   if (event.source !== window.parent) return
 
   if (isRenderCommand(event.data)) {
-    mountDemo(event.data.html, event.data.id)
+    void mountDemo(event.data.html, event.data.id, event.data.styleKeys)
     return
   }
 

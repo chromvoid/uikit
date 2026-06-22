@@ -8,7 +8,6 @@ import '@chromvoid/uikit/theme/tokens.css'
 import {defineAsyncComponent} from 'vue'
 
 import './custom.css'
-import './live-demo-examples.css'
 import ComponentCatalog from './components/ComponentCatalog.vue'
 import LiveDemo from './components/LiveDemo.vue'
 

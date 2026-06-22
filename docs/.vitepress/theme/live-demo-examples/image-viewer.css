@@ -1,0 +1,192 @@
+.image-viewer-demo-shell {
+  display: grid;
+  container-type: inline-size;
+  inline-size: 100%;
+  min-inline-size: 0;
+  min-block-size: 640px;
+  overflow: hidden;
+  border: 1px solid rgba(118, 181, 222, 0.18);
+  border-radius: 16px;
+  color: var(--image-viewer-demo-muted);
+  --image-viewer-demo-text: #eef5ff;
+  --image-viewer-demo-muted: rgba(190, 206, 226, 0.76);
+  --image-viewer-demo-soft: rgba(190, 206, 226, 0.58);
+  --image-viewer-demo-panel: rgba(238, 245, 255, 0.052);
+  --image-viewer-demo-border: rgba(118, 181, 222, 0.18);
+  background:
+    linear-gradient(180deg, rgba(12, 20, 32, 0.98), rgba(7, 13, 22, 0.98)),
+    radial-gradient(circle at 12% 0%, rgba(101, 215, 255, 0.1), transparent 36%),
+    radial-gradient(circle at 88% 18%, rgba(179, 136, 255, 0.08), transparent 36%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.04),
+    0 18px 42px rgba(0, 0, 0, 0.22);
+}
+
+.image-viewer-demo-shell,
+.image-viewer-demo-shell * {
+  box-sizing: border-box;
+}
+
+.image-viewer-demo-shell cv-image-viewer {
+  --cv-image-viewer-bg: rgba(3, 7, 12, 0.96);
+  --cv-image-viewer-panel: rgba(10, 18, 29, 0.84);
+  --cv-image-viewer-panel-strong: rgba(12, 20, 32, 0.96);
+  --cv-image-viewer-border: rgba(118, 181, 222, 0.24);
+  --cv-image-viewer-text: #eef5ff;
+  --cv-image-viewer-muted: rgba(190, 206, 226, 0.76);
+}
+
+.image-viewer-demo-launch {
+  display: grid;
+  grid-template-columns: 1fr;
+  align-items: stretch;
+  gap: 20px;
+  min-inline-size: 0;
+  padding: clamp(20px, 4cqi, 28px);
+}
+
+.image-viewer-demo-copy,
+.image-viewer-demo-gallery,
+.image-viewer-demo-actions {
+  display: grid;
+  min-inline-size: 0;
+}
+
+.image-viewer-demo-copy {
+  align-content: start;
+  gap: 10px;
+}
+
+.image-viewer-demo-gallery {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 180px), 1fr));
+  align-content: start;
+  gap: 12px;
+}
+
+.image-viewer-demo-actions {
+  grid-template-columns: minmax(0, max-content) minmax(0, 1fr);
+  align-items: center;
+  gap: 12px;
+  margin-block-start: 8px;
+}
+
+.image-viewer-demo-kicker {
+  color: #94e9ff;
+  font-family: var(--vp-font-family-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.image-viewer-demo-copy h3 {
+  max-width: 24ch;
+  margin: 0;
+  color: var(--image-viewer-demo-text);
+  font-size: clamp(1.2rem, 5cqi, 1.58rem);
+  line-height: 1.1;
+  letter-spacing: 0;
+  text-wrap: balance;
+}
+
+.image-viewer-demo-copy p {
+  max-width: 62ch;
+  margin: 0;
+  color: var(--image-viewer-demo-muted);
+  font-size: 0.92rem;
+  line-height: 1.58;
+}
+
+.image-viewer-demo-actions cv-button {
+  justify-self: start;
+}
+
+.image-viewer-demo-actions output {
+  display: block;
+  min-inline-size: 0;
+  overflow: hidden;
+  padding: 10px 12px;
+  border: 1px solid rgba(101, 215, 255, 0.2);
+  border-radius: 10px;
+  background: rgba(101, 215, 255, 0.07);
+  color: #bff3ff;
+  font-family: var(--vp-font-family-mono);
+  font-size: 0.76rem;
+  line-height: 1.35;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.image-viewer-demo-shot {
+  display: grid;
+  align-content: start;
+  gap: 10px;
+  min-inline-size: 0;
+  padding: 10px;
+  border: 1px solid var(--image-viewer-demo-border);
+  border-radius: 12px;
+  background:
+    linear-gradient(180deg, var(--image-viewer-demo-panel), rgba(238, 245, 255, 0.026)), rgba(7, 13, 22, 0.32);
+  color: var(--image-viewer-demo-text);
+  cursor: pointer;
+  font: inherit;
+  text-align: start;
+  transition:
+    border-color 160ms ease,
+    background-color 160ms ease,
+    transform 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.image-viewer-demo-shot img {
+  display: block;
+  inline-size: 100%;
+  aspect-ratio: 16 / 9;
+  block-size: auto;
+  border-radius: 8px;
+  object-fit: cover;
+  background: rgba(238, 245, 255, 0.035);
+}
+
+.image-viewer-demo-shot span {
+  min-inline-size: 0;
+  overflow-wrap: anywhere;
+  color: var(--image-viewer-demo-text);
+  font-size: 0.84rem;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.image-viewer-demo-shot:focus-visible {
+  outline: 2px solid rgba(148, 233, 255, 0.9);
+  outline-offset: 3px;
+}
+
+@media (hover: hover) {
+.image-viewer-demo-shot:hover {
+    border-color: rgba(157, 231, 255, 0.68);
+    background: rgba(101, 215, 255, 0.08);
+    transform: translateY(-1px);
+  }
+}
+
+@container (min-width: 760px) {
+.image-viewer-demo-launch {
+    grid-template-columns: minmax(0, 0.92fr) minmax(300px, 1fr);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+.image-viewer-demo-shot {
+    transition: none;
+  }
+}
+
+@media (max-width: 640px) {
+.image-viewer-demo-launch {
+    padding: 16px;
+  }
+
+.image-viewer-demo-actions {
+    grid-template-columns: 1fr;
+  }
+}

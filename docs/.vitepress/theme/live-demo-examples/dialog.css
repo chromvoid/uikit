@@ -1,0 +1,161 @@
+.dialog-demo-shell {
+  display: grid;
+  container-type: inline-size;
+  inline-size: 100%;
+  min-inline-size: 0;
+  overflow: hidden;
+  border: 1px solid rgba(118, 181, 222, 0.18);
+  border-radius: 16px;
+  color: var(--dialog-demo-muted);
+  --dialog-demo-text: #eef5ff;
+  --dialog-demo-muted: rgba(190, 206, 226, 0.76);
+  --dialog-demo-soft: rgba(190, 206, 226, 0.58);
+  --dialog-demo-panel: rgba(238, 245, 255, 0.052);
+  --dialog-demo-border: rgba(118, 181, 222, 0.18);
+  background:
+    linear-gradient(180deg, rgba(12, 20, 32, 0.98), rgba(7, 13, 22, 0.98)),
+    radial-gradient(circle at 12% 0%, rgba(101, 215, 255, 0.1), transparent 36%),
+    radial-gradient(circle at 88% 18%, rgba(179, 136, 255, 0.08), transparent 36%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.04),
+    0 18px 42px rgba(0, 0, 0, 0.22);
+}
+
+.dialog-demo-shell,
+.dialog-demo-shell * {
+  box-sizing: border-box;
+}
+
+.dialog-demo-hero,
+.dialog-demo-section {
+  display: grid;
+  gap: 20px;
+  min-inline-size: 0;
+  padding: clamp(20px, 4cqi, 28px);
+}
+
+.dialog-demo-hero {
+  grid-template-columns: 1fr;
+  align-items: stretch;
+  border-bottom: 1px solid var(--dialog-demo-border);
+}
+
+.dialog-demo-copy,
+.dialog-demo-section-header,
+.dialog-demo-action,
+.dialog-demo-panel {
+  display: grid;
+  align-content: start;
+  min-inline-size: 0;
+}
+
+.dialog-demo-copy,
+.dialog-demo-section-header {
+  gap: 10px;
+}
+
+.dialog-demo-actions,
+.dialog-demo-grid {
+  display: grid;
+  gap: 14px;
+  min-inline-size: 0;
+}
+
+.dialog-demo-actions {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 180px), 1fr));
+}
+
+.dialog-demo-grid {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+}
+
+.dialog-demo-action,
+.dialog-demo-panel {
+  gap: 12px;
+  padding: 16px;
+  border: 1px solid var(--dialog-demo-border);
+  border-radius: 12px;
+  background:
+    linear-gradient(180deg, var(--dialog-demo-panel), rgba(238, 245, 255, 0.026)), rgba(7, 13, 22, 0.32);
+}
+
+.dialog-demo-action:first-child {
+  border-color: rgba(101, 215, 255, 0.3);
+  background:
+    linear-gradient(180deg, rgba(101, 215, 255, 0.09), rgba(238, 245, 255, 0.026)), rgba(7, 13, 22, 0.32);
+}
+
+.dialog-demo-kicker,
+.dialog-demo-label {
+  font-family: var(--vp-font-family-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.dialog-demo-kicker {
+  color: #94e9ff;
+}
+
+.dialog-demo-label {
+  color: var(--dialog-demo-soft);
+}
+
+.dialog-demo-copy h3,
+.dialog-demo-section-header h4 {
+  margin: 0;
+  color: var(--dialog-demo-text);
+  letter-spacing: 0;
+}
+
+.dialog-demo-copy h3 {
+  max-width: 25ch;
+  font-size: clamp(1.18rem, 5cqi, 1.55rem);
+  line-height: 1.1;
+  text-wrap: balance;
+}
+
+.dialog-demo-section-header h4 {
+  font-family: var(--vp-font-family-base);
+  font-size: 1rem;
+  line-height: 1.3;
+}
+
+.dialog-demo-copy p,
+.dialog-demo-panel p {
+  max-width: 62ch;
+  margin: 0;
+  color: var(--dialog-demo-muted);
+  font-size: 0.92rem;
+  line-height: 1.58;
+}
+
+.dialog-demo-shell cv-button {
+  justify-self: start;
+}
+
+.dialog-demo-shell cv-button::part(base) {
+  min-block-size: 40px;
+}
+
+.dialog-demo-shell cv-dialog::part(content) {
+  --cv-dialog-width: min(520px, calc(100vw - 32px));
+}
+
+@container (min-width: 760px) {
+.dialog-demo-hero {
+    grid-template-columns: minmax(0, 0.9fr) minmax(280px, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+.dialog-demo-hero,
+  .dialog-demo-section {
+    padding: 16px;
+  }
+
+.dialog-demo-actions,
+  .dialog-demo-grid {
+    grid-template-columns: 1fr;
+  }
+}

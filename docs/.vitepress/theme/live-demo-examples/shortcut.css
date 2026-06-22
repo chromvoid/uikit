@@ -1,0 +1,418 @@
+.shortcut-demo-shell {
+  display: grid;
+  container-type: inline-size;
+  inline-size: 100%;
+  min-inline-size: 0;
+  overflow: hidden;
+  border: 1px solid rgba(118, 181, 222, 0.18);
+  border-radius: 16px;
+  color: var(--shortcut-demo-muted);
+  --shortcut-demo-text: #eef5ff;
+  --shortcut-demo-muted: rgba(190, 206, 226, 0.76);
+  --shortcut-demo-soft: rgba(190, 206, 226, 0.58);
+  --shortcut-demo-panel: rgba(238, 245, 255, 0.052);
+  --shortcut-demo-border: rgba(118, 181, 222, 0.18);
+  --shortcut-demo-cyan: #65d7ff;
+  --shortcut-demo-violet: #b388ff;
+  background:
+    linear-gradient(180deg, rgba(12, 20, 32, 0.98), rgba(7, 13, 22, 0.98)),
+    linear-gradient(135deg, rgba(101, 215, 255, 0.075), transparent 45%),
+    linear-gradient(315deg, rgba(179, 136, 255, 0.055), transparent 46%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.04),
+    0 18px 42px rgba(0, 0, 0, 0.22);
+}
+
+.shortcut-demo-shell,
+.shortcut-demo-shell * {
+  box-sizing: border-box;
+}
+
+.shortcut-demo-shell code {
+  color: #bff3ff;
+  font-family: var(--vp-font-family-mono);
+  font-size: 0.86em;
+}
+
+.shortcut-demo-shell cv-shortcut {
+  --cv-shortcut-gap: 5px;
+  --cv-shortcut-separator-color: rgba(190, 206, 226, 0.58);
+  --cv-shortcut-separator-font-size: 0.75em;
+  --cv-kbd-min-inline-size: 1.7em;
+  --cv-kbd-min-block-size: 1.7em;
+  --cv-kbd-padding-inline: 0.46em;
+  --cv-kbd-radius: 6px;
+  --cv-kbd-background: rgba(238, 245, 255, 0.06);
+  --cv-kbd-border-color: rgba(143, 220, 255, 0.24);
+  --cv-kbd-color: rgba(238, 245, 255, 0.92);
+  --cv-kbd-font-size: 0.74rem;
+}
+
+.shortcut-demo-command--active cv-shortcut,
+.shortcut-demo-command:focus-visible cv-shortcut,
+.shortcut-demo-programmatic cv-shortcut {
+  --cv-kbd-background: rgba(101, 215, 255, 0.12);
+  --cv-kbd-border-color: rgba(101, 215, 255, 0.42);
+  --cv-kbd-color: #f0fcff;
+}
+
+.shortcut-demo-hero,
+.shortcut-demo-workbench {
+  display: grid;
+  gap: 20px;
+  min-inline-size: 0;
+  padding: clamp(20px, 4cqi, 28px);
+}
+
+.shortcut-demo-hero {
+  border-bottom: 1px solid var(--shortcut-demo-border);
+}
+
+.shortcut-demo-copy,
+.shortcut-demo-section-header,
+.shortcut-demo-command-panel,
+.shortcut-demo-panel-header > div,
+.shortcut-demo-command-copy,
+.shortcut-demo-side,
+.shortcut-demo-context {
+  display: grid;
+  align-content: start;
+  min-inline-size: 0;
+}
+
+.shortcut-demo-copy,
+.shortcut-demo-section-header,
+.shortcut-demo-context {
+  gap: 10px;
+}
+
+.shortcut-demo-kicker,
+.shortcut-demo-label,
+.shortcut-demo-metrics dt,
+.shortcut-demo-panel-header output {
+  font-family: var(--vp-font-family-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.shortcut-demo-kicker {
+  color: #94e9ff;
+}
+
+.shortcut-demo-label,
+.shortcut-demo-metrics dt {
+  color: var(--shortcut-demo-soft);
+}
+
+.shortcut-demo-copy h3,
+.shortcut-demo-section-header h4 {
+  margin: 0;
+  color: var(--shortcut-demo-text);
+  font-family: var(--vp-font-family-base);
+  letter-spacing: 0;
+}
+
+.shortcut-demo-copy h3 {
+  max-inline-size: 32ch;
+  font-size: clamp(1.2rem, 5cqi, 1.56rem);
+  line-height: 1.1;
+  text-wrap: balance;
+}
+
+.shortcut-demo-section-header h4 {
+  max-inline-size: 60ch;
+  font-size: 1rem;
+  line-height: 1.32;
+}
+
+.shortcut-demo-copy p,
+.shortcut-demo-context p {
+  max-inline-size: 68ch;
+  margin: 0;
+  color: var(--shortcut-demo-muted);
+  font-size: 0.92rem;
+  line-height: 1.58;
+}
+
+.shortcut-demo-metrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 148px), 1fr));
+  gap: 14px;
+  min-inline-size: 0;
+  margin: 0;
+}
+
+.shortcut-demo-metrics div,
+.shortcut-demo-command-panel,
+.shortcut-demo-context {
+  border: 1px solid var(--shortcut-demo-border);
+  border-radius: 14px;
+  background:
+    linear-gradient(180deg, var(--shortcut-demo-panel), rgba(238, 245, 255, 0.026)), rgba(7, 13, 22, 0.32);
+}
+
+.shortcut-demo-metrics div {
+  display: grid;
+  gap: 4px;
+  min-inline-size: 0;
+  padding: 16px;
+}
+
+.shortcut-demo-metrics dd {
+  min-inline-size: 0;
+  margin: 0;
+  color: var(--shortcut-demo-text);
+  font-size: 0.9rem;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+
+.shortcut-demo-workbench {
+  align-items: start;
+}
+
+.shortcut-demo-platforms {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  min-inline-size: 0;
+}
+
+.shortcut-demo-platforms button {
+  min-block-size: 36px;
+  padding: 0 12px;
+  border: 1px solid rgba(118, 181, 222, 0.18);
+  border-radius: 10px;
+  background: rgba(238, 245, 255, 0.045);
+  color: rgba(226, 239, 255, 0.78);
+  font: inherit;
+  font-size: 0.84rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.shortcut-demo-platforms button[aria-pressed='true'] {
+  border-color: rgba(101, 215, 255, 0.48);
+  background: rgba(101, 215, 255, 0.12);
+  color: #ecfbff;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.045);
+}
+
+.shortcut-demo-platforms button:focus-visible,
+.shortcut-demo-command:focus-visible {
+  outline: 2px solid var(--shortcut-demo-cyan);
+  outline-offset: 2px;
+}
+
+.shortcut-demo-grid {
+  display: grid;
+  gap: 14px;
+  min-inline-size: 0;
+}
+
+.shortcut-demo-command-panel,
+.shortcut-demo-side {
+  gap: 12px;
+}
+
+.shortcut-demo-command-panel,
+.shortcut-demo-context {
+  padding: 14px;
+}
+
+.shortcut-demo-command-panel {
+  background:
+    linear-gradient(180deg, rgba(7, 13, 22, 0.52), rgba(7, 13, 22, 0.8)),
+    linear-gradient(90deg, rgba(101, 215, 255, 0.055), transparent 44%);
+}
+
+.shortcut-demo-panel-header,
+.shortcut-demo-command,
+.shortcut-demo-programmatic {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: center;
+  min-inline-size: 0;
+}
+
+.shortcut-demo-panel-header {
+  padding: 12px 14px;
+  border: 1px solid rgba(118, 181, 222, 0.14);
+  border-radius: 12px;
+  background: rgba(238, 245, 255, 0.038);
+}
+
+.shortcut-demo-panel-header strong {
+  min-inline-size: 0;
+  color: var(--shortcut-demo-text);
+  font-size: 0.94rem;
+  line-height: 1.32;
+  overflow-wrap: anywhere;
+}
+
+.shortcut-demo-panel-header output {
+  max-inline-size: 100%;
+  padding: 6px 9px;
+  border: 1px solid rgba(101, 215, 255, 0.22);
+  border-radius: 999px;
+  background: rgba(101, 215, 255, 0.075);
+  color: #dff9ff;
+  line-height: 1.2;
+  text-align: center;
+  text-transform: none;
+  overflow-wrap: anywhere;
+}
+
+.shortcut-demo-command {
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  min-block-size: 72px;
+  padding: 12px 14px;
+  border: 1px solid rgba(118, 181, 222, 0.13);
+  border-radius: 12px;
+  background: rgba(238, 245, 255, 0.034);
+  color: inherit;
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+}
+
+.shortcut-demo-command--active {
+  border-color: rgba(101, 215, 255, 0.34);
+  background: linear-gradient(90deg, rgba(101, 215, 255, 0.075), transparent 48%), rgba(238, 245, 255, 0.04);
+}
+
+.shortcut-demo-command-glyph {
+  display: inline-grid;
+  place-items: center;
+  inline-size: 34px;
+  block-size: 34px;
+  border: 1px solid rgba(101, 215, 255, 0.2);
+  border-radius: 10px;
+  background: rgba(101, 215, 255, 0.09);
+  color: #c9f7ff;
+  font-family: var(--vp-font-family-mono);
+  font-size: 0.8rem;
+}
+
+.shortcut-demo-command-glyph--violet {
+  border-color: rgba(179, 136, 255, 0.24);
+  background: rgba(179, 136, 255, 0.095);
+  color: #eadfff;
+}
+
+.shortcut-demo-command-copy {
+  gap: 4px;
+}
+
+.shortcut-demo-command-copy strong,
+.shortcut-demo-programmatic span {
+  min-inline-size: 0;
+  color: var(--shortcut-demo-text);
+  font-size: 0.9rem;
+  font-weight: 650;
+  line-height: 1.32;
+  overflow-wrap: anywhere;
+}
+
+.shortcut-demo-command-copy span {
+  min-inline-size: 0;
+  color: var(--shortcut-demo-muted);
+  font-size: 0.8rem;
+  line-height: 1.42;
+  overflow-wrap: anywhere;
+}
+
+.shortcut-demo-side {
+  min-inline-size: 0;
+}
+
+.shortcut-demo-context {
+  background:
+    linear-gradient(180deg, rgba(238, 245, 255, 0.044), rgba(238, 245, 255, 0.02)), rgba(7, 13, 22, 0.34);
+}
+
+.shortcut-demo-context cv-menu {
+  inline-size: 100%;
+  --cv-menu-min-inline-size: 100%;
+  --cv-menu-background: rgba(9, 16, 25, 0.92);
+  --cv-menu-border-color: rgba(143, 220, 255, 0.18);
+  --cv-menu-shadow: none;
+}
+
+.shortcut-demo-context cv-menu-item {
+  --cv-menu-item-padding-inline: 10px;
+}
+
+.shortcut-demo-context cv-menu-item cv-shortcut {
+  justify-self: end;
+  --cv-kbd-font-size: 0.68rem;
+  --cv-kbd-min-block-size: 1.55em;
+  --cv-kbd-min-inline-size: 1.55em;
+}
+
+.shortcut-demo-programmatic {
+  min-block-size: 54px;
+  padding: 11px 12px;
+  border: 1px solid rgba(101, 215, 255, 0.2);
+  border-radius: 12px;
+  background: rgba(101, 215, 255, 0.06);
+}
+
+@container (min-width: 560px) {
+.shortcut-demo-hero {
+    grid-template-columns: minmax(0, 1.08fr) minmax(240px, 0.72fr);
+  }
+
+.shortcut-demo-metrics {
+    grid-template-columns: 1fr;
+  }
+}
+
+@container (min-width: 760px) {
+.shortcut-demo-grid {
+    grid-template-columns: minmax(0, 1fr) minmax(220px, 0.42fr);
+    align-items: start;
+  }
+}
+
+@media (hover: hover) {
+.shortcut-demo-platforms button:hover,
+  .shortcut-demo-command:hover {
+    border-color: rgba(101, 215, 255, 0.36);
+    background-color: rgba(101, 215, 255, 0.075);
+  }
+}
+
+@media (max-width: 520px) {
+.shortcut-demo-hero,
+  .shortcut-demo-workbench {
+    padding: 16px;
+  }
+
+.shortcut-demo-copy h3 {
+    font-size: 1.22rem;
+  }
+
+.shortcut-demo-command-panel,
+  .shortcut-demo-context {
+    padding: 12px;
+  }
+
+.shortcut-demo-panel-header,
+  .shortcut-demo-command,
+  .shortcut-demo-programmatic {
+    grid-template-columns: 1fr;
+    align-items: start;
+  }
+
+.shortcut-demo-command {
+    min-block-size: 0;
+  }
+
+.shortcut-demo-command-glyph {
+    inline-size: 30px;
+    block-size: 30px;
+  }
+}

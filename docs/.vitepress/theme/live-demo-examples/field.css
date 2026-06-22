@@ -1,0 +1,437 @@
+.field-demo-shell {
+  display: grid;
+  container-type: inline-size;
+  inline-size: 100%;
+  min-inline-size: 0;
+  overflow: hidden;
+  border: 1px solid var(--field-demo-border);
+  border-radius: 16px;
+  color: var(--field-demo-muted);
+  background:
+    linear-gradient(180deg, rgba(12, 20, 32, 0.98), rgba(7, 13, 22, 0.98)),
+    linear-gradient(135deg, rgba(101, 215, 255, 0.08), transparent 44%),
+    linear-gradient(315deg, rgba(179, 136, 255, 0.052), transparent 46%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.04),
+    0 18px 42px rgba(0, 0, 0, 0.22);
+  --field-demo-text: #eef5ff;
+  --field-demo-muted: rgba(190, 206, 226, 0.76);
+  --field-demo-soft: rgba(190, 206, 226, 0.58);
+  --field-demo-border: rgba(118, 181, 222, 0.18);
+  --field-demo-border-strong: rgba(143, 220, 255, 0.28);
+  --field-demo-panel: rgba(238, 245, 255, 0.052);
+  --field-demo-cyan: #65d7ff;
+  --field-demo-green: #5beba0;
+  --field-demo-amber: #ffc857;
+  --field-demo-red: #ff7d86;
+}
+
+.field-demo-shell,
+.field-demo-shell * {
+  box-sizing: border-box;
+}
+
+.field-demo-shell code {
+  color: #bff3ff;
+  font-family: var(--vp-font-family-mono);
+  font-size: 0.86em;
+}
+
+.field-demo-hero,
+.field-demo-workbench {
+  display: grid;
+  gap: 20px;
+  min-inline-size: 0;
+  padding: clamp(20px, 4cqi, 28px);
+}
+
+.field-demo-hero {
+  border-bottom: 1px solid var(--field-demo-border);
+}
+
+.field-demo-copy,
+.field-demo-form,
+.field-demo-contract,
+.field-demo-form-head > div,
+.field-demo-section-header,
+.field-demo-contract-list > div {
+  display: grid;
+  align-content: start;
+  min-inline-size: 0;
+}
+
+.field-demo-copy,
+.field-demo-form-head > div,
+.field-demo-section-header,
+.field-demo-contract-list > div {
+  gap: 10px;
+}
+
+.field-demo-kicker,
+.field-demo-metrics dt,
+.field-demo-form-head span,
+.field-demo-section-header span,
+.field-demo-contract-list dt,
+.field-demo-flow span {
+  font-family: var(--vp-font-family-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.field-demo-kicker,
+.field-demo-section-header span {
+  color: #94e9ff;
+}
+
+.field-demo-copy h3,
+.field-demo-form-head h4,
+.field-demo-section-header h4 {
+  margin: 0;
+  color: var(--field-demo-text);
+  font-family: var(--vp-font-family-base);
+  letter-spacing: 0;
+}
+
+.field-demo-copy h3 {
+  max-inline-size: 36ch;
+  font-size: clamp(1.18rem, 5cqi, 1.54rem);
+  line-height: 1.1;
+  text-wrap: balance;
+}
+
+.field-demo-form-head h4,
+.field-demo-section-header h4 {
+  max-inline-size: 58ch;
+  font-size: 1rem;
+  line-height: 1.32;
+  overflow-wrap: anywhere;
+}
+
+.field-demo-copy p {
+  max-inline-size: 72ch;
+  margin: 0;
+  color: var(--field-demo-muted);
+  font-size: 0.92rem;
+  line-height: 1.58;
+}
+
+.field-demo-metrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 148px), 1fr));
+  gap: 14px;
+  min-inline-size: 0;
+  margin: 0;
+}
+
+.field-demo-metrics div,
+.field-demo-form,
+.field-demo-contract {
+  border: 1px solid var(--field-demo-border);
+  border-radius: 14px;
+  background:
+    linear-gradient(180deg, var(--field-demo-panel), rgba(238, 245, 255, 0.026)), rgba(7, 13, 22, 0.32);
+}
+
+.field-demo-metrics div {
+  display: grid;
+  gap: 4px;
+  min-inline-size: 0;
+  padding: 16px;
+}
+
+.field-demo-metrics dt,
+.field-demo-form-head span,
+.field-demo-contract-list dt,
+.field-demo-flow span {
+  color: var(--field-demo-soft);
+}
+
+.field-demo-metrics dd,
+.field-demo-contract-list dd {
+  min-inline-size: 0;
+  margin: 0;
+  color: var(--field-demo-text);
+  font-size: 0.9rem;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+
+.field-demo-workbench {
+  align-items: start;
+}
+
+.field-demo-form,
+.field-demo-contract {
+  gap: 16px;
+  padding: 14px;
+}
+
+.field-demo-form {
+  background:
+    linear-gradient(180deg, rgba(7, 13, 22, 0.52), rgba(7, 13, 22, 0.8)),
+    linear-gradient(90deg, rgba(101, 215, 255, 0.055), transparent 44%);
+}
+
+.field-demo-form-head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: start;
+  min-inline-size: 0;
+}
+
+.field-demo-form-head cv-badge {
+  justify-self: end;
+  --cv-color-primary: var(--field-demo-cyan);
+}
+
+.field-demo-control-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  min-inline-size: 0;
+}
+
+.field-demo-field {
+  inline-size: 100%;
+  min-inline-size: 0;
+  align-content: start;
+  --cv-field-gap: 7px;
+  --cv-field-meta-font-size: 0.76rem;
+  --cv-field-error-color: var(--field-demo-red);
+}
+
+.field-demo-field--wide {
+  grid-column: 1 / -1;
+}
+
+.field-demo-field::part(label) {
+  color: rgba(226, 239, 255, 0.78);
+  font-family: var(--vp-font-family-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.field-demo-field::part(description) {
+  color: rgba(190, 206, 226, 0.72);
+}
+
+.field-demo-field::part(error) {
+  font-weight: 620;
+}
+
+.field-demo-field[invalid]::part(label) {
+  color: #ffd8dc;
+}
+
+.field-demo-field[disabled]::part(label),
+.field-demo-field[disabled]::part(description) {
+  opacity: 0.72;
+}
+
+.field-demo-shell cv-input,
+.field-demo-shell cv-select,
+.field-demo-shell cv-textarea,
+.field-demo-shell cv-code-input {
+  inline-size: 100%;
+  min-inline-size: 0;
+}
+
+.field-demo-shell cv-input {
+  --cv-input-background: rgba(238, 245, 255, 0.045);
+  --cv-input-border-color: rgba(143, 220, 255, 0.22);
+  --cv-input-color: var(--field-demo-text);
+  --cv-input-placeholder-color: rgba(190, 206, 226, 0.58);
+}
+
+.field-demo-shell cv-input::part(base) {
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.025);
+}
+
+.field-demo-shell cv-input[invalid] {
+  --cv-color-danger: var(--field-demo-red);
+}
+
+.field-demo-field[disabled] cv-input::part(base) {
+  opacity: 0.66;
+}
+
+.field-demo-shell cv-select {
+  --cv-select-inline-size: 100%;
+  --cv-select-background: rgba(238, 245, 255, 0.045);
+  --cv-select-border-color: rgba(143, 220, 255, 0.22);
+  --cv-color-text: var(--field-demo-text);
+  --cv-color-border: rgba(143, 220, 255, 0.22);
+  --cv-color-surface: rgba(238, 245, 255, 0.045);
+}
+
+.field-demo-shell cv-select::part(trigger) {
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.025);
+}
+
+.field-demo-shell cv-textarea {
+  --cv-textarea-min-height: 92px;
+  --cv-textarea-background: rgba(238, 245, 255, 0.045);
+  --cv-textarea-border-color: rgba(143, 220, 255, 0.18);
+  --cv-textarea-color: var(--field-demo-text);
+  --cv-textarea-placeholder-color: rgba(190, 206, 226, 0.58);
+}
+
+.field-demo-shell cv-textarea::part(base) {
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.025);
+}
+
+.field-demo-shell cv-code-input {
+  --cv-code-input-size: clamp(32px, 9cqi, 38px);
+  --cv-code-input-gap: clamp(5px, 1.5cqi, 8px);
+  --cv-code-input-background: rgba(238, 245, 255, 0.06);
+  --cv-code-input-border-color: rgba(143, 220, 255, 0.34);
+  --cv-code-input-color: var(--field-demo-text);
+}
+
+.field-demo-contract-list {
+  display: grid;
+  gap: 10px;
+  min-inline-size: 0;
+  margin: 0;
+}
+
+.field-demo-contract-list > div {
+  padding: 12px;
+  border: 1px solid rgba(118, 181, 222, 0.14);
+  border-radius: 12px;
+  background: rgba(238, 245, 255, 0.038);
+}
+
+.field-demo-contract-list > div:nth-child(3) {
+  border-color: rgba(255, 125, 134, 0.24);
+  background: rgba(255, 125, 134, 0.042);
+}
+
+.field-demo-flow {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+  min-inline-size: 0;
+}
+
+.field-demo-flow span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-block-size: 34px;
+  min-inline-size: 0;
+  padding: 6px 8px;
+  border: 1px solid rgba(143, 220, 255, 0.18);
+  border-radius: 999px;
+  background: rgba(7, 13, 22, 0.48);
+  color: rgba(226, 239, 255, 0.76);
+  line-height: 1.15;
+  overflow-wrap: anywhere;
+  text-align: center;
+}
+
+.field-demo-flow span:first-child {
+  border-color: rgba(255, 125, 134, 0.32);
+  color: #ffe0e4;
+}
+
+.field-demo-flow span:last-child {
+  border-color: rgba(91, 235, 160, 0.3);
+  color: #dcfff0;
+}
+
+@container (min-width: 800px) {
+.field-demo-hero {
+    grid-template-columns: minmax(0, 1.08fr) minmax(260px, 0.72fr);
+  }
+
+.field-demo-workbench {
+    grid-template-columns: minmax(0, 1fr) minmax(280px, 0.48fr);
+  }
+
+.field-demo-metrics {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+.field-demo-hero,
+  .field-demo-workbench {
+    padding: 16px;
+  }
+
+.field-demo-form,
+  .field-demo-contract {
+    padding: 12px;
+  }
+
+.field-demo-control-grid,
+  .field-demo-flow,
+  .field-demo-form-head,
+  .field-demo-field[orientation='horizontal'] {
+    grid-template-columns: 1fr;
+  }
+
+.field-demo-form-head cv-badge {
+    justify-self: start;
+  }
+
+.field-demo-field[orientation='horizontal']::part(control),
+  .field-demo-field[orientation='horizontal']::part(description),
+  .field-demo-field[orientation='horizontal']::part(error) {
+    grid-column: 1;
+  }
+}
+
+.input-demo-grid,
+.field-demo-grid,
+.number-demo-grid,
+.select-demo-grid,
+.textarea-demo-grid,
+.fieldset-demo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+  gap: 18px;
+  inline-size: 100%;
+}
+
+.input-demo-cell::part(label),
+.number-demo-cell::part(label),
+.select-demo-cell::part(label),
+.textarea-demo-cell::part(label),
+.field-demo-grid cv-field::part(label) {
+  color: var(--cv-color-text-muted, #9aa6bf);
+  font-family: var(--vp-font-family-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.input-demo-cell > cv-input,
+.field-demo-grid cv-input,
+.number-demo-grid cv-number,
+.select-demo-cell > cv-select,
+.field-demo-grid cv-textarea,
+.textarea-demo-grid cv-textarea {
+  inline-size: 100%;
+  min-inline-size: 0;
+}
+
+.field-demo-grid cv-field {
+  inline-size: 100%;
+  min-inline-size: 0;
+  align-content: start;
+  --cv-field-gap: 6px;
+  --cv-field-meta-font-size: 0.74rem;
+}
+
+.field-demo-grid cv-field::part(description) {
+  color: var(--docs-text-muted);
+}
+
+.field-demo-grid cv-field[orientation='horizontal'] {
+  grid-column: 1 / -1;
+}

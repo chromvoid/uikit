@@ -1,0 +1,390 @@
+.listbox-demo-shell {
+  display: grid;
+  container-type: inline-size;
+  inline-size: 100%;
+  min-inline-size: 0;
+  overflow: hidden;
+  border: 1px solid rgba(118, 181, 222, 0.18);
+  border-radius: 16px;
+  color: var(--listbox-demo-muted);
+  --listbox-demo-text: #eef5ff;
+  --listbox-demo-muted: rgba(190, 206, 226, 0.76);
+  --listbox-demo-soft: rgba(190, 206, 226, 0.58);
+  --listbox-demo-panel: rgba(238, 245, 255, 0.052);
+  --listbox-demo-border: rgba(118, 181, 222, 0.18);
+  --listbox-demo-cyan: #65d7ff;
+  --listbox-demo-green: #5beba0;
+  --listbox-demo-violet: #b388ff;
+  background:
+    linear-gradient(180deg, rgba(12, 20, 32, 0.98), rgba(7, 13, 22, 0.98)),
+    linear-gradient(135deg, rgba(101, 215, 255, 0.078), transparent 43%),
+    linear-gradient(315deg, rgba(179, 136, 255, 0.06), transparent 45%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.04),
+    0 18px 42px rgba(0, 0, 0, 0.22);
+}
+
+.listbox-demo-shell,
+.listbox-demo-shell * {
+  box-sizing: border-box;
+}
+
+.listbox-demo-shell code {
+  color: #bff3ff;
+  font-family: var(--vp-font-family-mono);
+  font-size: 0.86em;
+}
+
+.listbox-demo-hero,
+.listbox-demo-workbench {
+  display: grid;
+  gap: 20px;
+  min-inline-size: 0;
+  padding: clamp(20px, 4cqi, 28px);
+}
+
+.listbox-demo-hero {
+  border-bottom: 1px solid var(--listbox-demo-border);
+}
+
+.listbox-demo-copy,
+.listbox-demo-section-header,
+.listbox-demo-panel,
+.listbox-demo-panel-header > div,
+.listbox-demo-mode {
+  display: grid;
+  align-content: start;
+  gap: 10px;
+  min-inline-size: 0;
+}
+
+.listbox-demo-kicker,
+.listbox-demo-label,
+.listbox-demo-metrics dt,
+.listbox-demo-readout {
+  font-family: var(--vp-font-family-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.listbox-demo-kicker {
+  color: #94e9ff;
+}
+
+.listbox-demo-label,
+.listbox-demo-metrics dt {
+  color: var(--listbox-demo-soft);
+}
+
+.listbox-demo-copy h3,
+.listbox-demo-section-header h4,
+.listbox-demo-panel-header h5,
+.listbox-demo-mode h5 {
+  margin: 0;
+  color: var(--listbox-demo-text);
+  letter-spacing: 0;
+}
+
+.listbox-demo-copy h3 {
+  max-inline-size: 34ch;
+  font-size: clamp(1.18rem, 5cqi, 1.55rem);
+  line-height: 1.1;
+  text-wrap: balance;
+}
+
+.listbox-demo-section-header h4,
+.listbox-demo-panel-header h5,
+.listbox-demo-mode h5 {
+  font-family: var(--vp-font-family-base);
+  line-height: 1.32;
+}
+
+.listbox-demo-section-header h4 {
+  max-inline-size: 66ch;
+  font-size: 1rem;
+}
+
+.listbox-demo-panel-header h5,
+.listbox-demo-mode h5 {
+  font-size: 0.96rem;
+}
+
+.listbox-demo-copy p {
+  max-inline-size: 72ch;
+  margin: 0;
+  color: var(--listbox-demo-muted);
+  font-size: 0.92rem;
+  line-height: 1.58;
+}
+
+.listbox-demo-metrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 148px), 1fr));
+  gap: 14px;
+  min-inline-size: 0;
+  margin: 0;
+}
+
+.listbox-demo-metrics div,
+.listbox-demo-panel,
+.listbox-demo-mode {
+  border: 1px solid var(--listbox-demo-border);
+  border-radius: 14px;
+  background:
+    linear-gradient(180deg, var(--listbox-demo-panel), rgba(238, 245, 255, 0.026)), rgba(7, 13, 22, 0.34);
+}
+
+.listbox-demo-metrics div {
+  display: grid;
+  gap: 4px;
+  min-inline-size: 0;
+  padding: 16px;
+}
+
+.listbox-demo-metrics dd {
+  min-inline-size: 0;
+  margin: 0;
+  color: var(--listbox-demo-text);
+  font-size: 0.9rem;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+
+.listbox-demo-layout,
+.listbox-demo-mode-grid {
+  display: grid;
+  gap: 14px;
+  min-inline-size: 0;
+}
+
+.listbox-demo-layout {
+  grid-template-columns: 1fr;
+}
+
+.listbox-demo-mode-grid {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+}
+
+.listbox-demo-panel,
+.listbox-demo-mode {
+  padding: 16px;
+}
+
+.listbox-demo-panel--primary {
+  background:
+    linear-gradient(180deg, rgba(7, 13, 22, 0.52), rgba(7, 13, 22, 0.8)),
+    linear-gradient(90deg, rgba(101, 215, 255, 0.055), transparent 44%);
+}
+
+.listbox-demo-panel-header {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: start;
+  min-inline-size: 0;
+}
+
+.listbox-demo-shell cv-listbox {
+  inline-size: 100%;
+  min-inline-size: 0;
+  --cv-color-border: rgba(143, 220, 255, 0.2);
+  --cv-color-primary: var(--listbox-demo-cyan);
+  --cv-color-primary-border: rgba(101, 215, 255, 0.2);
+  --cv-color-primary-ring: rgba(101, 215, 255, 0.12);
+  --cv-color-surface: rgba(8, 14, 23, 0.62);
+  --cv-color-text: var(--listbox-demo-text);
+  --cv-color-text-muted: var(--listbox-demo-soft);
+  --cv-listbox-gap: 6px;
+  --cv-listbox-padding: 6px;
+  --cv-listbox-border-radius: 14px;
+  --cv-listbox-border-color: rgba(143, 220, 255, 0.2);
+  --cv-listbox-background: rgba(8, 14, 23, 0.64);
+  --cv-listbox-focus-outline-color: var(--listbox-demo-cyan);
+  --cv-option-active-background: rgba(101, 215, 255, 0.12);
+  --cv-option-selected-background: rgba(101, 215, 255, 0.16);
+  --cv-option-padding-block: 10px;
+  --cv-option-padding-inline: 10px;
+  --cv-option-border-radius: 10px;
+}
+
+.listbox-demo-shell cv-listbox::part(base) {
+  min-inline-size: 0;
+  background:
+    linear-gradient(180deg, rgba(7, 13, 22, 0.46), rgba(7, 13, 22, 0.78)),
+    linear-gradient(90deg, rgba(101, 215, 255, 0.045), transparent 48%);
+}
+
+.listbox-demo-shell cv-listbox[orientation='horizontal']::part(base) {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.listbox-demo-shell cv-listbox-group {
+  gap: 6px;
+}
+
+.listbox-demo-shell cv-listbox-group::part(label) {
+  color: rgba(190, 206, 226, 0.62);
+  font-family: var(--vp-font-family-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.listbox-demo-shell cv-option {
+  inline-size: 100%;
+  min-inline-size: 0;
+}
+
+.listbox-demo-shell cv-listbox[orientation='horizontal'] cv-option {
+  inline-size: auto;
+}
+
+.listbox-demo-shell cv-option::part(base) {
+  min-block-size: 42px;
+  min-inline-size: 0;
+  outline-offset: 1px;
+  transition:
+    background-color 160ms ease,
+    color 160ms ease,
+    outline-color 160ms ease;
+}
+
+.listbox-demo-shell cv-option[selected]::part(base) {
+  box-shadow: inset 0 0 0 1px rgba(101, 215, 255, 0.18);
+}
+
+.listbox-demo-option-copy {
+  display: grid;
+  gap: 2px;
+  min-inline-size: 0;
+}
+
+.listbox-demo-option-copy strong,
+.listbox-demo-option-copy small {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.listbox-demo-option-copy strong {
+  color: var(--listbox-demo-text);
+  font-size: 0.9rem;
+  line-height: 1.28;
+}
+
+.listbox-demo-option-copy small {
+  color: var(--listbox-demo-soft);
+  font-family: var(--vp-font-family-mono);
+  font-size: 0.7rem;
+  line-height: 1.22;
+  text-transform: uppercase;
+}
+
+.listbox-demo-glyph {
+  display: inline-grid;
+  place-items: center;
+  inline-size: 24px;
+  block-size: 24px;
+  flex: 0 0 auto;
+  border: 1px solid rgba(101, 215, 255, 0.24);
+  border-radius: 8px;
+  background: rgba(101, 215, 255, 0.09);
+  color: #c9f5ff;
+  font-family: var(--vp-font-family-mono);
+  font-size: 0.7rem;
+}
+
+.listbox-demo-glyph--violet {
+  border-color: rgba(179, 136, 255, 0.28);
+  background: rgba(179, 136, 255, 0.1);
+  color: #dacaff;
+}
+
+.listbox-demo-glyph--muted {
+  border-color: rgba(190, 206, 226, 0.16);
+  background: rgba(190, 206, 226, 0.04);
+  color: rgba(190, 206, 226, 0.62);
+}
+
+.listbox-demo-shell cv-badge {
+  justify-self: end;
+  --cv-badge-height: 21px;
+  --cv-badge-padding-inline: 7px;
+  --cv-badge-font-size: 11px;
+  --cv-color-border: rgba(143, 220, 255, 0.22);
+  --cv-color-surface: rgba(238, 245, 255, 0.052);
+  --cv-color-text: rgba(226, 239, 255, 0.86);
+  --cv-color-primary: var(--listbox-demo-cyan);
+  --cv-color-success: var(--listbox-demo-green);
+}
+
+.listbox-demo-readout {
+  display: block;
+  min-inline-size: 0;
+  min-block-size: 42px;
+  margin: 0;
+  padding: 12px 14px;
+  border: 1px solid rgba(143, 220, 255, 0.18);
+  border-radius: 12px;
+  background: rgba(101, 215, 255, 0.055);
+  color: rgba(226, 239, 255, 0.88);
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+  text-transform: none;
+}
+
+@container (min-width: 660px) {
+.listbox-demo-layout {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+}
+
+@container (min-width: 760px) {
+.listbox-demo-hero {
+    grid-template-columns: minmax(0, 1.06fr) minmax(260px, 0.72fr);
+  }
+
+.listbox-demo-metrics {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (hover: hover) {
+.listbox-demo-shell cv-option:not([disabled]):hover::part(base) {
+    background: rgba(101, 215, 255, 0.08);
+  }
+}
+
+@media (max-width: 640px) {
+.listbox-demo-hero,
+  .listbox-demo-workbench {
+    padding: 16px;
+  }
+
+.listbox-demo-panel,
+  .listbox-demo-mode {
+    padding: 12px;
+  }
+
+.listbox-demo-panel-header {
+    grid-template-columns: 1fr;
+  }
+
+.listbox-demo-shell cv-badge {
+    justify-self: start;
+  }
+
+.listbox-demo-option-copy strong,
+  .listbox-demo-option-copy small {
+    white-space: normal;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+.listbox-demo-shell cv-option::part(base) {
+    transition: none;
+  }
+}

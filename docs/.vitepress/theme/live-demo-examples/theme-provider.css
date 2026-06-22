@@ -1,0 +1,27 @@
+.theme-provider-demo-board {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+  gap: 12px;
+  inline-size: 100%;
+  min-inline-size: 0;
+}
+
+.theme-provider-demo-panel {
+  display: grid;
+  align-content: start;
+  justify-items: start;
+  gap: 12px;
+  min-block-size: 112px;
+  min-inline-size: 0;
+  padding: 16px;
+  border: 1px solid var(--cv-color-border, rgba(118, 181, 222, 0.18));
+  border-radius: 12px;
+  background: var(--cv-color-surface, rgba(13, 22, 35, 0.94));
+  color: var(--cv-color-text, #eef5ff);
+}
+
+.theme-provider-demo-panel > span {
+  color: var(--cv-color-text-muted, rgba(190, 206, 226, 0.74));
+  font-size: 0.85rem;
+  line-height: 1.4;
+}

@@ -1,0 +1,381 @@
+.input-demo-grid,
+.field-demo-grid,
+.number-demo-grid,
+.select-demo-grid,
+.textarea-demo-grid,
+.fieldset-demo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+  gap: 18px;
+  inline-size: 100%;
+}
+
+.fieldset-demo-grid cv-fieldset {
+  inline-size: 100%;
+  min-inline-size: 0;
+  --cv-fieldset-gap: 10px;
+  --cv-fieldset-field-gap: 10px;
+}
+
+.fieldset-demo-grid cv-field,
+.fieldset-demo-grid cv-input,
+.fieldset-demo-grid cv-select {
+  inline-size: 100%;
+  min-inline-size: 0;
+}
+
+.fieldset-demo-grid cv-fieldset[orientation='horizontal'] {
+  grid-column: 1 / -1;
+}
+
+.fieldset-demo-shell {
+  display: grid;
+  container-type: inline-size;
+  inline-size: 100%;
+  min-inline-size: 0;
+  overflow: hidden;
+  border: 1px solid rgba(118, 181, 222, 0.18);
+  border-radius: 16px;
+  color: var(--fieldset-demo-muted);
+  --fieldset-demo-text: #eef5ff;
+  --fieldset-demo-muted: rgba(190, 206, 226, 0.76);
+  --fieldset-demo-soft: rgba(190, 206, 226, 0.58);
+  --fieldset-demo-panel: rgba(238, 245, 255, 0.052);
+  --fieldset-demo-border: rgba(118, 181, 222, 0.18);
+  --fieldset-demo-cyan: #65d7ff;
+  --fieldset-demo-green: #5beba0;
+  --fieldset-demo-amber: #ffc857;
+  --fieldset-demo-red: #ff7d86;
+  --fieldset-demo-violet: #b388ff;
+  background:
+    linear-gradient(180deg, rgba(12, 20, 32, 0.98), rgba(7, 13, 22, 0.98)),
+    linear-gradient(135deg, rgba(101, 215, 255, 0.08), transparent 43%),
+    linear-gradient(315deg, rgba(179, 136, 255, 0.06), transparent 44%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.04),
+    0 18px 42px rgba(0, 0, 0, 0.22);
+}
+
+.fieldset-demo-shell,
+.fieldset-demo-shell * {
+  box-sizing: border-box;
+}
+
+.fieldset-demo-hero,
+.fieldset-demo-board,
+.fieldset-demo-section {
+  display: grid;
+  gap: 20px;
+  min-inline-size: 0;
+  padding: clamp(20px, 4cqi, 28px);
+}
+
+.fieldset-demo-hero,
+.fieldset-demo-board {
+  border-bottom: 1px solid var(--fieldset-demo-border);
+}
+
+.fieldset-demo-copy,
+.fieldset-demo-section-header,
+.fieldset-demo-form,
+.fieldset-demo-proof,
+.fieldset-demo-proof li,
+.fieldset-demo-state-card {
+  display: grid;
+  align-content: start;
+  min-inline-size: 0;
+}
+
+.fieldset-demo-copy,
+.fieldset-demo-section-header,
+.fieldset-demo-proof li {
+  gap: 10px;
+}
+
+.fieldset-demo-kicker,
+.fieldset-demo-label,
+.fieldset-demo-metrics dt {
+  font-family: var(--vp-font-family-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.fieldset-demo-kicker {
+  color: #94e9ff;
+}
+
+.fieldset-demo-label,
+.fieldset-demo-metrics dt {
+  color: var(--fieldset-demo-soft);
+}
+
+.fieldset-demo-copy h3,
+.fieldset-demo-section-header h4 {
+  margin: 0;
+  color: var(--fieldset-demo-text);
+  font-family: var(--vp-font-family-base);
+  letter-spacing: 0;
+}
+
+.fieldset-demo-copy h3 {
+  max-inline-size: 35ch;
+  font-size: clamp(1.18rem, 5cqi, 1.54rem);
+  line-height: 1.1;
+  text-wrap: balance;
+}
+
+.fieldset-demo-section-header h4 {
+  max-inline-size: 64ch;
+  font-size: 1rem;
+  line-height: 1.32;
+  overflow-wrap: anywhere;
+}
+
+.fieldset-demo-copy p {
+  max-inline-size: 70ch;
+  margin: 0;
+  color: var(--fieldset-demo-muted);
+  font-size: 0.92rem;
+  line-height: 1.58;
+}
+
+.fieldset-demo-metrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 148px), 1fr));
+  gap: 14px;
+  min-inline-size: 0;
+  margin: 0;
+}
+
+.fieldset-demo-metrics div,
+.fieldset-demo-proof,
+.fieldset-demo-state-card {
+  border: 1px solid var(--fieldset-demo-border);
+  border-radius: 14px;
+  background:
+    linear-gradient(180deg, var(--fieldset-demo-panel), rgba(238, 245, 255, 0.026)), rgba(7, 13, 22, 0.32);
+}
+
+.fieldset-demo-metrics div {
+  display: grid;
+  gap: 4px;
+  min-inline-size: 0;
+  padding: 16px;
+}
+
+.fieldset-demo-metrics dd {
+  min-inline-size: 0;
+  margin: 0;
+  color: var(--fieldset-demo-text);
+  font-size: 0.9rem;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+
+.fieldset-demo-board {
+  align-items: start;
+}
+
+.fieldset-demo-form {
+  gap: 14px;
+  min-inline-size: 0;
+  margin: 0;
+  padding: 0;
+}
+
+.fieldset-demo-two-up,
+.fieldset-demo-state-grid {
+  display: grid;
+  gap: 12px;
+  min-inline-size: 0;
+}
+
+.fieldset-demo-two-up {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.fieldset-demo-state-grid {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr));
+}
+
+.fieldset-demo-shell cv-fieldset {
+  inline-size: 100%;
+  min-inline-size: 0;
+  color: var(--fieldset-demo-text);
+  --cv-color-text: var(--fieldset-demo-text);
+  --cv-color-text-muted: var(--fieldset-demo-muted);
+  --cv-color-danger: var(--fieldset-demo-red);
+  --cv-fieldset-gap: 11px;
+  --cv-fieldset-field-gap: 10px;
+}
+
+.fieldset-demo-shell cv-fieldset::part(base) {
+  padding: 15px;
+  border: 1px solid rgba(118, 181, 222, 0.16);
+  border-radius: 14px;
+  background:
+    linear-gradient(180deg, rgba(238, 245, 255, 0.044), rgba(238, 245, 255, 0.02)), rgba(7, 13, 22, 0.34);
+}
+
+.fieldset-demo-shell cv-fieldset::part(legend) {
+  color: var(--fieldset-demo-text);
+  font-size: 0.94rem;
+  font-weight: 650;
+  line-height: 1.34;
+  overflow-wrap: anywhere;
+}
+
+.fieldset-demo-shell cv-fieldset::part(description) {
+  color: var(--fieldset-demo-muted);
+  line-height: 1.45;
+}
+
+.fieldset-demo-shell cv-fieldset::part(error) {
+  color: #ffc7cd;
+}
+
+.fieldset-demo-shell cv-fieldset[invalid]::part(base) {
+  border-color: rgba(255, 125, 134, 0.32);
+  background:
+    linear-gradient(180deg, rgba(255, 125, 134, 0.055), rgba(238, 245, 255, 0.02)), rgba(7, 13, 22, 0.34);
+}
+
+.fieldset-demo-shell cv-fieldset[disabled]::part(base) {
+  border-style: dashed;
+  opacity: 0.74;
+}
+
+.fieldset-demo-shell cv-fieldset[orientation='horizontal']::part(fields) {
+  gap: 10px 14px;
+}
+
+.fieldset-demo-primary::part(base) {
+  background:
+    linear-gradient(180deg, rgba(7, 13, 22, 0.52), rgba(7, 13, 22, 0.8)),
+    linear-gradient(90deg, rgba(101, 215, 255, 0.055), transparent 44%);
+}
+
+.fieldset-demo-recovery::part(base) {
+  border-color: rgba(179, 136, 255, 0.22);
+  background: linear-gradient(90deg, rgba(179, 136, 255, 0.052), transparent 48%), rgba(238, 245, 255, 0.032);
+}
+
+.fieldset-demo-shell cv-field,
+.fieldset-demo-shell cv-input,
+.fieldset-demo-shell cv-select {
+  inline-size: 100%;
+  min-inline-size: 0;
+}
+
+.fieldset-demo-shell cv-field {
+  --cv-field-gap: 7px;
+  --cv-field-meta-font-size: 0.74rem;
+}
+
+.fieldset-demo-shell cv-field::part(label) {
+  color: var(--fieldset-demo-soft);
+  font-family: var(--vp-font-family-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.fieldset-demo-shell cv-input,
+.fieldset-demo-shell cv-select {
+  --cv-color-surface: rgba(238, 245, 255, 0.058);
+  --cv-color-surface-elevated: rgba(238, 245, 255, 0.065);
+  --cv-color-border: rgba(143, 220, 255, 0.3);
+  --cv-color-primary: var(--fieldset-demo-cyan);
+  --cv-color-text: var(--fieldset-demo-text);
+  --cv-color-text-muted: var(--fieldset-demo-muted);
+}
+
+.fieldset-demo-shell cv-select {
+  --cv-select-inline-size: 100%;
+}
+
+.live-demo-preview .fieldset-demo-shell cv-checkbox,
+.live-demo-preview .fieldset-demo-shell cv-switch {
+  color: var(--fieldset-demo-text);
+  --cv-color-text: var(--fieldset-demo-text);
+  --cv-color-text-muted: var(--fieldset-demo-muted);
+  --cv-color-border: rgba(143, 220, 255, 0.3);
+  --cv-color-primary: var(--fieldset-demo-cyan);
+  --cv-color-surface: rgba(238, 245, 255, 0.058);
+  --cv-color-surface-elevated: rgba(238, 245, 255, 0.065);
+}
+
+.fieldset-demo-proof {
+  gap: 14px;
+  padding: 15px;
+}
+
+.fieldset-demo-proof ol {
+  display: grid;
+  gap: 10px;
+  min-inline-size: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.fieldset-demo-proof li {
+  padding: 12px;
+  border: 1px solid rgba(118, 181, 222, 0.14);
+  border-radius: 12px;
+  background: rgba(238, 245, 255, 0.038);
+}
+
+.fieldset-demo-proof strong {
+  color: var(--fieldset-demo-text);
+  font-size: 0.9rem;
+  line-height: 1.34;
+}
+
+.fieldset-demo-proof span:not(.fieldset-demo-label) {
+  color: var(--fieldset-demo-muted);
+  font-size: 0.84rem;
+  line-height: 1.45;
+}
+
+.fieldset-demo-state-card {
+  gap: 10px;
+  padding: 14px;
+}
+
+@container (min-width: 760px) {
+.fieldset-demo-hero {
+    grid-template-columns: minmax(0, 1.08fr) minmax(260px, 0.72fr);
+  }
+
+.fieldset-demo-board {
+    grid-template-columns: minmax(0, 1fr) minmax(260px, 0.42fr);
+  }
+
+.fieldset-demo-metrics {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+.fieldset-demo-hero,
+  .fieldset-demo-board,
+  .fieldset-demo-section {
+    padding: 16px;
+  }
+
+.fieldset-demo-copy h3 {
+    font-size: 1.22rem;
+  }
+
+.fieldset-demo-two-up {
+    grid-template-columns: 1fr;
+  }
+
+.fieldset-demo-shell cv-fieldset::part(base),
+  .fieldset-demo-proof,
+  .fieldset-demo-state-card {
+    padding: 12px;
+  }
+}

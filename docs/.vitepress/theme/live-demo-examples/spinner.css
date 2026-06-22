@@ -1,0 +1,377 @@
+.spinner-demo-shell {
+  display: grid;
+  container-type: inline-size;
+  inline-size: 100%;
+  min-inline-size: 0;
+  overflow: hidden;
+  border: 1px solid rgba(118, 181, 222, 0.18);
+  border-radius: 16px;
+  color: var(--spinner-demo-muted);
+  --spinner-demo-text: #eef5ff;
+  --spinner-demo-muted: rgba(190, 206, 226, 0.76);
+  --spinner-demo-soft: rgba(190, 206, 226, 0.58);
+  --spinner-demo-border: rgba(118, 181, 222, 0.18);
+  --spinner-demo-panel: rgba(238, 245, 255, 0.052);
+  --spinner-demo-cyan: #65d7ff;
+  --spinner-demo-violet: #b388ff;
+  --spinner-demo-amber: #ffc857;
+  background:
+    linear-gradient(180deg, rgba(12, 20, 32, 0.98), rgba(7, 13, 22, 0.98)),
+    linear-gradient(135deg, rgba(101, 215, 255, 0.085), transparent 42%),
+    linear-gradient(315deg, rgba(179, 136, 255, 0.065), transparent 48%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.04),
+    0 18px 42px rgba(0, 0, 0, 0.22);
+}
+
+.spinner-demo-shell,
+.spinner-demo-shell * {
+  box-sizing: border-box;
+}
+
+.spinner-demo-hero,
+.spinner-demo-board,
+.spinner-demo-section {
+  display: grid;
+  gap: 20px;
+  min-inline-size: 0;
+  padding: clamp(20px, 4cqi, 28px);
+}
+
+.spinner-demo-hero,
+.spinner-demo-board {
+  border-bottom: 1px solid var(--spinner-demo-border);
+}
+
+.spinner-demo-copy,
+.spinner-demo-section-header,
+.spinner-demo-stage,
+.spinner-demo-side,
+.spinner-demo-side-head {
+  display: grid;
+  align-content: start;
+  gap: 10px;
+  min-inline-size: 0;
+}
+
+.spinner-demo-kicker,
+.spinner-demo-metrics dt,
+.spinner-demo-stage-head span,
+.spinner-demo-badge,
+.spinner-demo-step-list span,
+.spinner-demo-inline-status,
+.spinner-demo-matrix > div > span {
+  font-family: var(--vp-font-family-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.spinner-demo-kicker {
+  color: #94e9ff;
+}
+
+.spinner-demo-copy h3,
+.spinner-demo-section-header h4,
+.spinner-demo-side-head h4 {
+  margin: 0;
+  color: var(--spinner-demo-text);
+  letter-spacing: 0;
+}
+
+.spinner-demo-copy h3 {
+  max-inline-size: 34ch;
+  font-size: clamp(1.2rem, 5cqi, 1.6rem);
+  line-height: 1.12;
+  text-wrap: balance;
+}
+
+.spinner-demo-section-header h4,
+.spinner-demo-side-head h4 {
+  max-inline-size: 66ch;
+  font-family: var(--vp-font-family-base);
+  font-size: 1rem;
+  line-height: 1.32;
+}
+
+.spinner-demo-copy p {
+  max-inline-size: 68ch;
+  margin: 0;
+  color: var(--spinner-demo-muted);
+  font-size: 0.92rem;
+  line-height: 1.58;
+}
+
+.spinner-demo-metrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 148px), 1fr));
+  gap: 14px;
+  min-inline-size: 0;
+  margin: 0;
+}
+
+.spinner-demo-metrics div,
+.spinner-demo-stage,
+.spinner-demo-side,
+.spinner-demo-matrix > div {
+  border: 1px solid var(--spinner-demo-border);
+  border-radius: 14px;
+  background:
+    linear-gradient(180deg, var(--spinner-demo-panel), rgba(238, 245, 255, 0.026)), rgba(7, 13, 22, 0.32);
+}
+
+.spinner-demo-metrics div {
+  display: grid;
+  gap: 4px;
+  min-inline-size: 0;
+  padding: 16px;
+}
+
+.spinner-demo-metrics dt,
+.spinner-demo-stage-head span,
+.spinner-demo-step-list span,
+.spinner-demo-matrix > div > span {
+  color: var(--spinner-demo-soft);
+}
+
+.spinner-demo-metrics dd {
+  min-inline-size: 0;
+  margin: 0;
+  color: var(--spinner-demo-text);
+  font-size: 0.9rem;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+
+.spinner-demo-board {
+  grid-template-columns: 1fr;
+  align-items: start;
+}
+
+.spinner-demo-stage,
+.spinner-demo-side {
+  padding: 14px;
+}
+
+.spinner-demo-stage {
+  gap: 14px;
+  background:
+    linear-gradient(180deg, rgba(7, 13, 22, 0.5), rgba(7, 13, 22, 0.8)),
+    linear-gradient(90deg, rgba(101, 215, 255, 0.055), transparent 44%);
+}
+
+.spinner-demo-stage-head,
+.spinner-demo-step-list > div,
+.spinner-demo-inline-status {
+  display: grid;
+  min-inline-size: 0;
+  border: 1px solid rgba(118, 181, 222, 0.14);
+  border-radius: 12px;
+  background: rgba(238, 245, 255, 0.04);
+}
+
+.spinner-demo-stage-head {
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: center;
+  padding: 12px 14px;
+}
+
+.spinner-demo-stage-head > div {
+  display: grid;
+  gap: 4px;
+  min-inline-size: 0;
+}
+
+.spinner-demo-stage-head strong {
+  min-inline-size: 0;
+  color: var(--spinner-demo-text);
+  font-size: 1rem;
+  line-height: 1.28;
+  overflow-wrap: anywhere;
+}
+
+.spinner-demo-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-block-size: 28px;
+  max-inline-size: 100%;
+  padding: 5px 9px;
+  border: 1px solid rgba(101, 215, 255, 0.28);
+  border-radius: 999px;
+  background: rgba(101, 215, 255, 0.08);
+  color: rgba(226, 247, 255, 0.88);
+  line-height: 1.2;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+
+.spinner-demo-core {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-block-size: 176px;
+  overflow: hidden;
+  border: 1px solid rgba(143, 220, 255, 0.16);
+  border-radius: 14px;
+  background:
+    linear-gradient(180deg, rgba(238, 245, 255, 0.045), rgba(238, 245, 255, 0.018)),
+    radial-gradient(circle at 50% 50%, rgba(101, 215, 255, 0.1), transparent 44%);
+}
+
+.spinner-demo-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(143, 220, 255, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(143, 220, 255, 0.08) 1px, transparent 1px);
+  background-size: 28px 28px;
+  mask-image: linear-gradient(180deg, transparent, black 24%, black 74%, transparent);
+}
+
+.spinner-demo-core-spinner {
+  position: relative;
+  font-size: clamp(68px, 18cqi, 92px);
+  --cv-spinner-track-width: 5px;
+  --cv-spinner-track-color: rgba(143, 220, 255, 0.16);
+  --cv-spinner-indicator-color: var(--spinner-demo-cyan);
+  --cv-spinner-speed: 780ms;
+}
+
+.spinner-demo-step-list {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  min-inline-size: 0;
+}
+
+.spinner-demo-step-list > div {
+  gap: 5px;
+  padding: 12px;
+}
+
+.spinner-demo-step-list p {
+  min-inline-size: 0;
+  margin: 0;
+  color: rgba(226, 239, 255, 0.86);
+  font-size: 0.86rem;
+  line-height: 1.38;
+  overflow-wrap: anywhere;
+}
+
+.spinner-demo-side {
+  gap: 14px;
+}
+
+.spinner-demo-inline-status {
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 10px;
+  align-items: center;
+  min-block-size: 48px;
+  padding: 10px 12px;
+  color: rgba(226, 239, 255, 0.88);
+  text-transform: none;
+}
+
+.spinner-demo-inline-status--violet cv-spinner {
+  --cv-spinner-indicator-color: var(--spinner-demo-violet);
+}
+
+.spinner-demo-inline-status--amber cv-spinner {
+  --cv-spinner-indicator-color: var(--spinner-demo-amber);
+}
+
+.spinner-demo-matrix {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 148px), 1fr));
+  gap: 12px;
+  min-inline-size: 0;
+}
+
+.spinner-demo-matrix > div {
+  display: grid;
+  place-items: center;
+  gap: 12px;
+  min-block-size: 116px;
+  min-inline-size: 0;
+  padding: 14px;
+}
+
+.spinner-demo-matrix > div > span {
+  color: var(--spinner-demo-soft);
+  text-align: center;
+}
+
+.spinner-demo-spinner-xs,
+.spinner-demo-spinner-sm,
+.spinner-demo-spinner-md,
+.spinner-demo-spinner-lg {
+  --cv-spinner-track-color: rgba(143, 220, 255, 0.17);
+  --cv-spinner-indicator-color: var(--spinner-demo-cyan);
+}
+
+.spinner-demo-spinner-xs {
+  font-size: 14px;
+  --cv-spinner-track-width: 5px;
+}
+
+.spinner-demo-spinner-sm {
+  font-size: 20px;
+}
+
+.spinner-demo-spinner-md {
+  font-size: 30px;
+}
+
+.spinner-demo-spinner-lg {
+  font-size: 44px;
+  --cv-spinner-track-width: 5px;
+}
+
+@container (min-width: 760px) {
+.spinner-demo-hero {
+    grid-template-columns: minmax(0, 1.08fr) minmax(260px, 0.72fr);
+  }
+
+.spinner-demo-board {
+    grid-template-columns: minmax(0, 1fr) minmax(220px, 0.42fr);
+  }
+
+.spinner-demo-metrics {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+.spinner-demo-hero,
+  .spinner-demo-board,
+  .spinner-demo-section {
+    padding: 16px;
+  }
+
+.spinner-demo-copy h3 {
+    font-size: 1.22rem;
+  }
+
+.spinner-demo-stage,
+  .spinner-demo-side {
+    padding: 12px;
+  }
+
+.spinner-demo-metrics,
+  .spinner-demo-stage-head,
+  .spinner-demo-step-list {
+    grid-template-columns: 1fr;
+  }
+
+.spinner-demo-badge {
+    justify-self: start;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+.spinner-demo-shell cv-spinner {
+    --cv-spinner-speed: 2400ms;
+  }
+}

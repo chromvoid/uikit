@@ -1,0 +1,214 @@
+.live-demo-preview cv-checkbox {
+  color: var(--vp-c-text-1);
+  --cv-color-text: var(--vp-c-text-1);
+  --cv-color-surface: rgba(238, 245, 255, 0.06);
+  --cv-color-border: rgba(143, 220, 255, 0.34);
+}
+
+.checkbox-demo-shell {
+  display: grid;
+  inline-size: 100%;
+  min-inline-size: 0;
+  background:
+    linear-gradient(180deg, rgba(12, 20, 32, 0.98), rgba(7, 13, 22, 0.98)),
+    radial-gradient(circle at 12% 0%, rgba(101, 215, 255, 0.1), transparent 36%),
+    radial-gradient(circle at 88% 16%, rgba(179, 136, 255, 0.08), transparent 34%);
+}
+
+.checkbox-demo-hero,
+.checkbox-demo-section {
+  display: grid;
+  gap: 18px;
+  min-inline-size: 0;
+  padding: clamp(18px, 3vw, 24px);
+}
+
+.checkbox-demo-hero {
+  grid-template-columns: minmax(0, 1fr) minmax(220px, 0.42fr);
+  align-items: stretch;
+  border-bottom: 1px solid rgba(118, 181, 222, 0.18);
+}
+
+.checkbox-demo-copy,
+.checkbox-demo-section-header,
+.checkbox-demo-cell,
+.checkbox-demo-panel,
+.checkbox-demo-form {
+  display: grid;
+  align-content: start;
+  min-inline-size: 0;
+}
+
+.checkbox-demo-copy,
+.checkbox-demo-section-header {
+  gap: 8px;
+}
+
+.checkbox-demo-kicker,
+.checkbox-demo-label,
+.checkbox-demo-token,
+.checkbox-demo-metrics dt {
+  font-family: var(--vp-font-family-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.checkbox-demo-kicker {
+  color: #94e9ff;
+}
+
+.checkbox-demo-label,
+.checkbox-demo-metrics dt {
+  color: rgba(190, 206, 226, 0.72);
+}
+
+.checkbox-demo-copy h3,
+.checkbox-demo-section-header h4 {
+  margin: 0;
+  color: var(--vp-c-text-1);
+  letter-spacing: 0;
+}
+
+.checkbox-demo-copy h3 {
+  max-width: 18ch;
+  font-size: clamp(1.15rem, 2.6vw, 1.55rem);
+  line-height: 1.08;
+  text-wrap: balance;
+}
+
+.checkbox-demo-section-header h4 {
+  font-family: var(--vp-font-family-base);
+  font-size: 1rem;
+  line-height: 1.3;
+}
+
+.checkbox-demo-copy p {
+  max-width: 62ch;
+  margin: 0;
+  color: var(--docs-text-muted);
+  font-size: 0.92rem;
+  line-height: 1.65;
+}
+
+.checkbox-demo-metrics {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+  margin: 0;
+}
+
+.checkbox-demo-metrics div {
+  display: grid;
+  gap: 4px;
+  padding: 12px 14px;
+  border: 1px solid rgba(118, 181, 222, 0.18);
+  border-radius: 12px;
+  background: rgba(238, 245, 255, 0.045);
+}
+
+.checkbox-demo-metrics dd {
+  margin: 0;
+  color: var(--vp-c-text-1);
+  font-size: 0.9rem;
+}
+
+.checkbox-demo-section + .checkbox-demo-section {
+  border-top: 1px solid rgba(118, 181, 222, 0.14);
+}
+
+.checkbox-demo-state-grid,
+.checkbox-demo-workflow-grid {
+  display: grid;
+  gap: 12px;
+  min-inline-size: 0;
+}
+
+.checkbox-demo-state-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.checkbox-demo-workflow-grid {
+  grid-template-columns: minmax(0, 1.1fr) minmax(260px, 0.9fr);
+  align-items: stretch;
+}
+
+.checkbox-demo-cell,
+.checkbox-demo-panel {
+  gap: 10px;
+  padding: 14px;
+  border: 1px solid rgba(118, 181, 222, 0.18);
+  border-radius: 12px;
+  background:
+    linear-gradient(180deg, rgba(238, 245, 255, 0.052), rgba(238, 245, 255, 0.026)), rgba(7, 13, 22, 0.32);
+}
+
+.checkbox-demo-cell cv-checkbox,
+.checkbox-demo-list cv-checkbox,
+.checkbox-demo-form cv-checkbox {
+  min-block-size: 32px;
+}
+
+.checkbox-demo-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 12px;
+  align-items: center;
+  justify-content: space-between;
+  padding-block-end: 12px;
+  border-bottom: 1px solid rgba(118, 181, 222, 0.14);
+}
+
+.checkbox-demo-token {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: 28px;
+  padding-inline: 9px;
+  border: 1px solid rgba(101, 215, 255, 0.22);
+  border-radius: 999px;
+  background: rgba(101, 215, 255, 0.08);
+  color: #a5efff;
+  white-space: nowrap;
+}
+
+.checkbox-demo-list,
+.checkbox-demo-form {
+  gap: 10px;
+}
+
+@media (max-width: 960px) {
+.checkbox-demo-hero,
+  .checkbox-demo-workflow-grid {
+    grid-template-columns: 1fr;
+  }
+
+.checkbox-demo-metrics {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+.checkbox-demo-state-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+.checkbox-demo-hero,
+  .checkbox-demo-section {
+    padding: 16px;
+  }
+
+.checkbox-demo-metrics,
+  .checkbox-demo-state-grid {
+    grid-template-columns: 1fr;
+  }
+
+.checkbox-demo-toolbar {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+.checkbox-demo-token {
+    max-inline-size: 100%;
+    white-space: normal;
+  }
+}

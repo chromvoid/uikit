@@ -1,0 +1,343 @@
+.callout-demo-shell {
+  display: grid;
+  container-type: inline-size;
+  inline-size: 100%;
+  min-inline-size: 0;
+  overflow: hidden;
+  border: 1px solid rgba(118, 181, 222, 0.18);
+  border-radius: 16px;
+  color: var(--callout-demo-muted);
+  --callout-demo-text: #eef5ff;
+  --callout-demo-muted: rgba(190, 206, 226, 0.76);
+  --callout-demo-soft: rgba(190, 206, 226, 0.58);
+  --callout-demo-panel: rgba(238, 245, 255, 0.052);
+  --callout-demo-border: rgba(118, 181, 222, 0.18);
+  --callout-demo-cyan: #65d7ff;
+  --callout-demo-green: #5beba0;
+  --callout-demo-amber: #ffc857;
+  --callout-demo-red: #ff7d86;
+  --callout-demo-violet: #b388ff;
+  background:
+    linear-gradient(180deg, rgba(12, 20, 32, 0.98), rgba(7, 13, 22, 0.98)),
+    linear-gradient(135deg, rgba(101, 215, 255, 0.085), transparent 42%),
+    linear-gradient(315deg, rgba(179, 136, 255, 0.065), transparent 46%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.04),
+    0 18px 42px rgba(0, 0, 0, 0.22);
+}
+
+.callout-demo-shell,
+.callout-demo-shell * {
+  box-sizing: border-box;
+}
+
+.callout-demo-hero,
+.callout-demo-workbench {
+  display: grid;
+  gap: 20px;
+  min-inline-size: 0;
+  padding: clamp(20px, 4cqi, 28px);
+}
+
+.callout-demo-hero {
+  border-bottom: 1px solid var(--callout-demo-border);
+}
+
+.callout-demo-copy,
+.callout-demo-section-header,
+.callout-demo-stack,
+.callout-demo-side {
+  display: grid;
+  align-content: start;
+  gap: 10px;
+  min-inline-size: 0;
+}
+
+.callout-demo-kicker,
+.callout-demo-metrics dt,
+.callout-demo-chip-row,
+.callout-demo-readout {
+  font-family: var(--vp-font-family-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.callout-demo-kicker {
+  color: #94e9ff;
+}
+
+.callout-demo-copy h3,
+.callout-demo-section-header h4 {
+  margin: 0;
+  color: var(--callout-demo-text);
+  letter-spacing: 0;
+}
+
+.callout-demo-copy h3 {
+  max-inline-size: 32ch;
+  font-size: clamp(1.18rem, 5cqi, 1.55rem);
+  line-height: 1.1;
+  text-wrap: balance;
+}
+
+.callout-demo-section-header h4 {
+  max-inline-size: 66ch;
+  font-family: var(--vp-font-family-base);
+  font-size: 1rem;
+  line-height: 1.32;
+}
+
+.callout-demo-copy p {
+  max-inline-size: 68ch;
+  margin: 0;
+  color: var(--callout-demo-muted);
+  font-size: 0.92rem;
+  line-height: 1.58;
+}
+
+.callout-demo-copy code {
+  color: rgba(226, 239, 255, 0.92);
+  font-family: var(--vp-font-family-mono);
+  font-size: 0.86em;
+}
+
+.callout-demo-metrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 148px), 1fr));
+  gap: 14px;
+  min-inline-size: 0;
+  margin: 0;
+}
+
+.callout-demo-metrics div,
+.callout-demo-side,
+.callout-demo-stack {
+  border: 1px solid var(--callout-demo-border);
+  border-radius: 14px;
+  background:
+    linear-gradient(180deg, var(--callout-demo-panel), rgba(238, 245, 255, 0.026)), rgba(7, 13, 22, 0.32);
+}
+
+.callout-demo-metrics div {
+  display: grid;
+  gap: 4px;
+  min-inline-size: 0;
+  padding: 16px;
+}
+
+.callout-demo-metrics dt {
+  color: var(--callout-demo-soft);
+}
+
+.callout-demo-metrics dd {
+  min-inline-size: 0;
+  margin: 0;
+  color: var(--callout-demo-text);
+  font-size: 0.9rem;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+
+.callout-demo-layout {
+  display: grid;
+  gap: 14px;
+  min-inline-size: 0;
+}
+
+.callout-demo-stack {
+  padding: 14px;
+  background:
+    linear-gradient(180deg, rgba(7, 13, 22, 0.52), rgba(7, 13, 22, 0.8)),
+    linear-gradient(90deg, rgba(101, 215, 255, 0.055), transparent 44%);
+}
+
+.callout-demo-side {
+  padding: 14px;
+}
+
+.callout-demo-chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  min-inline-size: 0;
+  color: var(--callout-demo-soft);
+}
+
+.callout-demo-shell cv-callout {
+  --cv-callout-padding-block: 12px;
+  --cv-callout-padding-inline: 13px;
+  --cv-callout-border-radius: 12px;
+  --cv-callout-gap: 10px;
+  --cv-callout-font-size: 0.88rem;
+  --cv-color-border: rgba(143, 220, 255, 0.2);
+  --cv-color-surface-elevated: rgba(12, 20, 32, 0.92);
+  --cv-color-text: rgba(238, 245, 255, 0.9);
+  --cv-color-info: var(--callout-demo-cyan);
+  --cv-color-success: var(--callout-demo-green);
+  --cv-color-warning: var(--callout-demo-amber);
+  --cv-color-danger: var(--callout-demo-red);
+}
+
+.callout-demo-shell cv-callout::part(base) {
+  min-block-size: 52px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035);
+}
+
+.callout-demo-shell cv-callout[density='compact'] {
+  --cv-callout-compact-padding-block: 10px;
+  --cv-callout-compact-padding-inline: 12px;
+  --cv-callout-compact-border-radius: 10px;
+  --cv-callout-compact-font-size: 0.82rem;
+}
+
+.callout-demo-shell cv-callout[density='dense'] {
+  --cv-callout-dense-padding-block: 8px;
+  --cv-callout-dense-padding-inline: 10px;
+  --cv-callout-dense-border-radius: 10px;
+  --cv-callout-dense-font-size: 0.76rem;
+}
+
+.callout-demo-shell cv-callout[variant='neutral']::part(base) {
+  border-color: rgba(118, 181, 222, 0.18);
+  background: rgba(238, 245, 255, 0.045);
+}
+
+.callout-demo-shell cv-callout::part(message) {
+  line-height: 1.48;
+}
+
+.callout-demo-shell cv-callout::part(close-button) {
+  inline-size: 28px;
+  block-size: 28px;
+  margin-block: -3px;
+  border-radius: 8px;
+  color: rgba(238, 245, 255, 0.74);
+  font-size: 0.76rem;
+  transition:
+    background-color 160ms ease,
+    color 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.callout-demo-shell cv-callout::part(close-button):focus-visible {
+  outline: 0;
+  background: rgba(101, 215, 255, 0.12);
+  box-shadow: 0 0 0 3px rgba(101, 215, 255, 0.2);
+  color: #f4fbff;
+}
+
+.callout-demo-icon {
+  display: inline-grid;
+  place-items: center;
+  inline-size: 24px;
+  min-inline-size: 24px;
+  block-size: 24px;
+  border: 1px solid currentColor;
+  border-radius: 8px;
+  font-family: var(--vp-font-family-mono);
+  font-size: 0.68rem;
+  line-height: 1;
+}
+
+.callout-demo-readout {
+  display: block;
+  min-inline-size: 0;
+  min-block-size: 58px;
+  margin: 0;
+  padding: 12px 14px;
+  border: 1px solid rgba(143, 220, 255, 0.18);
+  border-radius: 12px;
+  background: rgba(238, 245, 255, 0.046);
+  color: rgba(226, 239, 255, 0.86);
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+  text-transform: none;
+}
+
+.callout-demo-shell[data-dismissed='1'] .callout-demo-readout,
+.callout-demo-shell[data-dismissed='2'] .callout-demo-readout {
+  border-color: rgba(255, 200, 87, 0.32);
+  color: #fff2cc;
+}
+
+.callout-demo-restore {
+  appearance: none;
+  justify-self: start;
+  min-block-size: 36px;
+  max-inline-size: 100%;
+  padding: 8px 12px;
+  border-color: rgba(101, 215, 255, 0.34);
+  border-style: solid;
+  border-width: 1px;
+  border-radius: 10px;
+  background: rgba(101, 215, 255, 0.08);
+  color: #e9f7ff;
+  cursor: pointer;
+  font: inherit;
+  font-family: var(--vp-font-family-mono);
+  font-size: 0.74rem;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+  text-align: center;
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.callout-demo-restore:focus-visible {
+  outline: 0;
+  border-color: rgba(101, 215, 255, 0.7);
+  box-shadow: 0 0 0 3px rgba(101, 215, 255, 0.2);
+}
+
+@container (min-width: 760px) {
+.callout-demo-hero {
+    grid-template-columns: minmax(0, 1.06fr) minmax(260px, 0.72fr);
+  }
+
+.callout-demo-metrics {
+    grid-template-columns: 1fr;
+  }
+
+.callout-demo-layout {
+    grid-template-columns: minmax(0, 1fr) minmax(250px, 0.44fr);
+  }
+}
+
+@media (hover: hover) {
+.callout-demo-shell cv-callout::part(close-button):hover {
+    background: rgba(238, 245, 255, 0.08);
+    color: #f4fbff;
+  }
+
+.callout-demo-restore:hover {
+    border-color: rgba(101, 215, 255, 0.58);
+    background: rgba(101, 215, 255, 0.13);
+  }
+}
+
+@media (max-width: 640px) {
+.callout-demo-hero,
+  .callout-demo-workbench {
+    padding: 16px;
+  }
+
+.callout-demo-metrics,
+  .callout-demo-layout {
+    grid-template-columns: 1fr;
+  }
+
+.callout-demo-stack,
+  .callout-demo-side {
+    padding: 12px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+.callout-demo-shell cv-callout::part(close-button),
+  .callout-demo-restore {
+    transition: none;
+  }
+}

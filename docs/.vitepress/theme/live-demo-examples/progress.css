@@ -1,0 +1,366 @@
+.progress-demo-shell {
+  display: grid;
+  container-type: inline-size;
+  inline-size: 100%;
+  min-inline-size: 0;
+  overflow: hidden;
+  border: 1px solid rgba(118, 181, 222, 0.18);
+  border-radius: 16px;
+  color: var(--progress-demo-muted);
+  --progress-demo-text: #eef5ff;
+  --progress-demo-muted: rgba(190, 206, 226, 0.76);
+  --progress-demo-soft: rgba(190, 206, 226, 0.58);
+  --progress-demo-panel: rgba(238, 245, 255, 0.052);
+  --progress-demo-border: rgba(118, 181, 222, 0.18);
+  --progress-demo-cyan: #65d7ff;
+  --progress-demo-green: #5beba0;
+  --progress-demo-amber: #ffc857;
+  --progress-demo-red: #ff7d86;
+  background:
+    linear-gradient(180deg, rgba(12, 20, 32, 0.98), rgba(7, 13, 22, 0.98)),
+    linear-gradient(135deg, rgba(101, 215, 255, 0.08), transparent 44%),
+    linear-gradient(315deg, rgba(179, 136, 255, 0.055), transparent 46%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.04),
+    0 18px 42px rgba(0, 0, 0, 0.22);
+}
+
+.progress-demo-shell,
+.progress-demo-shell * {
+  box-sizing: border-box;
+}
+
+.progress-demo-shell code {
+  color: #bff3ff;
+  font-family: var(--vp-font-family-mono);
+  font-size: 0.86em;
+}
+
+.progress-demo-hero,
+.progress-demo-workbench,
+.progress-demo-tones {
+  display: grid;
+  gap: 20px;
+  min-inline-size: 0;
+  padding: clamp(20px, 4cqi, 28px);
+}
+
+.progress-demo-hero,
+.progress-demo-workbench {
+  border-bottom: 1px solid var(--progress-demo-border);
+}
+
+.progress-demo-copy,
+.progress-demo-section-header,
+.progress-demo-panel,
+.progress-demo-panel-head,
+.progress-demo-primary-progress,
+.progress-demo-queue,
+.progress-demo-step,
+.progress-demo-tone {
+  display: grid;
+  align-content: start;
+  min-inline-size: 0;
+}
+
+.progress-demo-copy,
+.progress-demo-section-header,
+.progress-demo-primary-progress,
+.progress-demo-queue,
+.progress-demo-step,
+.progress-demo-tone {
+  gap: 10px;
+}
+
+.progress-demo-kicker,
+.progress-demo-metrics dt,
+.progress-demo-progress-label span,
+.progress-demo-proof-grid span,
+.progress-demo-step span,
+.progress-demo-tone span {
+  font-family: var(--vp-font-family-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.progress-demo-kicker {
+  color: #94e9ff;
+}
+
+.progress-demo-copy h3,
+.progress-demo-panel-head h4,
+.progress-demo-section-header h4 {
+  margin: 0;
+  color: var(--progress-demo-text);
+  font-family: var(--vp-font-family-base);
+  letter-spacing: 0;
+}
+
+.progress-demo-copy h3 {
+  max-inline-size: 34ch;
+  font-size: clamp(1.18rem, 5cqi, 1.54rem);
+  line-height: 1.1;
+  text-wrap: balance;
+}
+
+.progress-demo-panel-head h4,
+.progress-demo-section-header h4 {
+  max-inline-size: 58ch;
+  font-size: 1rem;
+  line-height: 1.32;
+  overflow-wrap: anywhere;
+}
+
+.progress-demo-copy p {
+  max-inline-size: 70ch;
+  margin: 0;
+  color: var(--progress-demo-muted);
+  font-size: 0.92rem;
+  line-height: 1.58;
+}
+
+.progress-demo-metrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 148px), 1fr));
+  gap: 14px;
+  min-inline-size: 0;
+  margin: 0;
+}
+
+.progress-demo-metrics div,
+.progress-demo-panel,
+.progress-demo-queue,
+.progress-demo-tone {
+  border: 1px solid var(--progress-demo-border);
+  border-radius: 14px;
+  background:
+    linear-gradient(180deg, var(--progress-demo-panel), rgba(238, 245, 255, 0.026)), rgba(7, 13, 22, 0.32);
+}
+
+.progress-demo-metrics div {
+  display: grid;
+  gap: 4px;
+  min-inline-size: 0;
+  padding: 16px;
+}
+
+.progress-demo-metrics dt,
+.progress-demo-progress-label span,
+.progress-demo-proof-grid span,
+.progress-demo-step span,
+.progress-demo-tone span {
+  color: var(--progress-demo-soft);
+}
+
+.progress-demo-metrics dd {
+  min-inline-size: 0;
+  margin: 0;
+  color: var(--progress-demo-text);
+  font-size: 0.9rem;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+
+.progress-demo-workbench {
+  align-items: start;
+}
+
+.progress-demo-panel,
+.progress-demo-queue {
+  padding: 14px;
+}
+
+.progress-demo-panel {
+  gap: 18px;
+  background:
+    linear-gradient(180deg, rgba(7, 13, 22, 0.52), rgba(7, 13, 22, 0.8)),
+    linear-gradient(90deg, rgba(101, 215, 255, 0.055), transparent 44%);
+}
+
+.progress-demo-panel-head {
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: start;
+}
+
+.progress-demo-panel-head > div {
+  display: grid;
+  gap: 5px;
+  min-inline-size: 0;
+}
+
+.progress-demo-panel-head cv-badge {
+  --cv-color-primary: var(--progress-demo-cyan);
+}
+
+.progress-demo-progress-label {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  min-inline-size: 0;
+}
+
+.progress-demo-progress-label strong,
+.progress-demo-proof-grid strong,
+.progress-demo-step strong {
+  min-inline-size: 0;
+  color: var(--progress-demo-text);
+  font-size: 0.92rem;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+
+.progress-demo-progress-label strong {
+  font-family: var(--vp-font-family-mono);
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.progress-demo-shell cv-progress {
+  --cv-progress-height: 8px;
+  --cv-progress-track-color: rgba(238, 245, 255, 0.055);
+  --cv-progress-label-color: var(--progress-demo-text);
+  inline-size: 100%;
+  min-inline-size: 0;
+}
+
+.progress-demo-shell cv-progress::part(base) {
+  border-color: rgba(143, 220, 255, 0.18);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.035),
+    0 0 0 1px rgba(0, 0, 0, 0.16);
+}
+
+.progress-demo-shell cv-progress::part(indicator) {
+  box-shadow: 0 0 18px rgba(101, 215, 255, 0.16);
+}
+
+.progress-demo-shell cv-progress[tone='queued'] {
+  --cv-progress-tone-queued-background: rgba(190, 206, 226, 0.48);
+}
+
+.progress-demo-shell cv-progress[tone='success'] {
+  --cv-progress-tone-success-background: linear-gradient(135deg, var(--progress-demo-green), #65d7ff);
+}
+
+.progress-demo-shell cv-progress[tone='warning'] {
+  --cv-progress-tone-warning-background: linear-gradient(135deg, var(--progress-demo-amber), #65d7ff);
+}
+
+.progress-demo-shell cv-progress[tone='danger'] {
+  --cv-progress-tone-danger-background: linear-gradient(135deg, var(--progress-demo-red), #ffc857);
+}
+
+.progress-demo-shell .progress-demo-main-progress {
+  --cv-progress-height: 22px;
+  --cv-progress-labeled-height: 22px;
+  --cv-progress-label-font-size: 0.72rem;
+}
+
+.progress-demo-proof-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  min-inline-size: 0;
+}
+
+.progress-demo-proof-grid div {
+  display: grid;
+  gap: 4px;
+  min-inline-size: 0;
+  min-block-size: 66px;
+  padding: 12px;
+  border: 1px solid rgba(118, 181, 222, 0.14);
+  border-radius: 12px;
+  background: rgba(238, 245, 255, 0.042);
+}
+
+.progress-demo-queue {
+  gap: 12px;
+}
+
+.progress-demo-step {
+  min-block-size: 78px;
+  padding: 12px;
+  border: 1px solid rgba(118, 181, 222, 0.14);
+  border-radius: 12px;
+  background: rgba(238, 245, 255, 0.038);
+}
+
+.progress-demo-step > div {
+  display: grid;
+  gap: 4px;
+  min-inline-size: 0;
+}
+
+.progress-demo-step--complete {
+  border-color: rgba(91, 235, 160, 0.24);
+  background: rgba(91, 235, 160, 0.045);
+}
+
+.progress-demo-step--active {
+  border-color: rgba(101, 215, 255, 0.28);
+  background: rgba(101, 215, 255, 0.05);
+}
+
+.progress-demo-tone-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 168px), 1fr));
+  gap: 12px;
+  min-inline-size: 0;
+}
+
+.progress-demo-tone {
+  min-block-size: 76px;
+  padding: 13px;
+}
+
+@container (min-width: 760px) {
+.progress-demo-hero {
+    grid-template-columns: minmax(0, 1.08fr) minmax(260px, 0.72fr);
+  }
+
+.progress-demo-workbench {
+    grid-template-columns: minmax(0, 1fr) minmax(240px, 0.45fr);
+  }
+
+.progress-demo-metrics {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+.progress-demo-hero,
+  .progress-demo-workbench,
+  .progress-demo-tones {
+    padding: 16px;
+  }
+
+.progress-demo-panel,
+  .progress-demo-queue {
+    padding: 12px;
+  }
+
+.progress-demo-panel-head,
+  .progress-demo-proof-grid {
+    grid-template-columns: 1fr;
+  }
+
+.progress-demo-panel-head cv-badge {
+    justify-self: start;
+  }
+
+.progress-demo-progress-label {
+    align-items: start;
+    flex-direction: column;
+    gap: 5px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+.progress-demo-shell cv-progress::part(indicator) {
+    transition-duration: 1ms;
+  }
+}

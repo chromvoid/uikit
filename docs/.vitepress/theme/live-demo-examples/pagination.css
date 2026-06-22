@@ -1,0 +1,271 @@
+.pagination-demo-shell {
+  display: grid;
+  container-type: inline-size;
+  inline-size: 100%;
+  min-inline-size: 0;
+  overflow: hidden;
+  border: 1px solid rgba(118, 181, 222, 0.18);
+  border-radius: 16px;
+  color: var(--pagination-demo-muted);
+  --pagination-demo-text: #eef5ff;
+  --pagination-demo-muted: rgba(190, 206, 226, 0.76);
+  --pagination-demo-soft: rgba(190, 206, 226, 0.58);
+  --pagination-demo-panel: rgba(238, 245, 255, 0.052);
+  --pagination-demo-border: rgba(118, 181, 222, 0.18);
+  background:
+    linear-gradient(180deg, rgba(12, 20, 32, 0.98), rgba(7, 13, 22, 0.98)),
+    radial-gradient(circle at 10% 0%, rgba(101, 215, 255, 0.1), transparent 36%),
+    radial-gradient(circle at 88% 18%, rgba(179, 136, 255, 0.08), transparent 36%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.04),
+    0 18px 42px rgba(0, 0, 0, 0.22);
+}
+
+.pagination-demo-shell cv-pagination {
+  --cv-pagination-gap: 6px;
+  --cv-pagination-button-size: 36px;
+  --cv-pagination-border-color: rgba(143, 220, 255, 0.34);
+  --cv-pagination-background: rgba(238, 245, 255, 0.065);
+  --cv-color-text: var(--pagination-demo-text);
+  --cv-color-text-muted: var(--pagination-demo-soft);
+  --cv-color-primary: #65d7ff;
+  --cv-color-surface: rgba(238, 245, 255, 0.065);
+  --cv-color-border: rgba(143, 220, 255, 0.34);
+}
+
+.pagination-demo-shell cv-pagination::part(button) {
+  font-family: var(--vp-font-family-base);
+  font-weight: 650;
+  transition:
+    border-color 160ms ease,
+    background-color 160ms ease,
+    transform 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.pagination-demo-shell cv-pagination::part(page-button) {
+  color: var(--pagination-demo-text);
+}
+
+.pagination-demo-shell cv-pagination::part(previous-button),
+.pagination-demo-shell cv-pagination::part(next-button) {
+  color: #bff3ff;
+}
+
+.pagination-demo-shell cv-pagination::part(ellipsis) {
+  color: var(--pagination-demo-soft);
+}
+
+.pagination-demo-shell cv-pagination::part(button):focus-visible {
+  outline: 2px solid rgba(101, 215, 255, 0.88);
+  outline-offset: 2px;
+}
+
+@media (hover: hover) {
+.pagination-demo-shell cv-pagination::part(button):not(:disabled):hover {
+    border-color: rgba(157, 231, 255, 0.68);
+    background: rgba(101, 215, 255, 0.1);
+    transform: translateY(-1px);
+  }
+}
+
+.pagination-demo-hero,
+.pagination-demo-section {
+  display: grid;
+  gap: 20px;
+  min-inline-size: 0;
+  padding: clamp(20px, 4cqi, 28px);
+}
+
+.pagination-demo-hero {
+  grid-template-columns: 1fr;
+  align-items: stretch;
+  border-bottom: 1px solid var(--pagination-demo-border);
+}
+
+.pagination-demo-section + .pagination-demo-section {
+  border-top: 1px solid rgba(118, 181, 222, 0.14);
+}
+
+.pagination-demo-copy,
+.pagination-demo-section-header,
+.pagination-demo-panel {
+  display: grid;
+  align-content: start;
+  min-inline-size: 0;
+}
+
+.pagination-demo-copy,
+.pagination-demo-section-header {
+  gap: 10px;
+}
+
+.pagination-demo-kicker,
+.pagination-demo-label,
+.pagination-demo-metrics dt {
+  font-family: var(--vp-font-family-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.pagination-demo-kicker {
+  color: #94e9ff;
+}
+
+.pagination-demo-label,
+.pagination-demo-metrics dt {
+  color: var(--pagination-demo-soft);
+}
+
+.pagination-demo-copy h3,
+.pagination-demo-section-header h4 {
+  margin: 0;
+  color: var(--pagination-demo-text);
+  letter-spacing: 0;
+}
+
+.pagination-demo-copy h3 {
+  max-width: 25ch;
+  font-size: clamp(1.18rem, 5cqi, 1.55rem);
+  line-height: 1.1;
+  text-wrap: balance;
+}
+
+.pagination-demo-section-header h4 {
+  font-family: var(--vp-font-family-base);
+  font-size: 1rem;
+  line-height: 1.3;
+}
+
+.pagination-demo-copy p,
+.pagination-demo-panel p {
+  max-width: 62ch;
+  margin: 0;
+  color: var(--pagination-demo-muted);
+  font-size: 0.92rem;
+  line-height: 1.58;
+}
+
+.pagination-demo-grid,
+.pagination-demo-metrics,
+.pagination-demo-panel {
+  display: grid;
+  gap: 14px;
+  min-inline-size: 0;
+}
+
+.pagination-demo-grid {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+}
+
+.pagination-demo-metrics {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 148px), 1fr));
+  margin: 0;
+}
+
+.pagination-demo-metrics div,
+.pagination-demo-panel {
+  gap: 12px;
+  padding: 16px;
+  border: 1px solid var(--pagination-demo-border);
+  border-radius: 12px;
+  background:
+    linear-gradient(180deg, var(--pagination-demo-panel), rgba(238, 245, 255, 0.026)), rgba(7, 13, 22, 0.32);
+}
+
+.pagination-demo-panel--primary {
+  border-color: rgba(101, 215, 255, 0.3);
+  background:
+    linear-gradient(180deg, rgba(101, 215, 255, 0.09), rgba(238, 245, 255, 0.026)), rgba(7, 13, 22, 0.32);
+}
+
+.pagination-demo-panel--wide {
+  grid-column: 1 / -1;
+}
+
+.pagination-demo-result-head {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: flex-start;
+  justify-content: space-between;
+  min-inline-size: 0;
+}
+
+.pagination-demo-result-head > div {
+  display: grid;
+  gap: 6px;
+  min-inline-size: min(100%, 220px);
+}
+
+.pagination-demo-result-title {
+  color: var(--pagination-demo-text);
+  font-size: 1rem;
+  line-height: 1.3;
+}
+
+.pagination-demo-scroll {
+  min-inline-size: 0;
+  overflow-x: auto;
+  padding: 2px 2px 8px;
+  scrollbar-color: rgba(101, 215, 255, 0.38) transparent;
+}
+
+.pagination-demo-output {
+  display: block;
+  min-block-size: 38px;
+  max-inline-size: 100%;
+  padding: 11px 12px;
+  border: 1px solid rgba(101, 215, 255, 0.2);
+  border-radius: 10px;
+  background: rgba(101, 215, 255, 0.07);
+  color: #bff3ff;
+  font-family: var(--vp-font-family-mono);
+  font-size: 0.78rem;
+  line-height: 1.45;
+}
+
+.pagination-demo-metrics dd {
+  margin: 0;
+  color: var(--pagination-demo-text);
+  font-size: 0.9rem;
+}
+
+@container (min-width: 760px) {
+.pagination-demo-hero {
+    grid-template-columns: minmax(0, 1.06fr) minmax(260px, 0.72fr);
+  }
+
+.pagination-demo-metrics {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 960px) {
+.pagination-demo-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+.pagination-demo-hero,
+  .pagination-demo-section {
+    padding: 16px;
+  }
+
+.pagination-demo-metrics {
+    grid-template-columns: 1fr;
+  }
+
+.pagination-demo-shell cv-pagination {
+    --cv-pagination-gap: 4px;
+    --cv-pagination-button-size: 32px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+.pagination-demo-shell cv-pagination::part(button) {
+    transition: none;
+  }
+}

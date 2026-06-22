@@ -2,6 +2,7 @@
 import {computed, nextTick, onMounted, onUnmounted, ref, watch} from 'vue'
 
 import iframeRuntimeUrl from './liveDemoFrameRuntime.ts?worker&url'
+import {extractLiveDemoStyleKeys} from './liveDemoStyleKeys'
 
 const props = defineProps<{
   code: string
@@ -28,6 +29,7 @@ const mounted = ref(false)
 type FrameRender = {
   id: string
   html: string
+  styleKeys: string[]
 }
 
 
@@ -73,6 +75,7 @@ function decodeBase64Utf8(value: string): string {
 const decoded = computed(() => decodeBase64Utf8(props.code))
 const highlightedHtml = computed(() => decodeBase64Utf8(props.highlighted))
 const isInline = computed(() => /\sdata-live-demo-inline(?:[\s=>]|$)/i.test(decoded.value))
+const styleKeys = computed(() => extractLiveDemoStyleKeys(decoded.value))
 const minFrameHeight = computed(() => {
   const match = decoded.value.match(/\sdata-live-demo-height=["']?(\d{2,4})["']?/i)
   const parsedHeight = Number.parseInt(match?.[1] ?? '', 10)
@@ -248,7 +251,12 @@ function flushFrameRender(frame: PooledFrame): void {
 
 
   frame.element.contentWindow?.postMessage(
-    {type: RENDER_COMMAND_TYPE, id: frame.pendingRender.id, html: frame.pendingRender.html},
+    {
+      type: RENDER_COMMAND_TYPE,
+      id: frame.pendingRender.id,
+      html: frame.pendingRender.html,
+      styleKeys: frame.pendingRender.styleKeys,
+    },
     '*',
   )
   frame.pendingRender = null
@@ -377,17 +385,29 @@ function updateFrameElementState(): void {
 }
 
 
-function mountInlineDemo(): void {
+async function mountInlineDemo(): Promise<void> {
   if (!container.value || !isInline.value) return
 
 
+  const html = decoded.value
+  const keys = styleKeys.value
+  const {loadLiveDemoCss} = await import('./liveDemoStyles')
+  const css = await loadLiveDemoCss(keys)
+  if (!container.value || !isInline.value || decoded.value !== html) return
+
+
   const template = document.createElement('template')
-  template.innerHTML = decoded.value
+  template.innerHTML = html
   const scripts = [...template.content.querySelectorAll('script')]
   scripts.forEach((script) => script.remove())
 
 
-  container.value.replaceChildren(template.content.cloneNode(true))
+  const style = document.createElement('style')
+  style.dataset.liveDemoStyles = 'true'
+  style.textContent = css
+
+
+  container.value.replaceChildren(style, template.content.cloneNode(true))
   scripts.forEach(runDemoScript)
 }
 
@@ -403,7 +423,7 @@ function mountFrameDemo(): void {
 
   frameReady.value = false
   currentRenderId = `live-demo-${++getFramePoolState().idSequence}`
-  frameLease.pendingRender = {id: currentRenderId, html: decoded.value}
+  frameLease.pendingRender = {id: currentRenderId, html: decoded.value, styleKeys: styleKeys.value}
   updateFrameElementState()
   observeFrameHost()
   flushFrameRender(frameLease)

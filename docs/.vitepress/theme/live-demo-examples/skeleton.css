@@ -1,0 +1,376 @@
+.skeleton-demo-shell {
+  display: grid;
+  container-type: inline-size;
+  inline-size: 100%;
+  min-inline-size: 0;
+  overflow: hidden;
+  border: 1px solid rgba(118, 181, 222, 0.18);
+  border-radius: 16px;
+  color: var(--skeleton-demo-muted);
+  --skeleton-demo-text: #eef5ff;
+  --skeleton-demo-muted: rgba(190, 206, 226, 0.76);
+  --skeleton-demo-soft: rgba(190, 206, 226, 0.58);
+  --skeleton-demo-panel: rgba(238, 245, 255, 0.052);
+  --skeleton-demo-border: rgba(118, 181, 222, 0.18);
+  --skeleton-demo-cyan: #65d7ff;
+  --skeleton-demo-violet: #b388ff;
+  background:
+    linear-gradient(180deg, rgba(12, 20, 32, 0.98), rgba(7, 13, 22, 0.98)),
+    linear-gradient(135deg, rgba(101, 215, 255, 0.075), transparent 46%),
+    repeating-linear-gradient(
+      90deg,
+      rgba(118, 181, 222, 0.032) 0,
+      rgba(118, 181, 222, 0.032) 1px,
+      transparent 1px,
+      transparent 46px
+    );
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.04),
+    0 18px 42px rgba(0, 0, 0, 0.22);
+}
+
+.skeleton-demo-shell,
+.skeleton-demo-shell * {
+  box-sizing: border-box;
+}
+
+.skeleton-demo-shell code {
+  color: #bff3ff;
+  font-family: var(--vp-font-family-mono);
+  font-size: 0.86em;
+}
+
+.skeleton-demo-shell cv-skeleton {
+  max-inline-size: 100%;
+  --cv-skeleton-background: rgba(143, 164, 194, 0.2);
+  --cv-skeleton-highlight: rgba(226, 247, 255, 0.16);
+  --cv-skeleton-radius: 8px;
+}
+
+.skeleton-demo-shell cv-skeleton::part(line) {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.045),
+    0 0 0 1px rgba(118, 181, 222, 0.035);
+}
+
+.skeleton-demo-hero,
+.skeleton-demo-board {
+  display: grid;
+  gap: 20px;
+  min-inline-size: 0;
+  padding: 24px;
+}
+
+.skeleton-demo-hero {
+  border-bottom: 1px solid var(--skeleton-demo-border);
+}
+
+.skeleton-demo-copy,
+.skeleton-demo-section-header,
+.skeleton-demo-workspace,
+.skeleton-demo-variants,
+.skeleton-demo-variant {
+  display: grid;
+  align-content: start;
+  min-inline-size: 0;
+}
+
+.skeleton-demo-copy,
+.skeleton-demo-section-header {
+  gap: 10px;
+}
+
+.skeleton-demo-kicker,
+.skeleton-demo-metrics dt,
+.skeleton-demo-label {
+  font-family: var(--vp-font-family-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.skeleton-demo-kicker {
+  color: #94e9ff;
+}
+
+.skeleton-demo-label,
+.skeleton-demo-metrics dt {
+  color: var(--skeleton-demo-soft);
+}
+
+.skeleton-demo-copy h3,
+.skeleton-demo-section-header h4 {
+  margin: 0;
+  color: var(--skeleton-demo-text);
+  font-family: var(--vp-font-family-base);
+  letter-spacing: 0;
+}
+
+.skeleton-demo-copy h3 {
+  max-inline-size: 30ch;
+  font-size: 1.48rem;
+  line-height: 1.12;
+  text-wrap: balance;
+}
+
+.skeleton-demo-section-header h4 {
+  max-inline-size: 58ch;
+  font-size: 1rem;
+  line-height: 1.32;
+}
+
+.skeleton-demo-copy p {
+  max-inline-size: 68ch;
+  margin: 0;
+  color: var(--skeleton-demo-muted);
+  font-size: 0.92rem;
+  line-height: 1.58;
+}
+
+.skeleton-demo-metrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 148px), 1fr));
+  gap: 14px;
+  min-inline-size: 0;
+  margin: 0;
+}
+
+.skeleton-demo-metrics div,
+.skeleton-demo-workspace,
+.skeleton-demo-variants,
+.skeleton-demo-variant {
+  border: 1px solid var(--skeleton-demo-border);
+  border-radius: 14px;
+  background:
+    linear-gradient(180deg, var(--skeleton-demo-panel), rgba(238, 245, 255, 0.026)), rgba(7, 13, 22, 0.32);
+}
+
+.skeleton-demo-metrics div {
+  display: grid;
+  gap: 4px;
+  min-inline-size: 0;
+  padding: 16px;
+}
+
+.skeleton-demo-metrics dd {
+  min-inline-size: 0;
+  margin: 0;
+  color: var(--skeleton-demo-text);
+  font-size: 0.9rem;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+
+.skeleton-demo-board {
+  grid-template-columns: 1fr;
+  align-items: start;
+}
+
+.skeleton-demo-section-header {
+  grid-column: 1 / -1;
+}
+
+.skeleton-demo-workspace {
+  gap: 14px;
+  padding: 14px;
+  background:
+    linear-gradient(180deg, rgba(7, 13, 22, 0.5), rgba(7, 13, 22, 0.8)),
+    linear-gradient(90deg, rgba(101, 215, 255, 0.055), transparent 44%);
+}
+
+.skeleton-demo-toolbar,
+.skeleton-demo-row,
+.skeleton-demo-inline {
+  display: grid;
+  min-inline-size: 0;
+}
+
+.skeleton-demo-toolbar {
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 14px;
+  align-items: center;
+  padding: 14px;
+  border: 1px solid rgba(118, 181, 222, 0.14);
+  border-radius: 12px;
+  background: rgba(238, 245, 255, 0.038);
+}
+
+.skeleton-demo-identity,
+.skeleton-demo-inline {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  min-inline-size: 0;
+}
+
+.skeleton-demo-identity > div,
+.skeleton-demo-row > div {
+  display: grid;
+  gap: 8px;
+  min-inline-size: 0;
+}
+
+.skeleton-demo-records {
+  display: grid;
+  gap: 10px;
+  min-inline-size: 0;
+}
+
+.skeleton-demo-row {
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: center;
+  min-block-size: 72px;
+  padding: 12px 14px;
+  border: 1px solid rgba(118, 181, 222, 0.13);
+  border-radius: 12px;
+  background: rgba(238, 245, 255, 0.034);
+}
+
+.skeleton-demo-row:nth-child(2) {
+  border-color: rgba(179, 136, 255, 0.18);
+  background: linear-gradient(90deg, rgba(179, 136, 255, 0.052), transparent 48%), rgba(238, 245, 255, 0.03);
+}
+
+.skeleton-demo-avatar {
+  flex: 0 0 auto;
+  --cv-skeleton-size: 44px;
+  --cv-skeleton-background: rgba(101, 215, 255, 0.16);
+}
+
+.skeleton-demo-avatar--small {
+  --cv-skeleton-size: 32px;
+}
+
+.skeleton-demo-icon {
+  --cv-skeleton-size: 34px;
+  --cv-skeleton-background: rgba(179, 136, 255, 0.15);
+}
+
+.skeleton-demo-title-line {
+  --cv-skeleton-inline-size: min(100%, 230px);
+  --cv-skeleton-block-size: 18px;
+  --cv-skeleton-line-block-size: 18px;
+}
+
+.skeleton-demo-meta-line {
+  --cv-skeleton-inline-size: min(100%, 150px);
+  --cv-skeleton-block-size: 10px;
+  --cv-skeleton-line-block-size: 10px;
+  --cv-skeleton-background: rgba(143, 164, 194, 0.14);
+}
+
+.skeleton-demo-action {
+  --cv-skeleton-inline-size: 112px;
+  --cv-skeleton-block-size: 38px;
+  --cv-skeleton-line-block-size: 38px;
+  --cv-skeleton-radius: 10px;
+  --cv-skeleton-background: rgba(101, 215, 255, 0.14);
+}
+
+.skeleton-demo-row-title {
+  --cv-skeleton-inline-size: min(100%, 210px);
+  --cv-skeleton-block-size: 15px;
+  --cv-skeleton-line-block-size: 15px;
+}
+
+.skeleton-demo-row-title--short {
+  --cv-skeleton-inline-size: min(100%, 156px);
+}
+
+.skeleton-demo-row-title--inline {
+  --cv-skeleton-inline-size: min(38cqi, 160px);
+}
+
+.skeleton-demo-row-meta {
+  --cv-skeleton-inline-size: min(100%, 180px);
+  --cv-skeleton-block-size: 10px;
+  --cv-skeleton-line-block-size: 10px;
+  --cv-skeleton-background: rgba(143, 164, 194, 0.14);
+}
+
+.skeleton-demo-row-meta--wide {
+  --cv-skeleton-inline-size: min(100%, 260px);
+}
+
+.skeleton-demo-row-meta--narrow {
+  --cv-skeleton-inline-size: min(100%, 132px);
+}
+
+.skeleton-demo-chip {
+  --cv-skeleton-inline-size: 74px;
+  --cv-skeleton-block-size: 24px;
+  --cv-skeleton-line-block-size: 24px;
+  --cv-skeleton-radius: 999px;
+  --cv-skeleton-background: rgba(101, 215, 255, 0.13);
+}
+
+.skeleton-demo-chip--muted {
+  --cv-skeleton-background: rgba(143, 164, 194, 0.13);
+}
+
+.skeleton-demo-variants {
+  gap: 12px;
+  padding: 14px;
+}
+
+.skeleton-demo-variant {
+  gap: 12px;
+  min-block-size: 104px;
+  padding: 13px;
+  border-color: rgba(118, 181, 222, 0.14);
+  background: rgba(238, 245, 255, 0.034);
+}
+
+.skeleton-demo-variant cv-skeleton[variant='text'] {
+  --cv-skeleton-line-block-size: 12px;
+  --cv-skeleton-line-gap: 9px;
+}
+
+.skeleton-demo-media {
+  --cv-skeleton-block-size: 118px;
+  --cv-skeleton-line-block-size: 118px;
+  --cv-skeleton-radius: 12px;
+  --cv-skeleton-background: rgba(179, 136, 255, 0.14);
+}
+
+@container (min-width: 760px) {
+.skeleton-demo-hero {
+    grid-template-columns: minmax(0, 1.08fr) minmax(260px, 0.72fr);
+  }
+
+.skeleton-demo-board {
+    grid-template-columns: minmax(0, 1fr) minmax(232px, 0.42fr);
+  }
+
+.skeleton-demo-metrics {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+.skeleton-demo-hero,
+  .skeleton-demo-board {
+    padding: 16px;
+  }
+
+.skeleton-demo-copy h3 {
+    font-size: 1.22rem;
+  }
+
+.skeleton-demo-workspace,
+  .skeleton-demo-variants {
+    padding: 12px;
+  }
+
+.skeleton-demo-toolbar,
+  .skeleton-demo-row {
+    grid-template-columns: 1fr;
+    align-items: start;
+  }
+
+.skeleton-demo-action,
+  .skeleton-demo-chip {
+    --cv-skeleton-inline-size: min(100%, 132px);
+  }
+}

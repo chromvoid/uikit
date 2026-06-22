@@ -1,0 +1,449 @@
+.input-demo-grid,
+.field-demo-grid,
+.number-demo-grid,
+.select-demo-grid,
+.textarea-demo-grid,
+.fieldset-demo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+  gap: 18px;
+  inline-size: 100%;
+}
+
+.input-demo-cell,
+.number-demo-cell,
+.select-demo-cell,
+.textarea-demo-cell {
+  inline-size: 100%;
+  min-inline-size: 0;
+  align-content: start;
+  --cv-field-gap: 8px;
+  --cv-field-meta-font-size: 0.78rem;
+}
+
+.input-demo-cell::part(label),
+.number-demo-cell::part(label),
+.select-demo-cell::part(label),
+.textarea-demo-cell::part(label),
+.field-demo-grid cv-field::part(label) {
+  color: var(--cv-color-text-muted, #9aa6bf);
+  font-family: var(--vp-font-family-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.select-demo-grid {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+  align-items: start;
+}
+
+.select-demo-cell--wide {
+  grid-column: span 2;
+}
+
+.input-demo-cell > cv-input,
+.field-demo-grid cv-input,
+.number-demo-grid cv-number,
+.select-demo-cell > cv-select,
+.field-demo-grid cv-textarea,
+.textarea-demo-grid cv-textarea {
+  inline-size: 100%;
+  min-inline-size: 0;
+}
+
+.select-demo-cell > cv-select {
+  --cv-select-inline-size: 100%;
+}
+
+.number-demo-cell::part(description),
+.select-demo-cell::part(description),
+.textarea-demo-cell::part(description) {
+  color: var(--docs-text-muted);
+}
+
+@media (max-width: 720px) {
+.select-demo-cell--wide {
+    grid-column: auto;
+  }
+}
+
+.select-demo-shell {
+  display: grid;
+  container-type: inline-size;
+  inline-size: 100%;
+  min-inline-size: 0;
+  border: 1px solid var(--select-demo-border);
+  border-radius: 16px;
+  color: var(--select-demo-muted);
+  background:
+    linear-gradient(180deg, rgba(12, 20, 32, 0.98), rgba(7, 13, 22, 0.98)),
+    linear-gradient(135deg, rgba(101, 215, 255, 0.08), transparent 42%),
+    radial-gradient(circle at 92% 4%, rgba(179, 136, 255, 0.12), transparent 32%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.04),
+    0 18px 42px rgba(0, 0, 0, 0.22);
+  --select-demo-text: #eef5ff;
+  --select-demo-muted: rgba(190, 206, 226, 0.76);
+  --select-demo-soft: rgba(190, 206, 226, 0.58);
+  --select-demo-panel: rgba(238, 245, 255, 0.052);
+  --select-demo-border: rgba(118, 181, 222, 0.18);
+  --select-demo-cyan: #65d7ff;
+  --select-demo-violet: #b388ff;
+  --select-demo-green: #5beba0;
+  --select-demo-amber: #ffc857;
+  --select-demo-red: #ff7d86;
+}
+
+.select-demo-shell,
+.select-demo-shell * {
+  box-sizing: border-box;
+}
+
+.select-demo-shell code {
+  color: #bff3ff;
+  font-family: var(--vp-font-family-mono);
+  font-size: 0.86em;
+}
+
+.select-demo-hero,
+.select-demo-board,
+.select-demo-cases {
+  display: grid;
+  gap: 20px;
+  min-inline-size: 0;
+  padding: clamp(20px, 4cqi, 28px);
+}
+
+.select-demo-hero,
+.select-demo-board {
+  border-bottom: 1px solid var(--select-demo-border);
+}
+
+.select-demo-copy,
+.select-demo-section-header,
+.select-demo-panel,
+.select-demo-side,
+.select-demo-field-grid,
+.select-demo-case-grid {
+  display: grid;
+  min-inline-size: 0;
+}
+
+.select-demo-copy,
+.select-demo-section-header,
+.select-demo-panel,
+.select-demo-side {
+  align-content: start;
+  gap: 10px;
+}
+
+.select-demo-kicker,
+.select-demo-metrics dt,
+.select-demo-state dt,
+.select-demo-state dd,
+.select-demo-log {
+  font-family: var(--vp-font-family-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.select-demo-kicker {
+  color: #94e9ff;
+}
+
+.select-demo-copy h3,
+.select-demo-section-header h4 {
+  margin: 0;
+  color: var(--select-demo-text);
+  font-family: var(--vp-font-family-base);
+  letter-spacing: 0;
+}
+
+.select-demo-copy h3 {
+  max-inline-size: 34ch;
+  font-size: clamp(1.18rem, 5cqi, 1.56rem);
+  line-height: 1.1;
+  text-wrap: balance;
+}
+
+.select-demo-section-header h4 {
+  max-inline-size: 62ch;
+  font-size: 1rem;
+  line-height: 1.32;
+  overflow-wrap: anywhere;
+}
+
+.select-demo-copy p {
+  max-inline-size: 70ch;
+  margin: 0;
+  color: var(--select-demo-muted);
+  font-size: 0.92rem;
+  line-height: 1.58;
+}
+
+.select-demo-metrics,
+.select-demo-state {
+  display: grid;
+  gap: 12px;
+  min-inline-size: 0;
+  margin: 0;
+}
+
+.select-demo-metrics {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 150px), 1fr));
+}
+
+.select-demo-metrics div,
+.select-demo-panel,
+.select-demo-side,
+.select-demo-state div {
+  border: 1px solid var(--select-demo-border);
+  border-radius: 14px;
+  background:
+    linear-gradient(180deg, var(--select-demo-panel), rgba(238, 245, 255, 0.026)), rgba(7, 13, 22, 0.32);
+}
+
+.select-demo-metrics div {
+  display: grid;
+  gap: 4px;
+  min-inline-size: 0;
+  padding: 16px;
+}
+
+.select-demo-metrics dt,
+.select-demo-state dt {
+  color: var(--select-demo-soft);
+}
+
+.select-demo-metrics dd,
+.select-demo-state dd {
+  min-inline-size: 0;
+  margin: 0;
+  color: var(--select-demo-text);
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+
+.select-demo-metrics dd {
+  font-size: 0.9rem;
+}
+
+.select-demo-board {
+  align-items: start;
+}
+
+.select-demo-panel,
+.select-demo-side {
+  padding: 14px;
+}
+
+.select-demo-panel {
+  gap: 16px;
+  background:
+    linear-gradient(180deg, rgba(7, 13, 22, 0.52), rgba(7, 13, 22, 0.8)),
+    linear-gradient(90deg, rgba(101, 215, 255, 0.055), transparent 44%);
+}
+
+.select-demo-panel--primary {
+  border-color: rgba(101, 215, 255, 0.22);
+}
+
+.select-demo-side {
+  gap: 12px;
+  background:
+    linear-gradient(180deg, rgba(18, 23, 38, 0.78), rgba(7, 13, 22, 0.78)),
+    linear-gradient(145deg, rgba(179, 136, 255, 0.075), transparent 54%);
+}
+
+.select-demo-field-grid,
+.select-demo-case-grid {
+  gap: 12px;
+}
+
+.select-demo-state {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.select-demo-state div {
+  display: grid;
+  gap: 4px;
+  min-inline-size: 0;
+  min-block-size: 66px;
+  padding: 12px;
+  background: rgba(238, 245, 255, 0.042);
+}
+
+.select-demo-state dd,
+.select-demo-log {
+  text-transform: none;
+}
+
+.select-demo-log {
+  display: block;
+  min-inline-size: 0;
+  min-block-size: 82px;
+  margin: 0;
+  padding: 12px 14px;
+  border: 1px solid rgba(143, 220, 255, 0.18);
+  border-radius: 12px;
+  background: rgba(238, 245, 255, 0.046);
+  color: rgba(226, 239, 255, 0.86);
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
+.select-demo-shell cv-field {
+  min-inline-size: 0;
+  --cv-field-gap: 6px;
+  --cv-field-label-color: var(--select-demo-text);
+  --cv-field-description-color: var(--select-demo-muted);
+  --cv-field-error-color: var(--select-demo-red);
+}
+
+.select-demo-shell cv-field::part(label) {
+  font-weight: 650;
+  letter-spacing: 0;
+}
+
+.select-demo-shell cv-field::part(description),
+.select-demo-shell cv-field::part(error) {
+  max-inline-size: 52ch;
+  overflow-wrap: anywhere;
+}
+
+.select-demo-shell cv-select {
+  inline-size: 100%;
+  min-inline-size: 0;
+  --cv-select-inline-size: 100%;
+  --cv-select-border-radius: 10px;
+  --cv-select-border-color: rgba(143, 220, 255, 0.2);
+  --cv-select-background: rgba(11, 19, 30, 0.88);
+  --cv-select-listbox-transition-duration: 140ms;
+}
+
+.select-demo-shell cv-select::part(trigger) {
+  min-inline-size: 0;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.035),
+    0 0 0 1px rgba(0, 0, 0, 0.14);
+  transition:
+    border-color 160ms ease,
+    background-color 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.select-demo-shell cv-select:not([disabled]):hover::part(trigger),
+.select-demo-shell cv-select[open]::part(trigger) {
+  border-color: rgba(101, 215, 255, 0.42);
+  background: rgba(16, 27, 42, 0.94);
+}
+
+.select-demo-shell cv-select[open]::part(trigger) {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    0 0 0 1px rgba(101, 215, 255, 0.16),
+    0 10px 26px rgba(0, 0, 0, 0.22);
+}
+
+.select-demo-shell cv-select[invalid]::part(trigger) {
+  border-color: rgba(255, 125, 134, 0.6);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.035),
+    0 0 0 1px rgba(255, 125, 134, 0.12);
+}
+
+.select-demo-shell cv-select::part(clear-button) {
+  border-radius: 999px;
+  background: rgba(238, 245, 255, 0.06);
+}
+
+.select-demo-shell cv-select::part(listbox) {
+  border: 1px solid rgba(143, 220, 255, 0.2);
+  border-radius: 12px;
+  background:
+    linear-gradient(180deg, rgba(18, 27, 40, 0.98), rgba(8, 14, 23, 0.98)),
+    radial-gradient(circle at top right, rgba(101, 215, 255, 0.12), transparent 46%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.04),
+    0 18px 36px rgba(0, 0, 0, 0.32);
+}
+
+.select-demo-shell cv-select-option::part(base) {
+  border-radius: 9px;
+  overflow-wrap: anywhere;
+}
+
+.select-demo-shell cv-select-option[active]::part(base) {
+  background: rgba(101, 215, 255, 0.18);
+}
+
+.select-demo-shell cv-select-option[selected]::part(base) {
+  background:
+    linear-gradient(90deg, rgba(101, 215, 255, 0.22), rgba(179, 136, 255, 0.16)), rgba(238, 245, 255, 0.04);
+  color: var(--select-demo-text);
+}
+
+.select-demo-shell cv-select-option[disabled]::part(base) {
+  color: var(--select-demo-soft);
+}
+
+.select-demo-shell cv-select-group::part(label) {
+  color: #a5b8ff;
+  font-family: var(--vp-font-family-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+@container (min-width: 680px) {
+.select-demo-hero {
+    grid-template-columns: minmax(0, 1.08fr) minmax(244px, 0.7fr);
+  }
+
+.select-demo-board {
+    grid-template-columns: minmax(0, 1fr) minmax(238px, 0.42fr);
+  }
+
+.select-demo-metrics {
+    grid-template-columns: 1fr;
+  }
+
+.select-demo-field-grid,
+  .select-demo-case-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+.select-demo-field--wide {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 640px) {
+.select-demo-hero,
+  .select-demo-board,
+  .select-demo-cases {
+    padding: 16px;
+  }
+
+.select-demo-copy h3 {
+    font-size: 1.22rem;
+  }
+
+.select-demo-panel,
+  .select-demo-side {
+    padding: 12px;
+  }
+
+.select-demo-state {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+.select-demo-shell cv-select::part(trigger),
+  .select-demo-shell cv-select::part(listbox) {
+    transition-duration: 1ms;
+  }
+}

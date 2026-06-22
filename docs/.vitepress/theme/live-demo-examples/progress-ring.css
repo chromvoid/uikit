@@ -1,0 +1,269 @@
+.progress-ring-demo-shell {
+  position: relative;
+  display: grid;
+  container-type: inline-size;
+  inline-size: 100%;
+  min-inline-size: 0;
+  overflow: hidden;
+  border: 1px solid rgba(118, 181, 222, 0.18);
+  border-radius: 16px;
+  color: var(--progress-ring-demo-muted);
+  --progress-ring-demo-text: #eef5ff;
+  --progress-ring-demo-muted: rgba(190, 206, 226, 0.76);
+  --progress-ring-demo-soft: rgba(190, 206, 226, 0.58);
+  --progress-ring-demo-border: rgba(118, 181, 222, 0.18);
+  --progress-ring-demo-panel: rgba(238, 245, 255, 0.052);
+  --progress-ring-demo-cyan: #65d7ff;
+  --progress-ring-demo-violet: #b388ff;
+  --progress-ring-demo-green: #5beba0;
+  background:
+    linear-gradient(180deg, rgba(12, 20, 32, 0.98), rgba(7, 13, 22, 0.98)),
+    linear-gradient(130deg, rgba(101, 215, 255, 0.09), transparent 46%),
+    linear-gradient(315deg, rgba(179, 136, 255, 0.06), transparent 48%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.04),
+    0 18px 42px rgba(0, 0, 0, 0.22);
+  isolation: isolate;
+}
+
+.progress-ring-demo-shell::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-image:
+    linear-gradient(rgba(143, 220, 255, 0.055) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(143, 220, 255, 0.055) 1px, transparent 1px);
+  background-size: 34px 34px;
+  mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.78), transparent 88%);
+}
+
+.progress-ring-demo-shell,
+.progress-ring-demo-shell * {
+  box-sizing: border-box;
+}
+
+.progress-ring-demo-hero,
+.progress-ring-demo-states {
+  display: grid;
+  gap: 20px;
+  min-inline-size: 0;
+  padding: clamp(20px, 4cqi, 28px);
+}
+
+.progress-ring-demo-hero {
+  align-items: stretch;
+  border-bottom: 1px solid var(--progress-ring-demo-border);
+}
+
+.progress-ring-demo-copy,
+.progress-ring-demo-stage,
+.progress-ring-demo-stage-ring,
+.progress-ring-demo-state,
+.progress-ring-demo-state > div {
+  display: grid;
+  min-inline-size: 0;
+}
+
+.progress-ring-demo-copy,
+.progress-ring-demo-stage,
+.progress-ring-demo-state > div {
+  align-content: start;
+}
+
+.progress-ring-demo-copy {
+  gap: 10px;
+}
+
+.progress-ring-demo-kicker,
+.progress-ring-demo-stage-label,
+.progress-ring-demo-telemetry dt {
+  font-family: var(--vp-font-family-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.progress-ring-demo-kicker {
+  color: #94e9ff;
+}
+
+.progress-ring-demo-copy h3 {
+  max-inline-size: 30ch;
+  margin: 0;
+  color: var(--progress-ring-demo-text);
+  font-size: clamp(1.18rem, 5cqi, 1.55rem);
+  line-height: 1.1;
+  letter-spacing: 0;
+  text-wrap: balance;
+}
+
+.progress-ring-demo-copy p {
+  max-inline-size: 68ch;
+  margin: 0;
+  color: var(--progress-ring-demo-muted);
+  font-size: 0.92rem;
+  line-height: 1.58;
+}
+
+.progress-ring-demo-stage {
+  gap: 18px;
+  justify-items: center;
+  padding: clamp(18px, 4cqi, 24px);
+  border: 1px solid rgba(101, 215, 255, 0.2);
+  border-radius: 14px;
+  background:
+    linear-gradient(180deg, rgba(101, 215, 255, 0.07), rgba(238, 245, 255, 0.026)), rgba(7, 13, 22, 0.46);
+}
+
+.progress-ring-demo-stage-ring {
+  place-items: center;
+  gap: 10px;
+}
+
+.progress-ring-demo-stage-label {
+  color: #bff3ff;
+}
+
+.progress-ring-demo-telemetry {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  inline-size: 100%;
+  min-inline-size: 0;
+  margin: 0;
+}
+
+.progress-ring-demo-telemetry div {
+  display: grid;
+  gap: 4px;
+  min-inline-size: 0;
+  padding: 12px;
+  border: 1px solid rgba(118, 181, 222, 0.14);
+  border-radius: 10px;
+  background: rgba(238, 245, 255, 0.042);
+}
+
+.progress-ring-demo-telemetry dt {
+  color: var(--progress-ring-demo-soft);
+}
+
+.progress-ring-demo-telemetry dd {
+  min-inline-size: 0;
+  margin: 0;
+  color: var(--progress-ring-demo-text);
+  font-size: 0.84rem;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+
+.progress-ring-demo-states {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 210px), 1fr));
+  align-items: stretch;
+}
+
+.progress-ring-demo-state {
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 14px;
+  align-items: center;
+  min-block-size: 128px;
+  padding: 14px;
+  border: 1px solid var(--progress-ring-demo-border);
+  border-radius: 12px;
+  background:
+    linear-gradient(180deg, var(--progress-ring-demo-panel), rgba(238, 245, 255, 0.026)),
+    rgba(7, 13, 22, 0.32);
+}
+
+.progress-ring-demo-state > div {
+  gap: 6px;
+}
+
+.progress-ring-demo-state strong {
+  color: var(--progress-ring-demo-text);
+  font-size: 0.94rem;
+  line-height: 1.25;
+}
+
+.progress-ring-demo-state span {
+  color: var(--progress-ring-demo-muted);
+  font-size: 0.82rem;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
+.progress-ring-demo-state code,
+.progress-ring-demo-telemetry code {
+  font-family: var(--vp-font-family-mono);
+  color: #bff3ff;
+}
+
+.progress-ring-demo-ring {
+  --cv-progress-ring-track-color: rgba(143, 220, 255, 0.16);
+  --cv-progress-ring-indicator-color: var(--progress-ring-demo-cyan);
+  --cv-progress-ring-label-color: var(--progress-ring-demo-text);
+  --cv-color-primary: var(--progress-ring-demo-cyan);
+  --cv-color-success: var(--progress-ring-demo-green);
+}
+
+.progress-ring-demo-ring::part(label) {
+  font-family: var(--vp-font-family-mono);
+  font-weight: 700;
+  letter-spacing: 0;
+}
+
+.progress-ring-demo-ring--hero {
+  --cv-progress-ring-size: clamp(148px, 28cqi, 206px);
+  --cv-progress-ring-track-width: 7px;
+  --cv-progress-ring-indicator-width: 8px;
+  filter: drop-shadow(0 16px 34px rgba(33, 164, 218, 0.22));
+}
+
+.progress-ring-demo-ring--hero::part(label) {
+  font-size: clamp(1.35rem, 5cqi, 2.2rem);
+}
+
+.progress-ring-demo-ring--state,
+.progress-ring-demo-ring--range,
+.progress-ring-demo-ring--complete {
+  --cv-progress-ring-size: 70px;
+  --cv-progress-ring-track-width: 4px;
+  --cv-progress-ring-indicator-width: 5px;
+  flex: none;
+}
+
+.progress-ring-demo-ring--range {
+  --cv-progress-ring-indicator-color: var(--progress-ring-demo-violet);
+}
+
+.progress-ring-demo-ring--complete {
+  --cv-progress-ring-indicator-color: var(--progress-ring-demo-green);
+}
+
+.progress-ring-demo-ring--state::part(label),
+.progress-ring-demo-ring--range::part(label),
+.progress-ring-demo-ring--complete::part(label) {
+  font-size: 0.84rem;
+}
+
+@container (min-width: 760px) {
+.progress-ring-demo-hero {
+    grid-template-columns: minmax(0, 1fr) minmax(280px, 0.78fr);
+  }
+}
+
+@media (max-width: 640px) {
+.progress-ring-demo-hero,
+  .progress-ring-demo-states {
+    padding: 16px;
+  }
+
+.progress-ring-demo-telemetry,
+  .progress-ring-demo-state {
+    grid-template-columns: 1fr;
+  }
+
+.progress-ring-demo-state {
+    justify-items: start;
+  }
+}
