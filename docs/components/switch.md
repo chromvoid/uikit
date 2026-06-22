@@ -9,10 +9,10 @@ Toggle control that represents an on/off state, visually distinct from a checkbo
 ## Usage
 
 ```html
-<div class="switch-demo-shell usage-demo">
-  <section class="switch-demo-hero usage-demo__hero" aria-labelledby="switch-demo-title">
-    <div class="switch-demo-copy usage-demo__copy">
-      <span class="switch-demo-kicker usage-demo__kicker">Switch pattern</span>
+<div class="switch-demo-shell">
+  <section class="switch-demo-hero" aria-labelledby="switch-demo-title">
+    <div class="switch-demo-copy">
+      <span class="switch-demo-kicker">Switch pattern</span>
       <h3 id="switch-demo-title">Immediate settings with an explicit on/off state.</h3>
       <p>
         Use switches for settings that apply as soon as the user changes them. Pair ambiguous settings with
@@ -38,77 +38,77 @@ Toggle control that represents an on/off state, visually distinct from a checkbo
     </div>
   </section>
 
-  <section class="switch-demo-section usage-demo__section" aria-labelledby="switch-demo-states">
-    <div class="switch-demo-section-header usage-demo__section-header">
-      <span class="switch-demo-kicker usage-demo__kicker">States</span>
+  <section class="switch-demo-section" aria-labelledby="switch-demo-states">
+    <div class="switch-demo-section-header">
+      <span class="switch-demo-kicker">States</span>
       <h4 id="switch-demo-states">Default, checked, disabled, and loading variants</h4>
     </div>
 
     <div class="switch-demo-state-grid">
       <div class="switch-demo-cell">
-        <span class="switch-demo-label usage-demo__meta usage-demo__label">Off</span>
+        <span class="switch-demo-label">Off</span>
         <cv-switch>Mask previews</cv-switch>
       </div>
 
       <div class="switch-demo-cell">
-        <span class="switch-demo-label usage-demo__meta usage-demo__label">On</span>
+        <span class="switch-demo-label">On</span>
         <cv-switch checked>Relay pairing</cv-switch>
       </div>
 
       <div class="switch-demo-cell">
-        <span class="switch-demo-label usage-demo__meta usage-demo__label">Disabled off</span>
+        <span class="switch-demo-label">Disabled off</span>
         <cv-switch disabled>Remote unlock</cv-switch>
       </div>
 
       <div class="switch-demo-cell">
-        <span class="switch-demo-label usage-demo__meta usage-demo__label">Disabled on</span>
+        <span class="switch-demo-label">Disabled on</span>
         <cv-switch checked disabled>Policy enforced</cv-switch>
       </div>
 
       <div class="switch-demo-cell">
-        <span class="switch-demo-label usage-demo__meta usage-demo__label">Loading off</span>
+        <span class="switch-demo-label">Loading off</span>
         <cv-switch loading>Saving visibility</cv-switch>
       </div>
 
       <div class="switch-demo-cell">
-        <span class="switch-demo-label usage-demo__meta usage-demo__label">Loading on</span>
+        <span class="switch-demo-label">Loading on</span>
         <cv-switch checked loading>Sync in progress</cv-switch>
       </div>
     </div>
   </section>
 
-  <section class="switch-demo-section usage-demo__section" aria-labelledby="switch-demo-density">
-    <div class="switch-demo-section-header usage-demo__section-header">
-      <span class="switch-demo-kicker usage-demo__kicker">Density</span>
+  <section class="switch-demo-section" aria-labelledby="switch-demo-density">
+    <div class="switch-demo-section-header">
+      <span class="switch-demo-kicker">Density</span>
       <h4 id="switch-demo-density">Size scale and row rhythm</h4>
     </div>
 
     <div class="switch-demo-size-grid">
       <div class="switch-demo-cell">
-        <span class="switch-demo-label usage-demo__meta usage-demo__label">Small</span>
+        <span class="switch-demo-label">Small</span>
         <cv-switch size="small" checked>Compact row</cv-switch>
       </div>
 
       <div class="switch-demo-cell">
-        <span class="switch-demo-label usage-demo__meta usage-demo__label">Medium</span>
+        <span class="switch-demo-label">Medium</span>
         <cv-switch checked>Default row</cv-switch>
       </div>
 
       <div class="switch-demo-cell">
-        <span class="switch-demo-label usage-demo__meta usage-demo__label">Large</span>
+        <span class="switch-demo-label">Large</span>
         <cv-switch size="large" checked>Primary setting</cv-switch>
       </div>
     </div>
   </section>
 
-  <section class="switch-demo-section usage-demo__section" aria-labelledby="switch-demo-content">
-    <div class="switch-demo-section-header usage-demo__section-header">
-      <span class="switch-demo-kicker usage-demo__kicker">Content</span>
+  <section class="switch-demo-section" aria-labelledby="switch-demo-content">
+    <div class="switch-demo-section-header">
+      <span class="switch-demo-kicker">Content</span>
       <h4 id="switch-demo-content">Help text, attribute help, and track slots</h4>
     </div>
 
     <div class="switch-demo-content-grid">
-      <div class="switch-demo-panel usage-demo__panel">
+      <div class="switch-demo-panel">
         <cv-switch help-text="Reduces non-essential surface detail after sunset"> Night mode </cv-switch>
 
         <cv-switch checked>
@@ -117,25 +117,25 @@ Toggle control that represents an on/off state, visually distinct from a checkbo
         </cv-switch>
       </div>
 
-      <div class="switch-demo-panel usage-demo__panel">
+      <div class="switch-demo-panel">
         <cv-switch checked size="large">
           Sound
-          <span class="switch-demo-track-text usage-demo__meta usage-demo__label" slot="toggled">ON</span>
-          <span class="switch-demo-track-text usage-demo__meta usage-demo__label" slot="untoggled">OFF</span>
+          <span class="switch-demo-track-text" slot="toggled">ON</span>
+          <span class="switch-demo-track-text" slot="untoggled">OFF</span>
         </cv-switch>
 
         <cv-switch size="large">
           Visibility
-          <span class="switch-demo-track-text usage-demo__meta usage-demo__label" slot="toggled">YES</span>
-          <span class="switch-demo-track-text usage-demo__meta usage-demo__label" slot="untoggled">NO</span>
+          <span class="switch-demo-track-text" slot="toggled">YES</span>
+          <span class="switch-demo-track-text" slot="untoggled">NO</span>
         </cv-switch>
       </div>
     </div>
   </section>
 
-  <section class="switch-demo-section usage-demo__section" aria-labelledby="switch-demo-form">
-    <div class="switch-demo-section-header usage-demo__section-header">
-      <span class="switch-demo-kicker usage-demo__kicker">Form grouping</span>
+  <section class="switch-demo-section" aria-labelledby="switch-demo-form">
+    <div class="switch-demo-section-header">
+      <span class="switch-demo-kicker">Form grouping</span>
       <h4 id="switch-demo-form">Switches inside a fieldset</h4>
     </div>
 

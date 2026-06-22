@@ -9,19 +9,19 @@ Single or multi-selection dropdown that composes a combobox trigger with a listb
 ## Usage
 
 ```html
-<div class="select-demo-shell usage-demo" data-demo="select" data-live-demo-height="820">
-  <header class="select-demo-hero usage-demo__hero">
-    <div class="select-demo-copy usage-demo__copy">
-      <span class="select-demo-kicker usage-demo__kicker">Select-only combobox</span>
+<div class="select-demo-shell" data-demo="select" data-live-demo-height="820">
+  <header class="select-demo-hero">
+    <div class="select-demo-copy">
+      <span class="select-demo-kicker">Select-only combobox</span>
       <h3>Route a vault policy with grouped, multiple, clearable, and invalid states.</h3>
       <p>
         The demo keeps DOM focus on the trigger, mirrors selection through
-        <code>cv-input</code> and <code>cv-change</code>, and shows the control inside field labels,
-        descriptions, and errors.
+        <code>cv-input</code> and <code>cv-change</code>, and shows the control inside
+        field labels, descriptions, and errors.
       </p>
     </div>
 
-    <dl class="select-demo-metrics usage-demo__metrics" aria-label="Select contract coverage">
+    <dl class="select-demo-metrics" aria-label="Select contract coverage">
       <div>
         <dt>Pattern</dt>
         <dd>APG select-only combobox</dd>
@@ -37,10 +37,10 @@ Single or multi-selection dropdown that composes a combobox trigger with a listb
     </dl>
   </header>
 
-  <section class="select-demo-board usage-demo__workbench" aria-label="Vault policy form">
-    <div class="select-demo-panel select-demo-panel--primary usage-demo__panel">
-      <div class="select-demo-section-header usage-demo__section-header">
-        <span class="select-demo-kicker usage-demo__kicker">Primary decision</span>
+  <section class="select-demo-board" aria-label="Vault policy form">
+    <div class="select-demo-panel select-demo-panel--primary">
+      <div class="select-demo-section-header">
+        <span class="select-demo-kicker">Primary decision</span>
         <h4>Choose the trust boundary before exposing any downstream route.</h4>
       </div>
 
@@ -82,9 +82,9 @@ Single or multi-selection dropdown that composes a combobox trigger with a listb
       </div>
     </div>
 
-    <aside class="select-demo-side usage-demo__side" aria-label="Live select state">
-      <span class="select-demo-kicker usage-demo__kicker">Event readout</span>
-      <dl class="select-demo-state usage-demo__state">
+    <aside class="select-demo-side" aria-label="Live select state">
+      <span class="select-demo-kicker">Event readout</span>
+      <dl class="select-demo-state">
         <div>
           <dt>Values</dt>
           <dd data-select-demo-values>hardware</dd>
@@ -94,15 +94,15 @@ Single or multi-selection dropdown that composes a combobox trigger with a listb
           <dd data-select-demo-active>none</dd>
         </div>
       </dl>
-      <output class="select-demo-log usage-demo__log" data-select-demo-output>
+      <output class="select-demo-log" data-select-demo-output>
         ready -> Trust boundary: hardware
       </output>
     </aside>
   </section>
 
-  <section class="select-demo-cases usage-demo__section" aria-label="Select state matrix">
-    <div class="select-demo-section-header usage-demo__section-header">
-      <span class="select-demo-kicker usage-demo__kicker">State matrix</span>
+  <section class="select-demo-cases" aria-label="Select state matrix">
+    <div class="select-demo-section-header">
+      <span class="select-demo-kicker">State matrix</span>
       <h4>Common application cases stay visible without turning the demo into a control dump.</h4>
     </div>
 
@@ -151,7 +151,11 @@ Single or multi-selection dropdown that composes a combobox trigger with a listb
 
 <script type="module">
   const formatSelectValues = (select) => {
-    const values = select.selectedValues?.length ? select.selectedValues : select.value ? [select.value] : []
+    const values = select.selectedValues?.length
+      ? select.selectedValues
+      : select.value
+        ? [select.value]
+        : []
 
     return values.length > 0 ? values.join(', ') : 'none'
   }
@@ -165,8 +169,11 @@ Single or multi-selection dropdown that composes a combobox trigger with a listb
     const primary = shell.querySelector('[data-select-demo-primary]')
 
     const emitState = (select, type, detail = {}) => {
-      const label =
-        select.closest('cv-field')?.querySelector('[slot="label"]')?.textContent?.trim() || 'Select'
+      const label = select
+        .closest('cv-field')
+        ?.querySelector('[slot="label"]')
+        ?.textContent
+        ?.trim() || 'Select'
       const selected = formatSelectValues(select)
 
       if (values) values.textContent = selected

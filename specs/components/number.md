@@ -251,14 +251,10 @@ UIKit does not own value management, clamping, snapping, draft commit logic, or 
 ## Usage
 
 ```html
-<div
-  class="number-demo-shell usage-demo usage-demo__dark-preview"
-  data-demo="number"
-  data-live-demo-height="900"
->
-  <section class="number-demo-hero usage-demo__hero" aria-labelledby="number-demo-title">
-    <div class="number-demo-copy usage-demo__copy">
-      <span class="number-demo-kicker usage-demo__kicker">Numeric spinbutton primitive</span>
+<div class="number-demo-shell" data-demo="number" data-live-demo-height="900">
+  <section class="number-demo-hero" aria-labelledby="number-demo-title">
+    <div class="number-demo-copy">
+      <span class="number-demo-kicker">Numeric spinbutton primitive</span>
       <h3 id="number-demo-title">
         Clamp, step, clear, and serialize numeric state through one field surface.
       </h3>
@@ -269,7 +265,7 @@ UIKit does not own value management, clamping, snapping, draft commit logic, or 
       </p>
     </div>
 
-    <dl class="number-demo-metrics usage-demo__metrics" aria-label="Number contract summary">
+    <dl class="number-demo-metrics" aria-label="Number contract summary">
       <div>
         <dt>Range</dt>
         <dd>min / max / step / large-step</dd>
@@ -285,24 +281,20 @@ UIKit does not own value management, clamping, snapping, draft commit logic, or 
     </dl>
   </section>
 
-  <section
-    class="number-demo-board usage-demo__workbench"
-    aria-label="Number examples in a vault policy form"
-  >
-    <form class="number-demo-form usage-demo__form" data-number-form>
-      <div class="number-demo-form-head usage-demo__form-head">
+  <section class="number-demo-board" aria-label="Number examples in a vault policy form">
+    <form class="number-demo-form" data-number-form>
+      <div class="number-demo-form-head">
         <div>
-          <span class="usage-demo__meta">Visible policy limits</span>
+          <span>Visible policy limits</span>
           <strong>decoy-profile.local</strong>
         </div>
         <cv-badge variant="primary" pill>bounded input</cv-badge>
       </div>
 
-      <div class="number-demo-field-grid usage-demo__field-grid">
-        <cv-field class="usage-demo__field" required>
+      <div class="number-demo-field-grid">
+        <cv-field required>
           <span slot="label">Decoy quota</span>
           <cv-number
-            class="usage-demo__text-control"
             data-number-primary
             name="quota"
             value="30"
@@ -314,65 +306,39 @@ UIKit does not own value management, clamping, snapping, draft commit logic, or 
             clearable
             stepper
           >
-            <span class="usage-demo__adornment" slot="suffix">GB</span>
+            <span slot="suffix">GB</span>
           </cv-number>
           <span slot="description">Arrow keys step by 5. Page keys step by 25. Clear returns to 30.</span>
         </cv-field>
 
-        <cv-field class="usage-demo__field">
+        <cv-field>
           <span slot="label">HOTP counter</span>
-          <cv-number
-            class="usage-demo__text-control"
-            name="counter"
-            value="12"
-            min="0"
-            max="999999"
-            step="1"
-            stepper
-            clearable
-          >
-            <span class="usage-demo__adornment" slot="prefix">#</span>
+          <cv-number name="counter" value="12" min="0" max="999999" step="1" stepper clearable>
+            <span slot="prefix">#</span>
           </cv-number>
           <span slot="description"
             >Stepper controls expose the same committed change event as keyboard steps.</span
           >
         </cv-field>
 
-        <cv-field class="usage-demo__field">
+        <cv-field>
           <span slot="label">Retry window</span>
-          <cv-number
-            class="usage-demo__text-control"
-            name="retry"
-            variant="filled"
-            value="3"
-            min="1"
-            max="10"
-            step="1"
-            clearable
-          >
-            <span class="usage-demo__adornment" slot="suffix">tries</span>
+          <cv-number name="retry" variant="filled" value="3" min="1" max="10" step="1" clearable>
+            <span slot="suffix">tries</span>
           </cv-number>
           <span slot="description">Filled variant keeps the same headless range and form contract.</span>
         </cv-field>
 
-        <cv-field class="usage-demo__field">
+        <cv-field>
           <span slot="label">Timeout</span>
-          <cv-number
-            class="usage-demo__text-control"
-            name="timeout"
-            value="45"
-            min="5"
-            max="120"
-            step="5"
-            large-step="30"
-          >
-            <span class="usage-demo__adornment" slot="suffix">sec</span>
+          <cv-number name="timeout" value="45" min="5" max="120" step="5" large-step="30">
+            <span slot="suffix">sec</span>
           </cv-number>
           <span slot="description">Draft edits commit on Enter or blur, then snap through the model.</span>
         </cv-field>
       </div>
 
-      <div class="number-demo-actions usage-demo__actions" aria-label="Programmatic number actions">
+      <div class="number-demo-actions" aria-label="Programmatic number actions">
         <cv-button type="button" size="small" data-number-action="step-up">Step up</cv-button>
         <cv-button type="button" size="small" data-number-action="page-up">Page up</cv-button>
         <cv-button type="button" size="small" variant="secondary" data-number-action="reset">Reset</cv-button>
@@ -382,17 +348,17 @@ UIKit does not own value management, clamping, snapping, draft commit logic, or 
       </div>
     </form>
 
-    <aside class="number-demo-side usage-demo__side" aria-label="Number event output">
-      <div class="number-demo-side-head usage-demo__side-head">
-        <span class="number-demo-kicker usage-demo__kicker">Event stream</span>
+    <aside class="number-demo-side" aria-label="Number event output">
+      <div class="number-demo-side-head">
+        <span class="number-demo-kicker">Event stream</span>
         <h4>Committed numeric changes report a stable number value, not draft text.</h4>
       </div>
 
-      <p class="number-demo-log usage-demo__log" role="status" aria-live="polite" data-number-output>
+      <p class="number-demo-log" role="status" aria-live="polite" data-number-output>
         Waiting for a committed number event.
       </p>
 
-      <dl class="number-demo-live usage-demo__state" aria-label="Live number state">
+      <dl class="number-demo-live" aria-label="Live number state">
         <div>
           <dt>Primary value</dt>
           <dd data-number-mirror>30 GB</dd>
@@ -409,82 +375,60 @@ UIKit does not own value management, clamping, snapping, draft commit logic, or 
     </aside>
   </section>
 
-  <section class="number-demo-section usage-demo__section" aria-labelledby="number-demo-matrix-title">
-    <div class="number-demo-section-header usage-demo__section-header">
-      <span class="number-demo-kicker usage-demo__kicker">Variants, bounds, and field states</span>
+  <section class="number-demo-section" aria-labelledby="number-demo-matrix-title">
+    <div class="number-demo-section-header">
+      <span class="number-demo-kicker">Variants, bounds, and field states</span>
       <h4 id="number-demo-matrix-title">
         Use one number contract, then tune density, affordance, or validation through attributes.
       </h4>
     </div>
 
-    <div class="number-demo-matrix usage-demo__field-grid" aria-label="Number state matrix">
-      <div class="usage-demo__case">
-        <span class="usage-demo__meta">Range edges</span>
-        <cv-number class="usage-demo__text-control" value="0" min="0" max="10" step="1" stepper></cv-number>
-        <cv-number class="usage-demo__text-control" value="10" min="0" max="10" step="1" stepper></cv-number>
+    <div class="number-demo-matrix" aria-label="Number state matrix">
+      <div>
+        <span>Range edges</span>
+        <cv-number value="0" min="0" max="10" step="1" stepper></cv-number>
+        <cv-number value="10" min="0" max="10" step="1" stepper></cv-number>
       </div>
 
-      <div class="usage-demo__case">
-        <span class="usage-demo__meta">Size</span>
-        <cv-number class="usage-demo__text-control" size="small" value="8" min="0" max="16"></cv-number>
-        <cv-number class="usage-demo__text-control" value="16" min="0" max="32"></cv-number>
-        <cv-number class="usage-demo__text-control" size="large" value="32" min="0" max="64"></cv-number>
+      <div>
+        <span>Size</span>
+        <cv-number size="small" value="8" min="0" max="16"></cv-number>
+        <cv-number value="16" min="0" max="32"></cv-number>
+        <cv-number size="large" value="32" min="0" max="64"></cv-number>
       </div>
 
-      <div class="usage-demo__case">
-        <span class="usage-demo__meta">Affixes</span>
-        <cv-number class="usage-demo__text-control" value="19" clearable>
-          <span class="usage-demo__adornment" slot="prefix">$</span>
-          <span class="usage-demo__adornment" slot="suffix">.00</span>
+      <div>
+        <span>Affixes</span>
+        <cv-number value="19" clearable>
+          <span slot="prefix">$</span>
+          <span slot="suffix">.00</span>
         </cv-number>
-        <cv-number class="usage-demo__text-control" value="128" variant="filled" min="16" max="512">
-          <span class="usage-demo__adornment" slot="suffix">MB</span>
+        <cv-number value="128" variant="filled" min="16" max="512">
+          <span slot="suffix">MB</span>
         </cv-number>
       </div>
 
-      <div class="usage-demo__case usage-demo__case--danger">
-        <span class="usage-demo__meta">Validation</span>
-        <cv-field class="usage-demo__field" required invalid>
+      <div>
+        <span>Validation</span>
+        <cv-field required invalid>
           <span slot="label">Age gate</span>
-          <cv-number
-            class="usage-demo__text-control"
-            required
-            invalid
-            min="18"
-            max="120"
-            value="16"
-          ></cv-number>
+          <cv-number required invalid min="18" max="120" value="16"></cv-number>
           <span slot="error">Value must be at least 18.</span>
         </cv-field>
       </div>
 
-      <div class="usage-demo__case">
-        <span class="usage-demo__meta">Clear defaults</span>
-        <cv-number
-          class="usage-demo__text-control"
-          value="42"
-          default-value="10"
-          min="0"
-          max="100"
-          clearable
-          stepper
-        ></cv-number>
-        <cv-number
-          class="usage-demo__text-control"
-          value="10"
-          default-value="10"
-          min="0"
-          max="100"
-          clearable
-        ></cv-number>
+      <div>
+        <span>Clear defaults</span>
+        <cv-number value="42" default-value="10" min="0" max="100" clearable stepper></cv-number>
+        <cv-number value="10" default-value="10" min="0" max="100" clearable></cv-number>
       </div>
 
-      <div class="usage-demo__case">
-        <span class="usage-demo__meta">Read state</span>
-        <cv-number class="usage-demo__text-control" read-only value="100"></cv-number>
-        <cv-field class="usage-demo__field" disabled>
+      <div>
+        <span>Read state</span>
+        <cv-number read-only value="100"></cv-number>
+        <cv-field disabled>
           <span slot="label">Disabled by field</span>
-          <cv-number class="usage-demo__text-control" value="50" stepper></cv-number>
+          <cv-number value="50" stepper></cv-number>
         </cv-field>
       </div>
     </div>

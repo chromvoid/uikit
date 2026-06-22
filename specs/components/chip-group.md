@@ -33,9 +33,9 @@ Shadow structure:
 
 ## Slots
 
-| Slot        | Description             |
-| ----------- | ----------------------- |
-| `(default)` | Slotted `cv-chip` items |
+| Slot        | Description               |
+| ----------- | ------------------------- |
+| `(default)` | Slotted `cv-chip` items   |
 
 ## CSS Parts
 
@@ -63,19 +63,19 @@ chips without emitting events.
 
 ## Selection modes
 
-| Mode       | Behavior                                                               |
-| ---------- | ---------------------------------------------------------------------- |
-| `none`     | Chips still emit their own `cv-chip-action`; the group does not select |
-| `single`   | One selected value at a time; clicking the selected chip clears it     |
-| `multiple` | Adds or removes values; host `value` serializes them with spaces       |
+| Mode       | Behavior                                                                 |
+| ---------- | ------------------------------------------------------------------------ |
+| `none`     | Chips still emit their own `cv-chip-action`; the group does not select   |
+| `single`   | One selected value at a time; clicking the selected chip clears it       |
+| `multiple` | Adds or removes values; host `value` serializes them with spaces         |
 
 ## Usage
 
 ```html
-<div class="chip-group-demo-shell usage-demo" data-demo="chip-group">
-  <section class="chip-group-demo-hero usage-demo__hero" aria-labelledby="chip-group-demo-title">
-    <div class="chip-group-demo-copy usage-demo__copy">
-      <span class="chip-group-demo-kicker usage-demo__kicker">Selection model</span>
+<div class="chip-group-demo-shell" data-demo="chip-group">
+  <section class="chip-group-demo-hero" aria-labelledby="chip-group-demo-title">
+    <div class="chip-group-demo-copy">
+      <span class="chip-group-demo-kicker">Selection model</span>
       <h3 id="chip-group-demo-title">Use groups when chips form one choice system.</h3>
       <p>
         The group owns selection, updates child chip states, and emits form-like input/change events only
@@ -83,7 +83,7 @@ chips without emitting events.
       </p>
     </div>
 
-    <dl class="chip-group-demo-metrics usage-demo__metrics" aria-label="Chip group behavior summary">
+    <dl class="chip-group-demo-metrics" aria-label="Chip group behavior summary">
       <div>
         <dt>Single</dt>
         <dd>One value</dd>
@@ -99,57 +99,49 @@ chips without emitting events.
     </dl>
   </section>
 
-  <section class="chip-group-demo-section usage-demo__section" aria-labelledby="chip-group-demo-single-title">
-    <div class="chip-group-demo-section-header usage-demo__section-header">
-      <span class="chip-group-demo-kicker usage-demo__kicker">Single selection</span>
+  <section class="chip-group-demo-section" aria-labelledby="chip-group-demo-single-title">
+    <div class="chip-group-demo-section-header">
+      <span class="chip-group-demo-kicker">Single selection</span>
       <h4 id="chip-group-demo-single-title">One active facet at a time</h4>
     </div>
 
-    <div class="chip-group-demo-panel usage-demo__panel">
+    <div class="chip-group-demo-panel">
       <cv-chip-group selection-mode="single" value="all" aria-label="Content filter">
         <cv-chip value="all">All</cv-chip>
         <cv-chip value="files">Files</cv-chip>
         <cv-chip value="notes">Notes</cv-chip>
         <cv-chip value="media" disabled>Media</cv-chip>
       </cv-chip-group>
-      <output class="chip-group-demo-output usage-demo__log" aria-live="polite">Current value: all</output>
+      <output class="chip-group-demo-output" aria-live="polite">Current value: all</output>
     </div>
   </section>
 
-  <section
-    class="chip-group-demo-section usage-demo__section"
-    aria-labelledby="chip-group-demo-multiple-title"
-  >
-    <div class="chip-group-demo-section-header usage-demo__section-header">
-      <span class="chip-group-demo-kicker usage-demo__kicker">Multiple selection</span>
+  <section class="chip-group-demo-section" aria-labelledby="chip-group-demo-multiple-title">
+    <div class="chip-group-demo-section-header">
+      <span class="chip-group-demo-kicker">Multiple selection</span>
       <h4 id="chip-group-demo-multiple-title">Selected chips serialize into the host value</h4>
     </div>
 
-    <div class="chip-group-demo-panel usage-demo__panel">
+    <div class="chip-group-demo-panel">
       <cv-chip-group selection-mode="multiple" value="local otp" aria-label="Vault facets">
         <cv-chip value="local" removable>Local</cv-chip>
         <cv-chip value="otp" removable>OTP seeds</cv-chip>
         <cv-chip value="shared">Shared</cv-chip>
         <cv-chip value="archived">Archived</cv-chip>
       </cv-chip-group>
-      <output class="chip-group-demo-output usage-demo__log" aria-live="polite"
-        >Current value: local otp</output
-      >
+      <output class="chip-group-demo-output" aria-live="polite">Current value: local otp</output>
     </div>
   </section>
 
-  <section
-    class="chip-group-demo-section usage-demo__section"
-    aria-labelledby="chip-group-demo-keyboard-title"
-  >
-    <div class="chip-group-demo-section-header usage-demo__section-header">
-      <span class="chip-group-demo-kicker usage-demo__kicker">Keyboard flow</span>
+  <section class="chip-group-demo-section" aria-labelledby="chip-group-demo-keyboard-title">
+    <div class="chip-group-demo-section-header">
+      <span class="chip-group-demo-kicker">Keyboard flow</span>
       <h4 id="chip-group-demo-keyboard-title">Orientation controls the arrow-key direction</h4>
     </div>
 
     <div class="chip-group-demo-keyboard-grid">
-      <div class="chip-group-demo-panel usage-demo__panel">
-        <span class="chip-group-demo-label usage-demo__meta usage-demo__label">Horizontal</span>
+      <div class="chip-group-demo-panel">
+        <span class="chip-group-demo-label">Horizontal</span>
         <cv-chip-group selection-mode="single" value="usb" aria-label="Transport" orientation="horizontal">
           <cv-chip value="usb">USB</cv-chip>
           <cv-chip value="webrtc">WebRTC</cv-chip>
@@ -157,8 +149,8 @@ chips without emitting events.
         </cv-chip-group>
       </div>
 
-      <div class="chip-group-demo-panel usage-demo__panel">
-        <span class="chip-group-demo-label usage-demo__meta usage-demo__label">Vertical</span>
+      <div class="chip-group-demo-panel">
+        <span class="chip-group-demo-label">Vertical</span>
         <cv-chip-group selection-mode="single" value="strict" aria-label="Policy" orientation="vertical">
           <cv-chip value="strict">Strict</cv-chip>
           <cv-chip value="balanced">Balanced</cv-chip>
@@ -170,19 +162,17 @@ chips without emitting events.
 </div>
 
 <script>
-  document
-    .querySelectorAll('.chip-group-demo-shell[data-demo="chip-group"]:not([data-ready])')
-    .forEach((shell) => {
-      shell.dataset.ready = 'true'
-      shell.querySelectorAll('cv-chip-group').forEach((group) => {
-        const panel = group.closest('.chip-group-demo-panel')
-        const output = panel?.querySelector('.chip-group-demo-output')
-        group.addEventListener('cv-change', (event) => {
-          if (!output) return
-          const value = Array.isArray(event.detail.value) ? event.detail.value.join(' ') : event.detail.value
-          output.textContent = `Current value: ${value || 'empty'}`
-        })
+  document.querySelectorAll('.chip-group-demo-shell[data-demo="chip-group"]:not([data-ready])').forEach((shell) => {
+    shell.dataset.ready = 'true'
+    shell.querySelectorAll('cv-chip-group').forEach((group) => {
+      const panel = group.closest('.chip-group-demo-panel')
+      const output = panel?.querySelector('.chip-group-demo-output')
+      group.addEventListener('cv-change', (event) => {
+        if (!output) return
+        const value = Array.isArray(event.detail.value) ? event.detail.value.join(' ') : event.detail.value
+        output.textContent = `Current value: ${value || 'empty'}`
       })
     })
+  })
 </script>
 ```

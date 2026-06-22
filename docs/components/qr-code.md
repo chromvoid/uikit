@@ -18,24 +18,24 @@ variant for visual hierarchy, a token-colored variant, and a branded variant wit
 in the center.
 
 ```html
-<div class="qr-demo-shell usage-demo" data-demo="qr-code" data-live-demo-height="680">
-  <section class="qr-demo-hero usage-demo__hero" aria-labelledby="qr-demo-title">
-    <div class="qr-demo-copy usage-demo__copy">
-      <span class="qr-demo-kicker usage-demo__kicker">Screen to device handoff</span>
+<div class="qr-demo-shell" data-demo="qr-code" data-live-demo-height="680">
+  <section class="qr-demo-hero" aria-labelledby="qr-demo-title">
+    <div class="qr-demo-copy">
+      <span class="qr-demo-kicker">Screen to device handoff</span>
       <h3 id="qr-demo-title">Make the transfer scannable without exposing sensitive payloads</h3>
       <p>
         Use the attribute form for public URLs. For setup secrets and recovery payloads, write
         <code>.value</code> from app state so the encoded data never has to be reflected in markup.
       </p>
-      <div class="qr-demo-signal-row usage-demo__baseline-row" aria-label="QR code reliability guidance">
-        <span class="qr-demo-signal usage-demo__meta usage-demo__label">High contrast</span>
-        <span class="qr-demo-signal usage-demo__meta usage-demo__label">Quiet zone kept</span>
-        <span class="qr-demo-signal usage-demo__meta usage-demo__label">Logo requires H</span>
+      <div class="qr-demo-signal-row" aria-label="QR code reliability guidance">
+        <span class="qr-demo-signal">High contrast</span>
+        <span class="qr-demo-signal">Quiet zone kept</span>
+        <span class="qr-demo-signal">Logo requires H</span>
       </div>
     </div>
 
     <figure class="qr-demo-feature">
-      <span class="qr-demo-feature-label usage-demo__meta usage-demo__label">Public pairing URL</span>
+      <span class="qr-demo-feature-label">Public pairing URL</span>
       <cv-qr-code
         class="qr-demo-featured"
         value="https://chromvoid.com/pair?device=vault"
@@ -49,7 +49,7 @@ in the center.
     </figure>
   </section>
 
-  <div class="qr-demo-board usage-demo__workbench" aria-label="QR code rendering variants">
+  <div class="qr-demo-board" aria-label="QR code rendering variants">
     <figure class="qr-demo-card">
       <cv-qr-code value="https://chromvoid.com" aria-label="ChromVoid website QR code"></cv-qr-code>
       <figcaption>

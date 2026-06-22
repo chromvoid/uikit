@@ -143,10 +143,10 @@ Keys `ArrowUp`, `ArrowDown`, `ArrowLeft`, `ArrowRight`, `Home`, `End`, `Enter`, 
 ## Usage
 
 ```html
-<div class="treeview-demo-shell usage-demo" data-demo="treeview" data-live-demo-height="780">
-  <section class="treeview-demo-hero usage-demo__hero" aria-labelledby="treeview-demo-title">
-    <div class="treeview-demo-copy usage-demo__copy">
-      <span class="treeview-demo-kicker usage-demo__kicker">APG tree adapter</span>
+<div class="treeview-demo-shell" data-demo="treeview" data-live-demo-height="780">
+  <section class="treeview-demo-hero" aria-labelledby="treeview-demo-title">
+    <div class="treeview-demo-copy">
+      <span class="treeview-demo-kicker">APG tree adapter</span>
       <h3 id="treeview-demo-title">Hierarchy, selection, and expansion stay on one headless contract.</h3>
       <p>
         Use treeview when the user needs to scan nested vault scopes, move through branches with arrow keys,
@@ -154,7 +154,7 @@ Keys `ArrowUp`, `ArrowDown`, `ArrowLeft`, `ArrowRight`, `Home`, `End`, `Enter`, 
       </p>
     </div>
 
-    <dl class="treeview-demo-metrics usage-demo__metrics" aria-label="Treeview behavior summary">
+    <dl class="treeview-demo-metrics" aria-label="Treeview behavior summary">
       <div>
         <dt>Root role</dt>
         <dd>tree</dd>
@@ -170,40 +170,37 @@ Keys `ArrowUp`, `ArrowDown`, `ArrowLeft`, `ArrowRight`, `Home`, `End`, `Enter`, 
     </dl>
   </section>
 
-  <section
-    class="treeview-demo-workbench usage-demo__workbench"
-    aria-labelledby="treeview-demo-workbench-title"
-  >
-    <div class="treeview-demo-section-header usage-demo__section-header">
-      <span class="treeview-demo-kicker usage-demo__kicker">Operational navigation</span>
+  <section class="treeview-demo-workbench" aria-labelledby="treeview-demo-workbench-title">
+    <div class="treeview-demo-section-header">
+      <span class="treeview-demo-kicker">Operational navigation</span>
       <h4 id="treeview-demo-workbench-title">Vault namespace tree with selected export scopes</h4>
     </div>
 
-    <div class="treeview-demo-layout usage-demo__single-layout">
-      <article class="treeview-demo-panel usage-demo__panel" aria-labelledby="treeview-demo-vault-title">
-        <header class="treeview-demo-panel-header usage-demo__panel-header">
+    <div class="treeview-demo-layout">
+      <article class="treeview-demo-panel" aria-labelledby="treeview-demo-vault-title">
+        <header class="treeview-demo-panel-header">
           <div>
             <span class="treeview-demo-label">Single select</span>
             <h5 id="treeview-demo-vault-title">Vault namespaces</h5>
           </div>
-          <cv-badge class="usage-demo__dense-badge" variant="success" size="small">active</cv-badge>
+          <cv-badge variant="success" size="small">active</cv-badge>
         </header>
 
         <cv-treeview id="treeview-demo-vault" aria-label="Vault namespace tree" selection-mode="single">
           <cv-treeitem value="vaults" label="Vaults">
             <span slot="label" class="treeview-demo-node">
               <span class="treeview-demo-glyph" aria-hidden="true">V</span>
-              <span class="treeview-demo-node-copy usage-demo__micro-copy">
+              <span class="treeview-demo-node-copy">
                 <strong>Vaults</strong>
                 <small>3 namespaces</small>
               </span>
-              <cv-badge class="usage-demo__dense-badge" variant="primary" size="small">live</cv-badge>
+              <cv-badge variant="primary" size="small">live</cv-badge>
             </span>
 
             <cv-treeitem value="vaults-primary" label="Primary vault" slot="children">
               <span slot="label" class="treeview-demo-node">
                 <span class="treeview-demo-glyph" aria-hidden="true">P</span>
-                <span class="treeview-demo-node-copy usage-demo__micro-copy">
+                <span class="treeview-demo-node-copy">
                   <strong>Primary vault</strong>
                   <small>hardware assisted</small>
                 </span>
@@ -212,7 +209,7 @@ Keys `ArrowUp`, `ArrowDown`, `ArrowLeft`, `ArrowRight`, `Home`, `End`, `Enter`, 
               <cv-treeitem value="vaults-primary-credentials" label="Credentials" slot="children">
                 <span slot="label" class="treeview-demo-node">
                   <span class="treeview-demo-glyph" aria-hidden="true">C</span>
-                  <span class="treeview-demo-node-copy usage-demo__micro-copy">
+                  <span class="treeview-demo-node-copy">
                     <strong>Credentials</strong>
                     <small>14 records</small>
                   </span>
@@ -221,7 +218,7 @@ Keys `ArrowUp`, `ArrowDown`, `ArrowLeft`, `ArrowRight`, `Home`, `End`, `Enter`, 
               <cv-treeitem value="vaults-primary-notes" label="Secure notes" slot="children">
                 <span slot="label" class="treeview-demo-node">
                   <span class="treeview-demo-glyph" aria-hidden="true">N</span>
-                  <span class="treeview-demo-node-copy usage-demo__micro-copy">
+                  <span class="treeview-demo-node-copy">
                     <strong>Secure notes</strong>
                     <small>sealed locally</small>
                   </span>
@@ -232,18 +229,18 @@ Keys `ArrowUp`, `ArrowDown`, `ArrowLeft`, `ArrowRight`, `Home`, `End`, `Enter`, 
             <cv-treeitem value="vaults-decoy" label="Decoy surface" slot="children">
               <span slot="label" class="treeview-demo-node">
                 <span class="treeview-demo-glyph treeview-demo-glyph--violet" aria-hidden="true">D</span>
-                <span class="treeview-demo-node-copy usage-demo__micro-copy">
+                <span class="treeview-demo-node-copy">
                   <strong>Decoy surface</strong>
                   <small>visible under inspection</small>
                 </span>
-                <cv-badge class="usage-demo__dense-badge" variant="neutral" size="small">visible</cv-badge>
+                <cv-badge variant="neutral" size="small">visible</cv-badge>
               </span>
             </cv-treeitem>
 
             <cv-treeitem value="vaults-archive" label="Cold archive" slot="children">
               <span slot="label" class="treeview-demo-node">
                 <span class="treeview-demo-glyph" aria-hidden="true">A</span>
-                <span class="treeview-demo-node-copy usage-demo__micro-copy">
+                <span class="treeview-demo-node-copy">
                   <strong>Cold archive</strong>
                   <small>offline recovery</small>
                 </span>
@@ -254,7 +251,7 @@ Keys `ArrowUp`, `ArrowDown`, `ArrowLeft`, `ArrowRight`, `Home`, `End`, `Enter`, 
           <cv-treeitem value="routes" label="Routes">
             <span slot="label" class="treeview-demo-node">
               <span class="treeview-demo-glyph" aria-hidden="true">R</span>
-              <span class="treeview-demo-node-copy usage-demo__micro-copy">
+              <span class="treeview-demo-node-copy">
                 <strong>Access routes</strong>
                 <small>device and relay paths</small>
               </span>
@@ -263,7 +260,7 @@ Keys `ArrowUp`, `ArrowDown`, `ArrowLeft`, `ArrowRight`, `Home`, `End`, `Enter`, 
             <cv-treeitem value="routes-relay" label="USB relay" slot="children">
               <span slot="label" class="treeview-demo-node">
                 <span class="treeview-demo-glyph" aria-hidden="true">U</span>
-                <span class="treeview-demo-node-copy usage-demo__micro-copy">
+                <span class="treeview-demo-node-copy">
                   <strong>USB relay</strong>
                   <small>paired</small>
                 </span>
@@ -272,7 +269,7 @@ Keys `ArrowUp`, `ArrowDown`, `ArrowLeft`, `ArrowRight`, `Home`, `End`, `Enter`, 
             <cv-treeitem value="routes-remote" label="Remote session" slot="children" disabled>
               <span slot="label" class="treeview-demo-node">
                 <span class="treeview-demo-glyph treeview-demo-glyph--muted" aria-hidden="true">X</span>
-                <span class="treeview-demo-node-copy usage-demo__micro-copy">
+                <span class="treeview-demo-node-copy">
                   <strong>Remote session</strong>
                   <small>disabled in this threat model</small>
                 </span>
@@ -282,20 +279,20 @@ Keys `ArrowUp`, `ArrowDown`, `ArrowLeft`, `ArrowRight`, `Home`, `End`, `Enter`, 
         </cv-treeview>
       </article>
 
-      <article class="treeview-demo-panel usage-demo__panel" aria-labelledby="treeview-demo-access-title">
-        <header class="treeview-demo-panel-header usage-demo__panel-header">
+      <article class="treeview-demo-panel" aria-labelledby="treeview-demo-access-title">
+        <header class="treeview-demo-panel-header">
           <div>
             <span class="treeview-demo-label">Multiple select</span>
             <h5 id="treeview-demo-access-title">Export scope</h5>
           </div>
-          <cv-badge class="usage-demo__dense-badge" variant="warning" size="small">review</cv-badge>
+          <cv-badge variant="warning" size="small">review</cv-badge>
         </header>
 
         <cv-treeview id="treeview-demo-access" aria-label="Export scope tree" selection-mode="multiple">
           <cv-treeitem value="hardware" label="Hardware boundary">
             <span slot="label" class="treeview-demo-node">
               <span class="treeview-demo-glyph" aria-hidden="true">H</span>
-              <span class="treeview-demo-node-copy usage-demo__micro-copy">
+              <span class="treeview-demo-node-copy">
                 <strong>Hardware boundary</strong>
                 <small>device-owned material</small>
               </span>
@@ -304,7 +301,7 @@ Keys `ArrowUp`, `ArrowDown`, `ArrowLeft`, `ArrowRight`, `Home`, `End`, `Enter`, 
             <cv-treeitem value="hardware-relay" label="Relay device" slot="children">
               <span slot="label" class="treeview-demo-node">
                 <span class="treeview-demo-glyph" aria-hidden="true">R</span>
-                <span class="treeview-demo-node-copy usage-demo__micro-copy">
+                <span class="treeview-demo-node-copy">
                   <strong>Relay device</strong>
                   <small>include pairing manifest</small>
                 </span>
@@ -313,7 +310,7 @@ Keys `ArrowUp`, `ArrowDown`, `ArrowLeft`, `ArrowRight`, `Home`, `End`, `Enter`, 
             <cv-treeitem value="hardware-backup-key" label="Backup key" slot="children">
               <span slot="label" class="treeview-demo-node">
                 <span class="treeview-demo-glyph" aria-hidden="true">K</span>
-                <span class="treeview-demo-node-copy usage-demo__micro-copy">
+                <span class="treeview-demo-node-copy">
                   <strong>Backup key</strong>
                   <small>not selected</small>
                 </span>
@@ -324,7 +321,7 @@ Keys `ArrowUp`, `ArrowDown`, `ArrowLeft`, `ArrowRight`, `Home`, `End`, `Enter`, 
           <cv-treeitem value="policies" label="Policies">
             <span slot="label" class="treeview-demo-node">
               <span class="treeview-demo-glyph treeview-demo-glyph--violet" aria-hidden="true">P</span>
-              <span class="treeview-demo-node-copy usage-demo__micro-copy">
+              <span class="treeview-demo-node-copy">
                 <strong>Policies</strong>
                 <small>operator-facing guidance</small>
               </span>
@@ -333,7 +330,7 @@ Keys `ArrowUp`, `ArrowDown`, `ArrowLeft`, `ArrowRight`, `Home`, `End`, `Enter`, 
             <cv-treeitem value="policies-border" label="Border playbook" slot="children">
               <span slot="label" class="treeview-demo-node">
                 <span class="treeview-demo-glyph treeview-demo-glyph--violet" aria-hidden="true">B</span>
-                <span class="treeview-demo-node-copy usage-demo__micro-copy">
+                <span class="treeview-demo-node-copy">
                   <strong>Border playbook</strong>
                   <small>selected for handoff</small>
                 </span>
@@ -342,7 +339,7 @@ Keys `ArrowUp`, `ArrowDown`, `ArrowLeft`, `ArrowRight`, `Home`, `End`, `Enter`, 
             <cv-treeitem value="policies-counsel" label="Counsel packet" slot="children">
               <span slot="label" class="treeview-demo-node">
                 <span class="treeview-demo-glyph treeview-demo-glyph--violet" aria-hidden="true">C</span>
-                <span class="treeview-demo-node-copy usage-demo__micro-copy">
+                <span class="treeview-demo-node-copy">
                   <strong>Counsel packet</strong>
                   <small>selected for review</small>
                 </span>
@@ -353,7 +350,7 @@ Keys `ArrowUp`, `ArrowDown`, `ArrowLeft`, `ArrowRight`, `Home`, `End`, `Enter`, 
           <cv-treeitem value="journalist-archive" label="Journalist archive" disabled>
             <span slot="label" class="treeview-demo-node">
               <span class="treeview-demo-glyph treeview-demo-glyph--muted" aria-hidden="true">J</span>
-              <span class="treeview-demo-node-copy usage-demo__micro-copy">
+              <span class="treeview-demo-node-copy">
                 <strong>Journalist archive</strong>
                 <small>blocked by export policy</small>
               </span>
@@ -363,18 +360,14 @@ Keys `ArrowUp`, `ArrowDown`, `ArrowLeft`, `ArrowRight`, `Home`, `End`, `Enter`, 
       </article>
     </div>
 
-    <div class="treeview-demo-hints usage-demo__toolbar" aria-label="Keyboard hints">
+    <div class="treeview-demo-hints" aria-label="Keyboard hints">
       <span>ArrowRight expands a branch</span>
       <span>ArrowLeft collapses or moves to parent</span>
       <span>Space toggles selection</span>
       <span>Ctrl+A selects all in multiple mode</span>
     </div>
 
-    <output
-      class="treeview-demo-readout usage-demo__log"
-      for="treeview-demo-vault treeview-demo-access"
-      aria-live="polite"
-    >
+    <output class="treeview-demo-readout" for="treeview-demo-vault treeview-demo-access" aria-live="polite">
       Vault focus: awaiting selection | Export bundle: none
     </output>
   </section>

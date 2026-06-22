@@ -9,20 +9,18 @@ Interactive element that triggers an action or toggles a pressed state.
 ## Usage
 
 ```html
-<div class="button-demo-shell usage-demo" data-demo="button" data-live-demo-height="780">
-  <section class="button-demo-hero usage-demo__hero" aria-labelledby="button-demo-title">
-    <div class="button-demo-copy usage-demo__copy">
-      <span class="button-demo-kicker usage-demo__kicker">Action primitive</span>
-      <h3 id="button-demo-title">
-        Use button when a user commits intent, changes mode, or starts a safe action.
-      </h3>
+<div class="button-demo-shell" data-demo="button" data-live-demo-height="780">
+  <section class="button-demo-hero" aria-labelledby="button-demo-title">
+    <div class="button-demo-copy">
+      <span class="button-demo-kicker">Action primitive</span>
+      <h3 id="button-demo-title">Use button when a user commits intent, changes mode, or starts a safe action.</h3>
       <p>
         The component keeps activation, toggle, disabled, loading, and form behavior in the headless button
         model. UIKit owns only the action surface, slots, variants, and sizing.
       </p>
     </div>
 
-    <dl class="button-demo-metrics usage-demo__metrics" aria-label="Button contract summary">
+    <dl class="button-demo-metrics" aria-label="Button contract summary">
       <div>
         <dt>Variants</dt>
         <dd>default / primary / danger / ghost</dd>
@@ -38,14 +36,14 @@ Interactive element that triggers an action or toggles a pressed state.
     </dl>
   </section>
 
-  <section class="button-demo-board usage-demo__workbench" aria-label="Button examples in a vault workflow">
+  <section class="button-demo-board" aria-label="Button examples in a vault workflow">
     <div class="button-demo-command">
-      <div class="button-demo-command-head usage-demo__action-head">
+      <div class="button-demo-command-head">
         <div>
           <span>Visible vault route</span>
           <strong>travel-profile.visible</strong>
         </div>
-        <span class="button-demo-status usage-demo__meta usage-demo__label">safe action window</span>
+        <span class="button-demo-status">safe action window</span>
       </div>
 
       <div class="button-demo-layer">
@@ -53,7 +51,7 @@ Interactive element that triggers an action or toggles a pressed state.
         <p>Commit the visible profile, inspect routing proof, or block relay writes before export.</p>
       </div>
 
-      <div class="button-demo-actions usage-demo__actions" aria-label="Primary action examples">
+      <div class="button-demo-actions" aria-label="Primary action examples">
         <cv-button preset="action-primary">
           <svg class="button-demo-icon" slot="prefix" viewBox="0 0 24 24" aria-hidden="true">
             <path d="M20 6 9 17l-5-5"></path>
@@ -86,13 +84,13 @@ Interactive element that triggers an action or toggles a pressed state.
       </div>
     </div>
 
-    <aside class="button-demo-side usage-demo__side" aria-label="Button state examples">
-      <div class="button-demo-side-head usage-demo__side-head">
-        <span class="button-demo-kicker usage-demo__kicker">State map</span>
+    <aside class="button-demo-side" aria-label="Button state examples">
+      <div class="button-demo-side-head">
+        <span class="button-demo-kicker">State map</span>
         <h4>Each state changes affordance without changing the contract.</h4>
       </div>
 
-      <div class="button-demo-state-list usage-demo__compact-list">
+      <div class="button-demo-state-list">
         <div>
           <span>Loading blocks action</span>
           <cv-button variant="primary" loading>Committing</cv-button>
@@ -109,12 +107,10 @@ Interactive element that triggers an action or toggles a pressed state.
     </aside>
   </section>
 
-  <section class="button-demo-section usage-demo__section" aria-labelledby="button-demo-matrix-title">
-    <div class="button-demo-section-header usage-demo__section-header">
-      <span class="button-demo-kicker usage-demo__kicker">Variants, sizes, and shape</span>
-      <h4 id="button-demo-matrix-title">
-        Use one action hierarchy, then tune emphasis with variant and modifier.
-      </h4>
+  <section class="button-demo-section" aria-labelledby="button-demo-matrix-title">
+    <div class="button-demo-section-header">
+      <span class="button-demo-kicker">Variants, sizes, and shape</span>
+      <h4 id="button-demo-matrix-title">Use one action hierarchy, then tune emphasis with variant and modifier.</h4>
     </div>
 
     <div class="button-demo-matrix" aria-label="Button variant and size matrix">

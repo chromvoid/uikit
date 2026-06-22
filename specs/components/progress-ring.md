@@ -7,7 +7,7 @@ A read-only circular indicator that communicates determinate or indeterminate lo
 ## Anatomy
 
 ```
-<cv-progress class="usage-demo__progress-host"-ring> (host)
+<cv-progress-ring> (host)
 └── <div part="base" role="progressbar">
     └── <svg part="svg" viewBox="0 0 100 100">
     │   ├── <circle part="track">
@@ -92,10 +92,10 @@ None. `cv-progress-ring` is a read-only indicator with no user-modifiable state.
 ## Usage
 
 ```html
-<div class="progress-ring-demo-shell usage-demo" data-live-demo-height="680">
-  <section class="progress-ring-demo-hero usage-demo__hero" aria-labelledby="progress-ring-demo-title">
-    <div class="progress-ring-demo-copy usage-demo__copy">
-      <span class="progress-ring-demo-kicker usage-demo__kicker">cv-progress-ring</span>
+<div class="progress-ring-demo-shell" data-live-demo-height="680">
+  <section class="progress-ring-demo-hero" aria-labelledby="progress-ring-demo-title">
+    <div class="progress-ring-demo-copy">
+      <span class="progress-ring-demo-kicker">cv-progress-ring</span>
       <h3 id="progress-ring-demo-title">Compact progress for auditable operations.</h3>
       <p>
         Use the ring when the surrounding surface already explains the operation and the UI needs a precise,
@@ -106,7 +106,7 @@ None. `cv-progress-ring` is a read-only indicator with no user-modifiable state.
     <div class="progress-ring-demo-stage" aria-label="Vault sync progress summary">
       <div class="progress-ring-demo-stage-ring">
         <cv-progress-ring
-          class="progress-ring-demo-ring progress-ring-demo-ring--hero usage-demo__progress-host"
+          class="progress-ring-demo-ring progress-ring-demo-ring--hero"
           value="72"
           value-text="72 percent synced"
           aria-label="Vault sync progress"
@@ -132,10 +132,10 @@ None. `cv-progress-ring` is a read-only indicator with no user-modifiable state.
     </div>
   </section>
 
-  <section class="progress-ring-demo-states usage-demo__band" aria-label="Progress ring states">
+  <section class="progress-ring-demo-states" aria-label="Progress ring states">
     <article class="progress-ring-demo-state">
       <cv-progress-ring
-        class="progress-ring-demo-ring progress-ring-demo-ring--state usage-demo__progress-host"
+        class="progress-ring-demo-ring progress-ring-demo-ring--state"
         value="34"
         value-text="34 percent indexed"
         aria-label="Indexing progress"
@@ -149,7 +149,7 @@ None. `cv-progress-ring` is a read-only indicator with no user-modifiable state.
 
     <article class="progress-ring-demo-state">
       <cv-progress-ring
-        class="progress-ring-demo-ring progress-ring-demo-ring--range usage-demo__progress-host"
+        class="progress-ring-demo-ring progress-ring-demo-ring--range"
         value="6"
         min="0"
         max="8"
@@ -165,7 +165,7 @@ None. `cv-progress-ring` is a read-only indicator with no user-modifiable state.
 
     <article class="progress-ring-demo-state">
       <cv-progress-ring
-        class="progress-ring-demo-ring progress-ring-demo-ring--complete usage-demo__progress-host"
+        class="progress-ring-demo-ring progress-ring-demo-ring--complete"
         value="100"
         aria-label="Verification complete"
         >OK</cv-progress-ring
@@ -178,7 +178,7 @@ None. `cv-progress-ring` is a read-only indicator with no user-modifiable state.
 
     <article class="progress-ring-demo-state">
       <cv-progress-ring
-        class="progress-ring-demo-ring progress-ring-demo-ring--state usage-demo__progress-host"
+        class="progress-ring-demo-ring progress-ring-demo-ring--state"
         indeterminate
         aria-label="Checking transport"
       ></cv-progress-ring>

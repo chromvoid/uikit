@@ -11,7 +11,7 @@ Data table for displaying structured tabular content with optional sorting, row 
 └── <div part="base" role="table|grid">
     ├── <div role="rowgroup" part="head">
     │   └── <div role="row" part="head-row">
-    │       └── <slot name="columns">       ← accepts <cv-table-column class="usage-demo__column-label"> children
+    │       └── <slot name="columns">       ← accepts <cv-table-column> children
     └── <div role="rowgroup" part="body" @cv-table-row-slotchange>
         └── <slot name="rows">               ← accepts <cv-table-row> children
 ```
@@ -36,10 +36,10 @@ Data table for displaying structured tabular content with optional sorting, row 
 
 ## Slots
 
-| Slot      | Description                                                                           |
-| --------- | ------------------------------------------------------------------------------------- |
-| `columns` | `<cv-table-column class="usage-demo__column-label">` children defining column headers |
-| `rows`    | `<cv-table-row>` children containing table data rows                                  |
+| Slot      | Description                                          |
+| --------- | ---------------------------------------------------- |
+| `columns` | `<cv-table-column>` children defining column headers |
+| `rows`    | `<cv-table-row>` children containing table data rows |
 
 ## CSS Parts
 
@@ -182,10 +182,10 @@ UIKit does not own sort, selection, or navigation logic; headless state is the s
 ## Usage
 
 ```html
-<div class="table-demo-shell usage-demo" data-demo="table" data-live-demo-height="760">
-  <section class="table-demo-hero usage-demo__hero" aria-labelledby="table-demo-title">
-    <div class="table-demo-copy usage-demo__copy">
-      <span class="table-demo-kicker usage-demo__kicker">Structured vault data</span>
+<div class="table-demo-shell" data-demo="table" data-live-demo-height="760">
+  <section class="table-demo-hero" aria-labelledby="table-demo-title">
+    <div class="table-demo-copy">
+      <span class="table-demo-kicker">Structured vault data</span>
       <h3 id="table-demo-title">Use table for scan-first records, not freeform cards.</h3>
       <p>
         Sort state, row selection, sticky headers, density modifiers, and grid keyboard navigation all stay on
@@ -193,7 +193,7 @@ UIKit does not own sort, selection, or navigation logic; headless state is the s
       </p>
     </div>
 
-    <dl class="table-demo-metrics usage-demo__metrics" aria-label="Table behavior summary">
+    <dl class="table-demo-metrics" aria-label="Table behavior summary">
       <div>
         <dt>Root</dt>
         <dd>table / grid</dd>
@@ -209,13 +209,13 @@ UIKit does not own sort, selection, or navigation logic; headless state is the s
     </dl>
   </section>
 
-  <section class="table-demo-workbench usage-demo__workbench" aria-labelledby="table-demo-workbench-title">
-    <div class="table-demo-section-header usage-demo__section-header">
-      <span class="table-demo-kicker usage-demo__kicker">Operational inventory</span>
+  <section class="table-demo-workbench" aria-labelledby="table-demo-workbench-title">
+    <div class="table-demo-section-header">
+      <span class="table-demo-kicker">Operational inventory</span>
       <h4 id="table-demo-workbench-title">Sortable status table with selected vault layers</h4>
     </div>
 
-    <div class="table-demo-toolbar usage-demo__toolbar" aria-label="Active table capabilities">
+    <div class="table-demo-toolbar" aria-label="Active table capabilities">
       <span>striped</span>
       <span>compact</span>
       <span>bordered</span>
@@ -223,7 +223,7 @@ UIKit does not own sort, selection, or navigation logic; headless state is the s
       <span>interactive</span>
     </div>
 
-    <div class="table-demo-scroll usage-demo__scroll-surface">
+    <div class="table-demo-scroll">
       <cv-table
         id="table-demo-vaults"
         aria-label="Vault layer inventory"
@@ -239,46 +239,17 @@ UIKit does not own sort, selection, or navigation logic; headless state is the s
         total-row-count="6"
         total-column-count="5"
       >
-        <cv-table-column
-          class="usage-demo__column-label"
-          slot="columns"
-          value="layer"
-          label="Layer"
-          sortable
-        ></cv-table-column>
-        <cv-table-column
-          class="usage-demo__column-label"
-          slot="columns"
-          value="owner"
-          label="Owner"
-          sortable
-        ></cv-table-column>
-        <cv-table-column
-          class="usage-demo__column-label"
-          slot="columns"
-          value="state"
-          label="State"
-        ></cv-table-column>
-        <cv-table-column
-          class="usage-demo__column-label"
-          slot="columns"
-          value="exposure"
-          label="Exposure"
-        ></cv-table-column>
-        <cv-table-column
-          class="usage-demo__column-label"
-          slot="columns"
-          value="ttl"
-          label="TTL"
-        ></cv-table-column>
+        <cv-table-column slot="columns" value="layer" label="Layer" sortable></cv-table-column>
+        <cv-table-column slot="columns" value="owner" label="Owner" sortable></cv-table-column>
+        <cv-table-column slot="columns" value="state" label="State"></cv-table-column>
+        <cv-table-column slot="columns" value="exposure" label="Exposure"></cv-table-column>
+        <cv-table-column slot="columns" value="ttl" label="TTL"></cv-table-column>
 
         <cv-table-row slot="rows" value="primary-vault">
           <cv-table-cell column="layer" row-header>Primary vault</cv-table-cell>
           <cv-table-cell column="owner">Alex</cv-table-cell>
           <cv-table-cell column="state"
-            ><cv-badge class="usage-demo__dense-badge" variant="success" size="small"
-              >Verified</cv-badge
-            ></cv-table-cell
+            ><cv-badge variant="success" size="small">Verified</cv-badge></cv-table-cell
           >
           <cv-table-cell column="exposure">Hidden</cv-table-cell>
           <cv-table-cell column="ttl">30 days</cv-table-cell>
@@ -287,9 +258,7 @@ UIKit does not own sort, selection, or navigation logic; headless state is the s
           <cv-table-cell column="layer" row-header>Decoy surface</cv-table-cell>
           <cv-table-cell column="owner">Traveler</cv-table-cell>
           <cv-table-cell column="state"
-            ><cv-badge class="usage-demo__dense-badge" variant="primary" size="small"
-              >Visible</cv-badge
-            ></cv-table-cell
+            ><cv-badge variant="primary" size="small">Visible</cv-badge></cv-table-cell
           >
           <cv-table-cell column="exposure">Inspectable</cv-table-cell>
           <cv-table-cell column="ttl">Active</cv-table-cell>
@@ -298,9 +267,7 @@ UIKit does not own sort, selection, or navigation logic; headless state is the s
           <cv-table-cell column="layer" row-header>Relay core</cv-table-cell>
           <cv-table-cell column="owner">Device</cv-table-cell>
           <cv-table-cell column="state"
-            ><cv-badge class="usage-demo__dense-badge" variant="success" size="small"
-              >Paired</cv-badge
-            ></cv-table-cell
+            ><cv-badge variant="success" size="small">Paired</cv-badge></cv-table-cell
           >
           <cv-table-cell column="exposure">Hardware</cv-table-cell>
           <cv-table-cell column="ttl">Session</cv-table-cell>
@@ -309,9 +276,7 @@ UIKit does not own sort, selection, or navigation logic; headless state is the s
           <cv-table-cell column="layer" row-header>Legal archive</cv-table-cell>
           <cv-table-cell column="owner">Counsel</cv-table-cell>
           <cv-table-cell column="state"
-            ><cv-badge class="usage-demo__dense-badge" variant="warning" size="small"
-              >Review</cv-badge
-            ></cv-table-cell
+            ><cv-badge variant="warning" size="small">Review</cv-badge></cv-table-cell
           >
           <cv-table-cell column="exposure">Shared</cv-table-cell>
           <cv-table-cell column="ttl">7 days</cv-table-cell>
@@ -320,9 +285,7 @@ UIKit does not own sort, selection, or navigation logic; headless state is the s
           <cv-table-cell column="layer" row-header>Recovery share</cv-table-cell>
           <cv-table-cell column="owner">Maria</cv-table-cell>
           <cv-table-cell column="state"
-            ><cv-badge class="usage-demo__dense-badge" variant="neutral" size="small"
-              >Dormant</cv-badge
-            ></cv-table-cell
+            ><cv-badge variant="neutral" size="small">Dormant</cv-badge></cv-table-cell
           >
           <cv-table-cell column="exposure">Sealed</cv-table-cell>
           <cv-table-cell column="ttl">90 days</cv-table-cell>
@@ -331,9 +294,7 @@ UIKit does not own sort, selection, or navigation logic; headless state is the s
           <cv-table-cell column="layer" row-header>Expired export</cv-table-cell>
           <cv-table-cell column="owner">Legacy</cv-table-cell>
           <cv-table-cell column="state"
-            ><cv-badge class="usage-demo__dense-badge" variant="danger" size="small"
-              >Blocked</cv-badge
-            ></cv-table-cell
+            ><cv-badge variant="danger" size="small">Blocked</cv-badge></cv-table-cell
           >
           <cv-table-cell column="exposure">None</cv-table-cell>
           <cv-table-cell column="ttl">Expired</cv-table-cell>
@@ -341,7 +302,7 @@ UIKit does not own sort, selection, or navigation logic; headless state is the s
       </cv-table>
     </div>
 
-    <output class="table-demo-readout usage-demo__log" for="table-demo-vaults" aria-live="polite">
+    <output class="table-demo-readout" for="table-demo-vaults" aria-live="polite">
       Sort: layer ascending | Selected: none | Focus: awaiting grid navigation
     </output>
   </section>
@@ -441,7 +402,7 @@ Column header definition within the table header row.
 #### Anatomy
 
 ```
-<cv-table-column class="usage-demo__column-label"> (host)
+<cv-table-column> (host)
 └── <span part="base">
     ├── <slot>${label}</slot>
     └── sort indicator (▲/▼)     ← only when sort-direction is ascending/descending

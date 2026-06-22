@@ -51,16 +51,11 @@ None. The component is presentational.
 ## Usage
 
 ```html
-<div
-  class="empty-state-demo-shell usage-demo"
-  data-demo="empty-state"
-  data-live-demo-height="760"
-  data-theme="dark"
->
+<div class="empty-state-demo-shell" data-demo="empty-state" data-live-demo-height="760" data-theme="dark">
   <cv-theme-provider mode="dark" class="empty-state-demo-theme">
-    <section class="empty-state-demo-hero usage-demo__hero" aria-labelledby="empty-state-demo-title">
-      <div class="empty-state-demo-copy usage-demo__copy">
-        <span class="empty-state-demo-kicker usage-demo__kicker">No-result boundary</span>
+    <section class="empty-state-demo-hero" aria-labelledby="empty-state-demo-title">
+      <div class="empty-state-demo-copy">
+        <span class="empty-state-demo-kicker">No-result boundary</span>
         <h3 id="empty-state-demo-title">
           Empty states explain what is missing, why it is safe, and which recovery path is available.
         </h3>
@@ -70,7 +65,7 @@ None. The component is presentational.
         </p>
       </div>
 
-      <dl class="empty-state-demo-metrics usage-demo__metrics" aria-label="Empty state contract summary">
+      <dl class="empty-state-demo-metrics" aria-label="Empty state contract summary">
         <div>
           <dt>Semantics</dt>
           <dd>status surface</dd>
@@ -86,24 +81,21 @@ None. The component is presentational.
       </dl>
     </section>
 
-    <section
-      class="empty-state-demo-workbench usage-demo__workbench"
-      aria-labelledby="empty-state-demo-workbench-title"
-    >
-      <div class="empty-state-demo-section-header usage-demo__section-header">
-        <span class="empty-state-demo-kicker usage-demo__kicker">Vault workspace</span>
+    <section class="empty-state-demo-workbench" aria-labelledby="empty-state-demo-workbench-title">
+      <div class="empty-state-demo-section-header">
+        <span class="empty-state-demo-kicker">Vault workspace</span>
         <h4 id="empty-state-demo-workbench-title">
           Place the empty state inside the surface it is explaining, not as an isolated illustration.
         </h4>
       </div>
 
       <div class="empty-state-demo-product" aria-label="Empty state in a filtered vault view">
-        <header class="empty-state-demo-product-header usage-demo__product-header">
+        <header class="empty-state-demo-product-header">
           <div>
             <span class="empty-state-demo-label">Visible route</span>
             <strong>travel-profile.files</strong>
           </div>
-          <cv-badge class="usage-demo__dense-badge" variant="warning" size="small">filtered</cv-badge>
+          <cv-badge variant="warning" size="small">filtered</cv-badge>
         </header>
 
         <div class="empty-state-demo-toolbar" aria-hidden="true">
@@ -121,7 +113,7 @@ None. The component is presentational.
           <p class="empty-state-demo-note">
             Keep the copy specific to the current route. Do not reveal whether another vault namespace exists.
           </p>
-          <div slot="actions" class="empty-state-demo-actions usage-demo__actions">
+          <div slot="actions" class="empty-state-demo-actions">
             <cv-button preset="action-primary">Clear filters</cv-button>
             <cv-button variant="ghost">Create folder</cv-button>
           </div>
@@ -129,12 +121,9 @@ None. The component is presentational.
       </div>
     </section>
 
-    <section
-      class="empty-state-demo-section usage-demo__section"
-      aria-labelledby="empty-state-demo-variants-title"
-    >
-      <div class="empty-state-demo-section-header usage-demo__section-header">
-        <span class="empty-state-demo-kicker usage-demo__kicker">State matrix</span>
+    <section class="empty-state-demo-section" aria-labelledby="empty-state-demo-variants-title">
+      <div class="empty-state-demo-section-header">
+        <span class="empty-state-demo-kicker">State matrix</span>
         <h4 id="empty-state-demo-variants-title">
           Use the same primitive for empty, filtered, drop, and unavailable cases.
         </h4>

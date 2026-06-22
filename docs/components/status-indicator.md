@@ -7,23 +7,18 @@ Inline status marker with optional label and suffix content.
 ## Usage
 
 ```html
-<div class="status-indicator-demo-shell usage-demo" data-demo="status-indicator" data-live-demo-height="700">
-  <section class="status-indicator-demo-hero usage-demo__hero" aria-labelledby="status-indicator-demo-title">
-    <div class="status-indicator-demo-copy usage-demo__copy">
-      <span class="status-indicator-demo-kicker usage-demo__kicker">Inline state signal</span>
-      <h3 id="status-indicator-demo-title">
-        Mark live connection, vault, and policy state without adding a control.
-      </h3>
+<div class="status-indicator-demo-shell" data-demo="status-indicator" data-live-demo-height="700">
+  <section class="status-indicator-demo-hero" aria-labelledby="status-indicator-demo-title">
+    <div class="status-indicator-demo-copy">
+      <span class="status-indicator-demo-kicker">Inline state signal</span>
+      <h3 id="status-indicator-demo-title">Mark live connection, vault, and policy state without adding a control.</h3>
       <p>
         Use <code>cv-status-indicator</code> when the surrounding row already owns the action. The indicator
         contributes semantic status text, optional pulse, and compact suffix context.
       </p>
     </div>
 
-    <dl
-      class="status-indicator-demo-metrics usage-demo__metrics"
-      aria-label="Status indicator contract summary"
-    >
+    <dl class="status-indicator-demo-metrics" aria-label="Status indicator contract summary">
       <div>
         <dt>Semantics</dt>
         <dd>role="status"</dd>
@@ -39,14 +34,11 @@ Inline status marker with optional label and suffix content.
     </dl>
   </section>
 
-  <section
-    class="status-indicator-demo-board usage-demo__workbench"
-    aria-label="Status indicator workflow examples"
-  >
-    <div class="status-indicator-demo-panel usage-demo__panel">
-      <header class="status-indicator-demo-panel-head usage-demo__panel-head">
-        <div class="usage-demo__flow usage-demo__flow--loose">
-          <span class="status-indicator-demo-kicker usage-demo__kicker">Session rail</span>
+  <section class="status-indicator-demo-board" aria-label="Status indicator workflow examples">
+    <div class="status-indicator-demo-panel">
+      <header class="status-indicator-demo-panel-head">
+        <div>
+          <span class="status-indicator-demo-kicker">Session rail</span>
           <h4>Visible route state</h4>
         </div>
         <cv-status-indicator tone="success" pulse>
@@ -56,8 +48,8 @@ Inline status marker with optional label and suffix content.
       </header>
 
       <div class="status-indicator-demo-row">
-        <div class="usage-demo__flow usage-demo__flow--loose">
-          <span class="usage-demo__meta usage-demo__label">Transport</span>
+        <div>
+          <span>Transport</span>
           <strong>Hardware channel negotiated</strong>
         </div>
         <cv-status-indicator tone="primary">
@@ -68,8 +60,8 @@ Inline status marker with optional label and suffix content.
       </div>
 
       <div class="status-indicator-demo-row status-indicator-demo-row--info">
-        <div class="usage-demo__flow usage-demo__flow--loose">
-          <span class="usage-demo__meta usage-demo__label">Catalog sync</span>
+        <div>
+          <span>Catalog sync</span>
           <strong>Remote manifest is being reconciled</strong>
         </div>
         <cv-status-indicator tone="info" pulse>
@@ -79,24 +71,24 @@ Inline status marker with optional label and suffix content.
       </div>
 
       <div class="status-indicator-demo-row status-indicator-demo-row--success">
-        <div class="usage-demo__flow usage-demo__flow--loose">
-          <span class="usage-demo__meta usage-demo__label">Visible vault</span>
+        <div>
+          <span>Visible vault</span>
           <strong>Decoy profile is mounted for the current route</strong>
         </div>
         <cv-status-indicator tone="success">Verified</cv-status-indicator>
       </div>
 
       <div class="status-indicator-demo-row status-indicator-demo-row--warning">
-        <div class="usage-demo__flow usage-demo__flow--loose">
-          <span class="usage-demo__meta usage-demo__label">Policy review</span>
+        <div>
+          <span>Policy review</span>
           <strong>Operator handoff expires soon</strong>
         </div>
         <cv-status-indicator tone="warning" pulse>Pending review</cv-status-indicator>
       </div>
 
       <div class="status-indicator-demo-row status-indicator-demo-row--danger">
-        <div class="usage-demo__flow usage-demo__flow--loose">
-          <span class="usage-demo__meta usage-demo__label">Remote writes</span>
+        <div>
+          <span>Remote writes</span>
           <strong>Blocked by local coercion profile</strong>
         </div>
         <cv-status-indicator tone="danger">
@@ -106,18 +98,13 @@ Inline status marker with optional label and suffix content.
       </div>
     </div>
 
-    <aside
-      class="status-indicator-demo-side usage-demo__side"
-      aria-labelledby="status-indicator-demo-decorative-title"
-    >
-      <div class="status-indicator-demo-section-header usage-demo__section-header">
-        <span class="status-indicator-demo-kicker usage-demo__kicker">Marker-only</span>
-        <h4 id="status-indicator-demo-decorative-title">
-          Use decorative dots when adjacent text carries the label.
-        </h4>
+    <aside class="status-indicator-demo-side" aria-labelledby="status-indicator-demo-decorative-title">
+      <div class="status-indicator-demo-section-header">
+        <span class="status-indicator-demo-kicker">Marker-only</span>
+        <h4 id="status-indicator-demo-decorative-title">Use decorative dots when adjacent text carries the label.</h4>
       </div>
 
-      <div class="status-indicator-demo-dot-list usage-demo__compact-list">
+      <div class="status-indicator-demo-dot-list">
         <div>
           <cv-status-indicator tone="success" decorative></cv-status-indicator>
           <span>Verified local index</span>
@@ -138,45 +125,40 @@ Inline status marker with optional label and suffix content.
     </aside>
   </section>
 
-  <section
-    class="status-indicator-demo-tones usage-demo__section"
-    aria-labelledby="status-indicator-demo-tones-title"
-  >
-    <div class="status-indicator-demo-section-header usage-demo__section-header">
-      <span class="status-indicator-demo-kicker usage-demo__kicker">Tone and size matrix</span>
-      <h4 id="status-indicator-demo-tones-title">
-        Keep color semantic; use size for density, not importance.
-      </h4>
+  <section class="status-indicator-demo-tones" aria-labelledby="status-indicator-demo-tones-title">
+    <div class="status-indicator-demo-section-header">
+      <span class="status-indicator-demo-kicker">Tone and size matrix</span>
+      <h4 id="status-indicator-demo-tones-title">Keep color semantic; use size for density, not importance.</h4>
     </div>
 
     <div class="status-indicator-demo-tone-grid" aria-label="Status indicator tone and size examples">
-      <div class="usage-demo__flow">
-        <span class="usage-demo__meta usage-demo__label">Neutral</span>
+      <div>
+        <span>Neutral</span>
         <cv-status-indicator tone="neutral" size="small">Idle</cv-status-indicator>
         <cv-status-indicator tone="neutral">Queued</cv-status-indicator>
       </div>
-      <div class="usage-demo__flow">
-        <span class="usage-demo__meta usage-demo__label">Primary</span>
+      <div>
+        <span>Primary</span>
         <cv-status-indicator tone="primary">Active</cv-status-indicator>
         <cv-status-indicator tone="primary" pulse>Streaming</cv-status-indicator>
       </div>
-      <div class="usage-demo__flow">
-        <span class="usage-demo__meta usage-demo__label">Info</span>
+      <div>
+        <span>Info</span>
         <cv-status-indicator tone="info">Scanning</cv-status-indicator>
         <cv-status-indicator tone="info" size="large">Observed</cv-status-indicator>
       </div>
-      <div class="usage-demo__flow">
-        <span class="usage-demo__meta usage-demo__label">Success</span>
+      <div>
+        <span>Success</span>
         <cv-status-indicator tone="success">Synced</cv-status-indicator>
         <cv-status-indicator tone="success" pulse>Paired</cv-status-indicator>
       </div>
-      <div class="usage-demo__flow">
-        <span class="usage-demo__meta usage-demo__label">Warning</span>
+      <div>
+        <span>Warning</span>
         <cv-status-indicator tone="warning">Pending</cv-status-indicator>
         <cv-status-indicator tone="warning" size="small">Review</cv-status-indicator>
       </div>
-      <div class="usage-demo__flow">
-        <span class="usage-demo__meta usage-demo__label">Danger</span>
+      <div>
+        <span>Danger</span>
         <cv-status-indicator tone="danger">Blocked</cv-status-indicator>
         <cv-status-indicator tone="danger" size="large">Critical</cv-status-indicator>
       </div>

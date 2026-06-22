@@ -168,10 +168,10 @@ Keyboard events are forwarded to `actions.handleKeyDown(event)`. The return valu
 ## Usage
 
 ```html
-<div class="feed-demo-shell usage-demo" data-demo="feed" data-live-demo-height="780">
-  <section class="feed-demo-hero usage-demo__hero" aria-labelledby="feed-demo-title">
-    <div class="feed-demo-copy usage-demo__copy">
-      <span class="feed-demo-kicker usage-demo__kicker">Bidirectional stream</span>
+<div class="feed-demo-shell" data-demo="feed" data-live-demo-height="780">
+  <section class="feed-demo-hero" aria-labelledby="feed-demo-title">
+    <div class="feed-demo-copy">
+      <span class="feed-demo-kicker">Bidirectional stream</span>
       <h3 id="feed-demo-title">Feed emits load requests; consumers slot in new articles.</h3>
       <p>
         This is not virtualization. Scroll sentinels request more records, then the wrapper appends or
@@ -179,27 +179,27 @@ Keyboard events are forwarded to `actions.handleKeyDown(event)`. The return valu
       </p>
     </div>
 
-    <dl class="feed-demo-status usage-demo__grid--compact" aria-label="Feed runtime state">
+    <dl class="feed-demo-status" aria-label="Feed runtime state">
       <div>
-        <dt class="usage-demo__meta usage-demo__label">Loaded</dt>
+        <dt>Loaded</dt>
         <dd data-feed-loaded>3 articles</dd>
       </div>
       <div>
-        <dt class="usage-demo__meta usage-demo__label">Active</dt>
+        <dt>Active</dt>
         <dd data-feed-active>Latest device handoff</dd>
       </div>
       <div>
-        <dt class="usage-demo__meta usage-demo__label">Busy</dt>
+        <dt>Busy</dt>
         <dd data-feed-busy>false</dd>
       </div>
       <div>
-        <dt class="usage-demo__meta usage-demo__label">Last event</dt>
+        <dt>Last event</dt>
         <dd data-feed-last>Ready</dd>
       </div>
     </dl>
   </section>
 
-  <section class="feed-demo-board usage-demo__workbench" aria-label="Interactive feed demo">
+  <section class="feed-demo-board" aria-label="Interactive feed demo">
     <div class="feed-demo-toolbar" aria-label="Feed demo controls">
       <cv-button data-feed-action="newer" variant="primary">Load newer</cv-button>
       <cv-button data-feed-action="older">Load older</cv-button>
@@ -210,7 +210,7 @@ Keyboard events are forwarded to `actions.handleKeyDown(event)`. The return valu
     </div>
 
     <div class="feed-demo-main">
-      <div class="feed-demo-frame usage-demo__grid">
+      <div class="feed-demo-frame">
         <button type="button" class="feed-demo-boundary" data-feed-before>Focus target before feed</button>
 
         <div class="feed-demo-scroll-wrap">
@@ -236,8 +236,8 @@ Keyboard events are forwarded to `actions.handleKeyDown(event)`. The return valu
         <button type="button" class="feed-demo-boundary" data-feed-after>Focus target after feed</button>
       </div>
 
-      <aside class="feed-demo-log usage-demo__log" aria-label="Feed event log">
-        <span class="feed-demo-label usage-demo__meta usage-demo__label">Event log</span>
+      <aside class="feed-demo-log" aria-label="Feed event log">
+        <span class="feed-demo-label">Event log</span>
         <ol data-feed-events aria-live="polite"></ol>
       </aside>
     </div>
@@ -353,7 +353,7 @@ Keyboard events are forwarded to `actions.handleKeyDown(event)`. The return valu
             <h4>${record.title}</h4>
             <p>${record.body}</p>
           </div>
-          <span class="feed-demo-meta usage-demo__status-pill">${record.meta}</span>
+          <span>${record.meta}</span>
         </article>
       `
       return article

@@ -10,31 +10,31 @@ Use `cv-chip` when the visible token does something: activates a filter editor, 
 ## Usage
 
 ```html
-<div class="chip-demo-shell usage-demo" data-demo="chip">
-  <section class="chip-demo-hero usage-demo__hero" aria-labelledby="chip-demo-title">
-    <div class="chip-demo-copy usage-demo__copy">
-      <span class="chip-demo-kicker usage-demo__kicker">Interactive token</span>
+<div class="chip-demo-shell" data-demo="chip">
+  <section class="chip-demo-hero" aria-labelledby="chip-demo-title">
+    <div class="chip-demo-copy">
+      <span class="chip-demo-kicker">Interactive token</span>
       <h3 id="chip-demo-title">Use chips when the label is also a control.</h3>
       <p>
-        A chip carries a stable value, optional selected state, and optional remove action in the same compact
-        surface.
+        A chip carries a stable value, optional selected state, and optional remove action in the same
+        compact surface.
       </p>
     </div>
 
     <div class="chip-demo-rack" aria-label="Chip behavior examples">
-      <div class="chip-demo-cell chip-demo-cell--good usage-demo__body-copy usage-demo__soft-card">
-        <span class="chip-demo-label usage-demo__meta usage-demo__label">Applied filter</span>
+      <div class="chip-demo-cell chip-demo-cell--good">
+        <span class="chip-demo-label">Applied filter</span>
         <cv-chip value="local" selected removable>
-          <span class="usage-demo__adornment" slot="prefix">#</span>
+          <span slot="prefix">#</span>
           Local vault
         </cv-chip>
         <p>Selected token with a remove affordance.</p>
       </div>
 
-      <div class="chip-demo-cell usage-demo__body-copy usage-demo__soft-card">
-        <span class="chip-demo-label usage-demo__meta usage-demo__label">Quick action</span>
+      <div class="chip-demo-cell">
+        <span class="chip-demo-label">Quick action</span>
         <cv-chip value="filter-rule">
-          <span class="usage-demo__adornment" slot="prefix">+</span>
+          <span slot="prefix">+</span>
           Add rule
         </cv-chip>
         <p>Clickable token that can open a focused editor.</p>
@@ -42,48 +42,48 @@ Use `cv-chip` when the visible token does something: activates a filter editor, 
     </div>
   </section>
 
-  <section class="chip-demo-section usage-demo__section" aria-labelledby="chip-demo-states-title">
-    <div class="chip-demo-section-header usage-demo__section-header">
-      <span class="chip-demo-kicker usage-demo__kicker">States</span>
+  <section class="chip-demo-section" aria-labelledby="chip-demo-states-title">
+    <div class="chip-demo-section-header">
+      <span class="chip-demo-kicker">States</span>
       <h4 id="chip-demo-states-title">Action, selected, removable, disabled, and size variants</h4>
     </div>
 
     <div class="chip-demo-state-grid">
-      <div class="chip-demo-cell usage-demo__body-copy usage-demo__soft-card">
-        <span class="chip-demo-label usage-demo__meta usage-demo__label">Action</span>
+      <div class="chip-demo-cell">
+        <span class="chip-demo-label">Action</span>
         <cv-chip value="edit-filter">Open filter</cv-chip>
       </div>
 
-      <div class="chip-demo-cell usage-demo__body-copy usage-demo__soft-card">
-        <span class="chip-demo-label usage-demo__meta usage-demo__label">Selected</span>
+      <div class="chip-demo-cell">
+        <span class="chip-demo-label">Selected</span>
         <cv-chip value="work" selected>Work</cv-chip>
       </div>
 
-      <div class="chip-demo-cell usage-demo__body-copy usage-demo__soft-card">
-        <span class="chip-demo-label usage-demo__meta usage-demo__label">Removable</span>
+      <div class="chip-demo-cell">
+        <span class="chip-demo-label">Removable</span>
         <cv-chip value="otp" removable>OTP seeds</cv-chip>
       </div>
 
-      <div class="chip-demo-cell usage-demo__body-copy usage-demo__soft-card">
-        <span class="chip-demo-label usage-demo__meta usage-demo__label">Disabled</span>
+      <div class="chip-demo-cell">
+        <span class="chip-demo-label">Disabled</span>
         <cv-chip value="remote" disabled>Remote sync</cv-chip>
       </div>
 
-      <div class="chip-demo-cell usage-demo__body-copy usage-demo__soft-card">
-        <span class="chip-demo-label usage-demo__meta usage-demo__label">Small</span>
+      <div class="chip-demo-cell">
+        <span class="chip-demo-label">Small</span>
         <cv-chip value="small" size="small">Compact</cv-chip>
       </div>
 
-      <div class="chip-demo-cell usage-demo__body-copy usage-demo__soft-card">
-        <span class="chip-demo-label usage-demo__meta usage-demo__label">Large pill</span>
+      <div class="chip-demo-cell">
+        <span class="chip-demo-label">Large pill</span>
         <cv-chip value="large" size="large" pill selected>Threat model</cv-chip>
       </div>
     </div>
   </section>
 
-  <section class="chip-demo-section usage-demo__section" aria-labelledby="chip-demo-events-title">
-    <div class="chip-demo-section-header usage-demo__section-header">
-      <span class="chip-demo-kicker usage-demo__kicker">Event contract</span>
+  <section class="chip-demo-section" aria-labelledby="chip-demo-events-title">
+    <div class="chip-demo-section-header">
+      <span class="chip-demo-kicker">Event contract</span>
       <h4 id="chip-demo-events-title">Activation and removal emit different events</h4>
     </div>
 
@@ -93,7 +93,7 @@ Use `cv-chip` when the visible token does something: activates a filter editor, 
         <cv-chip value="notes">Notes</cv-chip>
         <cv-chip value="media" removable>Media</cv-chip>
       </div>
-      <output class="chip-demo-output usage-demo__log" aria-live="polite">Event log appears here.</output>
+      <output class="chip-demo-output" aria-live="polite">Event log appears here.</output>
     </div>
   </section>
 </div>
@@ -155,25 +155,25 @@ Use `cv-chip` when the visible token does something: activates a filter editor, 
 
 ## Events
 
-| Event            | Detail                                             | Description                     |
-| ---------------- | -------------------------------------------------- | ------------------------------- |
-| `cv-chip-action` | `{ value: string, source: "click" \| "keyboard" }` | Emitted by a chip activation    |
-| `cv-chip-remove` | `{ value: string }`                                | Emitted by a chip remove button |
+| Event            | Detail                                             | Description                             |
+| ---------------- | -------------------------------------------------- | --------------------------------------- |
+| `cv-chip-action` | `{ value: string, source: "click" \| "keyboard" }` | Emitted by a chip activation            |
+| `cv-chip-remove` | `{ value: string }`                                | Emitted by a chip remove button         |
 
 ## Keyboard
 
-| Key           | Behavior                   |
-| ------------- | -------------------------- |
-| `Enter`/Space | Activates the focused chip |
+| Key           | Behavior                                   |
+| ------------- | ------------------------------------------ |
+| `Enter`/Space | Activates the focused chip                 |
 
 Arrow-key roving focus is handled by [`cv-chip-group`](./chip-group.md), not by a standalone chip.
 
 ## When to use chip vs badge
 
-| Need                                                     | Use             |
-| -------------------------------------------------------- | --------------- |
-| Applied filter, selected tag, quick facet, removable tag | `cv-chip`       |
-| Passive state, count, warning label, status dot          | `cv-badge`      |
+| Need                                                     | Use        |
+| -------------------------------------------------------- | ---------- |
+| Applied filter, selected tag, quick facet, removable tag | `cv-chip`  |
+| Passive state, count, warning label, status dot          | `cv-badge` |
 | Single or multiple selection across several chips        | `cv-chip-group` |
 
 ## Behavior notes

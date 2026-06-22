@@ -124,10 +124,10 @@ UIKit does not own tab selection logic; headless state is the source of truth.
 ## Usage
 
 ```html
-<div class="tabs-demo-shell usage-demo">
-  <section class="tabs-demo-hero usage-demo__hero" aria-labelledby="tabs-demo-title">
-    <div class="tabs-demo-copy usage-demo__copy">
-      <span class="tabs-demo-kicker usage-demo__kicker">Selection surface</span>
+<div class="tabs-demo-shell">
+  <section class="tabs-demo-hero" aria-labelledby="tabs-demo-title">
+    <div class="tabs-demo-copy">
+      <span class="tabs-demo-kicker">Selection surface</span>
       <h3 id="tabs-demo-title">One active panel inside a known context.</h3>
       <p>
         Tabs keep sibling views close together, expose selected and focused state through the headless model,
@@ -135,7 +135,7 @@ UIKit does not own tab selection logic; headless state is the source of truth.
       </p>
     </div>
 
-    <dl class="tabs-demo-metrics usage-demo__metrics" aria-label="Tabs behavior summary">
+    <dl class="tabs-demo-metrics" aria-label="Tabs behavior summary">
       <div>
         <dt>State</dt>
         <dd>value</dd>
@@ -151,9 +151,9 @@ UIKit does not own tab selection logic; headless state is the source of truth.
     </dl>
   </section>
 
-  <section class="tabs-demo-section usage-demo__section" aria-labelledby="tabs-demo-horizontal-title">
-    <div class="tabs-demo-section-header usage-demo__section-header">
-      <span class="tabs-demo-kicker usage-demo__kicker">Horizontal</span>
+  <section class="tabs-demo-section" aria-labelledby="tabs-demo-horizontal-title">
+    <div class="tabs-demo-section-header">
+      <span class="tabs-demo-kicker">Horizontal</span>
       <h4 id="tabs-demo-horizontal-title">Use for compact panels with the same visual weight</h4>
     </div>
 
@@ -164,25 +164,25 @@ UIKit does not own tab selection logic; headless state is the source of truth.
       <cv-tab slot="nav" value="recovery" disabled>Recovery</cv-tab>
 
       <cv-tab-panel tab="overview">
-        <div class="tabs-demo-panel-content usage-demo__panel-content usage-demo__body-copy usage-demo__flow">
+        <div class="tabs-demo-panel-content">
           <h5>Overview</h5>
           <p>Show the current record summary, freshness, and the next safe action.</p>
         </div>
       </cv-tab-panel>
       <cv-tab-panel tab="history">
-        <div class="tabs-demo-panel-content usage-demo__panel-content usage-demo__body-copy usage-demo__flow">
+        <div class="tabs-demo-panel-content">
           <h5>History</h5>
           <p>Review recent changes without leaving the record detail surface.</p>
         </div>
       </cv-tab-panel>
       <cv-tab-panel tab="access">
-        <div class="tabs-demo-panel-content usage-demo__panel-content usage-demo__body-copy usage-demo__flow">
+        <div class="tabs-demo-panel-content">
           <h5>Access</h5>
           <p>Audit who can unlock or export this entry in the current vault context.</p>
         </div>
       </cv-tab-panel>
       <cv-tab-panel tab="recovery">
-        <div class="tabs-demo-panel-content usage-demo__panel-content usage-demo__body-copy usage-demo__flow">
+        <div class="tabs-demo-panel-content">
           <h5>Recovery</h5>
           <p>Disabled tabs stay visible when a state exists but is not available yet.</p>
         </div>
@@ -190,9 +190,9 @@ UIKit does not own tab selection logic; headless state is the source of truth.
     </cv-tabs>
   </section>
 
-  <section class="tabs-demo-section usage-demo__section" aria-labelledby="tabs-demo-vertical-title">
-    <div class="tabs-demo-section-header usage-demo__section-header">
-      <span class="tabs-demo-kicker usage-demo__kicker">Vertical manual</span>
+  <section class="tabs-demo-section" aria-labelledby="tabs-demo-vertical-title">
+    <div class="tabs-demo-section-header">
+      <span class="tabs-demo-kicker">Vertical manual</span>
       <h4 id="tabs-demo-vertical-title">Use for longer labels and settings-style grouping</h4>
     </div>
 
@@ -202,7 +202,7 @@ UIKit does not own tab selection logic; headless state is the source of truth.
       <cv-tab slot="nav" value="exports">Export policy</cv-tab>
 
       <cv-tab-panel tab="policy">
-        <div class="tabs-demo-panel-content usage-demo__panel-content usage-demo__body-copy usage-demo__flow">
+        <div class="tabs-demo-panel-content">
           <h5>Threat model</h5>
           <p>
             In manual mode, arrow keys move focus first. Press Enter or Space to commit the selected panel.
@@ -210,13 +210,13 @@ UIKit does not own tab selection logic; headless state is the source of truth.
         </div>
       </cv-tab-panel>
       <cv-tab-panel tab="devices">
-        <div class="tabs-demo-panel-content usage-demo__panel-content usage-demo__body-copy usage-demo__flow">
+        <div class="tabs-demo-panel-content">
           <h5>Trusted devices</h5>
           <p>Use the vertical layout when the tab list behaves like a local settings rail.</p>
         </div>
       </cv-tab-panel>
       <cv-tab-panel tab="exports">
-        <div class="tabs-demo-panel-content usage-demo__panel-content usage-demo__body-copy usage-demo__flow">
+        <div class="tabs-demo-panel-content">
           <h5>Export policy</h5>
           <p>Panels keep the same width as the container, so content does not jump between tabs.</p>
         </div>
@@ -224,11 +224,8 @@ UIKit does not own tab selection logic; headless state is the source of truth.
     </cv-tabs>
   </section>
 
-  <section
-    class="tabs-demo-note usage-demo__band usage-demo__divider usage-demo__body-copy usage-demo__flow"
-    aria-labelledby="tabs-demo-close-title"
-  >
-    <span class="tabs-demo-kicker usage-demo__kicker">Closable tabs</span>
+  <section class="tabs-demo-note" aria-labelledby="tabs-demo-close-title">
+    <span class="tabs-demo-kicker">Closable tabs</span>
     <h4 id="tabs-demo-close-title">Close buttons are opt-in, not a default tab affordance.</h4>
     <p>
       Add <code>closable</code> only for removable workspace tabs such as open files or temporary records. The

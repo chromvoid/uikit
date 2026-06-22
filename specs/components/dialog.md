@@ -154,10 +154,10 @@ The top-layer shell, overlay, and content expose `data-state="closed|opening|ope
 ## Usage
 
 ```html
-<div class="dialog-demo-shell usage-demo" data-demo="dialog" data-live-demo-height="560">
-  <section class="dialog-demo-hero usage-demo__hero" aria-labelledby="dialog-demo-title">
-    <div class="dialog-demo-copy usage-demo__copy">
-      <span class="dialog-demo-kicker usage-demo__kicker">Controlled dialogs</span>
+<div class="dialog-demo-shell" data-demo="dialog" data-live-demo-height="560">
+  <section class="dialog-demo-hero" aria-labelledby="dialog-demo-title">
+    <div class="dialog-demo-copy">
+      <span class="dialog-demo-kicker">Controlled dialogs</span>
       <h3 id="dialog-demo-title">Choose the dialog pattern by task risk</h3>
       <p>
         External controls own the open state. The labels below describe each scenario; only the action buttons
@@ -165,7 +165,7 @@ The top-layer shell, overlay, and content expose `data-state="closed|opening|ope
       </p>
     </div>
 
-    <div class="dialog-demo-actions usage-demo__actions" aria-label="Controlled dialog examples">
+    <div class="dialog-demo-actions" aria-label="Controlled dialog examples">
       <div class="dialog-demo-action">
         <span class="dialog-demo-label">Confirmation</span>
         <cv-button variant="primary" data-dialog-open="dialog-demo-confirm">Review transfer</cv-button>
@@ -181,20 +181,20 @@ The top-layer shell, overlay, and content expose `data-state="closed|opening|ope
     </div>
   </section>
 
-  <section class="dialog-demo-section usage-demo__section" aria-labelledby="dialog-demo-variants-title">
-    <div class="dialog-demo-section-header usage-demo__section-header">
-      <span class="dialog-demo-kicker usage-demo__kicker">Variants</span>
+  <section class="dialog-demo-section" aria-labelledby="dialog-demo-variants-title">
+    <div class="dialog-demo-section-header">
+      <span class="dialog-demo-kicker">Variants</span>
       <h4 id="dialog-demo-variants-title">Header and close affordance examples</h4>
     </div>
 
     <div class="dialog-demo-grid">
-      <div class="dialog-demo-panel usage-demo__panel">
+      <div class="dialog-demo-panel">
         <span class="dialog-demo-label">No header</span>
         <p>Use for short acknowledgements where the body is already clear.</p>
         <cv-button data-dialog-open="dialog-demo-compact">Open compact notice</cv-button>
       </div>
 
-      <div class="dialog-demo-panel usage-demo__panel">
+      <div class="dialog-demo-panel">
         <span class="dialog-demo-label">Custom close icon</span>
         <p>Use the header-close slot when the shell needs a branded or platform-specific icon.</p>
         <cv-button data-dialog-open="dialog-demo-settings">Open settings</cv-button>

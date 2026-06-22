@@ -101,10 +101,10 @@ Additionally, component styles depend on theme tokens through fallback values:
 ## Usage
 
 ```html
-<div class="link-demo-shell usage-demo" data-demo="link" data-live-demo-height="640">
-  <section class="link-demo-hero usage-demo__hero" aria-labelledby="link-demo-title">
-    <div class="link-demo-copy usage-demo__copy">
-      <span class="link-demo-kicker usage-demo__kicker">Navigation primitive</span>
+<div class="link-demo-shell" data-demo="link" data-live-demo-height="640">
+  <section class="link-demo-hero" aria-labelledby="link-demo-title">
+    <div class="link-demo-copy">
+      <span class="link-demo-kicker">Navigation primitive</span>
       <h3 id="link-demo-title">Use links for route changes and resource jumps, not disabled actions.</h3>
       <p>
         The component keeps a native anchor in the shadow tree, forwards <code>href</code>, and exposes a
@@ -112,7 +112,7 @@ Additionally, component styles depend on theme tokens through fallback values:
       </p>
     </div>
 
-    <dl class="link-demo-metrics usage-demo__metrics" aria-label="Link contract summary">
+    <dl class="link-demo-metrics" aria-label="Link contract summary">
       <div>
         <dt>Root</dt>
         <dd>native anchor</dd>
@@ -128,9 +128,9 @@ Additionally, component styles depend on theme tokens through fallback values:
     </dl>
   </section>
 
-  <section class="link-demo-workbench usage-demo__workbench" aria-labelledby="link-demo-workbench-title">
-    <div class="link-demo-section-header usage-demo__section-header">
-      <span class="link-demo-kicker usage-demo__kicker">Product copy</span>
+  <section class="link-demo-workbench" aria-labelledby="link-demo-workbench-title">
+    <div class="link-demo-section-header">
+      <span class="link-demo-kicker">Product copy</span>
       <h4 id="link-demo-workbench-title">Keep inline navigation readable inside dense vault text</h4>
     </div>
 
@@ -262,9 +262,9 @@ Additionally, component styles depend on theme tokens through fallback values:
     </div>
   </section>
 
-  <section class="link-demo-states usage-demo__single-layout" aria-labelledby="link-demo-states-title">
-    <div class="link-demo-section-header usage-demo__section-header">
-      <span class="link-demo-kicker usage-demo__kicker">Slots and tone</span>
+  <section class="link-demo-states" aria-labelledby="link-demo-states-title">
+    <div class="link-demo-section-header">
+      <span class="link-demo-kicker">Slots and tone</span>
       <h4 id="link-demo-states-title">Prefix, suffix, quiet, and event feedback in one compact surface</h4>
     </div>
 
@@ -333,7 +333,7 @@ Additionally, component styles depend on theme tokens through fallback values:
       </div>
     </div>
 
-    <output class="link-demo-output usage-demo__log" data-link-demo-output aria-live="polite">
+    <output class="link-demo-output" data-link-demo-output aria-live="polite">
       press: waiting for activation
     </output>
   </section>

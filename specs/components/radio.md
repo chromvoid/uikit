@@ -88,15 +88,10 @@ This document is the UIKit surface contract for Radio Group.
 ## Usage
 
 ```html
-<div
-  class="radio-demo-shell usage-demo"
-  data-demo="radio-group"
-  data-live-demo-height="1080"
-  data-theme="dark"
->
-  <section class="radio-demo-hero usage-demo__hero" aria-labelledby="radio-demo-title">
-    <div class="radio-demo-copy usage-demo__copy">
-      <span class="radio-demo-kicker usage-demo__kicker">Single-choice control</span>
+<div class="radio-demo-shell" data-demo="radio-group" data-live-demo-height="1080" data-theme="dark">
+  <section class="radio-demo-hero" aria-labelledby="radio-demo-title">
+    <div class="radio-demo-copy">
+      <span class="radio-demo-kicker">Single-choice control</span>
       <h3 id="radio-demo-title">Use radio-group when the answer must be exactly one branch.</h3>
       <p>
         The group owns roving focus, ARIA, form value, and change events. Each <code>cv-radio</code> stays
@@ -104,7 +99,7 @@ This document is the UIKit surface contract for Radio Group.
       </p>
     </div>
 
-    <dl class="radio-demo-metrics usage-demo__metrics" aria-label="Radio group contract summary">
+    <dl class="radio-demo-metrics" aria-label="Radio group contract summary">
       <div>
         <dt>Keyboard</dt>
         <dd>Arrow keys, Home, End, Space</dd>
@@ -120,22 +115,19 @@ This document is the UIKit surface contract for Radio Group.
     </dl>
   </section>
 
-  <section class="radio-demo-workbench usage-demo__workbench" aria-labelledby="radio-demo-workbench-title">
-    <div class="radio-demo-section-header usage-demo__section-header">
-      <span class="radio-demo-kicker usage-demo__kicker">Vault route picker</span>
+  <section class="radio-demo-workbench" aria-labelledby="radio-demo-workbench-title">
+    <div class="radio-demo-section-header">
+      <span class="radio-demo-kicker">Vault route picker</span>
       <h4 id="radio-demo-workbench-title">
         Select one visible branch while the group keeps form semantics and focus order.
       </h4>
     </div>
 
-    <div class="radio-demo-board usage-demo__workbench">
-      <form
-        class="radio-demo-panel radio-demo-panel--primary usage-demo__panel"
-        aria-label="Vault route selection"
-      >
-        <header class="radio-demo-panel-header usage-demo__panel-header">
+    <div class="radio-demo-board">
+      <form class="radio-demo-panel radio-demo-panel--primary" aria-label="Vault route selection">
+        <header class="radio-demo-panel-header">
           <div>
-            <span class="radio-demo-label usage-demo__meta usage-demo__label">Decision point</span>
+            <span class="radio-demo-label">Decision point</span>
             <strong>Unlock target for this session</strong>
           </div>
           <cv-badge variant="primary">required</cv-badge>
@@ -165,17 +157,14 @@ This document is the UIKit surface contract for Radio Group.
           </cv-radio>
         </cv-radio-group>
 
-        <output class="radio-demo-output usage-demo__readout usage-demo__readout--steady" aria-live="polite">
+        <output class="radio-demo-output" aria-live="polite">
           Selected route: Hidden namespace · value=hidden
         </output>
       </form>
 
-      <aside
-        class="radio-demo-panel radio-demo-panel--contract usage-demo__panel"
-        aria-label="Current radio group contract"
-      >
-        <span class="radio-demo-label usage-demo__meta usage-demo__label">Live contract</span>
-        <dl class="radio-demo-live usage-demo__state">
+      <aside class="radio-demo-panel radio-demo-panel--contract" aria-label="Current radio group contract">
+        <span class="radio-demo-label">Live contract</span>
+        <dl class="radio-demo-live">
           <div>
             <dt>value</dt>
             <dd data-radio-current-value>hidden</dd>
@@ -197,9 +186,9 @@ This document is the UIKit surface contract for Radio Group.
     </div>
   </section>
 
-  <section class="radio-demo-section usage-demo__section" aria-labelledby="radio-demo-states-title">
-    <div class="radio-demo-section-header usage-demo__section-header">
-      <span class="radio-demo-kicker usage-demo__kicker">States and variants</span>
+  <section class="radio-demo-section" aria-labelledby="radio-demo-states-title">
+    <div class="radio-demo-section-header">
+      <span class="radio-demo-kicker">States and variants</span>
       <h4 id="radio-demo-states-title">
         Default radios, segmented controls, descriptions, disabled groups, and size scale.
       </h4>
@@ -207,7 +196,7 @@ This document is the UIKit surface contract for Radio Group.
 
     <div class="radio-demo-state-grid">
       <div class="radio-demo-cell radio-demo-cell--wide">
-        <span class="radio-demo-label usage-demo__meta usage-demo__label">Segmented density</span>
+        <span class="radio-demo-label">Segmented density</span>
         <cv-radio-group variant="segmented" value="manual" aria-label="Unlock mode">
           <cv-radio value="auto">Auto</cv-radio>
           <cv-radio value="manual">Manual</cv-radio>
@@ -216,7 +205,7 @@ This document is the UIKit surface contract for Radio Group.
       </div>
 
       <div class="radio-demo-cell">
-        <span class="radio-demo-label usage-demo__meta usage-demo__label">Horizontal default</span>
+        <span class="radio-demo-label">Horizontal default</span>
         <cv-radio-group value="local" aria-label="Sync target">
           <cv-radio value="local">Local</cv-radio>
           <cv-radio value="relay">Relay</cv-radio>
@@ -225,7 +214,7 @@ This document is the UIKit surface contract for Radio Group.
       </div>
 
       <div class="radio-demo-cell">
-        <span class="radio-demo-label usage-demo__meta usage-demo__label">With descriptions</span>
+        <span class="radio-demo-label">With descriptions</span>
         <cv-radio-group value="owner" orientation="vertical" aria-label="Recovery owner">
           <cv-radio value="owner">
             Owner key
@@ -239,7 +228,7 @@ This document is the UIKit surface contract for Radio Group.
       </div>
 
       <div class="radio-demo-cell radio-demo-cell--muted">
-        <span class="radio-demo-label usage-demo__meta usage-demo__label">Disabled group</span>
+        <span class="radio-demo-label">Disabled group</span>
         <cv-radio-group value="policy" disabled aria-label="Locked policy">
           <cv-radio value="policy">Policy</cv-radio>
           <cv-radio value="manual">Manual</cv-radio>
@@ -247,7 +236,7 @@ This document is the UIKit surface contract for Radio Group.
       </div>
 
       <div class="radio-demo-cell radio-demo-cell--wide">
-        <span class="radio-demo-label usage-demo__meta usage-demo__label">Size scale</span>
+        <span class="radio-demo-label">Size scale</span>
         <cv-radio-group value="medium" aria-label="Radio size examples">
           <cv-radio value="small" size="small">Small</cv-radio>
           <cv-radio value="medium" size="medium">Medium</cv-radio>

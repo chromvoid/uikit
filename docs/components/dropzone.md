@@ -9,16 +9,11 @@ Controlled visual shell for drag/drop or upload drop areas.
 ## Usage
 
 ```html
-<div
-  class="dropzone-demo-shell usage-demo"
-  data-demo="dropzone"
-  data-live-demo-height="820"
-  data-theme="dark"
->
+<div class="dropzone-demo-shell" data-demo="dropzone" data-live-demo-height="820" data-theme="dark">
   <cv-theme-provider mode="dark" class="dropzone-demo-theme">
-    <section class="dropzone-demo-hero usage-demo__hero" aria-labelledby="dropzone-demo-title">
-      <div class="dropzone-demo-copy usage-demo__copy">
-        <span class="dropzone-demo-kicker usage-demo__kicker">Controlled drop boundary</span>
+    <section class="dropzone-demo-hero" aria-labelledby="dropzone-demo-title">
+      <div class="dropzone-demo-copy">
+        <span class="dropzone-demo-kicker">Controlled drop boundary</span>
         <h3 id="dropzone-demo-title">Dropzone makes drag state visible without owning upload logic.</h3>
         <p>
           Route models own drag events, validation, encryption, and upload queues. The component owns only the
@@ -26,7 +21,7 @@ Controlled visual shell for drag/drop or upload drop areas.
         </p>
       </div>
 
-      <dl class="dropzone-demo-metrics usage-demo__metrics" aria-label="Dropzone contract summary">
+      <dl class="dropzone-demo-metrics" aria-label="Dropzone contract summary">
         <div>
           <dt>State source</dt>
           <dd>consumer model</dd>
@@ -42,12 +37,9 @@ Controlled visual shell for drag/drop or upload drop areas.
       </dl>
     </section>
 
-    <section
-      class="dropzone-demo-workbench usage-demo__workbench"
-      aria-labelledby="dropzone-demo-workbench-title"
-    >
-      <div class="dropzone-demo-section-header usage-demo__section-header">
-        <span class="dropzone-demo-kicker usage-demo__kicker">Vault workspace</span>
+    <section class="dropzone-demo-workbench" aria-labelledby="dropzone-demo-workbench-title">
+      <div class="dropzone-demo-section-header">
+        <span class="dropzone-demo-kicker">Vault workspace</span>
         <h4 id="dropzone-demo-workbench-title">
           Place the shell around real product content so the drop boundary reads as a temporary state, not a
           separate upload page.
@@ -55,14 +47,12 @@ Controlled visual shell for drag/drop or upload drop areas.
       </div>
 
       <div class="dropzone-demo-product" aria-label="Dropzone around a visible vault file list">
-        <header class="dropzone-demo-product-header usage-demo__product-header">
+        <header class="dropzone-demo-product-header">
           <div>
             <span class="dropzone-demo-label">Visible route</span>
             <strong>travel-profile.files</strong>
           </div>
-          <cv-badge class="usage-demo__dense-badge" variant="primary" size="small"
-            >drop target armed</cv-badge
-          >
+          <cv-badge variant="primary" size="small">drop target armed</cv-badge>
         </header>
 
         <div class="dropzone-demo-layout">
@@ -74,7 +64,7 @@ Controlled visual shell for drag/drop or upload drop areas.
                   <strong>border-entry-checklist.pdf</strong>
                   <small>1.4 MB / visible namespace</small>
                 </div>
-                <cv-badge class="usage-demo__dense-badge" variant="success" size="small">synced</cv-badge>
+                <cv-badge variant="success" size="small">synced</cv-badge>
               </article>
               <article>
                 <span class="dropzone-demo-file-mark" aria-hidden="true"></span>
@@ -82,7 +72,7 @@ Controlled visual shell for drag/drop or upload drop areas.
                   <strong>source-contact-notes.txt</strong>
                   <small>18 KB / local only</small>
                 </div>
-                <cv-badge class="usage-demo__dense-badge" variant="warning" size="small">pending</cv-badge>
+                <cv-badge variant="warning" size="small">pending</cv-badge>
               </article>
               <article>
                 <span class="dropzone-demo-file-mark" aria-hidden="true"></span>
@@ -90,7 +80,7 @@ Controlled visual shell for drag/drop or upload drop areas.
                   <strong>device-route-proof.json</strong>
                   <small>42 KB / audit trail</small>
                 </div>
-                <cv-badge class="usage-demo__dense-badge" variant="neutral" size="small">sealed</cv-badge>
+                <cv-badge variant="neutral" size="small">sealed</cv-badge>
               </article>
             </div>
 
@@ -102,7 +92,7 @@ Controlled visual shell for drag/drop or upload drop areas.
           </cv-dropzone>
 
           <aside class="dropzone-demo-pipeline" aria-label="Upload pipeline">
-            <span class="dropzone-demo-kicker usage-demo__kicker">Upload pipeline</span>
+            <span class="dropzone-demo-kicker">Upload pipeline</span>
             <ol>
               <li>
                 <strong>Inspect payload</strong>
@@ -123,9 +113,9 @@ Controlled visual shell for drag/drop or upload drop areas.
       </div>
     </section>
 
-    <section class="dropzone-demo-section usage-demo__section" aria-labelledby="dropzone-demo-states-title">
-      <div class="dropzone-demo-section-header usage-demo__section-header">
-        <span class="dropzone-demo-kicker usage-demo__kicker">State matrix</span>
+    <section class="dropzone-demo-section" aria-labelledby="dropzone-demo-states-title">
+      <div class="dropzone-demo-section-header">
+        <span class="dropzone-demo-kicker">State matrix</span>
         <h4 id="dropzone-demo-states-title">
           The same primitive covers idle, active, loading, and disabled states without taking ownership of
           drag/drop behavior.

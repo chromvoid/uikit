@@ -57,10 +57,10 @@ None.
 Use `cv-shortcut` as secondary command metadata in menus, command rows, toolbars, and dense panels. Do not use it as a button or as a keyboard listener. Resolve platform-specific shortcuts in the owning model or application code, then pass the rendered keys into the component.
 
 ```html
-<div class="shortcut-demo-shell usage-demo" data-demo="shortcut" data-live-demo-height="760">
-  <section class="shortcut-demo-hero usage-demo__hero" aria-labelledby="shortcut-demo-title">
-    <div class="shortcut-demo-copy usage-demo__copy">
-      <span class="shortcut-demo-kicker usage-demo__kicker">Command metadata</span>
+<div class="shortcut-demo-shell" data-demo="shortcut" data-live-demo-height="760">
+  <section class="shortcut-demo-hero" aria-labelledby="shortcut-demo-title">
+    <div class="shortcut-demo-copy">
+      <span class="shortcut-demo-kicker">Command metadata</span>
       <h3 id="shortcut-demo-title">Shortcut labels should read as hints, not as controls.</h3>
       <p>
         The component keeps keycap rendering stable while shortcut matching, platform resolution, and command
@@ -68,10 +68,7 @@ Use `cv-shortcut` as secondary command metadata in menus, command rows, toolbars
       </p>
     </div>
 
-    <dl
-      class="shortcut-demo-metrics usage-demo__metrics"
-      aria-label="Shortcut component responsibility split"
-    >
+    <dl class="shortcut-demo-metrics" aria-label="Shortcut component responsibility split">
       <div>
         <dt>Renders</dt>
         <dd>label or keys</dd>
@@ -87,22 +84,15 @@ Use `cv-shortcut` as secondary command metadata in menus, command rows, toolbars
     </dl>
   </section>
 
-  <section
-    class="shortcut-demo-workbench usage-demo__workbench"
-    aria-labelledby="shortcut-demo-workbench-title"
-  >
-    <div class="shortcut-demo-section-header usage-demo__section-header">
-      <span class="shortcut-demo-kicker usage-demo__kicker">Vault command surface</span>
+  <section class="shortcut-demo-workbench" aria-labelledby="shortcut-demo-workbench-title">
+    <div class="shortcut-demo-section-header">
+      <span class="shortcut-demo-kicker">Vault command surface</span>
       <h4 id="shortcut-demo-workbench-title">
         Platform mapping changes the label, but the visual contract stays identical
       </h4>
     </div>
 
-    <div
-      class="shortcut-demo-platforms usage-demo__toolbar"
-      role="group"
-      aria-label="Shortcut platform preview"
-    >
+    <div class="shortcut-demo-platforms" role="group" aria-label="Shortcut platform preview">
       <button type="button" data-shortcut-platform="macos" aria-pressed="true">macOS</button>
       <button type="button" data-shortcut-platform="windows" aria-pressed="false">Windows</button>
       <button type="button" data-shortcut-platform="linux" aria-pressed="false">Linux</button>
@@ -111,7 +101,7 @@ Use `cv-shortcut` as secondary command metadata in menus, command rows, toolbars
 
     <div class="shortcut-demo-grid">
       <div class="shortcut-demo-command-panel" aria-label="Command row shortcut examples">
-        <header class="shortcut-demo-panel-header usage-demo__panel-header usage-demo__surface-header">
+        <header class="shortcut-demo-panel-header">
           <div>
             <span class="shortcut-demo-label">Active route</span>
             <strong>Hidden vault review</strong>
@@ -119,10 +109,7 @@ Use `cv-shortcut` as secondary command metadata in menus, command rows, toolbars
           <output data-shortcut-readout aria-live="polite">Previewing macOS bindings</output>
         </header>
 
-        <button
-          type="button"
-          class="shortcut-demo-command shortcut-demo-command--active usage-demo__inline-card-row"
-        >
+        <button type="button" class="shortcut-demo-command shortcut-demo-command--active">
           <span class="shortcut-demo-command-glyph" aria-hidden="true">P</span>
           <span class="shortcut-demo-command-copy">
             <strong>Open command palette</strong>
@@ -131,10 +118,8 @@ Use `cv-shortcut` as secondary command metadata in menus, command rows, toolbars
           <cv-shortcut data-shortcut-id="palette" keys="Meta,K"></cv-shortcut>
         </button>
 
-        <button type="button" class="shortcut-demo-command usage-demo__inline-card-row">
-          <span class="shortcut-demo-command-glyph shortcut-demo-command-glyph--violet" aria-hidden="true"
-            >R</span
-          >
+        <button type="button" class="shortcut-demo-command">
+          <span class="shortcut-demo-command-glyph shortcut-demo-command-glyph--violet" aria-hidden="true">R</span>
           <span class="shortcut-demo-command-copy">
             <strong>Reveal selected field</strong>
             <span>Temporary visibility for the focused secret.</span>
@@ -142,7 +127,7 @@ Use `cv-shortcut` as secondary command metadata in menus, command rows, toolbars
           <cv-shortcut data-shortcut-id="reveal" keys="Meta,Shift,R"></cv-shortcut>
         </button>
 
-        <button type="button" class="shortcut-demo-command usage-demo__inline-card-row">
+        <button type="button" class="shortcut-demo-command">
           <span class="shortcut-demo-command-glyph" aria-hidden="true">F</span>
           <span class="shortcut-demo-command-copy">
             <strong>Focus vault search</strong>
@@ -152,8 +137,8 @@ Use `cv-shortcut` as secondary command metadata in menus, command rows, toolbars
         </button>
       </div>
 
-      <aside class="shortcut-demo-side usage-demo__side" aria-label="Shortcut usage contexts">
-        <div class="shortcut-demo-context usage-demo__body-copy">
+      <aside class="shortcut-demo-side" aria-label="Shortcut usage contexts">
+        <div class="shortcut-demo-context">
           <span class="shortcut-demo-label">Menu suffix</span>
           <cv-menu open close-on-select="false" aria-label="Shortcut menu example">
             <cv-menu-item value="copy">
@@ -167,13 +152,13 @@ Use `cv-shortcut` as secondary command metadata in menus, command rows, toolbars
           </cv-menu>
         </div>
 
-        <div class="shortcut-demo-context usage-demo__body-copy">
+        <div class="shortcut-demo-context">
           <span class="shortcut-demo-label">Programmatic keys</span>
           <p>
             Consumers may assign a string array property when the binding comes from a registry instead of
             static markup.
           </p>
-          <div class="shortcut-demo-programmatic usage-demo__body-copy usage-demo__soft-card">
+          <div class="shortcut-demo-programmatic">
             <span>Open quick switcher</span>
             <cv-shortcut data-programmatic-shortcut></cv-shortcut>
           </div>
@@ -184,86 +169,84 @@ Use `cv-shortcut` as secondary command metadata in menus, command rows, toolbars
 </div>
 
 <script>
-  document
-    .querySelectorAll('.shortcut-demo-shell[data-demo="shortcut"]:not([data-ready])')
-    .forEach((shell) => {
-      shell.dataset.ready = 'true'
+  document.querySelectorAll('.shortcut-demo-shell[data-demo="shortcut"]:not([data-ready])').forEach((shell) => {
+    shell.dataset.ready = 'true'
 
-      const readout = shell.querySelector('[data-shortcut-readout]')
-      const platformButtons = [...shell.querySelectorAll('[data-shortcut-platform]')]
-      const platformLabels = {
-        macos: 'macOS',
-        windows: 'Windows',
-        linux: 'Linux',
-        web: 'Web',
-      }
-      const bindings = {
-        macos: {
-          palette: ['Meta', 'K'],
-          reveal: ['Meta', 'Shift', 'R'],
-          search: ['Meta', 'F'],
-          copy: ['Meta', 'C'],
-          close: ['Esc'],
-          programmatic: ['Meta', 'Shift', 'P'],
-        },
-        windows: {
-          palette: ['Ctrl', 'K'],
-          reveal: ['Ctrl', 'Shift', 'R'],
-          search: ['Ctrl', 'F'],
-          copy: ['Ctrl', 'C'],
-          close: ['Esc'],
-          programmatic: ['Ctrl', 'Shift', 'P'],
-        },
-        linux: {
-          palette: ['Ctrl', 'K'],
-          reveal: ['Ctrl', 'Shift', 'R'],
-          search: ['Ctrl', 'F'],
-          copy: ['Ctrl', 'C'],
-          close: ['Esc'],
-          programmatic: ['Ctrl', 'Shift', 'P'],
-        },
-        web: {
-          palette: ['Ctrl', '/'],
-          reveal: ['Shift', 'Enter'],
-          search: ['/'],
-          copy: ['Ctrl', 'C'],
-          close: ['Esc'],
-          programmatic: ['Alt', 'P'],
-        },
-      }
+    const readout = shell.querySelector('[data-shortcut-readout]')
+    const platformButtons = [...shell.querySelectorAll('[data-shortcut-platform]')]
+    const platformLabels = {
+      macos: 'macOS',
+      windows: 'Windows',
+      linux: 'Linux',
+      web: 'Web',
+    }
+    const bindings = {
+      macos: {
+        palette: ['Meta', 'K'],
+        reveal: ['Meta', 'Shift', 'R'],
+        search: ['Meta', 'F'],
+        copy: ['Meta', 'C'],
+        close: ['Esc'],
+        programmatic: ['Meta', 'Shift', 'P'],
+      },
+      windows: {
+        palette: ['Ctrl', 'K'],
+        reveal: ['Ctrl', 'Shift', 'R'],
+        search: ['Ctrl', 'F'],
+        copy: ['Ctrl', 'C'],
+        close: ['Esc'],
+        programmatic: ['Ctrl', 'Shift', 'P'],
+      },
+      linux: {
+        palette: ['Ctrl', 'K'],
+        reveal: ['Ctrl', 'Shift', 'R'],
+        search: ['Ctrl', 'F'],
+        copy: ['Ctrl', 'C'],
+        close: ['Esc'],
+        programmatic: ['Ctrl', 'Shift', 'P'],
+      },
+      web: {
+        palette: ['Ctrl', '/'],
+        reveal: ['Shift', 'Enter'],
+        search: ['/'],
+        copy: ['Ctrl', 'C'],
+        close: ['Esc'],
+        programmatic: ['Alt', 'P'],
+      },
+    }
 
-      const setShortcutKeys = (shortcut, keys, platform) => {
-        shortcut.keys = keys
-        shortcut.setAttribute('aria-label', `${platformLabels[platform]} shortcut: ${keys.join(' plus ')}`)
-      }
+    const setShortcutKeys = (shortcut, keys, platform) => {
+      shortcut.keys = keys
+      shortcut.setAttribute('aria-label', `${platformLabels[platform]} shortcut: ${keys.join(' plus ')}`)
+    }
 
-      const applyPlatform = (platform) => {
-        shell.dataset.platform = platform
-        platformButtons.forEach((button) => {
-          button.setAttribute('aria-pressed', String(button.dataset.shortcutPlatform === platform))
-        })
-
-        shell.querySelectorAll('[data-shortcut-id]').forEach((shortcut) => {
-          const id = shortcut.dataset.shortcutId
-          setShortcutKeys(shortcut, bindings[platform][id], platform)
-        })
-
-        const programmaticShortcut = shell.querySelector('[data-programmatic-shortcut]')
-        if (programmaticShortcut) {
-          setShortcutKeys(programmaticShortcut, bindings[platform].programmatic, platform)
-        }
-
-        if (readout) {
-          readout.textContent = `Previewing ${platformLabels[platform]} bindings`
-        }
-      }
-
+    const applyPlatform = (platform) => {
+      shell.dataset.platform = platform
       platformButtons.forEach((button) => {
-        button.addEventListener('click', () => applyPlatform(button.dataset.shortcutPlatform))
+        button.setAttribute('aria-pressed', String(button.dataset.shortcutPlatform === platform))
       })
 
-      applyPlatform('macos')
+      shell.querySelectorAll('[data-shortcut-id]').forEach((shortcut) => {
+        const id = shortcut.dataset.shortcutId
+        setShortcutKeys(shortcut, bindings[platform][id], platform)
+      })
+
+      const programmaticShortcut = shell.querySelector('[data-programmatic-shortcut]')
+      if (programmaticShortcut) {
+        setShortcutKeys(programmaticShortcut, bindings[platform].programmatic, platform)
+      }
+
+      if (readout) {
+        readout.textContent = `Previewing ${platformLabels[platform]} bindings`
+      }
+    }
+
+    platformButtons.forEach((button) => {
+      button.addEventListener('click', () => applyPlatform(button.dataset.shortcutPlatform))
     })
+
+    applyPlatform('macos')
+  })
 </script>
 ```
 

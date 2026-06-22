@@ -9,10 +9,10 @@ Indeterminate loading spinner with SVG track and indicator animation.
 ## Usage
 
 ```html
-<div class="spinner-demo-shell usage-demo" data-demo="spinner" data-live-demo-height="760">
-  <section class="spinner-demo-hero usage-demo__hero" aria-labelledby="spinner-demo-title">
-    <div class="spinner-demo-copy usage-demo__copy">
-      <span class="spinner-demo-kicker usage-demo__kicker">Indeterminate feedback</span>
+<div class="spinner-demo-shell" data-demo="spinner" data-live-demo-height="760">
+  <section class="spinner-demo-hero" aria-labelledby="spinner-demo-title">
+    <div class="spinner-demo-copy">
+      <span class="spinner-demo-kicker">Indeterminate feedback</span>
       <h3 id="spinner-demo-title">Use spinner when work is active but progress cannot be measured.</h3>
       <p>
         Keep the spinner close to the control or region it represents. The visible surface stays small; the
@@ -20,7 +20,7 @@ Indeterminate loading spinner with SVG track and indicator animation.
       </p>
     </div>
 
-    <dl class="spinner-demo-metrics usage-demo__metrics" aria-label="Spinner contract summary">
+    <dl class="spinner-demo-metrics" aria-label="Spinner contract summary">
       <div>
         <dt>ARIA</dt>
         <dd>progressbar with label</dd>
@@ -36,14 +36,14 @@ Indeterminate loading spinner with SVG track and indicator animation.
     </dl>
   </section>
 
-  <section class="spinner-demo-board usage-demo__workbench" aria-labelledby="spinner-demo-board-title">
+  <section class="spinner-demo-board" aria-labelledby="spinner-demo-board-title">
     <div class="spinner-demo-stage" role="status" aria-live="polite">
-      <div class="spinner-demo-stage-head usage-demo__surface-header">
+      <div class="spinner-demo-stage-head">
         <div>
           <span>Vault handoff</span>
           <strong id="spinner-demo-board-title">Checking relay route before export</strong>
         </div>
-        <span class="spinner-demo-badge usage-demo__meta usage-demo__label">pending</span>
+        <span class="spinner-demo-badge">pending</span>
       </div>
 
       <div class="spinner-demo-core">
@@ -51,7 +51,7 @@ Indeterminate loading spinner with SVG track and indicator animation.
         <cv-spinner class="spinner-demo-core-spinner" label="Loading vault handoff status"></cv-spinner>
       </div>
 
-      <div class="spinner-demo-step-list usage-demo__compact-list" aria-label="Loading checkpoints">
+      <div class="spinner-demo-step-list" aria-label="Loading checkpoints">
         <div>
           <span>01</span>
           <p>visible vault selected</p>
@@ -67,9 +67,9 @@ Indeterminate loading spinner with SVG track and indicator animation.
       </div>
     </div>
 
-    <aside class="spinner-demo-side usage-demo__side" aria-label="Spinner placement examples">
-      <div class="spinner-demo-side-head usage-demo__side-head">
-        <span class="spinner-demo-kicker usage-demo__kicker">Placement</span>
+    <aside class="spinner-demo-side" aria-label="Spinner placement examples">
+      <div class="spinner-demo-side-head">
+        <span class="spinner-demo-kicker">Placement</span>
         <h4>Match scale to the surface that is blocked.</h4>
       </div>
 
@@ -90,9 +90,9 @@ Indeterminate loading spinner with SVG track and indicator animation.
     </aside>
   </section>
 
-  <section class="spinner-demo-section usage-demo__section" aria-labelledby="spinner-demo-scale-title">
-    <div class="spinner-demo-section-header usage-demo__section-header">
-      <span class="spinner-demo-kicker usage-demo__kicker">Scale and tone</span>
+  <section class="spinner-demo-section" aria-labelledby="spinner-demo-scale-title">
+    <div class="spinner-demo-section-header">
+      <span class="spinner-demo-kicker">Scale and tone</span>
       <h4 id="spinner-demo-scale-title">Size from the owning layout and reserve color for status meaning.</h4>
     </div>
 

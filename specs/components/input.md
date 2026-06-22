@@ -197,10 +197,10 @@ UIKit does not own value management, type resolution, clearable logic, or passwo
 ## Usage
 
 ```html
-<div class="input-demo-shell usage-demo" data-demo="input" data-live-demo-height="860">
-  <section class="input-demo-hero usage-demo__hero" aria-labelledby="input-demo-title">
-    <div class="input-demo-copy usage-demo__copy">
-      <span class="input-demo-kicker usage-demo__kicker">Text entry primitive</span>
+<div class="input-demo-shell" data-demo="input" data-live-demo-height="860">
+  <section class="input-demo-hero" aria-labelledby="input-demo-title">
+    <div class="input-demo-copy">
+      <span class="input-demo-kicker">Text entry primitive</span>
       <h3 id="input-demo-title">Use input when a visible value needs native editing and headless state.</h3>
       <p>
         The headless input model owns value, focus, clearing, readonly/disabled state, password visibility,
@@ -208,7 +208,7 @@ UIKit does not own value management, type resolution, clearable logic, or passwo
       </p>
     </div>
 
-    <dl class="input-demo-metrics usage-demo__metrics" aria-label="Input contract summary">
+    <dl class="input-demo-metrics" aria-label="Input contract summary">
       <div>
         <dt>States</dt>
         <dd>focused / filled / invalid / readonly / disabled</dd>
@@ -224,36 +224,28 @@ UIKit does not own value management, type resolution, clearable logic, or passwo
     </dl>
   </section>
 
-  <section class="input-demo-board usage-demo__workbench" aria-label="Input examples in a vault record form">
-    <form class="input-demo-form usage-demo__form" data-input-form>
-      <div class="input-demo-form-head usage-demo__form-head">
+  <section class="input-demo-board" aria-label="Input examples in a vault record form">
+    <form class="input-demo-form" data-input-form>
+      <div class="input-demo-form-head">
         <div>
-          <span class="usage-demo__meta">Visible vault record</span>
+          <span>Visible vault record</span>
           <strong>border-relay.admin</strong>
         </div>
         <cv-badge variant="primary" pill>editable route</cv-badge>
       </div>
 
-      <div class="input-demo-field-grid usage-demo__field-grid">
-        <cv-field class="usage-demo__field" required>
+      <div class="input-demo-field-grid">
+        <cv-field required>
           <span slot="label">Visible alias</span>
-          <cv-input
-            class="usage-demo__text-control"
-            data-input-primary
-            name="alias"
-            value="border-relay.admin"
-            clearable
-            autocomplete="off"
-          >
-            <span class="usage-demo__adornment" slot="prefix" aria-hidden="true">cv://</span>
+          <cv-input data-input-primary name="alias" value="border-relay.admin" clearable autocomplete="off">
+            <span slot="prefix" aria-hidden="true">cv://</span>
           </cv-input>
           <span slot="description">Clearable text input with a prefix slot and live value events.</span>
         </cv-field>
 
-        <cv-field class="usage-demo__field">
+        <cv-field>
           <span slot="label">Recovery email</span>
           <cv-input
-            class="usage-demo__text-control"
             name="email"
             type="email"
             value="alex@chromvoid.local"
@@ -263,25 +255,17 @@ UIKit does not own value management, type resolution, clearable logic, or passwo
           <span slot="description">Text-like native types keep keyboard and validation hints intact.</span>
         </cv-field>
 
-        <cv-field class="usage-demo__field">
+        <cv-field>
           <span slot="label">Local secret</span>
-          <cv-input
-            class="usage-demo__text-control"
-            type="password"
-            password-toggle
-            clearable
-            value="decoy-key-4589"
-            autocomplete="off"
-          >
-            <span class="usage-demo__adornment" slot="prefix" aria-hidden="true">key</span>
+          <cv-input type="password" password-toggle clearable value="decoy-key-4589" autocomplete="off">
+            <span slot="prefix" aria-hidden="true">key</span>
           </cv-input>
           <span slot="description">Password visibility is part of the input model, not local DOM state.</span>
         </cv-field>
 
-        <cv-field class="usage-demo__field">
+        <cv-field>
           <span slot="label">Search visible layer</span>
           <cv-input
-            class="usage-demo__text-control"
             preset="search-mobile"
             variant="filled"
             type="search"
@@ -294,17 +278,17 @@ UIKit does not own value management, type resolution, clearable logic, or passwo
       </div>
     </form>
 
-    <aside class="input-demo-side usage-demo__side" aria-label="Input event output">
-      <div class="input-demo-side-head usage-demo__side-head">
-        <span class="input-demo-kicker usage-demo__kicker">Event stream</span>
+    <aside class="input-demo-side" aria-label="Input event output">
+      <div class="input-demo-side-head">
+        <span class="input-demo-kicker">Event stream</span>
         <h4>Interact with any active field to inspect the public contract.</h4>
       </div>
 
-      <p class="input-demo-log usage-demo__log" role="status" aria-live="polite" data-input-output>
+      <p class="input-demo-log" role="status" aria-live="polite" data-input-output>
         Waiting for input. Type, blur, clear, or toggle the password control.
       </p>
 
-      <dl class="input-demo-live usage-demo__state" aria-label="Live input state">
+      <dl class="input-demo-live" aria-label="Live input state">
         <div>
           <dt>Primary value</dt>
           <dd data-input-mirror>border-relay.admin</dd>
@@ -317,66 +301,61 @@ UIKit does not own value management, type resolution, clearable logic, or passwo
     </aside>
   </section>
 
-  <section class="input-demo-section usage-demo__section" aria-labelledby="input-demo-matrix-title">
-    <div class="input-demo-section-header usage-demo__section-header">
-      <span class="input-demo-kicker usage-demo__kicker">Variants, sizes, and field states</span>
+  <section class="input-demo-section" aria-labelledby="input-demo-matrix-title">
+    <div class="input-demo-section-header">
+      <span class="input-demo-kicker">Variants, sizes, and field states</span>
       <h4 id="input-demo-matrix-title">
         Keep one input contract, then tune emphasis with variant, size, slots, or field state.
       </h4>
     </div>
 
-    <div class="input-demo-matrix usage-demo__field-grid" aria-label="Input state matrix">
-      <div class="usage-demo__case">
-        <span class="usage-demo__meta">Variant</span>
-        <cv-input class="usage-demo__text-control" placeholder="Outlined default"></cv-input>
-        <cv-input class="usage-demo__text-control" variant="filled" value="Filled surface"></cv-input>
+    <div class="input-demo-matrix" aria-label="Input state matrix">
+      <div>
+        <span>Variant</span>
+        <cv-input placeholder="Outlined default"></cv-input>
+        <cv-input variant="filled" value="Filled surface"></cv-input>
       </div>
 
-      <div class="usage-demo__case">
-        <span class="usage-demo__meta">Size</span>
-        <cv-input class="usage-demo__text-control" size="small" value="Small"></cv-input>
-        <cv-input class="usage-demo__text-control" value="Medium"></cv-input>
-        <cv-input class="usage-demo__text-control" size="large" value="Large"></cv-input>
+      <div>
+        <span>Size</span>
+        <cv-input size="small" value="Small"></cv-input>
+        <cv-input value="Medium"></cv-input>
+        <cv-input size="large" value="Large"></cv-input>
       </div>
 
-      <div class="usage-demo__case">
-        <span class="usage-demo__meta">Affixes</span>
-        <cv-input class="usage-demo__text-control" value="chromvoid">
-          <span class="usage-demo__adornment" slot="prefix" aria-hidden="true">@</span>
-          <span class="usage-demo__adornment" slot="suffix">.app</span>
+      <div>
+        <span>Affixes</span>
+        <cv-input value="chromvoid">
+          <span slot="prefix" aria-hidden="true">@</span>
+          <span slot="suffix">.app</span>
         </cv-input>
-        <cv-input class="usage-demo__text-control" value="/vault/visible" clearable>
-          <span class="usage-demo__adornment" slot="prefix" aria-hidden="true">path</span>
+        <cv-input value="/vault/visible" clearable>
+          <span slot="prefix" aria-hidden="true">path</span>
         </cv-input>
       </div>
 
-      <div class="usage-demo__case usage-demo__case--danger">
-        <span class="usage-demo__meta">Validation</span>
-        <cv-field class="usage-demo__field" required invalid>
+      <div>
+        <span>Validation</span>
+        <cv-field required invalid>
           <span slot="label">Policy route</span>
-          <cv-input class="usage-demo__text-control" value="unknown relay"></cv-input>
+          <cv-input value="unknown relay"></cv-input>
           <span slot="error">Route is not available in the visible profile.</span>
         </cv-field>
       </div>
 
-      <div class="usage-demo__case">
-        <span class="usage-demo__meta">Read state</span>
-        <cv-input class="usage-demo__text-control" readonly value="Readonly but focusable"></cv-input>
-        <cv-field class="usage-demo__field" disabled>
+      <div>
+        <span>Read state</span>
+        <cv-input readonly value="Readonly but focusable"></cv-input>
+        <cv-field disabled>
           <span slot="label">Disabled by field</span>
-          <cv-input class="usage-demo__text-control" value="Locked by policy"></cv-input>
+          <cv-input value="Locked by policy"></cv-input>
         </cv-field>
       </div>
 
-      <div class="usage-demo__case">
-        <span class="usage-demo__meta">Native type</span>
-        <cv-input
-          class="usage-demo__text-control"
-          type="url"
-          value="https://relay.chromvoid.local"
-          clearable
-        ></cv-input>
-        <cv-input class="usage-demo__text-control" type="tel" placeholder="+1 555 0100"></cv-input>
+      <div>
+        <span>Native type</span>
+        <cv-input type="url" value="https://relay.chromvoid.local" clearable></cv-input>
+        <cv-input type="tel" placeholder="+1 555 0100"></cv-input>
       </div>
     </div>
   </section>

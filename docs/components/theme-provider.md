@@ -9,10 +9,10 @@ Provides design tokens as CSS custom properties to descendant components, with s
 ## Usage
 
 ```html
-<div class="theme-provider-demo-board usage-demo__workbench">
+<div class="theme-provider-demo-board">
   <!-- Basic dark theme. -->
   <cv-theme-provider mode="dark">
-    <section class="theme-provider-demo-panel usage-demo__panel">
+    <section class="theme-provider-demo-panel">
       <span>Dark mode scope</span>
       <cv-button variant="primary">Save</cv-button>
     </section>
@@ -20,15 +20,15 @@ Provides design tokens as CSS custom properties to descendant components, with s
 
   <!-- System-auto follows OS light/dark preference. -->
   <cv-theme-provider>
-    <section class="theme-provider-demo-panel usage-demo__panel">
+    <section class="theme-provider-demo-panel">
       <span>System color mode</span>
-      <cv-badge class="usage-demo__dense-badge" variant="success" size="small">auto</cv-badge>
+      <cv-badge variant="success" size="small">auto</cv-badge>
     </section>
   </cv-theme-provider>
 
   <!-- Named themes are registered through the runtime theme engine. -->
   <cv-theme-provider data-theme-demo-brand>
-    <section class="theme-provider-demo-panel usage-demo__panel">
+    <section class="theme-provider-demo-panel">
       <span>Named brand theme</span>
       <cv-button variant="primary">Branded</cv-button>
     </section>
@@ -36,10 +36,10 @@ Provides design tokens as CSS custom properties to descendant components, with s
 
   <!-- Nested providers scope overrides to their own subtree. -->
   <cv-theme-provider mode="dark">
-    <section class="theme-provider-demo-panel usage-demo__panel">
+    <section class="theme-provider-demo-panel">
       <span>Outer dark provider</span>
       <cv-theme-provider data-theme-demo-sidebar>
-        <cv-badge class="usage-demo__dense-badge" variant="primary" size="small">sidebar scope</cv-badge>
+        <cv-badge variant="primary" size="small">sidebar scope</cv-badge>
       </cv-theme-provider>
     </section>
   </cv-theme-provider>

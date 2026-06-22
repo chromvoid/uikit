@@ -9,10 +9,10 @@ Button that copies a value to the system clipboard with three-state visual feedb
 ## Usage
 
 ```html
-<div class="copy-button-demo-shell usage-demo" data-demo="copy-button" data-live-demo-height="420">
-  <section class="copy-button-demo-hero usage-demo__hero" aria-labelledby="copy-button-demo-title">
-    <div class="copy-button-demo-copy usage-demo__copy">
-      <p class="copy-button-demo-kicker usage-demo__kicker">Clipboard boundary</p>
+<div class="copy-button-demo-shell" data-demo="copy-button" data-live-demo-height="420">
+  <section class="copy-button-demo-hero" aria-labelledby="copy-button-demo-title">
+    <div class="copy-button-demo-copy">
+      <p class="copy-button-demo-kicker">Clipboard boundary</p>
       <h3 id="copy-button-demo-title">Copy sensitive values without putting them in markup</h3>
       <p>
         Values are assigned as properties, clipboard writes can be adapter-backed, and the visible control
@@ -20,7 +20,7 @@ Button that copies a value to the system clipboard with three-state visual feedb
       </p>
     </div>
 
-    <dl class="copy-button-demo-metrics usage-demo__metrics" aria-label="Copy button contract highlights">
+    <dl class="copy-button-demo-metrics" aria-label="Copy button contract highlights">
       <div>
         <dt>Value</dt>
         <dd>property-only</dd>
@@ -36,9 +36,9 @@ Button that copies a value to the system clipboard with three-state visual feedb
     </dl>
   </section>
 
-  <section class="copy-button-demo-workbench usage-demo__workbench" aria-label="Vault record copy actions">
+  <section class="copy-button-demo-workbench" aria-label="Vault record copy actions">
     <div class="copy-button-demo-record">
-      <div class="copy-button-demo-record-head usage-demo__surface-header">
+      <div class="copy-button-demo-record-head">
         <div>
           <span>Vault record</span>
           <strong>border-relay.admin</strong>
@@ -108,7 +108,7 @@ Button that copies a value to the system clipboard with three-state visual feedb
       </div>
     </div>
 
-    <aside class="copy-button-demo-side usage-demo__side" aria-label="Copy button variants and event output">
+    <aside class="copy-button-demo-side" aria-label="Copy button variants and event output">
       <div class="copy-button-demo-variants">
         <div>
           <cv-copy-button
@@ -138,7 +138,7 @@ Button that copies a value to the system clipboard with three-state visual feedb
         </div>
       </div>
 
-      <p class="copy-button-demo-log usage-demo__log" role="status" aria-live="polite" data-copy-output>
+      <p class="copy-button-demo-log" role="status" aria-live="polite" data-copy-output>
         Waiting for a copy event. Click any active copy button.
       </p>
     </aside>

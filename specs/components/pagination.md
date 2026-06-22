@@ -62,10 +62,10 @@ Page navigation with bounded previous/next actions and current-page announcement
 ## Usage
 
 ```html
-<div class="pagination-demo-shell usage-demo" data-demo="pagination">
-  <section class="pagination-demo-hero usage-demo__hero" aria-labelledby="pagination-demo-title">
-    <div class="pagination-demo-copy usage-demo__copy">
-      <span class="pagination-demo-kicker usage-demo__kicker">Page navigation</span>
+<div class="pagination-demo-shell" data-demo="pagination">
+  <section class="pagination-demo-hero" aria-labelledby="pagination-demo-title">
+    <div class="pagination-demo-copy">
+      <span class="pagination-demo-kicker">Page navigation</span>
       <h3 id="pagination-demo-title">Use pagination when the collection has known page bounds.</h3>
       <p>
         <code>cv-pagination</code> renders a navigation landmark, clamps page changes to the available range,
@@ -73,7 +73,7 @@ Page navigation with bounded previous/next actions and current-page announcement
       </p>
     </div>
 
-    <dl class="pagination-demo-metrics usage-demo__metrics" aria-label="Pagination behavior summary">
+    <dl class="pagination-demo-metrics" aria-label="Pagination behavior summary">
       <div>
         <dt>Range</dt>
         <dd>ellipsis</dd>
@@ -89,26 +89,21 @@ Page navigation with bounded previous/next actions and current-page announcement
     </dl>
   </section>
 
-  <section
-    class="pagination-demo-section usage-demo__section"
-    aria-labelledby="pagination-demo-controlled-title"
-  >
-    <div class="pagination-demo-section-header usage-demo__section-header">
-      <span class="pagination-demo-kicker usage-demo__kicker">Controlled list</span>
+  <section class="pagination-demo-section" aria-labelledby="pagination-demo-controlled-title">
+    <div class="pagination-demo-section-header">
+      <span class="pagination-demo-kicker">Controlled list</span>
       <h4 id="pagination-demo-controlled-title">
         Listen for <code>cv-page-change</code> and update the surrounding result state
       </h4>
     </div>
 
-    <div class="pagination-demo-panel pagination-demo-panel--primary usage-demo__panel">
+    <div class="pagination-demo-panel pagination-demo-panel--primary">
       <div class="pagination-demo-result-head">
         <div>
           <span class="pagination-demo-label">Audit records</span>
           <strong class="pagination-demo-result-title">Evidence package exports</strong>
         </div>
-        <output class="pagination-demo-output usage-demo__log" aria-live="polite"
-          >Page 6 of 24 · records 126-150</output
-        >
+        <output class="pagination-demo-output" aria-live="polite">Page 6 of 24 · records 126-150</output>
       </div>
 
       <div class="pagination-demo-scroll">
@@ -122,19 +117,16 @@ Page navigation with bounded previous/next actions and current-page announcement
     </div>
   </section>
 
-  <section
-    class="pagination-demo-section usage-demo__section"
-    aria-labelledby="pagination-demo-variants-title"
-  >
-    <div class="pagination-demo-section-header usage-demo__section-header">
-      <span class="pagination-demo-kicker usage-demo__kicker">Variants</span>
+  <section class="pagination-demo-section" aria-labelledby="pagination-demo-variants-title">
+    <div class="pagination-demo-section-header">
+      <span class="pagination-demo-kicker">Variants</span>
       <h4 id="pagination-demo-variants-title">
         Tune density, boundaries, and unavailable states per surface
       </h4>
     </div>
 
     <div class="pagination-demo-grid">
-      <div class="pagination-demo-panel usage-demo__panel">
+      <div class="pagination-demo-panel">
         <span class="pagination-demo-label">Small collection</span>
         <p>No ellipsis is rendered while every page can fit.</p>
         <div class="pagination-demo-scroll">
@@ -142,7 +134,7 @@ Page navigation with bounded previous/next actions and current-page announcement
         </div>
       </div>
 
-      <div class="pagination-demo-panel pagination-demo-panel--wide usage-demo__panel">
+      <div class="pagination-demo-panel pagination-demo-panel--wide">
         <span class="pagination-demo-label">Long range with wider context</span>
         <p>Increase <code>sibling-count</code> and <code>boundary-count</code> for dense data views.</p>
         <div class="pagination-demo-scroll">
@@ -156,7 +148,7 @@ Page navigation with bounded previous/next actions and current-page announcement
         </div>
       </div>
 
-      <div class="pagination-demo-panel usage-demo__panel">
+      <div class="pagination-demo-panel">
         <span class="pagination-demo-label">Compact rail</span>
         <p><code>compact</code> hides ellipsis markers for narrow toolbars and mobile-adjacent layouts.</p>
         <div class="pagination-demo-scroll">
@@ -164,7 +156,7 @@ Page navigation with bounded previous/next actions and current-page announcement
         </div>
       </div>
 
-      <div class="pagination-demo-panel usage-demo__panel">
+      <div class="pagination-demo-panel">
         <span class="pagination-demo-label">Disabled while loading</span>
         <p><code>disabled</code> blocks navigation while preserving the current page announcement.</p>
         <div class="pagination-demo-scroll">

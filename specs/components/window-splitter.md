@@ -188,10 +188,10 @@ Both events are dispatched as `CustomEvent` with `bubbles: true` and `composed: 
 ## Usage
 
 ```html
-<div class="window-splitter-demo-shell usage-demo" data-demo="window-splitter" data-live-demo-height="760">
-  <section class="window-splitter-demo-hero usage-demo__hero" aria-labelledby="window-splitter-demo-title">
-    <div class="window-splitter-demo-copy usage-demo__copy">
-      <span class="window-splitter-demo-kicker usage-demo__kicker">Resizable workspace boundary</span>
+<div class="window-splitter-demo-shell" data-demo="window-splitter" data-live-demo-height="760">
+  <section class="window-splitter-demo-hero" aria-labelledby="window-splitter-demo-title">
+    <div class="window-splitter-demo-copy">
+      <span class="window-splitter-demo-kicker">Resizable workspace boundary</span>
       <h3 id="window-splitter-demo-title">
         Resize visible and hidden panes without losing the separator contract.
       </h3>
@@ -201,10 +201,7 @@ Both events are dispatched as `CustomEvent` with `bubbles: true` and `composed: 
       </p>
     </div>
 
-    <dl
-      class="window-splitter-demo-metrics usage-demo__metrics"
-      aria-label="Window splitter behavior summary"
-    >
+    <dl class="window-splitter-demo-metrics" aria-label="Window splitter behavior summary">
       <div>
         <dt>Role</dt>
         <dd>separator</dd>
@@ -220,18 +217,15 @@ Both events are dispatched as `CustomEvent` with `bubbles: true` and `composed: 
     </dl>
   </section>
 
-  <section
-    class="window-splitter-demo-workbench usage-demo__workbench"
-    aria-labelledby="window-splitter-demo-workbench-title"
-  >
-    <div class="window-splitter-demo-section-header usage-demo__section-header">
-      <span class="window-splitter-demo-kicker usage-demo__kicker">Vault review workspace</span>
+  <section class="window-splitter-demo-workbench" aria-labelledby="window-splitter-demo-workbench-title">
+    <div class="window-splitter-demo-section-header">
+      <span class="window-splitter-demo-kicker">Vault review workspace</span>
       <h4 id="window-splitter-demo-workbench-title">
         Drag the divider or focus it and use keyboard commands to rebalance the panes
       </h4>
     </div>
 
-    <div class="window-splitter-demo-toolbar usage-demo__toolbar" aria-label="Active splitter capabilities">
+    <div class="window-splitter-demo-toolbar" aria-label="Active splitter capabilities">
       <span>orientation="vertical"</span>
       <span>snap="25% 50% 75%"</span>
       <span>cv-input + cv-change</span>
@@ -306,10 +300,10 @@ Both events are dispatched as `CustomEvent` with `bubbles: true` and `composed: 
       </cv-window-splitter>
     </div>
 
-    <div class="window-splitter-demo-status usage-demo__compact-list">
+    <div class="window-splitter-demo-status">
       <div>
         <output
-          class="window-splitter-demo-readout usage-demo__log"
+          class="window-splitter-demo-readout"
           for="window-splitter-demo-vault"
           aria-live="polite"
           data-splitter-output
@@ -334,12 +328,9 @@ Both events are dispatched as `CustomEvent` with `bubbles: true` and `composed: 
     </div>
   </section>
 
-  <section
-    class="window-splitter-demo-secondary usage-demo__single-layout"
-    aria-labelledby="window-splitter-demo-fixed-title"
-  >
-    <div class="window-splitter-demo-section-header usage-demo__section-header">
-      <span class="window-splitter-demo-kicker usage-demo__kicker">Fixed toggle mode</span>
+  <section class="window-splitter-demo-secondary" aria-labelledby="window-splitter-demo-fixed-title">
+    <div class="window-splitter-demo-section-header">
+      <span class="window-splitter-demo-kicker">Fixed toggle mode</span>
       <h4 id="window-splitter-demo-fixed-title">
         Use fixed when the separator switches between two committed states
       </h4>
@@ -366,7 +357,7 @@ Both events are dispatched as `CustomEvent` with `bubbles: true` and `composed: 
     </cv-window-splitter>
 
     <output
-      class="window-splitter-demo-readout usage-demo__log"
+      class="window-splitter-demo-readout"
       for="window-splitter-demo-fixed"
       aria-live="polite"
       data-fixed-output

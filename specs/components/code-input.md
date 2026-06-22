@@ -7,10 +7,10 @@ Segmented short-code entry for PIN, OTP, pairing, and recovery codes.
 ## Usage
 
 ```html
-<div class="code-input-demo-shell usage-demo" data-demo="code-input" data-live-demo-height="780">
-  <section class="code-input-demo-hero usage-demo__hero" aria-labelledby="code-input-demo-title">
-    <div class="code-input-demo-copy usage-demo__copy">
-      <span class="code-input-demo-kicker usage-demo__kicker">Segmented secret entry</span>
+<div class="code-input-demo-shell" data-demo="code-input" data-live-demo-height="780">
+  <section class="code-input-demo-hero" aria-labelledby="code-input-demo-title">
+    <div class="code-input-demo-copy">
+      <span class="code-input-demo-kicker">Segmented secret entry</span>
       <h3 id="code-input-demo-title">Collect short codes without losing form semantics or paste behavior.</h3>
       <p>
         <code>cv-code-input</code> wraps the headless model for OTP, PIN, pairing, and recovery flows. The
@@ -18,7 +18,7 @@ Segmented short-code entry for PIN, OTP, pairing, and recovery codes.
       </p>
     </div>
 
-    <dl class="code-input-demo-metrics usage-demo__metrics" aria-label="Code input contract highlights">
+    <dl class="code-input-demo-metrics" aria-label="Code input contract highlights">
       <div>
         <dt>Paste</dt>
         <dd>distributed from the focused segment</dd>
@@ -34,13 +34,9 @@ Segmented short-code entry for PIN, OTP, pairing, and recovery codes.
     </dl>
   </section>
 
-  <form
-    class="code-input-demo-workbench usage-demo__workbench"
-    aria-label="Pairing code verification"
-    data-code-form
-  >
-    <section class="code-input-demo-panel usage-demo__panel" aria-labelledby="code-input-panel-title">
-      <div class="code-input-demo-panel-head usage-demo__panel-head">
+  <form class="code-input-demo-workbench" aria-label="Pairing code verification" data-code-form>
+    <section class="code-input-demo-panel" aria-labelledby="code-input-panel-title">
+      <div class="code-input-demo-panel-head">
         <div>
           <span>Vault pairing challenge</span>
           <h4 id="code-input-panel-title">Device token from trusted display</h4>
@@ -60,32 +56,28 @@ Segmented short-code entry for PIN, OTP, pairing, and recovery codes.
           required
           autocomplete="off"
         ></cv-code-input>
-        <span slot="description"
-          >Type or paste a full token. Completion is reported through <code>cv-complete</code>.</span
-        >
+        <span slot="description">Type or paste a full token. Completion is reported through <code>cv-complete</code>.</span>
       </cv-field>
 
-      <div class="code-input-demo-actions usage-demo__actions" aria-label="Code input demo actions">
+      <div class="code-input-demo-actions" aria-label="Code input demo actions">
         <cv-button size="small" data-code-action="pairing">Fill pairing token</cv-button>
         <cv-button size="small" outline data-code-action="otp">Use OTP sample</cv-button>
         <cv-button size="small" variant="ghost" data-code-action="clear">Clear</cv-button>
       </div>
 
-      <p class="code-input-demo-log usage-demo__log" role="status" aria-live="polite" data-code-output>
+      <p class="code-input-demo-log" role="status" aria-live="polite" data-code-output>
         Waiting for input. Focus any segment, paste a code, or use a sample action.
       </p>
     </section>
 
-    <aside class="code-input-demo-side usage-demo__side" aria-label="Code input usage states">
+    <aside class="code-input-demo-side" aria-label="Code input usage states">
       <div class="code-input-demo-contract">
         <span>Model boundary</span>
         <strong>state.value() stays normalized</strong>
-        <p>
-          UIKit renders the segments. The headless model owns charset filtering, focus index, and no-op gates.
-        </p>
+        <p>UIKit renders the segments. The headless model owns charset filtering, focus index, and no-op gates.</p>
       </div>
 
-      <div class="code-input-demo-state-list usage-demo__compact-list">
+      <div class="code-input-demo-state-list">
         <cv-field>
           <span slot="label">Masked PIN</span>
           <cv-code-input purpose="pin" length="4" mask value="2048" size="small"></cv-code-input>
@@ -93,13 +85,7 @@ Segmented short-code entry for PIN, OTP, pairing, and recovery codes.
 
         <cv-field invalid>
           <span slot="label">Recovery mismatch</span>
-          <cv-code-input
-            purpose="recovery"
-            charset="alphanumeric"
-            length="6"
-            value="A7K2M9"
-            invalid
-          ></cv-code-input>
+          <cv-code-input purpose="recovery" charset="alphanumeric" length="6" value="A7K2M9" invalid></cv-code-input>
           <span slot="error">The recovery code no longer matches this vault.</span>
         </cv-field>
 
@@ -110,13 +96,7 @@ Segmented short-code entry for PIN, OTP, pairing, and recovery codes.
 
         <cv-field>
           <span slot="label">Readonly audit code</span>
-          <cv-code-input
-            purpose="pairing"
-            charset="alphanumeric"
-            length="6"
-            value="RD3K9X"
-            readonly
-          ></cv-code-input>
+          <cv-code-input purpose="pairing" charset="alphanumeric" length="6" value="RD3K9X" readonly></cv-code-input>
         </cv-field>
       </div>
     </aside>
@@ -193,10 +173,7 @@ Segmented short-code entry for PIN, OTP, pairing, and recovery codes.
       shell.addEventListener('cv-input', (event) => {
         if (event.target !== main) return
         const {value, complete} = event.detail
-        setOutput(
-          `cv-input: value="${value || 'empty'}", complete=${String(complete)}.`,
-          complete ? 'complete' : 'typing',
-        )
+        setOutput(`cv-input: value="${value || 'empty'}", complete=${String(complete)}.`, complete ? 'complete' : 'typing')
       })
 
       shell.addEventListener('cv-change', (event) => {

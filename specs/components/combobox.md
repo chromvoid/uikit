@@ -288,14 +288,10 @@ These behaviors are optional and currently not required on `cv-combobox`:
 ## Usage
 
 ```html
-<div
-  class="combobox-demo-shell usage-demo usage-demo__dark-preview"
-  data-demo="combobox"
-  data-live-demo-height="1180"
->
-  <section class="combobox-demo-hero usage-demo__hero" aria-labelledby="combobox-demo-title">
-    <div class="combobox-demo-copy usage-demo__copy">
-      <span class="combobox-demo-kicker usage-demo__kicker">Search and select primitive</span>
+<div class="combobox-demo-shell" data-demo="combobox" data-live-demo-height="1180">
+  <section class="combobox-demo-hero" aria-labelledby="combobox-demo-title">
+    <div class="combobox-demo-copy">
+      <span class="combobox-demo-kicker">Search and select primitive</span>
       <h3 id="combobox-demo-title">
         Use combobox when a controlled choice also needs filtering, grouping, or tags.
       </h3>
@@ -306,7 +302,7 @@ These behaviors are optional and currently not required on `cv-combobox`:
       </p>
     </div>
 
-    <dl class="combobox-demo-metrics usage-demo__metrics" aria-label="Combobox contract summary">
+    <dl class="combobox-demo-metrics" aria-label="Combobox contract summary">
       <div>
         <dt>Modes</dt>
         <dd>editable / select-only</dd>
@@ -322,24 +318,20 @@ These behaviors are optional and currently not required on `cv-combobox`:
     </dl>
   </section>
 
-  <section
-    class="combobox-demo-board usage-demo__workbench"
-    aria-label="Combobox examples in a vault routing form"
-  >
-    <form class="combobox-demo-panel usage-demo__panel" data-combobox-form>
-      <div class="combobox-demo-panel-head usage-demo__panel-head usage-demo__form-head">
+  <section class="combobox-demo-board" aria-label="Combobox examples in a vault routing form">
+    <form class="combobox-demo-panel" data-combobox-form>
+      <div class="combobox-demo-panel-head">
         <div>
-          <span class="usage-demo__meta">Visible profile routing</span>
+          <span>Visible profile routing</span>
           <strong>relay.surface / browser tags / operator handoff</strong>
         </div>
         <cv-badge variant="primary" pill>live contract</cv-badge>
       </div>
 
-      <div class="combobox-demo-field-grid usage-demo__field-grid">
-        <cv-field class="usage-demo__field" required>
+      <div class="combobox-demo-field-grid">
+        <cv-field required>
           <span slot="label">Visible route</span>
           <cv-combobox
-            class="usage-demo__select-control"
             data-combobox-primary
             clearable
             value="relay"
@@ -347,7 +339,7 @@ These behaviors are optional and currently not required on `cv-combobox`:
             placeholder="Search routes"
             aria-label="Visible route"
           >
-            <span class="usage-demo__adornment" slot="prefix" aria-hidden="true">route</span>
+            <span slot="prefix" aria-hidden="true">route</span>
             <cv-combobox-option value="relay">Relay endpoint</cv-combobox-option>
             <cv-combobox-option value="gateway">Gateway unlock</cv-combobox-option>
             <cv-combobox-option value="import">Credential import</cv-combobox-option>
@@ -358,10 +350,9 @@ These behaviors are optional and currently not required on `cv-combobox`:
           >
         </cv-field>
 
-        <cv-field class="usage-demo__field">
+        <cv-field>
           <span slot="label">Layer tags</span>
           <cv-combobox
-            class="usage-demo__select-control"
             multiple
             clearable
             max-tags-visible="2"
@@ -377,15 +368,9 @@ These behaviors are optional and currently not required on `cv-combobox`:
           <span slot="description">Multiple selection renders tags and keeps the popup open by default.</span>
         </cv-field>
 
-        <cv-field class="usage-demo__field">
+        <cv-field>
           <span slot="label">Operator</span>
-          <cv-combobox
-            class="usage-demo__select-control"
-            type="select-only"
-            value="alex"
-            placeholder="Assign operator"
-            aria-label="Operator"
-          >
+          <cv-combobox type="select-only" value="alex" placeholder="Assign operator" aria-label="Operator">
             <cv-combobox-option value="alex">Alex - security review</cv-combobox-option>
             <cv-combobox-option value="maria">Maria - legal hold</cv-combobox-option>
             <cv-combobox-option value="ops">Ops queue</cv-combobox-option>
@@ -395,13 +380,9 @@ These behaviors are optional and currently not required on `cv-combobox`:
           >
         </cv-field>
 
-        <cv-field class="usage-demo__field">
+        <cv-field>
           <span slot="label">Jurisdiction</span>
-          <cv-combobox
-            class="usage-demo__select-control"
-            placeholder="Filter jurisdiction"
-            aria-label="Jurisdiction"
-          >
+          <cv-combobox placeholder="Filter jurisdiction" aria-label="Jurisdiction">
             <cv-combobox-group label="Low-friction review">
               <cv-combobox-option value="helsinki">Helsinki</cv-combobox-option>
               <cv-combobox-option value="reykjavik">Reykjavik</cv-combobox-option>
@@ -418,17 +399,17 @@ These behaviors are optional and currently not required on `cv-combobox`:
       </div>
     </form>
 
-    <aside class="combobox-demo-side usage-demo__side" aria-label="Combobox event output">
-      <div class="combobox-demo-side-head usage-demo__side-head">
-        <span class="combobox-demo-kicker usage-demo__kicker">Event stream</span>
+    <aside class="combobox-demo-side" aria-label="Combobox event output">
+      <div class="combobox-demo-side-head">
+        <span class="combobox-demo-kicker">Event stream</span>
         <h4>Interact with any combobox to inspect the public state emitted by the component.</h4>
       </div>
 
-      <p class="combobox-demo-log usage-demo__log" role="status" aria-live="polite" data-combobox-output>
+      <p class="combobox-demo-log" role="status" aria-live="polite" data-combobox-output>
         Waiting for interaction. Type, pick an option, toggle a tag, or clear a value.
       </p>
 
-      <dl class="combobox-demo-live usage-demo__state" aria-label="Live combobox state">
+      <dl class="combobox-demo-live" aria-label="Live combobox state">
         <div>
           <dt>Selection</dt>
           <dd data-combobox-selected>relay</dd>
@@ -443,10 +424,9 @@ These behaviors are optional and currently not required on `cv-combobox`:
         </div>
       </dl>
 
-      <div class="combobox-demo-open-card usage-demo__case">
-        <span class="usage-demo__meta">Open grouped listbox</span>
+      <div class="combobox-demo-open-card">
+        <span>Open grouped listbox</span>
         <cv-combobox
-          class="usage-demo__select-control"
           open
           type="select-only"
           value="work"
@@ -463,48 +443,36 @@ These behaviors are optional and currently not required on `cv-combobox`:
     </aside>
   </section>
 
-  <section class="combobox-demo-section usage-demo__section" aria-labelledby="combobox-demo-matrix-title">
-    <div class="combobox-demo-section-header usage-demo__section-header">
-      <span class="combobox-demo-kicker usage-demo__kicker">State matrix</span>
+  <section class="combobox-demo-section" aria-labelledby="combobox-demo-matrix-title">
+    <div class="combobox-demo-section-header">
+      <span class="combobox-demo-kicker">State matrix</span>
       <h4 id="combobox-demo-matrix-title">
         One component covers typed filtering, trigger-only selection, tag overflow, invalid input, grouping,
         and sizing.
       </h4>
     </div>
 
-    <div class="combobox-demo-matrix usage-demo__field-grid" aria-label="Combobox state matrix">
-      <div class="usage-demo__case">
-        <span class="usage-demo__meta">Editable filter</span>
-        <cv-combobox
-          class="usage-demo__select-control"
-          input-value="gate"
-          placeholder="Type to filter"
-          aria-label="Editable filter"
-        >
+    <div class="combobox-demo-matrix" aria-label="Combobox state matrix">
+      <div>
+        <span>Editable filter</span>
+        <cv-combobox input-value="gate" placeholder="Type to filter" aria-label="Editable filter">
           <cv-combobox-option value="gateway">Gateway</cv-combobox-option>
           <cv-combobox-option value="gatekeeper">Gatekeeper</cv-combobox-option>
           <cv-combobox-option value="relay">Relay</cv-combobox-option>
         </cv-combobox>
       </div>
 
-      <div class="usage-demo__case">
-        <span class="usage-demo__meta">Select-only</span>
-        <cv-combobox
-          class="usage-demo__select-control"
-          type="select-only"
-          value="hardware"
-          placeholder="Choose boundary"
-          aria-label="Boundary"
-        >
+      <div>
+        <span>Select-only</span>
+        <cv-combobox type="select-only" value="hardware" placeholder="Choose boundary" aria-label="Boundary">
           <cv-combobox-option value="software">Software only</cv-combobox-option>
           <cv-combobox-option value="hardware">Hardware-assisted</cv-combobox-option>
         </cv-combobox>
       </div>
 
-      <div class="usage-demo__case">
-        <span class="usage-demo__meta">Tag overflow</span>
+      <div>
+        <span>Tag overflow</span>
         <cv-combobox
-          class="usage-demo__select-control"
           multiple
           clearable
           max-tags-visible="1"
@@ -518,12 +486,11 @@ These behaviors are optional and currently not required on `cv-combobox`:
         </cv-combobox>
       </div>
 
-      <div class="usage-demo__case usage-demo__case--danger">
-        <span class="usage-demo__meta">Invalid</span>
-        <cv-field class="usage-demo__field" invalid>
+      <div>
+        <span>Invalid</span>
+        <cv-field invalid>
           <span slot="label">Policy route</span>
           <cv-combobox
-            class="usage-demo__select-control"
             invalid
             input-value="unknown relay"
             placeholder="Search route"
@@ -535,38 +502,21 @@ These behaviors are optional and currently not required on `cv-combobox`:
         </cv-field>
       </div>
 
-      <div class="usage-demo__case">
-        <span class="usage-demo__meta">Disabled option</span>
-        <cv-combobox
-          class="usage-demo__select-control"
-          value="active"
-          placeholder="Choose state"
-          aria-label="Disabled option"
-        >
+      <div>
+        <span>Disabled option</span>
+        <cv-combobox value="active" placeholder="Choose state" aria-label="Disabled option">
           <cv-combobox-option value="active">Active</cv-combobox-option>
           <cv-combobox-option value="archived" disabled>Archived policy</cv-combobox-option>
         </cv-combobox>
       </div>
 
-      <div class="usage-demo__case">
-        <span class="usage-demo__meta">Sizes</span>
-        <cv-combobox
-          class="usage-demo__select-control"
-          size="small"
-          value="s"
-          placeholder="Small"
-          aria-label="Small combobox"
-        >
+      <div>
+        <span>Sizes</span>
+        <cv-combobox size="small" value="s" placeholder="Small" aria-label="Small combobox">
           <cv-combobox-option value="s">Small</cv-combobox-option>
           <cv-combobox-option value="m">Medium</cv-combobox-option>
         </cv-combobox>
-        <cv-combobox
-          class="usage-demo__select-control"
-          size="large"
-          value="l"
-          placeholder="Large"
-          aria-label="Large combobox"
-        >
+        <cv-combobox size="large" value="l" placeholder="Large" aria-label="Large combobox">
           <cv-combobox-option value="m">Medium</cv-combobox-option>
           <cv-combobox-option value="l">Large</cv-combobox-option>
         </cv-combobox>

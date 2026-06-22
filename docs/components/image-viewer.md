@@ -7,30 +7,25 @@ Fullscreen image viewer shell for modal image inspection, gallery navigation, ac
 ## Usage
 
 ```html
-<div class="image-viewer-demo-shell usage-demo" data-demo="image-viewer" data-live-demo-height="640">
+<div class="image-viewer-demo-shell" data-demo="image-viewer" data-live-demo-height="640">
   <section class="image-viewer-demo-launch" aria-labelledby="image-viewer-demo-title">
-    <div class="image-viewer-demo-copy usage-demo__copy">
-      <span class="image-viewer-demo-kicker usage-demo__kicker">Controlled gallery</span>
+    <div class="image-viewer-demo-copy">
+      <span class="image-viewer-demo-kicker">Controlled gallery</span>
       <h3 id="image-viewer-demo-title">Inspect generated ChromVoid imagery with committed navigation</h3>
       <p>
         The shell owns image URLs, actions, and current index. The viewer emits intent events; this demo
         commits them back into component state.
       </p>
-      <div class="image-viewer-demo-actions usage-demo__actions">
+      <div class="image-viewer-demo-actions">
         <cv-button variant="primary" data-image-viewer-open>
           <cv-icon slot="prefix" name="maximize" size="s"></cv-icon>
           Open viewer
         </cv-button>
-        <output
-          class="usage-demo__readout usage-demo__readout--cyan usage-demo__readout--truncate"
-          data-image-viewer-output
-          aria-live="polite"
-          >Ready</output
-        >
+        <output data-image-viewer-output aria-live="polite">Ready</output>
       </div>
     </div>
 
-    <div class="image-viewer-demo-gallery usage-demo__grid" aria-label="Generated gallery images">
+    <div class="image-viewer-demo-gallery" aria-label="Generated gallery images">
       <button type="button" class="image-viewer-demo-shot" data-image-viewer-index="0">
         <img data-image-viewer-thumb="chromvoid-mobile-vault-thumb.png" alt="" width="320" height="180" />
         <span>Mobile vault workspace</span>

@@ -9,24 +9,18 @@ The component provides task-list structure, accessible busy/empty semantics, and
 ## Usage
 
 ```html
-<div
-  class="task-list-demo-shell usage-demo usage-demo__dark-preview"
-  data-demo="task-list"
-  data-live-demo-height="760"
->
-  <section class="task-list-demo-hero usage-demo__hero" aria-labelledby="task-list-demo-title">
-    <div class="task-list-demo-copy usage-demo__copy">
-      <span class="task-list-demo-kicker usage-demo__kicker">Transfer surface</span>
-      <h3 id="task-list-demo-title">
-        Keep every queued operation scannable while the batch is still moving.
-      </h3>
+<div class="task-list-demo-shell" data-demo="task-list" data-live-demo-height="760">
+  <section class="task-list-demo-hero" aria-labelledby="task-list-demo-title">
+    <div class="task-list-demo-copy">
+      <span class="task-list-demo-kicker">Transfer surface</span>
+      <h3 id="task-list-demo-title">Keep every queued operation scannable while the batch is still moving.</h3>
       <p>
-        <code>cv-task-list</code> owns the accessible list shell, busy state, empty state placement, and row
-        density. Product code keeps ownership of task data, retry/cancel actions, and progress math.
+        <code>cv-task-list</code> owns the accessible list shell, busy state, empty state placement, and
+        row density. Product code keeps ownership of task data, retry/cancel actions, and progress math.
       </p>
     </div>
 
-    <dl class="task-list-demo-metrics usage-demo__metrics" aria-label="Queue summary">
+    <dl class="task-list-demo-metrics" aria-label="Queue summary">
       <div>
         <dt>Active</dt>
         <dd>2 encrypted tasks</dd>
@@ -42,7 +36,7 @@ The component provides task-list structure, accessible busy/empty semantics, and
     </dl>
   </section>
 
-  <section class="task-list-demo-board usage-demo__workbench" aria-label="Task list presentation">
+  <section class="task-list-demo-board" aria-label="Task list presentation">
     <cv-task-list class="task-list-demo-main-list" label="Deniable export transfer tasks" busy>
       <span slot="header" class="task-list-demo-title">Deniable export transfer</span>
       <cv-badge slot="header" variant="primary" pulse>Running</cv-badge>
@@ -51,12 +45,7 @@ The component provides task-list structure, accessible busy/empty semantics, and
         <div class="task-list-demo-row-main">
           <strong>Encrypt vault-export.zip</strong>
           <span>Chunk 18 of 25 - ChaCha20 stream sealed</span>
-          <cv-progress
-            class="usage-demo__progress-host"
-            value="72"
-            value-text="72%"
-            aria-label="Encrypt vault export progress"
-          ></cv-progress>
+          <cv-progress value="72" value-text="72%" aria-label="Encrypt vault export progress"></cv-progress>
         </div>
         <cv-badge variant="primary" pulse>72%</cv-badge>
       </div>
@@ -66,7 +55,6 @@ The component provides task-list structure, accessible busy/empty semantics, and
           <strong>Verify metadata manifest</strong>
           <span>Checksums match the local catalog snapshot</span>
           <cv-progress
-            class="usage-demo__progress-host"
             tone="success"
             value="100"
             value-text="Complete"
@@ -81,7 +69,6 @@ The component provides task-list structure, accessible busy/empty semantics, and
           <strong>Upload encrypted backup</strong>
           <span>Waiting for a network slot before retrying</span>
           <cv-progress
-            class="usage-demo__progress-host"
             tone="queued"
             value="0"
             value-text="Queued"
@@ -94,7 +81,7 @@ The component provides task-list structure, accessible busy/empty semantics, and
       <span slot="footer" class="task-list-demo-footer">2 active / 1 queued / updated now</span>
     </cv-task-list>
 
-    <div class="task-list-demo-side usage-demo__side">
+    <div class="task-list-demo-side">
       <cv-task-list class="task-list-demo-compact-list" label="Verification lane" density="compact">
         <span slot="header" class="task-list-demo-title">Verification lane</span>
 

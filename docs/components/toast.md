@@ -9,10 +9,10 @@ Container that manages a queue of toast notifications with positioning, stacking
 ## Usage
 
 ```html
-<div class="toast-demo-shell usage-demo" data-demo="toast" data-live-demo-height="760">
-  <section class="toast-demo-hero usage-demo__hero" aria-labelledby="toast-demo-title">
-    <div class="toast-demo-copy usage-demo__copy">
-      <span class="toast-demo-kicker usage-demo__kicker">Queued live feedback</span>
+<div class="toast-demo-shell" data-demo="toast" data-live-demo-height="760">
+  <section class="toast-demo-hero" aria-labelledby="toast-demo-title">
+    <div class="toast-demo-copy">
+      <span class="toast-demo-kicker">Queued live feedback</span>
       <h3 id="toast-demo-title">Use toast for non-blocking workflow feedback that can stack, pause, and expire.</h3>
       <p>
         The region owns queue visibility, ARIA contracts, and auto-dismiss timing. Callers push domain events into
@@ -20,7 +20,7 @@ Container that manages a queue of toast notifications with positioning, stacking
       </p>
     </div>
 
-    <dl class="toast-demo-metrics usage-demo__metrics" aria-label="Toast contract summary">
+    <dl class="toast-demo-metrics" aria-label="Toast contract summary">
       <div>
         <dt>Region role</dt>
         <dd>region / polite</dd>
@@ -36,14 +36,14 @@ Container that manages a queue of toast notifications with positioning, stacking
     </dl>
   </section>
 
-  <section class="toast-demo-workbench usage-demo__workbench" aria-label="Toast queue workbench">
-    <div class="toast-demo-panel usage-demo__panel">
-      <div class="toast-demo-section-header usage-demo__section-header">
-        <span class="toast-demo-kicker usage-demo__kicker">Vault workflow events</span>
+  <section class="toast-demo-workbench" aria-label="Toast queue workbench">
+    <div class="toast-demo-panel">
+      <div class="toast-demo-section-header">
+        <span class="toast-demo-kicker">Vault workflow events</span>
         <h4>Push realistic status changes into one region and inspect queue state.</h4>
       </div>
 
-      <div class="toast-demo-actions usage-demo__actions" aria-label="Toast scenarios">
+      <div class="toast-demo-actions" aria-label="Toast scenarios">
         <cv-button data-toast-action="saved" variant="primary">Save profile</cv-button>
         <cv-button data-toast-action="route">Route proof</cv-button>
         <cv-button data-toast-action="warning">Warn handoff</cv-button>
@@ -71,15 +71,15 @@ Container that manages a queue of toast notifications with positioning, stacking
         </div>
       </div>
 
-      <div class="toast-demo-footer-actions usage-demo__actions" aria-label="Queue actions">
+      <div class="toast-demo-footer-actions" aria-label="Queue actions">
         <cv-button data-toast-action="burst">Queue burst</cv-button>
         <cv-button data-toast-action="clear">Clear queue</cv-button>
       </div>
     </div>
 
     <div class="toast-demo-stage" aria-label="Live toast region preview">
-      <div class="toast-demo-route-card usage-demo__body-copy">
-        <span class="toast-demo-kicker usage-demo__kicker">Visible route</span>
+      <div class="toast-demo-route-card">
+        <span class="toast-demo-kicker">Visible route</span>
         <strong>travel-profile.visible</strong>
         <p>Task content stays interactive while feedback is announced from the toast region.</p>
       </div>
@@ -87,8 +87,8 @@ Container that manages a queue of toast notifications with positioning, stacking
       <cv-toast-region data-toast-region position="top-end" max-visible="3"></cv-toast-region>
     </div>
 
-    <aside class="toast-demo-side usage-demo__side" aria-label="Toast queue state">
-      <dl class="toast-demo-state usage-demo__state" aria-label="Current toast state">
+    <aside class="toast-demo-side" aria-label="Toast queue state">
+      <dl class="toast-demo-state" aria-label="Current toast state">
         <div>
           <dt>Visible</dt>
           <dd data-toast-visible>0</dd>
@@ -107,7 +107,7 @@ Container that manages a queue of toast notifications with positioning, stacking
         </div>
       </dl>
 
-      <p class="toast-demo-log usage-demo__log" role="status" aria-live="polite" data-toast-log>
+      <p class="toast-demo-log" role="status" aria-live="polite" data-toast-log>
         Waiting for a workflow event. Push a scenario or queue a burst.
       </p>
     </aside>

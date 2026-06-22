@@ -180,7 +180,7 @@ Lightweight sidebar navigation item that adapts to expanded and collapsed rail m
 ```html
 <div class="sidebar-demo-showcase" data-live-demo-height="940">
   <!-- Persistent layout sidebar. -->
-  <div class="sidebar-demo-shell usage-demo">
+  <div class="sidebar-demo-shell">
     <cv-sidebar class="sidebar-demo-nav" aria-label="Threat model navigation" breakpoint="0px">
       <span slot="header" class="sidebar-demo-brand">
         <span class="sidebar-demo-brand-mark" aria-hidden="true"></span>
@@ -189,28 +189,28 @@ Lightweight sidebar navigation item that adapts to expanded and collapsed rail m
       <span slot="toggle" class="sidebar-demo-toggle-glyph" aria-hidden="true"></span>
 
       <cv-sidebar-item href="#assets" active>
-        <span slot="prefix" class="sidebar-demo-item-glyph usage-demo__adornment">A</span>
+        <span slot="prefix" class="sidebar-demo-item-glyph">A</span>
         Assets
-        <cv-badge class="usage-demo__dense-badge" slot="suffix" variant="primary" size="small">live</cv-badge>
+        <cv-badge slot="suffix" variant="primary" size="small">live</cv-badge>
       </cv-sidebar-item>
 
       <cv-sidebar-item href="#trust-boundaries">
-        <span slot="prefix" class="sidebar-demo-item-glyph usage-demo__adornment">T</span>
+        <span slot="prefix" class="sidebar-demo-item-glyph">T</span>
         Trust boundaries
       </cv-sidebar-item>
 
       <cv-sidebar-item href="#deniable-vaults">
-        <span slot="prefix" class="sidebar-demo-item-glyph usage-demo__adornment">D</span>
+        <span slot="prefix" class="sidebar-demo-item-glyph">D</span>
         Deniable vaults
       </cv-sidebar-item>
 
       <cv-sidebar-item href="#host-state">
-        <span slot="prefix" class="sidebar-demo-item-glyph usage-demo__adornment">H</span>
+        <span slot="prefix" class="sidebar-demo-item-glyph">H</span>
         Host state
       </cv-sidebar-item>
 
       <cv-sidebar-item href="#out-of-scope" disabled>
-        <span slot="prefix" class="sidebar-demo-item-glyph usage-demo__adornment">L</span>
+        <span slot="prefix" class="sidebar-demo-item-glyph">L</span>
         Out of scope
       </cv-sidebar-item>
 
@@ -218,7 +218,7 @@ Lightweight sidebar navigation item that adapts to expanded and collapsed rail m
     </cv-sidebar>
 
     <section class="sidebar-demo-workspace" aria-label="Selected threat model section">
-      <p class="sidebar-demo-kicker usage-demo__kicker">selected section</p>
+      <p class="sidebar-demo-kicker">selected section</p>
       <h3>Assets under pressure</h3>
       <p>
         Navigation stays persistent while the workspace explains visible assets, hidden layers, and
@@ -249,34 +249,34 @@ Lightweight sidebar navigation item that adapts to expanded and collapsed rail m
 
   <div class="sidebar-demo-variants">
     <!-- Collapsed desktop rail. -->
-    <div class="sidebar-demo-rail usage-demo">
+    <div class="sidebar-demo-rail">
       <cv-sidebar collapsed size="small" aria-label="Collapsed threat model navigation" breakpoint="0px">
         <span slot="header">Threat Model</span>
         <span slot="toggle" class="sidebar-demo-toggle-glyph" aria-hidden="true"></span>
 
         <cv-sidebar-item href="#assets" active>
-          <span slot="prefix" class="sidebar-demo-item-glyph usage-demo__adornment">A</span>
+          <span slot="prefix" class="sidebar-demo-item-glyph">A</span>
           Assets
         </cv-sidebar-item>
         <cv-sidebar-item href="#trust-boundaries">
-          <span slot="prefix" class="sidebar-demo-item-glyph usage-demo__adornment">T</span>
+          <span slot="prefix" class="sidebar-demo-item-glyph">T</span>
           Trust boundaries
         </cv-sidebar-item>
         <cv-sidebar-item href="#deniable-vaults">
-          <span slot="prefix" class="sidebar-demo-item-glyph usage-demo__adornment">D</span>
+          <span slot="prefix" class="sidebar-demo-item-glyph">D</span>
           Deniable vaults
         </cv-sidebar-item>
       </cv-sidebar>
 
       <section class="sidebar-demo-rail-copy" aria-label="Rail state summary">
-        <p class="sidebar-demo-kicker usage-demo__kicker">rail state</p>
+        <p class="sidebar-demo-kicker">rail state</p>
         <h3>Compact review mode</h3>
         <p>Section markers stay visible while the current threat-model notes use the remaining workspace.</p>
       </section>
     </div>
 
     <!-- Mobile overlay preview. -->
-    <div class="sidebar-demo-overlay usage-demo">
+    <div class="sidebar-demo-overlay">
       <button
         type="button"
         class="sidebar-demo-overlay-trigger"
@@ -299,21 +299,21 @@ Lightweight sidebar navigation item that adapts to expanded and collapsed rail m
         <span slot="toggle" class="sidebar-demo-close-glyph" aria-hidden="true"></span>
 
         <cv-sidebar-item href="#assets" active>
-          <span slot="prefix" class="sidebar-demo-item-glyph usage-demo__adornment">A</span>
+          <span slot="prefix" class="sidebar-demo-item-glyph">A</span>
           Assets
         </cv-sidebar-item>
         <cv-sidebar-item href="#trust-boundaries">
-          <span slot="prefix" class="sidebar-demo-item-glyph usage-demo__adornment">T</span>
+          <span slot="prefix" class="sidebar-demo-item-glyph">T</span>
           Trust boundaries
         </cv-sidebar-item>
         <cv-sidebar-item href="#host-state">
-          <span slot="prefix" class="sidebar-demo-item-glyph usage-demo__adornment">H</span>
+          <span slot="prefix" class="sidebar-demo-item-glyph">H</span>
           Host state
         </cv-sidebar-item>
       </cv-sidebar>
 
       <section class="sidebar-demo-overlay-copy" aria-label="Overlay preview workspace">
-        <p class="sidebar-demo-kicker usage-demo__kicker">overlay preview</p>
+        <p class="sidebar-demo-kicker">overlay preview</p>
         <h3>Touch review overlay</h3>
         <p>The workspace stays dimmed while threat sections move into a dialog-style navigation layer.</p>
       </section>

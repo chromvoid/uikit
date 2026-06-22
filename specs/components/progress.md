@@ -7,7 +7,7 @@ A read-only indicator that communicates determinate or indeterminate loading/com
 ## Anatomy
 
 ```
-<cv-progress class="usage-demo__progress-host"> (host)
+<cv-progress> (host)
 └── <div part="base" role="progressbar">
     └── <div part="indicator">
         └── <span part="label">
@@ -101,10 +101,10 @@ None. `cv-progress` is a read-only indicator with no user-modifiable state.
 ## Usage
 
 ```html
-<div class="progress-demo-shell usage-demo" data-demo="progress" data-live-demo-height="640">
-  <section class="progress-demo-hero usage-demo__hero" aria-labelledby="progress-demo-title">
-    <div class="progress-demo-copy usage-demo__copy">
-      <span class="progress-demo-kicker usage-demo__kicker">Linear operation state</span>
+<div class="progress-demo-shell" data-demo="progress" data-live-demo-height="640">
+  <section class="progress-demo-hero" aria-labelledby="progress-demo-title">
+    <div class="progress-demo-copy">
+      <span class="progress-demo-kicker">Linear operation state</span>
       <h3 id="progress-demo-title">Track a running job without turning it into an interaction.</h3>
       <p>
         Use <code>cv-progress</code> for read-only work: encrypted exports, verification passes, sync queues,
@@ -113,7 +113,7 @@ None. `cv-progress` is a read-only indicator with no user-modifiable state.
       </p>
     </div>
 
-    <dl class="progress-demo-metrics usage-demo__metrics" aria-label="Progress contract summary">
+    <dl class="progress-demo-metrics" aria-label="Progress contract summary">
       <div>
         <dt>Semantics</dt>
         <dd>role="progressbar"</dd>
@@ -129,26 +129,23 @@ None. `cv-progress` is a read-only indicator with no user-modifiable state.
     </dl>
   </section>
 
-  <section
-    class="progress-demo-workbench usage-demo__workbench"
-    aria-labelledby="progress-demo-workbench-title"
-  >
-    <div class="progress-demo-panel usage-demo__panel">
-      <header class="progress-demo-panel-head usage-demo__panel-head">
-        <div class="usage-demo__flow usage-demo__flow--tight">
-          <span class="progress-demo-kicker usage-demo__kicker">Encrypted export</span>
+  <section class="progress-demo-workbench" aria-labelledby="progress-demo-workbench-title">
+    <div class="progress-demo-panel">
+      <header class="progress-demo-panel-head">
+        <div>
+          <span class="progress-demo-kicker">Encrypted export</span>
           <h4 id="progress-demo-workbench-title">media-archive.cvault</h4>
         </div>
         <cv-badge variant="primary" pulse>Running</cv-badge>
       </header>
 
-      <div class="progress-demo-primary-progress usage-demo__flow usage-demo__flow--loose">
-        <div class="progress-demo-progress-label usage-demo__baseline-row">
-          <span class="usage-demo__meta usage-demo__label">Transfer window</span>
+      <div class="progress-demo-primary-progress">
+        <div class="progress-demo-progress-label">
+          <span>Transfer window</span>
           <strong>1.8 GB / 2.4 GB</strong>
         </div>
         <cv-progress
-          class="progress-demo-main-progress usage-demo__progress-host"
+          class="progress-demo-main-progress"
           tone="upload"
           value="74"
           value-text="74%"
@@ -158,122 +155,79 @@ None. `cv-progress` is a read-only indicator with no user-modifiable state.
         </cv-progress>
       </div>
 
-      <div class="progress-demo-proof-grid usage-demo__grid--thirds" aria-label="Current transfer details">
-        <div class="usage-demo__flow usage-demo__flow--tight">
-          <span class="usage-demo__meta usage-demo__label">Range</span>
+      <div class="progress-demo-proof-grid" aria-label="Current transfer details">
+        <div>
+          <span>Range</span>
           <strong>0-100</strong>
         </div>
-        <div class="usage-demo__flow usage-demo__flow--tight">
-          <span class="usage-demo__meta usage-demo__label">Text</span>
+        <div>
+          <span>Text</span>
           <strong>value-text="74%"</strong>
         </div>
-        <div class="usage-demo__flow usage-demo__flow--tight">
-          <span class="usage-demo__meta usage-demo__label">Tone</span>
+        <div>
+          <span>Tone</span>
           <strong>upload</strong>
         </div>
       </div>
     </div>
 
-    <aside class="progress-demo-queue usage-demo__flow" aria-label="Export queue stages">
-      <div class="progress-demo-step progress-demo-step--complete usage-demo__flow usage-demo__flow--loose">
-        <div class="usage-demo__flow usage-demo__flow--tight">
-          <span class="usage-demo__meta usage-demo__label">Step 1</span>
+    <aside class="progress-demo-queue" aria-label="Export queue stages">
+      <div class="progress-demo-step progress-demo-step--complete">
+        <div>
+          <span>Step 1</span>
           <strong>Encrypt chunks</strong>
         </div>
-        <cv-progress
-          class="usage-demo__progress-host"
-          tone="success"
-          value="100"
-          aria-label="Encrypt chunks complete"
-        ></cv-progress>
+        <cv-progress tone="success" value="100" aria-label="Encrypt chunks complete"></cv-progress>
       </div>
 
-      <div class="progress-demo-step progress-demo-step--active usage-demo__flow usage-demo__flow--loose">
-        <div class="usage-demo__flow usage-demo__flow--tight">
-          <span class="usage-demo__meta usage-demo__label">Step 2</span>
+      <div class="progress-demo-step progress-demo-step--active">
+        <div>
+          <span>Step 2</span>
           <strong>Upload sealed archive</strong>
         </div>
-        <cv-progress
-          class="usage-demo__progress-host"
-          tone="upload"
-          value="74"
-          aria-label="Upload sealed archive progress"
-        ></cv-progress>
+        <cv-progress tone="upload" value="74" aria-label="Upload sealed archive progress"></cv-progress>
       </div>
 
-      <div class="progress-demo-step usage-demo__flow usage-demo__flow--loose">
-        <div class="usage-demo__flow usage-demo__flow--tight">
-          <span class="usage-demo__meta usage-demo__label">Step 3</span>
+      <div class="progress-demo-step">
+        <div>
+          <span>Step 3</span>
           <strong>Verify remote manifest</strong>
         </div>
-        <cv-progress
-          class="usage-demo__progress-host"
-          tone="queued"
-          value="16"
-          aria-label="Verify remote manifest queued"
-        ></cv-progress>
+        <cv-progress tone="queued" value="16" aria-label="Verify remote manifest queued"></cv-progress>
       </div>
     </aside>
   </section>
 
-  <section class="progress-demo-tones usage-demo__section" aria-labelledby="progress-demo-tones-title">
-    <div class="progress-demo-section-header usage-demo__section-header">
-      <span class="progress-demo-kicker usage-demo__kicker">State palette</span>
+  <section class="progress-demo-tones" aria-labelledby="progress-demo-tones-title">
+    <div class="progress-demo-section-header">
+      <span class="progress-demo-kicker">State palette</span>
       <h4 id="progress-demo-tones-title">Choose tone by operation state, not decoration.</h4>
     </div>
 
     <div class="progress-demo-tone-grid">
-      <div class="progress-demo-tone usage-demo__flow usage-demo__flow--loose">
-        <span class="usage-demo__meta usage-demo__label">Default</span>
-        <cv-progress
-          class="usage-demo__progress-host"
-          value="42"
-          aria-label="Default determinate progress"
-        ></cv-progress>
+      <div class="progress-demo-tone">
+        <span>Default</span>
+        <cv-progress value="42" aria-label="Default determinate progress"></cv-progress>
       </div>
-      <div class="progress-demo-tone usage-demo__flow usage-demo__flow--loose">
-        <span class="usage-demo__meta usage-demo__label">Queued</span>
-        <cv-progress
-          class="usage-demo__progress-host"
-          tone="queued"
-          value="28"
-          aria-label="Queued progress"
-        ></cv-progress>
+      <div class="progress-demo-tone">
+        <span>Queued</span>
+        <cv-progress tone="queued" value="28" aria-label="Queued progress"></cv-progress>
       </div>
-      <div class="progress-demo-tone usage-demo__flow usage-demo__flow--loose">
-        <span class="usage-demo__meta usage-demo__label">Success</span>
-        <cv-progress
-          class="usage-demo__progress-host"
-          tone="success"
-          value="100"
-          aria-label="Completed progress"
-        ></cv-progress>
+      <div class="progress-demo-tone">
+        <span>Success</span>
+        <cv-progress tone="success" value="100" aria-label="Completed progress"></cv-progress>
       </div>
-      <div class="progress-demo-tone usage-demo__flow usage-demo__flow--loose">
-        <span class="usage-demo__meta usage-demo__label">Warning</span>
-        <cv-progress
-          class="usage-demo__progress-host"
-          tone="warning"
-          value="58"
-          aria-label="Paused progress"
-        ></cv-progress>
+      <div class="progress-demo-tone">
+        <span>Warning</span>
+        <cv-progress tone="warning" value="58" aria-label="Paused progress"></cv-progress>
       </div>
-      <div class="progress-demo-tone usage-demo__flow usage-demo__flow--loose">
-        <span class="usage-demo__meta usage-demo__label">Danger</span>
-        <cv-progress
-          class="usage-demo__progress-host"
-          tone="danger"
-          value="34"
-          aria-label="Failed progress"
-        ></cv-progress>
+      <div class="progress-demo-tone">
+        <span>Danger</span>
+        <cv-progress tone="danger" value="34" aria-label="Failed progress"></cv-progress>
       </div>
-      <div class="progress-demo-tone usage-demo__flow usage-demo__flow--loose">
-        <span class="usage-demo__meta usage-demo__label">Indeterminate</span>
-        <cv-progress
-          class="usage-demo__progress-host"
-          indeterminate
-          aria-label="Waiting for remote manifest"
-        ></cv-progress>
+      <div class="progress-demo-tone">
+        <span>Indeterminate</span>
+        <cv-progress indeterminate aria-label="Waiting for remote manifest"></cv-progress>
       </div>
     </div>
   </section>

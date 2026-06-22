@@ -132,10 +132,10 @@ The UIKit layer does not construct any ARIA attributes directly.
 ## Usage
 
 ```html
-<div class="meter-demo-shell usage-demo" data-demo="meter" data-theme="dark" data-live-demo-height="780">
-  <section class="meter-demo-hero usage-demo__hero" aria-labelledby="meter-demo-title">
-    <div class="meter-demo-copy usage-demo__copy">
-      <span class="meter-demo-kicker usage-demo__kicker">Known range measurement</span>
+<div class="meter-demo-shell" data-demo="meter" data-theme="dark" data-live-demo-height="780">
+  <section class="meter-demo-hero" aria-labelledby="meter-demo-title">
+    <div class="meter-demo-copy">
+      <span class="meter-demo-kicker">Known range measurement</span>
       <h3 id="meter-demo-title">Measure a condition. Do not imply a task is running.</h3>
       <p>
         Use <code>cv-meter</code> for capacity, quality, pressure, strength, or saturation values that already
@@ -144,7 +144,7 @@ The UIKit layer does not construct any ARIA attributes directly.
       </p>
     </div>
 
-    <dl class="meter-demo-metrics usage-demo__metrics" aria-label="Meter contract summary">
+    <dl class="meter-demo-metrics" aria-label="Meter contract summary">
       <div>
         <dt>Semantics</dt>
         <dd>role="meter"</dd>
@@ -160,19 +160,19 @@ The UIKit layer does not construct any ARIA attributes directly.
     </dl>
   </section>
 
-  <section class="meter-demo-workbench usage-demo__workbench" aria-labelledby="meter-demo-workbench-title">
-    <div class="meter-demo-panel usage-demo__panel">
-      <header class="meter-demo-panel-head usage-demo__panel-head">
-        <div class="usage-demo__flow usage-demo__flow--tight">
-          <span class="meter-demo-kicker usage-demo__kicker">Storage pressure</span>
+  <section class="meter-demo-workbench" aria-labelledby="meter-demo-workbench-title">
+    <div class="meter-demo-panel">
+      <header class="meter-demo-panel-head">
+        <div>
+          <span class="meter-demo-kicker">Storage pressure</span>
           <h4 id="meter-demo-workbench-title">remote-vault-01</h4>
         </div>
         <cv-badge variant="warning">Measured</cv-badge>
       </header>
 
-      <div class="meter-demo-primary-reading usage-demo__flow usage-demo__flow--loose">
-        <div class="meter-demo-reading-label usage-demo__baseline-row">
-          <span class="usage-demo__meta usage-demo__label">Capacity used</span>
+      <div class="meter-demo-primary-reading">
+        <div class="meter-demo-reading-label">
+          <span>Capacity used</span>
           <strong>82 GB / 100 GB</strong>
         </div>
         <cv-meter
@@ -188,30 +188,30 @@ The UIKit layer does not construct any ARIA attributes directly.
         >
           high
         </cv-meter>
-        <div class="meter-demo-scale usage-demo__meta usage-demo__label" aria-hidden="true">
+        <div class="meter-demo-scale" aria-hidden="true">
           <span>low</span>
           <span>optimum</span>
           <span>high</span>
         </div>
       </div>
 
-      <div class="meter-demo-zone-grid usage-demo__grid--thirds" aria-label="Meter threshold examples">
-        <div class="usage-demo__flow usage-demo__flow--loose">
-          <span class="usage-demo__meta usage-demo__label">Low</span>
+      <div class="meter-demo-zone-grid" aria-label="Meter threshold examples">
+        <div>
+          <span>Low</span>
           <cv-meter value="34" low="45" high="80" optimum="62" aria-label="Low threshold example"
             >34</cv-meter
           >
           <strong>Below target</strong>
         </div>
-        <div class="usage-demo__flow usage-demo__flow--loose">
-          <span class="usage-demo__meta usage-demo__label">Optimum</span>
+        <div>
+          <span>Optimum</span>
           <cv-meter value="58" low="35" high="85" optimum="55" aria-label="Optimum threshold example"
             >58</cv-meter
           >
           <strong>Healthy range</strong>
         </div>
-        <div class="usage-demo__flow usage-demo__flow--loose">
-          <span class="usage-demo__meta usage-demo__label">High</span>
+        <div>
+          <span>High</span>
           <cv-meter value="91" low="30" high="80" optimum="50" aria-label="High threshold example"
             >91</cv-meter
           >
@@ -220,17 +220,15 @@ The UIKit layer does not construct any ARIA attributes directly.
       </div>
     </div>
 
-    <aside class="meter-demo-compare usage-demo__flow" aria-labelledby="meter-demo-compare-title">
-      <div class="meter-demo-section-header usage-demo__section-header">
-        <span class="meter-demo-kicker usage-demo__kicker">Meter vs progress</span>
+    <aside class="meter-demo-compare" aria-labelledby="meter-demo-compare-title">
+      <div class="meter-demo-section-header">
+        <span class="meter-demo-kicker">Meter vs progress</span>
         <h4 id="meter-demo-compare-title">Choose by meaning, not by shape.</h4>
       </div>
 
-      <div class="meter-demo-compare-grid usage-demo__field-grid">
-        <div
-          class="meter-demo-compare-card meter-demo-compare-card--meter usage-demo__flow usage-demo__flow--loose"
-        >
-          <span class="usage-demo__meta usage-demo__label">cv-meter</span>
+      <div class="meter-demo-compare-grid">
+        <div class="meter-demo-compare-card meter-demo-compare-card--meter">
+          <span>cv-meter</span>
           <strong>Static measurement</strong>
           <cv-meter
             value="64"
@@ -245,13 +243,10 @@ The UIKit layer does not construct any ARIA attributes directly.
           <p>Answers "how much is the measured condition?" and can map the value into threshold zones.</p>
         </div>
 
-        <div
-          class="meter-demo-compare-card meter-demo-compare-card--progress usage-demo__flow usage-demo__flow--loose"
-        >
-          <span class="usage-demo__meta usage-demo__label">cv-progress</span>
+        <div class="meter-demo-compare-card meter-demo-compare-card--progress">
+          <span>cv-progress</span>
           <strong>Operation progress</strong>
           <cv-progress
-            class="usage-demo__progress-host"
             value="64"
             tone="upload"
             value-text="64 percent uploaded"
@@ -259,11 +254,7 @@ The UIKit layer does not construct any ARIA attributes directly.
           >
             64%
           </cv-progress>
-          <cv-progress
-            class="usage-demo__progress-host"
-            indeterminate
-            aria-label="Manifest verification is still waiting"
-          ></cv-progress>
+          <cv-progress indeterminate aria-label="Manifest verification is still waiting"></cv-progress>
           <p>
             Answers "how far has the job advanced?" and can be indeterminate while work has no known value.
           </p>
@@ -272,29 +263,29 @@ The UIKit layer does not construct any ARIA attributes directly.
     </aside>
   </section>
 
-  <section class="meter-demo-rules usage-demo__section" aria-labelledby="meter-demo-rules-title">
-    <div class="meter-demo-section-header usage-demo__section-header">
-      <span class="meter-demo-kicker usage-demo__kicker">Decision rules</span>
+  <section class="meter-demo-rules" aria-labelledby="meter-demo-rules-title">
+    <div class="meter-demo-section-header">
+      <span class="meter-demo-kicker">Decision rules</span>
       <h4 id="meter-demo-rules-title">The visual shape is similar, but the accessibility contract is not.</h4>
     </div>
 
     <dl class="meter-demo-rule-grid" aria-label="When to use meter or progress">
-      <div class="usage-demo__flow usage-demo__flow--loose">
-        <dt class="usage-demo__meta usage-demo__label">Use meter for</dt>
+      <div>
+        <dt>Use meter for</dt>
         <dd>disk usage, password strength, queue saturation, memory pressure</dd>
       </div>
-      <div class="usage-demo__flow usage-demo__flow--loose">
-        <dt class="usage-demo__meta usage-demo__label">Use progress for</dt>
+      <div>
+        <dt>Use progress for</dt>
         <dd>upload, export, sync, verification, loading or completion state</dd>
       </div>
-      <div class="usage-demo__flow usage-demo__flow--loose">
-        <dt class="usage-demo__meta usage-demo__label">Meter contract</dt>
+      <div>
+        <dt>Meter contract</dt>
         <dd>
           <code>value</code> plus optional <code>low</code>, <code>high</code>, and <code>optimum</code>
         </dd>
       </div>
-      <div class="usage-demo__flow usage-demo__flow--loose">
-        <dt class="usage-demo__meta usage-demo__label">Progress contract</dt>
+      <div>
+        <dt>Progress contract</dt>
         <dd>
           <code>value</code> while determinate, or <code>indeterminate</code> when the amount is unknown
         </dd>

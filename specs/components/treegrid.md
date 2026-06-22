@@ -152,10 +152,10 @@ Keys `ArrowUp`, `ArrowDown`, `ArrowLeft`, `ArrowRight`, `Home`, `End`, `Enter`, 
 ## Usage
 
 ```html
-<div class="treegrid-demo-shell usage-demo" data-demo="treegrid" data-live-demo-height="760">
-  <section class="treegrid-demo-hero usage-demo__hero" aria-labelledby="treegrid-demo-title">
-    <div class="treegrid-demo-copy usage-demo__copy">
-      <span class="treegrid-demo-kicker usage-demo__kicker">Hierarchical grid adapter</span>
+<div class="treegrid-demo-shell" data-demo="treegrid" data-live-demo-height="760">
+  <section class="treegrid-demo-hero" aria-labelledby="treegrid-demo-title">
+    <div class="treegrid-demo-copy">
+      <span class="treegrid-demo-kicker">Hierarchical grid adapter</span>
       <h3 id="treegrid-demo-title">Map nested vault layers without losing column context.</h3>
       <p>
         Treegrid keeps row hierarchy, expansion state, row selection, active-cell focus, and column semantics
@@ -163,7 +163,7 @@ Keys `ArrowUp`, `ArrowDown`, `ArrowLeft`, `ArrowRight`, `Home`, `End`, `Enter`, 
       </p>
     </div>
 
-    <dl class="treegrid-demo-metrics usage-demo__metrics" aria-label="Treegrid behavior summary">
+    <dl class="treegrid-demo-metrics" aria-label="Treegrid behavior summary">
       <div>
         <dt>Root</dt>
         <dd>treegrid</dd>
@@ -179,51 +179,42 @@ Keys `ArrowUp`, `ArrowDown`, `ArrowLeft`, `ArrowRight`, `Home`, `End`, `Enter`, 
     </dl>
   </section>
 
-  <section
-    class="treegrid-demo-workbench usage-demo__workbench"
-    aria-labelledby="treegrid-demo-workbench-title"
-  >
-    <div class="treegrid-demo-section-header usage-demo__section-header">
-      <span class="treegrid-demo-kicker usage-demo__kicker">Vault trust map</span>
+  <section class="treegrid-demo-workbench" aria-labelledby="treegrid-demo-workbench-title">
+    <div class="treegrid-demo-section-header">
+      <span class="treegrid-demo-kicker">Vault trust map</span>
       <h4 id="treegrid-demo-workbench-title">Branch rows reveal visible and hidden operating layers</h4>
     </div>
 
-    <div class="treegrid-demo-toolbar usage-demo__toolbar" aria-label="Active treegrid capabilities">
+    <div class="treegrid-demo-toolbar" aria-label="Active treegrid capabilities">
       <span>selection-mode="multiple"</span>
       <span>rowheader cells</span>
       <span>expanded branches</span>
       <span>roving tabindex</span>
     </div>
 
-    <div class="treegrid-demo-scroll usage-demo__scroll-surface">
+    <div class="treegrid-demo-scroll">
       <cv-treegrid
         id="treegrid-demo-map"
         aria-label="Vault trust boundary map"
         selection-mode="multiple"
         value="visible-surface::status"
       >
-        <cv-treegrid-column class="usage-demo__column-label" value="layer" cell-role="rowheader"
-          >Layer</cv-treegrid-column
-        >
-        <cv-treegrid-column class="usage-demo__column-label" value="status">Status</cv-treegrid-column>
-        <cv-treegrid-column class="usage-demo__column-label" value="owner">Owner</cv-treegrid-column>
-        <cv-treegrid-column class="usage-demo__column-label" value="scope">Scope</cv-treegrid-column>
+        <cv-treegrid-column value="layer" cell-role="rowheader">Layer</cv-treegrid-column>
+        <cv-treegrid-column value="status">Status</cv-treegrid-column>
+        <cv-treegrid-column value="owner">Owner</cv-treegrid-column>
+        <cv-treegrid-column value="scope">Scope</cv-treegrid-column>
 
         <cv-treegrid-row value="visible-surface">
           <cv-treegrid-cell column="layer">Visible surface</cv-treegrid-cell>
           <cv-treegrid-cell column="status"
-            ><cv-badge class="usage-demo__dense-badge" variant="primary" size="small"
-              >Visible</cv-badge
-            ></cv-treegrid-cell
+            ><cv-badge variant="primary" size="small">Visible</cv-badge></cv-treegrid-cell
           >
           <cv-treegrid-cell column="owner">Traveler</cv-treegrid-cell>
           <cv-treegrid-cell column="scope">Inspect</cv-treegrid-cell>
           <cv-treegrid-row value="travel-profile" slot="children">
             <cv-treegrid-cell column="layer">Travel profile</cv-treegrid-cell>
             <cv-treegrid-cell column="status"
-              ><cv-badge class="usage-demo__dense-badge" variant="success" size="small"
-                >Ready</cv-badge
-              ></cv-treegrid-cell
+              ><cv-badge variant="success" size="small">Ready</cv-badge></cv-treegrid-cell
             >
             <cv-treegrid-cell column="owner">Alex</cv-treegrid-cell>
             <cv-treegrid-cell column="scope">Allowed</cv-treegrid-cell>
@@ -231,9 +222,7 @@ Keys `ArrowUp`, `ArrowDown`, `ArrowLeft`, `ArrowRight`, `Home`, `End`, `Enter`, 
           <cv-treegrid-row value="border-docs" slot="children">
             <cv-treegrid-cell column="layer">Border docs</cv-treegrid-cell>
             <cv-treegrid-cell column="status"
-              ><cv-badge class="usage-demo__dense-badge" variant="neutral" size="small"
-                >Decoy</cv-badge
-              ></cv-treegrid-cell
+              ><cv-badge variant="neutral" size="small">Decoy</cv-badge></cv-treegrid-cell
             >
             <cv-treegrid-cell column="owner">Maria</cv-treegrid-cell>
             <cv-treegrid-cell column="scope">Visible</cv-treegrid-cell>
@@ -243,27 +232,21 @@ Keys `ArrowUp`, `ArrowDown`, `ArrowLeft`, `ArrowRight`, `Home`, `End`, `Enter`, 
         <cv-treegrid-row value="sealed-core">
           <cv-treegrid-cell column="layer">Sealed core</cv-treegrid-cell>
           <cv-treegrid-cell column="status"
-            ><cv-badge class="usage-demo__dense-badge" variant="success" size="small"
-              >Verified</cv-badge
-            ></cv-treegrid-cell
+            ><cv-badge variant="success" size="small">Verified</cv-badge></cv-treegrid-cell
           >
           <cv-treegrid-cell column="owner">Device</cv-treegrid-cell>
           <cv-treegrid-cell column="scope">Device</cv-treegrid-cell>
           <cv-treegrid-row value="primary-vault" slot="children">
             <cv-treegrid-cell column="layer">Primary vault</cv-treegrid-cell>
             <cv-treegrid-cell column="status"
-              ><cv-badge class="usage-demo__dense-badge" variant="success" size="small"
-                >Sealed</cv-badge
-              ></cv-treegrid-cell
+              ><cv-badge variant="success" size="small">Sealed</cv-badge></cv-treegrid-cell
             >
             <cv-treegrid-cell column="owner">Alex</cv-treegrid-cell>
             <cv-treegrid-cell column="scope">Hidden</cv-treegrid-cell>
             <cv-treegrid-row value="otp-seeds" slot="children">
               <cv-treegrid-cell column="layer">OTP seed group</cv-treegrid-cell>
               <cv-treegrid-cell column="status"
-                ><cv-badge class="usage-demo__dense-badge" variant="warning" size="small"
-                  >Rotating</cv-badge
-                ></cv-treegrid-cell
+                ><cv-badge variant="warning" size="small">Rotating</cv-badge></cv-treegrid-cell
               >
               <cv-treegrid-cell column="owner">Vault</cv-treegrid-cell>
               <cv-treegrid-cell column="scope">Session</cv-treegrid-cell>
@@ -272,9 +255,7 @@ Keys `ArrowUp`, `ArrowDown`, `ArrowLeft`, `ArrowRight`, `Home`, `End`, `Enter`, 
           <cv-treegrid-row value="relay-core" slot="children">
             <cv-treegrid-cell column="layer">Relay core</cv-treegrid-cell>
             <cv-treegrid-cell column="status"
-              ><cv-badge class="usage-demo__dense-badge" variant="success" size="small"
-                >Paired</cv-badge
-              ></cv-treegrid-cell
+              ><cv-badge variant="success" size="small">Paired</cv-badge></cv-treegrid-cell
             >
             <cv-treegrid-cell column="owner">USB device</cv-treegrid-cell>
             <cv-treegrid-cell column="scope">Local</cv-treegrid-cell>
@@ -284,18 +265,14 @@ Keys `ArrowUp`, `ArrowDown`, `ArrowLeft`, `ArrowRight`, `Home`, `End`, `Enter`, 
         <cv-treegrid-row value="recovery-envelope">
           <cv-treegrid-cell column="layer">Recovery envelope</cv-treegrid-cell>
           <cv-treegrid-cell column="status"
-            ><cv-badge class="usage-demo__dense-badge" variant="warning" size="small"
-              >Review</cv-badge
-            ></cv-treegrid-cell
+            ><cv-badge variant="warning" size="small">Review</cv-badge></cv-treegrid-cell
           >
           <cv-treegrid-cell column="owner">Counsel</cv-treegrid-cell>
           <cv-treegrid-cell column="scope">Shared</cv-treegrid-cell>
           <cv-treegrid-row value="expired-export" slot="children" disabled>
             <cv-treegrid-cell column="layer" disabled>Expired export</cv-treegrid-cell>
             <cv-treegrid-cell column="status"
-              ><cv-badge class="usage-demo__dense-badge" variant="danger" size="small"
-                >Blocked</cv-badge
-              ></cv-treegrid-cell
+              ><cv-badge variant="danger" size="small">Blocked</cv-badge></cv-treegrid-cell
             >
             <cv-treegrid-cell column="owner">Legacy</cv-treegrid-cell>
             <cv-treegrid-cell column="scope">None</cv-treegrid-cell>
@@ -304,7 +281,7 @@ Keys `ArrowUp`, `ArrowDown`, `ArrowLeft`, `ArrowRight`, `Home`, `End`, `Enter`, 
       </cv-treegrid>
     </div>
 
-    <output class="treegrid-demo-readout usage-demo__log" for="treegrid-demo-map" aria-live="polite">
+    <output class="treegrid-demo-readout" for="treegrid-demo-map" aria-live="polite">
       Active cell: visible-surface::status | Selected rows: none | Expanded branches: none
     </output>
   </section>
@@ -437,7 +414,7 @@ Declares a column definition. Rendered as a visual column header inside `cv-tree
 #### Anatomy
 
 ```
-<cv-treegrid-column class="usage-demo__column-label"> (host)
+<cv-treegrid-column> (host)
 └── <span>
     └── <slot>   ← falls back to [label] attribute text
 ```

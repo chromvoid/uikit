@@ -9,10 +9,10 @@ Container of interactive elements that provides a single tab stop and arrow-key 
 ## Usage
 
 ```html
-<div class="toolbar-demo-shell usage-demo" data-demo="toolbar">
-  <section class="toolbar-demo-hero usage-demo__hero" aria-labelledby="toolbar-demo-title">
-    <div class="toolbar-demo-copy usage-demo__copy">
-      <span class="toolbar-demo-kicker usage-demo__kicker">Composite command surface</span>
+<div class="toolbar-demo-shell" data-demo="toolbar">
+  <section class="toolbar-demo-hero" aria-labelledby="toolbar-demo-title">
+    <div class="toolbar-demo-copy">
+      <span class="toolbar-demo-kicker">Composite command surface</span>
       <h3 id="toolbar-demo-title">Use toolbar when Tab should enter once and arrows move between tools.</h3>
       <p>
         Toolbar gives a cluster of peer commands one accessible surface:
@@ -21,7 +21,7 @@ Container of interactive elements that provides a single tab stop and arrow-key 
       </p>
     </div>
 
-    <dl class="toolbar-demo-metrics usage-demo__metrics" aria-label="Toolbar behavior summary">
+    <dl class="toolbar-demo-metrics" aria-label="Toolbar behavior summary">
       <div>
         <dt>Tab stop</dt>
         <dd>one</dd>
@@ -37,19 +37,16 @@ Container of interactive elements that provides a single tab stop and arrow-key 
     </dl>
   </section>
 
-  <section
-    class="toolbar-demo-workbench usage-demo__workbench"
-    aria-labelledby="toolbar-demo-workbench-title"
-  >
-    <div class="toolbar-demo-section-header usage-demo__section-header">
-      <span class="toolbar-demo-kicker usage-demo__kicker">Record command strip</span>
+  <section class="toolbar-demo-workbench" aria-labelledby="toolbar-demo-workbench-title">
+    <div class="toolbar-demo-section-header">
+      <span class="toolbar-demo-kicker">Record command strip</span>
       <h4 id="toolbar-demo-workbench-title">
         One toolbar can expose editing, inspection, and export tools without adding extra Tab stops
       </h4>
     </div>
 
     <div class="toolbar-demo-surface">
-      <header class="toolbar-demo-surface-header usage-demo__surface-header">
+      <header class="toolbar-demo-surface-header">
         <div>
           <span class="toolbar-demo-label">Vault record</span>
           <strong>Border checkpoint profile</strong>
@@ -106,7 +103,7 @@ Container of interactive elements that provides a single tab stop and arrow-key 
         </div>
       </div>
 
-      <output class="toolbar-demo-log usage-demo__log" data-toolbar-log aria-live="polite">
+      <output class="toolbar-demo-log" data-toolbar-log aria-live="polite">
         cv-change will report the active tool after keyboard or pointer movement.
       </output>
     </div>
@@ -114,8 +111,8 @@ Container of interactive elements that provides a single tab stop and arrow-key 
 
   <section class="toolbar-demo-split" aria-labelledby="toolbar-demo-rail-title">
     <div class="toolbar-demo-rail-panel">
-      <div class="toolbar-demo-section-header usage-demo__section-header">
-        <span class="toolbar-demo-kicker usage-demo__kicker">Vertical tool rail</span>
+      <div class="toolbar-demo-section-header">
+        <span class="toolbar-demo-kicker">Vertical tool rail</span>
         <h4 id="toolbar-demo-rail-title">Use orientation for side tools and dense editors</h4>
       </div>
 
@@ -147,8 +144,8 @@ Container of interactive elements that provides a single tab stop and arrow-key 
       </cv-toolbar>
     </div>
 
-    <div class="toolbar-demo-boundary usage-demo__body-copy usage-demo__surface usage-demo__flow">
-      <span class="toolbar-demo-kicker usage-demo__kicker">Boundary</span>
+    <div class="toolbar-demo-boundary">
+      <span class="toolbar-demo-kicker">Boundary</span>
       <h4>Toolbar is not a button group.</h4>
       <div class="toolbar-demo-boundary-grid">
         <div>

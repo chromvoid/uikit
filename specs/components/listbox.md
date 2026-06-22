@@ -9,7 +9,7 @@ Standalone listbox widget for single or multiple selection from a list of option
 ```
 <cv-listbox> (host)
 └── <div part="base" role="listbox">
-    └── <slot>   ← accepts <cv-option> and <cv-listbox-group class="usage-demo__listbox-group-label"> children
+    └── <slot>   ← accepts <cv-option> and <cv-listbox-group> children
 ```
 
 ## Attributes
@@ -33,9 +33,9 @@ Non-reflected properties:
 
 ## Slots
 
-| Slot        | Description                                                                                        |
-| ----------- | -------------------------------------------------------------------------------------------------- |
-| `(default)` | One or more `<cv-option>` or `<cv-listbox-group class="usage-demo__listbox-group-label">` children |
+| Slot        | Description                                                |
+| ----------- | ---------------------------------------------------------- |
+| `(default)` | One or more `<cv-option>` or `<cv-listbox-group>` children |
 
 ## CSS Parts
 
@@ -171,10 +171,10 @@ in one operational surface. For option label composition, prefix/suffix slots,
 and rich option content, see [`cv-option`](./option.md).
 
 ```html
-<div class="listbox-demo-shell usage-demo" data-demo="listbox" data-live-demo-height="860">
-  <section class="listbox-demo-hero usage-demo__hero" aria-labelledby="listbox-demo-title">
-    <div class="listbox-demo-copy usage-demo__copy">
-      <span class="listbox-demo-kicker usage-demo__kicker">Collection selection primitive</span>
+<div class="listbox-demo-shell" data-demo="listbox" data-live-demo-height="860">
+  <section class="listbox-demo-hero" aria-labelledby="listbox-demo-title">
+    <div class="listbox-demo-copy">
+      <span class="listbox-demo-kicker">Collection selection primitive</span>
       <h3 id="listbox-demo-title">Choose one visible route, then compose the export fields.</h3>
       <p>
         <code>cv-listbox</code> adapts the headless model into DOM focus, ARIA state, grouped options, and
@@ -182,7 +182,7 @@ and rich option content, see [`cv-option`](./option.md).
       </p>
     </div>
 
-    <dl class="listbox-demo-metrics usage-demo__metrics" aria-label="Listbox contract summary">
+    <dl class="listbox-demo-metrics" aria-label="Listbox contract summary">
       <div>
         <dt>Default focus</dt>
         <dd><code>aria-activedescendant</code> on the listbox root</dd>
@@ -198,12 +198,9 @@ and rich option content, see [`cv-option`](./option.md).
     </dl>
   </section>
 
-  <section
-    class="listbox-demo-workbench usage-demo__workbench"
-    aria-labelledby="listbox-demo-workbench-title"
-  >
-    <div class="listbox-demo-section-header usage-demo__section-header">
-      <span class="listbox-demo-kicker usage-demo__kicker">Interactive contract</span>
+  <section class="listbox-demo-workbench" aria-labelledby="listbox-demo-workbench-title">
+    <div class="listbox-demo-section-header">
+      <span class="listbox-demo-kicker">Interactive contract</span>
       <h4 id="listbox-demo-workbench-title">
         Grouped single-select and multi-select examples share one event readout.
       </h4>
@@ -211,10 +208,10 @@ and rich option content, see [`cv-option`](./option.md).
 
     <div class="listbox-demo-layout">
       <article
-        class="listbox-demo-panel listbox-demo-panel--primary usage-demo__panel"
+        class="listbox-demo-panel listbox-demo-panel--primary"
         aria-labelledby="listbox-demo-route-title"
       >
-        <header class="listbox-demo-panel-header usage-demo__panel-header">
+        <header class="listbox-demo-panel-header">
           <div>
             <span class="listbox-demo-label">Single select with groups</span>
             <h5 id="listbox-demo-route-title">Visible profile route</h5>
@@ -223,40 +220,36 @@ and rich option content, see [`cv-option`](./option.md).
         </header>
 
         <cv-listbox class="listbox-demo-primary" aria-label="Visible vault route">
-          <cv-listbox-group class="usage-demo__listbox-group-label" label="Visible surfaces">
+          <cv-listbox-group label="Visible surfaces">
             <cv-option value="daily" data-label="Daily vault">
-              <span slot="prefix" class="listbox-demo-glyph usage-demo__adornment">D</span>
-              <span class="listbox-demo-option-copy usage-demo__micro-copy">
+              <span slot="prefix" class="listbox-demo-glyph">D</span>
+              <span class="listbox-demo-option-copy">
                 <strong>Daily vault</strong>
                 <small>Default work profile</small>
               </span>
               <cv-badge slot="suffix" variant="neutral">stable</cv-badge>
             </cv-option>
             <cv-option value="travel" data-label="Travel profile" selected>
-              <span slot="prefix" class="listbox-demo-glyph listbox-demo-glyph--violet usage-demo__adornment"
-                >T</span
-              >
-              <span class="listbox-demo-option-copy usage-demo__micro-copy">
+              <span slot="prefix" class="listbox-demo-glyph listbox-demo-glyph--violet">T</span>
+              <span class="listbox-demo-option-copy">
                 <strong>Travel profile</strong>
                 <small>Deniable border route</small>
               </span>
               <cv-badge slot="suffix" variant="primary">visible</cv-badge>
             </cv-option>
           </cv-listbox-group>
-          <cv-listbox-group class="usage-demo__listbox-group-label" label="Hidden layers">
+          <cv-listbox-group label="Hidden layers">
             <cv-option value="sealed" data-label="Sealed core">
-              <span slot="prefix" class="listbox-demo-glyph usage-demo__adornment">S</span>
-              <span class="listbox-demo-option-copy usage-demo__micro-copy">
+              <span slot="prefix" class="listbox-demo-glyph">S</span>
+              <span class="listbox-demo-option-copy">
                 <strong>Sealed core</strong>
                 <small>Requires hardware proof</small>
               </span>
               <cv-badge slot="suffix" variant="success">paired</cv-badge>
             </cv-option>
             <cv-option value="remote" data-label="Remote recovery" disabled>
-              <span slot="prefix" class="listbox-demo-glyph listbox-demo-glyph--muted usage-demo__adornment"
-                >R</span
-              >
-              <span class="listbox-demo-option-copy usage-demo__micro-copy">
+              <span slot="prefix" class="listbox-demo-glyph listbox-demo-glyph--muted">R</span>
+              <span class="listbox-demo-option-copy">
                 <strong>Remote recovery</strong>
                 <small>Disabled until quorum returns</small>
               </span>
@@ -266,8 +259,8 @@ and rich option content, see [`cv-option`](./option.md).
         </cv-listbox>
       </article>
 
-      <article class="listbox-demo-panel usage-demo__panel" aria-labelledby="listbox-demo-export-title">
-        <header class="listbox-demo-panel-header usage-demo__panel-header">
+      <article class="listbox-demo-panel" aria-labelledby="listbox-demo-export-title">
+        <header class="listbox-demo-panel-header">
           <div>
             <span class="listbox-demo-label">Multiple select with range</span>
             <h5 id="listbox-demo-export-title">Export field set</h5>
@@ -277,33 +270,29 @@ and rich option content, see [`cv-option`](./option.md).
 
         <cv-listbox selection-mode="multiple" range-selection aria-label="Export fields">
           <cv-option value="name" data-label="Record name" selected>
-            <span slot="prefix" class="listbox-demo-glyph usage-demo__adornment">N</span>
-            <span class="listbox-demo-option-copy usage-demo__micro-copy">
+            <span slot="prefix" class="listbox-demo-glyph">N</span>
+            <span class="listbox-demo-option-copy">
               <strong>Record name</strong>
               <small>Shown in review table</small>
             </span>
           </cv-option>
           <cv-option value="owner" data-label="Owner" selected>
-            <span slot="prefix" class="listbox-demo-glyph usage-demo__adornment">O</span>
-            <span class="listbox-demo-option-copy usage-demo__micro-copy">
+            <span slot="prefix" class="listbox-demo-glyph">O</span>
+            <span class="listbox-demo-option-copy">
               <strong>Owner</strong>
               <small>Operational accountability</small>
             </span>
           </cv-option>
           <cv-option value="risk" data-label="Risk flag">
-            <span slot="prefix" class="listbox-demo-glyph listbox-demo-glyph--violet usage-demo__adornment"
-              >R</span
-            >
-            <span class="listbox-demo-option-copy usage-demo__micro-copy">
+            <span slot="prefix" class="listbox-demo-glyph listbox-demo-glyph--violet">R</span>
+            <span class="listbox-demo-option-copy">
               <strong>Risk flag</strong>
               <small>Visible in elevated review</small>
             </span>
           </cv-option>
           <cv-option value="raw" data-label="Raw secret" disabled>
-            <span slot="prefix" class="listbox-demo-glyph listbox-demo-glyph--muted usage-demo__adornment"
-              >X</span
-            >
-            <span class="listbox-demo-option-copy usage-demo__micro-copy">
+            <span slot="prefix" class="listbox-demo-glyph listbox-demo-glyph--muted">X</span>
+            <span class="listbox-demo-option-copy">
               <strong>Raw secret</strong>
               <small>Never exported from this route</small>
             </span>
@@ -312,7 +301,7 @@ and rich option content, see [`cv-option`](./option.md).
       </article>
     </div>
 
-    <output class="listbox-demo-readout usage-demo__log" aria-live="polite" data-listbox-readout>
+    <output class="listbox-demo-readout" aria-live="polite" data-listbox-readout>
       Selection events appear here.
     </output>
 
@@ -429,7 +418,7 @@ Groups related options under a visible label header. Must be a direct child of `
 #### Anatomy
 
 ```
-<cv-listbox-group class="usage-demo__listbox-group-label"> (host)
+<cv-listbox-group> (host)
 ├── <div part="label">   ← group label text
 └── <slot>               ← accepts <cv-option> children
 ```

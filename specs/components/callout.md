@@ -137,10 +137,10 @@ No `cv-input` or `cv-change` events are emitted. The callout has no user-modifia
 ## Usage
 
 ```html
-<div class="callout-demo-shell usage-demo" data-demo="callout" data-live-demo-height="640">
-  <section class="callout-demo-hero usage-demo__hero" aria-labelledby="callout-demo-title">
-    <div class="callout-demo-copy usage-demo__copy">
-      <span class="callout-demo-kicker usage-demo__kicker">Static guidance surface</span>
+<div class="callout-demo-shell" data-demo="callout" data-live-demo-height="640">
+  <section class="callout-demo-hero" aria-labelledby="callout-demo-title">
+    <div class="callout-demo-copy">
+      <span class="callout-demo-kicker">Static guidance surface</span>
       <h3 id="callout-demo-title">Use callout for durable context, not time-sensitive alerts.</h3>
       <p>
         A callout renders as <code>role="note"</code>, keeps all ARIA and close behavior in headless state,
@@ -148,7 +148,7 @@ No `cv-input` or `cv-change` events are emitted. The callout has no user-modifia
       </p>
     </div>
 
-    <dl class="callout-demo-metrics usage-demo__metrics" aria-label="Callout contract summary">
+    <dl class="callout-demo-metrics" aria-label="Callout contract summary">
       <div>
         <dt>Root role</dt>
         <dd>note</dd>
@@ -164,12 +164,9 @@ No `cv-input` or `cv-change` events are emitted. The callout has no user-modifia
     </dl>
   </section>
 
-  <section
-    class="callout-demo-workbench usage-demo__workbench"
-    aria-labelledby="callout-demo-workbench-title"
-  >
-    <div class="callout-demo-section-header usage-demo__section-header">
-      <span class="callout-demo-kicker usage-demo__kicker">Vault review panel</span>
+  <section class="callout-demo-workbench" aria-labelledby="callout-demo-workbench-title">
+    <div class="callout-demo-section-header">
+      <span class="callout-demo-kicker">Vault review panel</span>
       <h4 id="callout-demo-workbench-title">
         Layer durable notes around a workflow without stealing focus or announcing new status.
       </h4>
@@ -198,13 +195,13 @@ No `cv-input` or `cv-change` events are emitted. The callout has no user-modifia
         </cv-callout>
       </div>
 
-      <aside class="callout-demo-side usage-demo__side" aria-label="Callout variants and density">
+      <aside class="callout-demo-side" aria-label="Callout variants and density">
         <div class="callout-demo-chip-row" aria-label="Available variants">
-          <cv-badge class="usage-demo__dense-badge" variant="primary" size="small">info</cv-badge>
-          <cv-badge class="usage-demo__dense-badge" variant="success" size="small">success</cv-badge>
-          <cv-badge class="usage-demo__dense-badge" variant="warning" size="small">warning</cv-badge>
-          <cv-badge class="usage-demo__dense-badge" variant="danger" size="small">danger</cv-badge>
-          <cv-badge class="usage-demo__dense-badge" variant="neutral" size="small">neutral</cv-badge>
+          <cv-badge variant="primary" size="small">info</cv-badge>
+          <cv-badge variant="success" size="small">success</cv-badge>
+          <cv-badge variant="warning" size="small">warning</cv-badge>
+          <cv-badge variant="danger" size="small">danger</cv-badge>
+          <cv-badge variant="neutral" size="small">neutral</cv-badge>
         </div>
 
         <cv-callout variant="neutral" density="compact">
@@ -217,7 +214,7 @@ No `cv-input` or `cv-change` events are emitted. The callout has no user-modifia
           Dense inline note for secondary metadata.
         </cv-callout>
 
-        <output class="callout-demo-readout usage-demo__log" aria-live="polite" data-callout-readout>
+        <output class="callout-demo-readout" aria-live="polite" data-callout-readout>
           Dismissible notes are open. Close one to see the cv-close event.
         </output>
 
