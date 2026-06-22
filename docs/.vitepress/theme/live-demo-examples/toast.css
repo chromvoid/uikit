@@ -6,16 +6,7 @@
   overflow: hidden;
   border: 1px solid rgba(118, 181, 222, 0.18);
   border-radius: 16px;
-  color: var(--toast-demo-muted);
-  --toast-demo-text: #eef5ff;
-  --toast-demo-muted: rgba(190, 206, 226, 0.76);
-  --toast-demo-soft: rgba(190, 206, 226, 0.58);
-  --toast-demo-border: rgba(118, 181, 222, 0.18);
-  --toast-demo-panel: rgba(238, 245, 255, 0.052);
-  --toast-demo-cyan: #65d7ff;
-  --toast-demo-green: #5beba0;
-  --toast-demo-amber: #ffc857;
-  --toast-demo-red: #ff7d86;
+  color: var(--live-demo-muted);
   background:
     linear-gradient(180deg, rgba(12, 20, 32, 0.98), rgba(7, 13, 22, 0.98)),
     linear-gradient(135deg, rgba(101, 215, 255, 0.075), transparent 44%),
@@ -31,15 +22,15 @@
 }
 
 .toast-demo-shell cv-button {
-  --cv-color-text: var(--toast-demo-text);
-  --cv-color-text-muted: var(--toast-demo-muted);
+  --cv-color-text: var(--live-demo-text);
+  --cv-color-text-muted: var(--live-demo-muted);
   --cv-color-surface: rgba(238, 245, 255, 0.06);
   --cv-color-border: rgba(143, 220, 255, 0.22);
-  --cv-color-primary: var(--toast-demo-cyan);
+  --cv-color-primary: var(--live-demo-cyan);
   --cv-color-primary-dark: #3caecc;
-  --cv-color-danger: var(--toast-demo-red);
+  --cv-color-danger: var(--live-demo-red);
   --cv-color-on-primary: #071018;
-  --cv-button-text-color: var(--toast-demo-text);
+  --cv-button-text-color: var(--live-demo-text);
 }
 
 .toast-demo-hero,
@@ -51,7 +42,7 @@
 }
 
 .toast-demo-hero {
-  border-bottom: 1px solid var(--toast-demo-border);
+  border-bottom: 1px solid var(--live-demo-border);
 }
 
 .toast-demo-copy,
@@ -87,7 +78,7 @@
 .toast-demo-copy h3,
 .toast-demo-section-header h4 {
   margin: 0;
-  color: var(--toast-demo-text);
+  color: var(--live-demo-text);
   letter-spacing: 0;
 }
 
@@ -108,7 +99,7 @@
 .toast-demo-copy p,
 .toast-demo-route-card p {
   margin: 0;
-  color: var(--toast-demo-muted);
+  color: var(--live-demo-muted);
   font-size: 0.92rem;
   line-height: 1.58;
 }
@@ -129,10 +120,10 @@
 .toast-demo-panel,
 .toast-demo-stage,
 .toast-demo-side {
-  border: 1px solid var(--toast-demo-border);
+  border: 1px solid var(--live-demo-border);
   border-radius: 14px;
   background:
-    linear-gradient(180deg, var(--toast-demo-panel), rgba(238, 245, 255, 0.026)), rgba(7, 13, 22, 0.32);
+    linear-gradient(180deg, var(--live-demo-panel), rgba(238, 245, 255, 0.026)), rgba(7, 13, 22, 0.32);
 }
 
 .toast-demo-metrics div {
@@ -144,14 +135,14 @@
 
 .toast-demo-metrics dt,
 .toast-demo-state dt {
-  color: var(--toast-demo-soft);
+  color: var(--live-demo-soft);
 }
 
 .toast-demo-metrics dd,
 .toast-demo-state dd {
   min-inline-size: 0;
   margin: 0;
-  color: var(--toast-demo-text);
+  color: var(--live-demo-text);
   line-height: 1.35;
   overflow-wrap: anywhere;
 }
@@ -188,12 +179,12 @@
 }
 
 .toast-demo-actions cv-button[data-toast-action='warning'] {
-  --cv-button-accent-color: var(--toast-demo-amber);
+  --cv-button-accent-color: var(--live-demo-amber);
 }
 
 .toast-demo-actions cv-button[data-toast-action='loading'],
 .toast-demo-footer-actions cv-button {
-  --cv-button-accent-color: var(--toast-demo-cyan);
+  --cv-button-accent-color: var(--live-demo-cyan);
   --cv-button-background: rgba(238, 245, 255, 0.045);
   --cv-button-text-color: rgba(226, 239, 255, 0.88);
 }
@@ -225,11 +216,11 @@
 
 .toast-demo-segment button:hover {
   border-color: rgba(143, 220, 255, 0.36);
-  color: var(--toast-demo-text);
+  color: var(--live-demo-text);
 }
 
 .toast-demo-segment button:focus-visible {
-  outline: 2px solid var(--toast-demo-cyan);
+  outline: 2px solid var(--live-demo-cyan);
   outline-offset: 2px;
 }
 
@@ -279,7 +270,7 @@
 }
 
 .toast-demo-route-card strong {
-  color: var(--toast-demo-text);
+  color: var(--live-demo-text);
   font-family: var(--vp-font-family-mono);
   font-size: 0.94rem;
   letter-spacing: 0;
@@ -305,10 +296,10 @@
   --cv-color-surface-elevated: rgba(12, 20, 32, 0.96);
   --cv-color-text: rgba(238, 245, 255, 0.94);
   --cv-color-text-muted: rgba(190, 206, 226, 0.78);
-  --cv-color-primary: var(--toast-demo-cyan);
-  --cv-color-success: var(--toast-demo-green);
-  --cv-color-warning: var(--toast-demo-amber);
-  --cv-color-danger: var(--toast-demo-red);
+  --cv-color-primary: var(--live-demo-cyan);
+  --cv-color-success: var(--live-demo-green);
+  --cv-color-warning: var(--live-demo-amber);
+  --cv-color-danger: var(--live-demo-red);
   --cv-color-success-border-strong: rgba(91, 235, 160, 0.58);
   --cv-color-warning-border-strong: rgba(255, 200, 87, 0.62);
   --cv-color-danger-border-strong: rgba(255, 125, 134, 0.64);
@@ -366,67 +357,67 @@
 }
 
 @container (min-width: 860px) {
-.toast-demo-hero {
+  .toast-demo-hero {
     grid-template-columns: minmax(0, 1.06fr) minmax(260px, 0.72fr);
   }
 
-.toast-demo-metrics {
+  .toast-demo-metrics {
     grid-template-columns: 1fr;
   }
 
-.toast-demo-workbench {
+  .toast-demo-workbench {
     grid-template-columns: minmax(270px, 0.74fr) minmax(360px, 1fr);
     align-items: start;
   }
 
-.toast-demo-side {
+  .toast-demo-side {
     grid-column: 1 / -1;
   }
 }
 
 @container (min-width: 1040px) {
-.toast-demo-workbench {
+  .toast-demo-workbench {
     grid-template-columns: minmax(270px, 0.54fr) minmax(360px, 1fr) minmax(248px, 0.44fr);
   }
 
-.toast-demo-side {
+  .toast-demo-side {
     grid-column: auto;
   }
 }
 
 @media (max-width: 640px) {
-.toast-demo-hero,
+  .toast-demo-hero,
   .toast-demo-workbench {
     padding: 16px;
   }
 
-.toast-demo-panel,
+  .toast-demo-panel,
   .toast-demo-side {
     padding: 12px;
   }
 
-.toast-demo-stage {
+  .toast-demo-stage {
     min-block-size: 420px;
   }
 
-.toast-demo-route-card {
+  .toast-demo-route-card {
     inset-inline: 12px;
     inset-block-end: 12px;
   }
 
-.toast-demo-stage cv-toast-region {
+  .toast-demo-stage cv-toast-region {
     --cv-toast-region-inset: 12px;
     --cv-toast-region-width: calc(100% - 24px);
     --cv-toast-region-max-width: calc(100% - 24px);
   }
 
-.toast-demo-state {
+  .toast-demo-state {
     grid-template-columns: 1fr;
   }
 }
 
 @container (max-width: 420px) {
-.toast-demo-stage {
+  .toast-demo-stage {
     min-block-size: 590px;
   }
 }
@@ -461,11 +452,11 @@
 }
 
 @media (max-width: 640px) {
-.toast-demo-surface {
+  .toast-demo-surface {
     padding-block-start: 136px;
   }
 
-.toast-demo-surface .example-row {
+  .toast-demo-surface .example-row {
     padding-inline-end: 0;
   }
 }

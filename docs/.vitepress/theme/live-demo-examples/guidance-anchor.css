@@ -6,7 +6,7 @@
   min-inline-size: 0;
   overflow: hidden;
   padding: clamp(16px, 3cqi, 22px);
-  color: var(--guidance-anchor-demo-muted);
+  color: var(--live-demo-muted);
   --cv-color-border: rgba(118, 181, 222, 0.24);
   --cv-color-info: #65d7ff;
   --cv-color-on-primary: #06131a;
@@ -16,11 +16,6 @@
   --cv-color-surface-elevated: #162030;
   --cv-color-text: #e8ecf6;
   --cv-color-text-muted: rgba(190, 206, 226, 0.78);
-  --guidance-anchor-demo-text: #eef5ff;
-  --guidance-anchor-demo-muted: rgba(190, 206, 226, 0.78);
-  --guidance-anchor-demo-soft: rgba(190, 206, 226, 0.58);
-  --guidance-anchor-demo-panel: rgba(238, 245, 255, 0.052);
-  --guidance-anchor-demo-border: rgba(118, 181, 222, 0.2);
 }
 
 .guidance-anchor-demo-shell,
@@ -68,7 +63,7 @@
 .guidance-anchor-demo-copy h3,
 .guidance-anchor-demo-inspector h4 {
   margin: 0;
-  color: var(--guidance-anchor-demo-text);
+  color: var(--live-demo-text);
   letter-spacing: 0;
 }
 
@@ -82,7 +77,7 @@
 .guidance-anchor-demo-copy p {
   max-inline-size: 68ch;
   margin: 0;
-  color: var(--guidance-anchor-demo-muted);
+  color: var(--live-demo-muted);
   font-size: 0.92rem;
   line-height: 1.58;
 }
@@ -99,7 +94,7 @@
   gap: 5px;
   min-inline-size: 0;
   padding: 12px;
-  border: 1px solid var(--guidance-anchor-demo-border);
+  border: 1px solid var(--live-demo-border);
   border-radius: 12px;
   background: rgba(238, 245, 255, 0.04);
 }
@@ -107,7 +102,7 @@
 .guidance-anchor-demo-flow dd {
   margin: 0;
   overflow-wrap: anywhere;
-  color: var(--guidance-anchor-demo-text);
+  color: var(--live-demo-text);
   font-size: 0.86rem;
   line-height: 1.35;
 }
@@ -136,13 +131,13 @@
 
 .guidance-anchor-demo-title span,
 .guidance-anchor-demo-meta {
-  color: var(--guidance-anchor-demo-soft);
+  color: var(--live-demo-soft);
 }
 
 .guidance-anchor-demo-title strong {
   min-inline-size: 0;
   overflow-wrap: anywhere;
-  color: var(--guidance-anchor-demo-text);
+  color: var(--live-demo-text);
   font-size: 1rem;
   line-height: 1.3;
 }
@@ -206,7 +201,7 @@
 .guidance-anchor-demo-file {
   min-inline-size: 0;
   overflow: hidden;
-  color: var(--guidance-anchor-demo-text);
+  color: var(--live-demo-text);
   font-size: 0.9rem;
   line-height: 1.35;
   text-overflow: ellipsis;
@@ -277,45 +272,45 @@
 }
 
 @container (min-width: 760px) {
-.guidance-anchor-demo-brief {
+  .guidance-anchor-demo-brief {
     grid-template-columns: minmax(0, 1fr) minmax(300px, 0.74fr);
   }
 
-.guidance-anchor-demo-content {
+  .guidance-anchor-demo-content {
     grid-template-columns: minmax(0, 1fr) minmax(268px, 0.62fr);
   }
 
-.guidance-anchor-demo-callout {
+  .guidance-anchor-demo-callout {
     grid-template-columns: 44px minmax(0, 1fr);
   }
 
-.guidance-anchor-demo-rail {
+  .guidance-anchor-demo-rail {
     display: block;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-.guidance-anchor-demo-target::after {
+  .guidance-anchor-demo-target::after {
     transition: none;
   }
 }
 
 @media (max-width: 640px) {
-.guidance-anchor-demo-toolbar,
+  .guidance-anchor-demo-toolbar,
   .guidance-anchor-demo-inspector {
     grid-template-columns: 1fr;
   }
 
-.guidance-anchor-demo-actions {
+  .guidance-anchor-demo-actions {
     justify-content: start;
   }
 
-.guidance-anchor-demo-list div {
+  .guidance-anchor-demo-list div {
     grid-template-columns: 1fr;
     gap: 4px;
   }
 
-.guidance-anchor-demo-inspector output {
+  .guidance-anchor-demo-inspector output {
     white-space: normal;
   }
 }

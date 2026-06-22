@@ -6,16 +6,7 @@
   overflow: hidden;
   border: 1px solid rgba(118, 181, 222, 0.18);
   border-radius: 16px;
-  color: var(--copy-button-demo-muted);
-  --copy-button-demo-text: #eef5ff;
-  --copy-button-demo-muted: rgba(190, 206, 226, 0.76);
-  --copy-button-demo-soft: rgba(190, 206, 226, 0.58);
-  --copy-button-demo-border: rgba(118, 181, 222, 0.18);
-  --copy-button-demo-panel: rgba(238, 245, 255, 0.052);
-  --copy-button-demo-cyan: #65d7ff;
-  --copy-button-demo-green: #5beba0;
-  --copy-button-demo-red: #ff7d86;
-  --copy-button-demo-violet: #b388ff;
+  color: var(--live-demo-muted);
   background:
     linear-gradient(180deg, rgba(12, 20, 32, 0.98), rgba(7, 13, 22, 0.98)),
     radial-gradient(circle at 14% 0%, rgba(101, 215, 255, 0.11), transparent 36%),
@@ -41,7 +32,7 @@
 .copy-button-demo-hero {
   grid-template-columns: 1fr;
   align-items: start;
-  border-bottom: 1px solid var(--copy-button-demo-border);
+  border-bottom: 1px solid var(--live-demo-border);
 }
 
 .copy-button-demo-copy {
@@ -71,7 +62,7 @@
 .copy-button-demo-copy h3 {
   max-inline-size: 28ch;
   margin: 0;
-  color: var(--copy-button-demo-text);
+  color: var(--live-demo-text);
   font-family: var(--vp-font-family-base);
   font-size: clamp(1.22rem, 5cqi, 1.62rem);
   line-height: 1.12;
@@ -82,7 +73,7 @@
 .copy-button-demo-copy p:last-child {
   max-inline-size: 64ch;
   margin: 0;
-  color: var(--copy-button-demo-muted);
+  color: var(--live-demo-muted);
   font-size: 0.92rem;
   line-height: 1.58;
 }
@@ -100,20 +91,20 @@
   gap: 4px;
   min-inline-size: 0;
   padding: 16px;
-  border: 1px solid var(--copy-button-demo-border);
+  border: 1px solid var(--live-demo-border);
   border-radius: 12px;
   background:
-    linear-gradient(180deg, var(--copy-button-demo-panel), rgba(238, 245, 255, 0.026)), rgba(7, 13, 22, 0.32);
+    linear-gradient(180deg, var(--live-demo-panel), rgba(238, 245, 255, 0.026)), rgba(7, 13, 22, 0.32);
 }
 
 .copy-button-demo-metrics dt {
-  color: var(--copy-button-demo-soft);
+  color: var(--live-demo-soft);
 }
 
 .copy-button-demo-metrics dd {
   min-inline-size: 0;
   margin: 0;
-  color: var(--copy-button-demo-text);
+  color: var(--live-demo-text);
   font-size: 0.9rem;
   line-height: 1.35;
   overflow-wrap: anywhere;
@@ -166,12 +157,12 @@
 .copy-button-demo-record-head span,
 .copy-button-demo-row span,
 .copy-button-demo-variants span {
-  color: var(--copy-button-demo-soft);
+  color: var(--live-demo-soft);
 }
 
 .copy-button-demo-record-head strong {
   min-inline-size: 0;
-  color: var(--copy-button-demo-text);
+  color: var(--live-demo-text);
   font-size: 1rem;
   line-height: 1.28;
   overflow-wrap: anywhere;
@@ -235,8 +226,8 @@
   --cv-copy-button-color: #e9f7ff;
   --cv-copy-button-hover-background: rgba(101, 215, 255, 0.11);
   --cv-copy-button-hover-border-color: rgba(101, 215, 255, 0.56);
-  --cv-copy-button-success-color: var(--copy-button-demo-green);
-  --cv-copy-button-error-color: var(--copy-button-demo-red);
+  --cv-copy-button-success-color: var(--live-demo-green);
+  --cv-copy-button-error-color: var(--live-demo-red);
 }
 
 .copy-button-demo-row--secret cv-copy-button {
@@ -300,36 +291,36 @@
 }
 
 @container (min-width: 760px) {
-.copy-button-demo-hero {
+  .copy-button-demo-hero {
     grid-template-columns: minmax(0, 1.08fr) minmax(260px, 0.72fr);
   }
 
-.copy-button-demo-workbench {
+  .copy-button-demo-workbench {
     grid-template-columns: minmax(0, 1fr) minmax(220px, 0.42fr);
   }
 
-.copy-button-demo-metrics {
+  .copy-button-demo-metrics {
     grid-template-columns: 1fr;
   }
 }
 
 @media (max-width: 640px) {
-.copy-button-demo-hero,
+  .copy-button-demo-hero,
   .copy-button-demo-workbench {
     padding: 16px;
   }
 
-.copy-button-demo-record {
+  .copy-button-demo-record {
     padding: 12px;
   }
 
-.copy-button-demo-record-head,
+  .copy-button-demo-record-head,
   .copy-button-demo-row {
     grid-template-columns: 1fr;
     justify-items: start;
   }
 
-.copy-button-demo-badge {
+  .copy-button-demo-badge {
     justify-self: start;
   }
 }

@@ -6,12 +6,7 @@
   overflow: hidden;
   border: 1px solid rgba(118, 181, 222, 0.18);
   border-radius: 16px;
-  color: var(--breadcrumb-demo-muted);
-  --breadcrumb-demo-text: #eef5ff;
-  --breadcrumb-demo-muted: rgba(190, 206, 226, 0.76);
-  --breadcrumb-demo-soft: rgba(190, 206, 226, 0.58);
-  --breadcrumb-demo-panel: rgba(238, 245, 255, 0.052);
-  --breadcrumb-demo-border: rgba(118, 181, 222, 0.18);
+  color: var(--live-demo-muted);
   background:
     linear-gradient(180deg, rgba(12, 20, 32, 0.98), rgba(7, 13, 22, 0.98)),
     radial-gradient(circle at 10% 0%, rgba(101, 215, 255, 0.1), transparent 36%),
@@ -30,13 +25,13 @@
   --cv-breadcrumb-item-link-max-inline-size: min(18rem, 58cqi);
   --cv-breadcrumb-item-current-background: rgba(101, 215, 255, 0.12);
   --cv-breadcrumb-item-current-border-color: rgba(101, 215, 255, 0.34);
-  --cv-breadcrumb-item-current-color: var(--breadcrumb-demo-text);
+  --cv-breadcrumb-item-current-color: var(--live-demo-text);
   --cv-breadcrumb-item-hover-background: rgba(101, 215, 255, 0.08);
   --cv-breadcrumb-item-hover-border-color: rgba(143, 220, 255, 0.34);
 }
 
 .breadcrumb-demo-shell cv-breadcrumb-item::part(link) {
-  color: var(--breadcrumb-demo-muted);
+  color: var(--live-demo-muted);
 }
 
 .breadcrumb-demo-shell cv-breadcrumb-item:not([current])::part(link) {
@@ -47,11 +42,11 @@
 .breadcrumb-demo-shell cv-breadcrumb-item[current]::part(link) {
   border-color: rgba(101, 215, 255, 0.34);
   background: rgba(101, 215, 255, 0.12);
-  color: var(--breadcrumb-demo-text);
+  color: var(--live-demo-text);
 }
 
 .breadcrumb-demo-shell cv-breadcrumb-item::part(separator) {
-  color: var(--breadcrumb-demo-soft);
+  color: var(--live-demo-soft);
   opacity: 0.62;
 }
 
@@ -70,7 +65,7 @@
 .breadcrumb-demo-hero {
   grid-template-columns: 1fr;
   align-items: stretch;
-  border-bottom: 1px solid var(--breadcrumb-demo-border);
+  border-bottom: 1px solid var(--live-demo-border);
 }
 
 .breadcrumb-demo-section + .breadcrumb-demo-section {
@@ -105,13 +100,13 @@
 
 .breadcrumb-demo-label,
 .breadcrumb-demo-metrics dt {
-  color: var(--breadcrumb-demo-soft);
+  color: var(--live-demo-soft);
 }
 
 .breadcrumb-demo-copy h3,
 .breadcrumb-demo-section-header h4 {
   margin: 0;
-  color: var(--breadcrumb-demo-text);
+  color: var(--live-demo-text);
   letter-spacing: 0;
 }
 
@@ -131,7 +126,7 @@
 .breadcrumb-demo-copy p {
   max-width: 62ch;
   margin: 0;
-  color: var(--breadcrumb-demo-muted);
+  color: var(--live-demo-muted);
   font-size: 0.92rem;
   line-height: 1.58;
 }
@@ -161,10 +156,10 @@
 .breadcrumb-demo-panel {
   gap: 12px;
   padding: 16px;
-  border: 1px solid var(--breadcrumb-demo-border);
+  border: 1px solid var(--live-demo-border);
   border-radius: 12px;
   background:
-    linear-gradient(180deg, var(--breadcrumb-demo-panel), rgba(238, 245, 255, 0.026)), rgba(7, 13, 22, 0.32);
+    linear-gradient(180deg, var(--live-demo-panel), rgba(238, 245, 255, 0.026)), rgba(7, 13, 22, 0.32);
 }
 
 .breadcrumb-demo-panel-heading {
@@ -176,7 +171,7 @@
 .breadcrumb-demo-note {
   max-inline-size: 62ch;
   margin: 0;
-  color: var(--breadcrumb-demo-muted);
+  color: var(--live-demo-muted);
   font-size: 0.82rem;
   line-height: 1.45;
 }
@@ -216,7 +211,7 @@
 
 .breadcrumb-demo-metrics dd {
   margin: 0;
-  color: var(--breadcrumb-demo-text);
+  color: var(--live-demo-text);
   font-size: 0.9rem;
 }
 
@@ -249,38 +244,38 @@
 }
 
 @container (min-width: 760px) {
-.breadcrumb-demo-hero {
+  .breadcrumb-demo-hero {
     grid-template-columns: minmax(0, 1.06fr) minmax(260px, 0.72fr);
   }
 
-.breadcrumb-demo-metrics {
+  .breadcrumb-demo-metrics {
     grid-template-columns: 1fr;
   }
 }
 
 @media (max-width: 960px) {
-.breadcrumb-demo-grid {
+  .breadcrumb-demo-grid {
     grid-template-columns: 1fr;
   }
 }
 
 @media (max-width: 640px) {
-.breadcrumb-demo-hero,
+  .breadcrumb-demo-hero,
   .breadcrumb-demo-section {
     padding: 16px;
   }
 
-.breadcrumb-demo-metrics {
+  .breadcrumb-demo-metrics {
     grid-template-columns: 1fr;
   }
 
-.breadcrumb-demo-shell cv-breadcrumb-item {
+  .breadcrumb-demo-shell cv-breadcrumb-item {
     --cv-breadcrumb-item-link-max-inline-size: min(13rem, 64cqi);
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-.breadcrumb-demo-shell cv-breadcrumb-item::part(link) {
+  .breadcrumb-demo-shell cv-breadcrumb-item::part(link) {
     transition: none;
   }
 }

@@ -9,7 +9,7 @@ Provides design tokens as CSS custom properties to descendant components, with s
 ## Usage
 
 ```html
-<div class="theme-provider-demo-board">
+<div class="theme-provider-demo-board" data-demo="theme-provider">
   <!-- Basic dark theme. -->
   <cv-theme-provider mode="dark">
     <section class="theme-provider-demo-panel">

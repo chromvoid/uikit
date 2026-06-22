@@ -6,16 +6,7 @@
   overflow: hidden;
   border: 1px solid rgba(118, 181, 222, 0.18);
   border-radius: 16px;
-  color: var(--input-demo-muted);
-  --input-demo-text: #eef5ff;
-  --input-demo-muted: rgba(190, 206, 226, 0.76);
-  --input-demo-soft: rgba(190, 206, 226, 0.58);
-  --input-demo-panel: rgba(238, 245, 255, 0.052);
-  --input-demo-border: rgba(118, 181, 222, 0.18);
-  --input-demo-cyan: #65d7ff;
-  --input-demo-violet: #b388ff;
-  --input-demo-green: #5beba0;
-  --input-demo-red: #ff7d86;
+  color: var(--live-demo-muted);
   background:
     linear-gradient(180deg, rgba(12, 20, 32, 0.98), rgba(7, 13, 22, 0.98)),
     linear-gradient(135deg, rgba(101, 215, 255, 0.08), transparent 42%),
@@ -41,7 +32,7 @@
 
 .input-demo-hero,
 .input-demo-board {
-  border-bottom: 1px solid var(--input-demo-border);
+  border-bottom: 1px solid var(--live-demo-border);
 }
 
 .input-demo-copy,
@@ -85,7 +76,7 @@
 .input-demo-section-header h4,
 .input-demo-side-head h4 {
   margin: 0;
-  color: var(--input-demo-text);
+  color: var(--live-demo-text);
   font-family: var(--vp-font-family-base);
   letter-spacing: 0;
 }
@@ -108,7 +99,7 @@
 .input-demo-copy p {
   max-inline-size: 72ch;
   margin: 0;
-  color: var(--input-demo-muted);
+  color: var(--live-demo-muted);
   font-size: 0.92rem;
   line-height: 1.58;
 }
@@ -125,10 +116,10 @@
 .input-demo-form,
 .input-demo-side,
 .input-demo-matrix > div {
-  border: 1px solid var(--input-demo-border);
+  border: 1px solid var(--live-demo-border);
   border-radius: 14px;
   background:
-    linear-gradient(180deg, var(--input-demo-panel), rgba(238, 245, 255, 0.026)), rgba(7, 13, 22, 0.32);
+    linear-gradient(180deg, var(--live-demo-panel), rgba(238, 245, 255, 0.026)), rgba(7, 13, 22, 0.32);
 }
 
 .input-demo-metrics div {
@@ -142,14 +133,14 @@
 .input-demo-form-head span,
 .input-demo-matrix > div > span,
 .input-demo-live dt {
-  color: var(--input-demo-soft);
+  color: var(--live-demo-soft);
 }
 
 .input-demo-metrics dd,
 .input-demo-live dd {
   min-inline-size: 0;
   margin: 0;
-  color: var(--input-demo-text);
+  color: var(--live-demo-text);
   line-height: 1.35;
   overflow-wrap: anywhere;
 }
@@ -193,7 +184,7 @@
 
 .input-demo-form-head strong {
   min-inline-size: 0;
-  color: var(--input-demo-text);
+  color: var(--live-demo-text);
   font-size: 0.94rem;
   line-height: 1.34;
   overflow-wrap: anywhere;
@@ -253,10 +244,10 @@
   min-inline-size: 0;
   --cv-color-border: rgba(143, 220, 255, 0.24);
   --cv-color-surface-2: rgba(238, 245, 255, 0.056);
-  --cv-color-text: var(--input-demo-text);
+  --cv-color-text: var(--live-demo-text);
   --cv-color-text-muted: rgba(190, 206, 226, 0.58);
-  --cv-color-primary: var(--input-demo-cyan);
-  --cv-color-danger: var(--input-demo-red);
+  --cv-color-primary: var(--live-demo-cyan);
+  --cv-color-danger: var(--live-demo-red);
   --cv-input-focus-ring: 0 0 0 2px rgba(101, 215, 255, 0.26);
   --cv-input-border-radius: 10px;
 }
@@ -278,7 +269,7 @@
   --cv-color-border: rgba(143, 220, 255, 0.24);
   --cv-color-surface: rgba(101, 215, 255, 0.08);
   --cv-color-text: #dff8ff;
-  --cv-color-primary: var(--input-demo-cyan);
+  --cv-color-primary: var(--live-demo-cyan);
 }
 
 .input-demo-shell [slot='prefix'],
@@ -332,54 +323,54 @@
 }
 
 @container (min-width: 760px) {
-.input-demo-hero {
+  .input-demo-hero {
     grid-template-columns: minmax(0, 1.08fr) minmax(260px, 0.72fr);
   }
 
-.input-demo-board {
+  .input-demo-board {
     grid-template-columns: minmax(0, 1fr) minmax(260px, 0.42fr);
   }
 
-.input-demo-metrics {
+  .input-demo-metrics {
     grid-template-columns: 1fr;
   }
 }
 
 @media (hover: hover) {
-.input-demo-shell cv-input:not([disabled]):hover::part(base) {
+  .input-demo-shell cv-input:not([disabled]):hover::part(base) {
     border-color: rgba(157, 231, 255, 0.5);
   }
 }
 
 @media (max-width: 640px) {
-.input-demo-hero,
+  .input-demo-hero,
   .input-demo-board,
   .input-demo-section {
     padding: 16px;
   }
 
-.input-demo-copy h3 {
+  .input-demo-copy h3 {
     font-size: 1.22rem;
   }
 
-.input-demo-form,
+  .input-demo-form,
   .input-demo-side {
     padding: 12px;
   }
 
-.input-demo-metrics,
+  .input-demo-metrics,
   .input-demo-form-head,
   .input-demo-live {
     grid-template-columns: 1fr;
   }
 
-.input-demo-form-head cv-badge {
+  .input-demo-form-head cv-badge {
     justify-self: start;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-.input-demo-shell cv-input::part(base) {
+  .input-demo-shell cv-input::part(base) {
     transition: none;
   }
 }
@@ -437,17 +428,7 @@
   overflow: hidden;
   border: 1px solid rgba(118, 181, 222, 0.18);
   border-radius: 16px;
-  color: var(--code-input-demo-muted);
-  --code-input-demo-text: #eef5ff;
-  --code-input-demo-muted: rgba(190, 206, 226, 0.76);
-  --code-input-demo-soft: rgba(190, 206, 226, 0.58);
-  --code-input-demo-border: rgba(118, 181, 222, 0.18);
-  --code-input-demo-panel: rgba(238, 245, 255, 0.052);
-  --code-input-demo-cyan: #65d7ff;
-  --code-input-demo-green: #5beba0;
-  --code-input-demo-amber: #ffc857;
-  --code-input-demo-red: #ff7d86;
-  --code-input-demo-violet: #b388ff;
+  color: var(--live-demo-muted);
   background:
     linear-gradient(180deg, rgba(12, 20, 32, 0.98), rgba(7, 13, 22, 0.98)),
     radial-gradient(circle at 14% 0%, rgba(101, 215, 255, 0.11), transparent 36%),
@@ -471,7 +452,7 @@
 }
 
 .code-input-demo-hero {
-  border-bottom: 1px solid var(--code-input-demo-border);
+  border-bottom: 1px solid var(--live-demo-border);
 }
 
 .code-input-demo-workbench {
@@ -518,7 +499,7 @@
 .code-input-demo-panel-head h4,
 .code-input-demo-contract strong {
   margin: 0;
-  color: var(--code-input-demo-text);
+  color: var(--live-demo-text);
   font-family: var(--vp-font-family-base);
   letter-spacing: 0;
 }
@@ -541,7 +522,7 @@
 .code-input-demo-copy p,
 .code-input-demo-contract p {
   margin: 0;
-  color: var(--code-input-demo-muted);
+  color: var(--live-demo-muted);
   font-size: 0.92rem;
   line-height: 1.58;
 }
@@ -568,10 +549,10 @@
 .code-input-demo-panel,
 .code-input-demo-contract,
 .code-input-demo-state-list cv-field {
-  border: 1px solid var(--code-input-demo-border);
+  border: 1px solid var(--live-demo-border);
   border-radius: 14px;
   background:
-    linear-gradient(180deg, var(--code-input-demo-panel), rgba(238, 245, 255, 0.026)), rgba(7, 13, 22, 0.32);
+    linear-gradient(180deg, var(--live-demo-panel), rgba(238, 245, 255, 0.026)), rgba(7, 13, 22, 0.32);
 }
 
 .code-input-demo-metrics div {
@@ -585,13 +566,13 @@
 .code-input-demo-panel-head span,
 .code-input-demo-contract span,
 .code-input-demo-state-list cv-field::part(label) {
-  color: var(--code-input-demo-soft);
+  color: var(--live-demo-soft);
 }
 
 .code-input-demo-metrics dd {
   min-inline-size: 0;
   margin: 0;
-  color: var(--code-input-demo-text);
+  color: var(--live-demo-text);
   font-size: 0.9rem;
   line-height: 1.35;
   overflow-wrap: anywhere;
@@ -623,15 +604,15 @@
 
 .code-input-demo-panel-head cv-badge {
   justify-self: end;
-  --cv-color-primary: var(--code-input-demo-cyan);
+  --cv-color-primary: var(--live-demo-cyan);
 }
 
 .code-input-demo-shell[data-code-state='typing'] .code-input-demo-panel-head cv-badge {
-  --cv-color-primary: var(--code-input-demo-amber);
+  --cv-color-primary: var(--live-demo-amber);
 }
 
 .code-input-demo-shell[data-code-state='complete'] .code-input-demo-panel-head cv-badge {
-  --cv-color-primary: var(--code-input-demo-green);
+  --cv-color-primary: var(--live-demo-green);
 }
 
 .code-input-demo-shell cv-field {
@@ -686,7 +667,7 @@
 }
 
 .code-input-demo-actions cv-button {
-  --cv-button-accent-color: var(--code-input-demo-cyan);
+  --cv-button-accent-color: var(--live-demo-cyan);
   --cv-button-background: rgba(238, 245, 255, 0.058);
   --cv-button-background-hover: rgba(101, 215, 255, 0.11);
   --cv-button-border-color: rgba(143, 220, 255, 0.28);
@@ -695,8 +676,8 @@
   --cv-button-border-radius: 10px;
   --cv-button-padding-inline: 12px;
   --cv-button-font-size: 0.84rem;
-  --cv-button-text-color: var(--code-input-demo-text);
-  --cv-button-text-color-hover: var(--code-input-demo-text);
+  --cv-button-text-color: var(--live-demo-text);
+  --cv-button-text-color-hover: var(--live-demo-text);
 }
 
 .code-input-demo-actions cv-button[data-code-action='pairing'] {
@@ -704,7 +685,7 @@
 }
 
 .code-input-demo-actions cv-button[data-code-action='otp'] {
-  --cv-button-accent-color: var(--code-input-demo-violet);
+  --cv-button-accent-color: var(--live-demo-violet);
   --cv-button-background-hover: rgba(179, 136, 255, 0.11);
   --cv-button-border-color-hover: rgba(179, 136, 255, 0.54);
 }
@@ -770,35 +751,35 @@
 }
 
 @container (min-width: 620px) {
-.code-input-demo-hero {
+  .code-input-demo-hero {
     grid-template-columns: minmax(0, 1.08fr) minmax(260px, 0.72fr);
   }
 
-.code-input-demo-workbench {
+  .code-input-demo-workbench {
     grid-template-columns: minmax(0, 1fr) minmax(270px, 0.46fr);
   }
 
-.code-input-demo-metrics {
+  .code-input-demo-metrics {
     grid-template-columns: 1fr;
   }
 }
 
 @media (max-width: 640px) {
-.code-input-demo-hero,
+  .code-input-demo-hero,
   .code-input-demo-workbench {
     padding: 16px;
   }
 
-.code-input-demo-panel,
+  .code-input-demo-panel,
   .code-input-demo-side {
     padding: 12px;
   }
 
-.code-input-demo-panel-head {
+  .code-input-demo-panel-head {
     grid-template-columns: 1fr;
   }
 
-.code-input-demo-panel-head cv-badge {
+  .code-input-demo-panel-head cv-badge {
     justify-self: start;
   }
 }

@@ -6,12 +6,7 @@
   overflow: hidden;
   border: 1px solid rgba(118, 181, 222, 0.18);
   border-radius: 16px;
-  color: var(--dialog-demo-muted);
-  --dialog-demo-text: #eef5ff;
-  --dialog-demo-muted: rgba(190, 206, 226, 0.76);
-  --dialog-demo-soft: rgba(190, 206, 226, 0.58);
-  --dialog-demo-panel: rgba(238, 245, 255, 0.052);
-  --dialog-demo-border: rgba(118, 181, 222, 0.18);
+  color: var(--live-demo-muted);
   background:
     linear-gradient(180deg, rgba(12, 20, 32, 0.98), rgba(7, 13, 22, 0.98)),
     radial-gradient(circle at 12% 0%, rgba(101, 215, 255, 0.1), transparent 36%),
@@ -37,7 +32,7 @@
 .dialog-demo-hero {
   grid-template-columns: 1fr;
   align-items: stretch;
-  border-bottom: 1px solid var(--dialog-demo-border);
+  border-bottom: 1px solid var(--live-demo-border);
 }
 
 .dialog-demo-copy,
@@ -73,10 +68,10 @@
 .dialog-demo-panel {
   gap: 12px;
   padding: 16px;
-  border: 1px solid var(--dialog-demo-border);
+  border: 1px solid var(--live-demo-border);
   border-radius: 12px;
   background:
-    linear-gradient(180deg, var(--dialog-demo-panel), rgba(238, 245, 255, 0.026)), rgba(7, 13, 22, 0.32);
+    linear-gradient(180deg, var(--live-demo-panel), rgba(238, 245, 255, 0.026)), rgba(7, 13, 22, 0.32);
 }
 
 .dialog-demo-action:first-child {
@@ -98,13 +93,13 @@
 }
 
 .dialog-demo-label {
-  color: var(--dialog-demo-soft);
+  color: var(--live-demo-soft);
 }
 
 .dialog-demo-copy h3,
 .dialog-demo-section-header h4 {
   margin: 0;
-  color: var(--dialog-demo-text);
+  color: var(--live-demo-text);
   letter-spacing: 0;
 }
 
@@ -125,7 +120,7 @@
 .dialog-demo-panel p {
   max-width: 62ch;
   margin: 0;
-  color: var(--dialog-demo-muted);
+  color: var(--live-demo-muted);
   font-size: 0.92rem;
   line-height: 1.58;
 }
@@ -143,18 +138,18 @@
 }
 
 @container (min-width: 760px) {
-.dialog-demo-hero {
+  .dialog-demo-hero {
     grid-template-columns: minmax(0, 0.9fr) minmax(280px, 1fr);
   }
 }
 
 @media (max-width: 640px) {
-.dialog-demo-hero,
+  .dialog-demo-hero,
   .dialog-demo-section {
     padding: 16px;
   }
 
-.dialog-demo-actions,
+  .dialog-demo-actions,
   .dialog-demo-grid {
     grid-template-columns: 1fr;
   }

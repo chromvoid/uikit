@@ -6,17 +6,7 @@
   overflow: hidden;
   border: 1px solid rgba(118, 181, 222, 0.18);
   border-radius: 16px;
-  color: var(--status-indicator-demo-muted);
-  --status-indicator-demo-text: #eef5ff;
-  --status-indicator-demo-muted: rgba(190, 206, 226, 0.76);
-  --status-indicator-demo-soft: rgba(190, 206, 226, 0.58);
-  --status-indicator-demo-panel: rgba(238, 245, 255, 0.052);
-  --status-indicator-demo-border: rgba(118, 181, 222, 0.18);
-  --status-indicator-demo-cyan: #65d7ff;
-  --status-indicator-demo-green: #5beba0;
-  --status-indicator-demo-amber: #ffc857;
-  --status-indicator-demo-red: #ff7d86;
-  --status-indicator-demo-violet: #b388ff;
+  color: var(--live-demo-muted);
   background:
     linear-gradient(180deg, rgba(12, 20, 32, 0.98), rgba(7, 13, 22, 0.98)),
     linear-gradient(135deg, rgba(101, 215, 255, 0.08), transparent 43%),
@@ -48,7 +38,7 @@
 
 .status-indicator-demo-hero,
 .status-indicator-demo-board {
-  border-bottom: 1px solid var(--status-indicator-demo-border);
+  border-bottom: 1px solid var(--live-demo-border);
 }
 
 .status-indicator-demo-copy,
@@ -91,7 +81,7 @@
 .status-indicator-demo-section-header h4,
 .status-indicator-demo-panel-head h4 {
   margin: 0;
-  color: var(--status-indicator-demo-text);
+  color: var(--live-demo-text);
   font-family: var(--vp-font-family-base);
   letter-spacing: 0;
 }
@@ -114,7 +104,7 @@
 .status-indicator-demo-copy p {
   max-inline-size: 70ch;
   margin: 0;
-  color: var(--status-indicator-demo-muted);
+  color: var(--live-demo-muted);
   font-size: 0.92rem;
   line-height: 1.58;
 }
@@ -131,11 +121,10 @@
 .status-indicator-demo-panel,
 .status-indicator-demo-side,
 .status-indicator-demo-tone-grid > div {
-  border: 1px solid var(--status-indicator-demo-border);
+  border: 1px solid var(--live-demo-border);
   border-radius: 14px;
   background:
-    linear-gradient(180deg, var(--status-indicator-demo-panel), rgba(238, 245, 255, 0.026)),
-    rgba(7, 13, 22, 0.32);
+    linear-gradient(180deg, var(--live-demo-panel), rgba(238, 245, 255, 0.026)), rgba(7, 13, 22, 0.32);
 }
 
 .status-indicator-demo-metrics div {
@@ -148,13 +137,13 @@
 .status-indicator-demo-metrics dt,
 .status-indicator-demo-row span,
 .status-indicator-demo-tone-grid > div > span {
-  color: var(--status-indicator-demo-soft);
+  color: var(--live-demo-soft);
 }
 
 .status-indicator-demo-metrics dd {
   min-inline-size: 0;
   margin: 0;
-  color: var(--status-indicator-demo-text);
+  color: var(--live-demo-text);
   font-size: 0.9rem;
   line-height: 1.35;
   overflow-wrap: anywhere;
@@ -215,7 +204,7 @@
 
 .status-indicator-demo-row strong {
   min-inline-size: 0;
-  color: var(--status-indicator-demo-text);
+  color: var(--live-demo-text);
   font-size: 0.94rem;
   font-weight: 640;
   line-height: 1.32;
@@ -268,11 +257,11 @@
 
 .status-indicator-demo-shell cv-status-indicator {
   --cv-color-border-strong: rgba(143, 220, 255, 0.38);
-  --cv-color-primary: var(--status-indicator-demo-cyan);
-  --cv-color-info: var(--status-indicator-demo-violet);
-  --cv-color-success: var(--status-indicator-demo-green);
-  --cv-color-warning: var(--status-indicator-demo-amber);
-  --cv-color-danger: var(--status-indicator-demo-red);
+  --cv-color-primary: var(--live-demo-cyan);
+  --cv-color-info: var(--live-demo-violet);
+  --cv-color-success: var(--live-demo-green);
+  --cv-color-warning: var(--live-demo-amber);
+  --cv-color-danger: var(--live-demo-red);
   --cv-status-gap: 6px;
   --cv-status-font-size: 0.78rem;
   --cv-status-label-color: rgba(238, 245, 255, 0.9);
@@ -309,49 +298,49 @@
 }
 
 @container (min-width: 760px) {
-.status-indicator-demo-hero {
+  .status-indicator-demo-hero {
     grid-template-columns: minmax(0, 1.08fr) minmax(260px, 0.72fr);
   }
 
-.status-indicator-demo-board {
+  .status-indicator-demo-board {
     grid-template-columns: minmax(0, 1fr) minmax(232px, 0.42fr);
   }
 
-.status-indicator-demo-metrics {
+  .status-indicator-demo-metrics {
     grid-template-columns: 1fr;
   }
 }
 
 @media (max-width: 640px) {
-.status-indicator-demo-hero,
+  .status-indicator-demo-hero,
   .status-indicator-demo-board,
   .status-indicator-demo-tones {
     padding: 16px;
   }
 
-.status-indicator-demo-copy h3 {
+  .status-indicator-demo-copy h3 {
     font-size: 1.22rem;
   }
 
-.status-indicator-demo-panel,
+  .status-indicator-demo-panel,
   .status-indicator-demo-side {
     padding: 12px;
   }
 
-.status-indicator-demo-metrics,
+  .status-indicator-demo-metrics,
   .status-indicator-demo-panel-head,
   .status-indicator-demo-row {
     grid-template-columns: 1fr;
   }
 
-.status-indicator-demo-panel-head cv-status-indicator,
+  .status-indicator-demo-panel-head cv-status-indicator,
   .status-indicator-demo-row cv-status-indicator {
     justify-self: start;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-.status-indicator-demo-shell cv-status-indicator[pulse]::part(marker) {
+  .status-indicator-demo-shell cv-status-indicator[pulse]::part(marker) {
     animation: none;
   }
 }

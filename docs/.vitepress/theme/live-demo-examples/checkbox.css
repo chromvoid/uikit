@@ -177,37 +177,37 @@
 }
 
 @media (max-width: 960px) {
-.checkbox-demo-hero,
+  .checkbox-demo-hero,
   .checkbox-demo-workflow-grid {
     grid-template-columns: 1fr;
   }
 
-.checkbox-demo-metrics {
+  .checkbox-demo-metrics {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
-.checkbox-demo-state-grid {
+  .checkbox-demo-state-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
 @media (max-width: 640px) {
-.checkbox-demo-hero,
+  .checkbox-demo-hero,
   .checkbox-demo-section {
     padding: 16px;
   }
 
-.checkbox-demo-metrics,
+  .checkbox-demo-metrics,
   .checkbox-demo-state-grid {
     grid-template-columns: 1fr;
   }
 
-.checkbox-demo-toolbar {
+  .checkbox-demo-toolbar {
     align-items: flex-start;
     flex-direction: column;
   }
 
-.checkbox-demo-token {
+  .checkbox-demo-token {
     max-inline-size: 100%;
     white-space: normal;
   }

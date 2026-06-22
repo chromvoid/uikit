@@ -10,7 +10,7 @@ linkage for one slotted control.
 ## Usage
 
 ```html
-<div class="field-demo-shell" data-live-demo-height="760">
+<div class="field-demo-shell" data-demo="field" data-live-demo-height="760">
   <section class="field-demo-hero" aria-labelledby="field-demo-title">
     <div class="field-demo-copy">
       <span class="field-demo-kicker">cv-field / form anatomy</span>

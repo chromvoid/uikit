@@ -13,17 +13,7 @@
   overflow: hidden;
   border: 1px solid rgba(118, 181, 222, 0.18);
   border-radius: 16px;
-  color: var(--task-list-demo-muted);
-  --task-list-demo-text: #eef5ff;
-  --task-list-demo-muted: rgba(190, 206, 226, 0.76);
-  --task-list-demo-soft: rgba(190, 206, 226, 0.58);
-  --task-list-demo-panel: rgba(238, 245, 255, 0.052);
-  --task-list-demo-border: rgba(118, 181, 222, 0.18);
-  --task-list-demo-border-strong: rgba(143, 220, 255, 0.28);
-  --task-list-demo-cyan: #65d7ff;
-  --task-list-demo-green: #5beba0;
-  --task-list-demo-amber: #ffc857;
-  --task-list-demo-violet: #b388ff;
+  color: var(--live-demo-muted);
   background:
     linear-gradient(180deg, rgba(12, 20, 32, 0.98), rgba(7, 13, 22, 0.98)),
     linear-gradient(135deg, rgba(101, 215, 255, 0.08), transparent 44%),
@@ -60,7 +50,7 @@
 }
 
 .task-list-demo-hero {
-  border-bottom: 1px solid var(--task-list-demo-border);
+  border-bottom: 1px solid var(--live-demo-border);
 }
 
 .task-list-demo-copy,
@@ -96,7 +86,7 @@
 .task-list-demo-copy h3 {
   max-inline-size: 34ch;
   margin: 0;
-  color: var(--task-list-demo-text);
+  color: var(--live-demo-text);
   font-family: var(--vp-font-family-base);
   font-size: clamp(1.18rem, 5cqi, 1.54rem);
   line-height: 1.1;
@@ -107,7 +97,7 @@
 .task-list-demo-copy p {
   max-inline-size: 70ch;
   margin: 0;
-  color: var(--task-list-demo-muted);
+  color: var(--live-demo-muted);
   font-size: 0.92rem;
   line-height: 1.58;
 }
@@ -125,22 +115,22 @@
   gap: 4px;
   min-inline-size: 0;
   padding: 16px;
-  border: 1px solid var(--task-list-demo-border);
+  border: 1px solid var(--live-demo-border);
   border-radius: 14px;
   background:
-    linear-gradient(180deg, var(--task-list-demo-panel), rgba(238, 245, 255, 0.026)), rgba(7, 13, 22, 0.32);
+    linear-gradient(180deg, var(--live-demo-panel), rgba(238, 245, 255, 0.026)), rgba(7, 13, 22, 0.32);
 }
 
 .task-list-demo-metrics dt,
 .task-list-demo-row-main span,
 .task-list-demo-compact-row span {
-  color: var(--task-list-demo-soft);
+  color: var(--live-demo-soft);
 }
 
 .task-list-demo-metrics dd {
   min-inline-size: 0;
   margin: 0;
-  color: var(--task-list-demo-text);
+  color: var(--live-demo-text);
   font-size: 0.9rem;
   line-height: 1.35;
   overflow-wrap: anywhere;
@@ -154,7 +144,7 @@
 .task-list-demo-compact-list,
 .task-list-demo-empty-list {
   --cv-task-list-background: linear-gradient(180deg, rgba(7, 13, 22, 0.58), rgba(7, 13, 22, 0.82));
-  --cv-task-list-border: 1px solid var(--task-list-demo-border-strong);
+  --cv-task-list-border: 1px solid var(--live-demo-border-strong);
   --cv-task-list-radius: 14px;
   --cv-task-list-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035);
   --cv-task-list-highlight-color: rgba(171, 231, 255, 0.32);
@@ -162,8 +152,8 @@
   --cv-task-list-row-background-hover: rgba(238, 245, 255, 0.062);
   --cv-task-list-row-border-color: rgba(118, 181, 222, 0.15);
   --cv-task-list-row-border-color-hover: rgba(143, 220, 255, 0.32);
-  --cv-task-list-header-color: var(--task-list-demo-text);
-  --cv-task-list-footer-color: var(--task-list-demo-muted);
+  --cv-task-list-header-color: var(--live-demo-text);
+  --cv-task-list-footer-color: var(--live-demo-muted);
 }
 
 .task-list-demo-main-list {
@@ -186,7 +176,7 @@
 
 .task-list-demo-title {
   min-inline-size: 0;
-  color: var(--task-list-demo-text);
+  color: var(--live-demo-text);
   font-weight: 680;
   line-height: 1.3;
   overflow-wrap: anywhere;
@@ -198,7 +188,7 @@
 
 .task-list-demo-row-main strong {
   min-inline-size: 0;
-  color: var(--task-list-demo-text);
+  color: var(--live-demo-text);
   font-size: 0.94rem;
   line-height: 1.32;
   overflow-wrap: anywhere;
@@ -207,7 +197,7 @@
 .task-list-demo-row-main cv-progress {
   --cv-progress-height: 7px;
   --cv-progress-track-color: rgba(238, 245, 255, 0.055);
-  --cv-progress-label-color: var(--task-list-demo-text);
+  --cv-progress-label-color: var(--live-demo-text);
   inline-size: 100%;
   min-inline-size: 0;
 }
@@ -235,10 +225,10 @@
   min-inline-size: max-content;
   --cv-color-border: rgba(143, 220, 255, 0.22);
   --cv-color-surface: rgba(238, 245, 255, 0.052);
-  --cv-color-text: var(--task-list-demo-text);
-  --cv-color-primary: var(--task-list-demo-cyan);
-  --cv-color-success: var(--task-list-demo-green);
-  --cv-color-warning: var(--task-list-demo-amber);
+  --cv-color-text: var(--live-demo-text);
+  --cv-color-primary: var(--live-demo-cyan);
+  --cv-color-success: var(--live-demo-green);
+  --cv-color-warning: var(--live-demo-amber);
   --cv-badge-gap: 5px;
 }
 
@@ -251,7 +241,7 @@
   --cv-button-min-height: 34px;
   --cv-button-border-radius: 10px;
   --cv-button-padding-inline: 12px;
-  --cv-button-accent-color: var(--task-list-demo-cyan);
+  --cv-button-accent-color: var(--live-demo-cyan);
 }
 
 .task-list-demo-compact-row {
@@ -267,48 +257,48 @@
 }
 
 .task-list-demo-empty-content strong {
-  color: var(--task-list-demo-text);
+  color: var(--live-demo-text);
   font-size: 0.9rem;
   line-height: 1.3;
 }
 
 .task-list-demo-empty-content span {
-  color: var(--task-list-demo-soft);
+  color: var(--live-demo-soft);
   font-size: 0.78rem;
   line-height: 1.45;
 }
 
 @container (min-width: 640px) {
-.task-list-demo-hero {
+  .task-list-demo-hero {
     grid-template-columns: minmax(0, 1.08fr) minmax(220px, 0.68fr);
   }
 
-.task-list-demo-board {
+  .task-list-demo-board {
     grid-template-columns: minmax(0, 1fr) minmax(220px, 0.42fr);
   }
 
-.task-list-demo-metrics {
+  .task-list-demo-metrics {
     grid-template-columns: 1fr;
   }
 }
 
 @media (max-width: 640px) {
-.task-list-demo-hero,
+  .task-list-demo-hero,
   .task-list-demo-board {
     padding: 16px;
   }
 
-.task-list-demo-copy h3 {
+  .task-list-demo-copy h3 {
     font-size: 1.22rem;
   }
 
-.task-list-demo-row,
+  .task-list-demo-row,
   .task-list-demo-compact-row {
     grid-template-columns: 1fr;
     align-items: start;
   }
 
-.task-list-demo-row cv-badge,
+  .task-list-demo-row cv-badge,
   .task-list-demo-row cv-button,
   .task-list-demo-compact-row cv-badge {
     justify-self: start;
@@ -316,7 +306,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-.task-list-demo-shell cv-badge[pulse]::part(base) {
+  .task-list-demo-shell cv-badge[pulse]::part(base) {
     animation: none;
   }
 }

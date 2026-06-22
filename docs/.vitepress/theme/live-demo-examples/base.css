@@ -7,6 +7,18 @@
   --docs-surface-1: color-mix(in oklch, var(--cv-color-surface, #101722) 92%, #070b12);
   --docs-border: color-mix(in oklch, var(--cv-color-border, #2a3245) 72%, rgba(151, 218, 255, 0.12));
   --docs-text-muted: var(--cv-color-text-muted, rgba(190, 206, 226, 0.82));
+  --live-demo-text: #eef5ff;
+  --live-demo-muted: rgba(190, 206, 226, 0.76);
+  --live-demo-soft: rgba(190, 206, 226, 0.58);
+  --live-demo-panel: rgba(238, 245, 255, 0.052);
+  --live-demo-panel-strong: var(--cv-color-surface-secondary-glass);
+  --live-demo-border: rgba(118, 181, 222, 0.18);
+  --live-demo-border-strong: rgba(143, 220, 255, 0.28);
+  --live-demo-cyan: #65d7ff;
+  --live-demo-green: #5beba0;
+  --live-demo-amber: #ffc857;
+  --live-demo-red: #ff7d86;
+  --live-demo-violet: #b388ff;
 }
 
 .example-row {

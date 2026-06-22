@@ -6,17 +6,11 @@
   overflow: hidden;
   border: 1px solid var(--cv-color-border-faint);
   border-radius: var(--cv-radius-3);
-  color: var(--radio-demo-muted);
+  color: var(--live-demo-muted);
   background: var(--cv-gradient-subtle), var(--cv-gradient-surface-deep);
   box-shadow:
     inset 0 1px 0 var(--cv-alpha-white-4),
     0 18px 42px var(--cv-alpha-black-20);
-  --radio-demo-text: var(--cv-color-text);
-  --radio-demo-muted: var(--cv-color-text-muted);
-  --radio-demo-soft: var(--cv-color-text-subtle);
-  --radio-demo-panel: var(--cv-color-surface-glass-subtle);
-  --radio-demo-panel-strong: var(--cv-color-surface-secondary-glass-soft);
-  --radio-demo-border: var(--cv-color-border-faint);
 }
 
 .radio-demo-shell,
@@ -33,9 +27,9 @@
 .radio-demo-shell cv-radio-group {
   inline-size: 100%;
   min-inline-size: 0;
-  color: var(--radio-demo-text);
-  --cv-color-text: var(--radio-demo-text);
-  --cv-color-text-muted: var(--radio-demo-muted);
+  color: var(--live-demo-text);
+  --cv-color-text: var(--live-demo-text);
+  --cv-color-text-muted: var(--live-demo-muted);
   --cv-color-surface: var(--cv-color-surface-glass-subtle);
   --cv-color-border: var(--cv-color-border-muted);
   --cv-radio-group-gap: var(--cv-space-2);
@@ -43,8 +37,8 @@
 
 .radio-demo-shell cv-radio-group::part(base) {
   inline-size: 100%;
-  border-color: var(--radio-demo-border);
-  background: var(--radio-demo-panel);
+  border-color: var(--live-demo-border);
+  background: var(--live-demo-panel);
   box-shadow: inset 0 1px 0 var(--cv-alpha-white-4);
 }
 
@@ -91,7 +85,7 @@
 .radio-demo-shell cv-radio::part(description) {
   display: block;
   min-inline-size: 0;
-  color: var(--radio-demo-muted);
+  color: var(--live-demo-muted);
   font-size: 0.8rem;
   line-height: 1.45;
   overflow-wrap: anywhere;
@@ -118,7 +112,7 @@
 
 .radio-demo-hero,
 .radio-demo-workbench {
-  border-bottom: 1px solid var(--radio-demo-border);
+  border-bottom: 1px solid var(--live-demo-border);
 }
 
 .radio-demo-copy,
@@ -158,13 +152,13 @@
 .radio-demo-label,
 .radio-demo-metrics dt,
 .radio-demo-live dt {
-  color: var(--radio-demo-soft);
+  color: var(--live-demo-soft);
 }
 
 .radio-demo-copy h3,
 .radio-demo-section-header h4 {
   margin: 0;
-  color: var(--radio-demo-text);
+  color: var(--live-demo-text);
   font-family: var(--vp-font-family-base);
   letter-spacing: 0;
 }
@@ -186,7 +180,7 @@
 .radio-demo-copy p {
   max-inline-size: 72ch;
   margin: 0;
-  color: var(--radio-demo-muted);
+  color: var(--live-demo-muted);
   font-size: 0.92rem;
   line-height: 1.58;
 }
@@ -203,9 +197,9 @@
 .radio-demo-panel,
 .radio-demo-cell,
 .radio-demo-live > div {
-  border: 1px solid var(--radio-demo-border);
+  border: 1px solid var(--live-demo-border);
   border-radius: var(--cv-radius-2);
-  background: var(--cv-gradient-surface), var(--radio-demo-panel);
+  background: var(--cv-gradient-surface), var(--live-demo-panel);
 }
 
 .radio-demo-metrics div {
@@ -219,7 +213,7 @@
 .radio-demo-live dd {
   min-inline-size: 0;
   margin: 0;
-  color: var(--radio-demo-text);
+  color: var(--live-demo-text);
   line-height: 1.35;
   overflow-wrap: anywhere;
 }
@@ -243,12 +237,12 @@
 }
 
 .radio-demo-panel--primary {
-  background: var(--cv-gradient-surface-primary), var(--radio-demo-panel);
+  background: var(--cv-gradient-surface-primary), var(--live-demo-panel);
 }
 
 .radio-demo-panel--contract,
 .radio-demo-cell--muted {
-  background: var(--cv-gradient-surface-deep), var(--radio-demo-panel);
+  background: var(--cv-gradient-surface-deep), var(--live-demo-panel);
 }
 
 .radio-demo-panel-header {
@@ -260,7 +254,7 @@
 }
 
 .radio-demo-panel-header strong {
-  color: var(--radio-demo-text);
+  color: var(--live-demo-text);
   font-size: 0.96rem;
   line-height: 1.34;
   overflow-wrap: anywhere;
@@ -290,7 +284,7 @@
   border: 1px solid var(--cv-color-primary-border);
   border-radius: var(--cv-radius-2);
   background: var(--cv-color-primary-surface);
-  color: var(--radio-demo-text);
+  color: var(--live-demo-text);
   line-height: 1.45;
   overflow-wrap: anywhere;
   text-transform: none;
@@ -318,64 +312,64 @@
 }
 
 @container (min-width: 800px) {
-.radio-demo-hero {
+  .radio-demo-hero {
     grid-template-columns: minmax(0, 1.08fr) minmax(260px, 0.72fr);
   }
 
-.radio-demo-board {
+  .radio-demo-board {
     grid-template-columns: minmax(0, 1fr) minmax(260px, 0.42fr);
     align-items: stretch;
   }
 
-.radio-demo-metrics {
+  .radio-demo-metrics {
     grid-template-columns: 1fr;
   }
 }
 
 @media (hover: hover) {
-.radio-demo-shell cv-radio:not([disabled]):hover::part(base) {
+  .radio-demo-shell cv-radio:not([disabled]):hover::part(base) {
     border-color: var(--cv-color-primary-border-strong);
     background-color: var(--cv-color-primary-subtle);
   }
 }
 
 @media (max-width: 720px) {
-.radio-demo-state-grid {
+  .radio-demo-state-grid {
     grid-template-columns: 1fr;
   }
 
-.radio-demo-cell--wide {
+  .radio-demo-cell--wide {
     grid-column: auto;
   }
 }
 
 @media (max-width: 640px) {
-.radio-demo-hero,
+  .radio-demo-hero,
   .radio-demo-workbench,
   .radio-demo-section {
     padding: var(--cv-space-4);
   }
 
-.radio-demo-panel,
+  .radio-demo-panel,
   .radio-demo-cell {
     padding: var(--cv-space-3);
   }
 
-.radio-demo-panel-header {
+  .radio-demo-panel-header {
     grid-template-columns: 1fr;
   }
 
-.radio-demo-panel-header cv-badge {
+  .radio-demo-panel-header cv-badge {
     justify-self: start;
   }
 
-.radio-demo-shell cv-radio[variant='segmented']::part(base) {
+  .radio-demo-shell cv-radio[variant='segmented']::part(base) {
     min-inline-size: min(100%, 132px);
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-.radio-demo-shell cv-radio::part(base) {
+  .radio-demo-shell cv-radio::part(base) {
     transition: none;
   }
 }

@@ -7,12 +7,7 @@
   overflow: hidden;
   border: 1px solid rgba(118, 181, 222, 0.18);
   border-radius: 16px;
-  color: var(--image-viewer-demo-muted);
-  --image-viewer-demo-text: #eef5ff;
-  --image-viewer-demo-muted: rgba(190, 206, 226, 0.76);
-  --image-viewer-demo-soft: rgba(190, 206, 226, 0.58);
-  --image-viewer-demo-panel: rgba(238, 245, 255, 0.052);
-  --image-viewer-demo-border: rgba(118, 181, 222, 0.18);
+  color: var(--live-demo-muted);
   background:
     linear-gradient(180deg, rgba(12, 20, 32, 0.98), rgba(7, 13, 22, 0.98)),
     radial-gradient(circle at 12% 0%, rgba(101, 215, 255, 0.1), transparent 36%),
@@ -81,7 +76,7 @@
 .image-viewer-demo-copy h3 {
   max-width: 24ch;
   margin: 0;
-  color: var(--image-viewer-demo-text);
+  color: var(--live-demo-text);
   font-size: clamp(1.2rem, 5cqi, 1.58rem);
   line-height: 1.1;
   letter-spacing: 0;
@@ -91,7 +86,7 @@
 .image-viewer-demo-copy p {
   max-width: 62ch;
   margin: 0;
-  color: var(--image-viewer-demo-muted);
+  color: var(--live-demo-muted);
   font-size: 0.92rem;
   line-height: 1.58;
 }
@@ -122,11 +117,11 @@
   gap: 10px;
   min-inline-size: 0;
   padding: 10px;
-  border: 1px solid var(--image-viewer-demo-border);
+  border: 1px solid var(--live-demo-border);
   border-radius: 12px;
   background:
-    linear-gradient(180deg, var(--image-viewer-demo-panel), rgba(238, 245, 255, 0.026)), rgba(7, 13, 22, 0.32);
-  color: var(--image-viewer-demo-text);
+    linear-gradient(180deg, var(--live-demo-panel), rgba(238, 245, 255, 0.026)), rgba(7, 13, 22, 0.32);
+  color: var(--live-demo-text);
   cursor: pointer;
   font: inherit;
   text-align: start;
@@ -150,7 +145,7 @@
 .image-viewer-demo-shot span {
   min-inline-size: 0;
   overflow-wrap: anywhere;
-  color: var(--image-viewer-demo-text);
+  color: var(--live-demo-text);
   font-size: 0.84rem;
   font-weight: 600;
   line-height: 1.35;
@@ -162,7 +157,7 @@
 }
 
 @media (hover: hover) {
-.image-viewer-demo-shot:hover {
+  .image-viewer-demo-shot:hover {
     border-color: rgba(157, 231, 255, 0.68);
     background: rgba(101, 215, 255, 0.08);
     transform: translateY(-1px);
@@ -170,23 +165,23 @@
 }
 
 @container (min-width: 760px) {
-.image-viewer-demo-launch {
+  .image-viewer-demo-launch {
     grid-template-columns: minmax(0, 0.92fr) minmax(300px, 1fr);
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-.image-viewer-demo-shot {
+  .image-viewer-demo-shot {
     transition: none;
   }
 }
 
 @media (max-width: 640px) {
-.image-viewer-demo-launch {
+  .image-viewer-demo-launch {
     padding: 16px;
   }
 
-.image-viewer-demo-actions {
+  .image-viewer-demo-actions {
     grid-template-columns: 1fr;
   }
 }

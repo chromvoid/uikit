@@ -6,15 +6,7 @@
   overflow: hidden;
   border: 1px solid rgba(118, 181, 222, 0.18);
   border-radius: 16px;
-  color: var(--treeview-demo-muted);
-  --treeview-demo-text: #eef5ff;
-  --treeview-demo-muted: rgba(190, 206, 226, 0.76);
-  --treeview-demo-soft: rgba(190, 206, 226, 0.58);
-  --treeview-demo-panel: rgba(238, 245, 255, 0.052);
-  --treeview-demo-border: rgba(118, 181, 222, 0.18);
-  --treeview-demo-cyan: #65d7ff;
-  --treeview-demo-green: #5beba0;
-  --treeview-demo-violet: #b388ff;
+  color: var(--live-demo-muted);
   background:
     linear-gradient(180deg, rgba(12, 20, 32, 0.98), rgba(7, 13, 22, 0.98)),
     linear-gradient(135deg, rgba(101, 215, 255, 0.07), transparent 44%),
@@ -40,7 +32,7 @@
 .treeview-demo-hero {
   grid-template-columns: 1fr;
   align-items: stretch;
-  border-bottom: 1px solid var(--treeview-demo-border);
+  border-bottom: 1px solid var(--live-demo-border);
 }
 
 .treeview-demo-copy,
@@ -67,14 +59,14 @@
 
 .treeview-demo-label,
 .treeview-demo-metrics dt {
-  color: var(--treeview-demo-soft);
+  color: var(--live-demo-soft);
 }
 
 .treeview-demo-copy h3,
 .treeview-demo-section-header h4,
 .treeview-demo-panel-header h5 {
   margin: 0;
-  color: var(--treeview-demo-text);
+  color: var(--live-demo-text);
   letter-spacing: 0;
 }
 
@@ -94,7 +86,7 @@
 .treeview-demo-copy p {
   max-inline-size: 66ch;
   margin: 0;
-  color: var(--treeview-demo-muted);
+  color: var(--live-demo-muted);
   font-size: 0.92rem;
   line-height: 1.58;
 }
@@ -112,16 +104,16 @@
   gap: 4px;
   min-inline-size: 0;
   padding: 16px;
-  border: 1px solid var(--treeview-demo-border);
+  border: 1px solid var(--live-demo-border);
   border-radius: 12px;
   background:
-    linear-gradient(180deg, var(--treeview-demo-panel), rgba(238, 245, 255, 0.026)), rgba(7, 13, 22, 0.32);
+    linear-gradient(180deg, var(--live-demo-panel), rgba(238, 245, 255, 0.026)), rgba(7, 13, 22, 0.32);
 }
 
 .treeview-demo-metrics dd {
   min-inline-size: 0;
   margin: 0;
-  color: var(--treeview-demo-text);
+  color: var(--live-demo-text);
   font-size: 0.9rem;
   line-height: 1.35;
   overflow-wrap: anywhere;
@@ -140,10 +132,10 @@
   gap: 14px;
   min-inline-size: 0;
   padding: 16px;
-  border: 1px solid var(--treeview-demo-border);
+  border: 1px solid var(--live-demo-border);
   border-radius: 14px;
   background:
-    linear-gradient(180deg, var(--treeview-demo-panel), rgba(238, 245, 255, 0.026)), rgba(7, 13, 22, 0.38);
+    linear-gradient(180deg, var(--live-demo-panel), rgba(238, 245, 255, 0.026)), rgba(7, 13, 22, 0.38);
 }
 
 .treeview-demo-panel-header {
@@ -169,11 +161,11 @@
 .treeview-demo-shell cv-treeview {
   min-inline-size: 0;
   --cv-color-border: rgba(143, 220, 255, 0.2);
-  --cv-color-primary: var(--treeview-demo-cyan);
+  --cv-color-primary: var(--live-demo-cyan);
   --cv-color-primary-border: rgba(101, 215, 255, 0.18);
   --cv-color-primary-ring: rgba(101, 215, 255, 0.12);
   --cv-color-surface: rgba(8, 14, 23, 0.62);
-  --cv-color-text: var(--treeview-demo-text);
+  --cv-color-text: var(--live-demo-text);
   --cv-radius-md: 14px;
   --cv-radius-sm: 10px;
   --cv-space-1: 5px;
@@ -215,7 +207,7 @@
   align-items: center;
   min-inline-size: 0;
   max-inline-size: 100%;
-  color: var(--treeview-demo-text);
+  color: var(--live-demo-text);
 }
 
 .treeview-demo-node-copy {
@@ -232,13 +224,13 @@
 }
 
 .treeview-demo-node strong {
-  color: var(--treeview-demo-text);
+  color: var(--live-demo-text);
   font-size: 0.9rem;
   line-height: 1.28;
 }
 
 .treeview-demo-node small {
-  color: var(--treeview-demo-soft);
+  color: var(--live-demo-soft);
   font-family: var(--vp-font-family-mono);
   font-size: 0.7rem;
   line-height: 1.22;
@@ -281,7 +273,7 @@
   --cv-badge-font-size: 11px;
   --cv-color-border: rgba(143, 220, 255, 0.22);
   --cv-color-surface: rgba(238, 245, 255, 0.052);
-  --cv-color-success: var(--treeview-demo-green);
+  --cv-color-success: var(--live-demo-green);
   --cv-color-warning: #ffc857;
 }
 
@@ -324,60 +316,60 @@
 }
 
 @container (min-width: 760px) {
-.treeview-demo-hero {
+  .treeview-demo-hero {
     grid-template-columns: minmax(0, 1.06fr) minmax(260px, 0.72fr);
   }
 
-.treeview-demo-metrics {
+  .treeview-demo-metrics {
     grid-template-columns: 1fr;
   }
 
-.treeview-demo-layout {
+  .treeview-demo-layout {
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   }
 }
 
 @media (hover: hover) {
-.treeview-demo-shell cv-treeitem:not([disabled]):hover::part(row) {
+  .treeview-demo-shell cv-treeitem:not([disabled]):hover::part(row) {
     background: rgba(101, 215, 255, 0.08);
   }
 }
 
 @media (max-width: 640px) {
-.treeview-demo-hero,
+  .treeview-demo-hero,
   .treeview-demo-workbench {
     padding: 16px;
   }
 
-.treeview-demo-metrics {
+  .treeview-demo-metrics {
     grid-template-columns: 1fr;
   }
 
-.treeview-demo-panel-header {
+  .treeview-demo-panel-header {
     grid-template-columns: 1fr;
   }
 
-.treeview-demo-shell cv-badge {
+  .treeview-demo-shell cv-badge {
     justify-self: start;
   }
 
-.treeview-demo-node {
+  .treeview-demo-node {
     grid-template-columns: auto minmax(0, 1fr);
   }
 
-.treeview-demo-node cv-badge {
+  .treeview-demo-node cv-badge {
     grid-column: 2;
     justify-self: start;
   }
 
-.treeview-demo-node strong,
+  .treeview-demo-node strong,
   .treeview-demo-node small {
     white-space: normal;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-.treeview-demo-shell cv-treeitem::part(row) {
+  .treeview-demo-shell cv-treeitem::part(row) {
     transition: none;
   }
 }

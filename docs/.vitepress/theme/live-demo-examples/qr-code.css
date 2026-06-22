@@ -180,28 +180,28 @@
 }
 
 @container (max-width: 560px) {
-.qr-demo-hero {
+  .qr-demo-hero {
     grid-template-columns: 1fr;
   }
 
-.qr-demo-copy h3,
+  .qr-demo-copy h3,
   .qr-demo-copy p {
     max-inline-size: none;
   }
 
-.qr-demo-featured {
+  .qr-demo-featured {
     --cv-qr-code-size: clamp(148px, 46cqi, 188px);
   }
 }
 
 @container (min-width: 760px) {
-.qr-demo-board {
+  .qr-demo-board {
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 }
 
 @container (max-width: 420px) {
-.qr-demo-board {
+  .qr-demo-board {
     grid-template-columns: 1fr;
   }
 }

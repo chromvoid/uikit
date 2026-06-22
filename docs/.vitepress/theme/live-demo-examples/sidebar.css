@@ -22,12 +22,7 @@
   overflow: hidden;
   border: 1px solid rgba(118, 181, 222, 0.18);
   border-radius: 16px;
-  color: var(--sidebar-demo-muted);
-  --sidebar-demo-text: #eef5ff;
-  --sidebar-demo-muted: rgba(190, 206, 226, 0.76);
-  --sidebar-demo-soft: rgba(190, 206, 226, 0.58);
-  --sidebar-demo-panel: rgba(238, 245, 255, 0.052);
-  --sidebar-demo-border: rgba(118, 181, 222, 0.18);
+  color: var(--live-demo-muted);
   background:
     linear-gradient(180deg, rgba(12, 20, 32, 0.98), rgba(7, 13, 22, 0.98)),
     radial-gradient(circle at 10% 0%, rgba(101, 215, 255, 0.1), transparent 36%),
@@ -75,10 +70,10 @@
   display: block;
   min-inline-size: 0;
   block-size: 100%;
-  color: var(--sidebar-demo-text);
+  color: var(--live-demo-text);
   --cv-color-primary: #65d7ff;
-  --cv-color-text: var(--sidebar-demo-text);
-  --cv-color-text-muted: var(--sidebar-demo-muted);
+  --cv-color-text: var(--live-demo-text);
+  --cv-color-text-muted: var(--live-demo-muted);
   --cv-color-surface: rgba(8, 14, 23, 0.96);
   --cv-color-border: rgba(143, 220, 255, 0.24);
   --cv-sidebar-background: linear-gradient(180deg, rgba(12, 20, 32, 0.98), rgba(8, 14, 23, 0.98));
@@ -164,7 +159,7 @@
   align-items: center;
   gap: 8px;
   min-inline-size: 0;
-  color: var(--sidebar-demo-text);
+  color: var(--live-demo-text);
 }
 
 .sidebar-demo-brand {
@@ -181,7 +176,7 @@
 }
 
 .sidebar-demo-status {
-  color: var(--sidebar-demo-soft);
+  color: var(--live-demo-soft);
   font-family: var(--vp-font-family-mono);
   font-size: 0.72rem;
   text-transform: uppercase;
@@ -217,7 +212,7 @@
 
 .sidebar-demo-label,
 .sidebar-demo-proof-list dt {
-  color: var(--sidebar-demo-soft);
+  color: var(--live-demo-soft);
 }
 
 .sidebar-demo-workspace h3,
@@ -225,7 +220,7 @@
 .sidebar-demo-overlay-copy h3 {
   max-inline-size: 24ch;
   margin: 0;
-  color: var(--sidebar-demo-text);
+  color: var(--live-demo-text);
   font-family: var(--vp-font-family-base);
   font-size: clamp(1.2rem, 5cqi, 1.55rem);
   line-height: 1.1;
@@ -238,7 +233,7 @@
 .sidebar-demo-overlay-copy p {
   max-inline-size: 62ch;
   margin: 0;
-  color: var(--sidebar-demo-muted);
+  color: var(--live-demo-muted);
   font-size: 0.92rem;
   line-height: 1.58;
 }
@@ -262,7 +257,7 @@
 .sidebar-demo-proof-list dd {
   min-inline-size: 0;
   margin: 0;
-  color: var(--sidebar-demo-text);
+  color: var(--live-demo-text);
   font-size: 0.88rem;
   line-height: 1.35;
 }
@@ -279,7 +274,7 @@
 }
 
 .sidebar-demo-mechanism strong {
-  color: var(--sidebar-demo-text);
+  color: var(--live-demo-text);
   font-size: 0.9rem;
   line-height: 1.45;
 }
@@ -353,14 +348,14 @@
 }
 
 @starting-style {
-.sidebar-demo-overlay-trigger:not([hidden]) {
+  .sidebar-demo-overlay-trigger:not([hidden]) {
     opacity: 0;
     transform: scale(0.94);
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-.sidebar-demo-overlay-trigger,
+  .sidebar-demo-overlay-trigger,
   .sidebar-demo-toggle-glyph,
   .sidebar-demo-close-glyph {
     transition: none;
@@ -378,27 +373,27 @@
 }
 
 @container (max-width: 500px) {
-.sidebar-demo-shell cv-sidebar {
+  .sidebar-demo-shell cv-sidebar {
     --cv-sidebar-inline-size: 100%;
   }
 
-.sidebar-demo-proof-list {
+  .sidebar-demo-proof-list {
     grid-template-columns: 1fr;
   }
 
-.sidebar-demo-overlay-copy {
+  .sidebar-demo-overlay-copy {
     inline-size: min(100%, 24ch);
   }
 }
 
 @media (max-width: 640px) {
-.sidebar-demo-workspace,
+  .sidebar-demo-workspace,
   .sidebar-demo-rail-copy,
   .sidebar-demo-overlay-copy {
     padding: 16px;
   }
 
-.sidebar-demo-shell,
+  .sidebar-demo-shell,
   .sidebar-demo-rail,
   .sidebar-demo-overlay {
     border-radius: 14px;
@@ -406,11 +401,11 @@
 }
 
 @media (max-width: 500px) {
-.sidebar-demo-shell {
+  .sidebar-demo-shell {
     grid-template-columns: 1fr;
   }
 
-.sidebar-demo-shell cv-sidebar {
+  .sidebar-demo-shell cv-sidebar {
     --cv-sidebar-inline-size: 100%;
   }
 }

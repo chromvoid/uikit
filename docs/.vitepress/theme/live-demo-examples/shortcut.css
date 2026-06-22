@@ -6,14 +6,7 @@
   overflow: hidden;
   border: 1px solid rgba(118, 181, 222, 0.18);
   border-radius: 16px;
-  color: var(--shortcut-demo-muted);
-  --shortcut-demo-text: #eef5ff;
-  --shortcut-demo-muted: rgba(190, 206, 226, 0.76);
-  --shortcut-demo-soft: rgba(190, 206, 226, 0.58);
-  --shortcut-demo-panel: rgba(238, 245, 255, 0.052);
-  --shortcut-demo-border: rgba(118, 181, 222, 0.18);
-  --shortcut-demo-cyan: #65d7ff;
-  --shortcut-demo-violet: #b388ff;
+  color: var(--live-demo-muted);
   background:
     linear-gradient(180deg, rgba(12, 20, 32, 0.98), rgba(7, 13, 22, 0.98)),
     linear-gradient(135deg, rgba(101, 215, 255, 0.075), transparent 45%),
@@ -65,7 +58,7 @@
 }
 
 .shortcut-demo-hero {
-  border-bottom: 1px solid var(--shortcut-demo-border);
+  border-bottom: 1px solid var(--live-demo-border);
 }
 
 .shortcut-demo-copy,
@@ -102,13 +95,13 @@
 
 .shortcut-demo-label,
 .shortcut-demo-metrics dt {
-  color: var(--shortcut-demo-soft);
+  color: var(--live-demo-soft);
 }
 
 .shortcut-demo-copy h3,
 .shortcut-demo-section-header h4 {
   margin: 0;
-  color: var(--shortcut-demo-text);
+  color: var(--live-demo-text);
   font-family: var(--vp-font-family-base);
   letter-spacing: 0;
 }
@@ -130,7 +123,7 @@
 .shortcut-demo-context p {
   max-inline-size: 68ch;
   margin: 0;
-  color: var(--shortcut-demo-muted);
+  color: var(--live-demo-muted);
   font-size: 0.92rem;
   line-height: 1.58;
 }
@@ -146,10 +139,10 @@
 .shortcut-demo-metrics div,
 .shortcut-demo-command-panel,
 .shortcut-demo-context {
-  border: 1px solid var(--shortcut-demo-border);
+  border: 1px solid var(--live-demo-border);
   border-radius: 14px;
   background:
-    linear-gradient(180deg, var(--shortcut-demo-panel), rgba(238, 245, 255, 0.026)), rgba(7, 13, 22, 0.32);
+    linear-gradient(180deg, var(--live-demo-panel), rgba(238, 245, 255, 0.026)), rgba(7, 13, 22, 0.32);
 }
 
 .shortcut-demo-metrics div {
@@ -162,7 +155,7 @@
 .shortcut-demo-metrics dd {
   min-inline-size: 0;
   margin: 0;
-  color: var(--shortcut-demo-text);
+  color: var(--live-demo-text);
   font-size: 0.9rem;
   line-height: 1.35;
   overflow-wrap: anywhere;
@@ -201,7 +194,7 @@
 
 .shortcut-demo-platforms button:focus-visible,
 .shortcut-demo-command:focus-visible {
-  outline: 2px solid var(--shortcut-demo-cyan);
+  outline: 2px solid var(--live-demo-cyan);
   outline-offset: 2px;
 }
 
@@ -246,7 +239,7 @@
 
 .shortcut-demo-panel-header strong {
   min-inline-size: 0;
-  color: var(--shortcut-demo-text);
+  color: var(--live-demo-text);
   font-size: 0.94rem;
   line-height: 1.32;
   overflow-wrap: anywhere;
@@ -309,7 +302,7 @@
 .shortcut-demo-command-copy strong,
 .shortcut-demo-programmatic span {
   min-inline-size: 0;
-  color: var(--shortcut-demo-text);
+  color: var(--live-demo-text);
   font-size: 0.9rem;
   font-weight: 650;
   line-height: 1.32;
@@ -318,7 +311,7 @@
 
 .shortcut-demo-command-copy span {
   min-inline-size: 0;
-  color: var(--shortcut-demo-muted);
+  color: var(--live-demo-muted);
   font-size: 0.8rem;
   line-height: 1.42;
   overflow-wrap: anywhere;
@@ -361,24 +354,24 @@
 }
 
 @container (min-width: 560px) {
-.shortcut-demo-hero {
+  .shortcut-demo-hero {
     grid-template-columns: minmax(0, 1.08fr) minmax(240px, 0.72fr);
   }
 
-.shortcut-demo-metrics {
+  .shortcut-demo-metrics {
     grid-template-columns: 1fr;
   }
 }
 
 @container (min-width: 760px) {
-.shortcut-demo-grid {
+  .shortcut-demo-grid {
     grid-template-columns: minmax(0, 1fr) minmax(220px, 0.42fr);
     align-items: start;
   }
 }
 
 @media (hover: hover) {
-.shortcut-demo-platforms button:hover,
+  .shortcut-demo-platforms button:hover,
   .shortcut-demo-command:hover {
     border-color: rgba(101, 215, 255, 0.36);
     background-color: rgba(101, 215, 255, 0.075);
@@ -386,32 +379,32 @@
 }
 
 @media (max-width: 520px) {
-.shortcut-demo-hero,
+  .shortcut-demo-hero,
   .shortcut-demo-workbench {
     padding: 16px;
   }
 
-.shortcut-demo-copy h3 {
+  .shortcut-demo-copy h3 {
     font-size: 1.22rem;
   }
 
-.shortcut-demo-command-panel,
+  .shortcut-demo-command-panel,
   .shortcut-demo-context {
     padding: 12px;
   }
 
-.shortcut-demo-panel-header,
+  .shortcut-demo-panel-header,
   .shortcut-demo-command,
   .shortcut-demo-programmatic {
     grid-template-columns: 1fr;
     align-items: start;
   }
 
-.shortcut-demo-command {
+  .shortcut-demo-command {
     min-block-size: 0;
   }
 
-.shortcut-demo-command-glyph {
+  .shortcut-demo-command-glyph {
     inline-size: 30px;
     block-size: 30px;
   }

@@ -6,17 +6,7 @@
   overflow: hidden;
   border: 1px solid rgba(118, 181, 222, 0.18);
   border-radius: 16px;
-  color: var(--callout-demo-muted);
-  --callout-demo-text: #eef5ff;
-  --callout-demo-muted: rgba(190, 206, 226, 0.76);
-  --callout-demo-soft: rgba(190, 206, 226, 0.58);
-  --callout-demo-panel: rgba(238, 245, 255, 0.052);
-  --callout-demo-border: rgba(118, 181, 222, 0.18);
-  --callout-demo-cyan: #65d7ff;
-  --callout-demo-green: #5beba0;
-  --callout-demo-amber: #ffc857;
-  --callout-demo-red: #ff7d86;
-  --callout-demo-violet: #b388ff;
+  color: var(--live-demo-muted);
   background:
     linear-gradient(180deg, rgba(12, 20, 32, 0.98), rgba(7, 13, 22, 0.98)),
     linear-gradient(135deg, rgba(101, 215, 255, 0.085), transparent 42%),
@@ -40,7 +30,7 @@
 }
 
 .callout-demo-hero {
-  border-bottom: 1px solid var(--callout-demo-border);
+  border-bottom: 1px solid var(--live-demo-border);
 }
 
 .callout-demo-copy,
@@ -70,7 +60,7 @@
 .callout-demo-copy h3,
 .callout-demo-section-header h4 {
   margin: 0;
-  color: var(--callout-demo-text);
+  color: var(--live-demo-text);
   letter-spacing: 0;
 }
 
@@ -91,7 +81,7 @@
 .callout-demo-copy p {
   max-inline-size: 68ch;
   margin: 0;
-  color: var(--callout-demo-muted);
+  color: var(--live-demo-muted);
   font-size: 0.92rem;
   line-height: 1.58;
 }
@@ -113,10 +103,10 @@
 .callout-demo-metrics div,
 .callout-demo-side,
 .callout-demo-stack {
-  border: 1px solid var(--callout-demo-border);
+  border: 1px solid var(--live-demo-border);
   border-radius: 14px;
   background:
-    linear-gradient(180deg, var(--callout-demo-panel), rgba(238, 245, 255, 0.026)), rgba(7, 13, 22, 0.32);
+    linear-gradient(180deg, var(--live-demo-panel), rgba(238, 245, 255, 0.026)), rgba(7, 13, 22, 0.32);
 }
 
 .callout-demo-metrics div {
@@ -127,13 +117,13 @@
 }
 
 .callout-demo-metrics dt {
-  color: var(--callout-demo-soft);
+  color: var(--live-demo-soft);
 }
 
 .callout-demo-metrics dd {
   min-inline-size: 0;
   margin: 0;
-  color: var(--callout-demo-text);
+  color: var(--live-demo-text);
   font-size: 0.9rem;
   line-height: 1.35;
   overflow-wrap: anywhere;
@@ -161,7 +151,7 @@
   flex-wrap: wrap;
   gap: 8px;
   min-inline-size: 0;
-  color: var(--callout-demo-soft);
+  color: var(--live-demo-soft);
 }
 
 .callout-demo-shell cv-callout {
@@ -173,10 +163,10 @@
   --cv-color-border: rgba(143, 220, 255, 0.2);
   --cv-color-surface-elevated: rgba(12, 20, 32, 0.92);
   --cv-color-text: rgba(238, 245, 255, 0.9);
-  --cv-color-info: var(--callout-demo-cyan);
-  --cv-color-success: var(--callout-demo-green);
-  --cv-color-warning: var(--callout-demo-amber);
-  --cv-color-danger: var(--callout-demo-red);
+  --cv-color-info: var(--live-demo-cyan);
+  --cv-color-success: var(--live-demo-green);
+  --cv-color-warning: var(--live-demo-amber);
+  --cv-color-danger: var(--live-demo-red);
 }
 
 .callout-demo-shell cv-callout::part(base) {
@@ -293,50 +283,50 @@
 }
 
 @container (min-width: 760px) {
-.callout-demo-hero {
+  .callout-demo-hero {
     grid-template-columns: minmax(0, 1.06fr) minmax(260px, 0.72fr);
   }
 
-.callout-demo-metrics {
+  .callout-demo-metrics {
     grid-template-columns: 1fr;
   }
 
-.callout-demo-layout {
+  .callout-demo-layout {
     grid-template-columns: minmax(0, 1fr) minmax(250px, 0.44fr);
   }
 }
 
 @media (hover: hover) {
-.callout-demo-shell cv-callout::part(close-button):hover {
+  .callout-demo-shell cv-callout::part(close-button):hover {
     background: rgba(238, 245, 255, 0.08);
     color: #f4fbff;
   }
 
-.callout-demo-restore:hover {
+  .callout-demo-restore:hover {
     border-color: rgba(101, 215, 255, 0.58);
     background: rgba(101, 215, 255, 0.13);
   }
 }
 
 @media (max-width: 640px) {
-.callout-demo-hero,
+  .callout-demo-hero,
   .callout-demo-workbench {
     padding: 16px;
   }
 
-.callout-demo-metrics,
+  .callout-demo-metrics,
   .callout-demo-layout {
     grid-template-columns: 1fr;
   }
 
-.callout-demo-stack,
+  .callout-demo-stack,
   .callout-demo-side {
     padding: 12px;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-.callout-demo-shell cv-callout::part(close-button),
+  .callout-demo-shell cv-callout::part(close-button),
   .callout-demo-restore {
     transition: none;
   }

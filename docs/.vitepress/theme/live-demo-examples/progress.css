@@ -6,16 +6,7 @@
   overflow: hidden;
   border: 1px solid rgba(118, 181, 222, 0.18);
   border-radius: 16px;
-  color: var(--progress-demo-muted);
-  --progress-demo-text: #eef5ff;
-  --progress-demo-muted: rgba(190, 206, 226, 0.76);
-  --progress-demo-soft: rgba(190, 206, 226, 0.58);
-  --progress-demo-panel: rgba(238, 245, 255, 0.052);
-  --progress-demo-border: rgba(118, 181, 222, 0.18);
-  --progress-demo-cyan: #65d7ff;
-  --progress-demo-green: #5beba0;
-  --progress-demo-amber: #ffc857;
-  --progress-demo-red: #ff7d86;
+  color: var(--live-demo-muted);
   background:
     linear-gradient(180deg, rgba(12, 20, 32, 0.98), rgba(7, 13, 22, 0.98)),
     linear-gradient(135deg, rgba(101, 215, 255, 0.08), transparent 44%),
@@ -47,7 +38,7 @@
 
 .progress-demo-hero,
 .progress-demo-workbench {
-  border-bottom: 1px solid var(--progress-demo-border);
+  border-bottom: 1px solid var(--live-demo-border);
 }
 
 .progress-demo-copy,
@@ -92,7 +83,7 @@
 .progress-demo-panel-head h4,
 .progress-demo-section-header h4 {
   margin: 0;
-  color: var(--progress-demo-text);
+  color: var(--live-demo-text);
   font-family: var(--vp-font-family-base);
   letter-spacing: 0;
 }
@@ -115,7 +106,7 @@
 .progress-demo-copy p {
   max-inline-size: 70ch;
   margin: 0;
-  color: var(--progress-demo-muted);
+  color: var(--live-demo-muted);
   font-size: 0.92rem;
   line-height: 1.58;
 }
@@ -132,10 +123,10 @@
 .progress-demo-panel,
 .progress-demo-queue,
 .progress-demo-tone {
-  border: 1px solid var(--progress-demo-border);
+  border: 1px solid var(--live-demo-border);
   border-radius: 14px;
   background:
-    linear-gradient(180deg, var(--progress-demo-panel), rgba(238, 245, 255, 0.026)), rgba(7, 13, 22, 0.32);
+    linear-gradient(180deg, var(--live-demo-panel), rgba(238, 245, 255, 0.026)), rgba(7, 13, 22, 0.32);
 }
 
 .progress-demo-metrics div {
@@ -150,13 +141,13 @@
 .progress-demo-proof-grid span,
 .progress-demo-step span,
 .progress-demo-tone span {
-  color: var(--progress-demo-soft);
+  color: var(--live-demo-soft);
 }
 
 .progress-demo-metrics dd {
   min-inline-size: 0;
   margin: 0;
-  color: var(--progress-demo-text);
+  color: var(--live-demo-text);
   font-size: 0.9rem;
   line-height: 1.35;
   overflow-wrap: anywhere;
@@ -191,7 +182,7 @@
 }
 
 .progress-demo-panel-head cv-badge {
-  --cv-color-primary: var(--progress-demo-cyan);
+  --cv-color-primary: var(--live-demo-cyan);
 }
 
 .progress-demo-progress-label {
@@ -206,7 +197,7 @@
 .progress-demo-proof-grid strong,
 .progress-demo-step strong {
   min-inline-size: 0;
-  color: var(--progress-demo-text);
+  color: var(--live-demo-text);
   font-size: 0.92rem;
   line-height: 1.35;
   overflow-wrap: anywhere;
@@ -221,7 +212,7 @@
 .progress-demo-shell cv-progress {
   --cv-progress-height: 8px;
   --cv-progress-track-color: rgba(238, 245, 255, 0.055);
-  --cv-progress-label-color: var(--progress-demo-text);
+  --cv-progress-label-color: var(--live-demo-text);
   inline-size: 100%;
   min-inline-size: 0;
 }
@@ -242,15 +233,15 @@
 }
 
 .progress-demo-shell cv-progress[tone='success'] {
-  --cv-progress-tone-success-background: linear-gradient(135deg, var(--progress-demo-green), #65d7ff);
+  --cv-progress-tone-success-background: linear-gradient(135deg, var(--live-demo-green), #65d7ff);
 }
 
 .progress-demo-shell cv-progress[tone='warning'] {
-  --cv-progress-tone-warning-background: linear-gradient(135deg, var(--progress-demo-amber), #65d7ff);
+  --cv-progress-tone-warning-background: linear-gradient(135deg, var(--live-demo-amber), #65d7ff);
 }
 
 .progress-demo-shell cv-progress[tone='danger'] {
-  --cv-progress-tone-danger-background: linear-gradient(135deg, var(--progress-demo-red), #ffc857);
+  --cv-progress-tone-danger-background: linear-gradient(135deg, var(--live-demo-red), #ffc857);
 }
 
 .progress-demo-shell .progress-demo-main-progress {
@@ -318,41 +309,41 @@
 }
 
 @container (min-width: 760px) {
-.progress-demo-hero {
+  .progress-demo-hero {
     grid-template-columns: minmax(0, 1.08fr) minmax(260px, 0.72fr);
   }
 
-.progress-demo-workbench {
+  .progress-demo-workbench {
     grid-template-columns: minmax(0, 1fr) minmax(240px, 0.45fr);
   }
 
-.progress-demo-metrics {
+  .progress-demo-metrics {
     grid-template-columns: 1fr;
   }
 }
 
 @media (max-width: 640px) {
-.progress-demo-hero,
+  .progress-demo-hero,
   .progress-demo-workbench,
   .progress-demo-tones {
     padding: 16px;
   }
 
-.progress-demo-panel,
+  .progress-demo-panel,
   .progress-demo-queue {
     padding: 12px;
   }
 
-.progress-demo-panel-head,
+  .progress-demo-panel-head,
   .progress-demo-proof-grid {
     grid-template-columns: 1fr;
   }
 
-.progress-demo-panel-head cv-badge {
+  .progress-demo-panel-head cv-badge {
     justify-self: start;
   }
 
-.progress-demo-progress-label {
+  .progress-demo-progress-label {
     align-items: start;
     flex-direction: column;
     gap: 5px;
@@ -360,7 +351,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-.progress-demo-shell cv-progress::part(indicator) {
+  .progress-demo-shell cv-progress::part(indicator) {
     transition-duration: 1ms;
   }
 }

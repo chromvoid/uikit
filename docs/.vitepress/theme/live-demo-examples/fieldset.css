@@ -36,17 +36,7 @@
   overflow: hidden;
   border: 1px solid rgba(118, 181, 222, 0.18);
   border-radius: 16px;
-  color: var(--fieldset-demo-muted);
-  --fieldset-demo-text: #eef5ff;
-  --fieldset-demo-muted: rgba(190, 206, 226, 0.76);
-  --fieldset-demo-soft: rgba(190, 206, 226, 0.58);
-  --fieldset-demo-panel: rgba(238, 245, 255, 0.052);
-  --fieldset-demo-border: rgba(118, 181, 222, 0.18);
-  --fieldset-demo-cyan: #65d7ff;
-  --fieldset-demo-green: #5beba0;
-  --fieldset-demo-amber: #ffc857;
-  --fieldset-demo-red: #ff7d86;
-  --fieldset-demo-violet: #b388ff;
+  color: var(--live-demo-muted);
   background:
     linear-gradient(180deg, rgba(12, 20, 32, 0.98), rgba(7, 13, 22, 0.98)),
     linear-gradient(135deg, rgba(101, 215, 255, 0.08), transparent 43%),
@@ -72,7 +62,7 @@
 
 .fieldset-demo-hero,
 .fieldset-demo-board {
-  border-bottom: 1px solid var(--fieldset-demo-border);
+  border-bottom: 1px solid var(--live-demo-border);
 }
 
 .fieldset-demo-copy,
@@ -107,13 +97,13 @@
 
 .fieldset-demo-label,
 .fieldset-demo-metrics dt {
-  color: var(--fieldset-demo-soft);
+  color: var(--live-demo-soft);
 }
 
 .fieldset-demo-copy h3,
 .fieldset-demo-section-header h4 {
   margin: 0;
-  color: var(--fieldset-demo-text);
+  color: var(--live-demo-text);
   font-family: var(--vp-font-family-base);
   letter-spacing: 0;
 }
@@ -135,7 +125,7 @@
 .fieldset-demo-copy p {
   max-inline-size: 70ch;
   margin: 0;
-  color: var(--fieldset-demo-muted);
+  color: var(--live-demo-muted);
   font-size: 0.92rem;
   line-height: 1.58;
 }
@@ -151,10 +141,10 @@
 .fieldset-demo-metrics div,
 .fieldset-demo-proof,
 .fieldset-demo-state-card {
-  border: 1px solid var(--fieldset-demo-border);
+  border: 1px solid var(--live-demo-border);
   border-radius: 14px;
   background:
-    linear-gradient(180deg, var(--fieldset-demo-panel), rgba(238, 245, 255, 0.026)), rgba(7, 13, 22, 0.32);
+    linear-gradient(180deg, var(--live-demo-panel), rgba(238, 245, 255, 0.026)), rgba(7, 13, 22, 0.32);
 }
 
 .fieldset-demo-metrics div {
@@ -167,7 +157,7 @@
 .fieldset-demo-metrics dd {
   min-inline-size: 0;
   margin: 0;
-  color: var(--fieldset-demo-text);
+  color: var(--live-demo-text);
   font-size: 0.9rem;
   line-height: 1.35;
   overflow-wrap: anywhere;
@@ -202,10 +192,10 @@
 .fieldset-demo-shell cv-fieldset {
   inline-size: 100%;
   min-inline-size: 0;
-  color: var(--fieldset-demo-text);
-  --cv-color-text: var(--fieldset-demo-text);
-  --cv-color-text-muted: var(--fieldset-demo-muted);
-  --cv-color-danger: var(--fieldset-demo-red);
+  color: var(--live-demo-text);
+  --cv-color-text: var(--live-demo-text);
+  --cv-color-text-muted: var(--live-demo-muted);
+  --cv-color-danger: var(--live-demo-red);
   --cv-fieldset-gap: 11px;
   --cv-fieldset-field-gap: 10px;
 }
@@ -219,7 +209,7 @@
 }
 
 .fieldset-demo-shell cv-fieldset::part(legend) {
-  color: var(--fieldset-demo-text);
+  color: var(--live-demo-text);
   font-size: 0.94rem;
   font-weight: 650;
   line-height: 1.34;
@@ -227,7 +217,7 @@
 }
 
 .fieldset-demo-shell cv-fieldset::part(description) {
-  color: var(--fieldset-demo-muted);
+  color: var(--live-demo-muted);
   line-height: 1.45;
 }
 
@@ -274,7 +264,7 @@
 }
 
 .fieldset-demo-shell cv-field::part(label) {
-  color: var(--fieldset-demo-soft);
+  color: var(--live-demo-soft);
   font-family: var(--vp-font-family-mono);
   font-size: 0.72rem;
   letter-spacing: 0;
@@ -286,9 +276,9 @@
   --cv-color-surface: rgba(238, 245, 255, 0.058);
   --cv-color-surface-elevated: rgba(238, 245, 255, 0.065);
   --cv-color-border: rgba(143, 220, 255, 0.3);
-  --cv-color-primary: var(--fieldset-demo-cyan);
-  --cv-color-text: var(--fieldset-demo-text);
-  --cv-color-text-muted: var(--fieldset-demo-muted);
+  --cv-color-primary: var(--live-demo-cyan);
+  --cv-color-text: var(--live-demo-text);
+  --cv-color-text-muted: var(--live-demo-muted);
 }
 
 .fieldset-demo-shell cv-select {
@@ -297,11 +287,11 @@
 
 .live-demo-preview .fieldset-demo-shell cv-checkbox,
 .live-demo-preview .fieldset-demo-shell cv-switch {
-  color: var(--fieldset-demo-text);
-  --cv-color-text: var(--fieldset-demo-text);
-  --cv-color-text-muted: var(--fieldset-demo-muted);
+  color: var(--live-demo-text);
+  --cv-color-text: var(--live-demo-text);
+  --cv-color-text-muted: var(--live-demo-muted);
   --cv-color-border: rgba(143, 220, 255, 0.3);
-  --cv-color-primary: var(--fieldset-demo-cyan);
+  --cv-color-primary: var(--live-demo-cyan);
   --cv-color-surface: rgba(238, 245, 255, 0.058);
   --cv-color-surface-elevated: rgba(238, 245, 255, 0.065);
 }
@@ -328,13 +318,13 @@
 }
 
 .fieldset-demo-proof strong {
-  color: var(--fieldset-demo-text);
+  color: var(--live-demo-text);
   font-size: 0.9rem;
   line-height: 1.34;
 }
 
 .fieldset-demo-proof span:not(.fieldset-demo-label) {
-  color: var(--fieldset-demo-muted);
+  color: var(--live-demo-muted);
   font-size: 0.84rem;
   line-height: 1.45;
 }
@@ -345,35 +335,35 @@
 }
 
 @container (min-width: 760px) {
-.fieldset-demo-hero {
+  .fieldset-demo-hero {
     grid-template-columns: minmax(0, 1.08fr) minmax(260px, 0.72fr);
   }
 
-.fieldset-demo-board {
+  .fieldset-demo-board {
     grid-template-columns: minmax(0, 1fr) minmax(260px, 0.42fr);
   }
 
-.fieldset-demo-metrics {
+  .fieldset-demo-metrics {
     grid-template-columns: 1fr;
   }
 }
 
 @media (max-width: 640px) {
-.fieldset-demo-hero,
+  .fieldset-demo-hero,
   .fieldset-demo-board,
   .fieldset-demo-section {
     padding: 16px;
   }
 
-.fieldset-demo-copy h3 {
+  .fieldset-demo-copy h3 {
     font-size: 1.22rem;
   }
 
-.fieldset-demo-two-up {
+  .fieldset-demo-two-up {
     grid-template-columns: 1fr;
   }
 
-.fieldset-demo-shell cv-fieldset::part(base),
+  .fieldset-demo-shell cv-fieldset::part(base),
   .fieldset-demo-proof,
   .fieldset-demo-state-card {
     padding: 12px;

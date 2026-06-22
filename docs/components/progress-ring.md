@@ -9,7 +9,7 @@ A read-only circular indicator that communicates determinate or indeterminate lo
 ## Usage
 
 ```html
-<div class="progress-ring-demo-shell" data-live-demo-height="680">
+<div class="progress-ring-demo-shell" data-demo="progress-ring" data-live-demo-height="680">
   <section class="progress-ring-demo-hero" aria-labelledby="progress-ring-demo-title">
     <div class="progress-ring-demo-copy">
       <span class="progress-ring-demo-kicker">cv-progress-ring</span>

@@ -7,15 +7,7 @@
   overflow: hidden;
   border: 1px solid rgba(118, 181, 222, 0.18);
   border-radius: 16px;
-  color: var(--progress-ring-demo-muted);
-  --progress-ring-demo-text: #eef5ff;
-  --progress-ring-demo-muted: rgba(190, 206, 226, 0.76);
-  --progress-ring-demo-soft: rgba(190, 206, 226, 0.58);
-  --progress-ring-demo-border: rgba(118, 181, 222, 0.18);
-  --progress-ring-demo-panel: rgba(238, 245, 255, 0.052);
-  --progress-ring-demo-cyan: #65d7ff;
-  --progress-ring-demo-violet: #b388ff;
-  --progress-ring-demo-green: #5beba0;
+  color: var(--live-demo-muted);
   background:
     linear-gradient(180deg, rgba(12, 20, 32, 0.98), rgba(7, 13, 22, 0.98)),
     linear-gradient(130deg, rgba(101, 215, 255, 0.09), transparent 46%),
@@ -53,7 +45,7 @@
 
 .progress-ring-demo-hero {
   align-items: stretch;
-  border-bottom: 1px solid var(--progress-ring-demo-border);
+  border-bottom: 1px solid var(--live-demo-border);
 }
 
 .progress-ring-demo-copy,
@@ -91,7 +83,7 @@
 .progress-ring-demo-copy h3 {
   max-inline-size: 30ch;
   margin: 0;
-  color: var(--progress-ring-demo-text);
+  color: var(--live-demo-text);
   font-size: clamp(1.18rem, 5cqi, 1.55rem);
   line-height: 1.1;
   letter-spacing: 0;
@@ -101,7 +93,7 @@
 .progress-ring-demo-copy p {
   max-inline-size: 68ch;
   margin: 0;
-  color: var(--progress-ring-demo-muted);
+  color: var(--live-demo-muted);
   font-size: 0.92rem;
   line-height: 1.58;
 }
@@ -145,13 +137,13 @@
 }
 
 .progress-ring-demo-telemetry dt {
-  color: var(--progress-ring-demo-soft);
+  color: var(--live-demo-soft);
 }
 
 .progress-ring-demo-telemetry dd {
   min-inline-size: 0;
   margin: 0;
-  color: var(--progress-ring-demo-text);
+  color: var(--live-demo-text);
   font-size: 0.84rem;
   line-height: 1.35;
   overflow-wrap: anywhere;
@@ -168,11 +160,10 @@
   align-items: center;
   min-block-size: 128px;
   padding: 14px;
-  border: 1px solid var(--progress-ring-demo-border);
+  border: 1px solid var(--live-demo-border);
   border-radius: 12px;
   background:
-    linear-gradient(180deg, var(--progress-ring-demo-panel), rgba(238, 245, 255, 0.026)),
-    rgba(7, 13, 22, 0.32);
+    linear-gradient(180deg, var(--live-demo-panel), rgba(238, 245, 255, 0.026)), rgba(7, 13, 22, 0.32);
 }
 
 .progress-ring-demo-state > div {
@@ -180,13 +171,13 @@
 }
 
 .progress-ring-demo-state strong {
-  color: var(--progress-ring-demo-text);
+  color: var(--live-demo-text);
   font-size: 0.94rem;
   line-height: 1.25;
 }
 
 .progress-ring-demo-state span {
-  color: var(--progress-ring-demo-muted);
+  color: var(--live-demo-muted);
   font-size: 0.82rem;
   line-height: 1.45;
   overflow-wrap: anywhere;
@@ -200,10 +191,10 @@
 
 .progress-ring-demo-ring {
   --cv-progress-ring-track-color: rgba(143, 220, 255, 0.16);
-  --cv-progress-ring-indicator-color: var(--progress-ring-demo-cyan);
-  --cv-progress-ring-label-color: var(--progress-ring-demo-text);
-  --cv-color-primary: var(--progress-ring-demo-cyan);
-  --cv-color-success: var(--progress-ring-demo-green);
+  --cv-progress-ring-indicator-color: var(--live-demo-cyan);
+  --cv-progress-ring-label-color: var(--live-demo-text);
+  --cv-color-primary: var(--live-demo-cyan);
+  --cv-color-success: var(--live-demo-green);
 }
 
 .progress-ring-demo-ring::part(label) {
@@ -233,11 +224,11 @@
 }
 
 .progress-ring-demo-ring--range {
-  --cv-progress-ring-indicator-color: var(--progress-ring-demo-violet);
+  --cv-progress-ring-indicator-color: var(--live-demo-violet);
 }
 
 .progress-ring-demo-ring--complete {
-  --cv-progress-ring-indicator-color: var(--progress-ring-demo-green);
+  --cv-progress-ring-indicator-color: var(--live-demo-green);
 }
 
 .progress-ring-demo-ring--state::part(label),
@@ -247,23 +238,23 @@
 }
 
 @container (min-width: 760px) {
-.progress-ring-demo-hero {
+  .progress-ring-demo-hero {
     grid-template-columns: minmax(0, 1fr) minmax(280px, 0.78fr);
   }
 }
 
 @media (max-width: 640px) {
-.progress-ring-demo-hero,
+  .progress-ring-demo-hero,
   .progress-ring-demo-states {
     padding: 16px;
   }
 
-.progress-ring-demo-telemetry,
+  .progress-ring-demo-telemetry,
   .progress-ring-demo-state {
     grid-template-columns: 1fr;
   }
 
-.progress-ring-demo-state {
+  .progress-ring-demo-state {
     justify-items: start;
   }
 }

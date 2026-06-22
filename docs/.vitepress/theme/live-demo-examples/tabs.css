@@ -4,12 +4,7 @@
   inline-size: 100%;
   min-inline-size: 0;
   overflow: hidden;
-  color: var(--tabs-demo-muted);
-  --tabs-demo-text: #eef5ff;
-  --tabs-demo-muted: rgba(190, 206, 226, 0.76);
-  --tabs-demo-soft: rgba(190, 206, 226, 0.58);
-  --tabs-demo-panel: rgba(238, 245, 255, 0.052);
-  --tabs-demo-border: rgba(118, 181, 222, 0.18);
+  color: var(--live-demo-muted);
 }
 
 .tabs-demo-shell,
@@ -22,9 +17,9 @@
   inline-size: 100%;
   max-inline-size: 100%;
   min-inline-size: 0;
-  color: var(--tabs-demo-text);
-  --cv-color-text: var(--tabs-demo-text);
-  --cv-color-text-muted: var(--tabs-demo-muted);
+  color: var(--live-demo-text);
+  --cv-color-text: var(--live-demo-text);
+  --cv-color-text-muted: var(--live-demo-muted);
   --cv-color-surface: rgba(238, 245, 255, 0.052);
   --cv-color-surface-secondary-glass: rgba(238, 245, 255, 0.035);
   --cv-color-border: rgba(143, 220, 255, 0.28);
@@ -45,9 +40,9 @@
   box-sizing: border-box;
   max-inline-size: 100%;
   min-inline-size: 0;
-  border-color: var(--tabs-demo-border);
+  border-color: var(--live-demo-border);
   background:
-    linear-gradient(180deg, var(--tabs-demo-panel), rgba(238, 245, 255, 0.024)), rgba(7, 13, 22, 0.32);
+    linear-gradient(180deg, var(--live-demo-panel), rgba(238, 245, 255, 0.024)), rgba(7, 13, 22, 0.32);
 }
 
 .tabs-demo-shell cv-tabs::part(panels) {
@@ -70,7 +65,7 @@
   min-block-size: 38px;
   border-color: rgba(143, 220, 255, 0.24);
   background: rgba(238, 245, 255, 0.045);
-  color: var(--tabs-demo-text);
+  color: var(--live-demo-text);
   transition:
     border-color 160ms ease,
     background-color 160ms ease,
@@ -103,11 +98,11 @@
 }
 
 .tabs-demo-shell cv-tab[disabled]::part(base) {
-  color: var(--tabs-demo-soft);
+  color: var(--live-demo-soft);
 }
 
 @media (hover: hover) {
-.tabs-demo-shell cv-tab:not([disabled]):hover::part(base) {
+  .tabs-demo-shell cv-tab:not([disabled]):hover::part(base) {
     border-color: rgba(157, 231, 255, 0.68);
     background: rgba(101, 215, 255, 0.1);
     transform: translateY(-1px);
@@ -126,7 +121,7 @@
 .tabs-demo-hero {
   grid-template-columns: 1fr;
   align-items: stretch;
-  border-bottom: 1px solid var(--tabs-demo-border);
+  border-bottom: 1px solid var(--live-demo-border);
 }
 
 .tabs-demo-section + .tabs-demo-section,
@@ -162,7 +157,7 @@
 }
 
 .tabs-demo-metrics dt {
-  color: var(--tabs-demo-soft);
+  color: var(--live-demo-soft);
 }
 
 .tabs-demo-copy h3,
@@ -170,7 +165,7 @@
 .tabs-demo-note h4,
 .tabs-demo-panel-content h5 {
   margin: 0;
-  color: var(--tabs-demo-text);
+  color: var(--live-demo-text);
   letter-spacing: 0;
 }
 
@@ -192,7 +187,7 @@
 .tabs-demo-note p,
 .tabs-demo-panel-content p {
   margin: 0;
-  color: var(--tabs-demo-muted);
+  color: var(--live-demo-muted);
   font-size: 0.92rem;
   line-height: 1.58;
 }
@@ -224,15 +219,15 @@
   display: grid;
   gap: 4px;
   padding: 16px;
-  border: 1px solid var(--tabs-demo-border);
+  border: 1px solid var(--live-demo-border);
   border-radius: 12px;
   background:
-    linear-gradient(180deg, var(--tabs-demo-panel), rgba(238, 245, 255, 0.026)), rgba(7, 13, 22, 0.32);
+    linear-gradient(180deg, var(--live-demo-panel), rgba(238, 245, 255, 0.026)), rgba(7, 13, 22, 0.32);
 }
 
 .tabs-demo-metrics dd {
   margin: 0;
-  color: var(--tabs-demo-text);
+  color: var(--live-demo-text);
   font-size: 0.9rem;
 }
 
@@ -241,35 +236,35 @@
 }
 
 @container (min-width: 760px) {
-.tabs-demo-hero {
+  .tabs-demo-hero {
     grid-template-columns: minmax(0, 1.06fr) minmax(260px, 0.72fr);
   }
 
-.tabs-demo-metrics {
+  .tabs-demo-metrics {
     grid-template-columns: 1fr;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-.tabs-demo-shell cv-tab::part(base) {
+  .tabs-demo-shell cv-tab::part(base) {
     transition: none;
   }
 }
 
 @media (max-width: 760px) {
-.tabs-demo-shell cv-tabs[orientation='vertical']::part(base) {
+  .tabs-demo-shell cv-tabs[orientation='vertical']::part(base) {
     grid-template-columns: 1fr !important;
   }
 }
 
 @media (max-width: 640px) {
-.tabs-demo-hero,
+  .tabs-demo-hero,
   .tabs-demo-section,
   .tabs-demo-note {
     padding: 16px;
   }
 
-.tabs-demo-metrics {
+  .tabs-demo-metrics {
     grid-template-columns: 1fr;
   }
 }

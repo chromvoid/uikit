@@ -9,13 +9,7 @@
   padding: 20px;
   border: 1px solid rgba(118, 181, 222, 0.18);
   border-radius: 16px;
-  color: var(--grid-demo-muted);
-  --grid-demo-text: #eef5ff;
-  --grid-demo-muted: rgba(190, 206, 226, 0.76);
-  --grid-demo-soft: rgba(190, 206, 226, 0.58);
-  --grid-demo-border: rgba(118, 181, 222, 0.18);
-  --grid-demo-cyan: #65d7ff;
-  --grid-demo-violet: #b388ff;
+  color: var(--live-demo-muted);
   background:
     linear-gradient(180deg, rgba(12, 20, 32, 0.98), rgba(7, 13, 22, 0.98)),
     linear-gradient(135deg, rgba(101, 215, 255, 0.08), transparent 38%),
@@ -39,7 +33,7 @@
 
 .grid-demo-kicker {
   margin: 0;
-  color: var(--grid-demo-cyan);
+  color: var(--live-demo-cyan);
   font-family: var(--vp-font-family-mono);
   font-size: 0.72rem;
   letter-spacing: 0;
@@ -49,7 +43,7 @@
 .grid-demo-hero h2 {
   max-inline-size: 22ch;
   margin: 0;
-  color: var(--grid-demo-text);
+  color: var(--live-demo-text);
   font-family: var(--vp-font-family-base);
   font-size: 1.45rem;
   line-height: 1.16;
@@ -59,7 +53,7 @@
 .grid-demo-hero p:last-child {
   max-inline-size: 58ch;
   margin: 0;
-  color: var(--grid-demo-muted);
+  color: var(--live-demo-muted);
   font-size: 0.92rem;
   line-height: 1.58;
 }
@@ -116,8 +110,8 @@
   --cv-color-border-soft: rgba(143, 220, 255, 0.12);
   --cv-color-active: rgba(101, 215, 255, 0.14);
   --cv-color-primary-ring: rgba(101, 215, 255, 0.19);
-  --cv-color-primary: var(--grid-demo-cyan);
-  --cv-color-text: var(--grid-demo-text);
+  --cv-color-primary: var(--live-demo-cyan);
+  --cv-color-text: var(--live-demo-text);
   --cv-radius-md: 14px;
 }
 
@@ -186,20 +180,20 @@
 }
 
 @media (max-width: 720px) {
-.grid-demo-shell {
+  .grid-demo-shell {
     grid-template-columns: 1fr;
     padding: 16px;
   }
 
-.grid-demo-hero {
+  .grid-demo-hero {
     align-content: start;
   }
 
-.grid-demo-toolbar {
+  .grid-demo-toolbar {
     justify-content: flex-start;
   }
 
-.grid-demo-hero h2 {
+  .grid-demo-hero h2 {
     max-inline-size: 100%;
     font-size: 1.22rem;
   }
@@ -213,15 +207,7 @@
   overflow: hidden;
   border: 1px solid rgba(118, 181, 222, 0.18);
   border-radius: 16px;
-  color: var(--treegrid-demo-muted);
-  --treegrid-demo-text: #eef5ff;
-  --treegrid-demo-muted: rgba(190, 206, 226, 0.76);
-  --treegrid-demo-soft: rgba(190, 206, 226, 0.58);
-  --treegrid-demo-panel: rgba(238, 245, 255, 0.052);
-  --treegrid-demo-border: rgba(118, 181, 222, 0.18);
-  --treegrid-demo-cyan: #65d7ff;
-  --treegrid-demo-green: #5beba0;
-  --treegrid-demo-violet: #b388ff;
+  color: var(--live-demo-muted);
   background:
     linear-gradient(180deg, rgba(12, 20, 32, 0.98), rgba(7, 13, 22, 0.98)),
     linear-gradient(135deg, rgba(101, 215, 255, 0.085), transparent 42%),
@@ -245,7 +231,7 @@
 }
 
 .treegrid-demo-hero {
-  border-bottom: 1px solid var(--treegrid-demo-border);
+  border-bottom: 1px solid var(--live-demo-border);
 }
 
 .treegrid-demo-copy,
@@ -272,7 +258,7 @@
 .treegrid-demo-copy h3,
 .treegrid-demo-section-header h4 {
   margin: 0;
-  color: var(--treegrid-demo-text);
+  color: var(--live-demo-text);
   letter-spacing: 0;
 }
 
@@ -292,7 +278,7 @@
 .treegrid-demo-copy p {
   max-inline-size: 68ch;
   margin: 0;
-  color: var(--treegrid-demo-muted);
+  color: var(--live-demo-muted);
   font-size: 0.92rem;
   line-height: 1.58;
 }
@@ -310,20 +296,20 @@
   gap: 4px;
   min-inline-size: 0;
   padding: 16px;
-  border: 1px solid var(--treegrid-demo-border);
+  border: 1px solid var(--live-demo-border);
   border-radius: 12px;
   background:
-    linear-gradient(180deg, var(--treegrid-demo-panel), rgba(238, 245, 255, 0.026)), rgba(7, 13, 22, 0.32);
+    linear-gradient(180deg, var(--live-demo-panel), rgba(238, 245, 255, 0.026)), rgba(7, 13, 22, 0.32);
 }
 
 .treegrid-demo-metrics dt {
-  color: var(--treegrid-demo-soft);
+  color: var(--live-demo-soft);
 }
 
 .treegrid-demo-metrics dd {
   min-inline-size: 0;
   margin: 0;
-  color: var(--treegrid-demo-text);
+  color: var(--live-demo-text);
   font-size: 0.9rem;
   line-height: 1.35;
   overflow-wrap: anywhere;
@@ -372,8 +358,8 @@
   --cv-color-selected: rgba(101, 215, 255, 0.18);
   --cv-color-primary-ring: rgba(101, 215, 255, 0.18);
   --cv-color-primary-border: rgba(101, 215, 255, 0.24);
-  --cv-color-primary: var(--treegrid-demo-cyan);
-  --cv-color-text: var(--treegrid-demo-text);
+  --cv-color-primary: var(--live-demo-cyan);
+  --cv-color-text: var(--live-demo-text);
   --cv-radius-md: 14px;
 }
 
@@ -457,26 +443,26 @@
 }
 
 @container (min-width: 760px) {
-.treegrid-demo-hero {
+  .treegrid-demo-hero {
     grid-template-columns: minmax(0, 1.06fr) minmax(260px, 0.72fr);
   }
 
-.treegrid-demo-metrics {
+  .treegrid-demo-metrics {
     grid-template-columns: 1fr;
   }
 }
 
 @media (max-width: 640px) {
-.treegrid-demo-hero,
+  .treegrid-demo-hero,
   .treegrid-demo-workbench {
     padding: 16px;
   }
 
-.treegrid-demo-metrics {
+  .treegrid-demo-metrics {
     grid-template-columns: 1fr;
   }
 
-.treegrid-demo-shell cv-treegrid {
+  .treegrid-demo-shell cv-treegrid {
     inline-size: 100%;
     min-inline-size: 100%;
     --cv-space-1: 3px;
@@ -484,30 +470,30 @@
     --cv-space-3: 6px;
   }
 
-.treegrid-demo-shell cv-treegrid::part(columnheader) {
+  .treegrid-demo-shell cv-treegrid::part(columnheader) {
     padding-inline: 6px;
   }
 
-.treegrid-demo-shell cv-treegrid-column,
+  .treegrid-demo-shell cv-treegrid-column,
   .treegrid-demo-shell cv-treegrid-cell {
     font-size: 0.74rem;
     line-height: 1.25;
     overflow-wrap: break-word;
   }
 
-.treegrid-demo-shell cv-treegrid-cell[column='owner'],
+  .treegrid-demo-shell cv-treegrid-cell[column='owner'],
   .treegrid-demo-shell cv-treegrid-cell[column='scope'] {
     font-size: 0.68rem;
   }
 
-.treegrid-demo-shell cv-badge {
+  .treegrid-demo-shell cv-badge {
     --cv-badge-padding-inline: 5px;
     --cv-badge-font-size: 10px;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-.treegrid-demo-shell cv-treegrid-column,
+  .treegrid-demo-shell cv-treegrid-column,
   .treegrid-demo-shell cv-treegrid-row {
     transition: none;
   }

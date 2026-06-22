@@ -6,7 +6,7 @@
   min-inline-size: 0;
   overflow: hidden;
   padding: 18px;
-  color: var(--guidance-panel-demo-muted);
+  color: var(--live-demo-muted);
   --cv-color-border: rgba(118, 181, 222, 0.24);
   --cv-color-danger: #ff7d86;
   --cv-color-info: #65d7ff;
@@ -19,10 +19,6 @@
   --cv-color-text-muted: rgba(190, 206, 226, 0.78);
   --cv-color-text-strong: #eef5ff;
   --cv-color-warning: #ffc857;
-  --guidance-panel-demo-border: rgba(118, 181, 222, 0.2);
-  --guidance-panel-demo-muted: rgba(190, 206, 226, 0.78);
-  --guidance-panel-demo-soft: rgba(190, 206, 226, 0.58);
-  --guidance-panel-demo-text: #eef5ff;
 }
 
 .guidance-panel-demo-shell,
@@ -73,7 +69,7 @@
 .guidance-panel-demo-toolbar h4,
 .guidance-panel-demo-note h4 {
   margin: 0;
-  color: var(--guidance-panel-demo-text);
+  color: var(--live-demo-text);
   letter-spacing: 0;
 }
 
@@ -87,7 +83,7 @@
 .guidance-panel-demo-copy p,
 .guidance-panel-demo-note p {
   margin: 0;
-  color: var(--guidance-panel-demo-muted);
+  color: var(--live-demo-muted);
   font-size: 0.92rem;
   line-height: 1.58;
 }
@@ -107,7 +103,7 @@
   display: grid;
   gap: 6px;
   padding: 12px;
-  border: 1px solid var(--guidance-panel-demo-border);
+  border: 1px solid var(--live-demo-border);
   border-radius: 12px;
   background: rgba(238, 245, 255, 0.04);
 }
@@ -115,7 +111,7 @@
 .guidance-panel-demo-contract dd {
   margin: 0;
   overflow-wrap: anywhere;
-  color: var(--guidance-panel-demo-text);
+  color: var(--live-demo-text);
   font-size: 0.86rem;
   line-height: 1.38;
 }
@@ -192,7 +188,7 @@
 
 .guidance-panel-demo-vault-row strong {
   overflow: hidden;
-  color: var(--guidance-panel-demo-text);
+  color: var(--live-demo-text);
   font-size: 0.92rem;
   line-height: 1.35;
   text-overflow: ellipsis;
@@ -201,7 +197,7 @@
 
 .guidance-panel-demo-vault-row small {
   overflow: hidden;
-  color: var(--guidance-panel-demo-soft);
+  color: var(--live-demo-soft);
   line-height: 1.3;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -259,52 +255,52 @@
 }
 
 @container (min-width: 780px) {
-.guidance-panel-demo-brief {
+  .guidance-panel-demo-brief {
     grid-template-columns: minmax(0, 1fr) minmax(320px, 0.74fr);
   }
 
-.guidance-panel-demo-grid {
+  .guidance-panel-demo-grid {
     grid-template-columns: minmax(0, 1fr) minmax(286px, 0.66fr);
   }
 
-.guidance-panel-demo-coach-mark {
+  .guidance-panel-demo-coach-mark {
     grid-template-columns: 44px minmax(0, 1fr);
   }
 
-.guidance-panel-demo-rail {
+  .guidance-panel-demo-rail {
     display: block;
   }
 
-.guidance-panel-demo-note {
+  .guidance-panel-demo-note {
     grid-template-columns: minmax(220px, 0.42fr) minmax(0, 1fr);
     align-items: center;
   }
 }
 
 @media (max-width: 640px) {
-.guidance-panel-demo-shell {
+  .guidance-panel-demo-shell {
     padding: 14px;
   }
 
-.guidance-panel-demo-copy h3 {
+  .guidance-panel-demo-copy h3 {
     font-size: 1.18rem;
   }
 
-.guidance-panel-demo-toolbar,
+  .guidance-panel-demo-toolbar,
   .guidance-panel-demo-vault-row {
     grid-template-columns: 1fr;
   }
 
-.guidance-panel-demo-status {
+  .guidance-panel-demo-status {
     justify-self: start;
     white-space: normal;
   }
 
-.guidance-panel-demo-vault-row cv-button {
+  .guidance-panel-demo-vault-row cv-button {
     justify-self: start;
   }
 
-.guidance-panel-demo-vault-row strong,
+  .guidance-panel-demo-vault-row strong,
   .guidance-panel-demo-vault-row small {
     white-space: normal;
   }

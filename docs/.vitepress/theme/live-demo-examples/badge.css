@@ -7,16 +7,7 @@
   overflow: hidden;
   border: 1px solid rgba(118, 181, 222, 0.18);
   border-radius: 16px;
-  color: var(--badge-demo-muted);
-  --badge-demo-text: #eef5ff;
-  --badge-demo-muted: rgba(190, 206, 226, 0.76);
-  --badge-demo-soft: rgba(190, 206, 226, 0.58);
-  --badge-demo-panel: rgba(238, 245, 255, 0.052);
-  --badge-demo-border: rgba(118, 181, 222, 0.18);
-  --badge-demo-cyan: #65d7ff;
-  --badge-demo-green: #5beba0;
-  --badge-demo-amber: #ffc857;
-  --badge-demo-red: #ff7d86;
+  color: var(--live-demo-muted);
   background:
     linear-gradient(180deg, rgba(12, 20, 32, 0.98), rgba(7, 13, 22, 0.98)),
     linear-gradient(135deg, rgba(101, 215, 255, 0.08), transparent 42%),
@@ -42,7 +33,7 @@
 
 .badge-demo-hero,
 .badge-demo-board {
-  border-bottom: 1px solid var(--badge-demo-border);
+  border-bottom: 1px solid var(--live-demo-border);
 }
 
 .badge-demo-copy,
@@ -76,7 +67,7 @@
 .badge-demo-section-header h4,
 .badge-demo-panel-head h4 {
   margin: 0;
-  color: var(--badge-demo-text);
+  color: var(--live-demo-text);
   font-family: var(--vp-font-family-base);
   letter-spacing: 0;
 }
@@ -98,7 +89,7 @@
 .badge-demo-copy p {
   max-inline-size: 68ch;
   margin: 0;
-  color: var(--badge-demo-muted);
+  color: var(--live-demo-muted);
   font-size: 0.92rem;
   line-height: 1.58;
 }
@@ -116,20 +107,20 @@
   gap: 4px;
   min-inline-size: 0;
   padding: 16px;
-  border: 1px solid var(--badge-demo-border);
+  border: 1px solid var(--live-demo-border);
   border-radius: 12px;
   background:
-    linear-gradient(180deg, var(--badge-demo-panel), rgba(238, 245, 255, 0.026)), rgba(7, 13, 22, 0.32);
+    linear-gradient(180deg, var(--live-demo-panel), rgba(238, 245, 255, 0.026)), rgba(7, 13, 22, 0.32);
 }
 
 .badge-demo-metrics dt {
-  color: var(--badge-demo-soft);
+  color: var(--live-demo-soft);
 }
 
 .badge-demo-metrics dd {
   min-inline-size: 0;
   margin: 0;
-  color: var(--badge-demo-text);
+  color: var(--live-demo-text);
   font-size: 0.9rem;
   line-height: 1.35;
   overflow-wrap: anywhere;
@@ -190,13 +181,13 @@
 .badge-demo-record-head span,
 .badge-demo-row span,
 .badge-demo-matrix > div > span {
-  color: var(--badge-demo-soft);
+  color: var(--live-demo-soft);
 }
 
 .badge-demo-record-head strong,
 .badge-demo-row strong {
   min-inline-size: 0;
-  color: var(--badge-demo-text);
+  color: var(--live-demo-text);
   font-size: 0.94rem;
   font-weight: 640;
   line-height: 1.32;
@@ -263,11 +254,11 @@
 .badge-demo-shell cv-badge {
   --cv-color-border: rgba(143, 220, 255, 0.22);
   --cv-color-surface: rgba(238, 245, 255, 0.052);
-  --cv-color-text: var(--badge-demo-text);
-  --cv-color-primary: var(--badge-demo-cyan);
-  --cv-color-success: var(--badge-demo-green);
-  --cv-color-warning: var(--badge-demo-amber);
-  --cv-color-danger: var(--badge-demo-red);
+  --cv-color-text: var(--live-demo-text);
+  --cv-color-primary: var(--live-demo-cyan);
+  --cv-color-success: var(--live-demo-green);
+  --cv-color-warning: var(--live-demo-amber);
+  --cv-color-danger: var(--live-demo-red);
   --cv-badge-gap: 5px;
 }
 
@@ -297,48 +288,48 @@
 }
 
 @container (min-width: 760px) {
-.badge-demo-hero {
+  .badge-demo-hero {
     grid-template-columns: minmax(0, 1.08fr) minmax(260px, 0.72fr);
   }
 
-.badge-demo-board {
+  .badge-demo-board {
     grid-template-columns: minmax(0, 1fr) minmax(220px, 0.42fr);
   }
 
-.badge-demo-metrics {
+  .badge-demo-metrics {
     grid-template-columns: 1fr;
   }
 }
 
 @media (max-width: 640px) {
-.badge-demo-hero,
+  .badge-demo-hero,
   .badge-demo-board,
   .badge-demo-section {
     padding: 16px;
   }
 
-.badge-demo-copy h3 {
+  .badge-demo-copy h3 {
     font-size: 1.22rem;
   }
 
-.badge-demo-record {
+  .badge-demo-record {
     padding: 12px;
   }
 
-.badge-demo-metrics,
+  .badge-demo-metrics,
   .badge-demo-record-head,
   .badge-demo-row {
     grid-template-columns: 1fr;
   }
 
-.badge-demo-record-head cv-badge,
+  .badge-demo-record-head cv-badge,
   .badge-demo-row cv-badge {
     justify-self: start;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-.badge-demo-shell cv-badge[pulse]::part(base) {
+  .badge-demo-shell cv-badge[pulse]::part(base) {
     animation: none;
   }
 }

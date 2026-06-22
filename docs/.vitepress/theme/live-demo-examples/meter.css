@@ -4,20 +4,13 @@
   inline-size: 100%;
   min-inline-size: 0;
   overflow: hidden;
-  border: 1px solid var(--meter-demo-border);
+  border: 1px solid var(--live-demo-border);
   border-radius: 16px;
-  color: var(--meter-demo-muted);
+  color: var(--live-demo-muted);
   background-color: var(--cv-color-bg);
   box-shadow:
     inset 0 1px 0 var(--cv-alpha-white-4),
     var(--cv-shadow-lg);
-  --meter-demo-text: var(--cv-color-text);
-  --meter-demo-muted: var(--cv-color-text-muted);
-  --meter-demo-soft: var(--cv-color-text-subtle);
-  --meter-demo-border: var(--cv-color-border-faint);
-  --meter-demo-border-strong: var(--cv-color-border-accent);
-  --meter-demo-panel: var(--cv-color-surface-glass);
-  --meter-demo-panel-strong: var(--cv-color-surface-secondary-glass);
 }
 
 .meter-demo-shell,
@@ -42,7 +35,7 @@
 
 .meter-demo-hero,
 .meter-demo-workbench {
-  border-bottom: 1px solid var(--meter-demo-border);
+  border-bottom: 1px solid var(--live-demo-border);
 }
 
 .meter-demo-copy,
@@ -90,7 +83,7 @@
 .meter-demo-panel-head h4,
 .meter-demo-section-header h4 {
   margin: 0;
-  color: var(--meter-demo-text);
+  color: var(--live-demo-text);
   font-family: var(--vp-font-family-base);
   letter-spacing: 0;
 }
@@ -113,7 +106,7 @@
 .meter-demo-copy p,
 .meter-demo-compare-card p {
   margin: 0;
-  color: var(--meter-demo-muted);
+  color: var(--live-demo-muted);
   font-size: 0.92rem;
   line-height: 1.58;
 }
@@ -138,9 +131,9 @@
 .meter-demo-panel,
 .meter-demo-compare,
 .meter-demo-rule-grid > div {
-  border: 1px solid var(--meter-demo-border);
+  border: 1px solid var(--live-demo-border);
   border-radius: 14px;
-  background-color: var(--meter-demo-panel);
+  background-color: var(--live-demo-panel);
 }
 
 .meter-demo-metrics div {
@@ -156,14 +149,14 @@
 .meter-demo-zone-grid span,
 .meter-demo-compare-card > span,
 .meter-demo-rule-grid dt {
-  color: var(--meter-demo-soft);
+  color: var(--live-demo-soft);
 }
 
 .meter-demo-metrics dd,
 .meter-demo-rule-grid dd {
   min-inline-size: 0;
   margin: 0;
-  color: var(--meter-demo-text);
+  color: var(--live-demo-text);
   font-size: 0.9rem;
   line-height: 1.35;
   overflow-wrap: anywhere;
@@ -180,7 +173,7 @@
 
 .meter-demo-panel {
   gap: 18px;
-  background-color: var(--meter-demo-panel-strong);
+  background-color: var(--live-demo-panel-strong);
 }
 
 .meter-demo-panel-head {
@@ -211,7 +204,7 @@
 .meter-demo-zone-grid strong,
 .meter-demo-compare-card strong {
   min-inline-size: 0;
-  color: var(--meter-demo-text);
+  color: var(--live-demo-text);
   font-size: 0.92rem;
   line-height: 1.35;
   overflow-wrap: anywhere;
@@ -231,14 +224,14 @@
 
 .meter-demo-shell cv-meter {
   --cv-meter-height: 9px;
-  --cv-meter-label-color: var(--meter-demo-text);
+  --cv-meter-label-color: var(--live-demo-text);
   --cv-meter-transition-duration: var(--cv-duration-normal);
 }
 
 .meter-demo-shell cv-progress {
   --cv-progress-height: 9px;
   --cv-progress-track-color: var(--cv-color-surface-2);
-  --cv-progress-label-color: var(--meter-demo-text);
+  --cv-progress-label-color: var(--live-demo-text);
 }
 
 .meter-demo-shell cv-meter::part(base),
@@ -289,7 +282,7 @@
 .meter-demo-compare-card {
   min-block-size: 86px;
   padding: 12px;
-  border: 1px solid var(--meter-demo-border);
+  border: 1px solid var(--live-demo-border);
   border-radius: 12px;
   background-color: var(--cv-color-surface-glass-subtle);
 }
@@ -361,41 +354,41 @@
 }
 
 @container (min-width: 820px) {
-.meter-demo-hero {
+  .meter-demo-hero {
     grid-template-columns: minmax(0, 1.08fr) minmax(260px, 0.72fr);
   }
 
-.meter-demo-workbench {
+  .meter-demo-workbench {
     grid-template-columns: minmax(0, 1fr) minmax(280px, 0.62fr);
   }
 
-.meter-demo-metrics {
+  .meter-demo-metrics {
     grid-template-columns: 1fr;
   }
 }
 
 @media (max-width: 640px) {
-.meter-demo-hero,
+  .meter-demo-hero,
   .meter-demo-workbench,
   .meter-demo-rules {
     padding: 16px;
   }
 
-.meter-demo-panel,
+  .meter-demo-panel,
   .meter-demo-compare {
     padding: 12px;
   }
 
-.meter-demo-panel-head,
+  .meter-demo-panel-head,
   .meter-demo-zone-grid {
     grid-template-columns: 1fr;
   }
 
-.meter-demo-panel-head cv-badge {
+  .meter-demo-panel-head cv-badge {
     justify-self: start;
   }
 
-.meter-demo-reading-label {
+  .meter-demo-reading-label {
     align-items: start;
     flex-direction: column;
     gap: 5px;
@@ -403,7 +396,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-.meter-demo-shell cv-meter::part(indicator),
+  .meter-demo-shell cv-meter::part(indicator),
   .meter-demo-shell cv-progress::part(indicator) {
     transition-duration: 1ms;
   }
