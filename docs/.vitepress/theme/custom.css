@@ -1,26 +1,4 @@
-@font-face {
-  font-family: 'Manrope';
-  font-style: normal;
-  font-weight: 400 700;
-  font-display: swap;
-  src: url('/fonts/manrope-latin-400.woff2') format('woff2');
-}
-
-@font-face {
-  font-family: 'Orbitron';
-  font-style: normal;
-  font-weight: 700;
-  font-display: swap;
-  src: url('/fonts/orbitron-latin-700.woff2') format('woff2');
-}
-
-@font-face {
-  font-family: 'JetBrains Mono';
-  font-style: normal;
-  font-weight: 500;
-  font-display: swap;
-  src: url('/fonts/jetbrains-mono-latin-500.woff2') format('woff2');
-}
+@import '@chromvoid/uikit/theme/tokens.css';
 
 :root {
   --vp-font-family-base: var(--cv-font-family-body, 'Manrope', 'Segoe UI', sans-serif);

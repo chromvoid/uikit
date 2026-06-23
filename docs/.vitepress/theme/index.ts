@@ -3,8 +3,6 @@ import {registerUikit} from '@chromvoid/uikit/register'
 import {unoUtilities} from '@chromvoid/uikit/styles/uno-utilities'
 import type {Theme} from 'vitepress'
 import DefaultTheme from 'vitepress/theme-without-fonts'
-
-import '@chromvoid/uikit/theme/tokens.css'
 import {defineAsyncComponent} from 'vue'
 
 import './custom.css'

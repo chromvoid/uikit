@@ -8,10 +8,34 @@ const description =
   'ChromVoid UIKit is a Lit-based component layer over @chromvoid/headless-ui with reusable theme tokens and accessible interactions.'
 
 const forceDarkThemeScript = "document.documentElement.dataset.theme='dark'"
-
 const repoName = process.env.GITHUB_REPOSITORY?.split('/')[1]
 const docsBase = process.env.DOCS_BASE?.trim()
 const base = docsBase || (process.env.GITHUB_ACTIONS === 'true' && repoName ? `/${repoName}/` : '/')
+const fontFaceStyle = `
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url('${base}fonts/manrope-latin-400.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Orbitron';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('${base}fonts/orbitron-latin-700.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('${base}fonts/jetbrains-mono-latin-500.woff2') format('woff2');
+}
+`
 
 const guideItems = [
   {text: 'Getting Started', link: '/guide/getting-started'},
@@ -30,6 +54,7 @@ export default defineConfig({
   lastUpdated: true,
   head: [
     ['script', {}, forceDarkThemeScript],
+    ['style', {}, fontFaceStyle],
     ['meta', {name: 'theme-color', content: '#0b0d12'}],
     ['meta', {property: 'og:title', content: 'ChromVoid UIKit'}],
     ['meta', {property: 'og:description', content: description}],
@@ -40,6 +65,7 @@ export default defineConfig({
         href: `${base}fonts/manrope-latin-400.woff2`,
         as: 'font',
         type: 'font/woff2',
+        crossorigin: 'anonymous',
       },
     ],
     [
@@ -49,6 +75,7 @@ export default defineConfig({
         href: `${base}fonts/orbitron-latin-700.woff2`,
         as: 'font',
         type: 'font/woff2',
+        crossorigin: 'anonymous',
       },
     ],
   ],

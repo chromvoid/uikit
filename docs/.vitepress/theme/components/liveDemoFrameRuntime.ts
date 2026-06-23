@@ -2,8 +2,8 @@ import {setUnoUtilities} from '@chromvoid/uikit/reatom-lit'
 import {registerUikit} from '@chromvoid/uikit/register'
 import {unoUtilities} from '@chromvoid/uikit/styles/uno-utilities'
 import {applyTheme, defineTheme} from '@chromvoid/uikit/theme'
+import tokenCss from '@chromvoid/uikit/theme/tokens.css?raw'
 
-import '@chromvoid/uikit/theme/tokens.css'
 import {loadLiveDemoCss} from './liveDemoStyles'
 
 setUnoUtilities(unoUtilities)
@@ -29,6 +29,8 @@ let demoStyleElement: HTMLStyleElement | null = null
 function installFrameStyles(): void {
   const style = document.createElement('style')
   style.textContent = `
+    ${tokenCss}
+
     html,
     body {
       min-block-size: 100%;
