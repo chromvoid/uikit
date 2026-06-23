@@ -19,7 +19,7 @@ jobs:
       - run: bun run test
       - name: Build docs
         env:
-          DOCS_BASE: ${{ vars.DOCS_BASE }}
+          DOCS_BASE: /
         run: bun run docs:build
 
   pack:
