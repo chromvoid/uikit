@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import {useData} from 'vitepress'
 import {computed, nextTick, onMounted, onUnmounted, ref, watch} from 'vue'
 
 import iframeRuntimeUrl from './liveDemoFrameRuntime.ts?worker&url'
@@ -17,6 +18,16 @@ const RENDERED_MESSAGE_TYPE = 'cv-live-demo:rendered'
 const READY_MESSAGE_TYPE = 'cv-live-demo:ready'
 const RENDER_COMMAND_TYPE = 'cv-live-demo:render'
 const CLEAR_COMMAND_TYPE = 'cv-live-demo:clear'
+const THEME_COMMAND_TYPE = 'cv-live-demo:theme'
+
+type DocsThemeMode = 'dark' | 'light'
+type DesignTokenSnapshot = Record<string, string>
+
+
+type FrameTheme = {
+  mode: DocsThemeMode
+  tokens: DesignTokenSnapshot
+}
 
 
 const container = ref<HTMLElement | null>(null)
@@ -30,6 +41,7 @@ type FrameRender = {
   id: string
   html: string
   styleKeys: string[]
+  theme: FrameTheme
 }
 
 
@@ -72,8 +84,36 @@ function decodeBase64Utf8(value: string): string {
 }
 
 
+function readDesignTokenSnapshot(): DesignTokenSnapshot {
+  const computedStyle = getComputedStyle(document.documentElement)
+  const tokens: DesignTokenSnapshot = {}
+
+  for (let index = 0; index < computedStyle.length; index += 1) {
+    const name = computedStyle.item(index)
+    if (!name.startsWith('--cv-')) continue
+
+    const value = computedStyle.getPropertyValue(name).trim()
+    if (value) {
+      tokens[name] = value
+    }
+  }
+
+  return tokens
+}
+
+
+function buildFrameTheme(): FrameTheme {
+  return {
+    mode: themeMode.value,
+    tokens: readDesignTokenSnapshot(),
+  }
+}
+
+
 const decoded = computed(() => decodeBase64Utf8(props.code))
 const highlightedHtml = computed(() => decodeBase64Utf8(props.highlighted))
+const {isDark} = useData()
+const themeMode = computed<DocsThemeMode>(() => (isDark.value ? 'dark' : 'light'))
 const isInline = computed(() => /\sdata-live-demo-inline(?:[\s=>]|$)/i.test(decoded.value))
 const styleKeys = computed(() => extractLiveDemoStyleKeys(decoded.value))
 const minFrameHeight = computed(() => {
@@ -116,6 +156,22 @@ watch(
 
 
 watch([frameHeight, frameReady], updateFrameElementState)
+
+
+watch(themeMode, () => {
+  if (!mounted.value || isInline.value) return
+
+  void nextTick(() => {
+    if (!mounted.value || isInline.value) return
+
+    const theme = buildFrameTheme()
+    if (frameLease?.pendingRender) {
+      frameLease.pendingRender.theme = theme
+    }
+    postFrameTheme(theme)
+    updateFrameElementState()
+  })
+})
 
 
 function runDemoScript(script: HTMLScriptElement): void {
@@ -201,25 +257,25 @@ function handleFrameMessage(event: MessageEvent): void {
 }
 
 
-function buildFrameSrcdoc(): string {
+function buildFrameSrcdoc(theme: DocsThemeMode): string {
   const closingScript = '</' + 'script>'
+  const htmlClass = theme === 'dark' ? ' class="dark"' : ''
   return `<!doctype html>
-<html lang="en">
+<html lang="en" data-theme="${theme}"${htmlClass}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <style>
       html {
         min-block-size: 100%;
-        background: #070d16;
-        color-scheme: dark;
+        color-scheme: ${theme};
       }
 
       body {
         min-block-size: 100%;
         margin: 0;
-        background: #070d16;
-        color: #eef5ff;
+        background: Canvas;
+        color: CanvasText;
         font-family:
           Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
         overflow: hidden;
@@ -229,6 +285,11 @@ function buildFrameSrcdoc(): string {
   </head>
   <body></body>
 </html>`
+}
+
+
+function postFrameTheme(theme: FrameTheme): void {
+  frameLease?.element.contentWindow?.postMessage({type: THEME_COMMAND_TYPE, theme}, '*')
 }
 
 
@@ -256,6 +317,7 @@ function flushFrameRender(frame: PooledFrame): void {
       id: frame.pendingRender.id,
       html: frame.pendingRender.html,
       styleKeys: frame.pendingRender.styleKeys,
+      theme: frame.pendingRender.theme,
     },
     '*',
   )
@@ -279,7 +341,8 @@ function createPooledFrame(pooled: boolean): PooledFrame {
   element.title = 'Isolated live demo preview'
   element.dataset.liveDemoFramePooled = pooled ? 'true' : 'false'
   element.sandbox.add('allow-scripts', 'allow-same-origin', 'allow-popups', 'allow-popups-to-escape-sandbox')
-  element.srcdoc = buildFrameSrcdoc()
+  element.srcdoc = buildFrameSrcdoc(themeMode.value)
+  element.style.colorScheme = themeMode.value
   parkFrameElement(element)
   element.addEventListener('load', () => {
     frame.ready = true
@@ -374,6 +437,7 @@ function updateFrameElementState(): void {
   frame.element.height = String(frameHeight.value)
   frame.element.className = frameReady.value ? 'live-demo-frame live-demo-frame--ready' : 'live-demo-frame'
   frame.element.dataset.liveDemoFrameActive = 'true'
+  frame.element.style.colorScheme = themeMode.value
   frame.element.style.position = 'fixed'
   frame.element.style.inset = 'auto'
   frame.element.style.left = `${rect.left}px`
@@ -423,7 +487,12 @@ function mountFrameDemo(): void {
 
   frameReady.value = false
   currentRenderId = `live-demo-${++getFramePoolState().idSequence}`
-  frameLease.pendingRender = {id: currentRenderId, html: decoded.value, styleKeys: styleKeys.value}
+  frameLease.pendingRender = {
+    id: currentRenderId,
+    html: decoded.value,
+    styleKeys: styleKeys.value,
+    theme: buildFrameTheme(),
+  }
   updateFrameElementState()
   observeFrameHost()
   flushFrameRender(frameLease)

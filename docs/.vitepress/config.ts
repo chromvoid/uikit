@@ -7,7 +7,13 @@ import {responsiveTablesPlugin} from './markdown/responsiveTables'
 const description =
   'ChromVoid UIKit is a Lit-based component layer over @chromvoid/headless-ui with reusable theme tokens and accessible interactions.'
 
-const forceDarkThemeScript = "document.documentElement.dataset.theme='dark'"
+const docsThemeBridgeScript = `;(() => {
+  const preference = localStorage.getItem('vitepress-theme-appearance') || 'dark'
+  const theme = preference === 'auto'
+    ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
+    : preference === 'light' ? 'light' : 'dark'
+  document.documentElement.dataset.theme = theme
+})()`
 const repoName = process.env.GITHUB_REPOSITORY?.split('/')[1]
 const docsBase = process.env.DOCS_BASE?.trim()
 const base = docsBase || (process.env.GITHUB_ACTIONS === 'true' && repoName ? `/${repoName}/` : '/')
@@ -49,11 +55,11 @@ export default defineConfig({
   description,
   lang: 'en-US',
   base,
-  appearance: 'force-dark',
+  appearance: 'dark',
   cleanUrls: false,
   lastUpdated: true,
   head: [
-    ['script', {}, forceDarkThemeScript],
+    ['script', {}, docsThemeBridgeScript],
     ['style', {}, fontFaceStyle],
     ['meta', {name: 'theme-color', content: '#0b0d12'}],
     ['meta', {property: 'og:title', content: 'ChromVoid UIKit'}],

@@ -2220,3 +2220,222 @@ cv-disclosure.live-demo-source pre {
     animation-delay: 190ms;
   }
 }
+
+[data-theme='light'] {
+  --vp-c-brand-1: var(--cv-color-primary);
+  --vp-c-brand-2: var(--cv-color-primary-dark);
+  --vp-c-brand-3: var(--cv-color-primary-darker);
+  --vp-c-text-1: var(--cv-color-text-strong);
+  --vp-c-text-2: var(--cv-color-text);
+  --vp-c-text-3: var(--cv-color-text-muted);
+  --vp-c-bg: var(--cv-color-bg);
+  --vp-c-bg-alt: var(--cv-color-surface-2);
+  --vp-c-bg-elv: var(--cv-color-surface);
+  --vp-c-divider: var(--cv-color-border-soft);
+  --vp-code-block-bg: var(--cv-color-surface-2);
+  --docs-bg-top: var(--cv-color-bg);
+  --docs-bg-bottom: var(--cv-color-surface-2);
+  --docs-glow-primary: var(--cv-color-primary-surface);
+  --docs-glow-secondary: var(--cv-color-accent-surface);
+  --docs-grid-color: var(--cv-color-border-faint);
+  --docs-surface-1: var(--cv-color-surface);
+  --docs-surface-2: var(--cv-color-surface-elevated);
+  --docs-surface-3: var(--cv-color-surface-3);
+  --docs-surface-hero: var(--cv-color-surface);
+  --docs-border: var(--cv-color-border-soft);
+  --docs-border-strong: var(--cv-color-primary-border-strong);
+  --docs-text-muted: var(--cv-color-text-muted);
+  --docs-ring: var(--cv-color-focus-ring);
+  --docs-shadow: var(--cv-shadow-sm);
+  --docs-shadow-soft: var(--cv-shadow-sm);
+}
+
+[data-theme='light'] body {
+  background: var(--cv-color-bg);
+}
+
+[data-theme='light'] body::before {
+  opacity: 0.42;
+}
+
+[data-theme='light'] body::after,
+[data-theme='light'] .VPHome .VPHero .main::before,
+[data-theme='light'] .VPHome .VPHero .main::after,
+[data-theme='light'] .uikit-intro::before,
+[data-theme='light'] .components-hero::before,
+[data-theme='light'] .uikit-callout::before,
+[data-theme='light'] .component-card::before,
+[data-theme='light'] .component-card::after,
+[data-theme='light'] .uikit-stat::before,
+[data-theme='light'] .uikit-architecture-step::before,
+[data-theme='light'] .uikit-quickstart::before,
+[data-theme='light'] .uikit-quickstart::after,
+[data-theme='light'] .getting-started-hero::before,
+[data-theme='light'] .getting-started-flow-step::before,
+[data-theme='light'] .getting-started-note::before {
+  display: none;
+}
+
+[data-theme='light'] .VPNavBar,
+[data-theme='light'] .VPLocalNav,
+[data-theme='light'] .VPSidebar,
+[data-theme='light'] #local-search .DocSearch-Button,
+[data-theme='light'] .VPSkipLink {
+  background: var(--cv-color-surface-glass-strong) !important;
+  box-shadow: var(--docs-shadow-soft);
+}
+
+[data-theme='light'] .VPSidebarItem .text,
+[data-theme='light'] .VPDocAside .outline-link,
+[data-theme='light'] .VPHero .tagline,
+[data-theme='light'] .uikit-intro-body,
+[data-theme='light'] .uikit-quickstart-copy > p:not(.components-kicker),
+[data-theme='light'] .getting-started-hero-copy p:not(.components-kicker),
+[data-theme='light'] .playground-stage-copy p:not(.components-kicker),
+[data-theme='light'] .playground-section-header + *,
+[data-theme='light'] .playground-card p,
+[data-theme='light'] .playground-overview span,
+[data-theme='light'] .live-demo-footer {
+  color: var(--cv-color-text-muted);
+}
+
+[data-theme='light'] .VPNavBar .link:hover,
+[data-theme='light'] .VPLocalNav .menu-text:hover,
+[data-theme='light'] .VPNavBar .link.active,
+[data-theme='light'] .VPDocAside .outline-link.active,
+[data-theme='light'] .vp-doc a,
+[data-theme='light'] .vp-doc a:hover,
+[data-theme='light'] .components-kicker,
+[data-theme='light'] .component-link::after,
+[data-theme='light'] .uikit-quickstart-preview-copy span,
+[data-theme='light'] .getting-started-flow-step span,
+[data-theme='light'] .getting-started-eyebrow,
+[data-theme='light'] .uikit-architecture-step span,
+[data-theme='light'] .playground-overview dt,
+[data-theme='light'] .playground-console-header span,
+[data-theme='light'] .playground-meter-panel span {
+  color: var(--cv-color-primary-dark);
+}
+
+[data-theme='light'] .VPHome .VPHero .main,
+[data-theme='light'] .VPHome .VPFeature,
+[data-theme='light'] .uikit-intro,
+[data-theme='light'] .components-hero,
+[data-theme='light'] .uikit-callout,
+[data-theme='light'] .component-card,
+[data-theme='light'] .component-link,
+[data-theme='light'] .uikit-stat,
+[data-theme='light'] .uikit-architecture-step,
+[data-theme='light'] .uikit-quickstart,
+[data-theme='light'] .uikit-intro-signal,
+[data-theme='light'] .uikit-quickstart-steps li,
+[data-theme='light'] .uikit-quickstart-code,
+[data-theme='light'] .uikit-quickstart-preview,
+[data-theme='light'] .getting-started-hero,
+[data-theme='light'] .getting-started-flow-step,
+[data-theme='light'] .getting-started-note,
+[data-theme='light'] .getting-started-surface,
+[data-theme='light'] .getting-started-console,
+[data-theme='light'] .getting-started-console-line,
+[data-theme='light'] .playground-hero,
+[data-theme='light'] .playground-stage,
+[data-theme='light'] .playground-section,
+[data-theme='light'] .playground-overview div,
+[data-theme='light'] .playground-console,
+[data-theme='light'] .playground-card,
+[data-theme='light'] .playground-meter-panel,
+[data-theme='light'] cv-card.catalog-stat-card::part(base),
+[data-theme='light'] cv-card.catalog-card::part(base),
+[data-theme='light'] cv-disclosure.live-demo-source::part(trigger),
+[data-theme='light'] cv-disclosure.live-demo-source::part(panel) {
+  background: var(--cv-color-surface);
+  color: var(--cv-color-text);
+  box-shadow: var(--docs-shadow-soft);
+}
+
+[data-theme='light'] .component-action,
+[data-theme='light'] .vp-doc a.component-action,
+[data-theme='light'] .playground-jump a {
+  border-color: var(--cv-color-border-soft);
+  background: var(--cv-color-surface);
+  color: var(--cv-color-text);
+}
+
+[data-theme='light'] .component-action:hover,
+[data-theme='light'] .vp-doc a.component-action:hover,
+[data-theme='light'] .component-link:hover,
+[data-theme='light'] .playground-jump a:hover {
+  border-color: var(--docs-border-strong);
+  background: var(--cv-color-surface-2);
+  color: var(--cv-color-text-strong);
+}
+
+[data-theme='light'] .component-action-primary,
+[data-theme='light'] .vp-doc a.component-action-primary,
+[data-theme='light'] .component-action-primary:hover,
+[data-theme='light'] .vp-doc a.component-action-primary:hover {
+  border-color: var(--cv-color-primary-border-strong);
+  background: var(--cv-color-primary);
+  color: var(--cv-color-on-primary);
+  box-shadow: var(--cv-shadow-sm);
+}
+
+[data-theme='light'] .vp-doc p code,
+[data-theme='light'] .vp-doc li code,
+[data-theme='light'] .vp-doc td code,
+[data-theme='light'] .vp-doc th code,
+[data-theme='light'] .vp-doc div[class*='language-'] {
+  border-color: var(--cv-color-border-soft);
+  background: var(--cv-color-surface-2);
+  color: var(--cv-color-text-strong);
+}
+
+[data-theme='light'] .docs-table-shell {
+  --uikit-table-row-bg: var(--cv-color-surface);
+  --uikit-table-row-bg-alt: var(--cv-color-surface-2);
+  --uikit-table-row-hover-bg: var(--cv-color-primary-surface);
+  background: var(--cv-color-surface);
+  box-shadow: var(--docs-shadow-soft);
+}
+
+[data-theme='light'] .docs-table-shell::before,
+[data-theme='light'] .docs-table-shell::after {
+  display: none;
+}
+
+[data-theme='light'] .docs-table-scroll::-webkit-scrollbar-track {
+  background: var(--cv-color-surface-2);
+}
+
+[data-theme='light'] .docs-table-scroll::-webkit-scrollbar-thumb {
+  border-color: var(--cv-color-surface-2);
+  background: var(--cv-color-border-strong);
+}
+
+[data-theme='light'] .vp-doc th {
+  background: var(--cv-color-surface-3);
+  color: var(--cv-color-text-strong);
+}
+
+[data-theme='light'] .vp-doc th,
+[data-theme='light'] .vp-doc td {
+  border-bottom-color: var(--cv-color-border-soft);
+}
+
+@media (hover: hover) {
+  [data-theme='light'] .vp-doc tbody tr:hover td {
+    background: var(--cv-color-primary-surface);
+    color: var(--cv-color-text-strong);
+  }
+}
+
+[data-theme='light'] .uikit-stat-value,
+[data-theme='light'] cv-card.catalog-stat-card::part(header),
+[data-theme='light'] cv-card.catalog-card::part(header),
+[data-theme='light'] .live-demo-card {
+  color: var(--cv-color-text-strong);
+}
+
+[data-theme='light'] .live-demo-frame {
+  color-scheme: light;
+}

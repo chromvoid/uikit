@@ -273,7 +273,7 @@
 }
 
 .status-indicator-demo-shell cv-status-indicator::part(marker) {
-  box-shadow: 0 0 14px color-mix(in srgb, currentColor 28%, transparent);
+  filter: drop-shadow(0 0 8px currentColor);
 }
 
 .status-indicator-demo-token,

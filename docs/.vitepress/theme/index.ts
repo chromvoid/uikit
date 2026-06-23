@@ -1,9 +1,9 @@
 import {setUnoUtilities} from '@chromvoid/uikit/reatom-lit'
 import {registerUikit} from '@chromvoid/uikit/register'
 import {unoUtilities} from '@chromvoid/uikit/styles/uno-utilities'
-import type {Theme} from 'vitepress'
+import {useData, type Theme} from 'vitepress'
 import DefaultTheme from 'vitepress/theme-without-fonts'
-import {defineAsyncComponent} from 'vue'
+import {defineAsyncComponent, watchEffect} from 'vue'
 
 import './custom.css'
 import ComponentCatalog from './components/ComponentCatalog.vue'
@@ -44,12 +44,17 @@ function scheduleDocsShellAccessibilitySync(): void {
   })
 }
 
-function syncDocsThemeMode(): void {
-  document.documentElement.dataset.theme = 'dark'
-}
-
 const theme: Theme = {
   ...DefaultTheme,
+  setup() {
+    DefaultTheme.setup?.()
+    if (typeof window === 'undefined') return
+
+    const {isDark} = useData()
+    watchEffect(() => {
+      document.documentElement.dataset.theme = isDark.value ? 'dark' : 'light'
+    })
+  },
   enhanceApp(ctx) {
     DefaultTheme.enhanceApp?.(ctx)
     ctx.app.component('ComponentCatalog', ComponentCatalog)
@@ -62,11 +67,9 @@ const theme: Theme = {
     }
 
     if (typeof window !== 'undefined') {
-      syncDocsThemeMode()
       const previousAfterRouteChange = ctx.router.onAfterRouteChange
       ctx.router.onAfterRouteChange = async (to) => {
         await previousAfterRouteChange?.(to)
-        syncDocsThemeMode()
         scheduleDocsShellAccessibilitySync()
       }
 
