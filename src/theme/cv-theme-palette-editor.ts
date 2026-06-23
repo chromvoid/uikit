@@ -2,6 +2,7 @@ import {css, nothing} from 'lit'
 
 import {html} from '../reatom-lit/index.js'
 import {ReatomLitElement} from '../reatom-lit/ReatomLitElement'
+import type {CVThemePaletteControllerElement} from './cv-theme-palette-controller'
 import {formatHwbColor} from './palette/generator'
 import {
   CV_THEME_PALETTE_CHANNELS,
@@ -13,7 +14,6 @@ import {
   type CVThemePaletteRole,
 } from './palette/index'
 import type {CVThemeScheme} from './types'
-import type {CVThemePaletteControllerElement} from './cv-theme-palette-controller'
 
 const roleLabels: Record<CVThemePaletteRole, string> = {
   bg: 'Background',
@@ -253,7 +253,11 @@ export class CVThemePaletteEditor extends ReatomLitElement {
     `
   }
 
-  private renderRole(scheme: CVThemeScheme, role: CVThemePaletteRole, color: {h: number; w: number; b: number}) {
+  private renderRole(
+    scheme: CVThemeScheme,
+    role: CVThemePaletteRole,
+    color: {h: number; w: number; b: number},
+  ) {
     return html`
       <div part="role-row" data-role=${role}>
         <div part="role-heading">

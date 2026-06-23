@@ -74,29 +74,27 @@ Wrap the composition with `cv-theme-provider` when you want a scoped color mode 
 The docs render this snippet as a live custom-element preview.
 
 ```html
-<cv-theme-provider mode="dark">
-  <section
-    class="getting-started-surface"
-    data-demo="getting-started"
-    data-live-demo-height="280"
-    aria-label="Vault bootstrap preview"
-  >
-    <div class="getting-started-surface-copy">
-      <span class="getting-started-eyebrow">Vault bootstrap</span>
-      <strong>Ready for shell wiring</strong>
-      <span>Tokens, actions, binary state, and progress share one surface.</span>
-    </div>
-    <div class="getting-started-surface-actions">
-      <cv-button variant="primary" pill>Unlock vault</cv-button>
-      <cv-switch checked>Core paired</cv-switch>
-    </div>
-    <div class="getting-started-surface-progress">
-      <span>Bootstrap progress</span>
-      <strong>64%</strong>
-      <cv-progress value="64" max="100" aria-label="Bootstrap progress"></cv-progress>
-    </div>
-  </section>
-</cv-theme-provider>
+<section
+  class="getting-started-surface"
+  data-demo="getting-started"
+  data-live-demo-height="280"
+  aria-label="Vault bootstrap preview"
+>
+  <div class="getting-started-surface-copy">
+    <span class="getting-started-eyebrow">Vault bootstrap</span>
+    <strong>Ready for shell wiring</strong>
+    <span>Tokens, actions, binary state, and progress share one surface.</span>
+  </div>
+  <div class="getting-started-surface-actions">
+    <cv-button variant="primary" pill>Unlock vault</cv-button>
+    <cv-switch checked>Core paired</cv-switch>
+  </div>
+  <div class="getting-started-surface-progress">
+    <span>Bootstrap progress</span>
+    <strong>64%</strong>
+    <cv-progress value="64" max="100" aria-label="Bootstrap progress"></cv-progress>
+  </div>
+</section>
 ```
 
 <div class="component-grid">

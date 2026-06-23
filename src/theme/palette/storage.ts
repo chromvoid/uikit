@@ -30,7 +30,8 @@ export function parseThemePaletteStoredRecord(value: string | null): CVThemePale
 
   try {
     const parsed = JSON.parse(value) as unknown
-    if (!isObject(parsed) || parsed.version !== CV_THEME_PALETTE_VERSION || !isRecipe(parsed.recipe)) return null
+    if (!isObject(parsed) || parsed.version !== CV_THEME_PALETTE_VERSION || !isRecipe(parsed.recipe))
+      return null
 
     return {
       version: CV_THEME_PALETTE_VERSION,

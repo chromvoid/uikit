@@ -15,10 +15,11 @@ The element uses `display: contents` so it does not generate a box in the layout
 
 ## Attributes
 
-| Attribute | Type   | Default    | Description                                              |
-| --------- | ------ | ---------- | -------------------------------------------------------- |
-| `theme`   | String | `""`       | Name of a registered theme to apply via the theme engine |
-| `mode`    | String | `"system"` | Color scheme mode: `light` \| `dark` \| `system`         |
+| Attribute       | Type   | Default    | Description                                              |
+| --------------- | ------ | ---------- | -------------------------------------------------------- |
+| `theme`         | String | `""`       | Name of a registered theme to apply via the theme engine |
+| `mode`          | String | `"system"` | Color scheme mode: `light` \| `dark` \| `system`         |
+| `resolved-mode` | String | `"light"`  | Current resolved scheme: `light` \| `dark`               |
 
 ### `mode` behavior
 
@@ -227,7 +228,11 @@ cv-theme-provider[data-cv-theme='my-theme'] {
 
 ## Events
 
-None. The theme provider does not emit events. Theme changes propagate via CSS custom property inheritance.
+| Event                  | Detail                 | Description                                     |
+| ---------------------- | ---------------------- | ----------------------------------------------- |
+| `cv-theme-mode-change` | `{mode, resolvedMode}` | Fired when the resolved light/dark mode changes |
+
+Theme token changes still propagate via CSS custom property inheritance.
 
 ## Accessibility
 
@@ -245,22 +250,35 @@ The theme engine (`theme-engine.ts`) provides a runtime API for registering and 
 type CVThemeTokenName = `--cv-${string}`
 type CVThemeTokens = Record<CVThemeTokenName, string>
 
+type CVThemeScheme = 'light' | 'dark'
+type CVThemeSchemeTokens = Record<CVThemeScheme, CVThemeTokens>
+type CVThemeInput = CVThemeTokens | CVThemeSchemeTokens
+
 interface CVThemeDefinition {
   name: string
   tokens: CVThemeTokens
+  schemeTokens?: CVThemeSchemeTokens
 }
 
 type CVThemeTarget = HTMLElement | ShadowRoot | Document
 ```
 
-### `defineTheme(name: string, tokens: CVThemeTokens): CVThemeDefinition`
+### `defineTheme(name: string, tokens: CVThemeInput): CVThemeDefinition`
 
 Registers a named theme in the global theme registry.
 
 - `name` must be a non-empty string.
 - All keys in `tokens` must start with `--cv-`. Invalid keys throw an `Error`.
+- Passing `{light, dark}` registers scheme-aware tokens. `cv-theme-provider` applies the branch matching its resolved mode.
 - Returns a defensive copy of the registered definition.
 - Calling `defineTheme` with an existing name overwrites the previous definition.
+
+### `resolveThemeTokens(name: string, scheme: CVThemeScheme): CVThemeTokens | undefined`
+
+Returns a defensive copy of the token map for a theme and scheme.
+
+- Static themes return the same token map for both schemes.
+- Scheme-aware themes return the matching `light` or `dark` branch.
 
 ### `getTheme(name: string): CVThemeDefinition | undefined`
 

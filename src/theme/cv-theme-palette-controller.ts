@@ -1,13 +1,13 @@
 import {css, html, LitElement} from 'lit'
 import type {PropertyValues} from 'lit'
 
+import {CVThemeProvider} from './cv-theme-provider'
 import {
   createThemePaletteController,
   CV_THEME_PALETTE_STORAGE_KEY,
   type CVThemePaletteController,
   type CVThemePaletteSavedSnapshot,
 } from './palette/index'
-import {CVThemeProvider} from './cv-theme-provider'
 
 export type CVPaletteSaveEvent = CustomEvent<CVThemePaletteSavedSnapshot>
 
@@ -122,7 +122,8 @@ export class CVThemePaletteControllerElement extends LitElement {
 
   private syncEditors(): void {
     for (const editor of this.querySelectorAll('cv-theme-palette-editor')) {
-      ;(editor as unknown as {model?: CVThemePaletteController; requestUpdate?: () => void}).model = this.model
+      ;(editor as unknown as {model?: CVThemePaletteController; requestUpdate?: () => void}).model =
+        this.model
       ;(editor as unknown as {requestUpdate?: () => void}).requestUpdate?.()
     }
   }

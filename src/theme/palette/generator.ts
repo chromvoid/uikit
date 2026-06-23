@@ -1,4 +1,5 @@
 import type {CVThemeScheme, CVThemeSchemeTokens, CVThemeTokenName, CVThemeTokens} from '../types'
+import {normalizeThemePaletteRecipe} from './ranges'
 import {
   CV_THEME_PALETTE_ROLES,
   CV_THEME_PALETTE_SCHEMES,
@@ -8,7 +9,6 @@ import {
   type CVThemePaletteValidationIssue,
   type CVThemePaletteValidationResult,
 } from './types'
-import {normalizeThemePaletteRecipe} from './ranges'
 
 const HWB_FUNCTION_NAME = 'hwb'
 const MIN_TEXT_CONTRAST = 4.5
@@ -183,25 +183,45 @@ function generateSchemeTokens(scheme: CVThemeScheme, recipe: CVThemePaletteRecip
   addToken(tokens, '--cv-color-surface-2', 'var(--cv-palette-surface-2)')
   addToken(tokens, '--cv-color-surface-3', 'var(--cv-palette-surface-3)')
   addToken(tokens, '--cv-color-surface-4', 'var(--cv-palette-surface-4)')
-  addToken(tokens, '--cv-color-surface-elevated', scheme === 'dark' ? 'var(--cv-color-surface-2)' : 'var(--cv-color-surface)')
+  addToken(
+    tokens,
+    '--cv-color-surface-elevated',
+    scheme === 'dark' ? 'var(--cv-color-surface-2)' : 'var(--cv-color-surface)',
+  )
   addToken(tokens, '--cv-color-surface-secondary', 'var(--cv-color-surface-2)')
   addToken(tokens, '--cv-color-surface-tertiary', 'var(--cv-color-surface-3)')
   addToken(tokens, '--cv-color-surface-hover', formatHwbColor(primary, scheme === 'dark' ? 0.07 : 0.06))
-  addToken(tokens, '--cv-color-surface-glass-subtle', formatHwbColor(surface, scheme === 'dark' ? 0.32 : 0.54))
+  addToken(
+    tokens,
+    '--cv-color-surface-glass-subtle',
+    formatHwbColor(surface, scheme === 'dark' ? 0.32 : 0.54),
+  )
   addToken(tokens, '--cv-color-surface-glass', formatHwbColor(surface, scheme === 'dark' ? 0.6 : 0.72))
-  addToken(tokens, '--cv-color-surface-glass-strong', formatHwbColor(surface, scheme === 'dark' ? 0.82 : 0.84))
+  addToken(
+    tokens,
+    '--cv-color-surface-glass-strong',
+    formatHwbColor(surface, scheme === 'dark' ? 0.82 : 0.84),
+  )
   addToken(
     tokens,
     '--cv-color-surface-secondary-glass-soft',
     formatHwbColor(surface2, scheme === 'dark' ? 0.4 : 0.58),
   )
-  addToken(tokens, '--cv-color-surface-secondary-glass', formatHwbColor(surface2, scheme === 'dark' ? 0.78 : 0.82))
+  addToken(
+    tokens,
+    '--cv-color-surface-secondary-glass',
+    formatHwbColor(surface2, scheme === 'dark' ? 0.78 : 0.82),
+  )
   addToken(
     tokens,
     '--cv-color-surface-secondary-glass-strong',
     formatHwbColor(surface2, scheme === 'dark' ? 0.88 : 0.9),
   )
-  addToken(tokens, '--cv-color-surface-tertiary-glass', formatHwbColor(surface3, scheme === 'dark' ? 0.6 : 0.72))
+  addToken(
+    tokens,
+    '--cv-color-surface-tertiary-glass',
+    formatHwbColor(surface3, scheme === 'dark' ? 0.6 : 0.72),
+  )
   addToken(
     tokens,
     '--cv-color-surface-tertiary-glass-strong',

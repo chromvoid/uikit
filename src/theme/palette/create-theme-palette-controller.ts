@@ -3,11 +3,7 @@ import {action, atom, computed} from '@reatom/core'
 import {defineTheme} from '../theme-engine'
 import type {CVThemeScheme, CVThemeSchemeTokens} from '../types'
 import {generateThemePaletteTokens, validateThemePaletteRecipe} from './generator'
-import {
-  cloneThemePaletteRecipe,
-  createDefaultThemePaletteRecipe,
-  normalizeThemePaletteRecipe,
-} from './ranges'
+import {cloneThemePaletteRecipe, createDefaultThemePaletteRecipe, normalizeThemePaletteRecipe} from './ranges'
 import {
   readThemePaletteStoredRecord,
   getThemePaletteStorage,
@@ -53,12 +49,12 @@ function createSavedSnapshot(
   }
 }
 
-export function createThemePaletteController(
-  options: CreateThemePaletteControllerOptions = {},
-) {
+export function createThemePaletteController(options: CreateThemePaletteControllerOptions = {}) {
   const name = options.name ?? 'cvThemePalette'
   const resolveStorage = () => options.storage ?? getThemePaletteStorage()
-  const initialRecipe = normalizeThemePaletteRecipe(options.initialRecipe ?? createDefaultThemePaletteRecipe())
+  const initialRecipe = normalizeThemePaletteRecipe(
+    options.initialRecipe ?? createDefaultThemePaletteRecipe(),
+  )
   const themeName = atom(options.themeName ?? 'cv-user-palette', `${name}.themeName`)
   const storageKey = atom(options.storageKey ?? CV_THEME_PALETTE_STORAGE_KEY, `${name}.storageKey`)
   const draft = atom<CVThemePaletteRecipe>(cloneThemePaletteRecipe(initialRecipe), `${name}.draft`)

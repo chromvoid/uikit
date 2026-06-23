@@ -134,7 +134,7 @@ registerUikit()</code></pre>
       </figure>
       <figure class="uikit-quickstart-code">
         <figcaption>shell.html</figcaption>
-        <pre><code>&lt;cv-theme-provider mode="dark"&gt;
+        <pre><code>&lt;cv-theme-provider mode="system"&gt;
   &lt;cv-button&gt;Unlock vault&lt;/cv-button&gt;
   &lt;cv-checkbox checked&gt;Arm sync&lt;/cv-checkbox&gt;
   &lt;cv-progress value="58" aria-label="Migration progress"&gt;&lt;/cv-progress&gt;

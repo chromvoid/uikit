@@ -1,9 +1,9 @@
 import {afterEach, describe, expect, it} from 'vitest'
 
-import {CVThemeProvider} from './cv-theme-provider'
 import {CVThemePaletteControllerElement} from './cv-theme-palette-controller'
 import {CVThemePaletteEditor} from './cv-theme-palette-editor'
 import {CVThemePaletteSwatch} from './cv-theme-palette-swatch'
+import {CVThemeProvider} from './cv-theme-provider'
 import type {CVThemePaletteSavedSnapshot} from './palette/index'
 
 CVThemeProvider.define()
@@ -30,7 +30,9 @@ describe('cv-theme-palette-controller', () => {
     document.body.append(provider)
     await settle(provider)
 
-    const controller = document.createElement('cv-theme-palette-controller') as CVThemePaletteControllerElement
+    const controller = document.createElement(
+      'cv-theme-palette-controller',
+    ) as CVThemePaletteControllerElement
     controller['for'] = 'app-theme'
     controller.themeName = 'unit-palette-preview'
     document.body.append(controller)
@@ -45,7 +47,9 @@ describe('cv-theme-palette-controller', () => {
   })
 
   it('saves through the controller and emits the SSR handoff snapshot', async () => {
-    const controller = document.createElement('cv-theme-palette-controller') as CVThemePaletteControllerElement
+    const controller = document.createElement(
+      'cv-theme-palette-controller',
+    ) as CVThemePaletteControllerElement
     controller.storageKey = 'unit-palette-save'
     controller.themeName = 'unit-palette-save-theme'
     document.body.append(controller)
@@ -70,7 +74,9 @@ describe('cv-theme-palette-controller', () => {
 
 describe('cv-theme-palette-editor', () => {
   it('renders controls from the host controller model and updates draft values', async () => {
-    const controller = document.createElement('cv-theme-palette-controller') as CVThemePaletteControllerElement
+    const controller = document.createElement(
+      'cv-theme-palette-controller',
+    ) as CVThemePaletteControllerElement
     const editor = document.createElement('cv-theme-palette-editor') as CVThemePaletteEditor
     controller.append(editor)
     document.body.append(controller)
@@ -91,11 +97,15 @@ describe('cv-theme-palette-editor', () => {
     await settle(editor)
 
     expect(controller.model.state.draft().schemes.dark.primary.h).toBe(240)
-    expect(editor.shadowRoot!.querySelector('button[data-kind="primary"]')?.hasAttribute('disabled')).toBe(false)
+    expect(editor.shadowRoot!.querySelector('button[data-kind="primary"]')?.hasAttribute('disabled')).toBe(
+      false,
+    )
   })
 
   it('routes save button clicks through the host controller', async () => {
-    const controller = document.createElement('cv-theme-palette-controller') as CVThemePaletteControllerElement
+    const controller = document.createElement(
+      'cv-theme-palette-controller',
+    ) as CVThemePaletteControllerElement
     controller.storageKey = 'unit-palette-editor-save'
     const editor = document.createElement('cv-theme-palette-editor') as CVThemePaletteEditor
     controller.append(editor)

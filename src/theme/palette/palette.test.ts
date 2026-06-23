@@ -3,11 +3,7 @@ import {describe, expect, it} from 'vitest'
 import {resolveThemeTokens} from '../theme-engine'
 import {createThemePaletteController} from './create-theme-palette-controller'
 import {generateThemePaletteTokens, validateThemePaletteRecipe} from './generator'
-import {
-  cloneThemePaletteRecipe,
-  createDefaultThemePaletteRecipe,
-  normalizeThemePaletteRecipe,
-} from './ranges'
+import {cloneThemePaletteRecipe, createDefaultThemePaletteRecipe, normalizeThemePaletteRecipe} from './ranges'
 import {
   parseThemePaletteStoredRecord,
   readThemePaletteStoredRecord,
