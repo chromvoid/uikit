@@ -1,9 +1,17 @@
 import {LitElement, css, html} from 'lit'
 import type {PropertyValues} from 'lit'
 
-import {getTheme} from './theme-engine'
+import {getTheme, resolveThemeTokens} from './theme-engine'
+import type {CVThemeScheme} from './types'
 
 export type CVThemeMode = 'light' | 'dark' | 'system'
+
+export interface CVThemeModeChangeEventDetail {
+  mode: CVThemeMode
+  resolvedMode: CVThemeScheme
+}
+
+export type CVThemeModeChangeEvent = CustomEvent<CVThemeModeChangeEventDetail>
 
 export class CVThemeProvider extends LitElement {
   static elementName = 'cv-theme-provider'
@@ -12,11 +20,13 @@ export class CVThemeProvider extends LitElement {
     return {
       theme: {type: String, reflect: true},
       mode: {type: String, reflect: true},
+      resolvedMode: {type: String, attribute: 'resolved-mode', reflect: true},
     }
   }
 
   declare theme: string
   declare mode: CVThemeMode
+  declare resolvedMode: CVThemeScheme
 
   private _mediaQuery: MediaQueryList | null = null
   private _mediaChangeHandler: ((e: MediaQueryListEvent | {matches: boolean}) => void) | null = null
@@ -26,6 +36,7 @@ export class CVThemeProvider extends LitElement {
     super()
     this.theme = ''
     this.mode = 'system'
+    this.resolvedMode = 'light'
   }
 
   static styles = [
@@ -64,12 +75,16 @@ export class CVThemeProvider extends LitElement {
     }
   }
 
+  refreshTheme(): void {
+    this._applyCurrentTheme()
+  }
+
   private _applyMode(): void {
     if (this.mode === 'system') {
       this._setupMediaListener()
     } else {
       this._removeMediaListener()
-      this.style.colorScheme = this.mode
+      this._setResolvedMode(this.mode)
     }
   }
 
@@ -77,20 +92,20 @@ export class CVThemeProvider extends LitElement {
     this._removeMediaListener()
 
     if (typeof window.matchMedia !== 'function') {
-      this.style.colorScheme = 'light'
+      this._setResolvedMode('light')
       return
     }
 
     const mq = window.matchMedia('(prefers-color-scheme: dark)')
     if (!mq) {
-      this.style.colorScheme = 'light'
+      this._setResolvedMode('light')
       return
     }
     this._mediaQuery = mq
-    this.style.colorScheme = mq.matches ? 'dark' : 'light'
+    this._setResolvedMode(mq.matches ? 'dark' : 'light')
 
     this._mediaChangeHandler = (e: {matches: boolean}) => {
-      this.style.colorScheme = e.matches ? 'dark' : 'light'
+      this._setResolvedMode(e.matches ? 'dark' : 'light')
     }
     mq.addEventListener('change', this._mediaChangeHandler as EventListener)
   }
@@ -101,6 +116,26 @@ export class CVThemeProvider extends LitElement {
       this._mediaQuery = null
       this._mediaChangeHandler = null
     }
+  }
+
+  private _setResolvedMode(next: CVThemeScheme): void {
+    const previous = this.resolvedMode
+    this.resolvedMode = next
+    this.style.colorScheme = next
+
+    if (previous === next) return
+
+    this.dispatchEvent(
+      new CustomEvent<CVThemeModeChangeEventDetail>('cv-theme-mode-change', {
+        detail: {
+          mode: this.mode,
+          resolvedMode: next,
+        },
+        bubbles: true,
+        composed: true,
+      }),
+    )
+    this._applyCurrentTheme()
   }
 
   private _applyCurrentTheme(): void {
@@ -121,7 +156,10 @@ export class CVThemeProvider extends LitElement {
       return
     }
 
-    for (const [key, value] of Object.entries(definition.tokens)) {
+    const tokens = resolveThemeTokens(this.theme, this.resolvedMode)
+    if (!tokens) return
+
+    for (const [key, value] of Object.entries(tokens)) {
       this.style.setProperty(key, value)
       this._appliedTokens.add(key)
     }

@@ -100,10 +100,18 @@ import {
   CVTreeview,
   CVWindowSplitter,
 } from './components/index'
-import {CVThemeProvider} from './theme/index'
+import {
+  CVThemePaletteControllerElement,
+  CVThemePaletteEditor,
+  CVThemePaletteSwatch,
+  CVThemeProvider,
+} from './theme/index'
 
 export function registerUikit(): void {
   CVThemeProvider.define()
+  CVThemePaletteControllerElement.define()
+  CVThemePaletteEditor.define()
+  CVThemePaletteSwatch.define()
   CVAccordionItem.define()
   CVAccordion.define()
   CVAlertDialog.define()

@@ -140,6 +140,21 @@ describe('cv-theme-provider', () => {
       expect(el.style.colorScheme).toBe('light')
     })
 
+    it('exposes resolvedMode and dispatches when resolved mode changes', async () => {
+      const el = await createProvider({mode: 'dark'})
+      const details: Array<{mode: string; resolvedMode: string}> = []
+      el.addEventListener('cv-theme-mode-change', (event) => {
+        details.push((event as CustomEvent<{mode: string; resolvedMode: string}>).detail)
+      })
+
+      el.mode = 'light'
+      await settle(el)
+
+      expect(el.resolvedMode).toBe('light')
+      expect(el.getAttribute('resolved-mode')).toBe('light')
+      expect(details).toEqual([{mode: 'light', resolvedMode: 'light'}])
+    })
+
     it('changing mode from light to dark updates color-scheme', async () => {
       const el = await createProvider({mode: 'light'})
       expect(el.style.colorScheme).toBe('light')
@@ -307,6 +322,61 @@ describe('cv-theme-provider', () => {
       expect(el.style.getPropertyValue('--cv-color-bg').trim()).toBe('#333')
       // Previous tokens from theme A should be removed
       expect(el.style.getPropertyValue('--cv-color-border').trim()).toBe('')
+    })
+
+    it('scheme-aware theme tokens follow explicit provider mode', async () => {
+      const name = `scheme-aware-${Date.now()}`
+      defineTheme(name, {
+        dark: {
+          '--cv-color-bg': '#101010',
+        },
+        light: {
+          '--cv-color-bg': '#f0f0f0',
+        },
+      })
+
+      const el = await createProvider({theme: name, mode: 'dark'})
+      expect(el.style.getPropertyValue('--cv-color-bg').trim()).toBe('#101010')
+
+      el.mode = 'light'
+      await settle(el)
+
+      expect(el.style.getPropertyValue('--cv-color-bg').trim()).toBe('#f0f0f0')
+    })
+
+    it('scheme-aware theme tokens follow system preference changes', async () => {
+      let changeCallback: ((e: {matches: boolean}) => void) | undefined
+      const addListenerSpy = vi.fn((event: string, cb: (e: {matches: boolean}) => void) => {
+        if (event === 'change') changeCallback = cb
+      })
+      vi.stubGlobal(
+        'matchMedia',
+        vi.fn().mockReturnValue({
+          matches: false,
+          addEventListener: addListenerSpy,
+          removeEventListener: vi.fn(),
+        }),
+      )
+
+      const name = `scheme-system-${Date.now()}`
+      defineTheme(name, {
+        dark: {
+          '--cv-color-bg': '#121212',
+        },
+        light: {
+          '--cv-color-bg': '#fafafa',
+        },
+      })
+
+      const el = await createProvider({theme: name, mode: 'system'})
+      expect(el.style.getPropertyValue('--cv-color-bg').trim()).toBe('#fafafa')
+
+      expect(changeCallback).toBeDefined()
+      changeCallback!({matches: true})
+      await settle(el)
+
+      expect(el.resolvedMode).toBe('dark')
+      expect(el.style.getPropertyValue('--cv-color-bg').trim()).toBe('#121212')
     })
   })
 
