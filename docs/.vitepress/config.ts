@@ -10,8 +10,9 @@ const description =
 const forceDarkThemeScript = "document.documentElement.dataset.theme='dark'"
 
 const repoName = process.env.GITHUB_REPOSITORY?.split('/')[1]
+const docsBase = process.env.DOCS_BASE?.trim()
 const base =
-  process.env.DOCS_BASE ?? (process.env.GITHUB_ACTIONS === 'true' && repoName ? `/${repoName}/` : '/')
+  docsBase || (process.env.GITHUB_ACTIONS === 'true' && repoName ? `/${repoName}/` : '/')
 
 const guideItems = [
   {text: 'Getting Started', link: '/guide/getting-started'},
