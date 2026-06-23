@@ -352,8 +352,7 @@ export class CVFeed extends ReatomLitElement {
     // on its own but may arrive batched with other DOM mutations.
     const currentIds = this.model.state.articleIds()
     const newIds = articles.map((a) => a.id)
-    const idsChanged =
-      currentIds.length !== newIds.length || currentIds.some((id, i) => id !== newIds[i])
+    const idsChanged = currentIds.length !== newIds.length || currentIds.some((id, i) => id !== newIds[i])
     const disabledChanged = articles.some((article) => {
       const props = this.tryGetArticleProps(article.id)
       if (!props) return true

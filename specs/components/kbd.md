@@ -40,10 +40,12 @@ None. The component does not listen for keyboard shortcuts.
   <section class="kbd-demo-hero" aria-labelledby="kbd-demo-title">
     <div class="kbd-demo-copy">
       <span class="kbd-demo-kicker">Keycap primitive</span>
-      <h3 id="kbd-demo-title">Use kbd for one physical key, then compose shortcuts at the consumer boundary.</h3>
+      <h3 id="kbd-demo-title">
+        Use kbd for one physical key, then compose shortcuts at the consumer boundary.
+      </h3>
       <p>
-        The component renders a native <code>kbd</code> node, keeps the label stable, and stays passive. Shortcut
-        matching, platform labels, and command execution remain outside this primitive.
+        The component renders a native <code>kbd</code> node, keeps the label stable, and stays passive.
+        Shortcut matching, platform labels, and command execution remain outside this primitive.
       </p>
     </div>
 

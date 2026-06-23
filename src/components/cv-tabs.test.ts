@@ -868,9 +868,7 @@ describe('cv-tabs', () => {
       await settle(tabs)
 
       const changes: string[] = []
-      tabs.addEventListener('cv-change', (e) =>
-        changes.push((e as CustomEvent).detail.selectedTabId),
-      )
+      tabs.addEventListener('cv-change', (e) => changes.push((e as CustomEvent).detail.selectedTabId))
 
       tabElements[1]!.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
       await settle(tabs)

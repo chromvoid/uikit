@@ -100,18 +100,20 @@ selection state, keeps child `selected` states in sync, and adds roving keyboard
 </div>
 
 <script>
-  document.querySelectorAll('.chip-group-demo-shell[data-demo="chip-group"]:not([data-ready])').forEach((shell) => {
-    shell.dataset.ready = 'true'
-    shell.querySelectorAll('cv-chip-group').forEach((group) => {
-      const panel = group.closest('.chip-group-demo-panel')
-      const output = panel?.querySelector('.chip-group-demo-output')
-      group.addEventListener('cv-change', (event) => {
-        if (!output) return
-        const value = Array.isArray(event.detail.value) ? event.detail.value.join(' ') : event.detail.value
-        output.textContent = `Current value: ${value || 'empty'}`
+  document
+    .querySelectorAll('.chip-group-demo-shell[data-demo="chip-group"]:not([data-ready])')
+    .forEach((shell) => {
+      shell.dataset.ready = 'true'
+      shell.querySelectorAll('cv-chip-group').forEach((group) => {
+        const panel = group.closest('.chip-group-demo-panel')
+        const output = panel?.querySelector('.chip-group-demo-output')
+        group.addEventListener('cv-change', (event) => {
+          if (!output) return
+          const value = Array.isArray(event.detail.value) ? event.detail.value.join(' ') : event.detail.value
+          output.textContent = `Current value: ${value || 'empty'}`
+        })
       })
     })
-  })
 </script>
 ```
 
@@ -143,9 +145,9 @@ Shadow structure:
 
 ## Slots
 
-| Slot        | Description               |
-| ----------- | ------------------------- |
-| `(default)` | Slotted `cv-chip` items   |
+| Slot        | Description             |
+| ----------- | ----------------------- |
+| `(default)` | Slotted `cv-chip` items |
 
 ## CSS Parts
 
@@ -173,8 +175,8 @@ chips without emitting events.
 
 ## Selection modes
 
-| Mode       | Behavior                                                                 |
-| ---------- | ------------------------------------------------------------------------ |
-| `none`     | Chips still emit their own `cv-chip-action`; the group does not select   |
-| `single`   | One selected value at a time; clicking the selected chip clears it       |
-| `multiple` | Adds or removes values; host `value` serializes them with spaces         |
+| Mode       | Behavior                                                               |
+| ---------- | ---------------------------------------------------------------------- |
+| `none`     | Chips still emit their own `cv-chip-action`; the group does not select |
+| `single`   | One selected value at a time; clicking the selected chip clears it     |
+| `multiple` | Adds or removes values; host `value` serializes them with spaces       |

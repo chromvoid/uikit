@@ -66,7 +66,9 @@ describe('cv-select', () => {
 
       expect(cssText).toMatch(/\[part='trigger'\]\s*{[\s\S]*justify-content:\s*flex-start/)
       expect(cssText).toMatch(/\[part='value'\]\s*{[\s\S]*flex:\s*1 1 auto/)
-      expect(cssText).toMatch(/\[part='clear-button'\]\s*{[\s\S]*inline-size:\s*var\(--cv-select-clear-button-size/)
+      expect(cssText).toMatch(
+        /\[part='clear-button'\]\s*{[\s\S]*inline-size:\s*var\(--cv-select-clear-button-size/,
+      )
     })
 
     it('rotates the chevron when the select is open', () => {
@@ -1139,10 +1141,7 @@ describe('cv-select', () => {
 
   describe('option added after mount with selected attribute', () => {
     it('honors a freshly slotted selected option', async () => {
-      const el = await createSelect(
-        {},
-        `<cv-select-option value="a">Alpha</cv-select-option>`,
-      )
+      const el = await createSelect({}, `<cv-select-option value="a">Alpha</cv-select-option>`)
       expect(el.value).toBe('')
 
       const added = document.createElement('cv-select-option') as CVSelectOption

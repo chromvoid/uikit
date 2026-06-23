@@ -310,8 +310,7 @@ export class CVSliderMultiThumb extends ReatomLitElement {
       // pointer is at or beyond the thumb's value, prefer the highest index (the
       // thumb that can move right); otherwise prefer the lowest index.
       const isCloser = distance < nearestDistance
-      const isTieTowardsHigher =
-        distance === nearestDistance && pointerValue >= value && index > nearestIndex
+      const isTieTowardsHigher = distance === nearestDistance && pointerValue >= value && index > nearestIndex
       if (isCloser || isTieTowardsHigher) {
         nearestDistance = distance
         nearestIndex = index
@@ -432,13 +431,7 @@ export class CVSliderMultiThumb extends ReatomLitElement {
   }
 
   private handleThumbKeyDown = (index: number, event: KeyboardEvent) => {
-    if (
-      this.disabled ||
-      event.defaultPrevented ||
-      event.altKey ||
-      event.ctrlKey ||
-      event.metaKey
-    ) {
+    if (this.disabled || event.defaultPrevented || event.altKey || event.ctrlKey || event.metaKey) {
       return
     }
 

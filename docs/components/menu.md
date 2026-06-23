@@ -15,8 +15,8 @@ Menu panel that displays a list of actionable items, supporting checkable items 
       <span class="menu-demo-kicker">Menu contract</span>
       <h3>Operate a dense action surface without losing keyboard state or checkable context.</h3>
       <p>
-        The menu keeps selection, active item, checkbox groups, radio groups, disabled actions, and
-        submenu affordances in the headless model while the UIKit layer owns only rendering.
+        The menu keeps selection, active item, checkbox groups, radio groups, disabled actions, and submenu
+        affordances in the headless model while the UIKit layer owns only rendering.
       </p>
     </div>
 

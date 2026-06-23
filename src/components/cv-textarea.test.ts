@@ -39,9 +39,15 @@ describe('cv-textarea', () => {
     it('renders filled variant with a visible non-prominent shell', () => {
       const stylesText = getStylesText()
 
-      expect(stylesText).toMatch(/:host\(\[variant='filled'\]\) \[part='base'\]\s*{[\s\S]*background:\s*var\(--cv-color-surface-2/)
-      expect(stylesText).toMatch(/:host\(\[variant='filled'\]\) \[part='base'\]\s*{[\s\S]*border-color:\s*transparent;/)
-      expect(stylesText).toMatch(/:host\(\[variant='filled'\]\) \[part='base'\]\s*{[\s\S]*box-shadow:\s*inset 0 0 0 1px/)
+      expect(stylesText).toMatch(
+        /:host\(\[variant='filled'\]\) \[part='base'\]\s*{[\s\S]*background:\s*var\(--cv-color-surface-2/,
+      )
+      expect(stylesText).toMatch(
+        /:host\(\[variant='filled'\]\) \[part='base'\]\s*{[\s\S]*border-color:\s*transparent;/,
+      )
+      expect(stylesText).toMatch(
+        /:host\(\[variant='filled'\]\) \[part='base'\]\s*{[\s\S]*box-shadow:\s*inset 0 0 0 1px/,
+      )
     })
   })
 

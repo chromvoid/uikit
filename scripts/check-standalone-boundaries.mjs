@@ -50,8 +50,6 @@ const forbiddenToolingPatterns = [
   {pattern: /\bworkspace:\*/u, reason: 'workspace dependency is not allowed'},
   {pattern: /\bnpx\s+prettier\b/u, reason: 'prettier CLI is not allowed'},
   {pattern: /\bprettier\s+--/u, reason: 'prettier CLI is not allowed'},
-  {pattern: /\bsetup-bun\b/u, reason: 'bun dependency is not allowed'},
-  {pattern: /\bbun\s+(?:build|run|test|install|x)\b/u, reason: 'bun dependency is not allowed'},
   {pattern: /\.\.\/headless\/dist/u, reason: 'tooling file references sibling headless dist output'},
   {pattern: /\.\.\/\.\.\/\.oxlintrc\.json/u, reason: 'tooling file references a root oxlint config'},
   {pattern: /\.\.\/\.\.\/\.prettierrc/u, reason: 'tooling file references a root prettier config'},

@@ -1064,7 +1064,9 @@ describe('cv-toolbar', () => {
         {type: 'item', value: 'b', label: 'B'},
       ])
       let focusCount = 0
-      getItems(toolbar).at(1)?.addEventListener('focus', () => focusCount++)
+      getItems(toolbar)
+        .at(1)
+        ?.addEventListener('focus', () => focusCount++)
 
       toolbar.value = 'b'
       await settle(toolbar)
@@ -1117,7 +1119,12 @@ describe('cv-toolbar', () => {
       expect(toolbar.value).toBe('a')
 
       const base = getBase(toolbar)
-      const event = new KeyboardEvent('keydown', {key: 'ArrowRight', ctrlKey: true, bubbles: true, cancelable: true})
+      const event = new KeyboardEvent('keydown', {
+        key: 'ArrowRight',
+        ctrlKey: true,
+        bubbles: true,
+        cancelable: true,
+      })
       base.dispatchEvent(event)
       await settle(toolbar)
 
@@ -1132,7 +1139,12 @@ describe('cv-toolbar', () => {
       ])
 
       const base = getBase(toolbar)
-      const event = new KeyboardEvent('keydown', {key: 'ArrowRight', metaKey: true, bubbles: true, cancelable: true})
+      const event = new KeyboardEvent('keydown', {
+        key: 'ArrowRight',
+        metaKey: true,
+        bubbles: true,
+        cancelable: true,
+      })
       base.dispatchEvent(event)
       await settle(toolbar)
 
@@ -1147,7 +1159,12 @@ describe('cv-toolbar', () => {
       ])
 
       const base = getBase(toolbar)
-      const event = new KeyboardEvent('keydown', {key: 'ArrowRight', altKey: true, bubbles: true, cancelable: true})
+      const event = new KeyboardEvent('keydown', {
+        key: 'ArrowRight',
+        altKey: true,
+        bubbles: true,
+        cancelable: true,
+      })
       base.dispatchEvent(event)
       await settle(toolbar)
 

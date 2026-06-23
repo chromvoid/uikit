@@ -71,14 +71,14 @@ NoLoJS является внешним reference material, а не нормат�
 
 # 3) Определения
 
-| Термин | Значение |
-| ------ | -------- |
-| Native-first | Решение начинается с HTML/CSS/browser API, если они покрывают semantic behavior, accessibility and interaction contract. |
-| No-JS UI mechanic | UI-механика, работающая только через HTML/CSS, например simple `<details>/<summary>` disclosure or CSS scroll-snap rail. |
-| Low-JS UI mechanic | UI-механика, где JS только связывает native primitive with model state, events, fallback or progressive enhancement. |
-| Business logic | Правила домена, workflow, permissions, validation, persistence, security, async side effects and app state transitions. |
-| Composite widget | Виджет с coordinated focus/keyboard/selection state across multiple interactive descendants, for example real tabs, menu, combobox or roving-focus accordion. |
-| Presence animation | Чисто визуальное появление/исчезновение already-owned state через CSS transitions/animations. |
+| Термин             | Значение                                                                                                                                                      |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Native-first       | Решение начинается с HTML/CSS/browser API, если они покрывают semantic behavior, accessibility and interaction contract.                                      |
+| No-JS UI mechanic  | UI-механика, работающая только через HTML/CSS, например simple `<details>/<summary>` disclosure or CSS scroll-snap rail.                                      |
+| Low-JS UI mechanic | UI-механика, где JS только связывает native primitive with model state, events, fallback or progressive enhancement.                                          |
+| Business logic     | Правила домена, workflow, permissions, validation, persistence, security, async side effects and app state transitions.                                       |
+| Composite widget   | Виджет с coordinated focus/keyboard/selection state across multiple interactive descendants, for example real tabs, menu, combobox or roving-focus accordion. |
+| Presence animation | Чисто визуальное появление/исчезновение already-owned state через CSS transitions/animations.                                                                 |
 
 ---
 
@@ -113,29 +113,29 @@ Native primitives are preferred only when their semantics fit the product intera
 
 ## 5.1 Functional requirements
 
-| ID | Requirement |
-| --- | ----------- |
-| **FR-229-001 Disclosure** | Simple FAQ/settings/help/welcome expand-collapse panels should use `<details>/<summary>` or a lightweight `cv-disclosure` path before `cv-accordion`. |
-| **FR-229-002 Accordion boundary** | Keep `cv-accordion` for controlled, grouped, roving-focus, APG-heavy or app-state-bound accordion scenarios. Do not use it as the default for simple content disclosure. |
-| **FR-229-003 Popover unification** | New menus, guidance panels, lightweight contextual panels and tooltip-like affordances should use `cv-popover` or a component that delegates to it instead of adding feature-local document listeners and positioning. |
-| **FR-229-004 Dialog boundary** | Keep `cv-dialog` for modal/non-modal top-layer surfaces that need focus restore, scroll lock, lifecycle events, mobile safe-area behavior or model-owned open state. Do not replace it with ad-hoc native dialog usage in feature code. |
-| **FR-229-005 Form choice semantics** | Do not use `role="tablist"` for choices that are not tabs. Entry type, mode and segmented form choices should use radio-group/segmented-control semantics. |
-| **FR-229-006 Lazy media** | Images, videos and iframes outside virtualized or immediately critical content should opt into native loading/decoding hints such as `loading="lazy"` and `decoding="async"` where applicable. |
-| **FR-229-007 Scroll rails** | Horizontal rails, thumbnails, feature cards and action strips should start from `overflow-x` + CSS scroll snap before JS carousel/swiper logic. |
-| **FR-229-008 Carousel boundary** | Use JS only when a rail needs stateful pagination, synchronized selection, zoom/gesture state, analytics-critical lifecycle or non-scroll interaction semantics. |
-| **FR-229-009 Presence animation** | For purely visual open/close or enter/exit appearance, JS should own state/lifecycle only; CSS should own the transition using existing tokens and `SPEC-225` motion rules. |
-| **FR-229-010 Browser fallback** | If native support is incomplete, progressive enhancement fallback must be centralized in UIKit/headless/shared code, not copied across feature components. |
-| **FR-229-011 Review evidence** | Frontend PRs that add custom JS for disclosure, popover, scroll rails, lazy media or visual-only animation should state why native/CSS-first primitives were insufficient. |
+| ID                                   | Requirement                                                                                                                                                                                                                             |
+| ------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **FR-229-001 Disclosure**            | Simple FAQ/settings/help/welcome expand-collapse panels should use `<details>/<summary>` or a lightweight `cv-disclosure` path before `cv-accordion`.                                                                                   |
+| **FR-229-002 Accordion boundary**    | Keep `cv-accordion` for controlled, grouped, roving-focus, APG-heavy or app-state-bound accordion scenarios. Do not use it as the default for simple content disclosure.                                                                |
+| **FR-229-003 Popover unification**   | New menus, guidance panels, lightweight contextual panels and tooltip-like affordances should use `cv-popover` or a component that delegates to it instead of adding feature-local document listeners and positioning.                  |
+| **FR-229-004 Dialog boundary**       | Keep `cv-dialog` for modal/non-modal top-layer surfaces that need focus restore, scroll lock, lifecycle events, mobile safe-area behavior or model-owned open state. Do not replace it with ad-hoc native dialog usage in feature code. |
+| **FR-229-005 Form choice semantics** | Do not use `role="tablist"` for choices that are not tabs. Entry type, mode and segmented form choices should use radio-group/segmented-control semantics.                                                                              |
+| **FR-229-006 Lazy media**            | Images, videos and iframes outside virtualized or immediately critical content should opt into native loading/decoding hints such as `loading="lazy"` and `decoding="async"` where applicable.                                          |
+| **FR-229-007 Scroll rails**          | Horizontal rails, thumbnails, feature cards and action strips should start from `overflow-x` + CSS scroll snap before JS carousel/swiper logic.                                                                                         |
+| **FR-229-008 Carousel boundary**     | Use JS only when a rail needs stateful pagination, synchronized selection, zoom/gesture state, analytics-critical lifecycle or non-scroll interaction semantics.                                                                        |
+| **FR-229-009 Presence animation**    | For purely visual open/close or enter/exit appearance, JS should own state/lifecycle only; CSS should own the transition using existing tokens and `SPEC-225` motion rules.                                                             |
+| **FR-229-010 Browser fallback**      | If native support is incomplete, progressive enhancement fallback must be centralized in UIKit/headless/shared code, not copied across feature components.                                                                              |
+| **FR-229-011 Review evidence**       | Frontend PRs that add custom JS for disclosure, popover, scroll rails, lazy media or visual-only animation should state why native/CSS-first primitives were insufficient.                                                              |
 
 ## 5.2 Non-functional requirements
 
-| ID | Requirement |
-| --- | ----------- |
+| ID                              | Requirement                                                                                                                       |
+| ------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
 | **NFR-229-001 Maintainability** | Prefer fewer feature-local listeners, DOM measurements and imperative cleanup paths when native/CSS mechanics cover the behavior. |
-| **NFR-229-002 Performance** | Prefer browser-managed scrolling, lazy loading, top-layer behavior and CSS transitions before JS-driven equivalents. |
-| **NFR-229-003 Accessibility** | Do not reduce semantic clarity to reduce JS. Correct role, focus, keyboard and announcement behavior outrank JS count. |
-| **NFR-229-004 Reactivity** | Do not fix native/CSS integration with polling, `setTimeout`, repeated `requestUpdate()` or DOM queries as state source. |
-| **NFR-229-005 Consistency** | Reuse existing UIKit/headless specs and components before adding feature-local variants. |
+| **NFR-229-002 Performance**     | Prefer browser-managed scrolling, lazy loading, top-layer behavior and CSS transitions before JS-driven equivalents.              |
+| **NFR-229-003 Accessibility**   | Do not reduce semantic clarity to reduce JS. Correct role, focus, keyboard and announcement behavior outrank JS count.            |
+| **NFR-229-004 Reactivity**      | Do not fix native/CSS integration with polling, `setTimeout`, repeated `requestUpdate()` or DOM queries as state source.          |
+| **NFR-229-005 Consistency**     | Reuse existing UIKit/headless specs and components before adding feature-local variants.                                          |
 
 ---
 
@@ -199,27 +199,27 @@ Do not move real workflow transitions into CSS. If a transition affects save/imp
 
 These existing choices are aligned with this spec and should be treated as precedent:
 
-| Area | Existing baseline |
-| ---- | ----------------- |
-| Popover | `cv-popover` uses native Popover API detection with fallback. |
-| Dialog | `cv-dialog` uses native top-layer primitives internally while retaining required lifecycle/focus behavior. |
-| Simple disclosure | Some welcome/mobile content already uses `<details>/<summary>`. |
-| Lazy media | Some image preview paths already use async decoding. |
-| Scroll rails | Landing mobile rail already uses CSS scroll snap. |
-| Motion | `SPEC-225` already requires CSS/token/reduced-motion discipline for visual motion. |
+| Area              | Existing baseline                                                                                          |
+| ----------------- | ---------------------------------------------------------------------------------------------------------- |
+| Popover           | `cv-popover` uses native Popover API detection with fallback.                                              |
+| Dialog            | `cv-dialog` uses native top-layer primitives internally while retaining required lifecycle/focus behavior. |
+| Simple disclosure | Some welcome/mobile content already uses `<details>/<summary>`.                                            |
+| Lazy media        | Some image preview paths already use async decoding.                                                       |
+| Scroll rails      | Landing mobile rail already uses CSS scroll snap.                                                          |
+| Motion            | `SPEC-225` already requires CSS/token/reduced-motion discipline for visual motion.                         |
 
 ---
 
 # 8) Priority adoption targets
 
-| Priority | Target | Expected direction |
-| -------- | ------ | ------------------ |
-| P1 | Simple FAQ/settings/help/welcome accordions | Prefer `<details>/<summary>` or `cv-disclosure`; keep `cv-accordion` only for composite behavior. |
-| P1 | Passmanager entry type switch | Replace tab semantics with radio-group/segmented-choice semantics when touched by related work. |
-| P1 | New contextual panels | Use/extend `cv-popover`; avoid feature-local outside-click/positioning stacks. |
-| P2 | File thumbnails and long non-virtualized media lists | Add native lazy/decode hints where not already covered by virtualization or critical rendering. |
-| P2 | Horizontal action/card rails | Start with CSS scroll snap; add JS only for explicit stateful requirements. |
-| P2 | Visual-only open/close animation | Prefer CSS presence; keep JS as state/lifecycle boundary. |
+| Priority | Target                                               | Expected direction                                                                                |
+| -------- | ---------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
+| P1       | Simple FAQ/settings/help/welcome accordions          | Prefer `<details>/<summary>` or `cv-disclosure`; keep `cv-accordion` only for composite behavior. |
+| P1       | Passmanager entry type switch                        | Replace tab semantics with radio-group/segmented-choice semantics when touched by related work.   |
+| P1       | New contextual panels                                | Use/extend `cv-popover`; avoid feature-local outside-click/positioning stacks.                    |
+| P2       | File thumbnails and long non-virtualized media lists | Add native lazy/decode hints where not already covered by virtualization or critical rendering.   |
+| P2       | Horizontal action/card rails                         | Start with CSS scroll snap; add JS only for explicit stateful requirements.                       |
+| P2       | Visual-only open/close animation                     | Prefer CSS presence; keep JS as state/lifecycle boundary.                                         |
 
 ---
 

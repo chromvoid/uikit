@@ -13,10 +13,12 @@ The component provides task-list structure, accessible busy/empty semantics, and
   <section class="task-list-demo-hero" aria-labelledby="task-list-demo-title">
     <div class="task-list-demo-copy">
       <span class="task-list-demo-kicker">Transfer surface</span>
-      <h3 id="task-list-demo-title">Keep every queued operation scannable while the batch is still moving.</h3>
+      <h3 id="task-list-demo-title">
+        Keep every queued operation scannable while the batch is still moving.
+      </h3>
       <p>
-        <code>cv-task-list</code> owns the accessible list shell, busy state, empty state placement, and
-        row density. Product code keeps ownership of task data, retry/cancel actions, and progress math.
+        <code>cv-task-list</code> owns the accessible list shell, busy state, empty state placement, and row
+        density. Product code keeps ownership of task data, retry/cancel actions, and progress math.
       </p>
     </div>
 

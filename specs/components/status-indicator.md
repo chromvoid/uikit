@@ -66,7 +66,9 @@ None. The component is display-only.
   <section class="status-indicator-demo-hero" aria-labelledby="status-indicator-demo-title">
     <div class="status-indicator-demo-copy">
       <span class="status-indicator-demo-kicker">Inline state signal</span>
-      <h3 id="status-indicator-demo-title">Mark live connection, vault, and policy state without adding a control.</h3>
+      <h3 id="status-indicator-demo-title">
+        Mark live connection, vault, and policy state without adding a control.
+      </h3>
       <p>
         Use <code>cv-status-indicator</code> when the surrounding row already owns the action. The indicator
         contributes semantic status text, optional pulse, and compact suffix context.
@@ -156,7 +158,9 @@ None. The component is display-only.
     <aside class="status-indicator-demo-side" aria-labelledby="status-indicator-demo-decorative-title">
       <div class="status-indicator-demo-section-header">
         <span class="status-indicator-demo-kicker">Marker-only</span>
-        <h4 id="status-indicator-demo-decorative-title">Use decorative dots when adjacent text carries the label.</h4>
+        <h4 id="status-indicator-demo-decorative-title">
+          Use decorative dots when adjacent text carries the label.
+        </h4>
       </div>
 
       <div class="status-indicator-demo-dot-list">
@@ -183,7 +187,9 @@ None. The component is display-only.
   <section class="status-indicator-demo-tones" aria-labelledby="status-indicator-demo-tones-title">
     <div class="status-indicator-demo-section-header">
       <span class="status-indicator-demo-kicker">Tone and size matrix</span>
-      <h4 id="status-indicator-demo-tones-title">Keep color semantic; use size for density, not importance.</h4>
+      <h4 id="status-indicator-demo-tones-title">
+        Keep color semantic; use size for density, not importance.
+      </h4>
     </div>
 
     <div class="status-indicator-demo-tone-grid" aria-label="Status indicator tone and size examples">

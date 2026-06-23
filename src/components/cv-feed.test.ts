@@ -784,8 +784,7 @@ describe('cv-feed', () => {
     let originalIO: typeof IntersectionObserver | undefined
 
     const installObserverMock = () => {
-      originalIO = (globalThis as {IntersectionObserver?: typeof IntersectionObserver})
-        .IntersectionObserver
+      originalIO = (globalThis as {IntersectionObserver?: typeof IntersectionObserver}).IntersectionObserver
       MockIntersectionObserver.instances = []
       ;(globalThis as Record<string, unknown>)['IntersectionObserver'] = MockIntersectionObserver
     }

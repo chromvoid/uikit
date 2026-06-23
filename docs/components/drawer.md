@@ -54,7 +54,9 @@ Slide-out panel dialog anchored to a viewport edge, used for navigation, forms, 
           >
             <span slot="trigger">Policy</span>
             <span slot="title">Exposure policy</span>
-            <span slot="description">Tune what remains visible when the vault is inspected under pressure.</span>
+            <span slot="description"
+              >Tune what remains visible when the vault is inspected under pressure.</span
+            >
             <div class="drawer-demo-form">
               <label class="drawer-demo-field">
                 <span>Visible profile</span>
@@ -115,7 +117,11 @@ Slide-out panel dialog anchored to a viewport edge, used for navigation, forms, 
             </div>
           </cv-drawer>
 
-          <cv-drawer id="drawer-demo-notice" class="drawer-demo-drawer drawer-demo-drawer--notice" placement="top">
+          <cv-drawer
+            id="drawer-demo-notice"
+            class="drawer-demo-drawer drawer-demo-drawer--notice"
+            placement="top"
+          >
             <span slot="trigger">Non-modal notice</span>
             <span slot="title">Sync window</span>
             <p>This top drawer is opened as a non-modal notice so the page remains reachable.</p>
@@ -127,7 +133,9 @@ Slide-out panel dialog anchored to a viewport edge, used for navigation, forms, 
           <cv-drawer id="drawer-demo-alert" class="drawer-demo-drawer" type="alertdialog" placement="end">
             <span slot="trigger">Alert drawer</span>
             <span slot="title">Drop visible profile?</span>
-            <span slot="description">This removes the selected profile from the current visible surface.</span>
+            <span slot="description"
+              >This removes the selected profile from the current visible surface.</span
+            >
             <p>Use alertdialog only when the drawer asks for a high-risk decision.</p>
             <div slot="footer">
               <cv-button variant="ghost" data-drawer-close="drawer-demo-alert">Cancel</cv-button>
@@ -141,7 +149,9 @@ Slide-out panel dialog anchored to a viewport edge, used for navigation, forms, 
         <div class="drawer-demo-summary-card drawer-demo-summary-card--primary">
           <span class="drawer-demo-label">Primary surface</span>
           <strong>31 visible records</strong>
-          <p>Operational content stays in place while drawers handle navigation, policy, and contextual review.</p>
+          <p>
+            Operational content stays in place while drawers handle navigation, policy, and contextual review.
+          </p>
         </div>
         <div class="drawer-demo-summary-card">
           <span class="drawer-demo-label">Trust boundary</span>

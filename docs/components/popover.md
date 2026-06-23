@@ -15,8 +15,8 @@ Non-modal overlay anchored to a trigger element for contextual content such as m
       <span class="popover-demo-kicker">Anchored non-modal overlay</span>
       <h3 id="popover-demo-title">Expose dense controls without leaving the current task</h3>
       <p>
-        Use popovers for contextual actions, short forms, route details, or guidance that must stay tied to
-        a visible trigger.
+        Use popovers for contextual actions, short forms, route details, or guidance that must stay tied to a
+        visible trigger.
       </p>
     </div>
 

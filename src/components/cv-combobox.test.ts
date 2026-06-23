@@ -10,9 +10,7 @@ const stylesToText = () =>
   (CVCombobox.styles as Array<{cssText?: string}>).map((style) => style.cssText ?? '').join('\n')
 
 const optionStylesToText = () =>
-  (CVComboboxOption.styles as Array<{cssText?: string}>)
-    .map((style) => style.cssText ?? '')
-    .join('\n')
+  (CVComboboxOption.styles as Array<{cssText?: string}>).map((style) => style.cssText ?? '').join('\n')
 
 const settle = async (element: CVCombobox) => {
   await element.updateComplete
@@ -803,9 +801,7 @@ describe('cv-combobox', () => {
       const tags = Array.from(combobox.shadowRoot!.querySelectorAll('[part="tag"]'))
       const input = combobox.shadowRoot!.querySelector('[part="input"]') as HTMLInputElement
       const inputWrapper = combobox.shadowRoot!.querySelector('[part="input-wrapper"]') as HTMLElement
-      const tagLabels = tags.map((tag) =>
-        tag.querySelector('[part="tag-label"]')?.textContent?.trim(),
-      )
+      const tagLabels = tags.map((tag) => tag.querySelector('[part="tag-label"]')?.textContent?.trim())
 
       expect(combobox.value).toBe('js ts')
       expect(tagLabels).toEqual(['JavaScript', 'TypeScript'])
@@ -830,9 +826,7 @@ describe('cv-combobox', () => {
       const tags = Array.from(combobox.shadowRoot!.querySelectorAll('[part="tag"]'))
       const input = combobox.shadowRoot!.querySelector('[part="input"]') as HTMLInputElement
       const inputWrapper = combobox.shadowRoot!.querySelector('[part="input-wrapper"]') as HTMLElement
-      const tagLabels = tags.map((tag) =>
-        tag.querySelector('[part="tag-label"]')?.textContent?.trim(),
-      )
+      const tagLabels = tags.map((tag) => tag.querySelector('[part="tag-label"]')?.textContent?.trim())
 
       expect(combobox.value).toBe('js ts')
       expect(tagLabels).toEqual(['JavaScript', 'TypeScript'])

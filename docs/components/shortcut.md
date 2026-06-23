@@ -73,7 +73,9 @@ Use `cv-shortcut` as secondary command metadata in menus, command rows, toolbars
         </button>
 
         <button type="button" class="shortcut-demo-command">
-          <span class="shortcut-demo-command-glyph shortcut-demo-command-glyph--violet" aria-hidden="true">R</span>
+          <span class="shortcut-demo-command-glyph shortcut-demo-command-glyph--violet" aria-hidden="true"
+            >R</span
+          >
           <span class="shortcut-demo-command-copy">
             <strong>Reveal selected field</strong>
             <span>Temporary visibility for the focused secret.</span>
@@ -123,84 +125,86 @@ Use `cv-shortcut` as secondary command metadata in menus, command rows, toolbars
 </div>
 
 <script>
-  document.querySelectorAll('.shortcut-demo-shell[data-demo="shortcut"]:not([data-ready])').forEach((shell) => {
-    shell.dataset.ready = 'true'
+  document
+    .querySelectorAll('.shortcut-demo-shell[data-demo="shortcut"]:not([data-ready])')
+    .forEach((shell) => {
+      shell.dataset.ready = 'true'
 
-    const readout = shell.querySelector('[data-shortcut-readout]')
-    const platformButtons = [...shell.querySelectorAll('[data-shortcut-platform]')]
-    const platformLabels = {
-      macos: 'macOS',
-      windows: 'Windows',
-      linux: 'Linux',
-      web: 'Web',
-    }
-    const bindings = {
-      macos: {
-        palette: ['Meta', 'K'],
-        reveal: ['Meta', 'Shift', 'R'],
-        search: ['Meta', 'F'],
-        copy: ['Meta', 'C'],
-        close: ['Esc'],
-        programmatic: ['Meta', 'Shift', 'P'],
-      },
-      windows: {
-        palette: ['Ctrl', 'K'],
-        reveal: ['Ctrl', 'Shift', 'R'],
-        search: ['Ctrl', 'F'],
-        copy: ['Ctrl', 'C'],
-        close: ['Esc'],
-        programmatic: ['Ctrl', 'Shift', 'P'],
-      },
-      linux: {
-        palette: ['Ctrl', 'K'],
-        reveal: ['Ctrl', 'Shift', 'R'],
-        search: ['Ctrl', 'F'],
-        copy: ['Ctrl', 'C'],
-        close: ['Esc'],
-        programmatic: ['Ctrl', 'Shift', 'P'],
-      },
-      web: {
-        palette: ['Ctrl', '/'],
-        reveal: ['Shift', 'Enter'],
-        search: ['/'],
-        copy: ['Ctrl', 'C'],
-        close: ['Esc'],
-        programmatic: ['Alt', 'P'],
-      },
-    }
+      const readout = shell.querySelector('[data-shortcut-readout]')
+      const platformButtons = [...shell.querySelectorAll('[data-shortcut-platform]')]
+      const platformLabels = {
+        macos: 'macOS',
+        windows: 'Windows',
+        linux: 'Linux',
+        web: 'Web',
+      }
+      const bindings = {
+        macos: {
+          palette: ['Meta', 'K'],
+          reveal: ['Meta', 'Shift', 'R'],
+          search: ['Meta', 'F'],
+          copy: ['Meta', 'C'],
+          close: ['Esc'],
+          programmatic: ['Meta', 'Shift', 'P'],
+        },
+        windows: {
+          palette: ['Ctrl', 'K'],
+          reveal: ['Ctrl', 'Shift', 'R'],
+          search: ['Ctrl', 'F'],
+          copy: ['Ctrl', 'C'],
+          close: ['Esc'],
+          programmatic: ['Ctrl', 'Shift', 'P'],
+        },
+        linux: {
+          palette: ['Ctrl', 'K'],
+          reveal: ['Ctrl', 'Shift', 'R'],
+          search: ['Ctrl', 'F'],
+          copy: ['Ctrl', 'C'],
+          close: ['Esc'],
+          programmatic: ['Ctrl', 'Shift', 'P'],
+        },
+        web: {
+          palette: ['Ctrl', '/'],
+          reveal: ['Shift', 'Enter'],
+          search: ['/'],
+          copy: ['Ctrl', 'C'],
+          close: ['Esc'],
+          programmatic: ['Alt', 'P'],
+        },
+      }
 
-    const setShortcutKeys = (shortcut, keys, platform) => {
-      shortcut.keys = keys
-      shortcut.setAttribute('aria-label', `${platformLabels[platform]} shortcut: ${keys.join(' plus ')}`)
-    }
+      const setShortcutKeys = (shortcut, keys, platform) => {
+        shortcut.keys = keys
+        shortcut.setAttribute('aria-label', `${platformLabels[platform]} shortcut: ${keys.join(' plus ')}`)
+      }
 
-    const applyPlatform = (platform) => {
-      shell.dataset.platform = platform
+      const applyPlatform = (platform) => {
+        shell.dataset.platform = platform
+        platformButtons.forEach((button) => {
+          button.setAttribute('aria-pressed', String(button.dataset.shortcutPlatform === platform))
+        })
+
+        shell.querySelectorAll('[data-shortcut-id]').forEach((shortcut) => {
+          const id = shortcut.dataset.shortcutId
+          setShortcutKeys(shortcut, bindings[platform][id], platform)
+        })
+
+        const programmaticShortcut = shell.querySelector('[data-programmatic-shortcut]')
+        if (programmaticShortcut) {
+          setShortcutKeys(programmaticShortcut, bindings[platform].programmatic, platform)
+        }
+
+        if (readout) {
+          readout.textContent = `Previewing ${platformLabels[platform]} bindings`
+        }
+      }
+
       platformButtons.forEach((button) => {
-        button.setAttribute('aria-pressed', String(button.dataset.shortcutPlatform === platform))
+        button.addEventListener('click', () => applyPlatform(button.dataset.shortcutPlatform))
       })
 
-      shell.querySelectorAll('[data-shortcut-id]').forEach((shortcut) => {
-        const id = shortcut.dataset.shortcutId
-        setShortcutKeys(shortcut, bindings[platform][id], platform)
-      })
-
-      const programmaticShortcut = shell.querySelector('[data-programmatic-shortcut]')
-      if (programmaticShortcut) {
-        setShortcutKeys(programmaticShortcut, bindings[platform].programmatic, platform)
-      }
-
-      if (readout) {
-        readout.textContent = `Previewing ${platformLabels[platform]} bindings`
-      }
-    }
-
-    platformButtons.forEach((button) => {
-      button.addEventListener('click', () => applyPlatform(button.dataset.shortcutPlatform))
+      applyPlatform('macos')
     })
-
-    applyPlatform('macos')
-  })
 </script>
 ```
 

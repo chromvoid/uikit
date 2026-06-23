@@ -1300,7 +1300,12 @@ describe('cv-window-splitter', () => {
 
     it('Meta+ArrowLeft is ignored', async () => {
       const el = await createSplitter({orientation: 'vertical', position: 50, step: 5})
-      const ev = new KeyboardEvent('keydown', {key: 'ArrowLeft', bubbles: true, cancelable: true, metaKey: true})
+      const ev = new KeyboardEvent('keydown', {
+        key: 'ArrowLeft',
+        bubbles: true,
+        cancelable: true,
+        metaKey: true,
+      })
       getSeparator(el).dispatchEvent(ev)
       await settle(el)
       expect(el.position).toBe(50)

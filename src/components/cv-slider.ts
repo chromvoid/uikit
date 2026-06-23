@@ -341,13 +341,7 @@ export class CVSlider extends ReatomLitElement {
   }
 
   private handleThumbKeyDown(event: KeyboardEvent) {
-    if (
-      this.disabled ||
-      event.defaultPrevented ||
-      event.altKey ||
-      event.ctrlKey ||
-      event.metaKey
-    ) {
+    if (this.disabled || event.defaultPrevented || event.altKey || event.ctrlKey || event.metaKey) {
       return
     }
 

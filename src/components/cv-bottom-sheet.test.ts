@@ -113,12 +113,8 @@ describe('cv-bottom-sheet', () => {
       /cv-dialog\.has-detents::part\(content\)\s*{[\s\S]*block-size:\s*var\(--cv-bottom-sheet-detent-visible-height\)/,
     )
     expect(cssText).toMatch(/cv-dialog\.has-detents::part\(body\)\s*{[\s\S]*max-block-size:\s*none;/)
-    expect(cssText).toMatch(
-      /cv-dialog\.detent-collapsed\s*{[\s\S]*--cv-bottom-sheet-detent-offset:\s*0px;/,
-    )
-    expect(cssText).toMatch(
-      /cv-dialog\.detent-middle\s*{[\s\S]*--cv-bottom-sheet-detent-offset:\s*0px;/,
-    )
+    expect(cssText).toMatch(/cv-dialog\.detent-collapsed\s*{[\s\S]*--cv-bottom-sheet-detent-offset:\s*0px;/)
+    expect(cssText).toMatch(/cv-dialog\.detent-middle\s*{[\s\S]*--cv-bottom-sheet-detent-offset:\s*0px;/)
   })
 
   it('keeps header, body, and footer readable inside the active detent', () => {
