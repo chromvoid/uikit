@@ -142,17 +142,17 @@ registerUikit()</code></pre>
       </figure>
     </div>
 
-    <cv-theme-provider class="uikit-quickstart-preview" mode="dark">
-      <div class="uikit-quickstart-preview-copy">
-        <span>Rendered state</span>
-        <strong>Vault migration controls</strong>
-      </div>
-      <div class="uikit-quickstart-preview-actions">
-        <cv-button>Unlock vault</cv-button>
-        <cv-checkbox checked>Arm sync</cv-checkbox>
-      </div>
-      <cv-progress value="58" aria-label="Migration progress"></cv-progress>
-    </cv-theme-provider>
+<div class="uikit-quickstart-preview" aria-label="Rendered quick start preview">
+<div class="uikit-quickstart-preview-copy">
+<span>Rendered state</span>
+<strong>Vault migration controls</strong>
+</div>
+<div class="uikit-quickstart-preview-actions">
+<cv-button>Unlock vault</cv-button>
+<cv-checkbox checked>Arm sync</cv-checkbox>
+</div>
+<cv-progress value="58" aria-label="Migration progress"></cv-progress>
+</div>
   </div>
 </section>
 

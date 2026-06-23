@@ -11,8 +11,7 @@ const forceDarkThemeScript = "document.documentElement.dataset.theme='dark'"
 
 const repoName = process.env.GITHUB_REPOSITORY?.split('/')[1]
 const docsBase = process.env.DOCS_BASE?.trim()
-const base =
-  docsBase || (process.env.GITHUB_ACTIONS === 'true' && repoName ? `/${repoName}/` : '/')
+const base = docsBase || (process.env.GITHUB_ACTIONS === 'true' && repoName ? `/${repoName}/` : '/')
 
 const guideItems = [
   {text: 'Getting Started', link: '/guide/getting-started'},
@@ -87,7 +86,7 @@ export default defineConfig({
     socialLinks: [{icon: 'github', link: 'https://github.com/chromvoid/uikit'}],
     footer: {
       message: 'ChromVoid UIKit documentation',
-      copyright: 'Released under AGPL-3.0-only',
+      copyright: 'Released under MIT',
     },
     editLink: {
       pattern: 'https://github.com/chromvoid/uikit/edit/main/docs/:path',

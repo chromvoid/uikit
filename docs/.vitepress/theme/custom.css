@@ -1129,8 +1129,8 @@ body::after {
 
 .uikit-quickstart-code code {
   display: block;
-  min-inline-size: max-content;
-  white-space: pre;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
 }
 
 .uikit-quickstart-preview {
