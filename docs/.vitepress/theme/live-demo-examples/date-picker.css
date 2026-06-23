@@ -1,0 +1,335 @@
+.date-picker-demo-shell {
+  display: grid;
+  container-type: inline-size;
+  inline-size: 100%;
+  min-inline-size: 0;
+  overflow: hidden;
+  border: 1px solid var(--live-demo-border);
+  border-radius: 16px;
+  color: var(--live-demo-muted);
+  background:
+    linear-gradient(180deg, rgba(12, 20, 32, 0.98), rgba(7, 13, 22, 0.98)),
+    linear-gradient(135deg, rgba(101, 215, 255, 0.085), transparent 42%),
+    linear-gradient(315deg, rgba(179, 136, 255, 0.06), transparent 46%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.045),
+    0 18px 42px rgba(0, 0, 0, 0.24);
+}
+
+.date-picker-demo-shell,
+.date-picker-demo-shell * {
+  box-sizing: border-box;
+}
+
+.date-picker-demo-hero,
+.date-picker-demo-workbench,
+.date-picker-demo-section {
+  display: grid;
+  gap: 20px;
+  min-inline-size: 0;
+  padding: clamp(20px, 4cqi, 28px);
+}
+
+.date-picker-demo-hero,
+.date-picker-demo-workbench {
+  border-bottom: 1px solid var(--live-demo-border);
+}
+
+.date-picker-demo-copy,
+.date-picker-demo-section-header,
+.date-picker-demo-form,
+.date-picker-demo-summary,
+.date-picker-demo-card,
+.date-picker-demo-form-header > div,
+.date-picker-demo-summary > div {
+  display: grid;
+  align-content: start;
+  min-inline-size: 0;
+}
+
+.date-picker-demo-copy,
+.date-picker-demo-section-header,
+.date-picker-demo-form-header > div,
+.date-picker-demo-summary > div {
+  gap: 8px;
+}
+
+.date-picker-demo-kicker,
+.date-picker-demo-label,
+.date-picker-demo-metrics dt {
+  color: var(--live-demo-cyan);
+  font-family: var(--vp-font-family-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.date-picker-demo-copy h3,
+.date-picker-demo-section-header h4,
+.date-picker-demo-form-header strong,
+.date-picker-demo-summary strong {
+  margin: 0;
+  color: var(--live-demo-text);
+  font-family: var(--vp-font-family-base);
+  letter-spacing: 0;
+  overflow-wrap: anywhere;
+}
+
+.date-picker-demo-copy h3 {
+  max-inline-size: 38ch;
+  font-size: clamp(1.2rem, 5cqi, 1.58rem);
+  line-height: 1.1;
+  text-wrap: balance;
+}
+
+.date-picker-demo-section-header h4,
+.date-picker-demo-form-header strong {
+  max-inline-size: 66ch;
+  font-size: 1rem;
+  line-height: 1.32;
+}
+
+.date-picker-demo-summary strong {
+  font-size: 0.94rem;
+  line-height: 1.32;
+}
+
+.date-picker-demo-copy p,
+.date-picker-demo-summary p {
+  max-inline-size: 72ch;
+  margin: 0;
+  color: var(--live-demo-muted);
+  font-size: 0.92rem;
+  line-height: 1.58;
+}
+
+.date-picker-demo-summary p {
+  font-size: 0.82rem;
+  line-height: 1.48;
+}
+
+.date-picker-demo-shell code {
+  color: #bff3ff;
+  font-family: var(--vp-font-family-mono);
+  font-size: 0.86em;
+}
+
+.date-picker-demo-metrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 150px), 1fr));
+  gap: 14px;
+  min-inline-size: 0;
+  margin: 0;
+}
+
+.date-picker-demo-metrics div,
+.date-picker-demo-form,
+.date-picker-demo-summary > div,
+.date-picker-demo-card {
+  border: 1px solid var(--live-demo-border);
+  border-radius: 14px;
+  background:
+    linear-gradient(180deg, var(--live-demo-panel), rgba(238, 245, 255, 0.026)),
+    rgba(7, 13, 22, 0.32);
+}
+
+.date-picker-demo-metrics div {
+  display: grid;
+  gap: 4px;
+  min-inline-size: 0;
+  padding: 16px;
+}
+
+.date-picker-demo-metrics dt,
+.date-picker-demo-label {
+  color: var(--live-demo-soft);
+}
+
+.date-picker-demo-metrics dd {
+  min-inline-size: 0;
+  margin: 0;
+  color: var(--live-demo-text);
+  font-size: 0.9rem;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+
+.date-picker-demo-board {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(220px, 0.75fr);
+  gap: 16px;
+  align-items: start;
+  min-inline-size: 0;
+}
+
+.date-picker-demo-form {
+  gap: 16px;
+  min-block-size: 560px;
+  padding: 16px;
+  background:
+    linear-gradient(180deg, rgba(7, 13, 22, 0.48), rgba(7, 13, 22, 0.82)),
+    linear-gradient(90deg, rgba(101, 215, 255, 0.07), transparent 46%);
+}
+
+.date-picker-demo-form-header {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: start;
+  min-inline-size: 0;
+}
+
+.date-picker-demo-status {
+  justify-self: end;
+  min-inline-size: 0;
+  padding: 5px 9px;
+  border: 1px solid rgba(91, 235, 160, 0.28);
+  border-radius: 999px;
+  color: var(--live-demo-green);
+  background: rgba(91, 235, 160, 0.08);
+  font-family: var(--vp-font-family-mono);
+  font-size: 0.72rem;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+  text-transform: uppercase;
+}
+
+.date-picker-demo-primary {
+  justify-self: start;
+  --cv-date-picker-width: min(100%, 360px);
+  --cv-date-picker-dialog-width: min(100%, 360px);
+  --cv-date-picker-calendar-size: min(100%, 304px);
+  --cv-date-picker-input-min-height: 42px;
+  --cv-date-picker-input-padding-inline: 14px;
+  --cv-date-picker-border-radius: 12px;
+  --cv-date-picker-font-size: 0.92rem;
+}
+
+.date-picker-demo-summary {
+  gap: 12px;
+}
+
+.date-picker-demo-summary > div {
+  gap: 8px;
+  padding: 14px;
+}
+
+.date-picker-demo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+  gap: 14px;
+  min-inline-size: 0;
+}
+
+.date-picker-demo-card {
+  gap: 10px;
+  padding: 14px;
+}
+
+.date-picker-demo-card cv-date-picker {
+  inline-size: 100%;
+  --cv-date-picker-width: 100%;
+  --cv-date-picker-min-width: 0;
+  --cv-date-picker-dialog-width: 100%;
+  --cv-date-picker-calendar-size: min(100%, 282px);
+  --cv-date-picker-day-size: 34px;
+  --cv-date-picker-input-min-height: 38px;
+  --cv-date-picker-font-size: 0.88rem;
+}
+
+.date-picker-demo-shell cv-date-picker {
+  --cv-color-text: var(--live-demo-text);
+  --cv-color-text-strong: #f4fbff;
+  --cv-color-text-muted: rgba(226, 239, 255, 0.7);
+  --cv-color-primary-surface-strong: rgba(101, 215, 255, 0.2);
+  --cv-color-primary-border-strong: rgba(101, 215, 255, 0.58);
+  --cv-color-focus-ring: var(--live-demo-cyan);
+}
+
+.date-picker-demo-shell cv-date-picker::part(input-wrap),
+.date-picker-demo-shell cv-date-picker::part(dialog),
+.date-picker-demo-shell cv-date-picker::part(calendar-day),
+.date-picker-demo-shell cv-date-picker::part(month-nav-button),
+.date-picker-demo-shell cv-date-picker::part(year-nav-button),
+.date-picker-demo-shell cv-date-picker::part(hour-input),
+.date-picker-demo-shell cv-date-picker::part(minute-input),
+.date-picker-demo-shell cv-date-picker::part(apply-button),
+.date-picker-demo-shell cv-date-picker::part(cancel-button) {
+  border-color: rgba(143, 220, 255, 0.2);
+}
+
+.date-picker-demo-shell cv-date-picker::part(input-wrap),
+.date-picker-demo-shell cv-date-picker::part(calendar-day),
+.date-picker-demo-shell cv-date-picker::part(month-nav-button),
+.date-picker-demo-shell cv-date-picker::part(year-nav-button),
+.date-picker-demo-shell cv-date-picker::part(hour-input),
+.date-picker-demo-shell cv-date-picker::part(minute-input) {
+  background: rgba(238, 245, 255, 0.045);
+}
+
+.date-picker-demo-shell cv-date-picker::part(input),
+.date-picker-demo-shell cv-date-picker::part(clear-button),
+.date-picker-demo-shell cv-date-picker::part(calendar-day),
+.date-picker-demo-shell cv-date-picker::part(month-nav-button),
+.date-picker-demo-shell cv-date-picker::part(year-nav-button),
+.date-picker-demo-shell cv-date-picker::part(hour-input),
+.date-picker-demo-shell cv-date-picker::part(minute-input) {
+  color: var(--live-demo-text);
+}
+
+.date-picker-demo-shell cv-date-picker::part(dialog) {
+  background:
+    linear-gradient(180deg, rgba(18, 27, 40, 0.98), rgba(10, 17, 27, 0.98)),
+    linear-gradient(135deg, rgba(101, 215, 255, 0.055), transparent 44%);
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.24);
+}
+
+.date-picker-demo-shell cv-date-picker::part(month-label),
+.date-picker-demo-shell cv-date-picker::part(dialog-caption) {
+  color: rgba(226, 239, 255, 0.74);
+}
+
+.date-picker-demo-shell cv-date-picker::part(apply-button) {
+  border-color: rgba(101, 215, 255, 0.38);
+  color: #dff9ff;
+  background: rgba(101, 215, 255, 0.12);
+}
+
+.date-picker-demo-shell cv-date-picker::part(cancel-button) {
+  color: rgba(226, 239, 255, 0.78);
+  background: rgba(238, 245, 255, 0.04);
+}
+
+@container (max-width: 720px) {
+  .date-picker-demo-board {
+    grid-template-columns: 1fr;
+  }
+
+  .date-picker-demo-form {
+    min-block-size: 552px;
+  }
+}
+
+@container (max-width: 460px) {
+  .date-picker-demo-hero,
+  .date-picker-demo-workbench,
+  .date-picker-demo-section {
+    padding: 18px;
+  }
+
+  .date-picker-demo-form-header {
+    grid-template-columns: 1fr;
+  }
+
+  .date-picker-demo-status {
+    justify-self: start;
+  }
+
+  .date-picker-demo-primary {
+    justify-self: stretch;
+    --cv-date-picker-width: 100%;
+    --cv-date-picker-min-width: 0;
+    --cv-date-picker-calendar-size: 100%;
+    --cv-date-picker-day-size: min(40px, 11cqi);
+  }
+}

@@ -1,0 +1,359 @@
+.context-menu-demo-shell {
+  display: grid;
+  container-type: inline-size;
+  inline-size: 100%;
+  min-inline-size: 0;
+  overflow: hidden;
+  border: 1px solid rgba(118, 181, 222, 0.18);
+  border-radius: 16px;
+  color: var(--live-demo-muted);
+  background:
+    linear-gradient(180deg, rgba(12, 20, 32, 0.98), rgba(7, 13, 22, 0.98)),
+    radial-gradient(circle at 14% 0%, rgba(101, 215, 255, 0.1), transparent 34%),
+    radial-gradient(circle at 92% 16%, rgba(179, 136, 255, 0.08), transparent 36%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.04),
+    0 18px 42px rgba(0, 0, 0, 0.22);
+}
+
+.context-menu-demo-shell,
+.context-menu-demo-shell * {
+  box-sizing: border-box;
+}
+
+.context-menu-demo-hero,
+.context-menu-demo-workbench {
+  display: grid;
+  gap: clamp(18px, 4cqi, 28px);
+  min-inline-size: 0;
+  padding: clamp(20px, 4cqi, 30px);
+}
+
+.context-menu-demo-hero {
+  grid-template-columns: 1fr;
+  align-items: stretch;
+  border-block-end: 1px solid var(--live-demo-border);
+}
+
+.context-menu-demo-copy,
+.context-menu-demo-section-header,
+.context-menu-demo-surface,
+.context-menu-demo-toolbar > div,
+.context-menu-demo-contract > div {
+  display: grid;
+  align-content: start;
+  min-inline-size: 0;
+}
+
+.context-menu-demo-copy,
+.context-menu-demo-section-header {
+  gap: 10px;
+}
+
+.context-menu-demo-kicker,
+.context-menu-demo-label,
+.context-menu-demo-metrics dt {
+  font-family: var(--vp-font-family-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.context-menu-demo-kicker {
+  color: #94e9ff;
+}
+
+.context-menu-demo-label,
+.context-menu-demo-metrics dt {
+  color: var(--live-demo-soft);
+}
+
+.context-menu-demo-copy h3,
+.context-menu-demo-section-header h4 {
+  margin: 0;
+  color: var(--live-demo-text);
+  letter-spacing: 0;
+}
+
+.context-menu-demo-copy h3 {
+  max-inline-size: 32ch;
+  font-size: clamp(1.22rem, 5cqi, 1.68rem);
+  line-height: 1.1;
+  text-wrap: balance;
+}
+
+.context-menu-demo-section-header h4 {
+  max-inline-size: 58ch;
+  font-size: 1rem;
+  line-height: 1.34;
+}
+
+.context-menu-demo-copy p {
+  max-inline-size: 68ch;
+  margin: 0;
+  color: var(--live-demo-muted);
+  font-size: 0.92rem;
+  line-height: 1.58;
+}
+
+.context-menu-demo-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  min-inline-size: 0;
+  padding-block-start: 4px;
+}
+
+.context-menu-demo-shell cv-button::part(base) {
+  min-block-size: 40px;
+}
+
+.context-menu-demo-metrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 148px), 1fr));
+  gap: 14px;
+  min-inline-size: 0;
+  margin: 0;
+}
+
+.context-menu-demo-metrics div,
+.context-menu-demo-surface,
+.context-menu-demo-contract > div {
+  border: 1px solid var(--live-demo-border);
+  border-radius: 12px;
+  background:
+    linear-gradient(180deg, var(--live-demo-panel), rgba(238, 245, 255, 0.026)), rgba(7, 13, 22, 0.32);
+}
+
+.context-menu-demo-metrics div {
+  display: grid;
+  gap: 4px;
+  min-inline-size: 0;
+  padding: 16px;
+}
+
+.context-menu-demo-metrics dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+  color: var(--live-demo-text);
+  font-size: 0.88rem;
+}
+
+.context-menu-demo-surface {
+  gap: 16px;
+  padding: 16px;
+}
+
+.context-menu-demo-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: start;
+  justify-content: space-between;
+  min-inline-size: 0;
+}
+
+.context-menu-demo-toolbar strong,
+.context-menu-demo-contract strong {
+  overflow-wrap: anywhere;
+  color: var(--live-demo-text);
+  font-size: 0.94rem;
+  line-height: 1.34;
+}
+
+.context-menu-demo-state {
+  display: block;
+  min-inline-size: min(100%, 260px);
+  min-block-size: 34px;
+  padding: 9px 11px;
+  border: 1px solid rgba(101, 215, 255, 0.2);
+  border-radius: 10px;
+  background: rgba(101, 215, 255, 0.07);
+  color: #bff3ff;
+  font-family: var(--vp-font-family-mono);
+  font-size: 0.74rem;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
+.context-menu-demo-menu {
+  inline-size: 100%;
+  min-inline-size: 0;
+  --cv-context-menu-min-inline-size: 276px;
+  --cv-context-menu-padding: 6px;
+  --cv-context-menu-gap: 3px;
+  --cv-context-menu-border-radius: 12px;
+}
+
+.context-menu-demo-menu::part(target) {
+  border-radius: 14px;
+}
+
+.context-menu-demo-menu::part(menu) {
+  border-color: rgba(143, 220, 255, 0.26);
+  background:
+    linear-gradient(180deg, #132033, #0a111d),
+    radial-gradient(circle at 10% 0%, rgba(101, 215, 255, 0.12), transparent 34%);
+  box-shadow:
+    0 20px 52px rgba(0, 0, 0, 0.44),
+    0 0 0 1px rgba(101, 215, 255, 0.06);
+}
+
+.context-menu-demo-target {
+  min-inline-size: 0;
+  outline: none;
+}
+
+.context-menu-demo-table {
+  display: grid;
+  min-inline-size: 0;
+  overflow: hidden;
+  border: 1px solid rgba(118, 181, 222, 0.16);
+  border-radius: 14px;
+  background: rgba(238, 245, 255, 0.032);
+}
+
+.context-menu-demo-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(82px, 0.58fr) minmax(96px, 0.62fr);
+  gap: 12px;
+  align-items: center;
+  min-inline-size: 0;
+  padding: 12px 14px;
+  border-block-start: 1px solid rgba(118, 181, 222, 0.12);
+  color: var(--live-demo-muted);
+  font-size: 0.86rem;
+}
+
+.context-menu-demo-row:first-child {
+  border-block-start: 0;
+}
+
+.context-menu-demo-row > span {
+  min-inline-size: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.context-menu-demo-row--header {
+  color: var(--live-demo-soft);
+  font-family: var(--vp-font-family-mono);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+}
+
+.context-menu-demo-row--active {
+  position: relative;
+  color: var(--live-demo-text);
+  background:
+    linear-gradient(90deg, rgba(101, 215, 255, 0.12), rgba(179, 136, 255, 0.06)),
+    rgba(238, 245, 255, 0.038);
+}
+
+.context-menu-demo-row--active::before {
+  content: '';
+  position: absolute;
+  inset-block: 8px;
+  inset-inline-start: 0;
+  inline-size: 3px;
+  border-radius: 999px;
+  background: #65d7ff;
+  box-shadow: 0 0 16px rgba(101, 215, 255, 0.58);
+}
+
+.context-menu-demo-menu cv-menu-item {
+  --cv-menu-item-padding-block: 9px;
+  --cv-menu-item-padding-inline: 10px;
+  --cv-menu-item-color: var(--live-demo-text);
+  --cv-menu-item-background: transparent;
+  --cv-menu-item-hover-color: #eefaff;
+  --cv-menu-item-hover-background: rgba(101, 215, 255, 0.12);
+  --cv-menu-item-active-color: #eefaff;
+  --cv-menu-item-active-background: rgba(101, 215, 255, 0.16);
+  --cv-menu-item-selected-color: #eefaff;
+  --cv-menu-item-selected-background: rgba(0, 184, 204, 0.18);
+  --cv-menu-item-focus-ring: rgba(148, 233, 255, 0.92);
+}
+
+.context-menu-demo-menu cv-menu-item::part(label) {
+  white-space: nowrap;
+}
+
+.context-menu-demo-menu cv-icon {
+  color: #bff3ff;
+}
+
+.context-menu-demo-menu cv-shortcut {
+  --cv-shortcut-gap: 3px;
+  --cv-shortcut-separator-color: rgba(190, 206, 226, 0.48);
+  --cv-shortcut-separator-font-size: 0.68em;
+  --cv-kbd-min-inline-size: 1.55em;
+  --cv-kbd-min-block-size: 1.5em;
+  --cv-kbd-padding-inline: 0.4em;
+  --cv-kbd-radius: 5px;
+  --cv-kbd-background: rgba(238, 245, 255, 0.055);
+  --cv-kbd-border-color: rgba(143, 220, 255, 0.2);
+  --cv-kbd-color: rgba(238, 245, 255, 0.72);
+  --cv-kbd-font-size: 0.68rem;
+  font-family: var(--vp-font-family-mono);
+}
+
+.context-menu-demo-menu cv-menu-item[active] cv-shortcut,
+.context-menu-demo-menu cv-menu-item:hover cv-shortcut {
+  --cv-kbd-background: rgba(101, 215, 255, 0.12);
+  --cv-kbd-border-color: rgba(101, 215, 255, 0.36);
+  --cv-kbd-color: #f0fcff;
+}
+
+.context-menu-demo-contract {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 190px), 1fr));
+  gap: 12px;
+  min-inline-size: 0;
+}
+
+.context-menu-demo-contract > div {
+  gap: 7px;
+  padding: 13px;
+}
+
+.context-menu-demo-contract code {
+  color: #bff3ff;
+}
+
+@container (min-width: 660px) {
+  .context-menu-demo-hero {
+    grid-template-columns: minmax(0, 1.05fr) minmax(260px, 0.72fr);
+  }
+
+  .context-menu-demo-metrics {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .context-menu-demo-hero,
+  .context-menu-demo-workbench {
+    padding: 16px;
+  }
+
+  .context-menu-demo-row {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 5px;
+    align-items: start;
+  }
+
+  .context-menu-demo-row--header {
+    display: none;
+  }
+
+  .context-menu-demo-row > span {
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+
+  .context-menu-demo-state {
+    inline-size: 100%;
+  }
+}
