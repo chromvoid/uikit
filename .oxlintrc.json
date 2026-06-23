@@ -38,19 +38,8 @@
     "typescript/no-unnecessary-type-constraint": "off",
     "no-undef": "off",
     "no-redeclare": "off",
-    "quotes": [
-      "warn",
-      "single",
-      {
-        "allowTemplateLiterals": true,
-        "avoidEscape": true
-      }
-    ],
-    "semi": ["error", "never"],
     "no-console": "warn",
-    "no-mixed-spaces-and-tabs": ["error", "smart-tabs"],
     "no-empty": ["error", {"allowEmptyCatch": true}],
-    "object-curly-spacing": ["error", "never"],
     "import/no-duplicates": "error"
   }
 }
