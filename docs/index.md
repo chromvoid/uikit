@@ -130,7 +130,6 @@ features:
         <figcaption>entry.ts</figcaption>
         <pre><code>import &#123;registerUikit&#125; from '@chromvoid/uikit/register'
 import '@chromvoid/uikit/theme/tokens.css'
-
 registerUikit()</code></pre>
       </figure>
       <figure class="uikit-quickstart-code">
