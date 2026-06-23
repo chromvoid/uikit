@@ -166,33 +166,205 @@ This is a UIKit-only concern; the headless model does not handle native scroll m
 ## Usage
 
 ```html
-<!-- Basic carousel -->
-<cv-carousel aria-label="Product gallery">
-  <cv-carousel-slide value="vault">Vault setup</cv-carousel-slide>
-  <cv-carousel-slide value="keys">Key recovery</cv-carousel-slide>
-  <cv-carousel-slide value="audit">Audit trail</cv-carousel-slide>
-</cv-carousel>
+<div class="carousel-demo-shell" data-demo="carousel" data-live-demo-height="760">
+  <section class="carousel-demo-hero" aria-labelledby="carousel-demo-title">
+    <div class="carousel-demo-copy">
+      <span class="carousel-demo-kicker">Scroll-snap rail</span>
+      <h3 id="carousel-demo-title">
+        Carousel keeps slide navigation, native swipe, and value state aligned.
+      </h3>
+      <p>
+        The component owns controls, indicators, autoplay pause rules, and ARIA contracts while consumers
+        provide regular slide content.
+      </p>
+    </div>
 
-<!-- Autoplay carousel -->
-<cv-carousel aria-label="News feed" autoplay autoplay-interval="3000">
-  <cv-carousel-slide value="release">Release note</cv-carousel-slide>
-  <cv-carousel-slide value="maintenance">Maintenance window</cv-carousel-slide>
-</cv-carousel>
+    <dl class="carousel-demo-status" aria-label="Carousel runtime state">
+      <div>
+        <dt>Active</dt>
+        <dd data-carousel-active>Device proof</dd>
+      </div>
+      <div>
+        <dt>Value</dt>
+        <dd data-carousel-value>device-proof</dd>
+      </div>
+      <div>
+        <dt>Paused</dt>
+        <dd data-carousel-paused>false</dd>
+      </div>
+      <div>
+        <dt>Visible</dt>
+        <dd>2 slides</dd>
+      </div>
+    </dl>
+  </section>
 
-<!-- Multiple accessible slides from the active index -->
-<cv-carousel aria-label="Team members" visible-slides="3">
-  <cv-carousel-slide value="member-1">Alice</cv-carousel-slide>
-  <cv-carousel-slide value="member-2">Bob</cv-carousel-slide>
-  <cv-carousel-slide value="member-3">Charlie</cv-carousel-slide>
-  <cv-carousel-slide value="member-4">Diana</cv-carousel-slide>
-</cv-carousel>
+  <section class="carousel-demo-workbench" aria-label="Interactive carousel demo">
+    <div class="carousel-demo-frame">
+      <cv-carousel
+        class="carousel-demo-carousel"
+        aria-label="Vault handoff checkpoints"
+        active-index="1"
+        autoplay
+        autoplay-interval="4200"
+        visible-slides="2"
+      >
+        <cv-carousel-slide value="decoy-profile" label="Decoy profile">
+          <article class="carousel-demo-slide carousel-demo-slide--quiet">
+            <span class="carousel-demo-slide-label">01 / visible layer</span>
+            <h4>Routine records stay believable during low-risk inspection.</h4>
+            <p>Use this slide for a harmless workspace, travel profile, or shared machine surface.</p>
+            <ul>
+              <li>15 visible records</li>
+              <li>Recent activity preserved</li>
+              <li>No hidden-layer hints</li>
+            </ul>
+          </article>
+        </cv-carousel-slide>
 
-<!-- Controlled by value -->
-<cv-carousel aria-label="Steps" value="step-2">
-  <cv-carousel-slide value="step-1">Step 1</cv-carousel-slide>
-  <cv-carousel-slide value="step-2">Step 2</cv-carousel-slide>
-  <cv-carousel-slide value="step-3">Step 3</cv-carousel-slide>
-</cv-carousel>
+        <cv-carousel-slide value="device-proof" label="Device proof">
+          <article class="carousel-demo-slide carousel-demo-slide--primary">
+            <span class="carousel-demo-slide-label">02 / trust boundary</span>
+            <h4>Paired hardware proof gates the protected namespace.</h4>
+            <p>
+              The active card shows the same focus and indicator state users can reach with buttons, dots,
+              keys, or swipe.
+            </p>
+            <ul>
+              <li>USB device challenge</li>
+              <li>Autoplay pauses on focus</li>
+              <li><code>cv-change</code> emits value</li>
+            </ul>
+          </article>
+        </cv-carousel-slide>
+
+        <cv-carousel-slide value="session-route" label="Session route">
+          <article class="carousel-demo-slide carousel-demo-slide--violet">
+            <span class="carousel-demo-slide-label">03 / route handoff</span>
+            <h4>Navigation can jump by index or by controlled slide value.</h4>
+            <p>External controls below call the imperative API without duplicating carousel state.</p>
+            <ul>
+              <li><code>next()</code> and <code>prev()</code></li>
+              <li><code>value="session-route"</code></li>
+              <li>Native scroll sync</li>
+            </ul>
+          </article>
+        </cv-carousel-slide>
+
+        <cv-carousel-slide value="audit-trail" label="Audit trail">
+          <article class="carousel-demo-slide carousel-demo-slide--green">
+            <span class="carousel-demo-slide-label">04 / verification</span>
+            <h4>State changes are observable without querying the DOM rail.</h4>
+            <p>
+              Consumers listen for composed events and keep their own readouts, logs, or analytics in sync.
+            </p>
+            <ul>
+              <li><code>cv-input</code> for pause changes</li>
+              <li><code>cv-change</code> for slide changes</li>
+              <li>ARIA labels from slide records</li>
+            </ul>
+          </article>
+        </cv-carousel-slide>
+      </cv-carousel>
+
+      <div class="carousel-demo-controls" aria-label="Carousel demo controls">
+        <cv-button data-carousel-action="prev">Previous</cv-button>
+        <cv-button data-carousel-action="next" variant="primary">Next</cv-button>
+        <cv-button data-carousel-action="proof">Device proof</cv-button>
+        <cv-button data-carousel-action="audit">Audit trail</cv-button>
+        <cv-button data-carousel-action="toggle-pause">Pause</cv-button>
+      </div>
+    </div>
+
+    <aside class="carousel-demo-log" aria-label="Carousel event log">
+      <span class="carousel-demo-label">Event log</span>
+      <ol data-carousel-events aria-live="polite"></ol>
+    </aside>
+  </section>
+</div>
+
+<script>
+  document
+    .querySelectorAll('.carousel-demo-shell[data-demo="carousel"]:not([data-ready])')
+    .forEach((shell) => {
+      shell.dataset.ready = 'true'
+
+      const carousel = shell.querySelector('.carousel-demo-carousel')
+      const activeOutput = shell.querySelector('[data-carousel-active]')
+      const valueOutput = shell.querySelector('[data-carousel-value]')
+      const pausedOutput = shell.querySelector('[data-carousel-paused]')
+      const eventList = shell.querySelector('[data-carousel-events]')
+      const pauseButton = shell.querySelector('[data-carousel-action="toggle-pause"]')
+
+      if (!carousel || !activeOutput || !valueOutput || !pausedOutput || !eventList || !pauseButton) {
+        return
+      }
+
+      const slideNames = new Map([
+        ['decoy-profile', 'Decoy profile'],
+        ['device-proof', 'Device proof'],
+        ['session-route', 'Session route'],
+        ['audit-trail', 'Audit trail'],
+      ])
+
+      const writeLog = (label, detail) => {
+        const item = document.createElement('li')
+        item.textContent = `${label}: ${detail.activeValue ?? `index ${detail.activeIndex}`}, paused ${detail.paused}`
+        eventList.prepend(item)
+
+        while (eventList.children.length > 4) {
+          eventList.lastElementChild?.remove()
+        }
+      }
+
+      const syncReadout = (detail) => {
+        const value = detail.activeValue ?? carousel.value
+        activeOutput.textContent = slideNames.get(value) ?? `Slide ${detail.activeIndex + 1}`
+        valueOutput.textContent = value
+        pausedOutput.textContent = String(detail.paused)
+        pauseButton.textContent = detail.paused ? 'Resume' : 'Pause'
+      }
+
+      syncReadout({
+        activeIndex: carousel.activeIndex,
+        activeValue: carousel.value,
+        paused: carousel.paused,
+      })
+      writeLog('ready', {
+        activeIndex: carousel.activeIndex,
+        activeValue: carousel.value,
+        paused: carousel.paused,
+      })
+
+      carousel.addEventListener('cv-input', (event) => {
+        syncReadout(event.detail)
+        writeLog('input', event.detail)
+      })
+
+      carousel.addEventListener('cv-change', (event) => {
+        syncReadout(event.detail)
+        writeLog('change', event.detail)
+      })
+
+      shell.querySelectorAll('[data-carousel-action]').forEach((control) => {
+        control.addEventListener('click', () => {
+          const action = control.dataset.carouselAction
+
+          if (action === 'prev') carousel.prev()
+          if (action === 'next') carousel.next()
+          if (action === 'proof') carousel.value = 'device-proof'
+          if (action === 'audit') carousel.value = 'audit-trail'
+          if (action === 'toggle-pause') {
+            if (carousel.paused) {
+              carousel.play()
+            } else {
+              carousel.pause()
+            }
+          }
+        })
+      })
+    })
+</script>
 ```
 
 ## Child Elements

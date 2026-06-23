@@ -72,6 +72,152 @@ Vertically stacked set of interactive sections that expand or collapse to reveal
 Use `cv-accordion` for a true grouped composite: related sections with controlled expansion state, roving focus, heading semantics, multiple expanded values, or a rule that at least one section stays open. Use `cv-disclosure` or native `<details>/<summary>` for independent one-off reveals.
 
 ```html
+<div class="accordion-demo-shell" data-demo="accordion" data-live-demo-height="760">
+  <section class="accordion-demo-hero" aria-labelledby="accordion-demo-title">
+    <div class="accordion-demo-copy">
+      <span class="accordion-demo-kicker">Composite disclosure</span>
+      <h3 id="accordion-demo-title">Grouped sections with roving focus and controlled expansion.</h3>
+      <p>
+        Use it when a surface needs one source of truth for expanded values, keyboard movement between
+        headers, or an invariant such as one section always staying open.
+      </p>
+    </div>
+
+    <dl class="accordion-demo-metrics">
+      <div>
+        <dt>Mode</dt>
+        <dd>single or multiple</dd>
+      </div>
+      <div>
+        <dt>Focus</dt>
+        <dd>Arrow keys, Home, End</dd>
+      </div>
+      <div>
+        <dt>Event payload</dt>
+        <dd>{value, values, activeId}</dd>
+      </div>
+    </dl>
+  </section>
+
+  <section class="accordion-demo-board" aria-label="Accordion usage examples">
+    <div class="accordion-demo-panel accordion-demo-panel--primary">
+      <div class="accordion-demo-section-header">
+        <span class="accordion-demo-label">Single controlled value</span>
+        <h4>Credential record audit trail</h4>
+      </div>
+
+      <cv-accordion
+        id="credential-accordion"
+        class="accordion-demo-primary-accordion"
+        value="identity"
+        aria-label="Credential record sections"
+      >
+        <cv-accordion-item value="identity">
+          <span slot="trigger">Identity and target</span>
+          <div class="accordion-demo-content">
+            <p>Visible record fields stay compact while the current section owns the review context.</p>
+            <ul>
+              <li>Login URL and account handle</li>
+              <li>Last verified workspace</li>
+              <li>Visible alias for shared records</li>
+            </ul>
+          </div>
+        </cv-accordion-item>
+
+        <cv-accordion-item value="rotation">
+          <span slot="trigger">Rotation policy</span>
+          <div class="accordion-demo-content">
+            <p>The panel can host forms, status rows, or explanatory content without leaving the group.</p>
+            <dl class="accordion-demo-proof-list">
+              <div>
+                <dt>Next check</dt>
+                <dd>14 days</dd>
+              </div>
+              <div>
+                <dt>Signal</dt>
+                <dd>breach monitor clean</dd>
+              </div>
+            </dl>
+          </div>
+        </cv-accordion-item>
+
+        <cv-accordion-item value="recovery" disabled>
+          <span slot="trigger">Recovery material locked</span>
+          <p>Disabled items stay in the order but cannot be toggled or selected.</p>
+        </cv-accordion-item>
+      </cv-accordion>
+    </div>
+
+    <aside class="accordion-demo-side" aria-label="Multiple and required-open examples">
+      <div class="accordion-demo-panel">
+        <div class="accordion-demo-section-header">
+          <span class="accordion-demo-label">Multiple values</span>
+          <h4>Security checks can stay open together.</h4>
+        </div>
+
+        <cv-accordion id="security-accordion" allow-multiple aria-label="Security checks">
+          <cv-accordion-item value="password">
+            <span slot="trigger">Password policy</span>
+            <p>Length, rotation, and breach-monitoring requirements.</p>
+          </cv-accordion-item>
+          <cv-accordion-item value="devices">
+            <span slot="trigger">Trusted devices</span>
+            <p>Devices that can unlock this workspace.</p>
+          </cv-accordion-item>
+        </cv-accordion>
+      </div>
+
+      <div class="accordion-demo-panel accordion-demo-event-panel">
+        <div class="accordion-demo-section-header">
+          <span class="accordion-demo-label">Event contract</span>
+          <h4>Read interaction state from events, not the DOM.</h4>
+        </div>
+
+        <output id="accordion-event-output" class="accordion-demo-event-output" aria-live="polite">
+          value: identity | values: identity | activeId: identity
+        </output>
+      </div>
+
+      <div class="accordion-demo-panel">
+        <div class="accordion-demo-section-header">
+          <span class="accordion-demo-label">Required open</span>
+          <h4>At least one setup step remains expanded.</h4>
+        </div>
+
+        <cv-accordion id="required-accordion" value="intro" aria-label="Required setup">
+          <cv-accordion-item value="intro">
+            <span slot="trigger">Threat model note</span>
+            <p>Read the visible-state assumptions before changing the setup.</p>
+          </cv-accordion-item>
+          <cv-accordion-item value="details">
+            <span slot="trigger">Operational details</span>
+            <p>Configuration rules and review notes stay available.</p>
+          </cv-accordion-item>
+        </cv-accordion>
+      </div>
+    </aside>
+  </section>
+</div>
+
+<script type="module">
+  const securityAccordion = document.querySelector('#security-accordion')
+  const requiredAccordion = document.querySelector('#required-accordion')
+  const credentialAccordion = document.querySelector('#credential-accordion')
+  const eventOutput = document.querySelector('#accordion-event-output')
+
+  securityAccordion.expandedValues = ['password', 'devices']
+  requiredAccordion.allowZeroExpanded = false
+
+  credentialAccordion.addEventListener('cv-input', (event) => {
+    const {value, values, activeId} = event.detail
+    eventOutput.value = `value: ${value ?? 'none'} | values: ${values.join(', ') || 'none'} | activeId: ${
+      activeId ?? 'none'
+    }`
+  })
+</script>
+```
+
+```html live-demo-source-only
 <!-- Controlled single mode (default) -->
 <cv-accordion value="identity" aria-label="Credential sections">
   <cv-accordion-item value="identity">

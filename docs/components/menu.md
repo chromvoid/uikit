@@ -9,56 +9,180 @@ Menu panel that displays a list of actionable items, supporting checkable items 
 ## Usage
 
 ```html
-<!-- Basic menu -->
-<cv-menu open close-on-select="false" aria-label="Actions" data-live-demo-height="180">
-  <cv-menu-item value="cut">Cut</cv-menu-item>
-  <cv-menu-item value="copy">Copy</cv-menu-item>
-  <cv-menu-item value="paste">Paste</cv-menu-item>
-</cv-menu>
-```
+<div class="menu-demo-shell" data-demo="menu" data-live-demo-height="760">
+  <header class="menu-demo-hero">
+    <div class="menu-demo-copy">
+      <span class="menu-demo-kicker">Menu contract</span>
+      <h3>Operate a dense action surface without losing keyboard state or checkable context.</h3>
+      <p>
+        The menu keeps selection, active item, checkbox groups, radio groups, disabled actions, and
+        submenu affordances in the headless model while the UIKit layer owns only rendering.
+      </p>
+    </div>
 
-```html
-<!-- With disabled item -->
-<cv-menu open close-on-select="false" aria-label="Edit" data-live-demo-height="150">
-  <cv-menu-item value="undo">Undo</cv-menu-item>
-  <cv-menu-item value="redo" disabled>Redo</cv-menu-item>
-</cv-menu>
-```
+    <dl class="menu-demo-metrics" aria-label="Menu contract coverage">
+      <div>
+        <dt>Pattern</dt>
+        <dd>APG menu</dd>
+      </div>
+      <div>
+        <dt>Groups</dt>
+        <dd>Checkbox + radio</dd>
+      </div>
+      <div>
+        <dt>Events</dt>
+        <dd><code>cv-input</code> + <code>cv-change</code></dd>
+      </div>
+    </dl>
+  </header>
 
-```html
-<!-- With checkbox group -->
-<cv-menu open close-on-select="false" aria-label="View options" data-live-demo-height="190">
-  <cv-menu-group type="checkbox" label="Panels">
-    <cv-menu-item value="toolbar" checked>Toolbar</cv-menu-item>
-    <cv-menu-item value="sidebar">Sidebar</cv-menu-item>
-    <cv-menu-item value="statusbar" checked>Status Bar</cv-menu-item>
-  </cv-menu-group>
-</cv-menu>
-```
+  <section class="menu-demo-board" aria-label="Vault action menu demo">
+    <div class="menu-demo-panel menu-demo-panel--primary">
+      <div class="menu-demo-section-header">
+        <span class="menu-demo-kicker">Persistent command menu</span>
+        <h4>Pick actions, toggle visible panels, and change the command target in one open menu.</h4>
+      </div>
 
-```html
-<!-- With radio group -->
-<cv-menu open close-on-select="false" aria-label="Sort order" data-live-demo-height="190">
-  <cv-menu-group type="radio" label="Sort by">
-    <cv-menu-item value="name" checked>Name</cv-menu-item>
-    <cv-menu-item value="date">Date</cv-menu-item>
-    <cv-menu-item value="size">Size</cv-menu-item>
-  </cv-menu-group>
-</cv-menu>
-```
+      <cv-menu
+        class="menu-demo-menu"
+        data-menu-demo-primary
+        open
+        close-on-select="false"
+        aria-label="Vault command actions"
+        value="inspect"
+      >
+        <cv-menu-item value="inspect">
+          <span slot="prefix" class="menu-demo-glyph" aria-hidden="true">i</span>
+          Inspect route
+          <span slot="suffix">I</span>
+        </cv-menu-item>
+        <cv-menu-item value="copy-proof">
+          <span slot="prefix" class="menu-demo-glyph" aria-hidden="true">#</span>
+          Copy proof label
+          <span slot="suffix">C</span>
+        </cv-menu-item>
+        <cv-menu-item value="reveal-risk" disabled>
+          <span slot="prefix" class="menu-demo-glyph" aria-hidden="true">!</span>
+          Reveal locked route
+          <span slot="suffix">policy</span>
+        </cv-menu-item>
 
-```html
-<!-- With submenu -->
-<cv-menu open close-on-select="false" aria-label="File" data-live-demo-height="220">
-  <cv-menu-item value="new">New</cv-menu-item>
-  <cv-menu-item value="share">
-    Share
-    <cv-menu slot="submenu">
-      <cv-menu-item value="email">Email</cv-menu-item>
-      <cv-menu-item value="link">Copy Link</cv-menu-item>
-    </cv-menu>
-  </cv-menu-item>
-</cv-menu>
+        <cv-menu-group type="checkbox" label="Visible panels">
+          <cv-menu-item value="event-log" checked>Event log</cv-menu-item>
+          <cv-menu-item value="risk-badges">Risk badges</cv-menu-item>
+          <cv-menu-item value="trace-overlay" checked>Trace overlay</cv-menu-item>
+        </cv-menu-group>
+
+        <cv-menu-group type="radio" label="Command target">
+          <cv-menu-item value="visible-vault" checked>Visible vault</cv-menu-item>
+          <cv-menu-item value="hidden-layer">Hidden layer</cv-menu-item>
+          <cv-menu-item value="external-export" disabled>External export</cv-menu-item>
+        </cv-menu-group>
+
+        <cv-menu-item value="share">
+          <span slot="prefix" class="menu-demo-glyph" aria-hidden="true">+</span>
+          Share route
+          <span slot="suffix">submenu</span>
+          <cv-menu slot="submenu" aria-label="Share route options">
+            <cv-menu-item value="share-link">Copy link</cv-menu-item>
+            <cv-menu-item value="share-report">Create report</cv-menu-item>
+          </cv-menu>
+        </cv-menu-item>
+      </cv-menu>
+    </div>
+
+    <aside class="menu-demo-side" aria-label="Live menu state">
+      <span class="menu-demo-kicker">Event readout</span>
+      <dl class="menu-demo-state">
+        <div>
+          <dt>Value</dt>
+          <dd data-menu-demo-value>inspect</dd>
+        </div>
+        <div>
+          <dt>Active item</dt>
+          <dd data-menu-demo-active>none</dd>
+        </div>
+        <div>
+          <dt>Open</dt>
+          <dd data-menu-demo-open>true</dd>
+        </div>
+      </dl>
+      <output class="menu-demo-log" data-menu-demo-output>ready -> inspect</output>
+    </aside>
+  </section>
+
+  <section class="menu-demo-cases" aria-label="Menu state matrix">
+    <div class="menu-demo-section-header">
+      <span class="menu-demo-kicker">State matrix</span>
+      <h4>Reference cases stay visible without scattering five separate menus across the page.</h4>
+    </div>
+
+    <div class="menu-demo-case-grid">
+      <div class="menu-demo-case">
+        <span class="menu-demo-label">Basic actions</span>
+        <cv-menu open close-on-select="false" aria-label="Basic actions">
+          <cv-menu-item value="cut">Cut</cv-menu-item>
+          <cv-menu-item value="copy">Copy</cv-menu-item>
+          <cv-menu-item value="paste">Paste</cv-menu-item>
+        </cv-menu>
+      </div>
+
+      <div class="menu-demo-case">
+        <span class="menu-demo-label">Disabled item</span>
+        <cv-menu open close-on-select="false" aria-label="Edit actions">
+          <cv-menu-item value="undo">Undo</cv-menu-item>
+          <cv-menu-item value="redo" disabled>Redo</cv-menu-item>
+        </cv-menu>
+      </div>
+
+      <div class="menu-demo-case">
+        <span class="menu-demo-label">Checkable group</span>
+        <cv-menu open close-on-select="false" aria-label="View options">
+          <cv-menu-group type="checkbox" label="Panels">
+            <cv-menu-item value="toolbar" checked>Toolbar</cv-menu-item>
+            <cv-menu-item value="sidebar">Sidebar</cv-menu-item>
+            <cv-menu-item value="statusbar" checked>Status Bar</cv-menu-item>
+          </cv-menu-group>
+        </cv-menu>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script type="module">
+  document.querySelectorAll('.menu-demo-shell[data-demo="menu"]:not([data-ready])').forEach((shell) => {
+    shell.dataset.ready = 'true'
+
+    const value = shell.querySelector('[data-menu-demo-value]')
+    const active = shell.querySelector('[data-menu-demo-active]')
+    const open = shell.querySelector('[data-menu-demo-open]')
+    const output = shell.querySelector('[data-menu-demo-output]')
+    const primary = shell.querySelector('[data-menu-demo-primary]')
+
+    const emitState = (type, detail) => {
+      const selected = detail.value || 'none'
+      if (value) value.textContent = selected
+      if (active) active.textContent = detail.activeId || 'none'
+      if (open) open.textContent = detail.open ? 'true' : 'false'
+      if (output) output.textContent = `${type} -> ${selected} (${detail.open ? 'open' : 'closed'})`
+    }
+
+    shell.querySelectorAll('cv-menu').forEach((menu) => {
+      menu.addEventListener('cv-input', (event) => emitState(event.type, event.detail))
+      menu.addEventListener('cv-change', (event) => emitState(event.type, event.detail))
+    })
+
+    if (primary) {
+      requestAnimationFrame(() => {
+        emitState('ready', {
+          value: primary.value || 'inspect',
+          activeId: null,
+          open: primary.open,
+        })
+      })
+    }
+  })
+</script>
 ```
 
 ---

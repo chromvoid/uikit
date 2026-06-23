@@ -59,7 +59,7 @@ A resizable pane separator that lets users drag or keyboard-navigate to redistri
 
 | Part               | Element  | Description                                                                                                                |
 | ------------------ | -------- | -------------------------------------------------------------------------------------------------------------------------- |
-| `base`             | `<div>`  | Root grid container. Receives `data-orientation` and the inline `--cv-window-splitter-primary-size` variable.              |
+| `base`             | `<div>`  | Root grid container. Receives `data-orientation` and inherits the host-owned `--cv-window-splitter-primary-size` variable. |
 | `pane`             | `<div>`  | Either pane. Carries `data-pane="primary"` or `data-pane="secondary"`, and `data-orientation`.                             |
 | `separator`        | `<div>`  | The focusable, interactive separator element with `role="separator"`. Receives all ARIA and `data-orientation` attributes. |
 | `separator-handle` | `<span>` | Visual drag handle inside the separator. Renders the default glyph or the `separator` slot content.                        |
@@ -82,10 +82,10 @@ A resizable pane separator that lets users drag or keyboard-navigate to redistri
 
 ### Component properties
 
-| Property                            | Default | Description                                                                                                                                                    |
-| ----------------------------------- | ------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `--cv-window-splitter-primary-size` | `50%`   | Computed percentage size of the primary pane, set inline on `[part="base"]` as the grid track size. Updated continuously during drag and keyboard interaction. |
-| `--cv-window-splitter-divider-size` | `8px`   | Width (vertical orientation) or height (horizontal orientation) of the separator track in the grid layout.                                                     |
+| Property                            | Default | Description                                                                                                                                          |
+| ----------------------------------- | ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `--cv-window-splitter-primary-size` | `50%`   | Computed percentage size of the primary pane, set by the component on the host as the grid track size. Updated during drag and keyboard interaction. |
+| `--cv-window-splitter-divider-size` | `8px`   | Width (vertical orientation) or height (horizontal orientation) of the separator track in the grid layout.                                           |
 
 ### Theme tokens consumed (via fallback values)
 
@@ -129,11 +129,11 @@ A resizable pane separator that lets users drag or keyboard-navigate to redistri
 
 ### Headless state → DOM reflection
 
-| Headless Signal       | Direction    | DOM / CSS Reflection                                                                             |
-| --------------------- | ------------ | ------------------------------------------------------------------------------------------------ |
-| `state.position()`    | state → CSS  | `--cv-window-splitter-primary-size` inline on `[part="base"]`; `position` host attribute updated |
-| `state.isDragging()`  | state → attr | `[data-dragging]` on `[part="separator"]`                                                        |
-| `state.orientation()` | state → attr | `data-orientation` on `[part="base"]`, `[part="separator"]`, and both `[part="pane"]` elements   |
+| Headless Signal       | Direction    | DOM / CSS Reflection                                                                           |
+| --------------------- | ------------ | ---------------------------------------------------------------------------------------------- |
+| `state.position()`    | state → CSS  | `--cv-window-splitter-primary-size` on the host; `position` host attribute updated             |
+| `state.isDragging()`  | state → attr | `[data-dragging]` on `[part="separator"]`                                                      |
+| `state.orientation()` | state → attr | `data-orientation` on `[part="base"]`, `[part="separator"]`, and both `[part="pane"]` elements |
 
 ### Contract spreading
 
@@ -382,11 +382,11 @@ Both events are dispatched as `CustomEvent` with `bubbles: true` and `composed: 
         const snapMarkers = [...shell.querySelectorAll('[data-snap-value]')]
         if (!mainSplitter || !fixedSplitter || !mainOutput || !fixedOutput || !meter) return
 
-        const formatPosition = (splitter) => `${Math.round(Number(splitter.position))}%`
+        const formatPosition = (position) => `${Math.round(Number(position))}%`
 
-        const syncMain = (eventName = 'ready') => {
-          const position = Number(mainSplitter.position)
-          mainOutput.textContent = `Primary pane: ${formatPosition(mainSplitter)} | Event: ${eventName}`
+        const syncMain = (eventName = 'ready', nextPosition = Number(mainSplitter.position)) => {
+          const position = Number(nextPosition)
+          mainOutput.textContent = `Primary pane: ${formatPosition(position)} | Event: ${eventName}`
           meter.value = String(position)
           snapMarkers.forEach((marker) => {
             const snap = Number(marker.dataset.snapValue)
@@ -394,14 +394,51 @@ Both events are dispatched as `CustomEvent` with `bubbles: true` and `composed: 
           })
         }
 
-        const syncFixed = (eventName = 'ready') => {
-          fixedOutput.textContent = `Fixed pane: ${formatPosition(fixedSplitter)} | Event: ${eventName}`
+        const syncFixed = (eventName = 'ready', nextPosition = Number(fixedSplitter.position)) => {
+          fixedOutput.textContent = `Fixed pane: ${formatPosition(nextPosition)} | Event: ${eventName}`
         }
 
-        mainSplitter.addEventListener('cv-input', () => syncMain('cv-input'))
-        mainSplitter.addEventListener('cv-change', () => syncMain('cv-change'))
-        fixedSplitter.addEventListener('cv-input', () => syncFixed('cv-input'))
-        fixedSplitter.addEventListener('cv-change', () => syncFixed('cv-change'))
+        let mainSyncFrame = 0
+        let mainPendingPosition = Number(mainSplitter.position)
+        let fixedSyncFrame = 0
+        let fixedPendingPosition = Number(fixedSplitter.position)
+
+        const readEventPosition = (event, splitter) => Number(event.detail?.position ?? splitter.position)
+
+        const scheduleMainSync = (event) => {
+          mainPendingPosition = readEventPosition(event, mainSplitter)
+          if (mainSyncFrame) return
+          mainSyncFrame = requestAnimationFrame(() => {
+            mainSyncFrame = 0
+            syncMain('cv-input', mainPendingPosition)
+          })
+        }
+
+        const scheduleFixedSync = (event) => {
+          fixedPendingPosition = readEventPosition(event, fixedSplitter)
+          if (fixedSyncFrame) return
+          fixedSyncFrame = requestAnimationFrame(() => {
+            fixedSyncFrame = 0
+            syncFixed('cv-input', fixedPendingPosition)
+          })
+        }
+
+        mainSplitter.addEventListener('cv-input', scheduleMainSync)
+        mainSplitter.addEventListener('cv-change', (event) => {
+          if (mainSyncFrame) {
+            cancelAnimationFrame(mainSyncFrame)
+            mainSyncFrame = 0
+          }
+          syncMain('cv-change', readEventPosition(event, mainSplitter))
+        })
+        fixedSplitter.addEventListener('cv-input', scheduleFixedSync)
+        fixedSplitter.addEventListener('cv-change', (event) => {
+          if (fixedSyncFrame) {
+            cancelAnimationFrame(fixedSyncFrame)
+            fixedSyncFrame = 0
+          }
+          syncFixed('cv-change', readEventPosition(event, fixedSplitter))
+        })
 
         await Promise.all([mainSplitter.updateComplete, fixedSplitter.updateComplete])
         syncMain()

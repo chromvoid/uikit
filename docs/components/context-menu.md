@@ -9,14 +9,193 @@ Contextual menu triggered by right-click, keyboard invocation, or imperative `op
 ## Usage
 
 ```html
+<div class="context-menu-demo-shell" data-demo="context-menu" data-live-demo-height="780">
+  <section class="context-menu-demo-hero" aria-labelledby="context-menu-demo-title">
+    <div class="context-menu-demo-copy">
+      <span class="context-menu-demo-kicker">Contextual command surface</span>
+      <h3 id="context-menu-demo-title">
+        Right-click, keyboard, and programmatic opening all resolve through the same menu state.
+      </h3>
+      <p>
+        The component keeps coordinates, active item, selection, Escape handling, and focus restoration in the
+        headless context-menu model while the target can remain any product surface.
+      </p>
+      <div class="context-menu-demo-actions" role="group" aria-label="Context menu demo controls">
+        <cv-button variant="primary" data-context-menu-open>Open at file row</cv-button>
+        <cv-button variant="secondary" data-context-menu-focus>Focus target</cv-button>
+      </div>
+    </div>
+
+    <dl class="context-menu-demo-metrics" aria-label="Context menu behavior summary">
+      <div>
+        <dt>Trigger</dt>
+        <dd>right-click / Shift+F10</dd>
+      </div>
+      <div>
+        <dt>State</dt>
+        <dd>value + anchor</dd>
+      </div>
+      <div>
+        <dt>Focus</dt>
+        <dd>restores to target</dd>
+      </div>
+    </dl>
+  </section>
+
+  <section class="context-menu-demo-workbench" aria-labelledby="context-menu-demo-workbench-title">
+    <div class="context-menu-demo-section-header">
+      <span class="context-menu-demo-kicker">Vault file workspace</span>
+      <h4 id="context-menu-demo-workbench-title">
+        Use it where commands depend on the exact object under the pointer
+      </h4>
+    </div>
+
+    <div class="context-menu-demo-surface">
+      <header class="context-menu-demo-toolbar">
+        <div>
+          <span class="context-menu-demo-label">Selected route</span>
+          <strong>Travel profile / field-notes</strong>
+        </div>
+        <output class="context-menu-demo-state" data-context-menu-state aria-live="polite">
+          Menu closed. Right-click the highlighted row.
+        </output>
+      </header>
+
+      <cv-context-menu class="context-menu-demo-menu" aria-label="Vault file actions" close-on-scroll>
+        <div class="context-menu-demo-target" slot="target" tabindex="-1">
+          <div class="context-menu-demo-table" role="table" aria-label="Vault file list">
+            <div class="context-menu-demo-row context-menu-demo-row--header" role="row">
+              <span role="columnheader">Name</span>
+              <span role="columnheader">Layer</span>
+              <span role="columnheader">State</span>
+            </div>
+            <div class="context-menu-demo-row" role="row">
+              <span role="cell">border-route.md</span>
+              <span role="cell">visible</span>
+              <span role="cell">synced</span>
+            </div>
+            <div class="context-menu-demo-row context-menu-demo-row--active" role="row" aria-selected="true">
+              <span role="cell">source-contact.enc</span>
+              <span role="cell">hidden</span>
+              <span role="cell">local only</span>
+            </div>
+            <div class="context-menu-demo-row" role="row">
+              <span role="cell">camera-import.zip</span>
+              <span role="cell">quarantine</span>
+              <span role="cell">needs review</span>
+            </div>
+          </div>
+        </div>
+
+        <cv-menu-item value="preview">
+          <cv-icon slot="prefix" name="eye" size="s"></cv-icon>
+          Preview safely
+          <cv-shortcut slot="suffix" label="Enter"></cv-shortcut>
+        </cv-menu-item>
+        <cv-menu-item value="copy-path">
+          <cv-icon slot="prefix" name="copy" size="s"></cv-icon>
+          Copy sealed path
+          <cv-shortcut slot="suffix" label="Cmd+C"></cv-shortcut>
+        </cv-menu-item>
+        <cv-menu-item value="move">
+          <cv-icon slot="prefix" name="folder-open" size="s"></cv-icon>
+          Move to route
+          <cv-shortcut slot="suffix" label="M"></cv-shortcut>
+        </cv-menu-item>
+        <div role="separator" aria-hidden="true"></div>
+        <cv-menu-item value="audit">
+          <cv-icon slot="prefix" name="history" size="s"></cv-icon>
+          Inspect audit trail
+        </cv-menu-item>
+        <cv-menu-item value="expose" disabled>
+          <cv-icon slot="prefix" name="globe" size="s"></cv-icon>
+          Publish outside vault
+        </cv-menu-item>
+        <div role="separator" aria-hidden="true"></div>
+        <cv-menu-item value="delete">
+          <cv-icon slot="prefix" name="trash" size="s"></cv-icon>
+          Delete local copy
+          <cv-shortcut slot="suffix" label="Del"></cv-shortcut>
+        </cv-menu-item>
+      </cv-context-menu>
+
+      <div class="context-menu-demo-contract" aria-label="Context menu contract">
+        <div>
+          <span class="context-menu-demo-label">Pointer</span>
+          <strong>Context menu event anchors the popup to the click point.</strong>
+        </div>
+        <div>
+          <span class="context-menu-demo-label">Keyboard</span>
+          <strong>Shift+F10 and ContextMenu open without adding custom DOM state.</strong>
+        </div>
+        <div>
+          <span class="context-menu-demo-label">Selection</span>
+          <strong><code>cv-change</code> reports the chosen value.</strong>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>
+  ;(() => {
+    const shell = document.querySelector('.context-menu-demo-shell')
+    const menu = shell?.querySelector('.context-menu-demo-menu')
+    const target = shell?.querySelector('.context-menu-demo-target')
+    const state = shell?.querySelector('[data-context-menu-state]')
+    const openButton = shell?.querySelector('[data-context-menu-open]')
+    const focusButton = shell?.querySelector('[data-context-menu-focus]')
+
+    if (!shell || !menu || !target || !state) return
+
+    const commandLabels = {
+      'item-1': 'Preview safely',
+      'item-2': 'Copy sealed path',
+      'item-3': 'Move to route',
+      'item-4': 'Inspect audit trail',
+      'item-5': 'Publish outside vault',
+      'item-6': 'Delete local copy',
+    }
+
+    const setState = (detail) => {
+      const selected = detail?.value
+        ? `Selected: ${commandLabels[detail.value] ?? detail.value}`
+        : 'No command selected'
+      const status = detail?.open ? 'open' : 'closed'
+      const anchor =
+        typeof detail?.anchorX === 'number' && typeof detail?.anchorY === 'number'
+          ? ` at ${Math.round(detail.anchorX)}, ${Math.round(detail.anchorY)}`
+          : ''
+      state.textContent = `${selected}. Menu ${status}${anchor}.`
+    }
+
+    openButton?.addEventListener('click', () => {
+      const rect = target.getBoundingClientRect()
+      menu.openAt(rect.left + rect.width * 0.48, rect.top + rect.height * 0.58)
+    })
+
+    focusButton?.addEventListener('click', () => {
+      const focusTarget = menu.shadowRoot?.querySelector('[part="target"]')
+      focusTarget?.focus()
+    })
+
+    menu.addEventListener('cv-input', (event) => setState(event.detail))
+    menu.addEventListener('cv-change', (event) => setState(event.detail))
+  })()
+</script>
+```
+
+```html source-only
 <!-- Basic context menu -->
-<cv-context-menu aria-label="File actions" data-live-demo-height="420">
+<cv-context-menu aria-label="File actions">
   <div slot="target">Right-click here</div>
   <cv-menu-item value="copy">Copy</cv-menu-item>
   <cv-menu-item value="paste">Paste</cv-menu-item>
   <cv-menu-item value="delete" disabled>Delete</cv-menu-item>
 </cv-context-menu>
+```
 
+```html source-only
 <!-- With inert separators -->
 <cv-context-menu aria-label="Edit actions">
   <div slot="target">Right-click here</div>
@@ -26,7 +205,9 @@ Contextual menu triggered by right-click, keyboard invocation, or imperative `op
   <div role="separator" aria-hidden="true"></div>
   <cv-menu-item value="select-all">Select All</cv-menu-item>
 </cv-context-menu>
+```
 
+```html source-only
 <!-- With prefix and suffix affordances from cv-menu-item -->
 <cv-context-menu aria-label="File actions">
   <div slot="target">Content area</div>
@@ -36,7 +217,9 @@ Contextual menu triggered by right-click, keyboard invocation, or imperative `op
     <span slot="suffix">F2</span>
   </cv-menu-item>
 </cv-context-menu>
+```
 
+```html source-only
 <!-- Imperative positioning -->
 <cv-context-menu id="my-menu" aria-label="Custom menu" close-on-scroll>
   <div slot="target">Content area</div>
