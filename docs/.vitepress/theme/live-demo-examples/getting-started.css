@@ -1,0 +1,111 @@
+.live-demo-preview--frame {
+  background: #070d16;
+}
+
+.getting-started-surface {
+  display: grid;
+  gap: 18px;
+  inline-size: 100%;
+  min-inline-size: 0;
+  min-block-size: 280px;
+  padding: clamp(18px, 4vw, 26px);
+  overflow: hidden;
+  border: 1px solid rgba(118, 181, 222, 0.22);
+  border-radius: 18px;
+  color: var(--live-demo-muted);
+  background:
+    radial-gradient(circle at 12% 0%, rgba(101, 215, 255, 0.16), transparent 38%),
+    radial-gradient(circle at 92% 18%, rgba(179, 136, 255, 0.12), transparent 36%),
+    linear-gradient(180deg, rgba(13, 22, 35, 0.98), rgba(6, 12, 21, 0.98));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.045),
+    0 18px 42px rgba(0, 0, 0, 0.24);
+  container-type: inline-size;
+}
+
+.getting-started-surface,
+.getting-started-surface * {
+  box-sizing: border-box;
+}
+
+.getting-started-surface-copy {
+  display: grid;
+  gap: 8px;
+  min-inline-size: 0;
+}
+
+.getting-started-eyebrow,
+.getting-started-surface-progress span {
+  color: #94e9ff;
+  font-family: var(--vp-font-family-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.getting-started-surface-copy strong {
+  max-inline-size: 30ch;
+  color: var(--live-demo-text);
+  font-size: clamp(1.18rem, 5cqi, 1.5rem);
+  line-height: 1.12;
+  text-wrap: balance;
+}
+
+.getting-started-surface-copy span:last-child {
+  max-inline-size: 60ch;
+  color: var(--live-demo-muted);
+  font-size: 0.92rem;
+  line-height: 1.55;
+}
+
+.getting-started-surface-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  min-inline-size: 0;
+}
+
+.getting-started-surface-actions cv-switch {
+  min-inline-size: 0;
+}
+
+.getting-started-surface-progress {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 8px 14px;
+  align-items: center;
+  min-inline-size: 0;
+  padding: 14px;
+  border: 1px solid rgba(118, 181, 222, 0.16);
+  border-radius: 14px;
+  background:
+    linear-gradient(180deg, rgba(238, 245, 255, 0.052), rgba(238, 245, 255, 0.024)),
+    rgba(7, 13, 22, 0.36);
+}
+
+.getting-started-surface-progress strong {
+  color: var(--live-demo-text);
+  font-family: var(--vp-font-family-mono);
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.getting-started-surface-progress cv-progress {
+  grid-column: 1 / -1;
+  inline-size: 100%;
+  min-inline-size: 0;
+  --cv-progress-height: 8px;
+  --cv-progress-track-color: rgba(238, 245, 255, 0.07);
+}
+
+@media (max-width: 420px) {
+  .getting-started-surface {
+    gap: 16px;
+    padding: 16px;
+  }
+
+  .getting-started-surface-actions {
+    gap: 10px;
+  }
+}

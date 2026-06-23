@@ -75,7 +75,12 @@ The docs render this snippet as a live custom-element preview.
 
 ```html
 <cv-theme-provider mode="dark">
-  <section class="getting-started-surface" aria-label="Vault bootstrap preview">
+  <section
+    class="getting-started-surface"
+    data-demo="getting-started"
+    data-live-demo-height="280"
+    aria-label="Vault bootstrap preview"
+  >
     <div class="getting-started-surface-copy">
       <span class="getting-started-eyebrow">Vault bootstrap</span>
       <strong>Ready for shell wiring</strong>
@@ -85,7 +90,11 @@ The docs render this snippet as a live custom-element preview.
       <cv-button variant="primary" pill>Unlock vault</cv-button>
       <cv-switch checked>Core paired</cv-switch>
     </div>
-    <cv-progress value="64" max="100" aria-label="Bootstrap progress"></cv-progress>
+    <div class="getting-started-surface-progress">
+      <span>Bootstrap progress</span>
+      <strong>64%</strong>
+      <cv-progress value="64" max="100" aria-label="Bootstrap progress"></cv-progress>
+    </div>
   </section>
 </cv-theme-provider>
 ```
