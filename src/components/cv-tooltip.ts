@@ -106,6 +106,7 @@ export class CVTooltip extends ReatomLitElement {
         color: var(--cv-color-text, #e8ecf6);
         font-size: 0.85rem;
         white-space: normal;
+        overflow: visible;
         overflow-wrap: anywhere;
         box-shadow: var(--cv-shadow-1, 0 2px 8px rgba(0, 0, 0, 0.24));
       }

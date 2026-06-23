@@ -36,6 +36,8 @@ export interface CVPopoverResolvedPosition {
   placement: CVPopoverPlacement
 }
 
+export type CVPopoverArrowAxis = 'inline' | 'block'
+
 const mirrorSideMap: Record<PlacementSide, PlacementSide> = {
   top: 'bottom',
   right: 'left',
@@ -130,6 +132,10 @@ function clampToViewport(
   }
 }
 
+function clampValue(value: number, min: number, max: number): number {
+  return Math.min(Math.max(value, min), max)
+}
+
 export function getPlacementFallbacks(placement: CVPopoverPlacement): CVPopoverPlacement[] {
   const {side, align} = parsePlacement(placement)
   const candidates = [
@@ -165,6 +171,23 @@ export function getPositionAreaForPlacement(placement: CVPopoverPlacement): stri
             : 'center'
 
   return `${row} ${column}`
+}
+
+export function resolvePopoverArrowOffset(
+  anchorRect: CVPopoverRect,
+  panelRect: CVPopoverRect,
+  arrowSize: number,
+  axis: CVPopoverArrowAxis,
+  padding = 8,
+): number {
+  const anchorCenter =
+    axis === 'inline' ? anchorRect.left + anchorRect.width / 2 : anchorRect.top + anchorRect.height / 2
+  const panelStart = axis === 'inline' ? panelRect.left : panelRect.top
+  const panelSize = axis === 'inline' ? panelRect.width : panelRect.height
+  const arrowOffset = anchorCenter - panelStart - arrowSize / 2
+  const maxOffset = Math.max(padding, panelSize - arrowSize - padding)
+
+  return Math.round(clampValue(arrowOffset, padding, maxOffset))
 }
 
 export function resolvePopoverPosition(

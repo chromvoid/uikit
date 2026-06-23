@@ -67,6 +67,33 @@ async function mountMenuWithManyItems(params: {open?: boolean} = {}) {
 
   return {menu, root, items}
 }
+
+async function mountMenuWithSubmenu() {
+  const menu = document.createElement('cv-menu') as CVMenu
+  menu.open = true
+  menu.closeOnSelect = false
+  menu.innerHTML = `
+    <cv-menu-item value="share">
+      Share
+      <cv-menu slot="submenu" aria-label="Share options">
+        <cv-menu-item>Email</cv-menu-item>
+        <cv-menu-item>Copy Link</cv-menu-item>
+      </cv-menu>
+    </cv-menu-item>
+    <cv-menu-item value="rename">Rename</cv-menu-item>
+  `
+
+  document.body.append(menu)
+  await settle(menu)
+
+  const root = menu.shadowRoot?.querySelector('[part="base"]') as HTMLElement
+  const parentItem = menu.querySelector('cv-menu-item[value="share"]') as CVMenuItem
+  const submenu = parentItem.querySelector('cv-menu[slot="submenu"]') as CVMenu
+  const submenuItems = Array.from(submenu.querySelectorAll('cv-menu-item')) as CVMenuItem[]
+
+  return {menu, root, parentItem, submenu, submenuItems}
+}
+
 afterEach(() => {
   document.body.innerHTML = ''
 })
@@ -731,6 +758,42 @@ describe('cv-menu', () => {
 
       expect(items[0]!.getAttribute('aria-checked')).toBe('false')
       expect(items[1]!.getAttribute('aria-checked')).toBe('true')
+      expect(menu.open).toBe(true)
+      expect(menu.value).toBe('')
+    })
+  })
+
+  // --- Submenu integration ---
+
+  describe('submenu integration', () => {
+    it('ArrowRight opens the nested submenu for the active parent item', async () => {
+      const {menu, root, parentItem, submenu, submenuItems} = await mountMenuWithSubmenu()
+
+      expect(parentItem.getAttribute('aria-expanded')).toBe('false')
+      expect(submenu.open).toBe(false)
+      expect(submenu.hidden).toBe(true)
+
+      root.dispatchEvent(new KeyboardEvent('keydown', {key: 'ArrowRight', bubbles: true}))
+      await settle(menu)
+      await settle(submenu)
+
+      expect(parentItem.getAttribute('aria-haspopup')).toBe('menu')
+      expect(parentItem.getAttribute('aria-expanded')).toBe('true')
+      expect(submenu.open).toBe(true)
+      expect(submenu.hidden).toBe(false)
+      expect(submenuItems[0]!.hidden).toBe(false)
+    })
+
+    it('clicking a submenu parent opens its submenu without selecting the parent', async () => {
+      const {menu, parentItem, submenu} = await mountMenuWithSubmenu()
+
+      parentItem.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+      await settle(menu)
+      await settle(submenu)
+
+      expect(parentItem.getAttribute('aria-expanded')).toBe('true')
+      expect(submenu.open).toBe(true)
+      expect(submenu.hidden).toBe(false)
       expect(menu.open).toBe(true)
       expect(menu.value).toBe('')
     })

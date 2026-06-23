@@ -168,9 +168,7 @@ describe('cv-popover', () => {
     it('keeps closed native popover content hidden', () => {
       const cssText = stylesToText()
 
-      expect(cssText).toMatch(
-        /\[part='content'\]\[popover\]:not\(:popover-open\)[\s\S]*display:\s*none/,
-      )
+      expect(cssText).toMatch(/\[part='content'\]\[popover\]:not\(:popover-open\)[\s\S]*display:\s*none/)
     })
   })
 
@@ -804,6 +802,18 @@ describe('cv-popover', () => {
   // --- Focus restoration scoping (native popover semantics) ---
 
   describe('focus restoration scoping', () => {
+    it('focuses opened content without scrolling the page', async () => {
+      const el = await createPopover()
+      const trigger = getTrigger(el)
+      const content = getContent(el)
+      const focus = vi.spyOn(content, 'focus')
+
+      trigger.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+      await settle(el)
+
+      expect(focus).toHaveBeenCalledWith({preventScroll: true})
+    })
+
     it('does NOT pull focus back to the trigger when focus already moved outside (light dismiss)', async () => {
       const el = await createPopover()
       const outside = document.createElement('button')
@@ -861,9 +871,7 @@ describe('cv-popover', () => {
         if ((e as KeyboardEvent).key === 'Escape') ancestorSawEscape = true
       })
 
-      content.dispatchEvent(
-        new KeyboardEvent('keydown', {key: 'Escape', bubbles: true, composed: true}),
-      )
+      content.dispatchEvent(new KeyboardEvent('keydown', {key: 'Escape', bubbles: true, composed: true}))
       await settle(el)
 
       expect(el.open).toBe(false)
@@ -910,9 +918,7 @@ describe('cv-popover', () => {
       host.append(el)
       await settle(el)
 
-      const reattached = addSpy.mock.calls.some(
-        ([type]) => type === 'resize' || type === 'scroll',
-      )
+      const reattached = addSpy.mock.calls.some(([type]) => type === 'resize' || type === 'scroll')
       expect(reattached).toBe(true)
     })
   })

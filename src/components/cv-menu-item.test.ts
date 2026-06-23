@@ -153,6 +153,17 @@ describe('cv-menu-item', () => {
       expect(stylesText).toContain(':host(:hover) .item')
     })
 
+    it('defines a stable row layout for prefix, label, and suffix parts', () => {
+      const stylesText = getStylesText()
+
+      expect(stylesText).toMatch(/display:\s*flex/)
+      expect(stylesText).toMatch(/align-items:\s*center/)
+      expect(stylesText).toMatch(/\[part=['"]label['"]\]/)
+      expect(stylesText).toMatch(/flex:\s*1 1 auto/)
+      expect(stylesText).toMatch(/\[part=['"]suffix['"]\]/)
+      expect(stylesText).toMatch(/flex:\s*0 0 auto/)
+    })
+
     it('[disabled] attribute reflects on host', async () => {
       const item = await createItem({disabled: true})
       expect(item.hasAttribute('disabled')).toBe(true)

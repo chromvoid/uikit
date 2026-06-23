@@ -11,9 +11,7 @@ const settle = async (element: CVTooltip) => {
 }
 
 const stylesToText = () =>
-  (CVTooltip.styles as Array<{cssText?: string}>)
-    .map((style) => style.cssText ?? '')
-    .join('\n')
+  (CVTooltip.styles as Array<{cssText?: string}>).map((style) => style.cssText ?? '').join('\n')
 
 const createTooltip = async (attrs?: Partial<CVTooltip>) => {
   const el = document.createElement('cv-tooltip') as CVTooltip
@@ -99,6 +97,12 @@ describe('cv-tooltip', () => {
       expect(cssText).toMatch(/\[part='content'\]\s*{[\s\S]*max-inline-size:/)
       expect(cssText).toMatch(/\[part='content'\]\s*{[\s\S]*white-space:\s*normal;/)
       expect(cssText).toMatch(/\[part='content'\]\s*{[\s\S]*overflow-wrap:\s*anywhere;/)
+    })
+
+    it('keeps native popover overflow visible so arrow protrusion does not create a scrollbar', () => {
+      const cssText = stylesToText()
+
+      expect(cssText).toMatch(/\[part='content'\]\s*{[\s\S]*overflow:\s*visible;/)
     })
 
     it('keeps native anchor-positioned content offset from the trigger', () => {
@@ -1135,7 +1139,9 @@ describe('cv-tooltip', () => {
     it('unhandled Escape still closes', async () => {
       const {el, triggerWrap} = await mountTooltip({trigger: 'manual', open: true})
 
-      triggerWrap.dispatchEvent(new KeyboardEvent('keydown', {key: 'Escape', bubbles: true, cancelable: true}))
+      triggerWrap.dispatchEvent(
+        new KeyboardEvent('keydown', {key: 'Escape', bubbles: true, cancelable: true}),
+      )
       await settle(el)
 
       expect(el.open).toBe(false)

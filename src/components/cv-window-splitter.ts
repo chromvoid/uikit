@@ -57,6 +57,7 @@ export class CVWindowSplitter extends ReatomLitElement {
   private readonly idBase = `cv-window-splitter-${++cvWindowSplitterNonce}`
   private model: WindowSplitterModel
   private _dragStartPosition = 0
+  private _dragRect: Pick<DOMRect, 'left' | 'top' | 'width' | 'height'> | null = null
 
   constructor() {
     super()
@@ -150,6 +151,7 @@ export class CVWindowSplitter extends ReatomLitElement {
 
   override disconnectedCallback(): void {
     super.disconnectedCallback()
+    this._dragRect = null
   }
 
   override willUpdate(changedProperties: PropertyValues): void {
@@ -213,6 +215,10 @@ export class CVWindowSplitter extends ReatomLitElement {
     return Math.max(0, Math.min(100, ((this.model.state.position() - min) / (max - min)) * 100))
   }
 
+  private applyPrimarySize(): void {
+    this.style.setProperty('--cv-window-splitter-primary-size', `${this.getPercentage()}%`)
+  }
+
   private dispatchInput(detail: CVWindowSplitterEventDetail): void {
     this.dispatchEvent(
       new CustomEvent('cv-input', {
@@ -274,6 +280,11 @@ export class CVWindowSplitter extends ReatomLitElement {
       return
     e.preventDefault()
     const sep = e.currentTarget as HTMLElement
+    const base = this.shadowRoot?.querySelector('[part="base"]') as HTMLElement | null
+    if (!base) return
+
+    const {left, top, width, height} = base.getBoundingClientRect()
+    this._dragRect = {left, top, width, height}
     sep.setPointerCapture(e.pointerId)
     this.model.actions.startDragging()
     this._dragStartPosition = this.position
@@ -285,10 +296,8 @@ export class CVWindowSplitter extends ReatomLitElement {
   }
 
   private _onPointerMove = (e: PointerEvent): void => {
-    const base = this.shadowRoot?.querySelector('[part="base"]') as HTMLElement | null
-    if (!base) return
-
-    const rect = base.getBoundingClientRect()
+    const rect = this._dragRect
+    if (!rect) return
     if (rect.width <= 0 || rect.height <= 0) return
 
     const ratioRaw =
@@ -304,6 +313,7 @@ export class CVWindowSplitter extends ReatomLitElement {
     this.model.actions.setPosition(newPos)
     const pos = this.model.state.position()
     this.position = pos
+    this.applyPrimarySize()
     // Suppress cv-input when the drag resolved to the same position (e.g. it
     // snapped/clamped back onto the current value) — native controls stay quiet.
     if (pos === previousPos) return
@@ -317,6 +327,7 @@ export class CVWindowSplitter extends ReatomLitElement {
     sep.removeEventListener('pointercancel', this._onPointerUp)
     sep.removeEventListener('lostpointercapture', this._onLostPointerCapture)
     sep.removeAttribute('data-dragging')
+    this._dragRect = null
     this.model.actions.stopDragging()
     const pos = this.model.state.position()
     if (pos !== this._dragStartPosition) {
@@ -333,6 +344,7 @@ export class CVWindowSplitter extends ReatomLitElement {
     sep.removeEventListener('pointercancel', this._onPointerUp)
     sep.removeEventListener('lostpointercapture', this._onLostPointerCapture)
     sep.removeAttribute('data-dragging')
+    this._dragRect = null
     this.model.actions.stopDragging()
     const pos = this.model.state.position()
     if (pos !== this._dragStartPosition) {
@@ -346,15 +358,10 @@ export class CVWindowSplitter extends ReatomLitElement {
     const splitterProps = this.model.contracts.getSplitterProps()
     const primaryPaneProps = this.model.contracts.getPrimaryPaneProps()
     const secondaryPaneProps = this.model.contracts.getSecondaryPaneProps()
-    const percentage = this.getPercentage()
     const isDragging = this.model.state.isDragging()
 
     return html`
-      <div
-        part="base"
-        data-orientation=${this.orientation}
-        style=${`--cv-window-splitter-primary-size:${percentage}%;`}
-      >
+      <div part="base" data-orientation=${this.orientation}>
         <div
           id=${primaryPaneProps.id}
           data-pane=${primaryPaneProps['data-pane']}
@@ -397,5 +404,13 @@ export class CVWindowSplitter extends ReatomLitElement {
         </div>
       </div>
     `
+  }
+
+  protected override updated(changedProperties: PropertyValues): void {
+    super.updated(changedProperties)
+
+    if (changedProperties.has('position') || changedProperties.has('min') || changedProperties.has('max')) {
+      this.applyPrimarySize()
+    }
   }
 }

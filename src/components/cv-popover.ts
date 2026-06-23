@@ -12,6 +12,7 @@ import {ReatomLitElement} from '../reatom-lit/ReatomLitElement'
 import {
   getPlacementFallbacks,
   getPositionAreaForPlacement,
+  resolvePopoverArrowOffset,
   resolvePopoverPosition,
   type CVPopoverPlacement,
   type CVPopoverRect,
@@ -377,7 +378,7 @@ export class CVPopover extends ReatomLitElement {
 
     if (this.focusContentOnNextUpdate && modelOpen) {
       this.focusContentOnNextUpdate = false
-      this.getContentElement()?.focus()
+      this.getContentElement()?.focus({preventScroll: true})
     }
 
     if (
@@ -653,6 +654,34 @@ export class CVPopover extends ReatomLitElement {
     content.style.removeProperty('position-area')
     content.style.removeProperty('position-try-fallbacks')
     content.style.removeProperty('--cv-popover-anchor-inline-size')
+    content.style.removeProperty('--cv-popover-arrow-inline-start')
+    content.style.removeProperty('--cv-popover-arrow-block-start')
+  }
+
+  private syncArrowPosition(content: HTMLElement, anchor: HTMLElement, placement: CVPopoverPlacement): void {
+    const arrow = content.querySelector('[part="arrow"]') as HTMLElement | null
+    if (!arrow) return
+
+    const contentRect = toRect(content.getBoundingClientRect())
+    const anchorRect = toRect(anchor.getBoundingClientRect())
+    const arrowWidth = arrow.offsetWidth || arrow.getBoundingClientRect().width
+    const arrowHeight = arrow.offsetHeight || arrow.getBoundingClientRect().height
+    const [side] = placement.split('-')
+
+    if (side === 'top' || side === 'bottom') {
+      content.style.setProperty(
+        '--cv-popover-arrow-inline-start',
+        `${resolvePopoverArrowOffset(anchorRect, contentRect, arrowWidth, 'inline')}px`,
+      )
+      content.style.removeProperty('--cv-popover-arrow-block-start')
+      return
+    }
+
+    content.style.setProperty(
+      '--cv-popover-arrow-block-start',
+      `${resolvePopoverArrowOffset(anchorRect, contentRect, arrowHeight, 'block')}px`,
+    )
+    content.style.removeProperty('--cv-popover-arrow-inline-start')
   }
 
   private applyDirectionalOffset(content: HTMLElement, placement: CVPopoverPlacement): void {
@@ -740,6 +769,7 @@ export class CVPopover extends ReatomLitElement {
           .map((candidate) => getPositionAreaForPlacement(candidate))
           .join(', '),
       )
+      this.syncArrowPosition(content, anchor, this.placement)
       return
     }
 
@@ -762,6 +792,7 @@ export class CVPopover extends ReatomLitElement {
     content.style.left = `${resolved.left}px`
     content.style.transform = 'none'
     content.style.translate = 'none'
+    this.syncArrowPosition(content, anchor, resolved.placement)
   }
 
   private cancelLayoutFrame(): void {

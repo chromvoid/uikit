@@ -3,6 +3,7 @@ import {describe, expect, it} from 'vitest'
 import {
   getPlacementFallbacks,
   getPositionAreaForPlacement,
+  resolvePopoverArrowOffset,
   resolvePopoverPosition,
 } from './cv-popover-positioning'
 
@@ -150,6 +151,56 @@ describe('cv-popover positioning helpers', () => {
     expect(Number.isFinite(resolved.top)).toBe(true)
     expect(resolved.left).toBe(30)
     expect(resolved.top).toBe(108)
+  })
+
+  it('aligns a horizontal-placement arrow to the anchor center', () => {
+    const offset = resolvePopoverArrowOffset(
+      {
+        left: 100,
+        top: 120,
+        right: 180,
+        bottom: 160,
+        width: 80,
+        height: 40,
+      },
+      {
+        left: 20,
+        top: 12,
+        right: 340,
+        bottom: 112,
+        width: 320,
+        height: 100,
+      },
+      10,
+      'inline',
+    )
+
+    expect(offset).toBe(115)
+  })
+
+  it('clamps arrow offset inside the panel edge padding', () => {
+    const offset = resolvePopoverArrowOffset(
+      {
+        left: -40,
+        top: 120,
+        right: 0,
+        bottom: 160,
+        width: 40,
+        height: 40,
+      },
+      {
+        left: 20,
+        top: 12,
+        right: 220,
+        bottom: 112,
+        width: 200,
+        height: 100,
+      },
+      10,
+      'inline',
+    )
+
+    expect(offset).toBe(8)
   })
 
   it('rounds fractional anchor coordinates to integers', () => {
