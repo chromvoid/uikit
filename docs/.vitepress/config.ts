@@ -58,6 +58,51 @@ export default defineConfig({
     ['meta', {name: 'theme-color', content: '#0b0d12'}],
     ['meta', {property: 'og:title', content: 'ChromVoid UIKit'}],
     ['meta', {property: 'og:description', content: description}],
+    ['link', {rel: 'icon', href: `${base}favicon/favicon.ico`, sizes: 'any'}],
+    [
+      'link',
+      {
+        rel: 'icon',
+        type: 'image/png',
+        sizes: '16x16',
+        href: `${base}favicon/favicon-16x16.png`,
+      },
+    ],
+    [
+      'link',
+      {
+        rel: 'icon',
+        type: 'image/png',
+        sizes: '32x32',
+        href: `${base}favicon/favicon-32x32.png`,
+      },
+    ],
+    [
+      'link',
+      {
+        rel: 'icon',
+        type: 'image/png',
+        sizes: '192x192',
+        href: `${base}favicon/favicon-192x192.png`,
+      },
+    ],
+    [
+      'link',
+      {
+        rel: 'icon',
+        type: 'image/png',
+        sizes: '512x512',
+        href: `${base}favicon/favicon-512x512.png`,
+      },
+    ],
+    [
+      'link',
+      {
+        rel: 'apple-touch-icon',
+        sizes: '180x180',
+        href: `${base}favicon/apple-touch-icon.png`,
+      },
+    ],
     [
       'link',
       {
@@ -80,6 +125,7 @@ export default defineConfig({
     ],
   ],
   themeConfig: {
+    logo: {src: `${base}assets/icon.png`, alt: 'ChromVoid UIKit'},
     nav: [
       {text: 'Guide', link: '/guide/getting-started'},
       {text: 'Playground', link: '/guide/playground'},

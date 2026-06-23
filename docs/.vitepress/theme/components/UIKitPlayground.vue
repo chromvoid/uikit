@@ -314,10 +314,10 @@ onMounted(() => {
         <article class="playground-card playground-card--wide">
           <h4>Tabbed panels</h4>
           <p>Tabs keep related panels in one keyboard-managed structure.</p>
-          <cv-tabs aria-label="Section tabs">
-            <cv-tab value="overview" selected>Overview</cv-tab>
-            <cv-tab value="security">Security</cv-tab>
-            <cv-tab value="api">API</cv-tab>
+          <cv-tabs value="overview" aria-label="Section tabs">
+            <cv-tab slot="nav" value="overview">Overview</cv-tab>
+            <cv-tab slot="nav" value="security">Security</cv-tab>
+            <cv-tab slot="nav" value="api">API</cv-tab>
             <cv-tab-panel tab="overview">
               Overview content keeps product context close to the active tab.
             </cv-tab-panel>
