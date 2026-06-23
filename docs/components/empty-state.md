@@ -7,129 +7,127 @@ Reusable empty-result or empty-panel state with optional icon, body copy, and ac
 ## Usage
 
 ```html
-<div class="empty-state-demo-shell" data-demo="empty-state" data-live-demo-height="760" data-theme="dark">
-  <cv-theme-provider mode="dark" class="empty-state-demo-theme">
-    <section class="empty-state-demo-hero" aria-labelledby="empty-state-demo-title">
-      <div class="empty-state-demo-copy">
-        <span class="empty-state-demo-kicker">No-result boundary</span>
-        <h3 id="empty-state-demo-title">
-          Empty states explain what is missing, why it is safe, and which recovery path is available.
-        </h3>
-        <p>
-          The component renders a <code>role="status"</code> surface only. Route models decide whether the
-          state means no data, filtered data, unavailable storage, or an active drop target.
+<div class="empty-state-demo-shell" data-demo="empty-state" data-live-demo-height="760">
+  <section class="empty-state-demo-hero" aria-labelledby="empty-state-demo-title">
+    <div class="empty-state-demo-copy">
+      <span class="empty-state-demo-kicker">No-result boundary</span>
+      <h3 id="empty-state-demo-title">
+        Empty states explain what is missing, why it is safe, and which recovery path is available.
+      </h3>
+      <p>
+        The component renders a <code>role="status"</code> surface only. Route models decide whether the state
+        means no data, filtered data, unavailable storage, or an active drop target.
+      </p>
+    </div>
+
+    <dl class="empty-state-demo-metrics" aria-label="Empty state contract summary">
+      <div>
+        <dt>Semantics</dt>
+        <dd>status surface</dd>
+      </div>
+      <div>
+        <dt>Variants</dt>
+        <dd>panel / dropzone</dd>
+      </div>
+      <div>
+        <dt>Logic</dt>
+        <dd>owned by route</dd>
+      </div>
+    </dl>
+  </section>
+
+  <section class="empty-state-demo-workbench" aria-labelledby="empty-state-demo-workbench-title">
+    <div class="empty-state-demo-section-header">
+      <span class="empty-state-demo-kicker">Vault workspace</span>
+      <h4 id="empty-state-demo-workbench-title">
+        Place the empty state inside the surface it is explaining, not as an isolated illustration.
+      </h4>
+    </div>
+
+    <div class="empty-state-demo-product" aria-label="Empty state in a filtered vault view">
+      <header class="empty-state-demo-product-header">
+        <div>
+          <span class="empty-state-demo-label">Visible route</span>
+          <strong>travel-profile.files</strong>
+        </div>
+        <cv-badge variant="warning" size="small">filtered</cv-badge>
+      </header>
+
+      <div class="empty-state-demo-toolbar" aria-hidden="true">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+
+      <cv-empty-state
+        class="empty-state-demo-main"
+        icon="folder-open"
+        headline="No files match this route"
+        description="Clear filters or add a file to the visible profile. Hidden namespaces are not implied here."
+      >
+        <p class="empty-state-demo-note">
+          Keep the copy specific to the current route. Do not reveal whether another vault namespace exists.
         </p>
-      </div>
-
-      <dl class="empty-state-demo-metrics" aria-label="Empty state contract summary">
-        <div>
-          <dt>Semantics</dt>
-          <dd>status surface</dd>
+        <div slot="actions" class="empty-state-demo-actions">
+          <cv-button preset="action-primary">Clear filters</cv-button>
+          <cv-button variant="ghost">Create folder</cv-button>
         </div>
-        <div>
-          <dt>Variants</dt>
-          <dd>panel / dropzone</dd>
-        </div>
-        <div>
-          <dt>Logic</dt>
-          <dd>owned by route</dd>
-        </div>
-      </dl>
-    </section>
+      </cv-empty-state>
+    </div>
+  </section>
 
-    <section class="empty-state-demo-workbench" aria-labelledby="empty-state-demo-workbench-title">
-      <div class="empty-state-demo-section-header">
-        <span class="empty-state-demo-kicker">Vault workspace</span>
-        <h4 id="empty-state-demo-workbench-title">
-          Place the empty state inside the surface it is explaining, not as an isolated illustration.
-        </h4>
-      </div>
+  <section class="empty-state-demo-section" aria-labelledby="empty-state-demo-variants-title">
+    <div class="empty-state-demo-section-header">
+      <span class="empty-state-demo-kicker">State matrix</span>
+      <h4 id="empty-state-demo-variants-title">
+        Use the same primitive for empty, filtered, drop, and unavailable cases.
+      </h4>
+    </div>
 
-      <div class="empty-state-demo-product" aria-label="Empty state in a filtered vault view">
-        <header class="empty-state-demo-product-header">
-          <div>
-            <span class="empty-state-demo-label">Visible route</span>
-            <strong>travel-profile.files</strong>
-          </div>
-          <cv-badge variant="warning" size="small">filtered</cv-badge>
-        </header>
-
-        <div class="empty-state-demo-toolbar" aria-hidden="true">
-          <span></span>
-          <span></span>
-          <span></span>
-        </div>
-
+    <div class="empty-state-demo-grid" aria-label="Empty state examples">
+      <article class="empty-state-demo-card">
+        <span class="empty-state-demo-label">Empty collection</span>
         <cv-empty-state
-          class="empty-state-demo-main"
-          icon="folder-open"
-          headline="No files match this route"
-          description="Clear filters or add a file to the visible profile. Hidden namespaces are not implied here."
+          icon="file-text"
+          headline="No notes yet"
+          description="Create a note in the visible profile before sharing this workspace."
         >
-          <p class="empty-state-demo-note">
-            Keep the copy specific to the current route. Do not reveal whether another vault namespace exists.
-          </p>
-          <div slot="actions" class="empty-state-demo-actions">
-            <cv-button preset="action-primary">Clear filters</cv-button>
-            <cv-button variant="ghost">Create folder</cv-button>
-          </div>
+          <cv-button slot="actions" size="small" preset="action-primary-subtle">Create note</cv-button>
         </cv-empty-state>
-      </div>
-    </section>
+      </article>
 
-    <section class="empty-state-demo-section" aria-labelledby="empty-state-demo-variants-title">
-      <div class="empty-state-demo-section-header">
-        <span class="empty-state-demo-kicker">State matrix</span>
-        <h4 id="empty-state-demo-variants-title">
-          Use the same primitive for empty, filtered, drop, and unavailable cases.
-        </h4>
-      </div>
+      <article class="empty-state-demo-card empty-state-demo-card--filtered">
+        <span class="empty-state-demo-label">Filtered result</span>
+        <cv-empty-state
+          icon="search"
+          headline="No matching entries"
+          description="The query has no visible matches. Reset filters before changing vault scope."
+        >
+          <cv-button slot="actions" size="small">Reset filters</cv-button>
+        </cv-empty-state>
+      </article>
 
-      <div class="empty-state-demo-grid" aria-label="Empty state examples">
-        <article class="empty-state-demo-card">
-          <span class="empty-state-demo-label">Empty collection</span>
-          <cv-empty-state
-            icon="file-text"
-            headline="No notes yet"
-            description="Create a note in the visible profile before sharing this workspace."
-          >
-            <cv-button slot="actions" size="small" preset="action-primary-subtle">Create note</cv-button>
-          </cv-empty-state>
-        </article>
+      <article class="empty-state-demo-card empty-state-demo-card--drop">
+        <span class="empty-state-demo-label">Drop target</span>
+        <cv-empty-state
+          class="drop-active"
+          variant="dropzone"
+          icon="upload"
+          headline="Drop encrypted bundle"
+          description="Import waits for explicit confirmation after the file is staged."
+        ></cv-empty-state>
+      </article>
 
-        <article class="empty-state-demo-card empty-state-demo-card--filtered">
-          <span class="empty-state-demo-label">Filtered result</span>
-          <cv-empty-state
-            icon="search"
-            headline="No matching entries"
-            description="The query has no visible matches. Reset filters before changing vault scope."
-          >
-            <cv-button slot="actions" size="small">Reset filters</cv-button>
-          </cv-empty-state>
-        </article>
-
-        <article class="empty-state-demo-card empty-state-demo-card--drop">
-          <span class="empty-state-demo-label">Drop target</span>
-          <cv-empty-state
-            class="drop-active"
-            variant="dropzone"
-            icon="upload"
-            headline="Drop encrypted bundle"
-            description="Import waits for explicit confirmation after the file is staged."
-          ></cv-empty-state>
-        </article>
-
-        <article class="empty-state-demo-card empty-state-demo-card--unavailable">
-          <span class="empty-state-demo-label">Unavailable storage</span>
-          <cv-empty-state
-            icon="shield-x"
-            headline="Storage is locked"
-            description="Unlock the local vault before listing files or notes."
-          ></cv-empty-state>
-        </article>
-      </div>
-    </section>
-  </cv-theme-provider>
+      <article class="empty-state-demo-card empty-state-demo-card--unavailable">
+        <span class="empty-state-demo-label">Unavailable storage</span>
+        <cv-empty-state
+          icon="shield-x"
+          headline="Storage is locked"
+          description="Unlock the local vault before listing files or notes."
+        ></cv-empty-state>
+      </article>
+    </div>
+  </section>
 </div>
 ```
 

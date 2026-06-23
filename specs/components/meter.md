@@ -132,7 +132,7 @@ The UIKit layer does not construct any ARIA attributes directly.
 ## Usage
 
 ```html
-<div class="meter-demo-shell" data-demo="meter" data-theme="dark" data-live-demo-height="780">
+<div class="meter-demo-shell" data-demo="meter" data-live-demo-height="780">
   <section class="meter-demo-hero" aria-labelledby="meter-demo-title">
     <div class="meter-demo-copy">
       <span class="meter-demo-kicker">Known range measurement</span>
