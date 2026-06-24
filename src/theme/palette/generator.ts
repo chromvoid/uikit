@@ -299,6 +299,24 @@ function validateContrast(
   })
 }
 
+function validateGeneratedForeground(
+  issues: CVThemePaletteValidationIssue[],
+  scheme: CVThemeScheme,
+  role: Extract<CVThemePaletteRole, 'primary' | 'accent' | 'success' | 'warning' | 'danger'>,
+  background: CVHwbColor,
+): void {
+  const foreground = readableTextFor(background)
+  const contrast = hwbContrastRatio(foreground, background)
+  if (contrast >= MIN_TEXT_CONTRAST) return
+
+  issues.push({
+    code: 'on-role-contrast',
+    scheme,
+    role,
+    message: `${scheme} on-${role} contrast is ${contrast.toFixed(2)}:1`,
+  })
+}
+
 export function validateThemePaletteRecipe(recipe: CVThemePaletteRecipe): CVThemePaletteValidationResult {
   const normalized = normalizeThemePaletteRecipe(recipe)
   const issues: CVThemePaletteValidationIssue[] = []
@@ -319,6 +337,11 @@ export function validateThemePaletteRecipe(recipe: CVThemePaletteRecipe): CVThem
 
     validateContrast(issues, scheme, 'text', 'bg', roles.text, roles.bg)
     validateContrast(issues, scheme, 'text', 'surface', roles.text, roles.surface)
+    validateGeneratedForeground(issues, scheme, 'primary', roles.primary)
+    validateGeneratedForeground(issues, scheme, 'accent', roles.accent)
+    validateGeneratedForeground(issues, scheme, 'success', roles.success)
+    validateGeneratedForeground(issues, scheme, 'warning', roles.warning)
+    validateGeneratedForeground(issues, scheme, 'danger', roles.danger)
   }
 
   return {

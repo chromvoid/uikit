@@ -135,4 +135,13 @@ describe('createThemePaletteController', () => {
     controller.actions.discard()
     expect(controller.state.draft().schemes.light.accent.h).toBe(310)
   })
+
+  it('records an error state for corrupt stored recipes', () => {
+    const storage = new MemoryStorage()
+    storage.values.set('palette', '{')
+    const controller = createThemePaletteController({name: 'corruptPalette', storageKey: 'palette', storage})
+
+    expect(controller.actions.loadSaved()).toBeNull()
+    expect(controller.state.storageError()).toBe('storage-invalid-record')
+  })
 })

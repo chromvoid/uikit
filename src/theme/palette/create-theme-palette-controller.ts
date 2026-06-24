@@ -5,8 +5,8 @@ import type {CVThemeScheme, CVThemeSchemeTokens} from '../types'
 import {generateThemePaletteTokens, validateThemePaletteRecipe} from './generator'
 import {cloneThemePaletteRecipe, createDefaultThemePaletteRecipe, normalizeThemePaletteRecipe} from './ranges'
 import {
-  readThemePaletteStoredRecord,
   getThemePaletteStorage,
+  parseThemePaletteStoredRecord,
   removeThemePaletteStoredRecord,
   writeThemePaletteStoredRecord,
 } from './storage'
@@ -112,9 +112,25 @@ export function createThemePaletteController(options: CreateThemePaletteControll
 
   const loadSaved = action((): CVThemePaletteRecipe | null => {
     const storage = resolveStorage()
-    const record = readThemePaletteStoredRecord(storageKey(), storage)
     storageAvailable.set(Boolean(storage))
-    if (!record) return null
+    if (!storage) {
+      storageError.set('')
+      return null
+    }
+
+    let raw: string | null
+    try {
+      raw = storage.getItem(storageKey())
+    } catch {
+      storageError.set('storage-read-failed')
+      return null
+    }
+
+    const record = parseThemePaletteStoredRecord(raw)
+    if (!record) {
+      storageError.set(raw ? 'storage-invalid-record' : '')
+      return null
+    }
 
     const recipe = cloneThemePaletteRecipe(record.recipe)
     saved.set(recipe)

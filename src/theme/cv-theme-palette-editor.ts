@@ -56,15 +56,13 @@ export class CVThemePaletteEditor extends ReatomLitElement {
         gap: var(--cv-space-4);
       }
 
+      [part='scheme-tabs'] {
+        display: block;
+      }
+
       [part='scheme'] {
         display: grid;
         gap: var(--cv-space-3);
-      }
-
-      [part='scheme-title'] {
-        margin: 0;
-        font-size: var(--cv-font-size-lg);
-        font-weight: var(--cv-font-weight-semibold);
       }
 
       [part='role-list'] {
@@ -233,16 +231,22 @@ export class CVThemePaletteEditor extends ReatomLitElement {
 
     return html`
       <div part="base">
-        ${CV_THEME_PALETTE_SCHEMES.map(
-          (scheme) => html`
-            <section part="scheme" data-scheme=${scheme}>
-              <h3 part="scheme-title">${scheme === 'dark' ? 'Dark' : 'Light'}</h3>
-              <div part="role-list">
-                ${CV_THEME_PALETTE_ROLES.map((role) => this.renderRole(scheme, role, draft.schemes[scheme][role]))}
-              </div>
-            </section>
-          `,
-        )}
+        <cv-tabs part="scheme-tabs" aria-label="Palette schemes">
+          ${CV_THEME_PALETTE_SCHEMES.map(
+            (scheme) => html`
+              <cv-tab slot="nav" value=${scheme}>${scheme === 'dark' ? 'Dark' : 'Light'}</cv-tab>
+              <cv-tab-panel tab=${scheme}>
+                <section part="scheme" data-scheme=${scheme}>
+                  <div part="role-list">
+                    ${CV_THEME_PALETTE_ROLES.map((role) =>
+                      this.renderRole(scheme, role, draft.schemes[scheme][role]),
+                    )}
+                  </div>
+                </section>
+              </cv-tab-panel>
+            `,
+          )}
+        </cv-tabs>
         <div part="status" role="status" aria-live="polite">${firstIssue}</div>
         <div part="actions">
           <button data-kind="primary" ?disabled=${!canSave} @click=${this.handleSave}>Save</button>
