@@ -2,10 +2,12 @@ import {setUnoUtilities} from '@chromvoid/uikit/reatom-lit'
 import {registerUikit} from '@chromvoid/uikit/register'
 import {unoUtilities} from '@chromvoid/uikit/styles/uno-utilities'
 import {applyTheme, defineTheme} from '@chromvoid/uikit/theme'
-import tokenCss from '@chromvoid/uikit/theme/tokens.css?raw'
+
+import {FRAME_TOKEN_ALIASES} from './liveDemoFrameTokens'
+import {loadLiveDemoCss} from './liveDemoStyles'
 
 import frameThemeCss from './liveDemoFrameTheme.css?raw'
-import {loadLiveDemoCss} from './liveDemoStyles'
+import tokenCss from '@chromvoid/uikit/theme/tokens.css?raw'
 
 setUnoUtilities(unoUtilities)
 registerUikit()
@@ -16,84 +18,24 @@ const READY_MESSAGE_TYPE = 'cv-live-demo:ready'
 const RENDER_COMMAND_TYPE = 'cv-live-demo:render'
 const CLEAR_COMMAND_TYPE = 'cv-live-demo:clear'
 const THEME_COMMAND_TYPE = 'cv-live-demo:theme'
+const PALETTE_PREVIEW_MESSAGE_TYPE = 'cv-live-demo:palette-preview'
 const DEMO_SIDE_EFFECT_IMPORT_RE = /import\s+['"]@chromvoid\/uikit\/theme\/tokens\.css['"]\s*;?/g
 const DEMO_NAMED_IMPORT_RE =
   /import\s+\{([^}]+)\}\s+from\s+['"](@chromvoid\/uikit|@chromvoid\/uikit\/register|@chromvoid\/uikit\/theme)['"]\s*;?/g
-const FRAME_TOKEN_ALIASES: ReadonlyArray<readonly [source: string, alias: string]> = [
-  ['--cv-color-bg', '--cv-frame-color-bg'],
-  ['--cv-color-surface', '--cv-frame-color-surface'],
-  ['--cv-color-surface-2', '--cv-frame-color-surface-2'],
-  ['--cv-color-surface-3', '--cv-frame-color-surface-3'],
-  ['--cv-color-surface-4', '--cv-frame-color-surface-4'],
-  ['--cv-color-surface-elevated', '--cv-frame-color-surface-elevated'],
-  ['--cv-color-surface-secondary', '--cv-frame-color-surface-secondary'],
-  ['--cv-color-surface-tertiary', '--cv-frame-color-surface-tertiary'],
-  ['--cv-color-surface-glass', '--cv-frame-color-surface-glass'],
-  ['--cv-color-surface-glass-strong', '--cv-frame-color-surface-glass-strong'],
-  ['--cv-color-surface-secondary-glass-soft', '--cv-frame-color-surface-secondary-glass-soft'],
-  ['--cv-color-surface-secondary-glass', '--cv-frame-color-surface-secondary-glass'],
-  ['--cv-color-surface-secondary-glass-strong', '--cv-frame-color-surface-secondary-glass-strong'],
-  ['--cv-color-surface-tertiary-glass', '--cv-frame-color-surface-tertiary-glass'],
-  ['--cv-color-surface-tertiary-glass-strong', '--cv-frame-color-surface-tertiary-glass-strong'],
-  ['--cv-color-border', '--cv-frame-color-border'],
-  ['--cv-color-border-faint', '--cv-frame-color-border-faint'],
-  ['--cv-color-border-muted', '--cv-frame-color-border-muted'],
-  ['--cv-color-border-soft', '--cv-frame-color-border-soft'],
-  ['--cv-color-border-strong', '--cv-frame-color-border-strong'],
-  ['--cv-color-border-glass', '--cv-frame-color-border-glass'],
-  ['--cv-color-text', '--cv-frame-color-text'],
-  ['--cv-color-text-muted', '--cv-frame-color-text-muted'],
-  ['--cv-color-text-subtle', '--cv-frame-color-text-subtle'],
-  ['--cv-color-text-strong', '--cv-frame-color-text-strong'],
-  ['--cv-color-text-strongest', '--cv-frame-color-text-strongest'],
-  ['--cv-color-primary', '--cv-frame-color-primary'],
-  ['--cv-color-primary-dark', '--cv-frame-color-primary-dark'],
-  ['--cv-color-primary-darker', '--cv-frame-color-primary-darker'],
-  ['--cv-color-primary-subtle', '--cv-frame-color-primary-subtle'],
-  ['--cv-color-primary-muted', '--cv-frame-color-primary-muted'],
-  ['--cv-color-primary-surface', '--cv-frame-color-primary-surface'],
-  ['--cv-color-primary-surface-strong', '--cv-frame-color-primary-surface-strong'],
-  ['--cv-color-primary-border', '--cv-frame-color-primary-border'],
-  ['--cv-color-primary-border-strong', '--cv-frame-color-primary-border-strong'],
-  ['--cv-color-primary-ring', '--cv-frame-color-primary-ring'],
-  ['--cv-color-on-primary', '--cv-frame-color-on-primary'],
-  ['--cv-color-success', '--cv-frame-color-success'],
-  ['--cv-color-success-surface', '--cv-frame-color-success-surface'],
-  ['--cv-color-success-surface-strong', '--cv-frame-color-success-surface-strong'],
-  ['--cv-color-success-border', '--cv-frame-color-success-border'],
-  ['--cv-color-success-border-strong', '--cv-frame-color-success-border-strong'],
-  ['--cv-color-warning', '--cv-frame-color-warning'],
-  ['--cv-color-warning-surface', '--cv-frame-color-warning-surface'],
-  ['--cv-color-warning-surface-strong', '--cv-frame-color-warning-surface-strong'],
-  ['--cv-color-warning-border', '--cv-frame-color-warning-border'],
-  ['--cv-color-warning-border-strong', '--cv-frame-color-warning-border-strong'],
-  ['--cv-color-danger', '--cv-frame-color-danger'],
-  ['--cv-color-danger-surface', '--cv-frame-color-danger-surface'],
-  ['--cv-color-danger-surface-strong', '--cv-frame-color-danger-surface-strong'],
-  ['--cv-color-danger-border', '--cv-frame-color-danger-border'],
-  ['--cv-color-danger-border-strong', '--cv-frame-color-danger-border-strong'],
-  ['--cv-color-info', '--cv-frame-color-info'],
-  ['--cv-color-info-surface', '--cv-frame-color-info-surface'],
-  ['--cv-color-info-surface-strong', '--cv-frame-color-info-surface-strong'],
-  ['--cv-color-info-border', '--cv-frame-color-info-border'],
-  ['--cv-color-info-border-strong', '--cv-frame-color-info-border-strong'],
-  ['--cv-color-focus-ring', '--cv-frame-color-focus-ring'],
-  ['--cv-color-active', '--cv-frame-color-active'],
-  ['--cv-color-selected', '--cv-frame-color-selected'],
-  ['--cv-shadow-sm', '--cv-frame-shadow-sm'],
-  ['--cv-shadow-md', '--cv-frame-shadow-md'],
-  ['--cv-shadow-lg', '--cv-frame-shadow-lg'],
-  ['--cv-shadow-xl', '--cv-frame-shadow-xl'],
-  ['--cv-alpha-white-8', '--cv-frame-alpha-white-8'],
-  ['--cv-alpha-white-15', '--cv-frame-alpha-white-15'],
-  ['--cv-alpha-black-10', '--cv-frame-alpha-black-10'],
-]
 
 type DocsThemeMode = 'dark' | 'light'
 type DesignTokenSnapshot = Record<string, string>
+type SchemeDesignTokenSnapshot = Record<DocsThemeMode, DesignTokenSnapshot>
 type FrameTheme = {
   mode: DocsThemeMode
   tokens: DesignTokenSnapshot
+}
+type PaletteControllerElement = HTMLElement & {
+  model?: {
+    state?: {
+      previewTokens?: () => unknown
+    }
+  }
 }
 
 Object.assign(window, {
@@ -106,6 +48,8 @@ let demoStyleElement: HTMLStyleElement | null = null
 let frameThemeStyleElement: HTMLStyleElement | null = null
 let appliedDesignTokenNames = new Set<string>()
 let appliedFrameTokenAliasNames = new Set<string>()
+let pendingPaletteController: PaletteControllerElement | null = null
+let palettePreviewRaf = 0
 
 function isThemeMode(value: unknown): value is DocsThemeMode {
   return value === 'dark' || value === 'light'
@@ -118,7 +62,9 @@ function isDesignTokenName(value: string): boolean {
 function isDesignTokenSnapshot(value: unknown): value is DesignTokenSnapshot {
   if (typeof value !== 'object' || value === null) return false
 
-  return Object.entries(value).every(([name, tokenValue]) => isDesignTokenName(name) && typeof tokenValue === 'string')
+  return Object.entries(value).every(
+    ([name, tokenValue]) => isDesignTokenName(name) && typeof tokenValue === 'string',
+  )
 }
 
 function isFrameTheme(value: unknown): value is FrameTheme {
@@ -130,6 +76,13 @@ function isFrameTheme(value: unknown): value is FrameTheme {
     isThemeMode(value.mode) &&
     isDesignTokenSnapshot(value.tokens)
   )
+}
+
+function isSchemeDesignTokenSnapshot(value: unknown): value is SchemeDesignTokenSnapshot {
+  if (typeof value !== 'object' || value === null) return false
+
+  const candidate = value as Partial<Record<DocsThemeMode, unknown>>
+  return isDesignTokenSnapshot(candidate.light) && isDesignTokenSnapshot(candidate.dark)
 }
 
 const initialTheme = document.documentElement.dataset.theme
@@ -179,6 +132,8 @@ function ensureFrameThemeStyles(): void {
 }
 
 function applyFrameTheme(theme: FrameTheme): void {
+  frameTheme.mode = theme.mode
+  frameTheme.tokens = theme.tokens
   document.documentElement.dataset.theme = theme.mode
   document.documentElement.classList.toggle('dark', theme.mode === 'dark')
   document.documentElement.style.colorScheme = theme.mode
@@ -289,6 +244,64 @@ function observePreview(preview: HTMLElement, id: string): () => void {
   }
 }
 
+function getPaletteControllerFromEvent(event: Event): PaletteControllerElement | null {
+  for (const target of event.composedPath()) {
+    if (!(target instanceof Element)) continue
+    if (target.matches('cv-theme-palette-controller')) return target as PaletteControllerElement
+
+    const controller = target.closest('cv-theme-palette-controller')
+    if (controller instanceof HTMLElement) return controller as PaletteControllerElement
+  }
+
+  return null
+}
+
+function getPaletteController(): PaletteControllerElement | null {
+  return document.querySelector('cv-theme-palette-controller') as PaletteControllerElement | null
+}
+
+function readPalettePreviewTokens(controller: PaletteControllerElement): SchemeDesignTokenSnapshot | null {
+  try {
+    const tokens = controller.model?.state?.previewTokens?.()
+    return isSchemeDesignTokenSnapshot(tokens) ? tokens : null
+  } catch {
+    return null
+  }
+}
+
+function applyPalettePreview(tokens: SchemeDesignTokenSnapshot): void {
+  applyFrameTheme({
+    mode: frameTheme.mode,
+    tokens: {
+      ...frameTheme.tokens,
+      ...tokens[frameTheme.mode],
+    },
+  })
+}
+
+function flushPalettePreview(): void {
+  palettePreviewRaf = 0
+  const controller = pendingPaletteController ?? getPaletteController()
+  pendingPaletteController = null
+  if (!controller) return
+
+  const tokens = readPalettePreviewTokens(controller)
+  if (!tokens) return
+
+  applyPalettePreview(tokens)
+  window.parent.postMessage({type: PALETTE_PREVIEW_MESSAGE_TYPE, tokens}, '*')
+}
+
+function schedulePalettePreview(event: Event): void {
+  const controller = getPaletteControllerFromEvent(event)
+  if (!controller) return
+
+  pendingPaletteController = controller
+  if (palettePreviewRaf) return
+
+  palettePreviewRaf = window.requestAnimationFrame(flushPalettePreview)
+}
+
 function findHashOnlyAnchor(event: MouseEvent): HTMLAnchorElement | null {
   for (const target of event.composedPath()) {
     if (!(target instanceof HTMLAnchorElement)) continue
@@ -343,9 +356,7 @@ async function mountDemo(raw: string, id: string, styleKeys: string[], theme: Fr
   window.parent.postMessage({type: RENDERED_MESSAGE_TYPE, id}, '*')
 }
 
-function isRenderCommand(
-  data: unknown,
-): data is {
+function isRenderCommand(data: unknown): data is {
   type: typeof RENDER_COMMAND_TYPE
   id: string
   html: string
@@ -412,5 +423,8 @@ function handleParentMessage(event: MessageEvent): void {
 installFrameStyles()
 applyFrameTheme(frameTheme)
 document.addEventListener('click', preventFrameHashNavigation)
+document.addEventListener('click', schedulePalettePreview, true)
+document.addEventListener('cv-input', schedulePalettePreview, true)
+document.addEventListener('cv-change', schedulePalettePreview, true)
 window.addEventListener('message', handleParentMessage)
 window.parent.postMessage({type: READY_MESSAGE_TYPE}, '*')

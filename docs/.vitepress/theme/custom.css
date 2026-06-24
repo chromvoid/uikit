@@ -2299,6 +2299,47 @@ cv-disclosure.live-demo-source pre {
   color: var(--cv-color-text-muted);
 }
 
+[data-theme='light'] .VPSidebarItem .link:hover {
+  background: var(--cv-color-surface-hover);
+  box-shadow: inset 0 0 0 1px var(--cv-color-border-soft);
+}
+
+[data-theme='light'] .VPSidebarItem .link:hover .text,
+[data-theme='light'] .VPSidebarItem.level-0 > .item .link:hover > .text,
+[data-theme='light'] .VPSidebarItem.level-1 > .item .link:hover > .text,
+[data-theme='light'] .VPSidebarItem.level-2 > .item .link:hover > .text,
+[data-theme='light'] .VPSidebarItem.level-3 > .item .link:hover > .text,
+[data-theme='light'] .VPSidebarItem.level-4 > .item .link:hover > .text,
+[data-theme='light'] .VPSidebarItem.level-5 > .item .link:hover > .text {
+  color: var(--cv-color-text-strong);
+}
+
+[data-theme='light'] .VPSidebarItem.is-active .link,
+[data-theme='light'] .VPSidebarItem .is-active .link {
+  border-color: var(--cv-color-primary-border-strong);
+  background: var(--cv-color-primary-surface);
+  box-shadow: inset 0 0 0 1px var(--cv-color-primary-border);
+}
+
+[data-theme='light'] .VPSidebarItem.is-active .link:hover,
+[data-theme='light'] .VPSidebarItem .is-active .link:hover {
+  background: var(--cv-color-primary-surface-strong);
+}
+
+[data-theme='light'] .VPSidebarItem.is-active .text,
+[data-theme='light'] .VPSidebarItem .is-active .text {
+  color: var(--cv-color-text-strong);
+}
+
+[data-theme='light'] .VPSidebarItem.level-0.is-active > .item .link > .text,
+[data-theme='light'] .VPSidebarItem.level-1.is-active > .item .link > .text,
+[data-theme='light'] .VPSidebarItem.level-2.is-active > .item .link > .text,
+[data-theme='light'] .VPSidebarItem.level-3.is-active > .item .link > .text,
+[data-theme='light'] .VPSidebarItem.level-4.is-active > .item .link > .text,
+[data-theme='light'] .VPSidebarItem.level-5.is-active > .item .link > .text {
+  color: var(--cv-color-text-strong);
+}
+
 [data-theme='light'] .VPNavBar .link:hover,
 [data-theme='light'] .VPLocalNav .menu-text:hover,
 [data-theme='light'] .VPNavBar .link.active,

@@ -16,7 +16,7 @@
   --live-demo-violet: var(--cv-frame-color-info, var(--cv-color-info));
 }
 
-:root[data-theme='light'] .live-demo-preview--frame :where(:not(cv-theme-provider):not(cv-theme-provider *)) {
+:root[data-theme='light'] .live-demo-preview :where(:not(cv-theme-provider):not(cv-theme-provider *)) {
   --cv-color-bg: var(--cv-frame-color-bg);
   --cv-color-surface: var(--cv-frame-color-surface);
   --cv-color-surface-2: var(--cv-frame-color-surface-2);
@@ -80,12 +80,12 @@
   --cv-color-selected: var(--cv-frame-color-selected);
 }
 
-:root[data-theme='light'] .live-demo-preview--frame {
+:root[data-theme='light'] .live-demo-preview {
   color: var(--cv-frame-color-text);
 }
 
 :root[data-theme='light']
-  .live-demo-preview--frame
+  .live-demo-preview
   [class*='-demo-shell']:not(cv-theme-provider):not(cv-theme-provider *) {
   border-color: var(--cv-frame-color-border-soft);
   background: var(--cv-frame-color-surface);
@@ -94,16 +94,16 @@
 }
 
 :root[data-theme='light']
-  .live-demo-preview--frame
+  .live-demo-preview
   [class*='-demo-shell']:not(cv-theme-provider):not(cv-theme-provider *)::before,
 :root[data-theme='light']
-  .live-demo-preview--frame
+  .live-demo-preview
   [class*='-demo-shell']:not(cv-theme-provider):not(cv-theme-provider *)::after {
   opacity: 0;
 }
 
 :root[data-theme='light']
-  .live-demo-preview--frame
+  .live-demo-preview
   :where(
     [class*='-demo-hero'],
     [class*='-demo-board'],
@@ -116,26 +116,26 @@
 }
 
 :root[data-theme='light']
-  .live-demo-preview--frame
+  .live-demo-preview
   :where([class*='-demo-kicker'], [class*='-demo-label']):not(cv-theme-provider):not(cv-theme-provider *) {
-  color: var(--cv-frame-color-primary-dark);
+  color: var(--cv-frame-color-primary-darker);
 }
 
 :root[data-theme='light']
-  .live-demo-preview--frame
+  .live-demo-preview
   :where(h1, h2, h3, h4, h5, h6, strong):not(cv-theme-provider):not(cv-theme-provider *) {
   color: var(--cv-frame-color-text-strong);
 }
 
 :root[data-theme='light']
-  .live-demo-preview--frame
+  .live-demo-preview
   :where(p, small, dd, figcaption):not(cv-theme-provider):not(cv-theme-provider *) {
   color: var(--cv-frame-color-text-muted);
 }
 
 :root[data-theme='light']
-  .live-demo-preview--frame
-  :where([class*='-demo-card'], [class*='-demo-command'], [class*='-demo-console'], [class*='-demo-details'], [class*='-demo-field'], [class*='-demo-item'], [class*='-demo-layer'], [class*='-demo-metric'], [class*='-demo-panel'], [class*='-demo-product'], [class*='-demo-record'], [class*='-demo-side'], [class*='-demo-state'], [class*='-demo-step'], [class*='-demo-tile'], [class*='-demo-window']):not(cv-theme-provider):not(cv-theme-provider *) {
+  .live-demo-preview
+  :where([class*='-demo-card'], [class*='-demo-command'], [class*='-demo-console'], [class*='-demo-details'], [class*='-demo-field'], [class*='-demo-item'], [class*='-demo-layer'], [class*='-demo-metric'], [class*='-demo-panel'], [class*='-demo-product'], [class*='-demo-readout'], [class*='-demo-record'], [class*='-demo-scroll'], [class*='-demo-side'], [class*='-demo-stage'], [class*='-demo-state'], [class*='-demo-step'], [class*='-demo-tile'], [class*='-demo-window']):not(cv-theme-provider):not(cv-theme-provider *) {
   border-color: var(--cv-frame-color-border-soft);
   background: var(--cv-frame-color-surface-2);
   color: var(--cv-frame-color-text-muted);
@@ -143,34 +143,104 @@
 }
 
 :root[data-theme='light']
-  .live-demo-preview--frame
-  :where([class*='-demo-card'], [class*='-demo-command'], [class*='-demo-console'], [class*='-demo-details'], [class*='-demo-field'], [class*='-demo-item'], [class*='-demo-layer'], [class*='-demo-metric'], [class*='-demo-panel'], [class*='-demo-product'], [class*='-demo-record'], [class*='-demo-side'], [class*='-demo-state'], [class*='-demo-step'], [class*='-demo-tile'], [class*='-demo-window']):not(cv-theme-provider):not(cv-theme-provider *)
-  :where([class*='-demo-card'], [class*='-demo-command'], [class*='-demo-console'], [class*='-demo-details'], [class*='-demo-field'], [class*='-demo-item'], [class*='-demo-layer'], [class*='-demo-metric'], [class*='-demo-panel'], [class*='-demo-product'], [class*='-demo-record'], [class*='-demo-side'], [class*='-demo-state'], [class*='-demo-step'], [class*='-demo-tile'], [class*='-demo-window']):not(cv-theme-provider):not(cv-theme-provider *) {
+  .live-demo-preview
+  :where([class*='-demo-card'], [class*='-demo-command'], [class*='-demo-console'], [class*='-demo-details'], [class*='-demo-field'], [class*='-demo-item'], [class*='-demo-layer'], [class*='-demo-metric'], [class*='-demo-panel'], [class*='-demo-product'], [class*='-demo-readout'], [class*='-demo-record'], [class*='-demo-scroll'], [class*='-demo-side'], [class*='-demo-stage'], [class*='-demo-state'], [class*='-demo-step'], [class*='-demo-tile'], [class*='-demo-window']):not(cv-theme-provider):not(cv-theme-provider *)
+  :where([class*='-demo-card'], [class*='-demo-command'], [class*='-demo-console'], [class*='-demo-details'], [class*='-demo-field'], [class*='-demo-item'], [class*='-demo-layer'], [class*='-demo-metric'], [class*='-demo-panel'], [class*='-demo-product'], [class*='-demo-readout'], [class*='-demo-record'], [class*='-demo-scroll'], [class*='-demo-side'], [class*='-demo-stage'], [class*='-demo-state'], [class*='-demo-step'], [class*='-demo-tile'], [class*='-demo-window']):not(cv-theme-provider):not(cv-theme-provider *) {
   border-color: var(--cv-frame-color-border-faint);
   background: var(--cv-frame-color-surface);
 }
 
 :root[data-theme='light']
-  .live-demo-preview--frame
-  :where([class*='-demo-badge'], [class*='-demo-chip'], [class*='-demo-pill'], [class*='-demo-status'], [class*='-demo-tag'], [class*='-demo-token']):not(cv-theme-provider):not(cv-theme-provider *) {
-  border-color: var(--cv-frame-color-primary-border);
-  background: var(--cv-frame-color-primary-surface);
-  color: var(--cv-frame-color-primary-dark);
+  .live-demo-preview
+  :where([class*='-demo-cases'], [class*='-demo-readout'], [class*='-demo-vault']):not(
+    cv-theme-provider
+  ):not(cv-theme-provider *)
+  > :where(article, div):not(cv-theme-provider):not(cv-theme-provider *) {
+  border-color: var(--cv-frame-color-border-faint);
+  background: var(--cv-frame-color-surface);
+  color: var(--cv-frame-color-text-muted);
 }
 
 :root[data-theme='light']
-  .live-demo-preview--frame
+  .live-demo-preview
+  :where([class*='-demo-metrics'], [class*='-demo-readout'], [class*='-demo-vault']):not(
+    cv-theme-provider
+  ):not(cv-theme-provider *)
+  :where(dt, span):not(cv-theme-provider):not(cv-theme-provider *) {
+  color: var(--cv-frame-color-text-muted);
+}
+
+:root[data-theme='light']
+  .live-demo-preview
+  :where([class*='-demo-badge'], [class*='-demo-chip'], [class*='-demo-pill'], [class*='-demo-status'], [class*='-demo-tag'], [class*='-demo-token']):not(cv-theme-provider):not(cv-theme-provider *) {
+  border-color: var(--cv-frame-color-primary-border);
+  background: var(--cv-frame-color-primary-surface);
+  color: var(--cv-frame-color-primary-darker);
+}
+
+:root[data-theme='light']
+  .live-demo-preview
+  [class*='-demo-toolbar']:not(cv-theme-provider):not(cv-theme-provider *)
+  :where(span, button):not(cv-theme-provider):not(cv-theme-provider *) {
+  border-color: var(--cv-frame-color-primary-border);
+  background: var(--cv-frame-color-primary-surface);
+  color: var(--cv-frame-color-primary-darker);
+}
+
+:root[data-theme='light']
+  .live-demo-preview
   :where(table, thead, tbody, tr, th, td):not(cv-theme-provider):not(cv-theme-provider *) {
   border-color: var(--cv-frame-color-border-soft);
 }
 
-:root[data-theme='light'] .live-demo-preview--frame :where(th, td):not(cv-theme-provider):not(cv-theme-provider *) {
+:root[data-theme='light'] .live-demo-preview :where(th, td):not(cv-theme-provider):not(cv-theme-provider *) {
   background: var(--cv-frame-color-surface);
   color: var(--cv-frame-color-text);
 }
 
 :root[data-theme='light']
-  .live-demo-preview--frame
+  .live-demo-preview
+  [class*='-demo-shell']:not(cv-theme-provider):not(cv-theme-provider *)
+  cv-table:not(cv-theme-provider):not(cv-theme-provider *) {
+  --cv-color-surface: var(--cv-frame-color-surface);
+  --cv-color-surface-glass-strong: var(--cv-frame-color-surface-glass-strong);
+  --cv-color-surface-secondary-glass-strong: var(--cv-frame-color-surface-secondary-glass-strong);
+  --cv-color-border: var(--cv-frame-color-border);
+  --cv-color-border-soft: var(--cv-frame-color-border-soft);
+  --cv-color-primary: var(--cv-frame-color-primary);
+  --cv-color-primary-surface: var(--cv-frame-color-primary-surface);
+  --cv-color-success: var(--cv-frame-color-success);
+  --cv-color-warning: var(--cv-frame-color-warning);
+  --cv-color-danger: var(--cv-frame-color-danger);
+  --cv-color-text: var(--cv-frame-color-text);
+  --cv-table-border-color: var(--cv-frame-color-border-soft);
+  --cv-table-focus-outline-color: var(--cv-frame-color-focus-ring);
+  --cv-table-row-selected-background: var(--cv-frame-color-primary-surface);
+}
+
+:root[data-theme='light']
+  .live-demo-preview
+  [class*='-demo-shell']:not(cv-theme-provider):not(cv-theme-provider *)
+  cv-table-column:not(cv-theme-provider):not(cv-theme-provider *) {
+  color: var(--cv-frame-color-text-muted);
+}
+
+:root[data-theme='light']
+  .live-demo-preview
+  [class*='-demo-shell']:not(cv-theme-provider):not(cv-theme-provider *)
+  cv-table-cell:not(cv-theme-provider):not(cv-theme-provider *) {
+  color: var(--cv-frame-color-text);
+}
+
+:root[data-theme='light']
+  .live-demo-preview
+  [class*='-demo-shell']:not(cv-theme-provider):not(cv-theme-provider *)
+  cv-table-cell[row-header]:not(cv-theme-provider):not(cv-theme-provider *) {
+  color: var(--cv-frame-color-text-strong);
+}
+
+:root[data-theme='light']
+  .live-demo-preview
   :where(code, pre, kbd):not(cv-theme-provider):not(cv-theme-provider *) {
   border-color: var(--cv-frame-color-border-faint);
   background: var(--cv-frame-color-surface-2);
@@ -178,7 +248,35 @@
 }
 
 :root[data-theme='light']
-  .live-demo-preview--frame
+  .live-demo-preview
+  [class*='-demo-shell']:not(cv-theme-provider):not(cv-theme-provider *)
+  cv-popover:not(cv-theme-provider):not(cv-theme-provider *) {
+  --cv-popover-arrow-background: var(--cv-frame-color-surface);
+  --cv-popover-arrow-border-color: var(--cv-frame-color-border-soft);
+}
+
+:root[data-theme='light']
+  .live-demo-preview
+  [class*='-demo-shell']:not(cv-theme-provider):not(cv-theme-provider *)
+  cv-popover:not(cv-theme-provider):not(cv-theme-provider *)::part(trigger) {
+  border-color: var(--cv-frame-color-border-soft);
+  background: var(--cv-frame-color-surface);
+  color: var(--cv-frame-color-text-strong);
+  box-shadow: none;
+}
+
+:root[data-theme='light']
+  .live-demo-preview
+  [class*='-demo-shell']:not(cv-theme-provider):not(cv-theme-provider *)
+  cv-popover:not(cv-theme-provider):not(cv-theme-provider *)::part(content) {
+  border-color: var(--cv-frame-color-border-soft);
+  background: var(--cv-frame-color-surface);
+  color: var(--cv-frame-color-text);
+  box-shadow: var(--cv-frame-shadow-lg);
+}
+
+:root[data-theme='light']
+  .live-demo-preview
   :where(cv-button, cv-card, cv-callout, cv-empty-state):not(cv-theme-provider):not(cv-theme-provider *) {
   --cv-color-border: var(--cv-frame-color-border);
   --cv-color-surface: var(--cv-frame-color-surface);
