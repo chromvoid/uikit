@@ -7,13 +7,10 @@
   border: 1px solid var(--live-demo-border);
   border-radius: 16px;
   color: var(--live-demo-muted);
-  background:
-    linear-gradient(180deg, rgba(12, 20, 32, 0.98), rgba(7, 13, 22, 0.98)),
-    linear-gradient(135deg, rgba(101, 215, 255, 0.085), transparent 42%),
-    linear-gradient(315deg, rgba(179, 136, 255, 0.06), transparent 46%);
+  background: var(--live-demo-gradient-primary-soft);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.045),
-    0 18px 42px rgba(0, 0, 0, 0.24);
+    inset 0 1px 0 var(--cv-alpha-white-4),
+    0 18px 42px var(--cv-alpha-black-14);
 }
 
 .date-picker-demo-shell,
@@ -109,7 +106,7 @@
 }
 
 .date-picker-demo-shell code {
-  color: #bff3ff;
+  color: var(--live-demo-text);
   font-family: var(--vp-font-family-mono);
   font-size: 0.86em;
 }
@@ -128,9 +125,7 @@
 .date-picker-demo-card {
   border: 1px solid var(--live-demo-border);
   border-radius: 14px;
-  background:
-    linear-gradient(180deg, var(--live-demo-panel), rgba(238, 245, 255, 0.026)),
-    rgba(7, 13, 22, 0.32);
+  background: var(--live-demo-gradient-panel);
 }
 
 .date-picker-demo-metrics div {
@@ -166,9 +161,7 @@
   gap: 16px;
   min-block-size: 560px;
   padding: 16px;
-  background:
-    linear-gradient(180deg, rgba(7, 13, 22, 0.48), rgba(7, 13, 22, 0.82)),
-    linear-gradient(90deg, rgba(101, 215, 255, 0.07), transparent 46%);
+  background: var(--live-demo-gradient-primary-soft);
 }
 
 .date-picker-demo-form-header {
@@ -183,10 +176,10 @@
   justify-self: end;
   min-inline-size: 0;
   padding: 5px 9px;
-  border: 1px solid rgba(91, 235, 160, 0.28);
+  border: 1px solid var(--live-demo-green-border);
   border-radius: 999px;
   color: var(--live-demo-green);
-  background: rgba(91, 235, 160, 0.08);
+  background: var(--live-demo-green-surface);
   font-family: var(--vp-font-family-mono);
   font-size: 0.72rem;
   line-height: 1.2;
@@ -238,12 +231,6 @@
 }
 
 .date-picker-demo-shell cv-date-picker {
-  --cv-color-text: var(--live-demo-text);
-  --cv-color-text-strong: #f4fbff;
-  --cv-color-text-muted: rgba(226, 239, 255, 0.7);
-  --cv-color-primary-surface-strong: rgba(101, 215, 255, 0.2);
-  --cv-color-primary-border-strong: rgba(101, 215, 255, 0.58);
-  --cv-color-focus-ring: var(--live-demo-cyan);
 }
 
 .date-picker-demo-shell cv-date-picker::part(input-wrap),
@@ -255,7 +242,7 @@
 .date-picker-demo-shell cv-date-picker::part(minute-input),
 .date-picker-demo-shell cv-date-picker::part(apply-button),
 .date-picker-demo-shell cv-date-picker::part(cancel-button) {
-  border-color: rgba(143, 220, 255, 0.2);
+  border-color: var(--live-demo-cyan-surface);
 }
 
 .date-picker-demo-shell cv-date-picker::part(input-wrap),
@@ -264,7 +251,7 @@
 .date-picker-demo-shell cv-date-picker::part(year-nav-button),
 .date-picker-demo-shell cv-date-picker::part(hour-input),
 .date-picker-demo-shell cv-date-picker::part(minute-input) {
-  background: rgba(238, 245, 255, 0.045);
+  background: var(--live-demo-surface-highlight);
 }
 
 .date-picker-demo-shell cv-date-picker::part(input),
@@ -278,26 +265,24 @@
 }
 
 .date-picker-demo-shell cv-date-picker::part(dialog) {
-  background:
-    linear-gradient(180deg, rgba(18, 27, 40, 0.98), rgba(10, 17, 27, 0.98)),
-    linear-gradient(135deg, rgba(101, 215, 255, 0.055), transparent 44%);
-  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.24);
+  background: var(--live-demo-gradient-primary-soft);
+  box-shadow: 0 18px 44px var(--cv-alpha-black-14);
 }
 
 .date-picker-demo-shell cv-date-picker::part(month-label),
 .date-picker-demo-shell cv-date-picker::part(dialog-caption) {
-  color: rgba(226, 239, 255, 0.74);
+  color: var(--live-demo-muted);
 }
 
 .date-picker-demo-shell cv-date-picker::part(apply-button) {
-  border-color: rgba(101, 215, 255, 0.38);
-  color: #dff9ff;
-  background: rgba(101, 215, 255, 0.12);
+  border-color: var(--live-demo-cyan-border);
+  color: var(--live-demo-text);
+  background: var(--live-demo-cyan-surface);
 }
 
 .date-picker-demo-shell cv-date-picker::part(cancel-button) {
-  color: rgba(226, 239, 255, 0.78);
-  background: rgba(238, 245, 255, 0.04);
+  color: var(--live-demo-muted);
+  background: var(--live-demo-surface-highlight);
 }
 
 @container (max-width: 720px) {

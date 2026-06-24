@@ -4,16 +4,13 @@
   inline-size: 100%;
   min-inline-size: 0;
   overflow: visible;
-  border: 1px solid rgba(118, 181, 222, 0.18);
+  border: 1px solid var(--live-demo-border-muted);
   border-radius: 16px;
   color: var(--live-demo-muted);
-  background:
-    linear-gradient(180deg, rgba(12, 20, 32, 0.98), rgba(7, 13, 22, 0.98)),
-    linear-gradient(135deg, rgba(101, 215, 255, 0.08), transparent 42%),
-    linear-gradient(315deg, rgba(179, 136, 255, 0.07), transparent 48%);
+  background: var(--live-demo-gradient-primary-soft);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.04),
-    0 18px 42px rgba(0, 0, 0, 0.22);
+    inset 0 1px 0 var(--cv-alpha-white-4),
+    0 18px 42px var(--cv-alpha-black-14);
 }
 
 .tooltip-demo-shell,
@@ -60,7 +57,7 @@
 }
 
 .tooltip-demo-kicker {
-  color: #94e9ff;
+  color: var(--live-demo-cyan);
 }
 
 .tooltip-demo-copy h3,
@@ -107,8 +104,7 @@
 .tooltip-demo-readout {
   border: 1px solid var(--live-demo-border);
   border-radius: 14px;
-  background:
-    linear-gradient(180deg, var(--live-demo-panel), rgba(238, 245, 255, 0.026)), rgba(7, 13, 22, 0.32);
+  background: var(--live-demo-gradient-panel);
 }
 
 .tooltip-demo-metrics div {
@@ -150,9 +146,9 @@
   gap: 12px;
   align-items: center;
   padding: 12px 14px;
-  border: 1px solid rgba(118, 181, 222, 0.14);
+  border: 1px solid var(--live-demo-border-muted);
   border-radius: 12px;
-  background: rgba(238, 245, 255, 0.04);
+  background: var(--live-demo-surface-highlight);
 }
 
 .tooltip-demo-panel-head strong {
@@ -169,10 +165,10 @@
   min-block-size: 28px;
   max-inline-size: 100%;
   padding: 5px 9px;
-  border: 1px solid rgba(255, 200, 87, 0.3);
+  border: 1px solid var(--live-demo-amber-border);
   border-radius: 999px;
-  background: rgba(255, 200, 87, 0.08);
-  color: rgba(255, 229, 171, 0.92);
+  background: var(--live-demo-amber-surface);
+  color: var(--live-demo-text);
   line-height: 1.2;
   text-align: center;
   overflow-wrap: anywhere;
@@ -183,12 +179,9 @@
   gap: 12px;
   min-inline-size: 0;
   padding: 14px;
-  border: 1px solid rgba(118, 181, 222, 0.14);
+  border: 1px solid var(--live-demo-border-muted);
   border-radius: 12px;
-  background:
-    linear-gradient(180deg, rgba(7, 13, 22, 0.48), rgba(7, 13, 22, 0.82)),
-    radial-gradient(circle at 8% 0%, rgba(101, 215, 255, 0.08), transparent 32%),
-    radial-gradient(circle at 92% 100%, rgba(179, 136, 255, 0.08), transparent 34%);
+  background: var(--live-demo-gradient-primary-soft);
 }
 
 .tooltip-demo-target {
@@ -198,21 +191,21 @@
   align-items: center;
   min-inline-size: 0;
   padding: 13px;
-  border: 1px solid rgba(118, 181, 222, 0.14);
+  border: 1px solid var(--live-demo-border-muted);
   border-radius: 12px;
-  background: rgba(238, 245, 255, 0.035);
+  background: var(--live-demo-surface-highlight);
 }
 
 .tooltip-demo-target--primary {
   padding-block-start: 58px;
-  border-color: rgba(101, 215, 255, 0.22);
-  background: linear-gradient(90deg, rgba(101, 215, 255, 0.08), transparent 46%), rgba(238, 245, 255, 0.035);
+  border-color: var(--live-demo-cyan-border);
+  background: var(--live-demo-gradient-primary-soft);
 }
 
 .tooltip-demo-target--violet {
   padding-block-start: 58px;
-  border-color: rgba(179, 136, 255, 0.22);
-  background: linear-gradient(90deg, rgba(179, 136, 255, 0.08), transparent 46%), rgba(238, 245, 255, 0.035);
+  border-color: var(--live-demo-violet-border);
+  background: var(--live-demo-gradient-brand);
 }
 
 .tooltip-demo-target-copy {
@@ -242,10 +235,10 @@
   min-block-size: 38px;
   min-inline-size: 0;
   max-inline-size: 100%;
-  border: 1px solid rgba(118, 181, 222, 0.22);
+  border: 1px solid var(--live-demo-border);
   border-radius: 999px;
-  background: linear-gradient(180deg, rgba(18, 29, 43, 0.95), rgba(10, 17, 27, 0.95));
-  color: #dcf6ff;
+  background: var(--live-demo-gradient-panel);
+  color: var(--live-demo-text);
   line-height: 1.2;
   text-align: center;
   white-space: normal;
@@ -264,16 +257,15 @@
 }
 
 .tooltip-demo-hotspot--primary {
-  border-color: rgba(101, 215, 255, 0.4);
-  background: linear-gradient(135deg, rgba(101, 215, 255, 0.96), rgba(51, 148, 202, 0.96));
-  color: #041018;
+  border-color: var(--live-demo-cyan-border);
+  background: var(--live-demo-gradient-primary-soft);
+  color: var(--live-demo-surface);
 }
 
 .tooltip-demo-hotspot--violet {
-  border-color: rgba(179, 136, 255, 0.38);
-  background:
-    linear-gradient(180deg, rgba(35, 26, 56, 0.94), rgba(15, 19, 34, 0.96)), rgba(179, 136, 255, 0.08);
-  color: #efe8ff;
+  border-color: var(--live-demo-violet-border);
+  background: var(--live-demo-gradient-brand);
+  color: var(--live-demo-text);
 }
 
 .tooltip-demo-chip {
@@ -295,13 +287,13 @@
 .tooltip-demo-chip:hover,
 .tooltip-demo-control:hover {
   border-color: var(--live-demo-border-strong);
-  background: linear-gradient(180deg, rgba(24, 38, 56, 0.96), rgba(12, 21, 34, 0.96));
-  color: #f0fbff;
+  background: var(--live-demo-gradient-panel);
+  color: var(--live-demo-text-strongest);
   transform: translateY(-1px);
 }
 
 .tooltip-demo-hotspot--primary:hover {
-  color: #031018;
+  color: var(--live-demo-surface);
 }
 
 .tooltip-demo-hotspot:focus-visible,
@@ -331,29 +323,27 @@
 .tooltip-demo-shell cv-tooltip::part(content) {
   max-inline-size: min(260px, calc(100vw - 48px));
   padding: 9px 11px;
-  border-color: rgba(143, 220, 255, 0.26);
-  background:
-    linear-gradient(180deg, rgba(24, 34, 50, 0.98), rgba(12, 19, 31, 0.98)),
-    radial-gradient(circle at top left, rgba(101, 215, 255, 0.1), transparent 46%);
-  color: #eef8ff;
+  border-color: var(--live-demo-cyan-border);
+  background: var(--live-demo-gradient-primary-soft);
+  color: var(--live-demo-text-strongest);
   font-size: 0.82rem;
   line-height: 1.38;
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.04),
-    0 16px 34px rgba(0, 0, 0, 0.34);
+    inset 0 1px 0 var(--cv-alpha-white-4),
+    0 16px 34px var(--cv-alpha-black-25);
 }
 
 .tooltip-demo-tip--primary::part(content) {
-  border-color: rgba(101, 215, 255, 0.4);
+  border-color: var(--live-demo-cyan-border);
 }
 
 .tooltip-demo-tip--click::part(content),
 #tooltip-demo-manual::part(content) {
-  border-color: rgba(179, 136, 255, 0.34);
+  border-color: var(--live-demo-violet-border);
 }
 
 .tooltip-demo-shell cv-tooltip::part(arrow) {
-  border-block-start-color: rgba(24, 34, 50, 0.98);
+  border-block-start-color: var(--live-demo-surface);
 }
 
 .tooltip-demo-mode-grid {

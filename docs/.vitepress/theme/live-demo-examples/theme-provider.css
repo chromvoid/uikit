@@ -14,14 +14,14 @@
   min-block-size: 112px;
   min-inline-size: 0;
   padding: 16px;
-  border: 1px solid var(--cv-color-border, rgba(118, 181, 222, 0.18));
+  border: 1px solid var(--cv-color-border);
   border-radius: 12px;
-  background: var(--cv-color-surface, rgba(13, 22, 35, 0.94));
-  color: var(--cv-color-text, #eef5ff);
+  background: var(--cv-color-surface);
+  color: var(--cv-color-text);
 }
 
 .theme-provider-demo-panel > span {
-  color: var(--cv-color-text-muted, rgba(190, 206, 226, 0.74));
+  color: var(--cv-color-text-muted);
   font-size: 0.85rem;
   line-height: 1.4;
 }

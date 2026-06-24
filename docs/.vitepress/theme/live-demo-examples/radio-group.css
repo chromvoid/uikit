@@ -28,10 +28,6 @@
   inline-size: 100%;
   min-inline-size: 0;
   color: var(--live-demo-text);
-  --cv-color-text: var(--live-demo-text);
-  --cv-color-text-muted: var(--live-demo-muted);
-  --cv-color-surface: var(--cv-color-surface-glass-subtle);
-  --cv-color-border: var(--cv-color-border-muted);
   --cv-radio-group-gap: var(--cv-space-2);
 }
 

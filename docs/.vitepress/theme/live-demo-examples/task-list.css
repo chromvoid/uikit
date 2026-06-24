@@ -4,23 +4,13 @@
   inline-size: 100%;
   min-inline-size: 0;
   overflow: hidden;
-  border: 1px solid rgba(118, 181, 222, 0.18);
+  border: 1px solid var(--live-demo-border-muted);
   border-radius: 16px;
   color: var(--live-demo-muted);
-  background:
-    linear-gradient(180deg, rgba(12, 20, 32, 0.98), rgba(7, 13, 22, 0.98)),
-    linear-gradient(135deg, rgba(101, 215, 255, 0.08), transparent 44%),
-    linear-gradient(315deg, rgba(179, 136, 255, 0.06), transparent 46%),
-    repeating-linear-gradient(
-      90deg,
-      rgba(118, 181, 222, 0.028) 0,
-      rgba(118, 181, 222, 0.028) 1px,
-      transparent 1px,
-      transparent 48px
-    );
+  background: var(--live-demo-gradient-primary-soft);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.04),
-    0 18px 42px rgba(0, 0, 0, 0.22);
+    inset 0 1px 0 var(--cv-alpha-white-4),
+    0 18px 42px var(--cv-alpha-black-14);
 }
 
 .task-list-demo-shell,
@@ -29,7 +19,7 @@
 }
 
 .task-list-demo-shell code {
-  color: #bff3ff;
+  color: var(--live-demo-text);
   font-family: var(--vp-font-family-mono);
   font-size: 0.86em;
 }
@@ -73,7 +63,7 @@
 }
 
 .task-list-demo-kicker {
-  color: #94e9ff;
+  color: var(--live-demo-cyan);
 }
 
 .task-list-demo-copy h3 {
@@ -110,8 +100,7 @@
   padding: 16px;
   border: 1px solid var(--live-demo-border);
   border-radius: 14px;
-  background:
-    linear-gradient(180deg, var(--live-demo-panel), rgba(238, 245, 255, 0.026)), rgba(7, 13, 22, 0.32);
+  background: var(--live-demo-gradient-panel);
 }
 
 .task-list-demo-metrics dt,
@@ -136,15 +125,15 @@
 .task-list-demo-main-list,
 .task-list-demo-compact-list,
 .task-list-demo-empty-list {
-  --cv-task-list-background: linear-gradient(180deg, rgba(7, 13, 22, 0.58), rgba(7, 13, 22, 0.82));
+  --cv-task-list-background: var(--live-demo-gradient-panel);
   --cv-task-list-border: 1px solid var(--live-demo-border-strong);
   --cv-task-list-radius: 14px;
-  --cv-task-list-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035);
-  --cv-task-list-highlight-color: rgba(171, 231, 255, 0.32);
-  --cv-task-list-row-background: rgba(238, 245, 255, 0.04);
-  --cv-task-list-row-background-hover: rgba(238, 245, 255, 0.062);
-  --cv-task-list-row-border-color: rgba(118, 181, 222, 0.15);
-  --cv-task-list-row-border-color-hover: rgba(143, 220, 255, 0.32);
+  --cv-task-list-shadow: inset 0 1px 0 var(--cv-alpha-white-4);
+  --cv-task-list-highlight-color: var(--live-demo-cyan-border);
+  --cv-task-list-row-background: var(--live-demo-surface-highlight);
+  --cv-task-list-row-background-hover: var(--live-demo-surface-highlight);
+  --cv-task-list-row-border-color: var(--live-demo-border-muted);
+  --cv-task-list-row-border-color-hover: var(--live-demo-cyan-border);
   --cv-task-list-header-color: var(--live-demo-text);
   --cv-task-list-footer-color: var(--live-demo-muted);
 }
@@ -163,8 +152,8 @@
 }
 
 .task-list-demo-empty-list {
-  --cv-task-list-empty-background: rgba(7, 13, 22, 0.56);
-  --cv-task-list-empty-border-color: rgba(143, 220, 255, 0.2);
+  --cv-task-list-empty-background: var(--live-demo-surface-glass-strong);
+  --cv-task-list-empty-border-color: var(--live-demo-cyan-surface);
 }
 
 .task-list-demo-title {
@@ -189,39 +178,33 @@
 
 .task-list-demo-row-main cv-progress {
   --cv-progress-height: 7px;
-  --cv-progress-track-color: rgba(238, 245, 255, 0.055);
+  --cv-progress-track-color: var(--live-demo-surface-highlight);
   --cv-progress-label-color: var(--live-demo-text);
   inline-size: 100%;
   min-inline-size: 0;
 }
 
 .task-list-demo-row-main cv-progress::part(base) {
-  border-color: rgba(143, 220, 255, 0.18);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035);
+  border-color: var(--live-demo-cyan-surface);
+  box-shadow: inset 0 1px 0 var(--cv-alpha-white-4);
 }
 
 .task-list-demo-row--active {
-  border-color: rgba(101, 215, 255, 0.3);
-  background: linear-gradient(90deg, rgba(101, 215, 255, 0.062), transparent 46%), rgba(238, 245, 255, 0.038);
+  border-color: var(--live-demo-cyan-border);
+  background: var(--live-demo-gradient-primary-soft);
 }
 
 .task-list-demo-row--success {
-  border-color: rgba(91, 235, 160, 0.24);
+  border-color: var(--live-demo-green-border);
 }
 
 .task-list-demo-row--queued {
-  border-color: rgba(255, 200, 87, 0.24);
+  border-color: var(--live-demo-amber-border);
 }
 
 .task-list-demo-shell cv-badge {
   flex: 0 0 auto;
   min-inline-size: max-content;
-  --cv-color-border: rgba(143, 220, 255, 0.22);
-  --cv-color-surface: rgba(238, 245, 255, 0.052);
-  --cv-color-text: var(--live-demo-text);
-  --cv-color-primary: var(--live-demo-cyan);
-  --cv-color-success: var(--live-demo-green);
-  --cv-color-warning: var(--live-demo-amber);
   --cv-badge-gap: 5px;
 }
 

@@ -4,16 +4,13 @@
   inline-size: 100%;
   min-inline-size: 0;
   overflow: hidden;
-  border: 1px solid rgba(118, 181, 222, 0.18);
+  border: 1px solid var(--live-demo-border-muted);
   border-radius: 16px;
   color: var(--live-demo-muted);
-  background:
-    linear-gradient(180deg, rgba(12, 20, 32, 0.98), rgba(7, 13, 22, 0.98)),
-    radial-gradient(circle at 14% 0%, rgba(101, 215, 255, 0.11), transparent 36%),
-    radial-gradient(circle at 88% 18%, rgba(179, 136, 255, 0.075), transparent 36%);
+  background: var(--live-demo-gradient-primary-soft);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.04),
-    0 18px 42px rgba(0, 0, 0, 0.22);
+    inset 0 1px 0 var(--cv-alpha-white-4),
+    0 18px 42px var(--cv-alpha-black-14);
 }
 
 .code-input-demo-shell,
@@ -70,7 +67,7 @@
 }
 
 .code-input-demo-kicker {
-  color: #94e9ff;
+  color: var(--live-demo-cyan);
 }
 
 .code-input-demo-copy h3,
@@ -110,7 +107,7 @@
 }
 
 .code-input-demo-copy code {
-  color: #bff3ff;
+  color: var(--live-demo-text);
   font-family: var(--vp-font-family-mono);
   font-size: 0.86em;
 }
@@ -129,8 +126,7 @@
 .code-input-demo-state-list cv-field {
   border: 1px solid var(--live-demo-border);
   border-radius: 14px;
-  background:
-    linear-gradient(180deg, var(--live-demo-panel), rgba(238, 245, 255, 0.026)), rgba(7, 13, 22, 0.32);
+  background: var(--live-demo-gradient-panel);
 }
 
 .code-input-demo-metrics div {
@@ -163,9 +159,7 @@
 
 .code-input-demo-panel {
   gap: 16px;
-  background:
-    linear-gradient(180deg, rgba(7, 13, 22, 0.52), rgba(7, 13, 22, 0.8)),
-    linear-gradient(90deg, rgba(101, 215, 255, 0.055), transparent 44%);
+  background: var(--live-demo-gradient-primary-soft);
 }
 
 .code-input-demo-panel-head {
@@ -182,26 +176,23 @@
 
 .code-input-demo-panel-head cv-badge {
   justify-self: end;
-  --cv-color-primary: var(--live-demo-cyan);
 }
 
 .code-input-demo-shell[data-code-state='typing'] .code-input-demo-panel-head cv-badge {
-  --cv-color-primary: var(--live-demo-amber);
 }
 
 .code-input-demo-shell[data-code-state='complete'] .code-input-demo-panel-head cv-badge {
-  --cv-color-primary: var(--live-demo-green);
 }
 
 .code-input-demo-shell cv-field {
   --cv-field-gap: 7px;
-  --cv-field-label-color: rgba(226, 239, 255, 0.82);
-  --cv-field-description-color: rgba(190, 206, 226, 0.72);
-  --cv-field-error-color: #ffb0b6;
+  --cv-field-label-color: var(--live-demo-text);
+  --cv-field-description-color: var(--live-demo-muted);
+  --cv-field-error-color: var(--live-demo-red);
 }
 
 .code-input-demo-panel cv-field::part(label) {
-  color: rgba(226, 239, 255, 0.84);
+  color: var(--live-demo-text);
   font-family: var(--vp-font-family-mono);
   font-size: 0.78rem;
   letter-spacing: 0;
@@ -211,9 +202,9 @@
 .code-input-demo-shell cv-code-input {
   --cv-code-input-size: clamp(34px, 11cqi, 42px);
   --cv-code-input-gap: clamp(4px, 1.8cqi, 8px);
-  --cv-code-input-background: rgba(238, 245, 255, 0.058);
-  --cv-code-input-border-color: rgba(143, 220, 255, 0.3);
-  --cv-code-input-color: #eef5ff;
+  --cv-code-input-background: var(--live-demo-surface-highlight);
+  --cv-code-input-border-color: var(--live-demo-cyan-border);
+  --cv-code-input-color: var(--live-demo-text-strongest);
 }
 
 .code-input-demo-shell cv-code-input::part(group) {
@@ -225,16 +216,16 @@
   font-family: var(--vp-font-family-mono);
   font-weight: 600;
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.04),
-    0 0 0 1px rgba(0, 0, 0, 0.18);
+    inset 0 1px 0 var(--cv-alpha-white-4),
+    0 0 0 1px var(--cv-alpha-black-14);
 }
 
 .code-input-demo-shell cv-code-input[charset='alphanumeric'] {
-  --cv-code-input-border-color: rgba(179, 136, 255, 0.34);
+  --cv-code-input-border-color: var(--live-demo-violet-border);
 }
 
 .code-input-demo-shell cv-code-input[invalid] {
-  --cv-code-input-border-color: rgba(255, 125, 134, 0.54);
+  --cv-code-input-border-color: var(--live-demo-red-border-strong);
 }
 
 .code-input-demo-actions {
@@ -246,10 +237,10 @@
 
 .code-input-demo-actions cv-button {
   --cv-button-accent-color: var(--live-demo-cyan);
-  --cv-button-background: rgba(238, 245, 255, 0.058);
-  --cv-button-background-hover: rgba(101, 215, 255, 0.11);
-  --cv-button-border-color: rgba(143, 220, 255, 0.28);
-  --cv-button-border-color-hover: rgba(101, 215, 255, 0.56);
+  --cv-button-background: var(--live-demo-surface-highlight);
+  --cv-button-background-hover: var(--live-demo-cyan-surface);
+  --cv-button-border-color: var(--live-demo-cyan-border);
+  --cv-button-border-color-hover: var(--live-demo-cyan-border-strong);
   --cv-button-min-height: 36px;
   --cv-button-border-radius: 10px;
   --cv-button-padding-inline: 12px;
@@ -259,13 +250,13 @@
 }
 
 .code-input-demo-actions cv-button[data-code-action='pairing'] {
-  --cv-button-background: rgba(101, 215, 255, 0.14);
+  --cv-button-background: var(--live-demo-cyan-surface);
 }
 
 .code-input-demo-actions cv-button[data-code-action='otp'] {
   --cv-button-accent-color: var(--live-demo-violet);
-  --cv-button-background-hover: rgba(179, 136, 255, 0.11);
-  --cv-button-border-color-hover: rgba(179, 136, 255, 0.54);
+  --cv-button-background-hover: var(--live-demo-violet-surface);
+  --cv-button-border-color-hover: var(--live-demo-violet-border-strong);
 }
 
 .code-input-demo-log {
@@ -273,23 +264,23 @@
   min-block-size: 72px;
   margin: 0;
   padding: 12px 14px;
-  border: 1px solid rgba(143, 220, 255, 0.18);
+  border: 1px solid var(--live-demo-cyan-surface);
   border-radius: 12px;
-  background: rgba(238, 245, 255, 0.046);
-  color: rgba(226, 239, 255, 0.86);
+  background: var(--live-demo-surface-highlight);
+  color: var(--live-demo-text);
   line-height: 1.45;
   overflow-wrap: anywhere;
   text-transform: none;
 }
 
 .code-input-demo-shell[data-code-state='typing'] .code-input-demo-log {
-  border-color: rgba(255, 200, 87, 0.34);
-  color: #fff2cc;
+  border-color: var(--live-demo-amber-border);
+  color: var(--live-demo-amber);
 }
 
 .code-input-demo-shell[data-code-state='complete'] .code-input-demo-log {
-  border-color: rgba(91, 235, 160, 0.34);
-  color: #dcfff0;
+  border-color: var(--live-demo-green-border);
+  color: var(--live-demo-text);
 }
 
 .code-input-demo-side {
@@ -320,8 +311,8 @@
 }
 
 .code-input-demo-state-list cv-field[invalid] {
-  border-color: rgba(255, 125, 134, 0.24);
-  background: rgba(255, 125, 134, 0.055);
+  border-color: var(--live-demo-red-border);
+  background: var(--live-demo-red-surface);
 }
 
 .code-input-demo-state-list cv-field[disabled] {

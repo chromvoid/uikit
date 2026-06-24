@@ -4,16 +4,13 @@
   inline-size: 100%;
   min-inline-size: 0;
   overflow: hidden;
-  border: 1px solid rgba(118, 181, 222, 0.18);
+  border: 1px solid var(--live-demo-border-muted);
   border-radius: 16px;
   color: var(--live-demo-muted);
-  background:
-    linear-gradient(180deg, rgba(12, 20, 32, 0.98), rgba(7, 13, 22, 0.98)),
-    radial-gradient(circle at 12% 0%, rgba(101, 215, 255, 0.1), transparent 36%),
-    radial-gradient(circle at 88% 18%, rgba(179, 136, 255, 0.07), transparent 36%);
+  background: var(--live-demo-gradient-primary-soft);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.04),
-    0 18px 42px rgba(0, 0, 0, 0.22);
+    inset 0 1px 0 var(--cv-alpha-white-4),
+    0 18px 42px var(--cv-alpha-black-14);
 }
 
 .table-demo-shell,
@@ -53,7 +50,7 @@
 }
 
 .table-demo-kicker {
-  color: #94e9ff;
+  color: var(--live-demo-cyan);
 }
 
 .table-demo-metrics dt {
@@ -103,8 +100,7 @@
   padding: 16px;
   border: 1px solid var(--live-demo-border);
   border-radius: 12px;
-  background:
-    linear-gradient(180deg, var(--live-demo-panel), rgba(238, 245, 255, 0.026)), rgba(7, 13, 22, 0.32);
+  background: var(--live-demo-gradient-panel);
 }
 
 .table-demo-metrics dd {
@@ -130,10 +126,10 @@
   min-block-size: 28px;
   max-inline-size: 100%;
   padding: 5px 9px;
-  border: 1px solid rgba(143, 220, 255, 0.22);
+  border: 1px solid var(--live-demo-cyan-border);
   border-radius: 999px;
-  background: rgba(238, 245, 255, 0.05);
-  color: rgba(226, 239, 255, 0.82);
+  background: var(--live-demo-surface-highlight);
+  color: var(--live-demo-text);
   line-height: 1.2;
   white-space: normal;
 }
@@ -141,35 +137,18 @@
 .table-demo-scroll {
   min-inline-size: 0;
   overflow-x: auto;
-  border: 1px solid rgba(118, 181, 222, 0.16);
+  border: 1px solid var(--live-demo-border-muted);
   border-radius: 14px;
-  background:
-    linear-gradient(180deg, rgba(7, 13, 22, 0.46), rgba(7, 13, 22, 0.78)),
-    linear-gradient(90deg, rgba(101, 215, 255, 0.055), transparent 44%);
+  background: var(--live-demo-gradient-primary-soft);
 }
 
 .table-demo-shell cv-table {
   inline-size: max(100%, 720px);
   min-inline-size: 720px;
-  --cv-color-surface: rgba(10, 17, 27, 0.9);
-  --cv-color-surface-glass-strong: rgba(238, 245, 255, 0.07);
-  --cv-color-surface-secondary-glass-strong: rgba(238, 245, 255, 0.035);
-  --cv-color-border: rgba(143, 220, 255, 0.2);
-  --cv-color-border-soft: rgba(143, 220, 255, 0.12);
-  --cv-color-primary: var(--live-demo-cyan);
-  --cv-color-primary-surface: rgba(101, 215, 255, 0.13);
-  --cv-color-success: var(--live-demo-green);
-  --cv-color-warning: #ffc857;
-  --cv-color-danger: #ff7d86;
-  --cv-color-text: var(--live-demo-text);
-  --cv-table-border-color: rgba(143, 220, 255, 0.2);
+  --cv-table-border-color: var(--live-demo-cyan-surface);
   --cv-table-border-radius: 14px;
-  --cv-table-focus-outline-color: #94e9ff;
-  --cv-table-row-selected-background: linear-gradient(
-    90deg,
-    rgba(101, 215, 255, 0.18),
-    rgba(179, 136, 255, 0.09)
-  );
+  --cv-table-focus-outline-color: var(--live-demo-cyan);
+  --cv-table-row-selected-background: var(--live-demo-gradient-primary-soft);
 }
 
 .table-demo-shell cv-table-column,
@@ -179,7 +158,7 @@
 }
 
 .table-demo-shell cv-table-column {
-  color: rgba(226, 239, 255, 0.9);
+  color: var(--live-demo-text);
   font-family: var(--vp-font-family-mono);
   font-size: 0.74rem;
   text-transform: uppercase;
@@ -197,19 +176,18 @@
 }
 
 .table-demo-shell cv-table-cell[row-header] {
-  color: #f4fbff;
+  color: var(--live-demo-text-strongest);
 }
 
 .table-demo-shell cv-badge {
   --cv-badge-height: 21px;
   --cv-badge-padding-inline: 7px;
   --cv-badge-font-size: 11px;
-  --cv-color-surface: rgba(238, 245, 255, 0.052);
 }
 
 @media (hover: hover) {
   .table-demo-shell cv-table-row:hover {
-    background: rgba(101, 215, 255, 0.065);
+    background: var(--live-demo-cyan-surface);
   }
 }
 
@@ -219,10 +197,10 @@
   min-block-size: 40px;
   margin: 0;
   padding: 12px 14px;
-  border: 1px solid rgba(143, 220, 255, 0.18);
+  border: 1px solid var(--live-demo-cyan-surface);
   border-radius: 12px;
-  background: rgba(238, 245, 255, 0.046);
-  color: rgba(226, 239, 255, 0.86);
+  background: var(--live-demo-surface-highlight);
+  color: var(--live-demo-text);
   font-family: var(--vp-font-family-mono);
   font-size: 0.78rem;
   line-height: 1.45;

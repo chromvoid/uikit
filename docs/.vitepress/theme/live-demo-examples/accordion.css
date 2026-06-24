@@ -2,7 +2,7 @@
   display: block;
   overflow: hidden;
   padding: 10px;
-  background: #070d16;
+  background: var(--live-demo-surface);
 }
 
 .accordion-demo-shell {
@@ -11,23 +11,13 @@
   inline-size: 100%;
   min-inline-size: 0;
   overflow: hidden;
-  border: 1px solid rgba(118, 181, 222, 0.18);
+  border: 1px solid var(--live-demo-border-muted);
   border-radius: 16px;
   color: var(--live-demo-muted);
-  background:
-    linear-gradient(180deg, rgba(12, 20, 32, 0.98), rgba(7, 13, 22, 0.98)),
-    linear-gradient(132deg, rgba(101, 215, 255, 0.09), transparent 42%),
-    linear-gradient(318deg, rgba(179, 136, 255, 0.065), transparent 44%),
-    repeating-linear-gradient(
-      90deg,
-      rgba(118, 181, 222, 0.025) 0,
-      rgba(118, 181, 222, 0.025) 1px,
-      transparent 1px,
-      transparent 48px
-    );
+  background: var(--live-demo-gradient-primary-soft);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.04),
-    0 18px 42px rgba(0, 0, 0, 0.22);
+    inset 0 1px 0 var(--cv-alpha-white-4),
+    0 18px 42px var(--cv-alpha-black-14);
 }
 
 .accordion-demo-shell,
@@ -77,7 +67,7 @@
 }
 
 .accordion-demo-kicker {
-  color: #94e9ff;
+  color: var(--live-demo-cyan);
 }
 
 .accordion-demo-label,
@@ -129,8 +119,7 @@
 .accordion-demo-panel {
   border: 1px solid var(--live-demo-border);
   border-radius: 14px;
-  background:
-    linear-gradient(180deg, var(--live-demo-panel), rgba(238, 245, 255, 0.026)), rgba(7, 13, 22, 0.32);
+  background: var(--live-demo-gradient-panel);
 }
 
 .accordion-demo-metrics div {
@@ -164,13 +153,11 @@
 }
 
 .accordion-demo-panel--primary {
-  background:
-    linear-gradient(180deg, rgba(7, 13, 22, 0.54), rgba(7, 13, 22, 0.82)),
-    linear-gradient(90deg, rgba(101, 215, 255, 0.058), transparent 44%);
+  background: var(--live-demo-gradient-primary-soft);
 }
 
 .accordion-demo-event-panel {
-  border-color: rgba(101, 215, 255, 0.2);
+  border-color: var(--live-demo-cyan-surface);
 }
 
 .accordion-demo-shell cv-accordion {
@@ -184,24 +171,12 @@
   --cv-accordion-item-panel-border-radius: 12px;
   --cv-accordion-item-trigger-border-radius: 12px;
   --cv-accordion-item-indicator-size: 24px;
-  --cv-color-border-muted: rgba(118, 181, 222, 0.16);
-  --cv-color-border-soft: rgba(143, 220, 255, 0.26);
-  --cv-color-primary-border-strong: rgba(101, 215, 255, 0.46);
-  --cv-color-surface: rgba(12, 20, 32, 0.92);
-  --cv-color-surface-2: rgba(22, 32, 48, 0.92);
-  --cv-color-surface-hover: rgba(101, 215, 255, 0.07);
-  --cv-color-surface-highlight: rgba(238, 245, 255, 0.055);
-  --cv-color-primary-surface: rgba(101, 215, 255, 0.12);
-  --cv-color-focus-ring: var(--live-demo-cyan);
-  --cv-color-primary: var(--live-demo-cyan);
-  --cv-color-text: var(--live-demo-text);
-  --cv-color-text-muted: var(--live-demo-muted);
 }
 
 .accordion-demo-primary-accordion cv-accordion-item[expanded]::part(base) {
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.04),
-    0 0 0 1px rgba(101, 215, 255, 0.08);
+    inset 0 1px 0 var(--cv-alpha-white-4),
+    0 0 0 1px var(--live-demo-cyan-surface);
 }
 
 .accordion-demo-content ul {
@@ -209,7 +184,7 @@
   gap: 6px;
   margin: 0;
   padding-inline-start: 18px;
-  color: rgba(226, 239, 255, 0.86);
+  color: var(--live-demo-text);
   font-size: 0.86rem;
   line-height: 1.48;
 }
@@ -229,9 +204,9 @@
 .accordion-demo-proof-list div {
   gap: 3px;
   padding: 10px;
-  border: 1px solid rgba(118, 181, 222, 0.14);
+  border: 1px solid var(--live-demo-border-muted);
   border-radius: 10px;
-  background: rgba(238, 245, 255, 0.035);
+  background: var(--live-demo-surface-highlight);
 }
 
 .accordion-demo-proof-list dd {
@@ -242,10 +217,10 @@
   display: block;
   min-inline-size: 0;
   padding: 12px;
-  border: 1px solid rgba(101, 215, 255, 0.22);
+  border: 1px solid var(--live-demo-cyan-border);
   border-radius: 10px;
-  background: rgba(101, 215, 255, 0.07);
-  color: #bff3ff;
+  background: var(--live-demo-cyan-surface);
+  color: var(--live-demo-text);
   line-height: 1.5;
   overflow-wrap: anywhere;
   text-transform: none;

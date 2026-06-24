@@ -4,16 +4,13 @@
   inline-size: 100%;
   min-inline-size: 0;
   overflow: hidden;
-  border: 1px solid rgba(118, 181, 222, 0.18);
+  border: 1px solid var(--live-demo-border-muted);
   border-radius: 16px;
   color: var(--live-demo-muted);
-  background:
-    linear-gradient(180deg, rgba(12, 20, 32, 0.98), rgba(7, 13, 22, 0.98)),
-    linear-gradient(135deg, rgba(101, 215, 255, 0.08), transparent 42%),
-    linear-gradient(315deg, rgba(179, 136, 255, 0.055), transparent 44%);
+  background: var(--live-demo-gradient-primary-soft);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.04),
-    0 18px 42px rgba(0, 0, 0, 0.22);
+    inset 0 1px 0 var(--cv-alpha-white-4),
+    0 18px 42px var(--cv-alpha-black-14);
 }
 
 .time-picker-demo-shell,
@@ -69,7 +66,7 @@
 }
 
 .time-picker-demo-kicker {
-  color: #94e9ff;
+  color: var(--live-demo-cyan);
 }
 
 .time-picker-demo-copy h3,
@@ -118,8 +115,7 @@
 .time-picker-demo-state-grid > div {
   border: 1px solid var(--live-demo-border);
   border-radius: 14px;
-  background:
-    linear-gradient(180deg, var(--live-demo-panel), rgba(238, 245, 255, 0.026)), rgba(7, 13, 22, 0.32);
+  background: var(--live-demo-gradient-panel);
 }
 
 .time-picker-demo-metrics div {
@@ -159,9 +155,7 @@
 }
 
 .time-picker-demo-form {
-  background:
-    linear-gradient(180deg, rgba(7, 13, 22, 0.52), rgba(7, 13, 22, 0.8)),
-    linear-gradient(90deg, rgba(101, 215, 255, 0.055), transparent 44%);
+  background: var(--live-demo-gradient-primary-soft);
 }
 
 .time-picker-demo-form-head {
@@ -171,9 +165,9 @@
   align-items: start;
   min-inline-size: 0;
   padding: 13px;
-  border: 1px solid rgba(118, 181, 222, 0.14);
+  border: 1px solid var(--live-demo-border-muted);
   border-radius: 12px;
-  background: linear-gradient(90deg, rgba(101, 215, 255, 0.06), transparent 42%), rgba(238, 245, 255, 0.04);
+  background: var(--live-demo-gradient-primary-soft);
 }
 
 .time-picker-demo-form-head > div {
@@ -212,13 +206,13 @@
 }
 
 .time-picker-demo-state-grid > div:nth-child(2) {
-  border-color: rgba(255, 200, 87, 0.24);
-  background: linear-gradient(90deg, rgba(255, 200, 87, 0.045), transparent 50%), rgba(238, 245, 255, 0.032);
+  border-color: var(--live-demo-amber-border);
+  background: var(--live-demo-gradient-progress-warning);
 }
 
 .time-picker-demo-state-grid > div:nth-child(4) {
-  border-color: rgba(179, 136, 255, 0.22);
-  background: linear-gradient(90deg, rgba(179, 136, 255, 0.045), transparent 50%), rgba(238, 245, 255, 0.032);
+  border-color: var(--live-demo-violet-border);
+  background: var(--live-demo-gradient-brand);
 }
 
 .time-picker-demo-shell cv-field {
@@ -229,7 +223,7 @@
 }
 
 .time-picker-demo-shell cv-field::part(label) {
-  color: rgba(226, 239, 255, 0.78);
+  color: var(--live-demo-muted);
   font-family: var(--vp-font-family-mono);
   font-size: 0.72rem;
   letter-spacing: 0;
@@ -237,38 +231,32 @@
 }
 
 .time-picker-demo-shell cv-field::part(description) {
-  color: rgba(190, 206, 226, 0.72);
+  color: var(--live-demo-muted);
 }
 
 .time-picker-demo-shell cv-field::part(error) {
-  color: #ffb9bf;
+  color: var(--live-demo-red);
 }
 
 .time-picker-demo-shell cv-time-picker {
   inline-size: 100%;
   min-inline-size: 0;
   --cv-time-picker-inline-size: 100%;
-  --cv-time-picker-border-color: rgba(143, 220, 255, 0.24);
-  --cv-time-picker-background: rgba(238, 245, 255, 0.052);
+  --cv-time-picker-border-color: var(--live-demo-cyan-border);
+  --cv-time-picker-background: var(--live-demo-surface-highlight);
   --cv-time-picker-radius: 10px;
-  --cv-color-border: rgba(143, 220, 255, 0.24);
-  --cv-color-surface: rgba(238, 245, 255, 0.052);
-  --cv-color-text: var(--live-demo-text);
-  --cv-color-text-muted: rgba(190, 206, 226, 0.58);
-  --cv-color-primary: var(--live-demo-cyan);
-  --cv-color-danger: var(--live-demo-red);
 }
 
 .time-picker-demo-shell cv-time-picker::part(base) {
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035);
+  box-shadow: inset 0 1px 0 var(--cv-alpha-white-4);
 }
 
 .time-picker-demo-shell cv-time-picker[input-invalid]::part(base) {
-  background: linear-gradient(90deg, rgba(255, 125, 134, 0.075), transparent 52%), rgba(238, 245, 255, 0.052);
+  background: var(--live-demo-gradient-danger-soft);
 }
 
 .time-picker-demo-shell cv-time-picker[readonly]::part(base) {
-  background: linear-gradient(90deg, rgba(179, 136, 255, 0.06), transparent 52%), rgba(238, 245, 255, 0.04);
+  background: var(--live-demo-gradient-brand);
 }
 
 .time-picker-demo-shell cv-time-picker[disabled]::part(base) {
@@ -282,10 +270,6 @@
 }
 
 .time-picker-demo-shell cv-badge {
-  --cv-color-border: rgba(143, 220, 255, 0.24);
-  --cv-color-surface: rgba(101, 215, 255, 0.08);
-  --cv-color-text: #dff8ff;
-  --cv-color-primary: var(--live-demo-cyan);
 }
 
 .time-picker-demo-log {
@@ -293,10 +277,10 @@
   min-block-size: 82px;
   margin: 0;
   padding: 12px 14px;
-  border: 1px solid rgba(143, 220, 255, 0.18);
+  border: 1px solid var(--live-demo-cyan-surface);
   border-radius: 12px;
-  background: rgba(238, 245, 255, 0.046);
-  color: rgba(226, 239, 255, 0.86);
+  background: var(--live-demo-surface-highlight);
+  color: var(--live-demo-text);
   line-height: 1.45;
   overflow-wrap: anywhere;
   text-transform: none;
@@ -315,9 +299,9 @@
   gap: 4px;
   min-inline-size: 0;
   padding: 12px;
-  border: 1px solid rgba(118, 181, 222, 0.14);
+  border: 1px solid var(--live-demo-border-muted);
   border-radius: 12px;
-  background: rgba(238, 245, 255, 0.04);
+  background: var(--live-demo-surface-highlight);
 }
 
 .time-picker-demo-live dd {
@@ -340,7 +324,7 @@
 
 @media (hover: hover) {
   .time-picker-demo-shell cv-time-picker:not([disabled]):not([readonly]):hover::part(base) {
-    border-color: rgba(157, 231, 255, 0.5);
+    border-color: var(--live-demo-cyan-border-strong);
   }
 }
 
