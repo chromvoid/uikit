@@ -105,6 +105,11 @@
 .spinner-demo-matrix > div {
   border: 1px solid var(--live-demo-border);
   border-radius: 14px;
+}
+
+.spinner-demo-stage,
+.spinner-demo-side,
+.spinner-demo-matrix > div {
   background: var(--live-demo-gradient-panel);
 }
 

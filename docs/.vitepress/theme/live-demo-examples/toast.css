@@ -111,6 +111,11 @@
 .toast-demo-side {
   border: 1px solid var(--live-demo-border);
   border-radius: 14px;
+}
+
+.toast-demo-panel,
+.toast-demo-stage,
+.toast-demo-side {
   background: var(--live-demo-gradient-panel);
 }
 

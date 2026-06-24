@@ -98,7 +98,6 @@
   padding: 12px 14px;
   border: 1px solid var(--live-demo-border-muted);
   border-radius: 12px;
-  background: var(--live-demo-surface-highlight);
 }
 
 .checkbox-demo-metrics dd {

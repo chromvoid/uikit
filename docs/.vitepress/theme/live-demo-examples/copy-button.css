@@ -90,7 +90,6 @@
   padding: 16px;
   border: 1px solid var(--live-demo-border);
   border-radius: 12px;
-  background: var(--live-demo-gradient-panel);
 }
 
 .copy-button-demo-metrics dt {
@@ -194,6 +193,7 @@
 
 .copy-button-demo-row code {
   min-inline-size: 0;
+  background: transparent;
   color: var(--live-demo-text-strongest);
   font-family: var(--vp-font-family-mono);
   font-size: 0.84rem;

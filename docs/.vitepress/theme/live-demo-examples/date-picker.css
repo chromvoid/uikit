@@ -125,6 +125,11 @@
 .date-picker-demo-card {
   border: 1px solid var(--live-demo-border);
   border-radius: 14px;
+}
+
+.date-picker-demo-form,
+.date-picker-demo-summary > div,
+.date-picker-demo-card {
   background: var(--live-demo-gradient-panel);
 }
 

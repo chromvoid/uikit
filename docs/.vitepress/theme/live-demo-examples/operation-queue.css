@@ -123,6 +123,10 @@
 .operation-queue-demo-side {
   border: 1px solid var(--live-demo-border);
   border-radius: 14px;
+}
+
+.operation-queue-demo-board,
+.operation-queue-demo-side {
   background: var(--live-demo-gradient-panel);
 }
 

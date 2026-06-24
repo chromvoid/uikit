@@ -113,6 +113,11 @@
 .dropzone-demo-state-card {
   border: 1px solid var(--cv-color-border-glass);
   border-radius: var(--cv-radius-3);
+}
+
+.dropzone-demo-product,
+.dropzone-demo-pipeline,
+.dropzone-demo-state-card {
   background: var(--cv-color-surface-glass-subtle);
 }
 

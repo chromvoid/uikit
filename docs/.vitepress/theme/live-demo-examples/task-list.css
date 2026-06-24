@@ -100,7 +100,6 @@
   padding: 16px;
   border: 1px solid var(--live-demo-border);
   border-radius: 14px;
-  background: var(--live-demo-gradient-panel);
 }
 
 .task-list-demo-metrics dt,

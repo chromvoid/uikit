@@ -170,6 +170,11 @@
 .toolbar-demo-boundary {
   border: 1px solid var(--live-demo-border);
   border-radius: 12px;
+}
+
+.toolbar-demo-surface,
+.toolbar-demo-rail-panel,
+.toolbar-demo-boundary {
   background: var(--live-demo-gradient-panel);
 }
 

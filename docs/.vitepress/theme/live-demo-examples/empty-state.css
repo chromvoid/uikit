@@ -111,6 +111,10 @@
 .empty-state-demo-card {
   border: 1px solid var(--cv-color-border-glass);
   border-radius: var(--cv-radius-3);
+}
+
+.empty-state-demo-product,
+.empty-state-demo-card {
   background: var(--cv-color-surface-glass-subtle);
 }
 

@@ -120,6 +120,10 @@
 .listbox-demo-mode {
   border: 1px solid var(--live-demo-border);
   border-radius: 14px;
+}
+
+.listbox-demo-panel,
+.listbox-demo-mode {
   background: var(--live-demo-gradient-panel);
 }
 

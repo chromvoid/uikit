@@ -118,6 +118,10 @@
 .context-menu-demo-contract > div {
   border: 1px solid var(--live-demo-border);
   border-radius: 12px;
+}
+
+.context-menu-demo-surface,
+.context-menu-demo-contract > div {
   background: var(--live-demo-gradient-panel);
 }
 

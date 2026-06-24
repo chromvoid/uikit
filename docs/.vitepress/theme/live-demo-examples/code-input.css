@@ -126,6 +126,11 @@
 .code-input-demo-state-list cv-field {
   border: 1px solid var(--live-demo-border);
   border-radius: 14px;
+}
+
+.code-input-demo-panel,
+.code-input-demo-contract,
+.code-input-demo-state-list cv-field {
   background: var(--live-demo-gradient-panel);
 }
 

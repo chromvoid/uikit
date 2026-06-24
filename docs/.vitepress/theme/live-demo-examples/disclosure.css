@@ -104,6 +104,11 @@
 .disclosure-demo-proof div {
   border: 1px solid var(--live-demo-border);
   border-radius: 14px;
+}
+
+.disclosure-demo-panel,
+.disclosure-demo-side,
+.disclosure-demo-proof div {
   background: var(--live-demo-gradient-panel);
 }
 

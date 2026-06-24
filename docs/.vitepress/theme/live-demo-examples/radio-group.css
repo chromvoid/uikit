@@ -195,6 +195,11 @@
 .radio-demo-live > div {
   border: 1px solid var(--live-demo-border);
   border-radius: var(--cv-radius-2);
+}
+
+.radio-demo-panel,
+.radio-demo-cell,
+.radio-demo-live > div {
   background: var(--cv-gradient-surface), var(--live-demo-panel);
 }
 

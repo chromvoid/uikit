@@ -122,6 +122,11 @@
 .progress-demo-tone {
   border: 1px solid var(--live-demo-border);
   border-radius: 14px;
+}
+
+.progress-demo-panel,
+.progress-demo-queue,
+.progress-demo-tone {
   background: var(--live-demo-gradient-panel);
 }
 

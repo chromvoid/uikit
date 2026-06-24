@@ -104,6 +104,11 @@
 .tooltip-demo-readout {
   border: 1px solid var(--live-demo-border);
   border-radius: 14px;
+}
+
+.tooltip-demo-panel,
+.tooltip-demo-mode-grid > div,
+.tooltip-demo-readout {
   background: var(--live-demo-gradient-panel);
 }
 

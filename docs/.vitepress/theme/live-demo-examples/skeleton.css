@@ -125,6 +125,11 @@
 .skeleton-demo-variant {
   border: 1px solid var(--live-demo-border);
   border-radius: 14px;
+}
+
+.skeleton-demo-workspace,
+.skeleton-demo-variants,
+.skeleton-demo-variant {
   background: var(--live-demo-gradient-panel);
 }
 

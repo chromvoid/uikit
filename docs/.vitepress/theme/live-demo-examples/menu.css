@@ -121,6 +121,12 @@
 .menu-demo-state div {
   border: 1px solid var(--live-demo-border);
   border-radius: 14px;
+}
+
+.menu-demo-panel,
+.menu-demo-side,
+.menu-demo-case,
+.menu-demo-state div {
   background: var(--live-demo-gradient-panel);
 }
 

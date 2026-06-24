@@ -138,6 +138,10 @@
 .shortcut-demo-context {
   border: 1px solid var(--live-demo-border);
   border-radius: 14px;
+}
+
+.shortcut-demo-command-panel,
+.shortcut-demo-context {
   background: var(--live-demo-gradient-panel);
 }
 

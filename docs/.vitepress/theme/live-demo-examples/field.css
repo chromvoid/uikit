@@ -116,6 +116,10 @@
 .field-demo-contract {
   border: 1px solid var(--live-demo-border);
   border-radius: 14px;
+}
+
+.field-demo-form,
+.field-demo-contract {
   background: var(--live-demo-gradient-panel);
 }
 

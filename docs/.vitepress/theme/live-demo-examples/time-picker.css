@@ -115,6 +115,11 @@
 .time-picker-demo-state-grid > div {
   border: 1px solid var(--live-demo-border);
   border-radius: 14px;
+}
+
+.time-picker-demo-form,
+.time-picker-demo-side,
+.time-picker-demo-state-grid > div {
   background: var(--live-demo-gradient-panel);
 }
 

@@ -141,6 +141,10 @@
 .button-group-demo-mode {
   border: 1px solid var(--live-demo-border);
   border-radius: 12px;
+}
+
+.button-group-demo-surface,
+.button-group-demo-mode {
   background: var(--live-demo-gradient-panel);
 }
 

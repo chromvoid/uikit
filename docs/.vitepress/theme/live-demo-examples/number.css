@@ -114,6 +114,11 @@
 .number-demo-matrix > div {
   border: 1px solid var(--live-demo-border);
   border-radius: 14px;
+}
+
+.number-demo-form,
+.number-demo-side,
+.number-demo-matrix > div {
   background: var(--live-demo-gradient-panel);
 }
 

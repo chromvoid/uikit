@@ -148,6 +148,11 @@
 .kbd-demo-matrix > div {
   border: 1px solid var(--live-demo-border);
   border-radius: 14px;
+}
+
+.kbd-demo-console,
+.kbd-demo-side,
+.kbd-demo-matrix > div {
   background: var(--live-demo-gradient-panel);
 }
 

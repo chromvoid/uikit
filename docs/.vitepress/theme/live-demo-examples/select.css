@@ -188,6 +188,11 @@
 .select-demo-state div {
   border: 1px solid var(--live-demo-border);
   border-radius: 14px;
+}
+
+.select-demo-panel,
+.select-demo-side,
+.select-demo-state div {
   background: var(--live-demo-gradient-panel);
 }
 

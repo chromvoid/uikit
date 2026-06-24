@@ -129,6 +129,10 @@
 .tabs-demo-status > div {
   border: 1px solid var(--live-demo-border);
   border-radius: 14px;
+}
+
+.tabs-demo-panel-card,
+.tabs-demo-status > div {
   background: var(--live-demo-gradient-panel);
 }
 

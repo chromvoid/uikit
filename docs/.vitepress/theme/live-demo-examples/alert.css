@@ -104,6 +104,10 @@
 .alert-demo-side {
   border: 1px solid var(--live-demo-border);
   border-radius: 14px;
+}
+
+.alert-demo-panel,
+.alert-demo-side {
   background: var(--live-demo-gradient-panel);
 }
 

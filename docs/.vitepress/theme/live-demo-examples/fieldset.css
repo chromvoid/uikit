@@ -140,6 +140,10 @@
 .fieldset-demo-state-card {
   border: 1px solid var(--live-demo-border);
   border-radius: 14px;
+}
+
+.fieldset-demo-proof,
+.fieldset-demo-state-card {
   background: var(--live-demo-gradient-panel);
 }
 

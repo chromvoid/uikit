@@ -102,6 +102,10 @@
 .callout-demo-stack {
   border: 1px solid var(--live-demo-border);
   border-radius: 14px;
+}
+
+.callout-demo-side,
+.callout-demo-stack {
   background: var(--live-demo-gradient-panel);
 }
 

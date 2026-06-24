@@ -120,6 +120,11 @@
 .status-indicator-demo-tone-grid > div {
   border: 1px solid var(--live-demo-border);
   border-radius: 14px;
+}
+
+.status-indicator-demo-panel,
+.status-indicator-demo-side,
+.status-indicator-demo-tone-grid > div {
   background: var(--live-demo-gradient-panel);
 }
 

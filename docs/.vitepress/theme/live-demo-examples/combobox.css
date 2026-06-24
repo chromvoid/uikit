@@ -129,6 +129,12 @@
 .combobox-demo-matrix > div {
   border: 1px solid var(--live-demo-border);
   border-radius: 14px;
+}
+
+.combobox-demo-panel,
+.combobox-demo-side,
+.combobox-demo-open-card,
+.combobox-demo-matrix > div {
   background: var(--live-demo-gradient-panel);
 }
 

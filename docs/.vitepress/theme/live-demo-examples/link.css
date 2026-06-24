@@ -207,6 +207,11 @@
 .link-demo-sample {
   border: 1px solid var(--live-demo-border);
   border-radius: 12px;
+}
+
+.link-demo-reader,
+.link-demo-route-panel,
+.link-demo-sample {
   background: var(--live-demo-gradient-panel);
 }
 

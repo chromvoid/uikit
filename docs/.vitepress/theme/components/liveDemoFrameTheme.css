@@ -228,7 +228,7 @@
   border-color: var(--cv-frame-color-border-soft);
   background: var(--cv-frame-color-surface);
   color: var(--cv-frame-color-text-muted);
-  box-shadow: var(--cv-frame-shadow-sm);
+  box-shadow: none;
 }
 
 :root[data-theme='light']
@@ -273,29 +273,29 @@
 
 :root[data-theme='light']
   .live-demo-preview
-  :where([class*='-demo-card'], [class*='-demo-command'], [class*='-demo-console'], [class*='-demo-details'], [class*='-demo-field'], [class*='-demo-item'], [class*='-demo-layer'], [class*='-demo-metric'], [class*='-demo-panel'], [class*='-demo-product'], [class*='-demo-readout'], [class*='-demo-record'], [class*='-demo-scroll'], [class*='-demo-side'], [class*='-demo-stage'], [class*='-demo-state'], [class*='-demo-step'], [class*='-demo-tile'], [class*='-demo-window']):not(cv-theme-provider):not(cv-theme-provider *) {
+  :where([class*='-demo-card'], [class*='-demo-command'], [class*='-demo-console'], [class*='-demo-details'], [class*='-demo-field'], [class*='-demo-item'], [class*='-demo-layer'], [class*='-demo-log'], [class*='-demo-metric'], [class*='-demo-panel'], [class*='-demo-product'], [class*='-demo-readout'], [class*='-demo-record'], [class*='-demo-scroll'], [class*='-demo-side'], [class*='-demo-stage'], [class*='-demo-state'], [class*='-demo-step'], [class*='-demo-tile'], [class*='-demo-window']):not(cv-theme-provider):not(cv-theme-provider *) {
   border-color: var(--cv-frame-color-border-soft);
-  background: var(--cv-frame-color-surface-2);
+  background: none;
   color: var(--cv-frame-color-text-muted);
   box-shadow: none;
 }
 
 :root[data-theme='light']
   .live-demo-preview
-  :where([class*='-demo-card'], [class*='-demo-command'], [class*='-demo-console'], [class*='-demo-details'], [class*='-demo-field'], [class*='-demo-item'], [class*='-demo-layer'], [class*='-demo-metric'], [class*='-demo-panel'], [class*='-demo-product'], [class*='-demo-readout'], [class*='-demo-record'], [class*='-demo-scroll'], [class*='-demo-side'], [class*='-demo-stage'], [class*='-demo-state'], [class*='-demo-step'], [class*='-demo-tile'], [class*='-demo-window']):not(cv-theme-provider):not(cv-theme-provider *)
-  :where([class*='-demo-card'], [class*='-demo-command'], [class*='-demo-console'], [class*='-demo-details'], [class*='-demo-field'], [class*='-demo-item'], [class*='-demo-layer'], [class*='-demo-metric'], [class*='-demo-panel'], [class*='-demo-product'], [class*='-demo-readout'], [class*='-demo-record'], [class*='-demo-scroll'], [class*='-demo-side'], [class*='-demo-stage'], [class*='-demo-state'], [class*='-demo-step'], [class*='-demo-tile'], [class*='-demo-window']):not(cv-theme-provider):not(cv-theme-provider *) {
+  :where([class*='-demo-card'], [class*='-demo-command'], [class*='-demo-console'], [class*='-demo-details'], [class*='-demo-field'], [class*='-demo-item'], [class*='-demo-layer'], [class*='-demo-log'], [class*='-demo-metric'], [class*='-demo-panel'], [class*='-demo-product'], [class*='-demo-readout'], [class*='-demo-record'], [class*='-demo-scroll'], [class*='-demo-side'], [class*='-demo-stage'], [class*='-demo-state'], [class*='-demo-step'], [class*='-demo-tile'], [class*='-demo-window']):not(cv-theme-provider):not(cv-theme-provider *)
+  :where([class*='-demo-card'], [class*='-demo-command'], [class*='-demo-console'], [class*='-demo-details'], [class*='-demo-field'], [class*='-demo-item'], [class*='-demo-layer'], [class*='-demo-log'], [class*='-demo-metric'], [class*='-demo-panel'], [class*='-demo-product'], [class*='-demo-readout'], [class*='-demo-record'], [class*='-demo-scroll'], [class*='-demo-side'], [class*='-demo-stage'], [class*='-demo-state'], [class*='-demo-step'], [class*='-demo-tile'], [class*='-demo-window']):not(cv-theme-provider):not(cv-theme-provider *) {
   border-color: var(--cv-frame-color-border-faint);
-  background: var(--cv-frame-color-surface);
+  background: none;
 }
 
 :root[data-theme='light']
   .live-demo-preview
-  :where([class*='-demo-cases'], [class*='-demo-readout'], [class*='-demo-vault']):not(
+  :where([class*='-demo-cases'], [class*='-demo-readout'], [class*='-demo-state'], [class*='-demo-vault']):not(
     cv-theme-provider
   ):not(cv-theme-provider *)
   > :where(article, div):not(cv-theme-provider):not(cv-theme-provider *) {
   border-color: var(--cv-frame-color-border-faint);
-  background: var(--cv-frame-color-surface);
+  background: none;
   color: var(--cv-frame-color-text-muted);
 }
 
@@ -379,7 +379,7 @@
 
 :root[data-theme='light']
   .live-demo-preview
-  :where(code, pre, kbd):not(cv-theme-provider):not(cv-theme-provider *) {
+  :where(pre, kbd):not(cv-theme-provider):not(cv-theme-provider *) {
   border-color: var(--cv-frame-color-border-faint);
   background: var(--cv-frame-color-surface-2);
   color: var(--cv-frame-color-text-strong);

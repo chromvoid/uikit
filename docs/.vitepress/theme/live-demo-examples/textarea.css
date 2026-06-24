@@ -120,6 +120,11 @@ body:has(.textarea-demo-shell),
 .textarea-demo-matrix > div {
   border: 1px solid var(--live-demo-border);
   border-radius: 14px;
+}
+
+.textarea-demo-form,
+.textarea-demo-side,
+.textarea-demo-matrix > div {
   background: var(--live-demo-gradient-panel);
 }
 

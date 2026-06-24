@@ -173,6 +173,11 @@
   padding: 16px;
   border: 1px solid var(--live-demo-border);
   border-radius: 12px;
+}
+
+.chip-demo-cell,
+.chip-demo-event-panel,
+.chip-group-demo-panel {
   background: var(--live-demo-gradient-panel);
 }
 

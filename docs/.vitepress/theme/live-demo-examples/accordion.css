@@ -119,6 +119,9 @@
 .accordion-demo-panel {
   border: 1px solid var(--live-demo-border);
   border-radius: 14px;
+}
+
+.accordion-demo-panel {
   background: var(--live-demo-gradient-panel);
 }
 

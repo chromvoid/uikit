@@ -155,6 +155,9 @@
   padding: 16px;
   border: 1px solid var(--live-demo-border);
   border-radius: 12px;
+}
+
+.breadcrumb-demo-panel {
   background: var(--live-demo-gradient-panel);
 }
 
