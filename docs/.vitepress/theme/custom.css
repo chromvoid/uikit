@@ -2233,6 +2233,8 @@ cv-disclosure.live-demo-source pre {
   --vp-c-bg-elv: var(--cv-color-surface);
   --vp-c-divider: var(--cv-color-border-soft);
   --vp-code-block-bg: var(--cv-color-surface-2);
+  --vp-home-hero-name-color: var(--cv-color-primary-darker);
+  --vp-home-hero-name-background: none;
   --docs-bg-top: var(--cv-color-bg);
   --docs-bg-bottom: var(--cv-color-surface-2);
   --docs-glow-primary: var(--cv-color-primary-surface);
@@ -2283,6 +2285,14 @@ cv-disclosure.live-demo-source pre {
 [data-theme='light'] .VPSkipLink {
   background: var(--cv-color-surface-glass-strong) !important;
   box-shadow: var(--docs-shadow-soft);
+}
+
+[data-theme='light'] .VPSkipLink {
+  color: var(--cv-color-text-strong);
+}
+
+[data-theme='light'] .VPButton.medium.alt {
+  background-color: var(--cv-color-text-strong);
 }
 
 [data-theme='light'] .VPSidebarItem .text,
@@ -2348,6 +2358,7 @@ cv-disclosure.live-demo-source pre {
 [data-theme='light'] .vp-doc a:hover,
 [data-theme='light'] .components-kicker,
 [data-theme='light'] .component-link::after,
+[data-theme='light'] .uikit-quickstart-code figcaption,
 [data-theme='light'] .uikit-quickstart-preview-copy span,
 [data-theme='light'] .getting-started-flow-step span,
 [data-theme='light'] .getting-started-eyebrow,
@@ -2355,7 +2366,7 @@ cv-disclosure.live-demo-source pre {
 [data-theme='light'] .playground-overview dt,
 [data-theme='light'] .playground-console-header span,
 [data-theme='light'] .playground-meter-panel span {
-  color: var(--cv-color-primary-dark);
+  color: var(--cv-color-primary-darker);
 }
 
 [data-theme='light'] .VPHome .VPHero .main,
@@ -2417,8 +2428,19 @@ cv-disclosure.live-demo-source pre {
 [data-theme='light'] .vp-doc a.component-action-primary:hover {
   border-color: var(--cv-color-primary-border-strong);
   background: var(--cv-color-primary);
-  color: var(--cv-color-on-primary);
+  color: var(--cv-color-text-strongest);
   box-shadow: var(--cv-shadow-sm);
+}
+
+[data-theme='light'] .uikit-quickstart-code pre {
+  color: var(--cv-color-text);
+}
+
+[data-theme='light'] .uikit-quickstart-steps span,
+[data-theme='light'] .getting-started-console-line strong {
+  border-color: var(--cv-color-primary-border-strong);
+  background: var(--cv-color-primary-surface);
+  color: var(--cv-color-primary-darker);
 }
 
 [data-theme='light'] .vp-doc p code,
