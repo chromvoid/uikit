@@ -2,7 +2,6 @@ html:has(.textarea-demo-shell),
 body:has(.textarea-demo-shell),
 .live-demo-preview--frame:has(.textarea-demo-shell) {
   min-block-size: 0;
-  background: var(--live-demo-surface);
 }
 
 .textarea-demo-shell {
