@@ -165,6 +165,9 @@ A read-only circular indicator that communicates determinate or indeterminate lo
 | `:host([indeterminate])` | Spinning/rotating animation on the indicator arc; indicator has a fixed arc length  |
 | `:host([data-complete])` | Success appearance when `value >= max` (indicator stroke uses `--cv-color-success`) |
 
+- In `prefers-reduced-motion: reduce`, the indeterminate spin remains semantic but slows from `1.15s` to `4.6s`.
+- Determinate arc progress is applied through the owned SVG `stroke-dashoffset` attribute, not template `style=`.
+
 ## Reactive State Mapping
 
 `cv-progress-ring` is a visual adapter over headless `createProgress`.
@@ -178,11 +181,11 @@ A read-only circular indicator that communicates determinate or indeterminate lo
 | `value-text`    | attr -> option | Passed as `valueText` in `createProgress(options)` |
 | `aria-label`    | attr -> option | Passed as `ariaLabel` in `createProgress(options)` |
 
-| Headless State            | Direction      | DOM Reflection                                                                   |
-| ------------------------- | -------------- | -------------------------------------------------------------------------------- |
-| `state.percentage()`      | state -> style | Sets `stroke-dashoffset` on the indicator `<circle>` to represent the filled arc |
-| `state.isIndeterminate()` | state -> attr  | `[indeterminate]` host attribute                                                 |
-| `state.isComplete()`      | state -> attr  | `[data-complete]` host attribute                                                 |
+| Headless State            | Direction         | DOM Reflection                                                                   |
+| ------------------------- | ----------------- | -------------------------------------------------------------------------------- |
+| `state.percentage()`      | state -> SVG attr | Sets `stroke-dashoffset` on the indicator `<circle>` to represent the filled arc |
+| `state.isIndeterminate()` | state -> attr     | `[indeterminate]` host attribute                                                 |
+| `state.isComplete()`      | state -> attr     | `[data-complete]` host attribute                                                 |
 
 - `contracts.getProgressProps()` is spread onto the inner `[part="base"]` element to apply `role`, `aria-valuenow`, `aria-valuemin`, `aria-valuemax`, `aria-valuetext`, `aria-label`, and `id`.
 - ARIA value attributes are present only in determinate mode; headless omits them in indeterminate mode.

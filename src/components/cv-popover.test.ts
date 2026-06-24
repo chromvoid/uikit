@@ -91,6 +91,8 @@ const withNativePopoverSupport = () => {
   vi.spyOn(css, 'supports').mockImplementation((query: string) => {
     if (
       query === 'position-area: top left' ||
+      query === 'anchor-name: --cv-popover-anchor' ||
+      query === 'position-anchor: --cv-popover-anchor' ||
       query === 'top: anchor(bottom)' ||
       query === 'position-try-fallbacks: flip-block'
     ) {
@@ -773,7 +775,8 @@ describe('cv-popover', () => {
 
     it('offset maps to --cv-popover-offset CSS custom property', async () => {
       const el = await createPopover({offset: 12})
-      expect(getContent(el).getAttribute('style')).toContain('--cv-popover-offset:12px')
+      expect(el.style.getPropertyValue('--cv-popover-offset')).toBe('12px')
+      expect(getContent(el).getAttribute('style') ?? '').not.toContain('--cv-popover-offset')
     })
   })
 

@@ -1,9 +1,11 @@
 import {describe, expect, it} from 'vitest'
 
 import {
+  getBlockPlacementFallbacks,
   getPlacementFallbacks,
   getPositionAreaForPlacement,
   resolvePopoverArrowOffset,
+  resolvePopoverBlockPosition,
   resolvePopoverPosition,
 } from './cv-popover-positioning'
 
@@ -104,6 +106,10 @@ describe('cv-popover positioning helpers', () => {
     expect(getPlacementFallbacks('left')).toEqual(['left', 'right', 'bottom', 'top'])
   })
 
+  it('returns block-axis fallbacks for menu-like bottom alignment', () => {
+    expect(getBlockPlacementFallbacks('bottom-end')).toEqual(['bottom-end', 'top-end'])
+  })
+
   it('centers vertically for side placements', () => {
     const resolved = resolvePopoverPosition(
       {
@@ -125,6 +131,100 @@ describe('cv-popover positioning helpers', () => {
     expect(resolved.left).toBe(252)
     // anchor top 120 + (44 - 72) / 2 = 106
     expect(resolved.top).toBe(106)
+  })
+
+  it('keeps menu-like bottom alignment and clamps inline overflow', () => {
+    const resolved = resolvePopoverBlockPosition(
+      {
+        left: 280,
+        top: 120,
+        right: 316,
+        bottom: 156,
+        width: 36,
+        height: 36,
+      },
+      {
+        left: 0,
+        top: 0,
+        right: 0,
+        bottom: 0,
+        width: 180,
+        height: 100,
+      },
+      'bottom-start',
+      4,
+      {
+        width: 320,
+        height: 480,
+        padding: 8,
+      },
+    )
+
+    expect(resolved.placement).toBe('bottom-start')
+    expect(resolved.left).toBe(132)
+    expect(resolved.top).toBe(160)
+  })
+
+  it('falls back to bottom for tooltip-like top placement when top overflows', () => {
+    const resolved = resolvePopoverBlockPosition(
+      {
+        left: 100,
+        top: 4,
+        right: 140,
+        bottom: 24,
+        width: 40,
+        height: 20,
+      },
+      {
+        left: 0,
+        top: 0,
+        right: 0,
+        bottom: 0,
+        width: 120,
+        height: 80,
+      },
+      'top',
+      8,
+      {
+        width: 320,
+        height: 160,
+        padding: 8,
+      },
+    )
+
+    expect(resolved.placement).toBe('bottom')
+    expect(resolved.top).toBe(32)
+  })
+
+  it('keeps top for tooltip-like placement when bottom overflows', () => {
+    const resolved = resolvePopoverBlockPosition(
+      {
+        left: 100,
+        top: 120,
+        right: 140,
+        bottom: 140,
+        width: 40,
+        height: 20,
+      },
+      {
+        left: 0,
+        top: 0,
+        right: 0,
+        bottom: 0,
+        width: 120,
+        height: 80,
+      },
+      'top',
+      8,
+      {
+        width: 320,
+        height: 160,
+        padding: 8,
+      },
+    )
+
+    expect(resolved.placement).toBe('top')
+    expect(resolved.top).toBe(32)
   })
 
   it('produces finite integer coordinates for a zero-size anchor', () => {

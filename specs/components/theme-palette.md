@@ -66,6 +66,7 @@ The model clamps values through `CV_THEME_PALETTE_RANGES`. Hue is limited to `0.
 ## Behavior
 
 - Draft edits apply immediately as live preview to the target provider.
+- The editor separates light and dark scheme controls into tabs.
 - Save writes only the compact recipe to `localStorage`.
 - Save dispatches `cv-palette-save` with `{version, themeName, recipe, tokens, savedAt}`.
 - The event includes resolved light/dark token maps so app or SSR code can persist the generated result elsewhere.

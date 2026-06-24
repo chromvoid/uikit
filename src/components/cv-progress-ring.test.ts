@@ -287,24 +287,23 @@ describe('cv-progress-ring', () => {
       expect(getBase(el).getAttribute('aria-valuenow')).toBe('100')
     })
 
-    it('percentage computation is reflected in SVG indicator stroke-dashoffset', async () => {
+    it('percentage computation is reflected in SVG indicator stroke-dashoffset attribute', async () => {
       const el = await createProgressRing({value: 50, min: 0, max: 100})
       const indicator = el.shadowRoot!.querySelector('[part="indicator"]') as SVGCircleElement
       expect(indicator).not.toBeNull()
-      // The indicator should have a style attribute with stroke-dashoffset
-      const style = indicator.getAttribute('style') ?? ''
-      expect(style).toContain('stroke-dashoffset')
+      expect(indicator.hasAttribute('stroke-dashoffset')).toBe(true)
+      expect(indicator.hasAttribute('style')).toBe(false)
     })
 
     it('value changes update indicator stroke-dashoffset', async () => {
       const el = await createProgressRing({value: 25, min: 0, max: 100})
       const indicator = el.shadowRoot!.querySelector('[part="indicator"]') as SVGCircleElement
-      const initialStyle = indicator.getAttribute('style') ?? ''
+      const initialDashoffset = indicator.getAttribute('stroke-dashoffset')
 
       el.value = 75
       await settle(el)
-      const updatedStyle = indicator.getAttribute('style') ?? ''
-      expect(updatedStyle).not.toBe(initialStyle)
+      const updatedDashoffset = indicator.getAttribute('stroke-dashoffset')
+      expect(updatedDashoffset).not.toBe(initialDashoffset)
     })
 
     it('renders correct percentage for custom range', async () => {
@@ -336,28 +335,28 @@ describe('cv-progress-ring', () => {
     it('stroke-dashoffset is 0 at 100%', async () => {
       const el = await createProgressRing({value: 100, min: 0, max: 100})
       const indicator = el.shadowRoot!.querySelector('[part="indicator"]') as SVGCircleElement
-      expect(indicator.getAttribute('style')).toContain('stroke-dashoffset: 0;')
+      expect(indicator.getAttribute('stroke-dashoffset')).toBe('0')
     })
 
     it('stroke-dashoffset is full circumference at 0%', async () => {
       const el = await createProgressRing({value: 0, min: 0, max: 100})
       const indicator = el.shadowRoot!.querySelector('[part="indicator"]') as SVGCircleElement
-      expect(indicator.getAttribute('style')).toContain(`stroke-dashoffset: ${CIRCUMFERENCE};`)
+      expect(indicator.getAttribute('stroke-dashoffset')).toBe(String(CIRCUMFERENCE))
     })
 
     it('uses a fixed 75% dashoffset in indeterminate mode', async () => {
       const el = await createProgressRing({value: 50, indeterminate: true})
       const indicator = el.shadowRoot!.querySelector('[part="indicator"]') as SVGCircleElement
-      expect(indicator.getAttribute('style')).toContain(`stroke-dashoffset: ${CIRCUMFERENCE * 0.75};`)
+      expect(indicator.getAttribute('stroke-dashoffset')).toBe(String(CIRCUMFERENCE * 0.75))
     })
 
     it('handles min === max without NaN in dashoffset (zero-span range)', async () => {
       const el = await createProgressRing({value: 5, min: 5, max: 5})
       const indicator = el.shadowRoot!.querySelector('[part="indicator"]') as SVGCircleElement
-      const style = indicator.getAttribute('style') ?? ''
-      expect(style).not.toContain('NaN')
+      const dashoffset = indicator.getAttribute('stroke-dashoffset') ?? ''
+      expect(dashoffset).not.toContain('NaN')
       // percentage is 0 for a zero-span range
-      expect(style).toContain(`stroke-dashoffset: ${CIRCUMFERENCE};`)
+      expect(dashoffset).toBe(String(CIRCUMFERENCE))
     })
 
     it('normalizes inverted range (min > max) by swapping bounds', async () => {

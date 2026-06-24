@@ -219,6 +219,12 @@ export class CVBadge extends ReatomLitElement {
         }
       }
 
+      @media (prefers-reduced-motion: reduce) {
+        :host([pulse]) [part='base'] {
+          animation: none;
+        }
+      }
+
       /* --- sizes --- */
       :host([size='small']) {
         --cv-badge-height: 20px;

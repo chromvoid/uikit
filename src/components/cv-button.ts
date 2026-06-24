@@ -594,6 +594,12 @@ export class CVButton extends FormAssociatedReatomElement {
           transform: rotate(360deg);
         }
       }
+
+      @media (prefers-reduced-motion: reduce) {
+        [part='spinner'] {
+          animation-duration: 3200ms;
+        }
+      }
     `,
   ]
 

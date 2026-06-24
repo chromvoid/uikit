@@ -66,6 +66,7 @@ export class CVSlider extends ReatomLitElement {
   private dragValueChanged = false
   private activePointerId: number | null = null
   private dragAbortController: AbortController | null = null
+  private dragTrackRect: Pick<DOMRect, 'bottom' | 'left' | 'width' | 'height'> | null = null
 
   constructor() {
     super()
@@ -314,12 +315,26 @@ export class CVSlider extends ReatomLitElement {
     return true
   }
 
-  private updateValueFromPointer(clientX: number, clientY: number): boolean {
+  private captureDragTrackRect(): boolean {
     const track = this.shadowRoot?.querySelector('[part="track"]') as HTMLElement | null
     if (!track) return false
 
     const rect = track.getBoundingClientRect()
     if (rect.width <= 0 || rect.height <= 0) return false
+
+    this.dragTrackRect = {
+      bottom: rect.bottom,
+      left: rect.left,
+      width: rect.width,
+      height: rect.height,
+    }
+
+    return true
+  }
+
+  private updateValueFromPointer(clientX: number, clientY: number): boolean {
+    const rect = this.dragTrackRect
+    if (!rect) return false
 
     const ratioRaw =
       this.orientation === 'vertical'
@@ -360,6 +375,8 @@ export class CVSlider extends ReatomLitElement {
     event.preventDefault()
     ;(this.shadowRoot?.querySelector('[part="thumb"]') as HTMLElement | null)?.focus()
     this.cleanupDragListeners()
+    if (!this.captureDragTrackRect()) return
+
     this.dragging = true
     this.activePointerId = this.getPointerId(event)
     this.dragValueChanged = this.updateValueFromPointer(event.clientX, event.clientY)
@@ -416,6 +433,7 @@ export class CVSlider extends ReatomLitElement {
     this.dragAbortController?.abort()
     this.dragAbortController = null
     this.activePointerId = null
+    this.dragTrackRect = null
   }
 
   protected override render() {

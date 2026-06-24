@@ -144,7 +144,7 @@ describe('cv-image-viewer', () => {
 
   it('uses a restrained selected thumbnail border instead of the text color', () => {
     expect(cvImageViewerStyles.cssText).toMatch(
-      /\[part='thumbnail'\]\[aria-current='true'\]\s*\{[\s\S]*var\(--cv-color-primary-dark/,
+      /\[part='thumbnail'\]\[aria-current='true'\]\s*\{[\s\S]*var\(--cv-color-primary-border-strong/,
     )
     expect(cvImageViewerStyles.cssText).not.toContain(
       "[part='thumbnail'][aria-current='true'] {\n    border-color: var(--cv-image-viewer-text);",

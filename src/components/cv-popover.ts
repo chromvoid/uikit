@@ -10,12 +10,17 @@ import type {PropertyValues} from 'lit'
 import {html} from '../reatom-lit/index.js'
 import {ReatomLitElement} from '../reatom-lit/ReatomLitElement'
 import {
+  clearPopoverLayout,
   getPlacementFallbacks,
   getPositionAreaForPlacement,
+  isPopoverOpen,
   resolvePopoverArrowOffset,
   resolvePopoverPosition,
+  supportsNativeAnchoredAutoplacement,
+  supportsNativePopover,
   type CVPopoverPlacement,
-  type CVPopoverRect,
+  toPopoverRect,
+  type NativePopoverElement,
 } from './cv-popover-positioning'
 
 export interface CVPopoverEventDetail {
@@ -34,60 +39,12 @@ export interface CVPopoverShowOptions {
   openedBy?: PopoverOpenSource
 }
 
-type NativePopoverElement = HTMLElement & {
-  showPopover?: (options?: {source?: HTMLElement}) => void
-  hidePopover?: () => void
-}
-
 const popoverTriggerKeys = new Set(['Enter', ' ', 'Spacebar', 'ArrowDown'])
-
-function supportsNativePopover(): boolean {
-  return (
-    typeof HTMLElement !== 'undefined' &&
-    typeof HTMLElement.prototype.showPopover === 'function' &&
-    typeof HTMLElement.prototype.hidePopover === 'function'
-  )
-}
-
-function supportsAnchorPositioning(): boolean {
-  return (
-    typeof CSS !== 'undefined' &&
-    typeof CSS.supports === 'function' &&
-    CSS.supports('position-area: top left') &&
-    CSS.supports('top: anchor(bottom)')
-  )
-}
-
-function supportsAnchorTryFallbacks(): boolean {
-  return (
-    typeof CSS !== 'undefined' &&
-    typeof CSS.supports === 'function' &&
-    CSS.supports('position-try-fallbacks: flip-block')
-  )
-}
-
-function supportsNativeAnchoredAutoplacement(): boolean {
-  return supportsNativePopover() && supportsAnchorPositioning() && supportsAnchorTryFallbacks()
-}
-
-function isPopoverOpen(element: HTMLElement): boolean {
-  try {
-    return element.matches(':popover-open')
-  } catch {
-    return false
-  }
-}
-
-function toRect(rect: DOMRect): CVPopoverRect {
-  return {
-    left: rect.left,
-    top: rect.top,
-    right: rect.right,
-    bottom: rect.bottom,
-    width: rect.width,
-    height: rect.height,
-  }
-}
+const popoverLayoutCustomProperties = [
+  '--cv-popover-anchor-inline-size',
+  '--cv-popover-arrow-inline-start',
+  '--cv-popover-arrow-block-start',
+]
 
 let cvPopoverNonce = 0
 
@@ -330,6 +287,10 @@ export class CVPopover extends ReatomLitElement {
   override willUpdate(changedProperties: PropertyValues): void {
     super.willUpdate(changedProperties)
 
+    if (changedProperties.has('offset')) {
+      this.style.setProperty('--cv-popover-offset', `${this.offset}px`)
+    }
+
     if (
       changedProperties.has('ariaLabel') ||
       changedProperties.has('ariaLabelledBy') ||
@@ -370,7 +331,7 @@ export class CVPopover extends ReatomLitElement {
       this.cancelLayoutFrame()
       const content = this.getContentElement()
       if (content) {
-        this.clearInlineLayout(content)
+        clearPopoverLayout(content, {customProperties: popoverLayoutCustomProperties})
         content.dataset['placement'] = this.placement
         content.dataset['anchorPositioning'] = 'false'
       }
@@ -634,36 +595,12 @@ export class CVPopover extends ReatomLitElement {
     this.requestUpdate()
   }
 
-  private clearInlineLayout(content: HTMLElement): void {
-    content.style.position = ''
-    content.style.top = ''
-    content.style.left = ''
-    content.style.right = ''
-    content.style.bottom = ''
-    content.style.insetInlineStart = ''
-    content.style.insetBlockStart = ''
-    content.style.insetInlineEnd = ''
-    content.style.insetBlockEnd = ''
-    content.style.transform = ''
-    content.style.translate = ''
-    content.style.margin = ''
-    content.style.marginTop = ''
-    content.style.marginRight = ''
-    content.style.marginBottom = ''
-    content.style.marginLeft = ''
-    content.style.removeProperty('position-area')
-    content.style.removeProperty('position-try-fallbacks')
-    content.style.removeProperty('--cv-popover-anchor-inline-size')
-    content.style.removeProperty('--cv-popover-arrow-inline-start')
-    content.style.removeProperty('--cv-popover-arrow-block-start')
-  }
-
   private syncArrowPosition(content: HTMLElement, anchor: HTMLElement, placement: CVPopoverPlacement): void {
     const arrow = content.querySelector('[part="arrow"]') as HTMLElement | null
     if (!arrow) return
 
-    const contentRect = toRect(content.getBoundingClientRect())
-    const anchorRect = toRect(anchor.getBoundingClientRect())
+    const contentRect = toPopoverRect(content.getBoundingClientRect())
+    const anchorRect = toPopoverRect(anchor.getBoundingClientRect())
     const arrowWidth = arrow.offsetWidth || arrow.getBoundingClientRect().width
     const arrowHeight = arrow.offsetHeight || arrow.getBoundingClientRect().height
     const [side] = placement.split('-')
@@ -747,10 +684,10 @@ export class CVPopover extends ReatomLitElement {
     const anchor = this.resolveAnchorElement()
     if (!content || !anchor) return
 
-    const anchorRect = toRect(anchor.getBoundingClientRect())
+    const anchorRect = toPopoverRect(anchor.getBoundingClientRect())
 
     if (supportsNativeAnchoredAutoplacement()) {
-      this.clearInlineLayout(content)
+      clearPopoverLayout(content, {customProperties: popoverLayoutCustomProperties})
       content.style.setProperty(
         '--cv-popover-anchor-inline-size',
         `${Math.max(0, Math.round(anchorRect.width))}px`,
@@ -773,14 +710,14 @@ export class CVPopover extends ReatomLitElement {
       return
     }
 
-    const contentRect = toRect(content.getBoundingClientRect())
+    const contentRect = toPopoverRect(content.getBoundingClientRect())
     const resolved = resolvePopoverPosition(anchorRect, contentRect, this.placement, this.offset, {
       width: window.innerWidth,
       height: window.innerHeight,
       padding: 8,
     })
 
-    this.clearInlineLayout(content)
+    clearPopoverLayout(content, {customProperties: popoverLayoutCustomProperties})
     content.style.setProperty(
       '--cv-popover-anchor-inline-size',
       `${Math.max(0, Math.round(anchorRect.width))}px`,
@@ -870,7 +807,6 @@ export class CVPopover extends ReatomLitElement {
           data-anchor=${this.anchor}
           data-trigger-mode=${this.triggerMode}
           data-anchor-positioning="false"
-          style=${`--cv-popover-offset:${this.offset}px;`}
           part="content"
           @keydown=${this.handleContentKeyDown}
           @toggle=${this.handleNativeToggle}

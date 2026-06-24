@@ -281,6 +281,8 @@ Additionally, component styles depend on theme tokens through fallback values:
 | `:host([size="small"])`      | Small size overrides                                              |
 | `:host([size="large"])`      | Large size overrides                                              |
 
+- In `prefers-reduced-motion: reduce`, the loading spinner remains visible but slows from `800ms` to `3200ms`.
+
 ## Reactive State Mapping
 
 `cv-button` is a visual adapter over headless `createButton`.

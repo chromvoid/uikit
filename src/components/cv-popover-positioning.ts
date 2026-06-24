@@ -38,6 +38,15 @@ export interface CVPopoverResolvedPosition {
 
 export type CVPopoverArrowAxis = 'inline' | 'block'
 
+export type CVPopoverLayoutClearOptions = {
+  customProperties?: string[]
+}
+
+export type NativePopoverElement = HTMLElement & {
+  showPopover?: (options?: {source?: HTMLElement}) => void
+  hidePopover?: () => void
+}
+
 const mirrorSideMap: Record<PlacementSide, PlacementSide> = {
   top: 'bottom',
   right: 'left',
@@ -52,7 +61,10 @@ const orthogonalSidesMap: Record<PlacementSide, PlacementSide[]> = {
   left: ['bottom', 'top'],
 }
 
-function parsePlacement(placement: CVPopoverPlacement): {side: PlacementSide; align: PlacementAlign} {
+function parsePlacement(placement: CVPopoverPlacement): {
+  side: PlacementSide
+  align: PlacementAlign
+} {
   const [side, align = 'center'] = placement.split('-') as [PlacementSide, PlacementAlign?]
   return {side, align}
 }
@@ -136,6 +148,123 @@ function clampValue(value: number, min: number, max: number): number {
   return Math.min(Math.max(value, min), max)
 }
 
+function getSideSpace(
+  anchorRect: CVPopoverRect,
+  placement: CVPopoverPlacement,
+  offset: number,
+  viewport: CVPopoverViewport,
+): number {
+  const {side} = parsePlacement(placement)
+
+  switch (side) {
+    case 'top':
+      return Math.max(0, anchorRect.top - viewport.padding - offset)
+    case 'right':
+      return Math.max(0, viewport.width - anchorRect.right - viewport.padding - offset)
+    case 'bottom':
+      return Math.max(0, viewport.height - anchorRect.bottom - viewport.padding - offset)
+    case 'left':
+      return Math.max(0, anchorRect.left - viewport.padding - offset)
+  }
+}
+
+function fitsPlacementAxis(
+  position: CVPopoverResolvedPosition,
+  panelRect: CVPopoverRect,
+  viewport: CVPopoverViewport,
+): boolean {
+  const {side} = parsePlacement(position.placement)
+
+  if (side === 'top' || side === 'bottom') {
+    return (
+      position.top >= viewport.padding &&
+      position.top + panelRect.height <= viewport.height - viewport.padding
+    )
+  }
+
+  return (
+    position.left >= viewport.padding && position.left + panelRect.width <= viewport.width - viewport.padding
+  )
+}
+
+export function supportsNativePopover(): boolean {
+  return (
+    typeof HTMLElement !== 'undefined' &&
+    typeof HTMLElement.prototype.showPopover === 'function' &&
+    typeof HTMLElement.prototype.hidePopover === 'function'
+  )
+}
+
+export function supportsAnchorPositioning(): boolean {
+  if (typeof CSS === 'undefined' || typeof CSS.supports !== 'function') {
+    return false
+  }
+
+  return (
+    CSS.supports('anchor-name: --cv-popover-anchor') &&
+    CSS.supports('position-anchor: --cv-popover-anchor') &&
+    (CSS.supports('position-area: top left') || CSS.supports('position-area: top')) &&
+    CSS.supports('top: anchor(bottom)')
+  )
+}
+
+export function supportsAnchorTryFallbacks(): boolean {
+  return (
+    typeof CSS !== 'undefined' &&
+    typeof CSS.supports === 'function' &&
+    CSS.supports('position-try-fallbacks: flip-block')
+  )
+}
+
+export function supportsNativeAnchoredAutoplacement(): boolean {
+  return supportsNativePopover() && supportsAnchorPositioning() && supportsAnchorTryFallbacks()
+}
+
+export function isPopoverOpen(element: HTMLElement): boolean {
+  try {
+    return element.matches(':popover-open')
+  } catch {
+    return false
+  }
+}
+
+export function toPopoverRect(rect: DOMRect): CVPopoverRect {
+  return {
+    left: rect.left,
+    top: rect.top,
+    right: rect.right,
+    bottom: rect.bottom,
+    width: rect.width,
+    height: rect.height,
+  }
+}
+
+export function clearPopoverLayout(element: HTMLElement, options: CVPopoverLayoutClearOptions = {}): void {
+  element.style.position = ''
+  element.style.top = ''
+  element.style.left = ''
+  element.style.right = ''
+  element.style.bottom = ''
+  element.style.inset = ''
+  element.style.insetInlineStart = ''
+  element.style.insetBlockStart = ''
+  element.style.insetInlineEnd = ''
+  element.style.insetBlockEnd = ''
+  element.style.transform = ''
+  element.style.translate = ''
+  element.style.margin = ''
+  element.style.marginTop = ''
+  element.style.marginRight = ''
+  element.style.marginBottom = ''
+  element.style.marginLeft = ''
+  element.style.removeProperty('position-area')
+  element.style.removeProperty('position-try-fallbacks')
+
+  for (const property of options.customProperties ?? []) {
+    element.style.removeProperty(property)
+  }
+}
+
 export function getPlacementFallbacks(placement: CVPopoverPlacement): CVPopoverPlacement[] {
   const {side, align} = parsePlacement(placement)
   const candidates = [
@@ -145,6 +274,11 @@ export function getPlacementFallbacks(placement: CVPopoverPlacement): CVPopoverP
   ]
 
   return Array.from(new Set(candidates))
+}
+
+export function getBlockPlacementFallbacks(placement: CVPopoverPlacement): CVPopoverPlacement[] {
+  const {side, align} = parsePlacement(placement)
+  return [placement, formatPlacement(mirrorSideMap[side], align)]
 }
 
 export function getPositionAreaForPlacement(placement: CVPopoverPlacement): string {
@@ -207,4 +341,29 @@ export function resolvePopoverPosition(
   }
 
   return clampToViewport(computeCoords(anchorRect, panelRect, placement, offset), panelRect, viewport)
+}
+
+export function resolvePopoverBlockPosition(
+  anchorRect: CVPopoverRect,
+  panelRect: CVPopoverRect,
+  placement: CVPopoverPlacement,
+  offset: number,
+  viewport: CVPopoverViewport,
+): CVPopoverResolvedPosition {
+  const candidates = getBlockPlacementFallbacks(placement)
+
+  for (const candidate of candidates) {
+    const position = computeCoords(anchorRect, panelRect, candidate, offset)
+    if (fitsPlacementAxis(position, panelRect, viewport)) {
+      return clampToViewport(position, panelRect, viewport)
+    }
+  }
+
+  const bestCandidate = candidates.reduce((best, candidate) => {
+    const bestSpace = getSideSpace(anchorRect, best, offset, viewport)
+    const candidateSpace = getSideSpace(anchorRect, candidate, offset, viewport)
+    return candidateSpace > bestSpace ? candidate : best
+  }, candidates[0]!)
+
+  return clampToViewport(computeCoords(anchorRect, panelRect, bestCandidate, offset), panelRect, viewport)
 }

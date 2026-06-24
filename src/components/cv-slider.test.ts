@@ -135,6 +135,47 @@ describe('cv-slider', () => {
     expect(changeValues).toEqual([75])
   })
 
+  it('caches track geometry for the active pointer drag', async () => {
+    CVSlider.define()
+
+    const slider = document.createElement('cv-slider') as CVSlider
+    slider.min = 0
+    slider.max = 100
+    slider.value = 0
+
+    document.body.append(slider)
+    await settle(slider)
+
+    const track = slider.shadowRoot?.querySelector('[part="track"]') as HTMLElement
+    let rectReads = 0
+    Object.defineProperty(track, 'getBoundingClientRect', {
+      configurable: true,
+      value: () => {
+        rectReads += 1
+        return {
+          x: 0,
+          y: 0,
+          width: 200,
+          height: 20,
+          top: 0,
+          left: 0,
+          right: 200,
+          bottom: 20,
+          toJSON: () => ({}),
+        } as DOMRect
+      },
+    })
+
+    track.dispatchEvent(createPointerEvent('pointerdown', {clientX: 50, clientY: 10}))
+    document.dispatchEvent(createPointerEvent('pointermove', {clientX: 100, clientY: 10}))
+    document.dispatchEvent(createPointerEvent('pointermove', {clientX: 150, clientY: 10}))
+    document.dispatchEvent(createPointerEvent('pointerup', {clientX: 150, clientY: 10}))
+    await settle(slider)
+
+    expect(slider.value).toBe(75)
+    expect(rectReads).toBe(1)
+  })
+
   it('updates value from pointer interactions on the expanded base area', async () => {
     CVSlider.define()
 
