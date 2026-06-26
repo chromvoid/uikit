@@ -10,7 +10,7 @@ the same object or workflow, not as a replacement for page navigation.
 ## Usage
 
 ```html
-<div class="tabs-demo-shell" data-demo="tabs">
+<div class="tabs-demo-shell">
   <section class="tabs-demo-hero" aria-labelledby="tabs-demo-title">
     <div class="tabs-demo-copy">
       <span class="tabs-demo-kicker">Selection surface</span>

@@ -9,7 +9,7 @@ Toggle control that represents an on/off state, visually distinct from a checkbo
 ## Usage
 
 ```html
-<div class="switch-demo-shell" data-demo="switch">
+<div class="switch-demo-shell">
   <section class="switch-demo-hero" aria-labelledby="switch-demo-title">
     <div class="switch-demo-copy">
       <span class="switch-demo-kicker">Switch pattern</span>

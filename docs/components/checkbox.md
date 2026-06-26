@@ -16,7 +16,7 @@ This document is the UIKit surface contract for Checkbox.
 ## Usage
 
 ```html
-<div class="checkbox-demo-shell" data-demo="checkbox">
+<div class="checkbox-demo-shell">
   <section class="checkbox-demo-hero" aria-labelledby="checkbox-demo-title">
     <div class="checkbox-demo-copy">
       <span class="checkbox-demo-kicker">State contract</span>
