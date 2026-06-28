@@ -264,7 +264,6 @@ export class CVBottomSheet extends ReatomLitElement {
       cursor: grab;
       touch-action: none;
       user-select: none;
-      -webkit-tap-highlight-color: transparent;
     }
 
     .sheet-handle:focus-visible {

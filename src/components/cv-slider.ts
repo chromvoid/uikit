@@ -98,7 +98,6 @@ export class CVSlider extends ReatomLitElement {
         inline-size: 100%;
         block-size: 24px;
         touch-action: pan-y;
-        -webkit-tap-highlight-color: transparent;
         --cv-slider-percentage: 0%;
       }
 
@@ -110,7 +109,6 @@ export class CVSlider extends ReatomLitElement {
         border: 1px solid var(--cv-color-border, #2a3245);
         background: var(--cv-color-surface, #141923);
         touch-action: pan-y;
-        -webkit-tap-highlight-color: transparent;
       }
 
       [part='range'] {
@@ -138,7 +136,6 @@ export class CVSlider extends ReatomLitElement {
         transform: translate(-50%, -50%);
         cursor: grab;
         touch-action: pan-y;
-        -webkit-tap-highlight-color: transparent;
       }
 
       [part='thumb']:focus-visible {
