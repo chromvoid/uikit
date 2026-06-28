@@ -40,9 +40,15 @@ describe('cv-input', () => {
     it('renders filled variant with a visible non-prominent shell', () => {
       const stylesText = getStylesText()
 
-      expect(stylesText).toMatch(/:host\(\[variant='filled'\]\) \[part='base'\]\s*{[\s\S]*background:\s*var\(--cv-color-surface-2/)
-      expect(stylesText).toMatch(/:host\(\[variant='filled'\]\) \[part='base'\]\s*{[\s\S]*border-color:\s*transparent;/)
-      expect(stylesText).toMatch(/:host\(\[variant='filled'\]\) \[part='base'\]\s*{[\s\S]*box-shadow:\s*inset 0 0 0 1px/)
+      expect(stylesText).toMatch(
+        /:host\(\[variant='filled'\]\) \[part='base'\]\s*{[\s\S]*background:\s*var\(--cv-color-surface-2/,
+      )
+      expect(stylesText).toMatch(
+        /:host\(\[variant='filled'\]\) \[part='base'\]\s*{[\s\S]*border-color:\s*transparent;/,
+      )
+      expect(stylesText).toMatch(
+        /:host\(\[variant='filled'\]\) \[part='base'\]\s*{[\s\S]*box-shadow:\s*inset 0 0 0 1px/,
+      )
     })
   })
 
@@ -1169,7 +1175,11 @@ describe('cv-input', () => {
 
   describe('host pointerdown keyboard continuity', () => {
     const dispatchHostPointerDown = (el: CVInput, target: HTMLElement): PointerEvent => {
-      const event = new Event('pointerdown', {bubbles: true, composed: true, cancelable: true}) as PointerEvent
+      const event = new Event('pointerdown', {
+        bubbles: true,
+        composed: true,
+        cancelable: true,
+      }) as PointerEvent
       target.dispatchEvent(event)
       return event
     }

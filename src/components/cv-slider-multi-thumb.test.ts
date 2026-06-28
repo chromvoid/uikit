@@ -102,6 +102,48 @@ describe('cv-slider-multi-thumb', () => {
     expect(changeValues.at(-1)).toEqual([20, 90])
   })
 
+  it('caches track geometry for the active pointer drag', async () => {
+    CVSliderMultiThumb.define()
+
+    const slider = document.createElement('cv-slider-multi-thumb') as CVSliderMultiThumb
+    slider.values = [20, 80]
+    slider.min = 0
+    slider.max = 100
+
+    document.body.append(slider)
+    await settle(slider)
+
+    const base = slider.shadowRoot?.querySelector('[part="base"]') as HTMLElement
+    const track = slider.shadowRoot?.querySelector('[part="track"]') as HTMLElement
+    let rectReads = 0
+    Object.defineProperty(track, 'getBoundingClientRect', {
+      configurable: true,
+      value: () => {
+        rectReads += 1
+        return {
+          x: 0,
+          y: 0,
+          width: 200,
+          height: 20,
+          top: 0,
+          left: 0,
+          right: 200,
+          bottom: 20,
+          toJSON: () => ({}),
+        } as DOMRect
+      },
+    })
+
+    base.dispatchEvent(createPointerEvent('pointerdown', {clientX: 170, clientY: 10}))
+    document.dispatchEvent(createPointerEvent('pointermove', {clientX: 175, clientY: 10}))
+    document.dispatchEvent(createPointerEvent('pointermove', {clientX: 180, clientY: 10}))
+    document.dispatchEvent(createPointerEvent('pointerup', {clientX: 180, clientY: 10}))
+    await settle(slider)
+
+    expect(slider.values).toEqual([20, 90])
+    expect(rectReads).toBe(1)
+  })
+
   it('keeps thumbs ordered and does not allow crossing', async () => {
     CVSliderMultiThumb.define()
 
@@ -370,8 +412,8 @@ describe('cv-slider-multi-thumb', () => {
 
     // With the real denominator of (max-min)=0.5, the upper thumb must sit at
     // 100%, not at 50% as the old Math.max(range, 1) denominator produced.
-    expect(thumbs[0]!.getAttribute('style')).toContain('--cv-thumb-percentage:0%')
-    expect(thumbs[1]!.getAttribute('style')).toContain('--cv-thumb-percentage:100%')
+    expect(thumbs[0]!.style.getPropertyValue('--cv-thumb-percentage')).toBe('0%')
+    expect(thumbs[1]!.style.getPropertyValue('--cv-thumb-percentage')).toBe('100%')
   })
 
   it('prevents keyboard and pointer updates when disabled', async () => {

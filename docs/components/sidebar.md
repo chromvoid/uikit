@@ -9,7 +9,7 @@ Persistent layout sidebar with desktop expand/collapse, mobile overlay mode, and
 ## Usage
 
 ```html
-<div class="sidebar-demo-showcase" data-live-demo-height="940">
+<div class="sidebar-demo-showcase" data-demo="sidebar" data-live-demo-height="940">
   <!-- Persistent layout sidebar. -->
   <div class="sidebar-demo-shell">
     <cv-sidebar class="sidebar-demo-nav" aria-label="Threat model navigation" breakpoint="0px">

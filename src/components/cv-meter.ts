@@ -78,10 +78,12 @@ export class CVMeter extends ReatomLitElement {
 
       [part='indicator'] {
         block-size: 100%;
-        inline-size: var(--cv-meter-width, 0%);
+        inline-size: 100%;
         border-radius: inherit;
         background: var(--cv-gradient-progress-primary, var(--cv-gradient-primary));
-        transition: inline-size var(--cv-meter-transition-duration, var(--cv-duration-normal, 220ms))
+        transform: scaleX(var(--cv-meter-value-scale, 0));
+        transform-origin: left center;
+        transition: transform var(--cv-meter-transition-duration, var(--cv-duration-normal, 220ms))
           var(--cv-easing-standard, ease);
         position: relative;
       }
@@ -144,7 +146,7 @@ export class CVMeter extends ReatomLitElement {
   override willUpdate(changedProperties: PropertyValues): void {
     super.willUpdate(changedProperties)
 
-    if (
+    const shouldRecreateModel =
       changedProperties.has('min') ||
       changedProperties.has('max') ||
       changedProperties.has('low') ||
@@ -154,22 +156,22 @@ export class CVMeter extends ReatomLitElement {
       changedProperties.has('ariaLabel') ||
       changedProperties.has('ariaLabelledBy') ||
       changedProperties.has('ariaDescribedBy')
-    ) {
-      this.model = this.createModel()
-      return
-    }
 
-    if (changedProperties.has('value')) {
+    if (shouldRecreateModel) {
+      this.model = this.createModel()
+    } else if (changedProperties.has('value')) {
       const nextValue = this.sanitizeValue(this.value)
       if (this.model.state.value() !== nextValue) {
         this.model.actions.setValue(nextValue)
       }
     }
+
+    this.syncVisualState()
   }
 
   // A non-finite `value` (NaN/Infinity) must not reach the headless model:
   // `clamp(NaN, …)` returns NaN, which would surface as aria-valuenow="NaN"
-  // and --cv-meter-width:NaN%. Coerce non-finite input to the range minimum.
+  // and --cv-meter-value-scale:NaN. Coerce non-finite input to the range minimum.
   private sanitizeValue(value: number): number {
     return Number.isFinite(value) ? value : Math.min(this.min, this.max)
   }
@@ -194,9 +196,13 @@ export class CVMeter extends ReatomLitElement {
     return typeof value === 'number' && Number.isFinite(value) ? value : undefined
   }
 
+  private syncVisualState(): void {
+    const percentage = Math.max(0, Math.min(100, this.model.state.percentage()))
+    this.style.setProperty('--cv-meter-value-scale', String(percentage / 100))
+  }
+
   protected override render() {
     const props = this.model.contracts.getMeterProps()
-    const percentage = Math.max(0, Math.min(100, this.model.state.percentage()))
     const status = this.model.state.status()
 
     return html`
@@ -212,7 +218,8 @@ export class CVMeter extends ReatomLitElement {
         aria-describedby=${props['aria-describedby'] ?? nothing}
         part="base"
       >
-        <div part="indicator" data-status=${status} style=${`--cv-meter-width:${percentage}%;`}><span part="label"><slot></slot></span></div>
+        <div part="indicator" data-status=${status}></div>
+        <span part="label"><slot></slot></span>
       </div>
     `
   }

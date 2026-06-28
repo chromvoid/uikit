@@ -7,11 +7,41 @@ import {responsiveTablesPlugin} from './markdown/responsiveTables'
 const description =
   'ChromVoid UIKit is a Lit-based component layer over @chromvoid/headless-ui with reusable theme tokens and accessible interactions.'
 
-const forceDarkThemeScript = "document.documentElement.dataset.theme='dark'"
-
+const docsThemeBridgeScript = `;(() => {
+  const preference = localStorage.getItem('vitepress-theme-appearance') || 'dark'
+  const theme = preference === 'auto'
+    ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
+    : preference === 'light' ? 'light' : 'dark'
+  document.documentElement.dataset.theme = theme
+})()`
 const repoName = process.env.GITHUB_REPOSITORY?.split('/')[1]
-const base =
-  process.env.DOCS_BASE ?? (process.env.GITHUB_ACTIONS === 'true' && repoName ? `/${repoName}/` : '/')
+const docsBase = process.env.DOCS_BASE?.trim()
+const base = docsBase || (process.env.GITHUB_ACTIONS === 'true' && repoName ? `/${repoName}/` : '/')
+const fontFaceStyle = `
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url('${base}fonts/manrope-latin-400.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Orbitron';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('${base}fonts/orbitron-latin-700.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('${base}fonts/jetbrains-mono-latin-500.woff2') format('woff2');
+}
+`
 
 const guideItems = [
   {text: 'Getting Started', link: '/guide/getting-started'},
@@ -25,14 +55,60 @@ export default defineConfig({
   description,
   lang: 'en-US',
   base,
-  appearance: 'force-dark',
+  appearance: 'dark',
   cleanUrls: false,
   lastUpdated: true,
   head: [
-    ['script', {}, forceDarkThemeScript],
+    ['script', {}, docsThemeBridgeScript],
+    ['style', {}, fontFaceStyle],
     ['meta', {name: 'theme-color', content: '#0b0d12'}],
     ['meta', {property: 'og:title', content: 'ChromVoid UIKit'}],
     ['meta', {property: 'og:description', content: description}],
+    ['link', {rel: 'icon', href: `${base}favicon/favicon.ico`, sizes: 'any'}],
+    [
+      'link',
+      {
+        rel: 'icon',
+        type: 'image/png',
+        sizes: '16x16',
+        href: `${base}favicon/favicon-16x16.png`,
+      },
+    ],
+    [
+      'link',
+      {
+        rel: 'icon',
+        type: 'image/png',
+        sizes: '32x32',
+        href: `${base}favicon/favicon-32x32.png`,
+      },
+    ],
+    [
+      'link',
+      {
+        rel: 'icon',
+        type: 'image/png',
+        sizes: '192x192',
+        href: `${base}favicon/favicon-192x192.png`,
+      },
+    ],
+    [
+      'link',
+      {
+        rel: 'icon',
+        type: 'image/png',
+        sizes: '512x512',
+        href: `${base}favicon/favicon-512x512.png`,
+      },
+    ],
+    [
+      'link',
+      {
+        rel: 'apple-touch-icon',
+        sizes: '180x180',
+        href: `${base}favicon/apple-touch-icon.png`,
+      },
+    ],
     [
       'link',
       {
@@ -40,6 +116,7 @@ export default defineConfig({
         href: `${base}fonts/manrope-latin-400.woff2`,
         as: 'font',
         type: 'font/woff2',
+        crossorigin: 'anonymous',
       },
     ],
     [
@@ -49,10 +126,12 @@ export default defineConfig({
         href: `${base}fonts/orbitron-latin-700.woff2`,
         as: 'font',
         type: 'font/woff2',
+        crossorigin: 'anonymous',
       },
     ],
   ],
   themeConfig: {
+    logo: {src: `${base}assets/icon.png`, alt: 'ChromVoid UIKit'},
     nav: [
       {text: 'Guide', link: '/guide/getting-started'},
       {text: 'Playground', link: '/guide/playground'},
@@ -86,7 +165,7 @@ export default defineConfig({
     socialLinks: [{icon: 'github', link: 'https://github.com/chromvoid/uikit'}],
     footer: {
       message: 'ChromVoid UIKit documentation',
-      copyright: 'Released under AGPL-3.0-only',
+      copyright: 'Released under MIT',
     },
     editLink: {
       pattern: 'https://github.com/chromvoid/uikit/edit/main/docs/:path',

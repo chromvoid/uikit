@@ -27,10 +27,7 @@ const DETENT_ORDER: CVBottomSheetDetent[] = ['collapsed', 'middle', 'expanded']
 const openBottomSheets = new Set<HTMLElement>()
 
 export const cvBottomSheetOpenCount = atom(0, 'cvBottomSheet.openCount')
-export const cvAnyBottomSheetOpen = computed(
-  () => cvBottomSheetOpenCount() > 0,
-  'cvBottomSheet.anyOpen',
-)
+export const cvAnyBottomSheetOpen = computed(() => cvBottomSheetOpenCount() > 0, 'cvBottomSheet.anyOpen')
 
 function syncOpenBottomSheetRegistry(sheet: HTMLElement, open: boolean): void {
   const previousCount = openBottomSheets.size
@@ -272,7 +269,6 @@ export class CVBottomSheet extends ReatomLitElement {
       cursor: grab;
       touch-action: none;
       user-select: none;
-      -webkit-tap-highlight-color: transparent;
     }
 
     .sheet-handle:focus-visible {

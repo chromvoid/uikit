@@ -157,65 +157,173 @@ Slide-out panel dialog anchored to a viewport edge, used for navigation, forms, 
 ## Usage
 
 ```html
-<!-- Basic drawer (slides from end) -->
-<cv-drawer data-live-demo-height="560">
-  <span slot="trigger">Open drawer</span>
-  <span slot="title">Settings</span>
-  <p>Drawer body content here.</p>
-  <div slot="footer">
-    <cv-button variant="ghost">Cancel</cv-button>
-    <cv-button variant="primary">Save</cv-button>
-  </div>
-</cv-drawer>
+<div class="drawer-demo-shell" data-demo="drawer" data-live-demo-height="440">
+  <section class="drawer-demo-stage" aria-labelledby="drawer-demo-title">
+    <aside class="drawer-demo-rail" aria-label="Vault sections">
+      <span class="drawer-demo-mark">CV</span>
+      <a class="drawer-demo-rail-item drawer-demo-rail-item--active" href="#drawer-vault">Vault</a>
+      <a class="drawer-demo-rail-item" href="#drawer-devices">Devices</a>
+      <a class="drawer-demo-rail-item" href="#drawer-audit">Audit</a>
+    </aside>
 
-<!-- Left-side navigation drawer -->
-<cv-drawer placement="start">
-  <span slot="trigger">Menu</span>
-  <span slot="title">Navigation</span>
-  <nav>
-    <a href="/home">Home</a>
-    <a href="/settings">Settings</a>
-  </nav>
-</cv-drawer>
+    <main class="drawer-demo-workspace">
+      <header class="drawer-demo-toolbar">
+        <div class="drawer-demo-title-block">
+          <span class="drawer-demo-kicker">Drawer surface</span>
+          <h3 id="drawer-demo-title">Route-level panels without losing context</h3>
+        </div>
 
-<!-- Bottom sheet drawer -->
-<cv-drawer placement="bottom">
-  <span slot="trigger">Show details</span>
-  <span slot="title">Details</span>
-  <p>Content slides up from the bottom.</p>
-</cv-drawer>
+        <div class="drawer-demo-actions" aria-label="Drawer examples">
+          <cv-drawer class="drawer-demo-drawer drawer-demo-drawer--nav" placement="start" drag-to-close>
+            <span slot="trigger">Navigation</span>
+            <span slot="title">Vault routes</span>
+            <span slot="description">A start drawer works as a temporary navigation layer.</span>
+            <nav class="drawer-demo-nav" aria-label="Drawer navigation">
+              <a class="drawer-demo-nav-link drawer-demo-nav-link--active" href="#drawer-vault">
+                <strong>Records</strong>
+                <span>Credentials, recovery seeds, and secure notes</span>
+              </a>
+              <a class="drawer-demo-nav-link" href="#drawer-devices">
+                <strong>Devices</strong>
+                <span>Pairing state and hardware trust boundary</span>
+              </a>
+              <a class="drawer-demo-nav-link" href="#drawer-audit">
+                <strong>Audit trail</strong>
+                <span>Recent access and policy changes</span>
+              </a>
+            </nav>
+          </cv-drawer>
 
-<!-- Top drawer -->
-<cv-drawer placement="top">
-  <span slot="trigger">Notifications</span>
-  <span slot="title">Notifications</span>
-  <p>Notification content slides down from the top.</p>
-</cv-drawer>
+          <cv-drawer
+            id="drawer-demo-policy"
+            class="drawer-demo-drawer drawer-demo-drawer--settings"
+            placement="end"
+            initial-focus-id="drawer-demo-save"
+          >
+            <span slot="trigger">Policy</span>
+            <span slot="title">Exposure policy</span>
+            <span slot="description"
+              >Tune what remains visible when the vault is inspected under pressure.</span
+            >
+            <div class="drawer-demo-form">
+              <label class="drawer-demo-field">
+                <span>Visible profile</span>
+                <select id="drawer-demo-profile">
+                  <option>Travel vault</option>
+                  <option>Work vault</option>
+                  <option>Research vault</option>
+                </select>
+              </label>
+              <label class="drawer-demo-toggle">
+                <input type="checkbox" checked />
+                <span>
+                  <strong>Require device proof</strong>
+                  <small>Challenge paired hardware before revealing protected records.</small>
+                </span>
+              </label>
+              <label class="drawer-demo-toggle">
+                <input type="checkbox" />
+                <span>
+                  <strong>Keep decoy activity visible</strong>
+                  <small>Leave routine changes available for low-risk review paths.</small>
+                </span>
+              </label>
+            </div>
+            <div slot="footer">
+              <cv-button variant="ghost" data-drawer-close="drawer-demo-policy">Cancel</cv-button>
+              <cv-button id="drawer-demo-save" variant="primary" data-drawer-close="drawer-demo-policy">
+                Save policy
+              </cv-button>
+            </div>
+          </cv-drawer>
 
-<!-- Non-modal drawer -->
-<cv-drawer modal="false">
-  <span slot="trigger">Show panel</span>
-  <span slot="title">Side panel</span>
-  <p>This drawer does not block the page.</p>
-</cv-drawer>
+          <cv-drawer
+            id="drawer-demo-session"
+            class="drawer-demo-drawer drawer-demo-drawer--sheet"
+            placement="bottom"
+            drag-to-close
+          >
+            <span slot="trigger">Session sheet</span>
+            <span slot="title">Session details</span>
+            <span slot="description">Bottom placement is useful for mobile-adjacent task review.</span>
+            <dl class="drawer-demo-detail-list">
+              <div>
+                <dt>Active route</dt>
+                <dd>Vault / Records</dd>
+              </div>
+              <div>
+                <dt>Scroll lock</dt>
+                <dd>Enabled while modal</dd>
+              </div>
+              <div>
+                <dt>Dismissal</dt>
+                <dd>Escape, backdrop, header close, or touch drag</dd>
+              </div>
+            </dl>
+            <div slot="footer">
+              <cv-button variant="primary" data-drawer-close="drawer-demo-session">Done</cv-button>
+            </div>
+          </cv-drawer>
 
-<!-- Alert drawer -->
-<cv-drawer type="alertdialog">
-  <span slot="trigger">Delete account</span>
-  <span slot="title">Are you sure?</span>
-  <span slot="description">This action is permanent and cannot be undone.</span>
-  <div slot="footer">
-    <cv-button variant="ghost">Cancel</cv-button>
-    <cv-button variant="danger">Delete</cv-button>
-  </div>
-</cv-drawer>
+          <cv-drawer
+            id="drawer-demo-notice"
+            class="drawer-demo-drawer drawer-demo-drawer--notice"
+            placement="top"
+          >
+            <span slot="trigger">Non-modal notice</span>
+            <span slot="title">Sync window</span>
+            <p>This top drawer is opened as a non-modal notice so the page remains reachable.</p>
+            <div slot="footer">
+              <cv-button variant="primary" data-drawer-close="drawer-demo-notice">Acknowledge</cv-button>
+            </div>
+          </cv-drawer>
 
-<!-- Without header -->
-<cv-drawer no-header>
-  <span slot="trigger">Quick panel</span>
-  <p>Minimal drawer with body content only.</p>
-  <div slot="footer">
-    <cv-button variant="primary">Done</cv-button>
-  </div>
-</cv-drawer>
+          <cv-drawer id="drawer-demo-alert" class="drawer-demo-drawer" type="alertdialog" placement="end">
+            <span slot="trigger">Alert drawer</span>
+            <span slot="title">Drop visible profile?</span>
+            <span slot="description"
+              >This removes the selected profile from the current visible surface.</span
+            >
+            <p>Use alertdialog only when the drawer asks for a high-risk decision.</p>
+            <div slot="footer">
+              <cv-button variant="ghost" data-drawer-close="drawer-demo-alert">Cancel</cv-button>
+              <cv-button variant="danger" data-drawer-close="drawer-demo-alert">Drop profile</cv-button>
+            </div>
+          </cv-drawer>
+        </div>
+      </header>
+
+      <section class="drawer-demo-summary" aria-label="Current vault state">
+        <div class="drawer-demo-summary-card drawer-demo-summary-card--primary">
+          <span class="drawer-demo-label">Primary surface</span>
+          <strong>31 visible records</strong>
+          <p>
+            Operational content stays in place while drawers handle navigation, policy, and contextual review.
+          </p>
+        </div>
+        <div class="drawer-demo-summary-card">
+          <span class="drawer-demo-label">Trust boundary</span>
+          <strong>Hardware proof required</strong>
+          <p>Panels can carry focused controls without turning the route into a dense settings page.</p>
+        </div>
+      </section>
+    </main>
+  </section>
+</div>
+
+<script>
+  document.querySelectorAll('.drawer-demo-shell[data-demo="drawer"]:not([data-ready])').forEach((shell) => {
+    shell.dataset.ready = 'true'
+    const drawers = new Map([...shell.querySelectorAll('cv-drawer[id]')].map((drawer) => [drawer.id, drawer]))
+    const notice = drawers.get('drawer-demo-notice')
+    if (notice) notice.modal = false
+
+    shell.querySelectorAll('[data-drawer-close]').forEach((control) => {
+      control.addEventListener('click', () => {
+        const drawer = drawers.get(control.dataset.drawerClose)
+        if (drawer) drawer.open = false
+      })
+    })
+  })
+</script>
 ```

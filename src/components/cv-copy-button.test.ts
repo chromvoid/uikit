@@ -360,9 +360,10 @@ describe('cv-copy-button', () => {
       expect(cssText).toContain(":host([status='error']) [part='error-icon']")
       expect(cssText).toContain('opacity var(--cv-duration-fast')
       expect(cssText).toContain('transform var(--cv-duration-fast')
-      expect(cssText).toContain('filter var(--cv-duration-fast')
       expect(cssText).toContain('@media (prefers-reduced-motion: reduce)')
       expect(cssText).not.toContain('transition: all')
+      expect(cssText).not.toContain('filter var(--cv-duration-fast')
+      expect(cssText).not.toContain('filter: blur')
       expect(cssText).not.toContain('display: none')
     })
 

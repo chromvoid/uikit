@@ -1,0 +1,436 @@
+:root,
+.live-demo-preview {
+  --live-demo-bg: var(--cv-frame-color-bg, var(--cv-color-bg));
+  --live-demo-surface: var(--cv-frame-color-surface, var(--cv-color-surface));
+  --live-demo-surface-2: var(--cv-frame-color-surface-2, var(--cv-color-surface-2));
+  --live-demo-surface-3: var(--cv-frame-color-surface-3, var(--cv-color-surface-3));
+  --live-demo-surface-elevated: var(--cv-frame-color-surface-elevated, var(--cv-color-surface-elevated));
+  --live-demo-surface-glass: var(--cv-frame-color-surface-glass, var(--cv-color-surface-glass));
+  --live-demo-surface-glass-strong: var(
+    --cv-frame-color-surface-glass-strong,
+    var(--cv-color-surface-glass-strong)
+  );
+  --live-demo-surface-secondary-glass: var(
+    --cv-frame-color-surface-secondary-glass,
+    var(--cv-color-surface-secondary-glass)
+  );
+  --live-demo-surface-secondary-glass-strong: var(
+    --cv-frame-color-surface-secondary-glass-strong,
+    var(--cv-color-surface-secondary-glass-strong)
+  );
+  --live-demo-surface-highlight: var(--cv-frame-color-surface-highlight, var(--cv-color-surface-highlight));
+  --live-demo-text: var(--cv-frame-color-text-strong, var(--cv-color-text-strong));
+  --live-demo-text-primary: var(--cv-frame-color-text, var(--cv-color-text));
+  --live-demo-text-strong: var(--cv-frame-color-text-strong, var(--cv-color-text-strong));
+  --live-demo-text-strongest: var(--cv-frame-color-text-strongest, var(--cv-color-text-strongest));
+  --live-demo-muted: var(--cv-frame-color-text-muted, var(--cv-color-text-muted));
+  --live-demo-soft: var(--cv-frame-color-text-subtle, var(--cv-color-text-subtle));
+  --live-demo-panel: var(--cv-frame-color-surface-2, var(--cv-color-surface-2));
+  --live-demo-panel-strong: var(
+    --cv-frame-color-surface-secondary-glass,
+    var(--cv-color-surface-secondary-glass)
+  );
+  --live-demo-panel-soft: var(--cv-frame-color-surface-glass, var(--cv-color-surface-glass));
+  --live-demo-panel-elevated: var(--cv-frame-color-surface-elevated, var(--cv-color-surface-elevated));
+  --live-demo-border-faint: var(--cv-frame-color-border-faint, var(--cv-color-border-faint));
+  --live-demo-border-muted: var(--cv-frame-color-border-muted, var(--cv-color-border-muted));
+  --live-demo-border: var(--cv-frame-color-border-soft, var(--cv-color-border-soft));
+  --live-demo-border-strong: var(--cv-frame-color-border-strong, var(--cv-color-border-strong));
+  --live-demo-border-glass: var(--cv-frame-color-border-glass, var(--cv-color-border-glass));
+  --live-demo-cyan: var(--cv-frame-color-primary, var(--cv-color-primary));
+  --live-demo-cyan-dark: var(--cv-frame-color-primary-dark, var(--cv-color-primary-dark));
+  --live-demo-cyan-darker: var(--cv-frame-color-primary-darker, var(--cv-color-primary-darker));
+  --live-demo-cyan-subtle: var(--cv-frame-color-primary-subtle, var(--cv-color-primary-subtle));
+  --live-demo-cyan-muted: var(--cv-frame-color-primary-muted, var(--cv-color-primary-muted));
+  --live-demo-cyan-surface: var(--cv-frame-color-primary-surface, var(--cv-color-primary-surface));
+  --live-demo-cyan-surface-strong: var(
+    --cv-frame-color-primary-surface-strong,
+    var(--cv-color-primary-surface-strong)
+  );
+  --live-demo-cyan-border: var(--cv-frame-color-primary-border, var(--cv-color-primary-border));
+  --live-demo-cyan-border-strong: var(
+    --cv-frame-color-primary-border-strong,
+    var(--cv-color-primary-border-strong)
+  );
+  --live-demo-cyan-ring: var(--cv-frame-color-primary-ring, var(--cv-color-primary-ring));
+  --live-demo-on-cyan: var(--cv-frame-color-on-primary, var(--cv-color-on-primary));
+  --live-demo-violet: var(--cv-frame-color-accent, var(--cv-color-accent));
+  --live-demo-violet-dark: var(--cv-frame-color-accent-dark, var(--cv-color-accent-dark));
+  --live-demo-violet-surface: var(--cv-frame-color-accent-surface, var(--cv-color-accent-surface));
+  --live-demo-violet-surface-strong: var(
+    --cv-frame-color-accent-surface-strong,
+    var(--cv-color-accent-surface-strong)
+  );
+  --live-demo-violet-border: var(--cv-frame-color-accent-border, var(--cv-color-accent-border));
+  --live-demo-violet-border-strong: var(
+    --cv-frame-color-accent-border-strong,
+    var(--cv-color-accent-border-strong)
+  );
+  --live-demo-violet-ring: var(--cv-frame-color-accent-ring, var(--cv-color-accent-ring));
+  --live-demo-green: var(--cv-frame-color-success, var(--cv-color-success));
+  --live-demo-green-dark: var(--cv-frame-color-success-dark, var(--cv-color-success-dark));
+  --live-demo-green-surface: var(--cv-frame-color-success-surface, var(--cv-color-success-surface));
+  --live-demo-green-surface-strong: var(
+    --cv-frame-color-success-surface-strong,
+    var(--cv-color-success-surface-strong)
+  );
+  --live-demo-green-border: var(--cv-frame-color-success-border, var(--cv-color-success-border));
+  --live-demo-green-border-strong: var(
+    --cv-frame-color-success-border-strong,
+    var(--cv-color-success-border-strong)
+  );
+  --live-demo-green-ring: var(--cv-frame-color-success-ring, var(--cv-color-success-ring));
+  --live-demo-amber: var(--cv-frame-color-warning, var(--cv-color-warning));
+  --live-demo-amber-dark: var(--cv-frame-color-warning-dark, var(--cv-color-warning-dark));
+  --live-demo-amber-surface: var(--cv-frame-color-warning-surface, var(--cv-color-warning-surface));
+  --live-demo-amber-surface-strong: var(
+    --cv-frame-color-warning-surface-strong,
+    var(--cv-color-warning-surface-strong)
+  );
+  --live-demo-amber-border: var(--cv-frame-color-warning-border, var(--cv-color-warning-border));
+  --live-demo-amber-border-strong: var(
+    --cv-frame-color-warning-border-strong,
+    var(--cv-color-warning-border-strong)
+  );
+  --live-demo-amber-ring: var(--cv-frame-color-warning-ring, var(--cv-color-warning-ring));
+  --live-demo-red: var(--cv-frame-color-danger, var(--cv-color-danger));
+  --live-demo-red-dark: var(--cv-frame-color-danger-dark, var(--cv-color-danger-dark));
+  --live-demo-red-surface: var(--cv-frame-color-danger-surface, var(--cv-color-danger-surface));
+  --live-demo-red-surface-strong: var(
+    --cv-frame-color-danger-surface-strong,
+    var(--cv-color-danger-surface-strong)
+  );
+  --live-demo-red-border: var(--cv-frame-color-danger-border, var(--cv-color-danger-border));
+  --live-demo-red-border-strong: var(
+    --cv-frame-color-danger-border-strong,
+    var(--cv-color-danger-border-strong)
+  );
+  --live-demo-red-ring: var(--cv-frame-color-danger-ring, var(--cv-color-danger-ring));
+  --live-demo-info: var(--cv-frame-color-info, var(--cv-color-info));
+  --live-demo-info-surface: var(--cv-frame-color-info-surface, var(--cv-color-info-surface));
+  --live-demo-info-border: var(--cv-frame-color-info-border, var(--cv-color-info-border));
+  --live-demo-focus-ring: var(--cv-frame-color-focus-ring, var(--cv-color-focus-ring));
+  --live-demo-active: var(--cv-frame-color-active, var(--cv-color-active));
+  --live-demo-selected: var(--cv-frame-color-selected, var(--cv-color-selected));
+  --live-demo-overlay: var(--cv-frame-color-overlay, var(--cv-color-overlay));
+  --live-demo-shadow-sm: var(--cv-frame-shadow-sm, var(--cv-shadow-sm));
+  --live-demo-shadow-md: var(--cv-frame-shadow-md, var(--cv-shadow-md));
+  --live-demo-shadow-lg: var(--cv-frame-shadow-lg, var(--cv-shadow-lg));
+  --live-demo-shadow-xl: var(--cv-frame-shadow-xl, var(--cv-shadow-xl));
+  --live-demo-shadow-color: var(--cv-frame-alpha-black-25, var(--cv-alpha-black-25));
+  --live-demo-shadow-color-strong: var(--cv-frame-alpha-black-35, var(--cv-alpha-black-35));
+  --live-demo-highlight-line: var(--cv-frame-alpha-white-4, var(--cv-alpha-white-4));
+  --live-demo-highlight-soft: var(--cv-frame-alpha-white-8, var(--cv-alpha-white-8));
+  --live-demo-highlight-strong: var(--cv-frame-alpha-white-15, var(--cv-alpha-white-15));
+  --live-demo-gradient-shell: var(--cv-frame-gradient-surface-deep, var(--cv-gradient-surface-deep));
+  --live-demo-gradient-panel: var(--cv-frame-gradient-surface, var(--cv-gradient-surface));
+  --live-demo-gradient-primary: var(--cv-frame-gradient-primary, var(--cv-gradient-primary));
+  --live-demo-gradient-primary-soft: var(--cv-frame-gradient-surface-primary, var(--cv-gradient-surface-primary));
+  --live-demo-gradient-brand: var(--cv-frame-gradient-brand, var(--cv-gradient-brand));
+  --live-demo-gradient-success: var(--cv-frame-gradient-success, var(--cv-gradient-success));
+  --live-demo-gradient-danger-soft: var(--cv-frame-gradient-surface-danger, var(--cv-gradient-surface-danger));
+  --live-demo-gradient-progress-primary: var(
+    --cv-frame-gradient-progress-primary,
+    var(--cv-gradient-progress-primary)
+  );
+  --live-demo-gradient-progress-success: var(
+    --cv-frame-gradient-progress-success,
+    var(--cv-gradient-progress-success)
+  );
+  --live-demo-gradient-progress-warning: var(
+    --cv-frame-gradient-progress-warning,
+    var(--cv-gradient-progress-warning)
+  );
+  --live-demo-gradient-progress-danger: var(
+    --cv-frame-gradient-progress-danger,
+    var(--cv-gradient-progress-danger)
+  );
+  --live-demo-gradient-shimmer: var(--cv-frame-gradient-card-shimmer, var(--cv-gradient-card-shimmer));
+  --live-demo-gradient-mask-block: var(
+    --cv-frame-gradient-scroll-edge-mask-block-both,
+    var(--cv-gradient-scroll-edge-mask-block-both)
+  );
+  --live-demo-qr-background: var(--cv-frame-color-qr-background, var(--cv-color-qr-background));
+  --live-demo-qr-foreground: var(--cv-frame-color-qr-foreground, var(--cv-color-qr-foreground));
+}
+
+:root[data-theme='light'] .live-demo-preview :where(:not(cv-theme-provider):not(cv-theme-provider *)) {
+  --cv-color-bg: var(--cv-frame-color-bg);
+  --cv-color-surface: var(--cv-frame-color-surface);
+  --cv-color-surface-2: var(--cv-frame-color-surface-2);
+  --cv-color-surface-3: var(--cv-frame-color-surface-3);
+  --cv-color-surface-4: var(--cv-frame-color-surface-4);
+  --cv-color-surface-elevated: var(--cv-frame-color-surface-elevated);
+  --cv-color-surface-secondary: var(--cv-frame-color-surface-secondary);
+  --cv-color-surface-tertiary: var(--cv-frame-color-surface-tertiary);
+  --cv-color-surface-glass: var(--cv-frame-color-surface-glass);
+  --cv-color-surface-glass-strong: var(--cv-frame-color-surface-glass-strong);
+  --cv-color-surface-secondary-glass: var(--cv-frame-color-surface-secondary-glass);
+  --cv-color-surface-secondary-glass-strong: var(--cv-frame-color-surface-secondary-glass-strong);
+  --cv-color-surface-secondary-glass-soft: var(--cv-frame-color-surface-secondary-glass-soft);
+  --cv-color-surface-subtle: var(--cv-frame-color-surface-2);
+  --cv-color-surface-tertiary-glass: var(--cv-frame-color-surface-tertiary-glass);
+  --cv-color-surface-tertiary-glass-strong: var(--cv-frame-color-surface-tertiary-glass-strong);
+  --cv-color-border: var(--cv-frame-color-border);
+  --cv-color-border-faint: var(--cv-frame-color-border-faint);
+  --cv-color-border-muted: var(--cv-frame-color-border-muted);
+  --cv-color-border-soft: var(--cv-frame-color-border-soft);
+  --cv-color-border-strong: var(--cv-frame-color-border-strong);
+  --cv-color-border-glass: var(--cv-frame-color-border-glass);
+  --cv-color-text: var(--cv-frame-color-text);
+  --cv-color-text-muted: var(--cv-frame-color-text-muted);
+  --cv-color-text-subtle: var(--cv-frame-color-text-subtle);
+  --cv-color-text-strong: var(--cv-frame-color-text-strong);
+  --cv-color-text-strongest: var(--cv-frame-color-text-strongest);
+  --cv-color-primary: var(--cv-frame-color-primary);
+  --cv-color-primary-dark: var(--cv-frame-color-primary-dark);
+  --cv-color-primary-darker: var(--cv-frame-color-primary-darker);
+  --cv-color-primary-muted: var(--cv-frame-color-primary-muted);
+  --cv-color-primary-subtle: var(--cv-frame-color-primary-subtle);
+  --cv-color-primary-surface: var(--cv-frame-color-primary-surface);
+  --cv-color-primary-surface-strong: var(--cv-frame-color-primary-surface-strong);
+  --cv-color-primary-border: var(--cv-frame-color-primary-border);
+  --cv-color-primary-border-strong: var(--cv-frame-color-primary-border-strong);
+  --cv-color-primary-ring: var(--cv-frame-color-primary-ring);
+  --cv-color-on-primary: var(--cv-frame-color-on-primary);
+  --cv-color-success: var(--cv-frame-color-success);
+  --cv-color-success-surface: var(--cv-frame-color-success-surface);
+  --cv-color-success-surface-strong: var(--cv-frame-color-success-surface-strong);
+  --cv-color-success-border: var(--cv-frame-color-success-border);
+  --cv-color-success-border-strong: var(--cv-frame-color-success-border-strong);
+  --cv-color-warning: var(--cv-frame-color-warning);
+  --cv-color-warning-surface: var(--cv-frame-color-warning-surface);
+  --cv-color-warning-surface-strong: var(--cv-frame-color-warning-surface-strong);
+  --cv-color-warning-border: var(--cv-frame-color-warning-border);
+  --cv-color-warning-border-strong: var(--cv-frame-color-warning-border-strong);
+  --cv-color-danger: var(--cv-frame-color-danger);
+  --cv-color-danger-surface: var(--cv-frame-color-danger-surface);
+  --cv-color-danger-surface-strong: var(--cv-frame-color-danger-surface-strong);
+  --cv-color-danger-border: var(--cv-frame-color-danger-border);
+  --cv-color-danger-border-strong: var(--cv-frame-color-danger-border-strong);
+  --cv-color-info: var(--cv-frame-color-info);
+  --cv-color-info-surface: var(--cv-frame-color-info-surface);
+  --cv-color-info-surface-strong: var(--cv-frame-color-info-surface-strong);
+  --cv-color-info-border: var(--cv-frame-color-info-border);
+  --cv-color-info-border-strong: var(--cv-frame-color-info-border-strong);
+  --cv-color-focus-ring: var(--cv-frame-color-focus-ring);
+  --cv-color-active: var(--cv-frame-color-active);
+  --cv-color-selected: var(--cv-frame-color-selected);
+}
+
+:root[data-theme='light'] .live-demo-preview {
+  color: var(--cv-frame-color-text);
+}
+
+:root[data-theme='light']
+  .live-demo-preview
+  [class*='-demo-shell']:not(cv-theme-provider):not(cv-theme-provider *) {
+  border-color: var(--cv-frame-color-border-soft);
+  background: var(--cv-frame-color-surface);
+  color: var(--cv-frame-color-text-muted);
+  box-shadow: none;
+}
+
+:root[data-theme='light']
+  .live-demo-preview
+  [class*='-demo-shell']:not(cv-theme-provider):not(cv-theme-provider *)::before,
+:root[data-theme='light']
+  .live-demo-preview
+  [class*='-demo-shell']:not(cv-theme-provider):not(cv-theme-provider *)::after {
+  opacity: 0;
+}
+
+:root[data-theme='light']
+  .live-demo-preview
+  :where(
+    [class*='-demo-hero'],
+    [class*='-demo-board'],
+    [class*='-demo-section'],
+    [class*='-demo-workbench'],
+    [class*='-demo-stage'],
+    [class*='-demo-route']
+  ):not(cv-theme-provider):not(cv-theme-provider *) {
+  border-color: var(--cv-frame-color-border-soft);
+}
+
+:root[data-theme='light']
+  .live-demo-preview
+  :where([class*='-demo-kicker'], [class*='-demo-label']):not(cv-theme-provider):not(cv-theme-provider *) {
+  color: var(--cv-frame-color-primary-darker);
+}
+
+:root[data-theme='light']
+  .live-demo-preview
+  :where(h1, h2, h3, h4, h5, h6, strong):not(cv-theme-provider):not(cv-theme-provider *) {
+  color: var(--cv-frame-color-text-strong);
+}
+
+:root[data-theme='light']
+  .live-demo-preview
+  :where(p, small, dd, figcaption):not(cv-theme-provider):not(cv-theme-provider *) {
+  color: var(--cv-frame-color-text-muted);
+}
+
+:root[data-theme='light']
+  .live-demo-preview
+  :where([class*='-demo-card'], [class*='-demo-command'], [class*='-demo-console'], [class*='-demo-details'], [class*='-demo-field'], [class*='-demo-item'], [class*='-demo-layer'], [class*='-demo-log'], [class*='-demo-metric'], [class*='-demo-panel'], [class*='-demo-product'], [class*='-demo-readout'], [class*='-demo-record'], [class*='-demo-scroll'], [class*='-demo-side'], [class*='-demo-stage'], [class*='-demo-state'], [class*='-demo-step'], [class*='-demo-tile'], [class*='-demo-window']):not(cv-theme-provider):not(cv-theme-provider *) {
+  border-color: var(--cv-frame-color-border-soft);
+  background: none;
+  color: var(--cv-frame-color-text-muted);
+  box-shadow: none;
+}
+
+:root[data-theme='light']
+  .live-demo-preview
+  :where([class*='-demo-card'], [class*='-demo-command'], [class*='-demo-console'], [class*='-demo-details'], [class*='-demo-field'], [class*='-demo-item'], [class*='-demo-layer'], [class*='-demo-log'], [class*='-demo-metric'], [class*='-demo-panel'], [class*='-demo-product'], [class*='-demo-readout'], [class*='-demo-record'], [class*='-demo-scroll'], [class*='-demo-side'], [class*='-demo-stage'], [class*='-demo-state'], [class*='-demo-step'], [class*='-demo-tile'], [class*='-demo-window']):not(cv-theme-provider):not(cv-theme-provider *)
+  :where([class*='-demo-card'], [class*='-demo-command'], [class*='-demo-console'], [class*='-demo-details'], [class*='-demo-field'], [class*='-demo-item'], [class*='-demo-layer'], [class*='-demo-log'], [class*='-demo-metric'], [class*='-demo-panel'], [class*='-demo-product'], [class*='-demo-readout'], [class*='-demo-record'], [class*='-demo-scroll'], [class*='-demo-side'], [class*='-demo-stage'], [class*='-demo-state'], [class*='-demo-step'], [class*='-demo-tile'], [class*='-demo-window']):not(cv-theme-provider):not(cv-theme-provider *) {
+  border-color: var(--cv-frame-color-border-faint);
+  background: none;
+}
+
+:root[data-theme='light']
+  .live-demo-preview
+  :where([class*='-demo-cases'], [class*='-demo-readout'], [class*='-demo-state'], [class*='-demo-vault']):not(
+    cv-theme-provider
+  ):not(cv-theme-provider *)
+  > :where(article, div):not(cv-theme-provider):not(cv-theme-provider *) {
+  border-color: var(--cv-frame-color-border-faint);
+  background: none;
+  color: var(--cv-frame-color-text-muted);
+}
+
+:root[data-theme='light']
+  .live-demo-preview
+  :where([class*='-demo-metrics'], [class*='-demo-readout'], [class*='-demo-vault']):not(
+    cv-theme-provider
+  ):not(cv-theme-provider *)
+  :where(dt, span):not(cv-theme-provider):not(cv-theme-provider *) {
+  color: var(--cv-frame-color-text-muted);
+}
+
+:root[data-theme='light']
+  .live-demo-preview
+  :where([class*='-demo-badge'], [class*='-demo-chip'], [class*='-demo-pill'], [class*='-demo-status'], [class*='-demo-tag'], [class*='-demo-token']):not(cv-theme-provider):not(cv-theme-provider *) {
+  border-color: var(--cv-frame-color-primary-border);
+  background: var(--cv-frame-color-primary-surface);
+  color: var(--cv-frame-color-primary-darker);
+}
+
+:root[data-theme='light']
+  .live-demo-preview
+  [class*='-demo-toolbar']:not(cv-theme-provider):not(cv-theme-provider *)
+  :where(span, button):not(cv-theme-provider):not(cv-theme-provider *) {
+  border-color: var(--cv-frame-color-primary-border);
+  background: var(--cv-frame-color-primary-surface);
+  color: var(--cv-frame-color-primary-darker);
+}
+
+:root[data-theme='light']
+  .live-demo-preview
+  :where(table, thead, tbody, tr, th, td):not(cv-theme-provider):not(cv-theme-provider *) {
+  border-color: var(--cv-frame-color-border-soft);
+}
+
+:root[data-theme='light'] .live-demo-preview :where(th, td):not(cv-theme-provider):not(cv-theme-provider *) {
+  background: var(--cv-frame-color-surface);
+  color: var(--cv-frame-color-text);
+}
+
+:root[data-theme='light']
+  .live-demo-preview
+  [class*='-demo-shell']:not(cv-theme-provider):not(cv-theme-provider *)
+  cv-table:not(cv-theme-provider):not(cv-theme-provider *) {
+  --cv-color-surface: var(--cv-frame-color-surface);
+  --cv-color-surface-glass-strong: var(--cv-frame-color-surface-glass-strong);
+  --cv-color-surface-secondary-glass-strong: var(--cv-frame-color-surface-secondary-glass-strong);
+  --cv-color-border: var(--cv-frame-color-border);
+  --cv-color-border-soft: var(--cv-frame-color-border-soft);
+  --cv-color-primary: var(--cv-frame-color-primary);
+  --cv-color-primary-surface: var(--cv-frame-color-primary-surface);
+  --cv-color-success: var(--cv-frame-color-success);
+  --cv-color-warning: var(--cv-frame-color-warning);
+  --cv-color-danger: var(--cv-frame-color-danger);
+  --cv-color-text: var(--cv-frame-color-text);
+  --cv-table-border-color: var(--cv-frame-color-border-soft);
+  --cv-table-focus-outline-color: var(--cv-frame-color-focus-ring);
+  --cv-table-row-selected-background: var(--cv-frame-color-primary-surface);
+}
+
+:root[data-theme='light']
+  .live-demo-preview
+  [class*='-demo-shell']:not(cv-theme-provider):not(cv-theme-provider *)
+  cv-table-column:not(cv-theme-provider):not(cv-theme-provider *) {
+  color: var(--cv-frame-color-text-muted);
+}
+
+:root[data-theme='light']
+  .live-demo-preview
+  [class*='-demo-shell']:not(cv-theme-provider):not(cv-theme-provider *)
+  cv-table-cell:not(cv-theme-provider):not(cv-theme-provider *) {
+  color: var(--cv-frame-color-text);
+}
+
+:root[data-theme='light']
+  .live-demo-preview
+  [class*='-demo-shell']:not(cv-theme-provider):not(cv-theme-provider *)
+  cv-table-cell[row-header]:not(cv-theme-provider):not(cv-theme-provider *) {
+  color: var(--cv-frame-color-text-strong);
+}
+
+:root[data-theme='light']
+  .live-demo-preview
+  :where(pre, kbd):not(cv-theme-provider):not(cv-theme-provider *) {
+  border-color: var(--cv-frame-color-border-faint);
+  background: var(--cv-frame-color-surface-2);
+  color: var(--cv-frame-color-text-strong);
+}
+
+:root[data-theme='light']
+  .live-demo-preview
+  [class*='-demo-shell']:not(cv-theme-provider):not(cv-theme-provider *)
+  cv-popover:not(cv-theme-provider):not(cv-theme-provider *) {
+  --cv-popover-arrow-background: var(--cv-frame-color-surface);
+  --cv-popover-arrow-border-color: var(--cv-frame-color-border-soft);
+}
+
+:root[data-theme='light']
+  .live-demo-preview
+  [class*='-demo-shell']:not(cv-theme-provider):not(cv-theme-provider *)
+  cv-popover:not(cv-theme-provider):not(cv-theme-provider *)::part(trigger) {
+  border-color: var(--cv-frame-color-border-soft);
+  background: var(--cv-frame-color-surface);
+  color: var(--cv-frame-color-text-strong);
+  box-shadow: none;
+}
+
+:root[data-theme='light']
+  .live-demo-preview
+  [class*='-demo-shell']:not(cv-theme-provider):not(cv-theme-provider *)
+  cv-popover:not(cv-theme-provider):not(cv-theme-provider *)::part(content) {
+  border-color: var(--cv-frame-color-border-soft);
+  background: var(--cv-frame-color-surface);
+  color: var(--cv-frame-color-text);
+  box-shadow: var(--cv-frame-shadow-lg);
+}
+
+:root[data-theme='light']
+  .live-demo-preview
+  :where(cv-button, cv-card, cv-callout, cv-empty-state):not(cv-theme-provider):not(cv-theme-provider *) {
+  --cv-color-border: var(--cv-frame-color-border);
+  --cv-color-surface: var(--cv-frame-color-surface);
+  --cv-color-text: var(--cv-frame-color-text);
+  --cv-color-text-muted: var(--cv-frame-color-text-muted);
+  --cv-color-text-strong: var(--cv-frame-color-text-strong);
+  --cv-color-text-strongest: var(--cv-frame-color-text-strongest);
+  --cv-color-primary: var(--cv-frame-color-primary);
+  --cv-color-primary-dark: var(--cv-frame-color-primary-dark);
+  --cv-color-primary-darker: var(--cv-frame-color-primary-darker);
+  --cv-color-primary-muted: var(--cv-frame-color-primary-muted);
+  --cv-color-primary-subtle: var(--cv-frame-color-primary-subtle);
+  --cv-color-primary-border: var(--cv-frame-color-primary-border);
+  --cv-color-primary-border-strong: var(--cv-frame-color-primary-border-strong);
+  --cv-color-primary-ring: var(--cv-frame-color-primary-ring);
+  --cv-color-primary-surface: var(--cv-frame-color-primary-surface);
+  --cv-color-primary-surface-strong: var(--cv-frame-color-primary-surface-strong);
+  --cv-color-on-primary: var(--cv-frame-color-on-primary);
+}

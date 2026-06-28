@@ -9,7 +9,7 @@ Graphical display of a numeric value within a known range, such as disk usage or
 ## Usage
 
 ```html
-<div class="meter-demo-shell" data-demo="meter" data-theme="dark" data-live-demo-height="780">
+<div class="meter-demo-shell" data-demo="meter" data-live-demo-height="780">
   <section class="meter-demo-hero" aria-labelledby="meter-demo-title">
     <div class="meter-demo-copy">
       <span class="meter-demo-kicker">Known range measurement</span>
@@ -158,7 +158,8 @@ Graphical display of a numeric value within a known range, such as disk usage or
       <div>
         <dt>Meter contract</dt>
         <dd>
-          <code>value</code> plus optional <code>low</code>, <code>high</code>, and <code>optimum</code>
+          <code>value</code> plus optional <code>low</code>, <code>high</code>, and
+          <code>optimum</code>
         </dd>
       </div>
       <div>
@@ -177,9 +178,9 @@ Graphical display of a numeric value within a known range, such as disk usage or
 ```
 <cv-meter> (host)
 └── <div part="base" role="meter">
-    └── <div part="indicator" data-status="…">
-        └── <span part="label">
-            └── <slot>
+    ├── <div part="indicator" data-status="…">
+    └── <span part="label">
+        └── <slot>
 ```
 
 ## Attributes
@@ -199,19 +200,19 @@ Graphical display of a numeric value within a known range, such as disk usage or
 
 ## Slots
 
-| Slot        | Description                                        |
-| ----------- | -------------------------------------------------- |
-| `(default)` | Custom label content rendered inside the indicator |
+| Slot        | Description                                       |
+| ----------- | ------------------------------------------------- |
+| `(default)` | Custom label content rendered above the indicator |
 
 Use `value-text` for meaningful spoken text; the default slot is visual label content only.
 
 ## CSS Parts
 
-| Part        | Element  | Description                                            |
-| ----------- | -------- | ------------------------------------------------------ |
-| `base`      | `<div>`  | Root meter element with `role="meter"`                 |
-| `indicator` | `<div>`  | Fill bar reflecting current percentage and status zone |
-| `label`     | `<span>` | Wrapper around the default slot inside the indicator   |
+| Part        | Element  | Description                                                                |
+| ----------- | -------- | -------------------------------------------------------------------------- |
+| `base`      | `<div>`  | Root meter element with `role="meter"`                                     |
+| `indicator` | `<div>`  | Fill bar reflecting current percentage and status zone through `transform` |
+| `label`     | `<span>` | Wrapper around the default slot inside the base without being transformed  |
 
 ## CSS Custom Properties
 
@@ -222,7 +223,7 @@ Use `value-text` for meaningful spoken text; the default slot is visual label co
 | `--cv-meter-border-radius`       | `999px`                            | Border radius of the track and indicator                                            |
 | `--cv-meter-label-color`         | `var(--cv-color-text, #e8ecf6)`    | Text color for the label slot content                                               |
 | `--cv-meter-label-font-size`     | Calculated from track height       | Font size for the label slot content                                                |
-| `--cv-meter-transition-duration` | `var(--cv-duration-normal, 220ms)` | Transition duration for indicator width                                             |
+| `--cv-meter-transition-duration` | `var(--cv-duration-normal, 220ms)` | Transition duration for indicator transform                                         |
 | `--cv-meter-optimum-color`       | `var(--cv-color-success, #6ef7c8)` | Indicator color when status is `optimum`                                            |
 | `--cv-meter-suboptimum-color`    | `var(--cv-color-warning, #ffbe65)` | Indicator color when status is `low` (sub-optimum)                                  |
 | `--cv-meter-danger-color`        | `var(--cv-color-danger, #ff7a8a)`  | Indicator color when status is `high` (danger zone)                                 |
@@ -270,10 +271,10 @@ Note: `data-status` is set on the `[part="indicator"]` element, not on the host.
 | `aria-labelledby`  | attr → option | passed as `ariaLabelledBy` to `createMeter(options)`           |
 | `aria-describedby` | attr → option | passed as `ariaDescribedBy` to `createMeter(options)`          |
 
-| Headless State       | Direction     | DOM Reflection                                          |
-| -------------------- | ------------- | ------------------------------------------------------- |
-| `state.percentage()` | state → style | `--cv-meter-width` inline style on `[part="indicator"]` |
-| `state.status()`     | state → attr  | `data-status` attribute on `[part="indicator"]`         |
+| Headless State       | Direction     | DOM Reflection                                                               |
+| -------------------- | ------------- | ---------------------------------------------------------------------------- |
+| `state.percentage()` | state → style | Component-owned `--cv-meter-value-scale` on the host for indicator transform |
+| `state.status()`     | state → attr  | `data-status` attribute on `[part="indicator"]`                              |
 
 - `contracts.getMeterProps()` is spread onto the `[part="base"]` element to apply `role`, `aria-valuenow`, `aria-valuemin`, `aria-valuemax`, `aria-valuetext`, `aria-label`, `aria-labelledby`, and `aria-describedby`.
 - When `min`, `max`, `low`, `high`, `optimum`, `value-text`, or ARIA attributes change, the headless model is recreated with new options.

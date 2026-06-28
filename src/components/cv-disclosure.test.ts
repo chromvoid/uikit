@@ -629,9 +629,7 @@ describe('cv-disclosure', () => {
     it('handles two immediate trigger clicks as open then close', async () => {
       const el = await createDisclosure()
       const changes: boolean[] = []
-      el.addEventListener('cv-change', (e) =>
-        changes.push((e as CustomEvent<{open: boolean}>).detail.open),
-      )
+      el.addEventListener('cv-change', (e) => changes.push((e as CustomEvent<{open: boolean}>).detail.open))
 
       const trigger = getTrigger(el)
       trigger.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))

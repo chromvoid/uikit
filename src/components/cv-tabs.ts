@@ -241,8 +241,20 @@ export class CVTabs extends ReatomLitElement {
     return this.getAllPanelElements().filter((panel) => this.isDefaultPanelElement(panel))
   }
 
+  private getTabValue(tab: CVTab): string {
+    return this.normalizeText(tab.value) || this.normalizeText(tab.getAttribute('value'))
+  }
+
+  private isTabDisabled(tab: CVTab): boolean {
+    return tab.disabled || tab.hasAttribute('disabled')
+  }
+
+  private isTabSelected(tab: CVTab): boolean {
+    return tab.selected || tab.hasAttribute('selected')
+  }
+
   private ensureTabValue(tab: CVTab, index: number): string {
-    const normalized = tab.value?.trim()
+    const normalized = this.getTabValue(tab)
     if (normalized) return normalized
 
     const fallback = `tab-${index + 1}`
@@ -257,7 +269,7 @@ export class CVTabs extends ReatomLitElement {
     }
 
     for (const [index, tab] of tabElements.entries()) {
-      if (tab.selected && !tab.disabled) {
+      if (this.isTabSelected(tab) && !this.isTabDisabled(tab)) {
         return this.ensureTabValue(tab, index)
       }
     }
@@ -286,7 +298,7 @@ export class CVTabs extends ReatomLitElement {
     const pendingCloseRequest = this.pendingCloseRequest
     let emitCloseTransition = false
     if (pendingCloseRequest) {
-      const closeReflectedInDom = !tabElements.some((tab) => tab.value?.trim() === pendingCloseRequest.id)
+      const closeReflectedInDom = !tabElements.some((tab) => this.getTabValue(tab) === pendingCloseRequest.id)
 
       if (closeReflectedInDom) {
         if (pendingCloseRequest.wasSelected) {
@@ -329,7 +341,7 @@ export class CVTabs extends ReatomLitElement {
 
       return {
         id,
-        disabled: element.disabled,
+        disabled: this.isTabDisabled(element),
         element,
         panel,
       }

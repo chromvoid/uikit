@@ -162,46 +162,124 @@ When the `arrow` boolean attribute is present, the `[part="arrow"]` element is r
 ## Usage
 
 ```html
-<!-- Basic popover -->
-<cv-popover data-live-demo-height="420">
-  <span slot="trigger">Options</span>
-  <p>Popover content here</p>
-</cv-popover>
+<div class="popover-demo-shell" data-demo="popover" data-live-demo-inline>
+  <section class="popover-demo-hero" aria-labelledby="popover-demo-title">
+    <div class="popover-demo-copy">
+      <span class="popover-demo-kicker">Anchored non-modal overlay</span>
+      <h3 id="popover-demo-title">Expose dense controls without leaving the current task</h3>
+      <p>
+        Use popovers for contextual actions, short forms, route details, or guidance that must stay tied to a
+        visible trigger.
+      </p>
+    </div>
 
-<!-- Custom placement -->
-<cv-popover placement="top" offset="8">
-  <span slot="trigger">Help</span>
-  <p>Helpful information</p>
-</cv-popover>
+    <div class="popover-demo-stage" aria-label="Vault route toolbar example">
+      <div class="popover-demo-toolbar">
+        <span class="popover-demo-status">Visible route: public vault</span>
 
-<!-- With arrow -->
-<cv-popover arrow placement="bottom">
-  <span slot="trigger">Info</span>
-  <p>Content with arrow pointer</p>
-</cv-popover>
+        <cv-popover
+          class="popover-demo-primary"
+          arrow
+          placement="bottom-start"
+          offset="10"
+          aria-label="Exposure route controls"
+        >
+          <span slot="trigger">Exposure route</span>
+          <div class="popover-demo-panel">
+            <div class="popover-demo-panel-header">
+              <span class="popover-demo-label">Route state</span>
+              <strong>Decoy surface active</strong>
+            </div>
+            <dl class="popover-demo-readout">
+              <div>
+                <dt>Anchor</dt>
+                <dd>trigger</dd>
+              </div>
+              <div>
+                <dt>Dismiss</dt>
+                <dd>Escape, outside pointer, outside focus</dd>
+              </div>
+              <div>
+                <dt>Placement</dt>
+                <dd>bottom-start + arrow</dd>
+              </div>
+            </dl>
+            <div class="popover-demo-actions">
+              <cv-button variant="primary">Confirm route</cv-button>
+              <cv-button variant="secondary">Inspect policy</cv-button>
+            </div>
+          </div>
+        </cv-popover>
 
-<!-- Close policies disabled -->
-<cv-popover close-on-escape="false" close-on-outside-pointer="false">
-  <span slot="trigger">Sticky</span>
-  <p>Only closes via trigger toggle</p>
-</cv-popover>
+        <cv-popover arrow placement="bottom-end" offset="10" aria-label="Audit controls">
+          <span slot="trigger">Audit</span>
+          <div class="popover-demo-compact">
+            <strong>Last check passed</strong>
+            <p>Native popover support is used when available; the headless model still owns state.</p>
+          </div>
+        </cv-popover>
+      </div>
 
-<!-- Anchored to host -->
-<cv-popover anchor="host" placement="bottom-end">
-  <span slot="trigger">Menu</span>
-  <nav>Navigation items</nav>
-</cv-popover>
+      <div class="popover-demo-vault">
+        <div>
+          <span>Public layer</span>
+          <strong>2 files visible</strong>
+        </div>
+        <div>
+          <span>Hidden layer</span>
+          <strong>not mounted</strong>
+        </div>
+        <div>
+          <span>Hardware core</span>
+          <strong>paired</strong>
+        </div>
+      </div>
+    </div>
+  </section>
 
-<!-- Programmatic open -->
-<cv-popover open>
-  <span slot="trigger">Already open</span>
-  <p>Visible on mount</p>
-</cv-popover>
+  <section class="popover-demo-matrix" aria-labelledby="popover-demo-matrix-title">
+    <div class="popover-demo-section-header">
+      <span class="popover-demo-kicker">Placement variants</span>
+      <h4 id="popover-demo-matrix-title">Same contract, different anchor geometry</h4>
+    </div>
 
-<!-- With custom arrow -->
-<cv-popover arrow placement="top">
-  <span slot="trigger">Custom arrow</span>
-  <svg slot="arrow" viewBox="0 0 16 8"><polygon points="8,0 16,8 0,8" /></svg>
-  <p>Content</p>
-</cv-popover>
+    <div class="popover-demo-cases">
+      <article>
+        <span class="popover-demo-label">Top</span>
+        <p>Useful for bottom toolbars and compact inspector controls.</p>
+        <cv-popover arrow placement="top" offset="8">
+          <span slot="trigger">Open top</span>
+          <div class="popover-demo-compact">
+            <strong>Policy note</strong>
+            <p>Arrow position follows the resolved placement.</p>
+          </div>
+        </cv-popover>
+      </article>
+
+      <article>
+        <span class="popover-demo-label">Right</span>
+        <p>Use beside lists, tree items, and narrow rail controls.</p>
+        <cv-popover arrow placement="right-start" offset="8">
+          <span slot="trigger">Open right</span>
+          <div class="popover-demo-compact">
+            <strong>Quick action</strong>
+            <p>Panel size is clamped to the viewport.</p>
+          </div>
+        </cv-popover>
+      </article>
+
+      <article>
+        <span class="popover-demo-label">Host anchor</span>
+        <p>Use when the panel should align to the component box instead of the trigger button.</p>
+        <cv-popover anchor="host" placement="bottom-end" offset="8">
+          <span slot="trigger">Host aligned</span>
+          <div class="popover-demo-compact">
+            <strong>Aligned to host</strong>
+            <p>The <code>anchor</code> attribute changes the positioning reference.</p>
+          </div>
+        </cv-popover>
+      </article>
+    </div>
+  </section>
+</div>
 ```

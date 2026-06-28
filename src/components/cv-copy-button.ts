@@ -250,11 +250,9 @@ export class CVCopyButton extends ReatomLitElement {
         opacity: 0;
         pointer-events: none;
         transform: scale(0.78);
-        filter: blur(2px);
         transition:
           opacity var(--cv-duration-fast, 120ms) var(--cv-easing-standard, ease),
-          transform var(--cv-duration-fast, 120ms) var(--cv-easing-decelerate, ease-out),
-          filter var(--cv-duration-fast, 120ms) var(--cv-easing-standard, ease);
+          transform var(--cv-duration-fast, 120ms) var(--cv-easing-decelerate, ease-out);
       }
 
       [part='copy-icon'] svg,
@@ -312,7 +310,6 @@ export class CVCopyButton extends ReatomLitElement {
       :host([status='error']) [part='error-icon'] {
         opacity: 1;
         transform: scale(1);
-        filter: blur(0);
       }
 
       /* --- status: success --- */
@@ -350,7 +347,6 @@ export class CVCopyButton extends ReatomLitElement {
         [part='success-icon'],
         [part='error-icon'] {
           transform: none;
-          filter: none;
           transition: opacity var(--cv-duration-fast, 120ms) var(--cv-easing-standard, ease);
         }
       }

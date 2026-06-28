@@ -297,7 +297,6 @@ export class CVNumber extends FormAssociatedReatomElement {
 
       :host([stepper]) [part='base'] {
         touch-action: pan-y pinch-zoom;
-        -webkit-tap-highlight-color: transparent;
       }
 
       @media (prefers-reduced-motion: reduce) {

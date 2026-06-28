@@ -18,6 +18,7 @@ export const componentResetStyles = css`
   *::before,
   *::after {
     box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
   }
 
   h1,

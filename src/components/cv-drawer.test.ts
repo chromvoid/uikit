@@ -116,9 +116,7 @@ describe('cv-drawer', () => {
     it('lays out header text and close control in a stable grid', () => {
       const cssText = stylesToText(CVDrawer.styles)
 
-      expect(cssText).toMatch(
-        /\[part='header'\]\s*{[\s\S]*grid-template-columns:\s*minmax\(0,\s*1fr\) auto;/,
-      )
+      expect(cssText).toMatch(/\[part='header'\]\s*{[\s\S]*grid-template-columns:\s*minmax\(0,\s*1fr\) auto;/)
       expect(cssText).toMatch(/\[part='header-close'\]\s*{[\s\S]*grid-column:\s*2;/)
       expect(cssText).toMatch(/\[part='header-close'\]\s*{[\s\S]*align-self:\s*start;/)
       expect(cssText).toMatch(/\[part='title'\]\s*{[\s\S]*grid-column:\s*1;/)
@@ -511,13 +509,9 @@ describe('cv-drawer', () => {
       const cssText = stylesToText(CVDrawer.styles)
 
       expect(cssText).toContain('inline-size: min(var(--cv-drawer-size, 360px), 100%);')
-      expect(cssText).toContain(
-        'max-inline-size: min(var(--cv-drawer-max-size, calc(100dvh - 32px)), 100%);',
-      )
+      expect(cssText).toContain('max-inline-size: min(var(--cv-drawer-max-size, calc(100dvh - 32px)), 100%);')
       expect(cssText).toContain('block-size: min(var(--cv-drawer-size, 360px), 100%);')
-      expect(cssText).toContain(
-        'max-block-size: min(var(--cv-drawer-max-size, calc(100dvh - 32px)), 100%);',
-      )
+      expect(cssText).toContain('max-block-size: min(var(--cv-drawer-max-size, calc(100dvh - 32px)), 100%);')
     })
   })
 
@@ -751,9 +745,7 @@ describe('cv-drawer', () => {
       const el = await createDrawer({open: true, placement: 'start', dragToClose: true})
       const panel = getPanel(el)
 
-      panel.dispatchEvent(
-        createPointerEvent('pointerdown', {clientX: 240, clientY: 40, isPrimary: false}),
-      )
+      panel.dispatchEvent(createPointerEvent('pointerdown', {clientX: 240, clientY: 40, isPrimary: false}))
       expect(panel.getAttribute('data-dragging')).toBeNull()
 
       panel.dispatchEvent(createPointerEvent('pointermove', {clientX: 80, clientY: 40, isPrimary: false}))

@@ -7,15 +7,6 @@
   overflow: hidden;
   padding: clamp(16px, 3cqi, 22px);
   color: var(--live-demo-muted);
-  --cv-color-border: rgba(118, 181, 222, 0.24);
-  --cv-color-info: #65d7ff;
-  --cv-color-on-primary: #06131a;
-  --cv-color-primary: #65d7ff;
-  --cv-color-primary-dark: #00b7cc;
-  --cv-color-surface: #101722;
-  --cv-color-surface-elevated: #162030;
-  --cv-color-text: #e8ecf6;
-  --cv-color-text-muted: rgba(190, 206, 226, 0.78);
 }
 
 .guidance-anchor-demo-shell,
@@ -57,7 +48,7 @@
 
 .guidance-anchor-demo-kicker,
 .guidance-anchor-demo-flow dt {
-  color: #94e9ff;
+  color: var(--live-demo-cyan);
 }
 
 .guidance-anchor-demo-copy h3,
@@ -96,7 +87,7 @@
   padding: 12px;
   border: 1px solid var(--live-demo-border);
   border-radius: 12px;
-  background: rgba(238, 245, 255, 0.04);
+  background: var(--live-demo-surface-highlight);
 }
 
 .guidance-anchor-demo-flow dd {
@@ -111,10 +102,9 @@
   display: grid;
   gap: 16px;
   padding: clamp(14px, 3cqi, 18px);
-  border: 1px solid rgba(118, 181, 222, 0.18);
+  border: 1px solid var(--live-demo-border-muted);
   border-radius: 14px;
-  background:
-    linear-gradient(180deg, rgba(16, 26, 40, 0.82), rgba(8, 14, 23, 0.78)), rgba(238, 245, 255, 0.026);
+  background: var(--live-demo-gradient-panel);
 }
 
 .guidance-anchor-demo-toolbar {
@@ -160,7 +150,7 @@
   content: '';
   position: absolute;
   inset: -7px;
-  border: 1px solid rgba(148, 233, 255, 0.78);
+  border: 1px solid var(--live-demo-cyan-border-strong);
   border-radius: 14px;
   opacity: 0;
   pointer-events: none;
@@ -193,9 +183,9 @@
   gap: 12px;
   align-items: center;
   padding: 12px;
-  border: 1px solid rgba(118, 181, 222, 0.14);
+  border: 1px solid var(--live-demo-border-muted);
   border-radius: 10px;
-  background: rgba(238, 245, 255, 0.035);
+  background: var(--live-demo-surface-highlight);
 }
 
 .guidance-anchor-demo-file {
@@ -221,16 +211,16 @@
   inline-size: 44px;
   align-self: start;
   margin-block-start: 40px;
-  background: linear-gradient(90deg, rgba(148, 233, 255, 0), rgba(148, 233, 255, 0.72));
+  background: var(--live-demo-gradient-panel);
 }
 
 .guidance-anchor-demo-callout cv-guidance-panel {
-  --cv-guidance-panel-background: rgba(18, 29, 44, 0.94);
-  --cv-guidance-panel-border-color: rgba(148, 233, 255, 0.38);
-  --cv-guidance-panel-shadow: 0 18px 38px rgba(0, 0, 0, 0.26);
-  --cv-guidance-panel-title-color: #eef5ff;
-  --cv-guidance-panel-body-color: rgba(190, 206, 226, 0.78);
-  --cv-guidance-panel-progress-color: #bff3ff;
+  --cv-guidance-panel-background: var(--live-demo-surface);
+  --cv-guidance-panel-border-color: var(--live-demo-cyan-border);
+  --cv-guidance-panel-shadow: 0 18px 38px var(--cv-alpha-black-25);
+  --cv-guidance-panel-title-color: var(--live-demo-text-strongest);
+  --cv-guidance-panel-body-color: var(--live-demo-muted);
+  --cv-guidance-panel-progress-color: var(--live-demo-text);
 }
 
 .guidance-anchor-demo-inspector {
@@ -239,9 +229,9 @@
   gap: 12px;
   align-items: center;
   padding: 14px;
-  border: 1px solid rgba(101, 215, 255, 0.22);
+  border: 1px solid var(--live-demo-cyan-border);
   border-radius: 12px;
-  background: rgba(101, 215, 255, 0.06);
+  background: var(--live-demo-cyan-surface);
 }
 
 .guidance-anchor-demo-inspector div {
@@ -260,10 +250,10 @@
   min-inline-size: 0;
   overflow: hidden;
   padding: 10px 12px;
-  border: 1px solid rgba(101, 215, 255, 0.24);
+  border: 1px solid var(--live-demo-cyan-border);
   border-radius: 10px;
-  background: rgba(4, 10, 17, 0.62);
-  color: #bff3ff;
+  background: var(--live-demo-surface-glass-strong);
+  color: var(--live-demo-text);
   font-family: var(--vp-font-family-mono);
   font-size: 0.78rem;
   line-height: 1.45;

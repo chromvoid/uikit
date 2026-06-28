@@ -42,6 +42,25 @@ applyTheme(document, 'sunset')
 `mode` supports `light`, `dark`, and `system`. In `system` mode the provider follows
 `prefers-color-scheme`.
 
+## Let users tune a constrained palette
+
+Use `cv-theme-palette-controller` with `cv-theme-palette-editor` when the user should tune a
+safe HWB recipe instead of editing raw CSS tokens.
+
+```html
+<cv-theme-provider id="app-theme" mode="system">
+  <main>App content</main>
+</cv-theme-provider>
+
+<cv-theme-palette-controller for="app-theme" storage-key="cv-theme-palette:v1">
+  <cv-theme-palette-editor></cv-theme-palette-editor>
+</cv-theme-palette-controller>
+```
+
+Draft edits preview immediately on the target provider. Save persists the compact recipe to
+`localStorage` and emits `cv-palette-save` with the recipe plus resolved light/dark token maps for
+app-level or SSR persistence.
+
 ## Apply themes programmatically
 
 ```ts

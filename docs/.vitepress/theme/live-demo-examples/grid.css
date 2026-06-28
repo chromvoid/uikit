@@ -7,16 +7,13 @@
   min-inline-size: 0;
   overflow: hidden;
   padding: 20px;
-  border: 1px solid rgba(118, 181, 222, 0.18);
+  border: 1px solid var(--live-demo-border-muted);
   border-radius: 16px;
   color: var(--live-demo-muted);
-  background:
-    linear-gradient(180deg, rgba(12, 20, 32, 0.98), rgba(7, 13, 22, 0.98)),
-    linear-gradient(135deg, rgba(101, 215, 255, 0.08), transparent 38%),
-    linear-gradient(315deg, rgba(179, 136, 255, 0.055), transparent 42%);
+  background: var(--live-demo-gradient-primary-soft);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.04),
-    0 18px 42px rgba(0, 0, 0, 0.22);
+    inset 0 1px 0 var(--cv-alpha-white-4),
+    0 18px 42px var(--cv-alpha-black-14);
 }
 
 .grid-demo-shell,
@@ -75,10 +72,10 @@
   min-block-size: 28px;
   max-inline-size: 100%;
   padding: 5px 9px;
-  border: 1px solid rgba(143, 220, 255, 0.22);
+  border: 1px solid var(--live-demo-cyan-border);
   border-radius: 999px;
-  background: rgba(238, 245, 255, 0.05);
-  color: rgba(226, 239, 255, 0.82);
+  background: var(--live-demo-surface-highlight);
+  color: var(--live-demo-text);
   font-family: var(--vp-font-family-mono);
   font-size: 0.72rem;
   line-height: 1.2;
@@ -94,24 +91,14 @@
 .grid-demo-table-scroll {
   min-inline-size: 0;
   overflow-x: auto;
-  border: 1px solid rgba(118, 181, 222, 0.16);
+  border: 1px solid var(--live-demo-border-muted);
   border-radius: 14px;
-  background:
-    linear-gradient(180deg, rgba(7, 13, 22, 0.46), rgba(7, 13, 22, 0.78)),
-    linear-gradient(90deg, rgba(101, 215, 255, 0.055), transparent 44%);
+  background: var(--live-demo-gradient-primary-soft);
 }
 
 .grid-demo-shell cv-grid {
   inline-size: max(100%, 520px);
   min-inline-size: 520px;
-  --cv-color-surface: rgba(10, 17, 27, 0.9);
-  --cv-color-surface-glass-strong: rgba(238, 245, 255, 0.07);
-  --cv-color-border: rgba(143, 220, 255, 0.2);
-  --cv-color-border-soft: rgba(143, 220, 255, 0.12);
-  --cv-color-active: rgba(101, 215, 255, 0.14);
-  --cv-color-primary-ring: rgba(101, 215, 255, 0.19);
-  --cv-color-primary: var(--live-demo-cyan);
-  --cv-color-text: var(--live-demo-text);
   --cv-radius-md: 14px;
 }
 
@@ -122,7 +109,7 @@
 }
 
 .grid-demo-shell cv-grid-column {
-  color: rgba(226, 239, 255, 0.9);
+  color: var(--live-demo-text);
   font-family: var(--vp-font-family-mono);
   font-size: 0.74rem;
   letter-spacing: 0;
@@ -137,30 +124,23 @@
 }
 
 .grid-demo-shell cv-grid-cell[selected] {
-  --cv-color-primary-ring: rgba(101, 215, 255, 0.24);
-  --cv-color-text: #f4fbff;
 }
 
 .grid-demo-shell cv-grid-cell[active] {
-  --cv-color-active: rgba(101, 215, 255, 0.18);
 }
 
 .grid-demo-shell cv-grid-row[value='vault'] cv-grid-cell[column='state'],
 .grid-demo-shell cv-grid-row[value='relay'] cv-grid-cell[column='state'] {
-  --cv-color-text: #9fffd3;
 }
 
 .grid-demo-shell cv-grid-row[value='escrow'] cv-grid-cell[column='state'],
 .grid-demo-shell cv-grid-row[value='escrow'] cv-grid-cell[column='risk'] {
-  --cv-color-text: #ffd28a;
 }
 
 .grid-demo-shell cv-grid-row[value='decoy'] cv-grid-cell[column='risk'] {
-  --cv-color-text: #d5c2ff;
 }
 
 .grid-demo-shell cv-grid-cell[aria-disabled='true'] {
-  --cv-color-text: rgba(190, 206, 226, 0.54);
 }
 
 .grid-demo-readout {
@@ -168,10 +148,10 @@
   min-inline-size: 0;
   margin: 0;
   padding: 12px 14px;
-  border: 1px solid rgba(143, 220, 255, 0.18);
+  border: 1px solid var(--live-demo-cyan-surface);
   border-radius: 12px;
-  background: rgba(238, 245, 255, 0.046);
-  color: rgba(226, 239, 255, 0.86);
+  background: var(--live-demo-surface-highlight);
+  color: var(--live-demo-text);
   font-family: var(--vp-font-family-mono);
   font-size: 0.78rem;
   line-height: 1.45;
@@ -205,16 +185,13 @@
   inline-size: 100%;
   min-inline-size: 0;
   overflow: hidden;
-  border: 1px solid rgba(118, 181, 222, 0.18);
+  border: 1px solid var(--live-demo-border-muted);
   border-radius: 16px;
   color: var(--live-demo-muted);
-  background:
-    linear-gradient(180deg, rgba(12, 20, 32, 0.98), rgba(7, 13, 22, 0.98)),
-    linear-gradient(135deg, rgba(101, 215, 255, 0.085), transparent 42%),
-    linear-gradient(315deg, rgba(179, 136, 255, 0.07), transparent 45%);
+  background: var(--live-demo-gradient-primary-soft);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.04),
-    0 18px 42px rgba(0, 0, 0, 0.22);
+    inset 0 1px 0 var(--cv-alpha-white-4),
+    0 18px 42px var(--cv-alpha-black-14);
 }
 
 .treegrid-demo-shell,
@@ -252,7 +229,7 @@
 }
 
 .treegrid-demo-kicker {
-  color: #94e9ff;
+  color: var(--live-demo-cyan);
 }
 
 .treegrid-demo-copy h3,
@@ -298,8 +275,6 @@
   padding: 16px;
   border: 1px solid var(--live-demo-border);
   border-radius: 12px;
-  background:
-    linear-gradient(180deg, var(--live-demo-panel), rgba(238, 245, 255, 0.026)), rgba(7, 13, 22, 0.32);
 }
 
 .treegrid-demo-metrics dt {
@@ -329,10 +304,10 @@
   min-block-size: 28px;
   max-inline-size: 100%;
   padding: 5px 9px;
-  border: 1px solid rgba(143, 220, 255, 0.22);
+  border: 1px solid var(--live-demo-cyan-border);
   border-radius: 999px;
-  background: rgba(238, 245, 255, 0.05);
-  color: rgba(226, 239, 255, 0.82);
+  background: var(--live-demo-surface-highlight);
+  color: var(--live-demo-text);
   line-height: 1.2;
   white-space: normal;
 }
@@ -340,26 +315,14 @@
 .treegrid-demo-scroll {
   min-inline-size: 0;
   overflow-x: auto;
-  border: 1px solid rgba(118, 181, 222, 0.16);
+  border: 1px solid var(--live-demo-border-muted);
   border-radius: 14px;
-  background:
-    linear-gradient(180deg, rgba(7, 13, 22, 0.46), rgba(7, 13, 22, 0.78)),
-    linear-gradient(90deg, rgba(101, 215, 255, 0.055), transparent 44%);
+  background: var(--live-demo-gradient-primary-soft);
 }
 
 .treegrid-demo-shell cv-treegrid {
   inline-size: max(100%, 560px);
   min-inline-size: 560px;
-  --cv-color-surface: rgba(10, 17, 27, 0.9);
-  --cv-color-surface-glass-strong: rgba(238, 245, 255, 0.07);
-  --cv-color-border: rgba(143, 220, 255, 0.2);
-  --cv-color-border-soft: rgba(143, 220, 255, 0.12);
-  --cv-color-active: rgba(101, 215, 255, 0.14);
-  --cv-color-selected: rgba(101, 215, 255, 0.18);
-  --cv-color-primary-ring: rgba(101, 215, 255, 0.18);
-  --cv-color-primary-border: rgba(101, 215, 255, 0.24);
-  --cv-color-primary: var(--live-demo-cyan);
-  --cv-color-text: var(--live-demo-text);
   --cv-radius-md: 14px;
 }
 
@@ -370,7 +333,7 @@
 }
 
 .treegrid-demo-shell cv-treegrid-column {
-  color: rgba(226, 239, 255, 0.9);
+  color: var(--live-demo-text);
   font-family: var(--vp-font-family-mono);
   font-size: 0.74rem;
   letter-spacing: 0;
@@ -378,7 +341,7 @@
 }
 
 .treegrid-demo-shell cv-treegrid-cell[column='layer'] {
-  color: #f4fbff;
+  color: var(--live-demo-text-strongest);
 }
 
 .treegrid-demo-shell cv-treegrid-cell[column='owner'],
@@ -392,38 +355,31 @@
 }
 
 .treegrid-demo-shell cv-treegrid-cell[selected] {
-  --cv-color-text: #f4fbff;
 }
 
 .treegrid-demo-shell cv-treegrid-cell[active] {
-  --cv-color-selected: rgba(101, 215, 255, 0.22);
 }
 
 .treegrid-demo-shell cv-treegrid-row[value='sealed-core'] cv-treegrid-cell[column='scope'],
 .treegrid-demo-shell cv-treegrid-row[value='primary-vault'] cv-treegrid-cell[column='scope'] {
-  --cv-color-text: #d5c2ff;
 }
 
 .treegrid-demo-shell cv-treegrid-row[value='travel-profile'] cv-treegrid-cell[column='status'],
 .treegrid-demo-shell cv-treegrid-row[value='relay-core'] cv-treegrid-cell[column='status'] {
-  --cv-color-text: #9fffd3;
 }
 
 .treegrid-demo-shell cv-treegrid-row[value='otp-seeds'] cv-treegrid-cell[column='status'],
 .treegrid-demo-shell cv-treegrid-row[value='recovery-envelope'] cv-treegrid-cell[column='status'] {
-  --cv-color-text: #ffd28a;
 }
 
 .treegrid-demo-shell cv-treegrid-row[aria-disabled='true'],
 .treegrid-demo-shell cv-treegrid-cell[aria-disabled='true'] {
-  --cv-color-text: rgba(190, 206, 226, 0.54);
 }
 
 .treegrid-demo-shell cv-badge {
   --cv-badge-height: 21px;
   --cv-badge-padding-inline: 7px;
   --cv-badge-font-size: 11px;
-  --cv-color-surface: rgba(238, 245, 255, 0.052);
 }
 
 .treegrid-demo-readout {
@@ -432,10 +388,10 @@
   min-block-size: 40px;
   margin: 0;
   padding: 12px 14px;
-  border: 1px solid rgba(143, 220, 255, 0.18);
+  border: 1px solid var(--live-demo-cyan-surface);
   border-radius: 12px;
-  background: rgba(238, 245, 255, 0.046);
-  color: rgba(226, 239, 255, 0.86);
+  background: var(--live-demo-surface-highlight);
+  color: var(--live-demo-text);
   font-family: var(--vp-font-family-mono);
   font-size: 0.78rem;
   line-height: 1.45;

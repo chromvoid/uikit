@@ -65,7 +65,10 @@ export class CVBreadcrumbItem extends LitElement {
       @media (hover: hover) {
         :host(:not([current])) [part='link']:hover {
           border-color: var(--cv-breadcrumb-item-hover-border-color, var(--cv-color-border-muted, #3a465d));
-          background: var(--cv-breadcrumb-item-hover-background, var(--cv-color-surface-hover, rgba(0, 229, 255, 0.08)));
+          background: var(
+            --cv-breadcrumb-item-hover-background,
+            var(--cv-color-surface-hover, rgba(0, 229, 255, 0.08))
+          );
           color: var(--cv-breadcrumb-item-hover-color, var(--cv-color-text, #e8ecf6));
         }
       }
@@ -77,13 +80,22 @@ export class CVBreadcrumbItem extends LitElement {
       }
 
       [part='link']:active {
-        background: var(--cv-breadcrumb-item-active-background, var(--cv-color-active, rgba(0, 229, 255, 0.14)));
+        background: var(
+          --cv-breadcrumb-item-active-background,
+          var(--cv-color-active, rgba(0, 229, 255, 0.14))
+        );
         color: var(--cv-breadcrumb-item-active-color, var(--cv-color-text-strong, #eef5ff));
       }
 
       :host([current]) [part='link'] {
-        border-color: var(--cv-breadcrumb-item-current-border-color, var(--cv-color-primary-border, rgba(0, 229, 255, 0.3)));
-        background: var(--cv-breadcrumb-item-current-background, var(--cv-color-primary-surface, rgba(0, 229, 255, 0.12)));
+        border-color: var(
+          --cv-breadcrumb-item-current-border-color,
+          var(--cv-color-primary-border, rgba(0, 229, 255, 0.3))
+        );
+        background: var(
+          --cv-breadcrumb-item-current-background,
+          var(--cv-color-primary-surface, rgba(0, 229, 255, 0.12))
+        );
         color: var(--cv-breadcrumb-item-current-color, var(--cv-color-text-strong, #eef5ff));
         font-weight: var(--cv-breadcrumb-item-current-font-weight, var(--cv-font-weight-semibold, 600));
         box-shadow: inset 0 1px 0 var(--cv-breadcrumb-item-current-highlight, rgba(255, 255, 255, 0.04));

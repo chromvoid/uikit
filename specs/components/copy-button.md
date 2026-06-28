@@ -161,7 +161,7 @@ Additionally, component styles depend on theme tokens through fallback values:
 - `size` attribute controlling icon/button dimensions
 - `appearance` attribute controlling default or plain visual treatment
 - `cv-copy` and `cv-error` custom events dispatched on the host element
-- Pulse/scale animation on copy activation
+- Opacity/scale icon feedback on copy activation; icon swap does not animate `filter`
 
 ### Headless-owned concerns (UIKit does NOT reimplement)
 

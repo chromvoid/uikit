@@ -59,6 +59,7 @@ export class CVSliderMultiThumb extends ReatomLitElement {
   private dragValueChanged = false
   private activePointerId: number | null = null
   private dragAbortController: AbortController | null = null
+  private dragTrackRect: Pick<DOMRect, 'bottom' | 'left' | 'width' | 'height'> | null = null
 
   constructor() {
     super()
@@ -216,6 +217,11 @@ export class CVSliderMultiThumb extends ReatomLitElement {
     }
   }
 
+  override updated(changedProperties: PropertyValues): void {
+    super.updated(changedProperties)
+    this.applySliderGeometry()
+  }
+
   private createModel(): SliderMultiThumbModel {
     return createSliderMultiThumb({
       idBase: this.idBase,
@@ -268,6 +274,7 @@ export class CVSliderMultiThumb extends ReatomLitElement {
   private syncFromModelAndEmit(previousValues: readonly number[], emitChange: boolean): boolean {
     const nextValues = [...this.model.state.values()]
     this.syncValuesFromModel()
+    this.applySliderGeometry()
 
     if (arraysEqual(previousValues, nextValues)) return false
 
@@ -280,12 +287,51 @@ export class CVSliderMultiThumb extends ReatomLitElement {
     return true
   }
 
-  private pointerValueFromPosition(clientX: number, clientY: number): number | null {
+  private getThumbPercentages(): number[] {
+    const values = this.model.state.values()
+    const min = this.model.state.min()
+    const max = this.model.state.max()
+    const range = max - min
+    const denominator = range > 0 ? range : 1
+    return values.map((value) => Math.max(0, Math.min(100, ((value - min) / denominator) * 100)))
+  }
+
+  private applySliderGeometry(): void {
+    const percentages = this.getThumbPercentages()
+    const rangeStart = percentages.length === 0 ? 0 : Math.min(...percentages)
+    const rangeEnd = percentages.length === 0 ? 0 : Math.max(...percentages)
+    const rangeSize = Math.max(0, rangeEnd - rangeStart)
+    const base = this.shadowRoot?.querySelector('[part="base"]') as HTMLElement | null
+    base?.style.setProperty('--cv-range-start', `${rangeStart}%`)
+    base?.style.setProperty('--cv-range-size', `${rangeSize}%`)
+
+    const thumbs = Array.from(this.shadowRoot?.querySelectorAll('[part="thumb"]') ?? []) as HTMLElement[]
+    for (const thumb of thumbs) {
+      const index = Number(thumb.dataset.index)
+      thumb.style.setProperty('--cv-thumb-percentage', `${percentages[index] ?? 0}%`)
+    }
+  }
+
+  private captureDragTrackRect(): boolean {
     const track = this.shadowRoot?.querySelector('[part="track"]') as HTMLElement | null
-    if (!track) return null
+    if (!track) return false
 
     const rect = track.getBoundingClientRect()
-    if (rect.width <= 0 || rect.height <= 0) return null
+    if (rect.width <= 0 || rect.height <= 0) return false
+
+    this.dragTrackRect = {
+      bottom: rect.bottom,
+      left: rect.left,
+      width: rect.width,
+      height: rect.height,
+    }
+
+    return true
+  }
+
+  private pointerValueFromPosition(clientX: number, clientY: number): number | null {
+    const rect = this.dragTrackRect
+    if (!rect) return null
 
     const ratioRaw =
       this.orientation === 'vertical'
@@ -310,8 +356,7 @@ export class CVSliderMultiThumb extends ReatomLitElement {
       // pointer is at or beyond the thumb's value, prefer the highest index (the
       // thumb that can move right); otherwise prefer the lowest index.
       const isCloser = distance < nearestDistance
-      const isTieTowardsHigher =
-        distance === nearestDistance && pointerValue >= value && index > nearestIndex
+      const isTieTowardsHigher = distance === nearestDistance && pointerValue >= value && index > nearestIndex
       if (isCloser || isTieTowardsHigher) {
         nearestDistance = distance
         nearestIndex = index
@@ -363,14 +408,22 @@ export class CVSliderMultiThumb extends ReatomLitElement {
   private handleBasePointerDown(event: PointerEvent) {
     if (this.disabled || event.isPrimary === false || event.button !== 0) return
 
+    this.cleanupDragListeners()
+    if (!this.captureDragTrackRect()) return
+
     const pointerValue = this.pointerValueFromPosition(event.clientX, event.clientY)
-    if (pointerValue == null) return
+    if (pointerValue == null) {
+      this.cleanupDragListeners()
+      return
+    }
 
     const index = this.resolveThumbIndexFromEvent(event, pointerValue)
-    if (index == null) return
+    if (index == null) {
+      this.cleanupDragListeners()
+      return
+    }
 
     event.preventDefault()
-    this.cleanupDragListeners()
     this.model.actions.setActiveThumb(index)
     this.draggingThumbIndex = index
     this.activePointerId = this.getPointerId(event)
@@ -424,6 +477,7 @@ export class CVSliderMultiThumb extends ReatomLitElement {
     this.dragAbortController?.abort()
     this.dragAbortController = null
     this.activePointerId = null
+    this.dragTrackRect = null
   }
 
   private handleThumbFocus = (index: number) => {
@@ -432,13 +486,7 @@ export class CVSliderMultiThumb extends ReatomLitElement {
   }
 
   private handleThumbKeyDown = (index: number, event: KeyboardEvent) => {
-    if (
-      this.disabled ||
-      event.defaultPrevented ||
-      event.altKey ||
-      event.ctrlKey ||
-      event.metaKey
-    ) {
+    if (this.disabled || event.defaultPrevented || event.altKey || event.ctrlKey || event.metaKey) {
       return
     }
 
@@ -455,21 +503,12 @@ export class CVSliderMultiThumb extends ReatomLitElement {
     const rootProps = this.model.contracts.getRootProps()
     const trackProps = this.model.contracts.getTrackProps()
     const values = this.model.state.values()
-    const min = this.model.state.min()
-    const max = this.model.state.max()
-    const range = max - min
-    const denominator = range > 0 ? range : 1
-    const percentages = values.map((value) => Math.max(0, Math.min(100, ((value - min) / denominator) * 100)))
-    const rangeStart = percentages.length === 0 ? 0 : Math.min(...percentages)
-    const rangeEnd = percentages.length === 0 ? 0 : Math.max(...percentages)
-    const rangeSize = Math.max(0, rangeEnd - rangeStart)
 
     return html`
       <div
         id=${rootProps.id}
         data-orientation=${rootProps['data-orientation']}
         aria-disabled=${rootProps['aria-disabled'] ?? nothing}
-        style=${`--cv-range-start:${rangeStart}%;--cv-range-size:${rangeSize}%;`}
         part="base"
         @pointerdown=${this.handleBasePointerDown}
       >
@@ -493,7 +532,6 @@ export class CVSliderMultiThumb extends ReatomLitElement {
               aria-label=${thumbProps['aria-label'] ?? nothing}
               data-active=${thumbProps['data-active']}
               data-index=${String(index)}
-              style=${`--cv-thumb-percentage:${percentages[index] ?? 0}%;`}
               part="thumb"
               @focus=${() => this.handleThumbFocus(index)}
               @keydown=${(event: KeyboardEvent) => this.handleThumbKeyDown(index, event)}

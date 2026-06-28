@@ -123,10 +123,10 @@ describe('cv-number', () => {
 
       expect(stylesText).toContain("[part='stepper']")
       expect(stylesText).toMatch(/\[part='stepper'\]\s*{[\s\S]*display:\s*inline-flex;/)
+      expect(stylesText).toMatch(/\[part='stepper'\]\s*{[\s\S]*gap:\s*var\(--cv-number-stepper-button-gap\);/)
       expect(stylesText).toMatch(
-        /\[part='stepper'\]\s*{[\s\S]*gap:\s*var\(--cv-number-stepper-button-gap\);/,
+        /--cv-number-stepper-button-inline-size:\s*var\(--cv-number-stepper-width,\s*28px\);/,
       )
-      expect(stylesText).toMatch(/--cv-number-stepper-button-inline-size:\s*var\(--cv-number-stepper-width,\s*28px\);/)
       expect(stylesText).toMatch(
         /\[part='increment'\],\s*\n\s*\[part='decrement'\]\s*{[\s\S]*inline-size:\s*var\(--cv-number-stepper-button-inline-size\);/,
       )
@@ -568,9 +568,7 @@ describe('cv-number', () => {
       getInput(el).dispatchEvent(new FocusEvent('focus', {bubbles: true}))
       await settle(el)
 
-      getBase(el).dispatchEvent(
-        createWheelEvent(48),
-      )
+      getBase(el).dispatchEvent(createWheelEvent(48))
       await settle(el)
 
       expect(el.value).toBe(4)

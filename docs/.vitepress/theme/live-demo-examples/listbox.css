@@ -4,16 +4,13 @@
   inline-size: 100%;
   min-inline-size: 0;
   overflow: hidden;
-  border: 1px solid rgba(118, 181, 222, 0.18);
+  border: 1px solid var(--live-demo-border-muted);
   border-radius: 16px;
   color: var(--live-demo-muted);
-  background:
-    linear-gradient(180deg, rgba(12, 20, 32, 0.98), rgba(7, 13, 22, 0.98)),
-    linear-gradient(135deg, rgba(101, 215, 255, 0.078), transparent 43%),
-    linear-gradient(315deg, rgba(179, 136, 255, 0.06), transparent 45%);
+  background: var(--live-demo-gradient-primary-soft);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.04),
-    0 18px 42px rgba(0, 0, 0, 0.22);
+    inset 0 1px 0 var(--cv-alpha-white-4),
+    0 18px 42px var(--cv-alpha-black-14);
 }
 
 .listbox-demo-shell,
@@ -22,7 +19,7 @@
 }
 
 .listbox-demo-shell code {
-  color: #bff3ff;
+  color: var(--live-demo-text);
   font-family: var(--vp-font-family-mono);
   font-size: 0.86em;
 }
@@ -61,7 +58,7 @@
 }
 
 .listbox-demo-kicker {
-  color: #94e9ff;
+  color: var(--live-demo-cyan);
 }
 
 .listbox-demo-label,
@@ -123,8 +120,11 @@
 .listbox-demo-mode {
   border: 1px solid var(--live-demo-border);
   border-radius: 14px;
-  background:
-    linear-gradient(180deg, var(--live-demo-panel), rgba(238, 245, 255, 0.026)), rgba(7, 13, 22, 0.34);
+}
+
+.listbox-demo-panel,
+.listbox-demo-mode {
+  background: var(--live-demo-gradient-panel);
 }
 
 .listbox-demo-metrics div {
@@ -164,9 +164,7 @@
 }
 
 .listbox-demo-panel--primary {
-  background:
-    linear-gradient(180deg, rgba(7, 13, 22, 0.52), rgba(7, 13, 22, 0.8)),
-    linear-gradient(90deg, rgba(101, 215, 255, 0.055), transparent 44%);
+  background: var(--live-demo-gradient-primary-soft);
 }
 
 .listbox-demo-panel-header {
@@ -180,21 +178,14 @@
 .listbox-demo-shell cv-listbox {
   inline-size: 100%;
   min-inline-size: 0;
-  --cv-color-border: rgba(143, 220, 255, 0.2);
-  --cv-color-primary: var(--live-demo-cyan);
-  --cv-color-primary-border: rgba(101, 215, 255, 0.2);
-  --cv-color-primary-ring: rgba(101, 215, 255, 0.12);
-  --cv-color-surface: rgba(8, 14, 23, 0.62);
-  --cv-color-text: var(--live-demo-text);
-  --cv-color-text-muted: var(--live-demo-soft);
   --cv-listbox-gap: 6px;
   --cv-listbox-padding: 6px;
   --cv-listbox-border-radius: 14px;
-  --cv-listbox-border-color: rgba(143, 220, 255, 0.2);
-  --cv-listbox-background: rgba(8, 14, 23, 0.64);
+  --cv-listbox-border-color: var(--live-demo-cyan-surface);
+  --cv-listbox-background: var(--live-demo-surface-glass-strong);
   --cv-listbox-focus-outline-color: var(--live-demo-cyan);
-  --cv-option-active-background: rgba(101, 215, 255, 0.12);
-  --cv-option-selected-background: rgba(101, 215, 255, 0.16);
+  --cv-option-active-background: var(--live-demo-cyan-surface);
+  --cv-option-selected-background: var(--live-demo-cyan-surface);
   --cv-option-padding-block: 10px;
   --cv-option-padding-inline: 10px;
   --cv-option-border-radius: 10px;
@@ -202,9 +193,7 @@
 
 .listbox-demo-shell cv-listbox::part(base) {
   min-inline-size: 0;
-  background:
-    linear-gradient(180deg, rgba(7, 13, 22, 0.46), rgba(7, 13, 22, 0.78)),
-    linear-gradient(90deg, rgba(101, 215, 255, 0.045), transparent 48%);
+  background: var(--live-demo-gradient-primary-soft);
 }
 
 .listbox-demo-shell cv-listbox[orientation='horizontal']::part(base) {
@@ -218,7 +207,7 @@
 }
 
 .listbox-demo-shell cv-listbox-group::part(label) {
-  color: rgba(190, 206, 226, 0.62);
+  color: var(--live-demo-muted);
   font-family: var(--vp-font-family-mono);
   font-size: 0.68rem;
   letter-spacing: 0;
@@ -245,7 +234,7 @@
 }
 
 .listbox-demo-shell cv-option[selected]::part(base) {
-  box-shadow: inset 0 0 0 1px rgba(101, 215, 255, 0.18);
+  box-shadow: inset 0 0 0 1px var(--live-demo-cyan-surface);
 }
 
 .listbox-demo-option-copy {
@@ -281,24 +270,24 @@
   inline-size: 24px;
   block-size: 24px;
   flex: 0 0 auto;
-  border: 1px solid rgba(101, 215, 255, 0.24);
+  border: 1px solid var(--live-demo-cyan-border);
   border-radius: 8px;
-  background: rgba(101, 215, 255, 0.09);
-  color: #c9f5ff;
+  background: var(--live-demo-cyan-surface);
+  color: var(--live-demo-green);
   font-family: var(--vp-font-family-mono);
   font-size: 0.7rem;
 }
 
 .listbox-demo-glyph--violet {
-  border-color: rgba(179, 136, 255, 0.28);
-  background: rgba(179, 136, 255, 0.1);
-  color: #dacaff;
+  border-color: var(--live-demo-violet-border);
+  background: var(--live-demo-violet-surface);
+  color: var(--live-demo-violet);
 }
 
 .listbox-demo-glyph--muted {
-  border-color: rgba(190, 206, 226, 0.16);
-  background: rgba(190, 206, 226, 0.04);
-  color: rgba(190, 206, 226, 0.62);
+  border-color: var(--live-demo-soft);
+  background: var(--live-demo-soft);
+  color: var(--live-demo-muted);
 }
 
 .listbox-demo-shell cv-badge {
@@ -306,11 +295,6 @@
   --cv-badge-height: 21px;
   --cv-badge-padding-inline: 7px;
   --cv-badge-font-size: 11px;
-  --cv-color-border: rgba(143, 220, 255, 0.22);
-  --cv-color-surface: rgba(238, 245, 255, 0.052);
-  --cv-color-text: rgba(226, 239, 255, 0.86);
-  --cv-color-primary: var(--live-demo-cyan);
-  --cv-color-success: var(--live-demo-green);
 }
 
 .listbox-demo-readout {
@@ -319,10 +303,10 @@
   min-block-size: 42px;
   margin: 0;
   padding: 12px 14px;
-  border: 1px solid rgba(143, 220, 255, 0.18);
+  border: 1px solid var(--live-demo-cyan-surface);
   border-radius: 12px;
-  background: rgba(101, 215, 255, 0.055);
-  color: rgba(226, 239, 255, 0.88);
+  background: var(--live-demo-cyan-surface);
+  color: var(--live-demo-text);
   line-height: 1.45;
   overflow-wrap: anywhere;
   text-transform: none;
@@ -346,7 +330,7 @@
 
 @media (hover: hover) {
   .listbox-demo-shell cv-option:not([disabled]):hover::part(base) {
-    background: rgba(101, 215, 255, 0.08);
+    background: var(--live-demo-cyan-surface);
   }
 }
 

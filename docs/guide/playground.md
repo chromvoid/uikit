@@ -1,14 +1,7 @@
 # Playground
 
-Use this page as the interactive working surface for the package. It keeps live interaction checks,
-controller-backed examples, and composed states inside the same documentation site as the guides
-and reference pages.
-
-Use this page to validate:
-
-- stateful controls and keyboard behavior
-- controller-backed surfaces such as alerts and toasts
-- composition patterns before wiring a full application shell
+Live UIKit presentation for product-style component states. Use it to compare action, form,
+feedback, and structure primitives in one responsive docs surface.
 
 <ClientOnly>
   <UIKitPlayground />

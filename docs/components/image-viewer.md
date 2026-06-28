@@ -7,45 +7,70 @@ Fullscreen image viewer shell for modal image inspection, gallery navigation, ac
 ## Usage
 
 ```html
-<div class="image-viewer-demo-shell" data-demo="image-viewer" data-live-demo-height="640">
+<div class="image-viewer-demo-shell" data-demo="image-viewer" data-live-demo-height="760">
   <section class="image-viewer-demo-launch" aria-labelledby="image-viewer-demo-title">
     <div class="image-viewer-demo-copy">
-      <span class="image-viewer-demo-kicker">Controlled gallery</span>
-      <h3 id="image-viewer-demo-title">Inspect generated ChromVoid imagery with committed navigation</h3>
+      <span class="image-viewer-demo-kicker">Controlled image inspection</span>
+      <h3 id="image-viewer-demo-title">Preview vault imagery before opening the modal viewer</h3>
       <p>
-        The shell owns image URLs, actions, and current index. The viewer emits intent events; this demo
-        commits them back into component state.
+        The host owns source URLs, metadata, actions, and current index. The viewer emits navigation and
+        action intent; the shell commits state back into the component.
       </p>
+      <dl class="image-viewer-demo-proof">
+        <div>
+          <dt>5</dt>
+          <dd>items</dd>
+        </div>
+        <div>
+          <dt>3</dt>
+          <dd>viewer actions</dd>
+        </div>
+        <div>
+          <dt>0</dt>
+          <dd>catalog state inside UI kit</dd>
+        </div>
+      </dl>
       <div class="image-viewer-demo-actions">
         <cv-button variant="primary" data-image-viewer-open>
           <cv-icon slot="prefix" name="maximize" size="s"></cv-icon>
           Open viewer
         </cv-button>
-        <output data-image-viewer-output aria-live="polite">Ready</output>
+        <output data-image-viewer-output aria-live="polite"
+          >Ready: chromvoid-mobile-vault.png selected</output
+        >
       </div>
     </div>
 
-    <div class="image-viewer-demo-gallery" aria-label="Generated gallery images">
-      <button type="button" class="image-viewer-demo-shot" data-image-viewer-index="0">
-        <img data-image-viewer-thumb="chromvoid-mobile-vault-thumb.png" alt="" width="320" height="180" />
-        <span>Mobile vault workspace</span>
-      </button>
-      <button type="button" class="image-viewer-demo-shot" data-image-viewer-index="1">
-        <img data-image-viewer-thumb="hardware-vault-keypad-thumb.png" alt="" width="320" height="180" />
-        <span>Hardware vault keypad</span>
-      </button>
-      <button type="button" class="image-viewer-demo-shot" data-image-viewer-index="2">
-        <img data-image-viewer-thumb="mobile-core-bridge-thumb.png" alt="" width="320" height="180" />
-        <span>Mobile core bridge</span>
-      </button>
-      <button type="button" class="image-viewer-demo-shot" data-image-viewer-index="3">
-        <img data-image-viewer-thumb="deniable-vault-cube-thumb.png" alt="" width="320" height="180" />
-        <span>Deniable vault cube</span>
-      </button>
-      <button type="button" class="image-viewer-demo-shot" data-image-viewer-index="4">
-        <img data-image-viewer-thumb="trust-orbit-thumb.png" alt="" width="320" height="180" />
-        <span>Trust orbit diagram</span>
-      </button>
+    <div class="image-viewer-demo-stage" aria-label="Selected image preview">
+      <figure class="image-viewer-demo-preview">
+        <img data-image-viewer-preview alt="" width="960" height="540" />
+        <figcaption>
+          <span data-image-viewer-preview-title>chromvoid-mobile-vault.png</span>
+          <span data-image-viewer-preview-meta>generated PNG / 1795 x 876 / mobile vault</span>
+        </figcaption>
+      </figure>
+      <div class="image-viewer-demo-gallery" aria-label="Generated gallery images">
+        <button type="button" class="image-viewer-demo-shot" data-image-viewer-index="0" aria-pressed="true">
+          <img data-image-viewer-thumb="chromvoid-mobile-vault-thumb.png" alt="" width="320" height="180" />
+          <span>Mobile vault</span>
+        </button>
+        <button type="button" class="image-viewer-demo-shot" data-image-viewer-index="1" aria-pressed="false">
+          <img data-image-viewer-thumb="hardware-vault-keypad-thumb.png" alt="" width="320" height="180" />
+          <span>Keypad</span>
+        </button>
+        <button type="button" class="image-viewer-demo-shot" data-image-viewer-index="2" aria-pressed="false">
+          <img data-image-viewer-thumb="mobile-core-bridge-thumb.png" alt="" width="320" height="180" />
+          <span>Core bridge</span>
+        </button>
+        <button type="button" class="image-viewer-demo-shot" data-image-viewer-index="3" aria-pressed="false">
+          <img data-image-viewer-thumb="deniable-vault-cube-thumb.png" alt="" width="320" height="180" />
+          <span>Vault cube</span>
+        </button>
+        <button type="button" class="image-viewer-demo-shot" data-image-viewer-index="4" aria-pressed="false">
+          <img data-image-viewer-thumb="trust-orbit-thumb.png" alt="" width="320" height="180" />
+          <span>Trust orbit</span>
+        </button>
+      </div>
     </div>
   </section>
 
@@ -60,6 +85,9 @@ Fullscreen image viewer shell for modal image inspection, gallery navigation, ac
 
       const viewer = shell.querySelector('cv-image-viewer')
       const output = shell.querySelector('[data-image-viewer-output]')
+      const preview = shell.querySelector('[data-image-viewer-preview]')
+      const previewTitle = shell.querySelector('[data-image-viewer-preview-title]')
+      const previewMeta = shell.querySelector('[data-image-viewer-preview-meta]')
       const parentUrl = window.parent?.location?.href || window.location.href
       const assetUrl = (file) => new URL(`../images/image-viewer/${file}`, parentUrl).href
       const items = [
@@ -108,9 +136,24 @@ Fullscreen image viewer shell for modal image inspection, gallery navigation, ac
       const setStatus = (message) => {
         if (output) output.value = message
       }
+      const syncPreview = () => {
+        const item = items[viewer.currentIndex]
+        if (!item) return
+        if (preview) {
+          preview.src = item.src
+          preview.alt = item.alt || ''
+        }
+        if (previewTitle) previewTitle.textContent = item.title
+        if (previewMeta) previewMeta.textContent = item.meta.join(' / ')
+        shell.querySelectorAll('[data-image-viewer-index]').forEach((control) => {
+          const active = Number(control.dataset.imageViewerIndex) === viewer.currentIndex
+          control.setAttribute('aria-pressed', String(active))
+        })
+      }
       const commitIndex = (index, message) => {
         viewer.currentIndex = Math.max(0, Math.min(index, items.length - 1))
-        setStatus(message || `Viewing ${items[viewer.currentIndex].title}`)
+        syncPreview()
+        setStatus(message || `Selected ${items[viewer.currentIndex].title}`)
       }
 
       shell.querySelectorAll('[data-image-viewer-thumb]').forEach((image) => {
@@ -118,14 +161,18 @@ Fullscreen image viewer shell for modal image inspection, gallery navigation, ac
       })
 
       viewer.items = items
+      viewer.actions = [
+        {value: 'inspect-source', label: 'Inspect source'},
+        {value: 'share', label: 'Share'},
+        {value: 'remove', label: 'Remove', dangerous: true},
+      ]
       viewer.thumbnailWindow = {
         indices: [0, 1, 2, 3, 4],
         beforeCount: 0,
         afterCount: 0,
         thumbnailStepPx: 68,
       }
-      viewer.open = true
-      setStatus(`Viewing ${items[0].title}`)
+      syncPreview()
 
       shell.querySelectorAll('[data-image-viewer-open]').forEach((control) => {
         control.addEventListener('click', () => {
@@ -137,12 +184,14 @@ Fullscreen image viewer shell for modal image inspection, gallery navigation, ac
       shell.querySelectorAll('[data-image-viewer-index]').forEach((control) => {
         control.addEventListener('click', () => {
           commitIndex(Number(control.dataset.imageViewerIndex))
-          viewer.open = true
         })
       })
 
       viewer.addEventListener('cv-input', (event) => {
         commitIndex(event.detail.index, `Navigation requested: ${items[event.detail.index].title}`)
+      })
+      viewer.addEventListener('cv-action', (event) => {
+        setStatus(`${event.detail.value} requested for ${items[event.detail.index].title}`)
       })
       viewer.addEventListener('cv-close', () => {
         viewer.open = false

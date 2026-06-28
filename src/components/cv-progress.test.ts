@@ -45,13 +45,14 @@ describe('cv-progress', () => {
       expect(indicator.parentElement).toBe(getBase(el))
     })
 
-    it('renders [part="label"] as a span inside indicator', async () => {
+    it('renders [part="label"] as a span outside the transformed indicator', async () => {
       const el = await createProgress()
       const label = el.shadowRoot!.querySelector('[part="label"]') as HTMLElement
       expect(label).not.toBeNull()
       expect(label.tagName).toBe('SPAN')
       const indicator = el.shadowRoot!.querySelector('[part="indicator"]') as HTMLElement
-      expect(label.parentElement).toBe(indicator)
+      expect(label.parentElement).toBe(getBase(el))
+      expect(label.parentElement).not.toBe(indicator)
     })
 
     it('renders default slot inside label part', async () => {
@@ -145,21 +146,21 @@ describe('cv-progress', () => {
       expect(getBase(el).getAttribute('aria-valuenow')).toBe('10')
     })
 
-    it('value changes update indicator width via --cv-progress-width', async () => {
+    it('value changes update host-owned fill scale', async () => {
       const el = await createProgress({value: 5, max: 20})
       const indicator = el.shadowRoot!.querySelector('[part="indicator"]') as HTMLElement
-      expect(indicator.getAttribute('style')).toContain('--cv-progress-width:25%')
+      expect(el.style.getPropertyValue('--cv-progress-value-scale')).toBe('0.25')
+      expect(indicator.getAttribute('style')).toBeNull()
 
       el.value = 10
       await settle(el)
-      expect(indicator.getAttribute('style')).toContain('--cv-progress-width:50%')
+      expect(el.style.getPropertyValue('--cv-progress-value-scale')).toBe('0.5')
     })
 
     it('renders correct percentage for custom range', async () => {
       const el = await createProgress({value: 3, min: 0, max: 10})
       expect(getBase(el).getAttribute('aria-valuetext')).toBe('30%')
-      const indicator = el.shadowRoot!.querySelector('[part="indicator"]') as HTMLElement
-      expect(indicator.getAttribute('style')).toContain('--cv-progress-width:30%')
+      expect(el.style.getPropertyValue('--cv-progress-value-scale')).toBe('0.3')
     })
   })
 
@@ -276,7 +277,8 @@ describe('cv-progress', () => {
       const el = await createProgress({value: 250, min: 0, max: 100})
       expect(getBase(el).getAttribute('aria-valuenow')).toBe('100')
       const indicator = el.shadowRoot!.querySelector('[part="indicator"]') as HTMLElement
-      expect(indicator.getAttribute('style')).toContain('--cv-progress-width:100%')
+      expect(el.style.getPropertyValue('--cv-progress-value-scale')).toBe('1')
+      expect(indicator.getAttribute('style')).toBeNull()
     })
 
     it('handles min === max without NaN (zero-span range)', async () => {
@@ -285,8 +287,8 @@ describe('cv-progress', () => {
       const indicator = el.shadowRoot!.querySelector('[part="indicator"]') as HTMLElement
 
       expect(base.getAttribute('aria-valuetext')).toBe('0%')
-      expect(indicator.getAttribute('style')).toContain('--cv-progress-width:0%')
-      expect(indicator.getAttribute('style')).not.toContain('NaN')
+      expect(el.style.getPropertyValue('--cv-progress-value-scale')).toBe('0')
+      expect(indicator.getAttribute('style')).toBeNull()
       // value >= max, so complete
       expect(el.hasAttribute('data-complete')).toBe(true)
     })
@@ -311,8 +313,7 @@ describe('cv-progress', () => {
     it('rounds aria-valuetext percentage while keeping precise indicator width', async () => {
       const el = await createProgress({value: 1, min: 0, max: 3})
       expect(getBase(el).getAttribute('aria-valuetext')).toBe('33%')
-      const indicator = el.shadowRoot!.querySelector('[part="indicator"]') as HTMLElement
-      expect(indicator.getAttribute('style')).toContain('--cv-progress-width:33.3333%')
+      expect(Number.parseFloat(el.style.getPropertyValue('--cv-progress-value-scale'))).toBeCloseTo(1 / 3)
     })
   })
 

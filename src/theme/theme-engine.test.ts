@@ -1,7 +1,7 @@
 import {afterEach, describe, expect, it} from 'vitest'
 
 import {CVThemeProvider} from './cv-theme-provider'
-import {applyTheme, defineTheme, getTheme} from './theme-engine'
+import {applyTheme, defineTheme, getTheme, resolveThemeTokens} from './theme-engine'
 
 const flush = async () => {
   await Promise.resolve()
@@ -31,6 +31,32 @@ describe('theme engine', () => {
     loaded.tokens['--cv-color-bg'] = '#222222'
 
     expect(getTheme(name)?.tokens['--cv-color-bg']).toBe('#111111')
+  })
+
+  it('registers scheme-aware themes without leaking mutable references', () => {
+    const name = `unit-theme-${Date.now()}-scheme-clone`
+
+    defineTheme(name, {
+      dark: {
+        '--cv-color-bg': '#111111',
+      },
+      light: {
+        '--cv-color-bg': '#eeeeee',
+      },
+    })
+
+    const darkTokens = resolveThemeTokens(name, 'dark')
+    const lightTokens = resolveThemeTokens(name, 'light')
+    expect(darkTokens?.['--cv-color-bg']).toBe('#111111')
+    expect(lightTokens?.['--cv-color-bg']).toBe('#eeeeee')
+
+    if (!darkTokens) {
+      throw new Error('Expected dark tokens to be defined')
+    }
+
+    darkTokens['--cv-color-bg'] = '#222222'
+
+    expect(resolveThemeTokens(name, 'dark')?.['--cv-color-bg']).toBe('#111111')
   })
 
   it('applies a theme and removes previously applied tokens from the same target', () => {

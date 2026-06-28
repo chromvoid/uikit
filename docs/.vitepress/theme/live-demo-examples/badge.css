@@ -5,16 +5,13 @@
   min-block-size: 100%;
   min-inline-size: 0;
   overflow: hidden;
-  border: 1px solid rgba(118, 181, 222, 0.18);
+  border: 1px solid var(--live-demo-border-muted);
   border-radius: 16px;
   color: var(--live-demo-muted);
-  background:
-    linear-gradient(180deg, rgba(12, 20, 32, 0.98), rgba(7, 13, 22, 0.98)),
-    linear-gradient(135deg, rgba(101, 215, 255, 0.08), transparent 42%),
-    linear-gradient(315deg, rgba(179, 136, 255, 0.065), transparent 44%);
+  background: var(--live-demo-gradient-primary-soft);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.04),
-    0 18px 42px rgba(0, 0, 0, 0.22);
+    inset 0 1px 0 var(--cv-alpha-white-4),
+    0 18px 42px var(--cv-alpha-black-14);
 }
 
 .badge-demo-shell,
@@ -60,7 +57,7 @@
 }
 
 .badge-demo-kicker {
-  color: #94e9ff;
+  color: var(--live-demo-cyan);
 }
 
 .badge-demo-copy h3,
@@ -109,8 +106,6 @@
   padding: 16px;
   border: 1px solid var(--live-demo-border);
   border-radius: 12px;
-  background:
-    linear-gradient(180deg, var(--live-demo-panel), rgba(238, 245, 255, 0.026)), rgba(7, 13, 22, 0.32);
 }
 
 .badge-demo-metrics dt {
@@ -134,10 +129,9 @@
 .badge-demo-record,
 .badge-demo-panel,
 .badge-demo-matrix > div {
-  border: 1px solid rgba(118, 181, 222, 0.16);
+  border: 1px solid var(--live-demo-border-muted);
   border-radius: 14px;
-  background:
-    linear-gradient(180deg, rgba(238, 245, 255, 0.044), rgba(238, 245, 255, 0.02)), rgba(7, 13, 22, 0.34);
+  background: var(--live-demo-gradient-panel);
 }
 
 .badge-demo-record {
@@ -152,23 +146,23 @@
   align-items: center;
   min-inline-size: 0;
   padding: 12px 14px;
-  border: 1px solid rgba(118, 181, 222, 0.14);
+  border: 1px solid var(--live-demo-border-muted);
   border-radius: 12px;
-  background: rgba(238, 245, 255, 0.038);
+  background: var(--live-demo-surface-highlight);
 }
 
 .badge-demo-record-head {
-  background: linear-gradient(90deg, rgba(101, 215, 255, 0.06), transparent 42%), rgba(238, 245, 255, 0.04);
+  background: var(--live-demo-gradient-primary-soft);
 }
 
 .badge-demo-row--warning {
-  border-color: rgba(255, 200, 87, 0.26);
-  background: rgba(255, 200, 87, 0.045);
+  border-color: var(--live-demo-amber-border);
+  background: var(--live-demo-amber-surface);
 }
 
 .badge-demo-row--danger {
-  border-color: rgba(255, 125, 134, 0.28);
-  background: rgba(255, 125, 134, 0.045);
+  border-color: var(--live-demo-red-border);
+  background: var(--live-demo-red-surface);
 }
 
 .badge-demo-record-head > div,
@@ -212,14 +206,14 @@
   align-items: center;
   min-inline-size: 0;
   padding: 11px 12px;
-  border: 1px solid rgba(118, 181, 222, 0.14);
+  border: 1px solid var(--live-demo-border-muted);
   border-radius: 12px;
-  background: rgba(238, 245, 255, 0.038);
+  background: var(--live-demo-surface-highlight);
 }
 
 .badge-demo-dot-list span {
   min-inline-size: 0;
-  color: rgba(226, 239, 255, 0.86);
+  color: var(--live-demo-text);
   font-size: 0.86rem;
   line-height: 1.38;
   overflow-wrap: anywhere;
@@ -252,13 +246,6 @@
 }
 
 .badge-demo-shell cv-badge {
-  --cv-color-border: rgba(143, 220, 255, 0.22);
-  --cv-color-surface: rgba(238, 245, 255, 0.052);
-  --cv-color-text: var(--live-demo-text);
-  --cv-color-primary: var(--live-demo-cyan);
-  --cv-color-success: var(--live-demo-green);
-  --cv-color-warning: var(--live-demo-amber);
-  --cv-color-danger: var(--live-demo-red);
   --cv-badge-gap: 5px;
 }
 
@@ -268,23 +255,23 @@
 }
 
 .badge-demo-shell cv-badge[variant='neutral']::part(base) {
-  color: rgba(226, 239, 255, 0.84);
+  color: var(--live-demo-text);
 }
 
 .badge-demo-shell cv-badge[variant='primary']::part(base) {
-  color: #e9fbff;
+  color: var(--live-demo-text-strongest);
 }
 
 .badge-demo-shell cv-badge[variant='success']::part(base) {
-  color: #ddfff0;
+  color: var(--live-demo-text);
 }
 
 .badge-demo-shell cv-badge[variant='warning']::part(base) {
-  color: #fff1c7;
+  color: var(--live-demo-amber);
 }
 
 .badge-demo-shell cv-badge[variant='danger']::part(base) {
-  color: #ffe4e7;
+  color: var(--live-demo-amber);
 }
 
 @container (min-width: 760px) {

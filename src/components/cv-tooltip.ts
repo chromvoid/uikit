@@ -4,31 +4,18 @@ import type {PropertyValues} from 'lit'
 
 import {html} from '../reatom-lit/index.js'
 import {ReatomLitElement} from '../reatom-lit/ReatomLitElement'
+import {
+  clearPopoverLayout,
+  isPopoverOpen,
+  resolvePopoverBlockPosition,
+  supportsNativeAnchoredAutoplacement,
+  supportsNativePopover,
+  toPopoverRect,
+} from './cv-popover-positioning'
 
 export interface CVTooltipEventDetail {
   open: boolean
 }
-
-const supportsNativePopover =
-  typeof HTMLElement !== 'undefined' &&
-  typeof HTMLElement.prototype.showPopover === 'function' &&
-  typeof HTMLElement.prototype.hidePopover === 'function'
-
-const supportsAnchorPositioning =
-  typeof CSS !== 'undefined' &&
-  typeof CSS.supports === 'function' &&
-  CSS.supports('anchor-name: --cv-tooltip-anchor') &&
-  CSS.supports('position-anchor: --cv-tooltip-anchor') &&
-  CSS.supports('position-area: top') &&
-  CSS.supports('top: anchor(bottom)')
-
-const supportsAnchorTryFallbacks =
-  typeof CSS !== 'undefined' &&
-  typeof CSS.supports === 'function' &&
-  CSS.supports('position-try-fallbacks: flip-block')
-
-const supportsNativeAnchoredAutoplacement =
-  supportsNativePopover && supportsAnchorPositioning && supportsAnchorTryFallbacks
 
 let cvTooltipNonce = 0
 const tooltipOffset = 8
@@ -106,6 +93,7 @@ export class CVTooltip extends ReatomLitElement {
         color: var(--cv-color-text, #e8ecf6);
         font-size: 0.85rem;
         white-space: normal;
+        overflow: visible;
         overflow-wrap: anywhere;
         box-shadow: var(--cv-shadow-1, 0 2px 8px rgba(0, 0, 0, 0.24));
       }
@@ -171,9 +159,9 @@ export class CVTooltip extends ReatomLitElement {
       this.lastEmittedOpen = false
     }
 
-    if (supportsNativePopover) {
+    if (supportsNativePopover()) {
       const content = this.getContentElement()
-      if (content?.matches(':popover-open')) {
+      if (content && isPopoverOpen(content)) {
         content.hidePopover()
       }
     }
@@ -238,7 +226,7 @@ export class CVTooltip extends ReatomLitElement {
 
     this.syncNativePopover()
 
-    const shouldTrackLayout = modelOpen && !supportsNativeAnchoredAutoplacement
+    const shouldTrackLayout = modelOpen && !supportsNativeAnchoredAutoplacement()
     this.toggleLayoutListeners(shouldTrackLayout)
 
     if (modelOpen) {
@@ -247,7 +235,7 @@ export class CVTooltip extends ReatomLitElement {
       this.cancelLayoutFrame()
       const content = this.getContentElement()
       if (content) {
-        this.clearInlineLayout(content)
+        clearPopoverLayout(content)
         content.dataset['placement'] = 'top'
       }
     }
@@ -261,63 +249,43 @@ export class CVTooltip extends ReatomLitElement {
     return this.shadowRoot?.querySelector('[part="trigger"]') as HTMLElement | null
   }
 
-  private clearInlineLayout(content: HTMLElement): void {
-    content.style.position = ''
-    content.style.top = ''
-    content.style.left = ''
-    content.style.bottom = ''
-    content.style.insetInlineStart = ''
-    content.style.insetBlockEnd = ''
-    content.style.transform = ''
-    content.style.translate = ''
-  }
-
   private syncNativePopover(): void {
-    if (!supportsNativePopover) return
+    if (!supportsNativePopover()) return
 
     const content = this.getContentElement()
     if (!content) return
 
     const isOpen = this.model.state.isOpen()
-    const isPopoverOpen = content.matches(':popover-open')
+    const popoverOpen = isPopoverOpen(content)
 
-    if (isOpen && !isPopoverOpen) {
+    if (isOpen && !popoverOpen) {
       content.showPopover()
       return
     }
 
-    if (!isOpen && isPopoverOpen) {
+    if (!isOpen && popoverOpen) {
       content.hidePopover()
     }
   }
 
   private applyFallbackLayout(content: HTMLElement, trigger: HTMLElement): void {
-    const triggerRect = trigger.getBoundingClientRect()
-    const contentRect = content.getBoundingClientRect()
-    const viewportWidth = window.innerWidth
-    const viewportHeight = window.innerHeight
-    const gap = tooltipOffset
-    const viewportPadding = 8
+    const resolved = resolvePopoverBlockPosition(
+      toPopoverRect(trigger.getBoundingClientRect()),
+      toPopoverRect(content.getBoundingClientRect()),
+      'top',
+      tooltipOffset,
+      {
+        width: window.innerWidth,
+        height: window.innerHeight,
+        padding: 8,
+      },
+    )
 
-    const spaceAbove = triggerRect.top
-    const spaceBelow = viewportHeight - triggerRect.bottom
-    const placeAbove =
-      spaceAbove >= contentRect.height + gap ||
-      (spaceAbove >= spaceBelow && spaceAbove >= contentRect.height / 2)
-
-    let top = placeAbove ? triggerRect.top - contentRect.height - gap : triggerRect.bottom + gap
-    let left = triggerRect.left + triggerRect.width / 2 - contentRect.width / 2
-
-    const maxLeft = Math.max(viewportPadding, viewportWidth - contentRect.width - viewportPadding)
-    const maxTop = Math.max(viewportPadding, viewportHeight - contentRect.height - viewportPadding)
-
-    left = Math.min(Math.max(left, viewportPadding), maxLeft)
-    top = Math.min(Math.max(top, viewportPadding), maxTop)
-
-    content.dataset['placement'] = placeAbove ? 'top' : 'bottom'
+    content.dataset['placement'] = resolved.placement.startsWith('bottom') ? 'bottom' : 'top'
+    clearPopoverLayout(content)
     content.style.position = 'fixed'
-    content.style.top = `${top}px`
-    content.style.left = `${left}px`
+    content.style.top = `${resolved.top}px`
+    content.style.left = `${resolved.left}px`
     content.style.bottom = 'auto'
     content.style.insetInlineStart = 'auto'
     content.style.insetBlockEnd = 'auto'
@@ -330,8 +298,8 @@ export class CVTooltip extends ReatomLitElement {
     const trigger = this.getTriggerElement()
     if (!content || !trigger) return
 
-    if (supportsNativeAnchoredAutoplacement) {
-      this.clearInlineLayout(content)
+    if (supportsNativeAnchoredAutoplacement()) {
+      clearPopoverLayout(content)
       content.dataset['placement'] = 'top'
       return
     }
@@ -546,10 +514,10 @@ export class CVTooltip extends ReatomLitElement {
           id=${tooltipProps.id}
           role=${tooltipProps.role}
           tabindex=${tooltipProps.tabindex}
-          popover=${supportsNativePopover ? 'manual' : nothing}
+          popover=${supportsNativePopover() ? 'manual' : nothing}
           data-placement="top"
-          data-anchor-positioning=${supportsNativeAnchoredAutoplacement ? 'true' : 'false'}
-          ?hidden=${supportsNativePopover ? false : tooltipProps.hidden}
+          data-anchor-positioning=${supportsNativeAnchoredAutoplacement() ? 'true' : 'false'}
+          ?hidden=${supportsNativePopover() ? false : tooltipProps.hidden}
           part="content"
         >
           <slot name="content"></slot>

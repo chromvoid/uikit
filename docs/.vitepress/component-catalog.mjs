@@ -5,6 +5,7 @@ export const componentGroups = [
     description: 'Theme primitives and structural surfaces that establish the ChromVoid visual language.',
     items: [
       {name: 'cv-theme-provider', slug: 'theme-provider', spec: 'theme'},
+      {name: 'cv-theme-palette-controller', slug: 'theme-palette', spec: 'theme-palette'},
       {name: 'cv-badge', slug: 'badge', spec: 'badge'},
       {name: 'cv-callout', slug: 'callout', spec: 'callout'},
       {name: 'cv-card', slug: 'card', spec: 'card'},

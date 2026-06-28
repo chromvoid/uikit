@@ -676,6 +676,28 @@ describe('cv-carousel', () => {
   // --- Slot rebuild ---
 
   describe('slot rebuild', () => {
+    it('uses slide value and label attributes when properties are not initialized yet', async () => {
+      const carousel = document.createElement('cv-carousel') as CVCarousel
+      const slide = document.createElement('div') as unknown as CVCarouselSlide
+      Object.defineProperty(slide, 'tagName', {
+        configurable: true,
+        value: 'CV-CAROUSEL-SLIDE',
+      })
+      slide.value = ''
+      slide.label = ''
+      slide.setAttribute('value', 'attr-slide')
+      slide.setAttribute('label', 'Attribute slide')
+      slide.textContent = 'Fallback text'
+
+      carousel.append(slide)
+      document.body.append(carousel)
+      await settle(carousel)
+
+      expect(carousel.value).toBe('attr-slide')
+      expect(slide.value).toBe('attr-slide')
+      expect(slide.getAttribute('aria-label')).toBe('Attribute slide')
+    })
+
     it('preserves valid active slide on slot rebuild', async () => {
       const {carousel, indicators} = await mountCarousel()
 

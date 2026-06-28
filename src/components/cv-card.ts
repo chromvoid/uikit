@@ -221,7 +221,7 @@ export class CVCard extends ReatomLitElement {
       }
 
       :host([expandable]:not([disabled])) [part='header']:hover {
-        background-color: color-mix(in oklab, var(--cv-color-primary, #65d7ff) 8%, transparent);
+        background-color: var(--cv-color-primary-surface);
       }
 
       :host([expandable]) [part='header']:focus-visible {

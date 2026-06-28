@@ -7,7 +7,7 @@ Grouped form wrapper using native fieldset/legend semantics.
 ## Usage
 
 ```html
-<div class="fieldset-demo-shell" data-demo="fieldset" data-live-demo-height="900" data-theme="dark">
+<div class="fieldset-demo-shell" data-demo="fieldset" data-live-demo-height="900">
   <section class="fieldset-demo-hero" aria-labelledby="fieldset-demo-title">
     <div class="fieldset-demo-copy">
       <span class="fieldset-demo-kicker">Form grouping primitive</span>

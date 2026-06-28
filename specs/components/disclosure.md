@@ -111,53 +111,151 @@ Events fire only on user-initiated state changes (click, keyboard). Programmatic
 Use `cv-disclosure` for one local reveal: advanced settings, optional help, or a single FAQ answer. Prefer native `<details>/<summary>` for static content that does not need ChromVoid styling, events, or headless state. Use `cv-accordion` instead when the UI is a coordinated set of sections with controlled value(s), roving focus, heading levels, or "at least one open" rules.
 
 ```html
-<!-- Single optional reveal -->
-<cv-disclosure>
-  <span slot="trigger">Why is this field optional?</span>
-  The value is only needed when this record must match an external system.
-</cv-disclosure>
+<div class="disclosure-demo-shell" data-demo="disclosure" data-live-demo-height="820">
+  <section class="disclosure-demo-hero" aria-labelledby="disclosure-demo-title">
+    <div class="disclosure-demo-copy">
+      <span class="disclosure-demo-kicker">Local reveal primitive</span>
+      <h3 id="disclosure-demo-title">
+        Expose optional detail without turning the surface into an accordion.
+      </h3>
+      <p>
+        The component keeps click, keyboard, disabled, and named-group behavior in the headless disclosure
+        model. UIKit owns the visual trigger and panel only.
+      </p>
+    </div>
 
-<!-- Initially open advanced settings -->
-<cv-disclosure open>
-  <span slot="trigger">Advanced SSH options</span>
-  <p>Override the default key comment and rotation reminder.</p>
-</cv-disclosure>
+    <dl class="disclosure-demo-metrics" aria-label="Disclosure contract summary">
+      <div>
+        <dt>State</dt>
+        <dd>open / closed / disabled</dd>
+      </div>
+      <div>
+        <dt>Group</dt>
+        <dd>optional exclusive name</dd>
+      </div>
+      <div>
+        <dt>Events</dt>
+        <dd>cv-input + cv-change</dd>
+      </div>
+    </dl>
+  </section>
 
-<!-- Disabled -->
-<cv-disclosure disabled>
-  <span slot="trigger">Locked section</span>
-  Cannot be toggled.
-</cv-disclosure>
+  <section class="disclosure-demo-workbench" aria-label="Disclosure examples in a vault review">
+    <div class="disclosure-demo-panel" aria-labelledby="disclosure-demo-panel-title">
+      <div class="disclosure-demo-section-header">
+        <span class="disclosure-demo-kicker">Visible profile review</span>
+        <h4 id="disclosure-demo-panel-title">
+          Use one-off reveals for evidence, limits, and advanced notes.
+        </h4>
+      </div>
 
-<!-- Lightweight exclusive disclosure group.
-     Opening one named disclosure closes matching peers.
-     This is not a full accordion: no roving focus, no value/expandedValues
-     contract, and no allow-zero-expanded invariant. -->
-<cv-disclosure name="security-notes">
-  <span slot="trigger">Recovery phrase notes</span>
-  <p>Explain where the phrase is stored and who can access it.</p>
-</cv-disclosure>
+      <div class="disclosure-demo-stack">
+        <cv-disclosure open data-disclosure-label="Routing proof">
+          <span slot="trigger" class="disclosure-demo-trigger">
+            <strong>Routing proof</strong>
+            <small>Initially open state</small>
+          </span>
+          <div class="disclosure-demo-content">
+            <p>
+              The visible vault route resolves through the active device boundary. Hidden namespaces are not
+              listed in this disclosure because they are outside the current threat model.
+            </p>
+            <dl class="disclosure-demo-proof">
+              <div>
+                <dt>Route</dt>
+                <dd>travel-profile.visible</dd>
+              </div>
+              <div>
+                <dt>Boundary</dt>
+                <dd>paired hardware</dd>
+              </div>
+            </dl>
+          </div>
+        </cv-disclosure>
 
-<cv-disclosure name="security-notes">
-  <span slot="trigger">Hardware token notes</span>
-  <p>Describe the fallback token and enrollment date.</p>
-</cv-disclosure>
+        <cv-disclosure data-disclosure-label="Advanced relay options">
+          <span slot="trigger" class="disclosure-demo-trigger">
+            <strong>Advanced relay options</strong>
+            <small>Single optional reveal</small>
+          </span>
+          <div class="disclosure-demo-content">
+            <p>
+              Tune retry windows and export notes only when the operator needs relay-level detail. The closed
+              state keeps the routine review compact.
+            </p>
+          </div>
+        </cv-disclosure>
 
-<cv-disclosure name="security-notes">
-  <span slot="trigger">Audit notes</span>
-  <p>Keep the visible trail short and specific.</p>
-</cv-disclosure>
+        <cv-disclosure disabled data-disclosure-label="Locked recovery note">
+          <span slot="trigger" class="disclosure-demo-trigger">
+            <strong>Locked recovery note</strong>
+            <small>Disabled state remains visible</small>
+          </span>
+          <div class="disclosure-demo-content">
+            <p>This panel cannot be toggled while the workspace is in a protected review mode.</p>
+          </div>
+        </cv-disclosure>
+      </div>
+    </div>
 
-<!-- Custom animation timing via a class or component stylesheet -->
-<style>
-  .slow-disclosure {
-    --cv-disclosure-duration: 300ms;
-    --cv-disclosure-easing: cubic-bezier(0.4, 0, 0.2, 1);
-  }
-</style>
+    <aside class="disclosure-demo-side" aria-label="Grouped disclosure examples and event output">
+      <div class="disclosure-demo-group">
+        <div class="disclosure-demo-section-header">
+          <span class="disclosure-demo-kicker">Named group</span>
+          <h4>Opening one peer closes the others without roving focus or accordion value state.</h4>
+        </div>
 
-<cv-disclosure class="slow-disclosure">
-  <span slot="trigger">Slow reveal</span>
-  Content with custom animation.
-</cv-disclosure>
+        <cv-disclosure name="disclosure-demo-security-notes" data-disclosure-label="Recovery phrase">
+          <span slot="trigger" class="disclosure-demo-trigger">
+            <strong>Recovery phrase</strong>
+            <small>exclusive peer</small>
+          </span>
+          <p>Document storage location and operator access without exposing unrelated audit notes.</p>
+        </cv-disclosure>
+
+        <cv-disclosure name="disclosure-demo-security-notes" data-disclosure-label="Hardware token">
+          <span slot="trigger" class="disclosure-demo-trigger">
+            <strong>Hardware token</strong>
+            <small>exclusive peer</small>
+          </span>
+          <p>Show enrollment date, fallback token label, and expected pairing state.</p>
+        </cv-disclosure>
+
+        <cv-disclosure name="disclosure-demo-security-notes" data-disclosure-label="Audit note">
+          <span slot="trigger" class="disclosure-demo-trigger">
+            <strong>Audit note</strong>
+            <small>exclusive peer</small>
+          </span>
+          <p>Keep the visible trail short, specific, and tied to the selected vault surface.</p>
+        </cv-disclosure>
+      </div>
+
+      <p class="disclosure-demo-log" role="status" aria-live="polite" data-disclosure-output>
+        Waiting for user interaction. Toggle any active disclosure.
+      </p>
+    </aside>
+  </section>
+</div>
+
+<script type="module">
+  document
+    .querySelectorAll('.disclosure-demo-shell[data-demo="disclosure"]:not([data-ready])')
+    .forEach((shell) => {
+      shell.dataset.ready = 'true'
+
+      const output = shell.querySelector('[data-disclosure-output]')
+      const disclosures = shell.querySelectorAll('cv-disclosure')
+
+      disclosures.forEach((disclosure) => {
+        disclosure.addEventListener('cv-change', (event) => {
+          const detail = event.detail
+          const label = disclosure.dataset.disclosureLabel ?? 'Disclosure'
+          const state = detail.open ? 'opened' : 'closed'
+
+          shell.dataset.lastState = detail.open ? 'open' : 'closed'
+          if (output) output.textContent = `${label} ${state}.`
+        })
+      })
+    })
+</script>
 ```

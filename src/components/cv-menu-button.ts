@@ -6,6 +6,12 @@ import {html} from '../reatom-lit/index.js'
 import {ReatomLitElement} from '../reatom-lit/ReatomLitElement'
 import {CVIcon} from './cv-icon'
 import {CVMenuItem} from './cv-menu-item'
+import {
+  clearPopoverLayout,
+  resolvePopoverBlockPosition,
+  toPopoverRect,
+  type CVPopoverPlacement,
+} from './cv-popover-positioning'
 
 export interface CVMenuButtonEventDetail {
   value: string | null
@@ -446,13 +452,7 @@ export class CVMenuButton extends ReatomLitElement {
   }
 
   private clearInlineLayout(menu: HTMLElement): void {
-    menu.style.position = ''
-    menu.style.top = ''
-    menu.style.left = ''
-    menu.style.bottom = ''
-    menu.style.right = ''
-    menu.style.transform = ''
-    menu.style.translate = ''
+    clearPopoverLayout(menu)
     menu.style.minWidth = ''
     menu.style.visibility = ''
   }
@@ -469,19 +469,13 @@ export class CVMenuButton extends ReatomLitElement {
     return Number.isFinite(parsed) ? parsed : 180
   }
 
-  private getMenuInlineStart(baseRect: DOMRect, menuWidth: number, viewportWidth: number): number {
+  private getMenuPlacement(): CVPopoverPlacement {
     const rawAlign = getComputedStyle(this).getPropertyValue('--cv-menu-button-menu-align').trim()
     const align = rawAlign === 'center' || rawAlign === 'end' ? rawAlign : 'start'
-    const viewportPadding = 8
-    const maxLeft = Math.max(viewportPadding, viewportWidth - menuWidth - viewportPadding)
-    const preferredLeft =
-      align === 'center'
-        ? baseRect.left + baseRect.width / 2 - menuWidth / 2
-        : align === 'end'
-          ? baseRect.right - menuWidth
-          : baseRect.left
 
-    return Math.min(Math.max(preferredLeft, viewportPadding), maxLeft)
+    if (align === 'center') return 'bottom'
+    if (align === 'end') return 'bottom-end'
+    return 'bottom-start'
   }
 
   private getMenuItemProperty(source: CSSStyleDeclaration | null, name: string, fallback: string): string {
@@ -507,25 +501,21 @@ export class CVMenuButton extends ReatomLitElement {
     menu.style.visibility = 'hidden'
 
     const menuRect = menu.getBoundingClientRect()
-    const viewportWidth = window.innerWidth
-    const viewportHeight = window.innerHeight
-    const gap = this.getMenuOffset()
-    const viewportPadding = 8
-
-    const spaceAbove = Math.max(0, baseRect.top - viewportPadding - gap)
-    const spaceBelow = Math.max(0, viewportHeight - baseRect.bottom - viewportPadding - gap)
-    const placeAbove = spaceBelow < menuRect.height + gap && spaceAbove > spaceBelow
-
-    let top = placeAbove ? baseRect.top - menuRect.height - gap : baseRect.bottom + gap
-    let left = this.getMenuInlineStart(baseRect, menuRect.width, viewportWidth)
-
-    const maxTop = Math.max(viewportPadding, viewportHeight - menuRect.height - viewportPadding)
-
-    top = Math.min(Math.max(top, viewportPadding), maxTop)
+    const resolved = resolvePopoverBlockPosition(
+      toPopoverRect(baseRect),
+      toPopoverRect(menuRect),
+      this.getMenuPlacement(),
+      this.getMenuOffset(),
+      {
+        width: window.innerWidth,
+        height: window.innerHeight,
+        padding: 8,
+      },
+    )
 
     menu.style.position = 'absolute'
-    menu.style.top = `${top - baseRect.top}px`
-    menu.style.left = `${left - baseRect.left}px`
+    menu.style.top = `${resolved.top - baseRect.top}px`
+    menu.style.left = `${resolved.left - baseRect.left}px`
     menu.style.bottom = 'auto'
     menu.style.right = 'auto'
     menu.style.transform = 'none'
@@ -548,25 +538,21 @@ export class CVMenuButton extends ReatomLitElement {
     portal.style.visibility = 'hidden'
 
     const menuRect = portal.getBoundingClientRect()
-    const viewportWidth = window.innerWidth
-    const viewportHeight = window.innerHeight
-    const gap = this.getMenuOffset()
-    const viewportPadding = 8
-
-    const spaceAbove = Math.max(0, baseRect.top - viewportPadding - gap)
-    const spaceBelow = Math.max(0, viewportHeight - baseRect.bottom - viewportPadding - gap)
-    const placeAbove = spaceBelow < menuRect.height + gap && spaceAbove > spaceBelow
-
-    let top = placeAbove ? baseRect.top - menuRect.height - gap : baseRect.bottom + gap
-    let left = this.getMenuInlineStart(baseRect, menuRect.width, viewportWidth)
-
-    const maxTop = Math.max(viewportPadding, viewportHeight - menuRect.height - viewportPadding)
-
-    top = Math.min(Math.max(top, viewportPadding), maxTop)
+    const resolved = resolvePopoverBlockPosition(
+      toPopoverRect(baseRect),
+      toPopoverRect(menuRect),
+      this.getMenuPlacement(),
+      this.getMenuOffset(),
+      {
+        width: window.innerWidth,
+        height: window.innerHeight,
+        padding: 8,
+      },
+    )
 
     portal.style.position = 'fixed'
-    portal.style.top = `${top}px`
-    portal.style.left = `${left}px`
+    portal.style.top = `${resolved.top}px`
+    portal.style.left = `${resolved.left}px`
     portal.style.bottom = 'auto'
     portal.style.right = 'auto'
     portal.style.transform = 'none'

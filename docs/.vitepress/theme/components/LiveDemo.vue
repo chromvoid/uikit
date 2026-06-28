@@ -1,8 +1,12 @@
 <script setup lang="ts">
+import {useData} from 'vitepress'
 import {computed, nextTick, onMounted, onUnmounted, ref, watch} from 'vue'
 
 import iframeRuntimeUrl from './liveDemoFrameRuntime.ts?worker&url'
+import {FRAME_TOKEN_ALIASES} from './liveDemoFrameTokens'
 import {extractLiveDemoStyleKeys} from './liveDemoStyleKeys'
+
+import frameThemeCss from './liveDemoFrameTheme.css?raw'
 
 const props = defineProps<{
   code: string
@@ -17,6 +21,19 @@ const RENDERED_MESSAGE_TYPE = 'cv-live-demo:rendered'
 const READY_MESSAGE_TYPE = 'cv-live-demo:ready'
 const RENDER_COMMAND_TYPE = 'cv-live-demo:render'
 const CLEAR_COMMAND_TYPE = 'cv-live-demo:clear'
+const THEME_COMMAND_TYPE = 'cv-live-demo:theme'
+const PALETTE_PREVIEW_MESSAGE_TYPE = 'cv-live-demo:palette-preview'
+
+
+type DocsThemeMode = 'dark' | 'light'
+type DesignTokenSnapshot = Record<string, string>
+type SchemeDesignTokenSnapshot = Record<DocsThemeMode, DesignTokenSnapshot>
+
+
+type FrameTheme = {
+  mode: DocsThemeMode
+  tokens: DesignTokenSnapshot
+}
 
 
 const container = ref<HTMLElement | null>(null)
@@ -30,6 +47,7 @@ type FrameRender = {
   id: string
   html: string
   styleKeys: string[]
+  theme: FrameTheme
 }
 
 
@@ -53,6 +71,8 @@ type FramePoolState = {
 declare global {
   interface Window {
     __cvLiveDemoFramePool?: FramePoolState
+    __cvLiveDemoPalettePreview?: SchemeDesignTokenSnapshot
+    __cvLiveDemoPaletteTokenNames?: string[]
   }
 }
 
@@ -72,8 +92,89 @@ function decodeBase64Utf8(value: string): string {
 }
 
 
+function isDesignTokenName(value: string): boolean {
+  return /^--cv-[\w-]+$/u.test(value)
+}
+
+
+function isDesignTokenSnapshot(value: unknown): value is DesignTokenSnapshot {
+  if (typeof value !== 'object' || value === null) return false
+
+
+  return Object.entries(value).every(
+    ([name, tokenValue]) => isDesignTokenName(name) && typeof tokenValue === 'string',
+  )
+}
+
+
+function isSchemeDesignTokenSnapshot(value: unknown): value is SchemeDesignTokenSnapshot {
+  if (typeof value !== 'object' || value === null) return false
+  const candidate = value as Partial<Record<DocsThemeMode, unknown>>
+  return isDesignTokenSnapshot(candidate.light) && isDesignTokenSnapshot(candidate.dark)
+}
+
+
+function readDesignTokenSnapshot(): DesignTokenSnapshot {
+  const computedStyle = getComputedStyle(document.documentElement)
+  const tokens: DesignTokenSnapshot = {}
+
+
+  for (let index = 0; index < computedStyle.length; index += 1) {
+    const name = computedStyle.item(index)
+    if (!name.startsWith('--cv-')) continue
+
+
+    const value = computedStyle.getPropertyValue(name).trim()
+    if (value) {
+      tokens[name] = value
+    }
+  }
+
+
+  return tokens
+}
+
+
+function applyPaletteTokensForCurrentMode(): void {
+  const palettePreview = window.__cvLiveDemoPalettePreview
+  if (!palettePreview) return
+
+
+  const tokens = palettePreview[themeMode.value]
+  const rootStyle = document.documentElement.style
+  const nextTokenNames = Object.keys(tokens)
+  const nextTokenNameSet = new Set(nextTokenNames)
+
+
+  for (const name of window.__cvLiveDemoPaletteTokenNames ?? []) {
+    if (!nextTokenNameSet.has(name)) {
+      rootStyle.removeProperty(name)
+    }
+  }
+
+
+  for (const [name, value] of Object.entries(tokens)) {
+    rootStyle.setProperty(name, value)
+  }
+
+
+  window.__cvLiveDemoPaletteTokenNames = nextTokenNames
+}
+
+
+function buildFrameTheme(): FrameTheme {
+  applyPaletteTokensForCurrentMode()
+  return {
+    mode: themeMode.value,
+    tokens: readDesignTokenSnapshot(),
+  }
+}
+
+
 const decoded = computed(() => decodeBase64Utf8(props.code))
 const highlightedHtml = computed(() => decodeBase64Utf8(props.highlighted))
+const {isDark} = useData()
+const themeMode = computed<DocsThemeMode>(() => (isDark.value ? 'dark' : 'light'))
 const isInline = computed(() => /\sdata-live-demo-inline(?:[\s=>]|$)/i.test(decoded.value))
 const styleKeys = computed(() => extractLiveDemoStyleKeys(decoded.value))
 const minFrameHeight = computed(() => {
@@ -116,6 +217,41 @@ watch(
 
 
 watch([frameHeight, frameReady], updateFrameElementState)
+
+
+watch(themeMode, () => {
+  if (!mounted.value) return
+
+  void nextTick(() => {
+    if (!mounted.value) return
+
+    if (isInline.value) {
+      void mountInlineDemo()
+      return
+    }
+
+    const theme = buildFrameTheme()
+    if (frameLease?.pendingRender) {
+      frameLease.pendingRender.theme = theme
+    }
+    postFrameTheme(theme)
+    updateFrameElementState()
+  })
+})
+
+
+function buildInlineFrameThemeCss(theme: FrameTheme): string {
+  const declarations = FRAME_TOKEN_ALIASES.map(([source, alias]) => {
+    const value = theme.tokens[source]
+    return value ? `  ${alias}: ${value};` : ''
+  }).filter(Boolean)
+
+
+  if (declarations.length === 0) return frameThemeCss
+
+
+  return `.live-demo-preview {\n${declarations.join('\n')}\n}\n${frameThemeCss}`
+}
 
 
 function runDemoScript(script: HTMLScriptElement): void {
@@ -174,8 +310,28 @@ function isFrameReadyMessage(data: unknown): data is {type: typeof READY_MESSAGE
 }
 
 
+function isPalettePreviewMessage(
+  data: unknown,
+): data is {type: typeof PALETTE_PREVIEW_MESSAGE_TYPE; tokens: SchemeDesignTokenSnapshot} {
+  return (
+    typeof data === 'object' &&
+    data !== null &&
+    'type' in data &&
+    'tokens' in data &&
+    data.type === PALETTE_PREVIEW_MESSAGE_TYPE &&
+    isSchemeDesignTokenSnapshot(data.tokens)
+  )
+}
+
+
 function handleFrameMessage(event: MessageEvent): void {
   if (!frameLease || event.source !== frameLease.element.contentWindow) return
+
+
+  if (isPalettePreviewMessage(event.data)) {
+    applyPalettePreview(event.data.tokens)
+    return
+  }
 
 
   if (isFrameReadyMessage(event.data)) {
@@ -201,25 +357,25 @@ function handleFrameMessage(event: MessageEvent): void {
 }
 
 
-function buildFrameSrcdoc(): string {
+function buildFrameSrcdoc(theme: DocsThemeMode): string {
   const closingScript = '</' + 'script>'
+  const htmlClass = theme === 'dark' ? ' class="dark"' : ''
   return `<!doctype html>
-<html lang="en">
+<html lang="en" data-theme="${theme}"${htmlClass}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <style>
       html {
         min-block-size: 100%;
-        background: #070d16;
-        color-scheme: dark;
+        color-scheme: ${theme};
       }
 
       body {
         min-block-size: 100%;
         margin: 0;
-        background: #070d16;
-        color: #eef5ff;
+        background: Canvas;
+        color: CanvasText;
         font-family:
           Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
         overflow: hidden;
@@ -229,6 +385,37 @@ function buildFrameSrcdoc(): string {
   </head>
   <body></body>
 </html>`
+}
+
+
+function postFrameTheme(theme: FrameTheme): void {
+  frameLease?.element.contentWindow?.postMessage({type: THEME_COMMAND_TYPE, theme}, '*')
+}
+
+
+function postThemeToFrame(frame: PooledFrame, theme: FrameTheme): void {
+  if (frame.pendingRender) {
+    frame.pendingRender.theme = theme
+  }
+  frame.element.contentWindow?.postMessage({type: THEME_COMMAND_TYPE, theme}, '*')
+}
+
+
+function broadcastFrameTheme(theme: FrameTheme = buildFrameTheme()): void {
+  for (const frame of getFramePoolState().frames) {
+    postThemeToFrame(frame, theme)
+  }
+}
+
+
+function applyPalettePreview(tokens: SchemeDesignTokenSnapshot): void {
+  window.__cvLiveDemoPalettePreview = {
+    light: {...tokens.light},
+    dark: {...tokens.dark},
+  }
+  applyPaletteTokensForCurrentMode()
+  broadcastFrameTheme(buildFrameTheme())
+  updateFrameElementState()
 }
 
 
@@ -256,6 +443,7 @@ function flushFrameRender(frame: PooledFrame): void {
       id: frame.pendingRender.id,
       html: frame.pendingRender.html,
       styleKeys: frame.pendingRender.styleKeys,
+      theme: frame.pendingRender.theme,
     },
     '*',
   )
@@ -279,7 +467,8 @@ function createPooledFrame(pooled: boolean): PooledFrame {
   element.title = 'Isolated live demo preview'
   element.dataset.liveDemoFramePooled = pooled ? 'true' : 'false'
   element.sandbox.add('allow-scripts', 'allow-same-origin', 'allow-popups', 'allow-popups-to-escape-sandbox')
-  element.srcdoc = buildFrameSrcdoc()
+  element.srcdoc = buildFrameSrcdoc(themeMode.value)
+  element.style.colorScheme = themeMode.value
   parkFrameElement(element)
   element.addEventListener('load', () => {
     frame.ready = true
@@ -374,6 +563,7 @@ function updateFrameElementState(): void {
   frame.element.height = String(frameHeight.value)
   frame.element.className = frameReady.value ? 'live-demo-frame live-demo-frame--ready' : 'live-demo-frame'
   frame.element.dataset.liveDemoFrameActive = 'true'
+  frame.element.style.colorScheme = themeMode.value
   frame.element.style.position = 'fixed'
   frame.element.style.inset = 'auto'
   frame.element.style.left = `${rect.left}px`
@@ -391,6 +581,7 @@ async function mountInlineDemo(): Promise<void> {
 
   const html = decoded.value
   const keys = styleKeys.value
+  const theme = buildFrameTheme()
   const {loadLiveDemoCss} = await import('./liveDemoStyles')
   const css = await loadLiveDemoCss(keys)
   if (!container.value || !isInline.value || decoded.value !== html) return
@@ -404,7 +595,7 @@ async function mountInlineDemo(): Promise<void> {
 
   const style = document.createElement('style')
   style.dataset.liveDemoStyles = 'true'
-  style.textContent = css
+  style.textContent = `${css}\n${buildInlineFrameThemeCss(theme)}`
 
 
   container.value.replaceChildren(style, template.content.cloneNode(true))
@@ -423,7 +614,12 @@ function mountFrameDemo(): void {
 
   frameReady.value = false
   currentRenderId = `live-demo-${++getFramePoolState().idSequence}`
-  frameLease.pendingRender = {id: currentRenderId, html: decoded.value, styleKeys: styleKeys.value}
+  frameLease.pendingRender = {
+    id: currentRenderId,
+    html: decoded.value,
+    styleKeys: styleKeys.value,
+    theme: buildFrameTheme(),
+  }
   updateFrameElementState()
   observeFrameHost()
   flushFrameRender(frameLease)

@@ -1,0 +1,106 @@
+.live-demo-preview--frame {
+  background: var(--live-demo-surface);
+}
+
+.getting-started-surface {
+  display: grid;
+  gap: 18px;
+  inline-size: 100%;
+  min-inline-size: 0;
+  min-block-size: 280px;
+  padding: clamp(18px, 4vw, 26px);
+  overflow: hidden;
+  border: 1px solid var(--live-demo-border);
+  border-radius: 18px;
+  color: var(--live-demo-muted);
+  background: var(--live-demo-gradient-primary-soft);
+  box-shadow:
+    inset 0 1px 0 var(--cv-alpha-white-4),
+    0 18px 42px var(--cv-alpha-black-14);
+  container-type: inline-size;
+}
+
+.getting-started-surface,
+.getting-started-surface * {
+  box-sizing: border-box;
+}
+
+.getting-started-surface-copy {
+  display: grid;
+  gap: 8px;
+  min-inline-size: 0;
+}
+
+.getting-started-eyebrow,
+.getting-started-surface-progress span {
+  color: var(--live-demo-cyan);
+  font-family: var(--vp-font-family-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.getting-started-surface-copy strong {
+  max-inline-size: 30ch;
+  color: var(--live-demo-text);
+  font-size: clamp(1.18rem, 5cqi, 1.5rem);
+  line-height: 1.12;
+  text-wrap: balance;
+}
+
+.getting-started-surface-copy span:last-child {
+  max-inline-size: 60ch;
+  color: var(--live-demo-muted);
+  font-size: 0.92rem;
+  line-height: 1.55;
+}
+
+.getting-started-surface-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  min-inline-size: 0;
+}
+
+.getting-started-surface-actions cv-switch {
+  min-inline-size: 0;
+}
+
+.getting-started-surface-progress {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 8px 14px;
+  align-items: center;
+  min-inline-size: 0;
+  padding: 14px;
+  border: 1px solid var(--live-demo-border-muted);
+  border-radius: 14px;
+  background: var(--live-demo-gradient-panel);
+}
+
+.getting-started-surface-progress strong {
+  color: var(--live-demo-text);
+  font-family: var(--vp-font-family-mono);
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.getting-started-surface-progress cv-progress {
+  grid-column: 1 / -1;
+  inline-size: 100%;
+  min-inline-size: 0;
+  --cv-progress-height: 8px;
+  --cv-progress-track-color: var(--live-demo-surface-highlight);
+}
+
+@media (max-width: 420px) {
+  .getting-started-surface {
+    gap: 16px;
+    padding: 16px;
+  }
+
+  .getting-started-surface-actions {
+    gap: 10px;
+  }
+}

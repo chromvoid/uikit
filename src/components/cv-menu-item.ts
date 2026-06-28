@@ -48,6 +48,10 @@ export class CVMenuItem extends LitElement {
       }
 
       .item {
+        display: flex;
+        align-items: center;
+        inline-size: 100%;
+        min-inline-size: 0;
         gap: var(--cv-menu-item-gap, var(--cv-space-2, 8px));
         padding: var(--cv-menu-item-padding-block, var(--cv-space-2, 8px))
           var(--cv-menu-item-padding-inline, var(--cv-space-3, 12px));
@@ -89,7 +93,17 @@ export class CVMenuItem extends LitElement {
       }
 
       [part='label'] {
+        flex: 1 1 auto;
         min-inline-size: 0;
+      }
+
+      [part='prefix'],
+      [part='suffix'],
+      [part='checkmark'] {
+        display: inline-flex;
+        flex: 0 0 auto;
+        align-items: center;
+        justify-content: center;
       }
 
       [part='checkmark'] {
@@ -98,6 +112,10 @@ export class CVMenuItem extends LitElement {
       }
 
       [part='submenu-icon'] {
+        display: inline-flex;
+        flex: 0 0 auto;
+        align-items: center;
+        justify-content: center;
         margin-inline-start: auto;
       }
     `,

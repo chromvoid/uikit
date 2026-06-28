@@ -1,0 +1,285 @@
+.popover-demo-shell {
+  display: grid;
+  container-type: inline-size;
+  inline-size: 100%;
+  min-inline-size: 0;
+  overflow: hidden;
+  border: 1px solid var(--live-demo-border);
+  border-radius: 16px;
+  color: var(--live-demo-muted);
+  background: var(--live-demo-gradient-primary-soft);
+  box-shadow:
+    inset 0 1px 0 var(--cv-alpha-white-4),
+    0 18px 42px var(--cv-alpha-black-14);
+}
+
+.popover-demo-shell,
+.popover-demo-shell * {
+  box-sizing: border-box;
+}
+
+.popover-demo-hero,
+.popover-demo-matrix {
+  display: grid;
+  gap: 22px;
+  min-inline-size: 0;
+  padding: clamp(20px, 4cqi, 30px);
+}
+
+.popover-demo-hero {
+  grid-template-columns: minmax(0, 1fr);
+  align-items: stretch;
+  border-bottom: 1px solid var(--live-demo-border);
+}
+
+.popover-demo-copy,
+.popover-demo-stage,
+.popover-demo-section-header,
+.popover-demo-cases article,
+.popover-demo-panel,
+.popover-demo-panel-header,
+.popover-demo-compact {
+  display: grid;
+  align-content: start;
+  min-inline-size: 0;
+}
+
+.popover-demo-copy,
+.popover-demo-section-header,
+.popover-demo-panel,
+.popover-demo-compact {
+  gap: 10px;
+}
+
+.popover-demo-kicker,
+.popover-demo-label,
+.popover-demo-status,
+.popover-demo-readout dt {
+  font-family: var(--vp-font-family-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.popover-demo-kicker {
+  color: var(--live-demo-cyan);
+}
+
+.popover-demo-label,
+.popover-demo-readout dt {
+  color: var(--live-demo-soft);
+}
+
+.popover-demo-copy h3,
+.popover-demo-section-header h4 {
+  margin: 0;
+  color: var(--live-demo-text);
+  font-family: var(--vp-font-family-base);
+  letter-spacing: 0;
+}
+
+.popover-demo-copy h3 {
+  max-inline-size: 30ch;
+  font-size: clamp(1.18rem, 5cqi, 1.62rem);
+  line-height: 1.1;
+  text-wrap: balance;
+}
+
+.popover-demo-section-header h4 {
+  max-inline-size: 62ch;
+  font-size: 1rem;
+  line-height: 1.32;
+}
+
+.popover-demo-copy p,
+.popover-demo-cases p,
+.popover-demo-compact p {
+  margin: 0;
+  color: var(--live-demo-muted);
+  font-size: 0.92rem;
+  line-height: 1.58;
+}
+
+.popover-demo-copy p {
+  max-inline-size: 68ch;
+}
+
+.popover-demo-stage {
+  gap: 18px;
+  padding: clamp(16px, 3cqi, 22px);
+  overflow: visible;
+  border: 1px solid var(--live-demo-border-muted);
+  border-radius: 16px;
+  background: var(--live-demo-gradient-panel);
+}
+
+.popover-demo-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  min-inline-size: 0;
+  overflow: visible;
+}
+
+.popover-demo-status {
+  min-inline-size: min(100%, 220px);
+  padding: 9px 12px;
+  border: 1px solid var(--live-demo-green-border);
+  border-radius: 999px;
+  color: var(--live-demo-text);
+  background: var(--live-demo-green-surface);
+}
+
+.popover-demo-shell cv-popover {
+  --cv-popover-min-inline-size: min(320px, calc(100vw - 36px));
+  --cv-popover-max-inline-size: min(420px, calc(100vw - 36px));
+  --cv-popover-padding: 14px;
+  --cv-popover-border-radius: 14px;
+  --cv-popover-offset: 10px;
+  --cv-popover-arrow-size: 10px;
+  --cv-popover-arrow-background: var(--live-demo-surface);
+  --cv-popover-arrow-border-color: var(--live-demo-cyan-border);
+}
+
+.popover-demo-shell cv-popover::part(trigger) {
+  min-block-size: 40px;
+  border-color: var(--live-demo-cyan-border);
+  background: var(--live-demo-gradient-panel);
+  color: var(--live-demo-text);
+  font-weight: 650;
+}
+
+.popover-demo-shell cv-popover::part(content) {
+  border-color: var(--live-demo-cyan-border);
+  background: var(--live-demo-gradient-primary-soft);
+  box-shadow:
+    0 24px 70px var(--cv-alpha-black-35),
+    0 0 0 1px var(--live-demo-cyan-surface);
+}
+
+.popover-demo-primary::part(trigger) {
+  border-color: var(--live-demo-cyan-border);
+  background: var(--live-demo-gradient-primary-soft);
+  box-shadow: 0 14px 32px var(--live-demo-text);
+}
+
+.popover-demo-panel-header strong,
+.popover-demo-compact strong,
+.popover-demo-vault strong {
+  color: var(--live-demo-text);
+  line-height: 1.25;
+}
+
+.popover-demo-readout {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+}
+
+.popover-demo-readout div,
+.popover-demo-vault div {
+  display: grid;
+  gap: 4px;
+  min-inline-size: 0;
+  padding: 12px;
+  border: 1px solid var(--live-demo-border-muted);
+  border-radius: 12px;
+  background: var(--live-demo-surface-highlight);
+}
+
+.popover-demo-readout dd {
+  min-inline-size: 0;
+  margin: 0;
+  color: var(--live-demo-text);
+  line-height: 1.32;
+  overflow-wrap: anywhere;
+}
+
+.popover-demo-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  min-inline-size: 0;
+}
+
+.popover-demo-actions cv-button::part(base) {
+  min-block-size: 36px;
+}
+
+.popover-demo-vault {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 150px), 1fr));
+  gap: 10px;
+  min-inline-size: 0;
+}
+
+.popover-demo-vault span {
+  color: var(--live-demo-soft);
+  font-family: var(--vp-font-family-mono);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+}
+
+.popover-demo-vault div:first-child {
+  border-color: var(--live-demo-cyan-border);
+  background: var(--live-demo-cyan-surface);
+}
+
+.popover-demo-vault div:nth-child(2) {
+  border-color: var(--live-demo-violet-surface);
+  background: var(--live-demo-violet-surface);
+}
+
+.popover-demo-vault div:nth-child(3) {
+  border-color: var(--live-demo-green-surface);
+  background: var(--live-demo-green-surface);
+}
+
+.popover-demo-cases {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 210px), 1fr));
+  gap: 14px;
+  min-inline-size: 0;
+}
+
+.popover-demo-cases article {
+  gap: 12px;
+  padding: 16px;
+  overflow: visible;
+  border: 1px solid var(--live-demo-border);
+  border-radius: 14px;
+  background: var(--live-demo-gradient-panel);
+}
+
+.popover-demo-cases cv-popover {
+  justify-self: start;
+}
+
+.popover-demo-compact {
+  max-inline-size: 28ch;
+}
+
+.popover-demo-compact code {
+  color: var(--live-demo-text);
+  font-family: var(--vp-font-family-mono);
+  font-size: 0.86em;
+}
+
+@container (min-width: 760px) {
+  .popover-demo-hero {
+    grid-template-columns: minmax(0, 0.86fr) minmax(360px, 1.14fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .popover-demo-hero,
+  .popover-demo-matrix {
+    padding: 16px;
+  }
+
+  .popover-demo-status {
+    inline-size: 100%;
+  }
+}

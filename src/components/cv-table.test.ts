@@ -1080,9 +1080,7 @@ describe('cv-table', () => {
       await settle(table)
 
       expect(row1.getAttribute('aria-selected')).toBe('true')
-      expect(detail).toEqual(
-        expect.objectContaining({selectedRowIds: expect.arrayContaining(['row1'])}),
-      )
+      expect(detail).toEqual(expect.objectContaining({selectedRowIds: expect.arrayContaining(['row1'])}))
     })
 
     it('Ctrl+A selects all rows in interactive multi-select table', async () => {
@@ -1289,9 +1287,7 @@ describe('cv-table', () => {
       await settle(table)
       expect(row1.getAttribute('aria-selected')).toBe('true')
 
-      table.append(
-        createRow('row3', [createCell('name', 'Carol'), createCell('email', 'carol@example.com')]),
-      )
+      table.append(createRow('row3', [createCell('name', 'Carol'), createCell('email', 'carol@example.com')]))
       await settle(table)
 
       expect(row1.getAttribute('aria-selected')).toBe('true')

@@ -276,9 +276,7 @@ export class CVAccordion extends ReatomLitElement {
       // time matching sections appear, so a controlled value survives late
       // slotting. Only done once, so it never resurrects a user collapse.
       const knownIds = new Set(this.itemRecords.map((record) => record.id))
-      const reapply = this.resolveConfiguredExpandedIds(this.itemRecords).filter((id) =>
-        knownIds.has(id),
-      )
+      const reapply = this.resolveConfiguredExpandedIds(this.itemRecords).filter((id) => knownIds.has(id))
       if (reapply.length > 0) {
         this.model.actions.setExpandedIds(reapply)
       }
@@ -316,10 +314,7 @@ export class CVAccordion extends ReatomLitElement {
       }
 
       const keydown = (event: Event) => {
-        this.handleItemTriggerKeyDown(
-          record.id,
-          event as CustomEvent<CVAccordionItemTriggerKeydownDetail>,
-        )
+        this.handleItemTriggerKeyDown(record.id, event as CustomEvent<CVAccordionItemTriggerKeydownDetail>)
       }
 
       record.element.addEventListener('cv-accordion-item-trigger-click', click)

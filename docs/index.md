@@ -97,20 +97,64 @@ features:
 
 ## Quick Start
 
-```ts
-import {registerUikit} from '@chromvoid/uikit/register'
+<section class="uikit-quickstart" aria-label="Quick start setup and preview">
+  <div class="uikit-quickstart-copy">
+    <p class="components-kicker">Install path</p>
+    <h3>Register once, load tokens, compose real product states.</h3>
+    <p>
+      The default entry point keeps registration explicit while the theme provider scopes the visual
+      system around the components you render.
+    </p>
+    <ol class="uikit-quickstart-steps" aria-label="Quick start sequence">
+      <li>
+        <span>01</span>
+        <strong>Wire the bundle</strong>
+        <p>Import the bulk register entry and the token CSS in the browser entry.</p>
+      </li>
+      <li>
+        <span>02</span>
+        <strong>Scope the surface</strong>
+        <p>Wrap composed UI in <code>cv-theme-provider</code> when a product shell owns theme mode.</p>
+      </li>
+      <li>
+        <span>03</span>
+        <strong>Validate the state</strong>
+        <p>Render controls, selection, and progress together before moving into a feature route.</p>
+      </li>
+    </ol>
+  </div>
+
+  <div class="uikit-quickstart-stage">
+    <div class="uikit-quickstart-code-grid" aria-label="Quick start code snippets">
+      <figure class="uikit-quickstart-code">
+        <figcaption>entry.ts</figcaption>
+        <pre><code>import &#123;registerUikit&#125; from '@chromvoid/uikit/register'
 import '@chromvoid/uikit/theme/tokens.css'
+registerUikit()</code></pre>
+      </figure>
+      <figure class="uikit-quickstart-code">
+        <figcaption>shell.html</figcaption>
+        <pre><code>&lt;cv-theme-provider mode="system"&gt;
+  &lt;cv-button&gt;Unlock vault&lt;/cv-button&gt;
+  &lt;cv-checkbox checked&gt;Arm sync&lt;/cv-checkbox&gt;
+  &lt;cv-progress value="58" aria-label="Migration progress"&gt;&lt;/cv-progress&gt;
+&lt;/cv-theme-provider&gt;</code></pre>
+      </figure>
+    </div>
 
-registerUikit()
-```
-
-```html
-<cv-theme-provider mode="dark">
-  <cv-button>Unlock vault</cv-button>
-  <cv-checkbox checked>Arm sync</cv-checkbox>
-  <cv-progress value="58" aria-label="Migration progress"></cv-progress>
-</cv-theme-provider>
-```
+<div class="uikit-quickstart-preview" aria-label="Rendered quick start preview">
+<div class="uikit-quickstart-preview-copy">
+<span>Rendered state</span>
+<strong>Vault migration controls</strong>
+</div>
+<div class="uikit-quickstart-preview-actions">
+<cv-button>Unlock vault</cv-button>
+<cv-checkbox checked>Arm sync</cv-checkbox>
+</div>
+<cv-progress value="58" aria-label="Migration progress"></cv-progress>
+</div>
+  </div>
+</section>
 
 ## How The Package Is Layered
 

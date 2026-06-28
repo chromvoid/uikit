@@ -1,26 +1,4 @@
-@font-face {
-  font-family: 'Manrope';
-  font-style: normal;
-  font-weight: 400 700;
-  font-display: swap;
-  src: url('/fonts/manrope-latin-400.woff2') format('woff2');
-}
-
-@font-face {
-  font-family: 'Orbitron';
-  font-style: normal;
-  font-weight: 700;
-  font-display: swap;
-  src: url('/fonts/orbitron-latin-700.woff2') format('woff2');
-}
-
-@font-face {
-  font-family: 'JetBrains Mono';
-  font-style: normal;
-  font-weight: 500;
-  font-display: swap;
-  src: url('/fonts/jetbrains-mono-latin-500.woff2') format('woff2');
-}
+@import '@chromvoid/uikit/theme/tokens.css';
 
 :root {
   --vp-font-family-base: var(--cv-font-family-body, 'Manrope', 'Segoe UI', sans-serif);
@@ -335,6 +313,9 @@ body::after {
 }
 
 .VPButton.medium {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   min-block-size: 46px;
   padding-inline: 18px;
   border-radius: 999px;
@@ -439,7 +420,8 @@ body::after {
   .VPSidebarItem .link,
   .VPDocAside .outline-link,
   .component-action,
-  .component-link
+  .component-link,
+  .playground-jump a
 ):focus-visible {
   outline: 2px solid var(--docs-ring);
   outline-offset: 3px;
@@ -897,7 +879,12 @@ body::after {
 
 .vp-doc a.component-action-primary:hover,
 .component-action-primary:hover {
+  border-color: rgba(151, 236, 255, 0.54);
+  background: linear-gradient(135deg, rgba(154, 236, 255, 0.98), rgba(74, 159, 214, 0.98));
   color: #020d14;
+  box-shadow:
+    0 16px 36px rgba(23, 109, 154, 0.32),
+    inset 0 1px 0 rgba(255, 255, 255, 0.24);
 }
 
 .component-links {
@@ -948,6 +935,229 @@ body::after {
 
 .component-link:hover::after {
   transform: translateX(2px);
+}
+
+.uikit-quickstart {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  grid-template-columns: minmax(260px, 0.72fr) minmax(0, 1fr);
+  gap: 18px;
+  align-items: stretch;
+  margin: 8px 0 30px;
+  padding: 20px;
+  overflow: hidden;
+  border: 1px solid var(--docs-border);
+  border-radius: 20px;
+  background:
+    radial-gradient(circle at 14% 0%, rgba(101, 215, 255, 0.14), transparent 38%),
+    radial-gradient(circle at 90% 12%, rgba(179, 136, 255, 0.1), transparent 34%),
+    linear-gradient(180deg, rgba(15, 24, 37, 0.96), rgba(8, 14, 23, 0.96));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.04),
+    var(--docs-shadow);
+}
+
+.uikit-quickstart::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto;
+  block-size: 1px;
+  background: linear-gradient(90deg, transparent, rgba(171, 231, 255, 0.34), transparent);
+}
+
+.uikit-quickstart::after {
+  content: '';
+  position: absolute;
+  inset: auto 22px 22px auto;
+  inline-size: min(32vw, 360px);
+  aspect-ratio: 1;
+  pointer-events: none;
+  border: 1px solid rgba(130, 220, 255, 0.08);
+  border-radius: 999px;
+  background:
+    linear-gradient(135deg, rgba(130, 220, 255, 0.08), transparent 42%),
+    radial-gradient(circle, rgba(179, 136, 255, 0.08), transparent 66%);
+  opacity: 0.74;
+}
+
+.uikit-quickstart-copy,
+.uikit-quickstart-stage {
+  position: relative;
+  z-index: 1;
+}
+
+.uikit-quickstart-copy {
+  display: grid;
+  align-content: start;
+  gap: 14px;
+  min-inline-size: 0;
+  padding: 4px;
+}
+
+.uikit-quickstart-copy h3 {
+  max-inline-size: 18ch;
+  margin: 0;
+  color: var(--vp-c-text-1);
+  font-family: var(--cv-font-family-display, 'Orbitron', 'Manrope', sans-serif);
+  font-size: clamp(1.22rem, 2.4vw, 1.72rem);
+  line-height: 1.08;
+  text-wrap: balance;
+}
+
+.uikit-quickstart-copy > p:not(.components-kicker) {
+  margin: 0;
+  color: rgba(222, 232, 244, 0.9);
+  font-size: 0.96rem;
+  line-height: 1.62;
+}
+
+.uikit-quickstart-steps {
+  display: grid;
+  gap: 10px;
+  margin: 4px 0 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: none;
+}
+
+.uikit-quickstart-steps li {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  column-gap: 12px;
+  row-gap: 3px;
+  min-inline-size: 0;
+  padding: 12px;
+  border: 1px solid rgba(118, 181, 222, 0.16);
+  border-radius: 14px;
+  background:
+    linear-gradient(180deg, rgba(18, 28, 43, 0.74), rgba(10, 17, 27, 0.76)),
+    radial-gradient(circle at top left, rgba(101, 215, 255, 0.08), transparent 42%);
+}
+
+.uikit-quickstart-steps span {
+  grid-row: 1 / 3;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: 34px;
+  block-size: 28px;
+  border: 1px solid rgba(101, 215, 255, 0.28);
+  border-radius: 999px;
+  background: rgba(101, 215, 255, 0.1);
+  color: #a6f0ff;
+  font-family: var(--vp-font-family-mono);
+  font-size: 0.7rem;
+}
+
+.uikit-quickstart-steps strong {
+  color: var(--vp-c-text-1);
+  font-size: 0.94rem;
+  line-height: 1.3;
+}
+
+.uikit-quickstart-steps p {
+  margin: 0;
+  color: var(--docs-text-muted);
+  font-size: 0.84rem;
+  line-height: 1.45;
+}
+
+.uikit-quickstart-stage {
+  display: grid;
+  gap: 14px;
+  min-inline-size: 0;
+}
+
+.uikit-quickstart-code-grid {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: minmax(0, 0.86fr) minmax(0, 1.14fr);
+  min-inline-size: 0;
+}
+
+.uikit-quickstart-code {
+  display: grid;
+  min-inline-size: 0;
+  margin: 0;
+  overflow: hidden;
+  border: 1px solid rgba(118, 181, 222, 0.18);
+  border-radius: 14px;
+  background: rgba(5, 10, 18, 0.84);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
+}
+
+.uikit-quickstart-code figcaption {
+  display: flex;
+  align-items: center;
+  min-block-size: 36px;
+  padding: 0 14px;
+  border-bottom: 1px solid rgba(118, 181, 222, 0.14);
+  color: #9de9ff;
+  font-family: var(--vp-font-family-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.uikit-quickstart-code pre {
+  min-inline-size: 0;
+  margin: 0;
+  overflow-x: auto;
+  padding: 14px;
+  color: rgba(231, 240, 252, 0.9);
+  font-family: var(--vp-font-family-mono);
+  font-size: clamp(0.72rem, 0.95vw, 0.82rem);
+  line-height: 1.72;
+}
+
+.uikit-quickstart-code code {
+  display: block;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.uikit-quickstart-preview {
+  display: grid;
+  gap: 16px;
+  min-inline-size: 0;
+  padding: 18px;
+  border: 1px solid rgba(101, 215, 255, 0.22);
+  border-radius: 16px;
+  background:
+    linear-gradient(180deg, rgba(15, 23, 35, 0.96), rgba(7, 13, 22, 0.96)),
+    linear-gradient(90deg, rgba(101, 215, 255, 0.1), transparent 62%);
+}
+
+.uikit-quickstart-preview-copy {
+  display: grid;
+  gap: 5px;
+  min-inline-size: 0;
+}
+
+.uikit-quickstart-preview-copy span {
+  color: #94e9ff;
+  font-family: var(--vp-font-family-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.uikit-quickstart-preview-copy strong {
+  color: var(--vp-c-text-1);
+  font-size: 1.04rem;
+  line-height: 1.25;
+}
+
+.uikit-quickstart-preview-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+}
+
+.uikit-quickstart-preview cv-progress {
+  inline-size: 100%;
 }
 
 .getting-started-hero,
@@ -1253,9 +1463,351 @@ body::after {
   margin-bottom: 0;
 }
 
-.component-playground,
+.component-playground {
+  display: grid;
+  gap: 22px;
+  margin-top: 22px;
+}
+
+.component-playground--compact {
+  gap: 18px;
+}
+
 .catalog-shell {
   margin-top: 22px;
+}
+
+.playground-hero,
+.playground-stage,
+.playground-section {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--docs-border);
+  border-radius: 18px;
+  background:
+    linear-gradient(180deg, rgba(16, 25, 39, 0.96), rgba(8, 14, 23, 0.96)),
+    radial-gradient(circle at top right, rgba(112, 218, 255, 0.1), transparent 34%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.04),
+    var(--docs-shadow);
+}
+
+.playground-hero {
+  display: grid;
+  gap: 22px;
+  grid-template-columns: minmax(0, 1.1fr) minmax(220px, 0.78fr);
+  align-items: stretch;
+  padding: 24px;
+}
+
+.playground-hero-copy {
+  display: grid;
+  align-content: center;
+  gap: 12px;
+  min-inline-size: 0;
+}
+
+.playground-title {
+  max-inline-size: 18ch;
+  margin: 0;
+  color: var(--vp-c-text-1);
+  font-family: var(--cv-font-family-display, 'Orbitron', 'Manrope', sans-serif);
+  font-size: 1.55rem;
+  line-height: 1.08;
+}
+
+.playground-overview {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+}
+
+.playground-overview div {
+  display: grid;
+  gap: 6px;
+  min-inline-size: 0;
+  padding: 16px;
+  border: 1px solid rgba(114, 178, 219, 0.17);
+  border-radius: 14px;
+  background: rgba(5, 12, 21, 0.42);
+}
+
+.playground-overview dt {
+  color: #8ee7ff;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.playground-overview dd {
+  margin: 0;
+  color: var(--vp-c-text-1);
+  font-family: var(--cv-font-family-display, 'Orbitron', 'Manrope', sans-serif);
+  font-size: 1.25rem;
+  line-height: 1;
+}
+
+.playground-overview span {
+  color: rgba(210, 226, 242, 0.72);
+  font-size: 0.78rem;
+  line-height: 1.35;
+}
+
+.playground-jump {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.vp-doc .playground-jump a,
+.playground-jump a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-block-size: 30px;
+  padding: 0 11px;
+  border: 1px solid rgba(126, 194, 232, 0.2);
+  border-radius: 999px;
+  background: rgba(10, 18, 29, 0.72);
+  color: #d9f6ff;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.05em;
+  line-height: 1;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.vp-doc .playground-jump a:hover,
+.playground-jump a:hover {
+  border-color: rgba(137, 220, 255, 0.42);
+  background: rgba(20, 35, 51, 0.86);
+}
+
+.playground-stage {
+  display: grid;
+  gap: 22px;
+  grid-template-columns: minmax(0, 0.88fr) minmax(320px, 1.12fr);
+  padding: 24px;
+}
+
+.playground-stage-copy,
+.playground-section-header,
+.playground-card {
+  min-inline-size: 0;
+}
+
+.playground-stage-copy h3,
+.playground-section-header h3,
+.playground-card h4 {
+  margin: 0;
+  color: var(--vp-c-text-1);
+  font-family: var(--cv-font-family-display, 'Orbitron', 'Manrope', sans-serif);
+  line-height: 1.1;
+}
+
+.playground-stage-copy h3,
+.playground-section-header h3 {
+  max-inline-size: 20ch;
+  font-size: 1.4rem;
+}
+
+.playground-stage-copy p:not(.components-kicker),
+.playground-section-header + *,
+.playground-card p {
+  color: rgba(219, 231, 245, 0.76);
+}
+
+.playground-chip-row,
+.playground-row,
+.playground-console-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.playground-row--center {
+  align-items: center;
+}
+
+.playground-console,
+.playground-card {
+  display: grid;
+  gap: 16px;
+  border: 1px solid rgba(125, 187, 224, 0.18);
+  border-radius: 14px;
+  background: rgba(5, 12, 21, 0.42);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
+}
+
+.playground-console {
+  padding: 18px;
+}
+
+.playground-console-header,
+.playground-meter-panel > div {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.playground-console-header span,
+.playground-meter-panel span {
+  display: block;
+  margin-bottom: 4px;
+  color: #8ee7ff;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.playground-console-header strong,
+.playground-meter-panel strong {
+  color: var(--vp-c-text-1);
+  font-size: 0.9rem;
+}
+
+.playground-console-grid,
+.playground-form-grid {
+  display: grid;
+  gap: 14px;
+  grid-template-columns: minmax(0, 1fr) minmax(180px, 0.72fr);
+}
+
+.playground-meter-panel {
+  display: grid;
+  align-content: center;
+  gap: 10px;
+  min-inline-size: 0;
+  padding: 14px;
+  border: 1px solid rgba(124, 186, 224, 0.16);
+  border-radius: 12px;
+  background: rgba(15, 25, 37, 0.64);
+}
+
+.playground-section {
+  display: grid;
+  gap: 18px;
+  padding: 22px;
+}
+
+.playground-showcase-grid {
+  display: grid;
+  gap: 14px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.playground-card {
+  align-content: start;
+  padding: 16px;
+}
+
+.playground-card--wide {
+  grid-column: 1 / -1;
+}
+
+.playground-card h4 {
+  font-size: 1rem;
+}
+
+.playground-card p {
+  margin: 0;
+  font-size: 0.84rem;
+  line-height: 1.5;
+}
+
+.playground-stack,
+.playground-feedback-grid {
+  display: grid;
+  gap: 12px;
+}
+
+.playground-feedback-grid {
+  align-items: center;
+}
+
+.component-playground cv-field,
+.component-playground cv-select,
+.component-playground cv-input,
+.component-playground cv-listbox,
+.component-playground cv-progress,
+.component-playground cv-meter,
+.component-playground cv-alert,
+.component-playground cv-tabs,
+.component-playground cv-toast-region,
+.component-playground cv-radio-group,
+.component-playground cv-accordion,
+.component-playground cv-disclosure {
+  inline-size: 100%;
+  min-inline-size: 0;
+}
+
+.component-playground cv-button,
+.component-playground cv-chip,
+.component-playground cv-badge {
+  max-inline-size: 100%;
+}
+
+.playground-card cv-toast-region {
+  position: static;
+}
+
+@media (max-width: 960px) {
+  .playground-hero,
+  .playground-stage,
+  .playground-showcase-grid,
+  .playground-form-grid,
+  .playground-console-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .playground-overview {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .component-playground {
+    gap: 16px;
+  }
+
+  .playground-hero,
+  .playground-stage,
+  .playground-section {
+    padding: 16px;
+    border-radius: 16px;
+  }
+
+  .playground-title {
+    max-inline-size: none;
+    font-size: 1.35rem;
+  }
+
+  .playground-stage-copy h3,
+  .playground-section-header h3 {
+    max-inline-size: none;
+    font-size: 1.18rem;
+  }
+
+  .playground-overview {
+    grid-template-columns: 1fr;
+  }
+
+  .playground-jump a {
+    flex: 1 1 9rem;
+  }
+
+  .playground-console,
+  .playground-card {
+    padding: 14px;
+  }
+
+  .component-playground cv-button {
+    white-space: normal;
+  }
 }
 
 .catalog-grid {
@@ -1481,6 +2033,14 @@ cv-disclosure.live-demo-source pre {
     padding: 24px;
   }
 
+  .uikit-quickstart {
+    grid-template-columns: 1fr;
+  }
+
+  .uikit-quickstart-code-grid {
+    grid-template-columns: 1fr;
+  }
+
   .uikit-intro {
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   }
@@ -1508,6 +2068,36 @@ cv-disclosure.live-demo-source pre {
 @media (max-width: 640px) {
   body::before {
     opacity: 0.36;
+  }
+
+  .uikit-quickstart {
+    gap: 16px;
+    padding: 16px;
+    border-radius: 18px;
+  }
+
+  .uikit-quickstart-copy {
+    padding: 0;
+  }
+
+  .uikit-quickstart-copy h3 {
+    max-inline-size: none;
+  }
+
+  .uikit-quickstart-steps li {
+    grid-template-columns: 1fr;
+  }
+
+  .uikit-quickstart-steps span {
+    grid-row: auto;
+  }
+
+  .uikit-quickstart-code pre {
+    padding: 12px;
+  }
+
+  .uikit-quickstart-preview {
+    padding: 16px;
   }
 
   .VPHome .VPHero .main::before {
@@ -1629,4 +2219,286 @@ cv-disclosure.live-demo-source pre {
   .VPHome .component-link:nth-child(4) {
     animation-delay: 190ms;
   }
+}
+
+[data-theme='light'] {
+  --vp-c-brand-1: var(--cv-color-primary);
+  --vp-c-brand-2: var(--cv-color-primary-dark);
+  --vp-c-brand-3: var(--cv-color-primary-darker);
+  --vp-c-text-1: var(--cv-color-text-strong);
+  --vp-c-text-2: var(--cv-color-text);
+  --vp-c-text-3: var(--cv-color-text-muted);
+  --vp-c-bg: var(--cv-color-bg);
+  --vp-c-bg-alt: var(--cv-color-surface-2);
+  --vp-c-bg-elv: var(--cv-color-surface);
+  --vp-c-divider: var(--cv-color-border-soft);
+  --vp-code-block-bg: var(--cv-color-surface-2);
+  --vp-home-hero-name-color: var(--cv-color-primary-darker);
+  --vp-home-hero-name-background: none;
+  --docs-bg-top: var(--cv-color-bg);
+  --docs-bg-bottom: var(--cv-color-surface-2);
+  --docs-glow-primary: var(--cv-color-primary-surface);
+  --docs-glow-secondary: var(--cv-color-accent-surface);
+  --docs-grid-color: var(--cv-color-border-faint);
+  --docs-surface-1: var(--cv-color-surface);
+  --docs-surface-2: var(--cv-color-surface-elevated);
+  --docs-surface-3: var(--cv-color-surface-3);
+  --docs-surface-hero: var(--cv-color-surface);
+  --docs-border: var(--cv-color-border-soft);
+  --docs-border-strong: var(--cv-color-primary-border-strong);
+  --docs-text-muted: var(--cv-color-text-muted);
+  --docs-ring: var(--cv-color-focus-ring);
+  --docs-shadow: var(--cv-shadow-sm);
+  --docs-shadow-soft: var(--cv-shadow-sm);
+}
+
+[data-theme='light'] body {
+  background: var(--cv-color-bg);
+}
+
+[data-theme='light'] body::before {
+  opacity: 0.42;
+}
+
+[data-theme='light'] body::after,
+[data-theme='light'] .VPHome .VPHero .main::before,
+[data-theme='light'] .VPHome .VPHero .main::after,
+[data-theme='light'] .uikit-intro::before,
+[data-theme='light'] .components-hero::before,
+[data-theme='light'] .uikit-callout::before,
+[data-theme='light'] .component-card::before,
+[data-theme='light'] .component-card::after,
+[data-theme='light'] .uikit-stat::before,
+[data-theme='light'] .uikit-architecture-step::before,
+[data-theme='light'] .uikit-quickstart::before,
+[data-theme='light'] .uikit-quickstart::after,
+[data-theme='light'] .getting-started-hero::before,
+[data-theme='light'] .getting-started-flow-step::before,
+[data-theme='light'] .getting-started-note::before {
+  display: none;
+}
+
+[data-theme='light'] .VPNavBar,
+[data-theme='light'] .VPLocalNav,
+[data-theme='light'] .VPSidebar,
+[data-theme='light'] #local-search .DocSearch-Button,
+[data-theme='light'] .VPSkipLink {
+  background: var(--cv-color-surface-glass-strong) !important;
+  box-shadow: var(--docs-shadow-soft);
+}
+
+[data-theme='light'] .VPSkipLink {
+  color: var(--cv-color-text-strong);
+}
+
+[data-theme='light'] .VPButton.medium.alt {
+  background-color: var(--cv-color-text-strong);
+}
+
+[data-theme='light'] .VPSidebarItem .text,
+[data-theme='light'] .VPDocAside .outline-link,
+[data-theme='light'] .VPHero .tagline,
+[data-theme='light'] .uikit-intro-body,
+[data-theme='light'] .uikit-quickstart-copy > p:not(.components-kicker),
+[data-theme='light'] .getting-started-hero-copy p:not(.components-kicker),
+[data-theme='light'] .playground-stage-copy p:not(.components-kicker),
+[data-theme='light'] .playground-section-header + *,
+[data-theme='light'] .playground-card p,
+[data-theme='light'] .playground-overview span,
+[data-theme='light'] .live-demo-footer {
+  color: var(--cv-color-text-muted);
+}
+
+[data-theme='light'] .VPSidebarItem .link:hover {
+  background: var(--cv-color-surface-hover);
+  box-shadow: inset 0 0 0 1px var(--cv-color-border-soft);
+}
+
+[data-theme='light'] .VPSidebarItem .link:hover .text,
+[data-theme='light'] .VPSidebarItem.level-0 > .item .link:hover > .text,
+[data-theme='light'] .VPSidebarItem.level-1 > .item .link:hover > .text,
+[data-theme='light'] .VPSidebarItem.level-2 > .item .link:hover > .text,
+[data-theme='light'] .VPSidebarItem.level-3 > .item .link:hover > .text,
+[data-theme='light'] .VPSidebarItem.level-4 > .item .link:hover > .text,
+[data-theme='light'] .VPSidebarItem.level-5 > .item .link:hover > .text {
+  color: var(--cv-color-text-strong);
+}
+
+[data-theme='light'] .VPSidebarItem.is-active .link,
+[data-theme='light'] .VPSidebarItem .is-active .link {
+  border-color: var(--cv-color-primary-border-strong);
+  background: var(--cv-color-primary-surface);
+  box-shadow: inset 0 0 0 1px var(--cv-color-primary-border);
+}
+
+[data-theme='light'] .VPSidebarItem.is-active .link:hover,
+[data-theme='light'] .VPSidebarItem .is-active .link:hover {
+  background: var(--cv-color-primary-surface-strong);
+}
+
+[data-theme='light'] .VPSidebarItem.is-active .text,
+[data-theme='light'] .VPSidebarItem .is-active .text {
+  color: var(--cv-color-text-strong);
+}
+
+[data-theme='light'] .VPSidebarItem.level-0.is-active > .item .link > .text,
+[data-theme='light'] .VPSidebarItem.level-1.is-active > .item .link > .text,
+[data-theme='light'] .VPSidebarItem.level-2.is-active > .item .link > .text,
+[data-theme='light'] .VPSidebarItem.level-3.is-active > .item .link > .text,
+[data-theme='light'] .VPSidebarItem.level-4.is-active > .item .link > .text,
+[data-theme='light'] .VPSidebarItem.level-5.is-active > .item .link > .text {
+  color: var(--cv-color-text-strong);
+}
+
+[data-theme='light'] .VPNavBar .link:hover,
+[data-theme='light'] .VPLocalNav .menu-text:hover,
+[data-theme='light'] .VPNavBar .link.active,
+[data-theme='light'] .VPDocAside .outline-link.active,
+[data-theme='light'] .vp-doc a,
+[data-theme='light'] .vp-doc a:hover,
+[data-theme='light'] .components-kicker,
+[data-theme='light'] .component-link::after,
+[data-theme='light'] .uikit-quickstart-code figcaption,
+[data-theme='light'] .uikit-quickstart-preview-copy span,
+[data-theme='light'] .getting-started-flow-step span,
+[data-theme='light'] .getting-started-eyebrow,
+[data-theme='light'] .uikit-architecture-step span,
+[data-theme='light'] .playground-overview dt,
+[data-theme='light'] .playground-console-header span,
+[data-theme='light'] .playground-meter-panel span {
+  color: var(--cv-color-primary-darker);
+}
+
+[data-theme='light'] .VPHome .VPHero .main,
+[data-theme='light'] .VPHome .VPFeature,
+[data-theme='light'] .uikit-intro,
+[data-theme='light'] .components-hero,
+[data-theme='light'] .uikit-callout,
+[data-theme='light'] .component-card,
+[data-theme='light'] .component-link,
+[data-theme='light'] .uikit-stat,
+[data-theme='light'] .uikit-architecture-step,
+[data-theme='light'] .uikit-quickstart,
+[data-theme='light'] .uikit-intro-signal,
+[data-theme='light'] .uikit-quickstart-steps li,
+[data-theme='light'] .uikit-quickstart-code,
+[data-theme='light'] .uikit-quickstart-preview,
+[data-theme='light'] .getting-started-hero,
+[data-theme='light'] .getting-started-flow-step,
+[data-theme='light'] .getting-started-note,
+[data-theme='light'] .getting-started-surface,
+[data-theme='light'] .getting-started-console,
+[data-theme='light'] .getting-started-console-line,
+[data-theme='light'] .playground-hero,
+[data-theme='light'] .playground-stage,
+[data-theme='light'] .playground-section,
+[data-theme='light'] .playground-overview div,
+[data-theme='light'] .playground-console,
+[data-theme='light'] .playground-card,
+[data-theme='light'] .playground-meter-panel,
+[data-theme='light'] cv-card.catalog-stat-card::part(base),
+[data-theme='light'] cv-card.catalog-card::part(base),
+[data-theme='light'] cv-disclosure.live-demo-source::part(trigger),
+[data-theme='light'] cv-disclosure.live-demo-source::part(panel) {
+  background: var(--cv-color-surface);
+  color: var(--cv-color-text);
+  box-shadow: var(--docs-shadow-soft);
+}
+
+[data-theme='light'] .component-action,
+[data-theme='light'] .vp-doc a.component-action,
+[data-theme='light'] .playground-jump a {
+  border-color: var(--cv-color-border-soft);
+  background: var(--cv-color-surface);
+  color: var(--cv-color-text);
+}
+
+[data-theme='light'] .component-action:hover,
+[data-theme='light'] .vp-doc a.component-action:hover,
+[data-theme='light'] .component-link:hover,
+[data-theme='light'] .playground-jump a:hover {
+  border-color: var(--docs-border-strong);
+  background: var(--cv-color-surface-2);
+  color: var(--cv-color-text-strong);
+}
+
+[data-theme='light'] .component-action-primary,
+[data-theme='light'] .vp-doc a.component-action-primary,
+[data-theme='light'] .component-action-primary:hover,
+[data-theme='light'] .vp-doc a.component-action-primary:hover {
+  border-color: var(--cv-color-primary-border-strong);
+  background: var(--cv-color-primary);
+  color: var(--cv-color-text-strongest);
+  box-shadow: var(--cv-shadow-sm);
+}
+
+[data-theme='light'] .uikit-quickstart-code pre {
+  color: var(--cv-color-text);
+}
+
+[data-theme='light'] .uikit-quickstart-steps span,
+[data-theme='light'] .getting-started-console-line strong {
+  border-color: var(--cv-color-primary-border-strong);
+  background: var(--cv-color-primary-surface);
+  color: var(--cv-color-primary-darker);
+}
+
+[data-theme='light'] .vp-doc p code,
+[data-theme='light'] .vp-doc li code,
+[data-theme='light'] .vp-doc td code,
+[data-theme='light'] .vp-doc th code,
+[data-theme='light'] .vp-doc div[class*='language-'] {
+  border-color: var(--cv-color-border-soft);
+  background: var(--cv-color-surface-2);
+  color: var(--cv-color-text-strong);
+}
+
+[data-theme='light'] .docs-table-shell {
+  --uikit-table-row-bg: var(--cv-color-surface);
+  --uikit-table-row-bg-alt: var(--cv-color-surface-2);
+  --uikit-table-row-hover-bg: var(--cv-color-primary-surface);
+  background: var(--cv-color-surface);
+  box-shadow: var(--docs-shadow-soft);
+}
+
+[data-theme='light'] .docs-table-shell::before,
+[data-theme='light'] .docs-table-shell::after {
+  display: none;
+}
+
+[data-theme='light'] .docs-table-scroll::-webkit-scrollbar-track {
+  background: var(--cv-color-surface-2);
+}
+
+[data-theme='light'] .docs-table-scroll::-webkit-scrollbar-thumb {
+  border-color: var(--cv-color-surface-2);
+  background: var(--cv-color-border-strong);
+}
+
+[data-theme='light'] .vp-doc th {
+  background: var(--cv-color-surface-3);
+  color: var(--cv-color-text-strong);
+}
+
+[data-theme='light'] .vp-doc th,
+[data-theme='light'] .vp-doc td {
+  border-bottom-color: var(--cv-color-border-soft);
+}
+
+@media (hover: hover) {
+  [data-theme='light'] .vp-doc tbody tr:hover td {
+    background: var(--cv-color-primary-surface);
+    color: var(--cv-color-text-strong);
+  }
+}
+
+[data-theme='light'] .uikit-stat-value,
+[data-theme='light'] cv-card.catalog-stat-card::part(header),
+[data-theme='light'] cv-card.catalog-card::part(header),
+[data-theme='light'] .live-demo-card {
+  color: var(--cv-color-text-strong);
+}
+
+[data-theme='light'] .live-demo-frame {
+  color-scheme: light;
 }

@@ -936,7 +936,7 @@ describe('cv-window-splitter', () => {
     it('min === max does not crash and renders 0% primary size', async () => {
       const el = await createSplitter({min: 50, max: 50, position: 50})
       expect(getSeparator(el).getAttribute('aria-valuenow')).toBe('50')
-      expect(getBase(el).getAttribute('style')).toContain('--cv-window-splitter-primary-size:0%')
+      expect(el.style.getPropertyValue('--cv-window-splitter-primary-size')).toBe('0%')
     })
 
     it('min > max is normalized (swapped) for aria range', async () => {
@@ -1070,6 +1070,35 @@ describe('cv-window-splitter', () => {
       await settle(el)
 
       expect(el.position).toBe(100)
+    })
+
+    it('pointer drag caches the container rect instead of reading layout on every move', async () => {
+      const el = await createSplitter({orientation: 'vertical', position: 50, min: 0, max: 100})
+      const base = getBase(el)
+      let rectCalls = 0
+      base.getBoundingClientRect = () => {
+        rectCalls++
+        return {
+          left: 0,
+          right: 200,
+          width: 200,
+          top: 0,
+          bottom: 200,
+          height: 200,
+          x: 0,
+          y: 0,
+          toJSON: () => {},
+        } as DOMRect
+      }
+
+      const separator = await startDrag(el)
+      separator.dispatchEvent(new PointerEvent('pointermove', {pointerId: 1, clientX: 120, bubbles: true}))
+      separator.dispatchEvent(new PointerEvent('pointermove', {pointerId: 1, clientX: 140, bubbles: true}))
+      separator.dispatchEvent(new PointerEvent('pointermove', {pointerId: 1, clientX: 160, bubbles: true}))
+      await settle(el)
+
+      expect(rectCalls).toBe(1)
+      expect(el.position).toBe(80)
     })
 
     it('pointermove maps the container edge onto a custom min', async () => {
@@ -1271,7 +1300,12 @@ describe('cv-window-splitter', () => {
 
     it('Meta+ArrowLeft is ignored', async () => {
       const el = await createSplitter({orientation: 'vertical', position: 50, step: 5})
-      const ev = new KeyboardEvent('keydown', {key: 'ArrowLeft', bubbles: true, cancelable: true, metaKey: true})
+      const ev = new KeyboardEvent('keydown', {
+        key: 'ArrowLeft',
+        bubbles: true,
+        cancelable: true,
+        metaKey: true,
+      })
       getSeparator(el).dispatchEvent(ev)
       await settle(el)
       expect(el.position).toBe(50)

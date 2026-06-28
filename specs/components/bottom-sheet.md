@@ -5,110 +5,321 @@ Mobile modal sheet primitive that reuses `cv-dialog` for modal state, focus mana
 ## Usage
 
 ```html
-<style>
-  .bottom-sheet-demo-surface {
-    display: grid;
-    align-content: start;
-    gap: 18px;
-    inline-size: 100%;
-    min-block-size: 100dvh;
-    overflow: hidden;
-    padding: clamp(18px, 4vw, 28px);
-    box-sizing: border-box;
-    background:
-      linear-gradient(180deg, rgba(12, 20, 32, 0.98), rgba(7, 13, 22, 0.98)),
-      radial-gradient(circle at 12% 0%, rgba(101, 215, 255, 0.12), transparent 34%),
-      radial-gradient(circle at 88% 18%, rgba(179, 136, 255, 0.1), transparent 36%);
-  }
+<div class="bottom-sheet-demo-shell" data-demo="bottom-sheet" data-live-demo-height="820">
+  <section class="bottom-sheet-demo-stage" aria-labelledby="bottom-sheet-demo-title">
+    <div class="bottom-sheet-demo-copy">
+      <span class="bottom-sheet-demo-kicker">Mobile modal primitive</span>
+      <h3 id="bottom-sheet-demo-title">Bottom sheet keeps mobile decisions close to the thumb.</h3>
+      <p>
+        Use it for short, contextual decisions that should stay inside the current task: route review,
+        dirty-close confirmation, sort/filter controls, and compact metadata.
+      </p>
 
-  .bottom-sheet-demo-copy {
-    display: grid;
-    gap: 10px;
-    max-inline-size: 34rem;
-  }
+      <div class="bottom-sheet-demo-mode-list" role="group" aria-label="Bottom sheet demo scenario">
+        <cv-button
+          class="bottom-sheet-demo-mode"
+          data-sheet-mode="route"
+          variant="primary"
+          aria-pressed="true"
+        >
+          Route review
+        </cv-button>
+        <cv-button
+          class="bottom-sheet-demo-mode"
+          data-sheet-mode="detents"
+          variant="secondary"
+          aria-pressed="false"
+        >
+          Detents
+        </cv-button>
+        <cv-button
+          class="bottom-sheet-demo-mode"
+          data-sheet-mode="dirty"
+          variant="secondary"
+          aria-pressed="false"
+        >
+          Dirty close
+        </cv-button>
+      </div>
+    </div>
 
-  .bottom-sheet-demo-kicker {
-    color: #94e9ff;
-    font-family: var(--vp-font-family-mono);
-    font-size: 0.72rem;
-    letter-spacing: 0;
-    text-transform: uppercase;
-  }
+    <div class="bottom-sheet-demo-phone" aria-label="Mobile vault preview">
+      <div class="bottom-sheet-demo-statusbar">
+        <span>09:41</span>
+        <span>Core paired</span>
+      </div>
 
-  .bottom-sheet-demo-copy h3,
-  .bottom-sheet-demo-copy p {
-    margin: 0;
-  }
+      <div class="bottom-sheet-demo-app">
+        <header class="bottom-sheet-demo-app-header">
+          <span class="bottom-sheet-demo-kicker">Active vault</span>
+          <strong>Field notes</strong>
+        </header>
 
-  .bottom-sheet-demo-copy h3 {
-    max-inline-size: 24ch;
-    color: #eef5ff;
-    font-size: 1.35rem;
-    line-height: 1.1;
-    text-wrap: balance;
-  }
+        <div class="bottom-sheet-demo-file">
+          <span class="bottom-sheet-demo-file-mark">N</span>
+          <div>
+            <strong>border-route.md</strong>
+            <span>Edited 3 min ago &middot; local only</span>
+          </div>
+        </div>
 
-  .bottom-sheet-demo-copy p {
-    color: rgba(190, 206, 226, 0.76);
-    font-size: 0.92rem;
-    line-height: 1.58;
-  }
+        <dl class="bottom-sheet-demo-readout" aria-label="Current bottom sheet state">
+          <div>
+            <dt>Mode</dt>
+            <dd data-sheet-readout-mode>Route review</dd>
+          </div>
+          <div>
+            <dt>State</dt>
+            <dd data-sheet-readout-state>closed</dd>
+          </div>
+          <div>
+            <dt>Detent</dt>
+            <dd data-sheet-readout-detent>none</dd>
+          </div>
+        </dl>
 
-  .bottom-sheet-demo-sheet {
-    --cv-bottom-sheet-width: min(100%, 520px);
-    --cv-bottom-sheet-max-width: 100%;
-    --cv-bottom-sheet-max-height: min(360px, calc(100dvh - 24px));
-    --cv-bottom-sheet-expanded-height: min(420px, calc(100dvh - 24px));
-    --cv-bottom-sheet-border-radius: 16px 16px 0 0;
-  }
+        <cv-button class="bottom-sheet-demo-open" variant="primary">Open active sheet</cv-button>
+      </div>
 
-  .bottom-sheet-demo-sheet::part(content) {
-    box-shadow:
-      0 -18px 44px rgba(0, 0, 0, 0.32),
-      inset 0 1px 0 rgba(255, 255, 255, 0.05);
-  }
-</style>
+      <cv-bottom-sheet
+        class="bottom-sheet-demo-sheet"
+        initial-focus-id="bottom-sheet-demo-primary"
+        aria-label="Bottom sheet demo"
+      >
+        <span slot="title" data-sheet-title>Review exposure route</span>
+        <span slot="description" data-sheet-description>
+          Choose what remains visible before the vault leaves the trusted device.
+        </span>
 
-<div class="bottom-sheet-demo-surface" data-demo="bottom-sheet" data-live-demo-height="560">
-  <div class="bottom-sheet-demo-copy">
-    <span class="bottom-sheet-demo-kicker">Isolated preview</span>
-    <h3>Open the sheet inside this frame.</h3>
-    <p>
-      The sheet keeps its normal modal dialog behavior. The iframe is the preview viewport, so the backdrop
-      covers this frame instead of the documentation shell.
-    </p>
-    <cv-button class="bottom-sheet-demo-open" variant="primary">Open bottom sheet</cv-button>
-  </div>
+        <div class="bottom-sheet-demo-sheet-view" data-sheet-view="route">
+          <div class="bottom-sheet-demo-route">
+            <div class="bottom-sheet-demo-route-step">
+              <span>D</span>
+              <div>
+                <strong>Deniable vault</strong>
+                <small>Visible container, safe to disclose</small>
+              </div>
+            </div>
+            <div class="bottom-sheet-demo-route-step bottom-sheet-demo-route-step--active">
+              <span>T</span>
+              <div>
+                <strong>Travel profile</strong>
+                <small>Only selected notes and media are exposed</small>
+              </div>
+            </div>
+            <div class="bottom-sheet-demo-route-step">
+              <span>H</span>
+              <div>
+                <strong>Hidden layer</strong>
+                <small>No UI affordance in this route</small>
+              </div>
+            </div>
+          </div>
+        </div>
 
-  <cv-bottom-sheet class="bottom-sheet-demo-sheet" initial-focus-id="bottom-sheet-demo-close">
-    <span slot="title">Player</span>
-    <p>Sheet content stays inside the preview container instead of covering the documentation page.</p>
-    <cv-button id="bottom-sheet-demo-close" slot="footer">Close</cv-button>
-  </cv-bottom-sheet>
+        <div class="bottom-sheet-demo-sheet-view" data-sheet-view="detents" hidden>
+          <div class="bottom-sheet-demo-detent-actions" role="group" aria-label="Set demo detent">
+            <cv-button data-sheet-detent="collapsed" variant="secondary">Collapsed</cv-button>
+            <cv-button data-sheet-detent="middle" variant="secondary">Middle</cv-button>
+            <cv-button data-sheet-detent="expanded" variant="secondary">Expanded</cv-button>
+          </div>
+          <ul class="bottom-sheet-demo-metadata">
+            <li><span>GPS</span><strong>available</strong></li>
+            <li><span>Import stream</span><strong>original bytes</strong></li>
+            <li><span>Preview cache</span><strong>ephemeral</strong></li>
+          </ul>
+        </div>
+
+        <div class="bottom-sheet-demo-sheet-view" data-sheet-view="dirty" hidden>
+          <div class="bottom-sheet-demo-warning">
+            <span>!</span>
+            <div>
+              <strong>Unsaved note edits</strong>
+              <p>Closing now drops the local draft. Save before leaving the document route.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="bottom-sheet-demo-footer" slot="footer">
+          <cv-button id="bottom-sheet-demo-primary" data-sheet-primary variant="primary"
+            >Apply route</cv-button
+          >
+          <cv-button data-sheet-close variant="secondary">Close</cv-button>
+        </div>
+      </cv-bottom-sheet>
+    </div>
+  </section>
+
+  <section class="bottom-sheet-demo-contract" aria-label="Bottom sheet contract summary">
+    <article>
+      <span class="bottom-sheet-demo-label">Dialog base</span>
+      <strong>Focus, Escape, backdrop, scroll lock</strong>
+      <p>
+        <code>cv-bottom-sheet</code> reuses <code>cv-dialog</code>, so modal behavior and lifecycle events
+        stay consistent.
+      </p>
+    </article>
+    <article>
+      <span class="bottom-sheet-demo-label">Motion axis</span>
+      <strong>Bottom-up transform</strong>
+      <p>The sheet swaps centered dialog motion for vertical translate, drag offset, and detent snapping.</p>
+    </article>
+    <article>
+      <span class="bottom-sheet-demo-label">Mobile viewport</span>
+      <strong>Safe-area and keyboard aware</strong>
+      <p>Viewport and keyboard insets flow through CSS variables instead of consumer-side layout math.</p>
+    </article>
+  </section>
 </div>
 
 <script>
   document
-    .querySelectorAll('.bottom-sheet-demo-surface[data-demo="bottom-sheet"]:not([data-ready])')
-    .forEach((surface) => {
-      surface.dataset.ready = 'true'
+    .querySelectorAll('.bottom-sheet-demo-shell[data-demo="bottom-sheet"]:not([data-ready])')
+    .forEach((shell) => {
+      shell.dataset.ready = 'true'
 
-      const sheet = surface.querySelector('.bottom-sheet-demo-sheet')
-      const openButton = surface.querySelector('.bottom-sheet-demo-open')
-      const closeButton = surface.querySelector('#bottom-sheet-demo-close')
+      const sheet = shell.querySelector('.bottom-sheet-demo-sheet')
+      const phone = shell.querySelector('.bottom-sheet-demo-phone')
+      const openButton = shell.querySelector('.bottom-sheet-demo-open')
+      const closeButton = shell.querySelector('[data-sheet-close]')
+      const primaryButton = shell.querySelector('[data-sheet-primary]')
+      const modeButtons = [...shell.querySelectorAll('[data-sheet-mode]')]
+      const detentButtons = [...shell.querySelectorAll('[data-sheet-detent]')]
+      const views = [...shell.querySelectorAll('[data-sheet-view]')]
+      const title = shell.querySelector('[data-sheet-title]')
+      const description = shell.querySelector('[data-sheet-description]')
+      const readoutMode = shell.querySelector('[data-sheet-readout-mode]')
+      const readoutState = shell.querySelector('[data-sheet-readout-state]')
+      const readoutDetent = shell.querySelector('[data-sheet-readout-detent]')
+
+      const modes = {
+        route: {
+          label: 'Route review',
+          title: 'Review exposure route',
+          description: 'Choose what remains visible before the vault leaves the trusted device.',
+          primary: 'Apply route',
+          detents: '',
+          detent: 'expanded',
+          type: 'dialog',
+        },
+        detents: {
+          label: 'Detents',
+          title: 'Inspect import metadata',
+          description: 'Snap compact, middle, or expanded inside the gallery.',
+          primary: 'Confirm metadata',
+          detents: 'collapsed middle expanded',
+          detent: 'middle',
+          type: 'dialog',
+        },
+        dirty: {
+          label: 'Dirty close',
+          title: 'Save note before closing?',
+          description: 'Use alertdialog when the sheet blocks a risky route transition.',
+          primary: 'Save draft',
+          detents: '',
+          detent: 'expanded',
+          type: 'alertdialog',
+        },
+      }
+
+      let currentMode = 'route'
+
+      const syncSheetFrame = () => {
+        if (!sheet || !phone) return
+
+        const rect = phone.getBoundingClientRect()
+        sheet.style.setProperty('--bottom-sheet-demo-phone-top', `${Math.round(rect.top)}px`)
+        sheet.style.setProperty('--bottom-sheet-demo-phone-left', `${Math.round(rect.left)}px`)
+        sheet.style.setProperty('--bottom-sheet-demo-phone-width', `${Math.round(rect.width)}px`)
+        sheet.style.setProperty('--bottom-sheet-demo-phone-height', `${Math.round(rect.height)}px`)
+        sheet.style.setProperty(
+          '--bottom-sheet-demo-expanded-height',
+          `${Math.max(320, Math.round(rect.height * 0.78))}px`,
+        )
+        sheet.style.setProperty(
+          '--bottom-sheet-demo-middle-height',
+          `${Math.max(300, Math.round(rect.height * 0.66))}px`,
+        )
+      }
+
+      const updateReadout = (eventDetail) => {
+        if (readoutMode) readoutMode.textContent = modes[currentMode].label
+        if (readoutState) readoutState.textContent = sheet?.open ? 'open' : 'closed'
+        if (readoutDetent)
+          readoutDetent.textContent = eventDetail?.detent ?? (sheet?.detents ? sheet.detent : 'none')
+      }
+
+      const setMode = (mode) => {
+        currentMode = mode
+        const config = modes[mode]
+
+        modeButtons.forEach((button) => {
+          const active = button.dataset.sheetMode === mode
+          button.setAttribute('aria-pressed', active ? 'true' : 'false')
+          button.setAttribute('variant', active ? 'primary' : 'secondary')
+        })
+
+        views.forEach((view) => {
+          view.hidden = view.dataset.sheetView !== mode
+        })
+
+        if (title) title.textContent = config.title
+        if (description) description.textContent = config.description
+        if (primaryButton) primaryButton.textContent = config.primary
+
+        if (sheet) {
+          sheet.type = config.type
+          sheet.detents = config.detents
+          sheet.detent = config.detent
+          sheet.modal = false
+        }
+
+        syncSheetFrame()
+        updateReadout()
+      }
+
+      modeButtons.forEach((button) => {
+        button.addEventListener('click', () => setMode(button.dataset.sheetMode))
+      })
+
+      detentButtons.forEach((button) => {
+        button.addEventListener('click', () => {
+          if (!sheet) return
+          sheet.detent = button.dataset.sheetDetent
+          updateReadout({detent: sheet.detent})
+        })
+      })
 
       openButton?.addEventListener('click', () => {
+        syncSheetFrame()
         if (sheet) sheet.open = true
+        updateReadout()
       })
 
       closeButton?.addEventListener('click', () => {
         if (sheet) sheet.open = false
+        updateReadout()
+      })
+
+      primaryButton?.addEventListener('click', () => {
+        if (sheet) sheet.open = false
+        updateReadout()
+        openButton?.focus({preventScroll: true})
       })
 
       sheet?.addEventListener('cv-change', (event) => {
+        syncSheetFrame()
+        updateReadout(event.detail)
         if (event.detail.open) return
         openButton?.focus({preventScroll: true})
       })
+
+      window.addEventListener('resize', syncSheetFrame)
+      if ('ResizeObserver' in window && phone) {
+        new ResizeObserver(syncSheetFrame).observe(phone)
+      }
+
+      setMode(currentMode)
     })
 </script>
 ```

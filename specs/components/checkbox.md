@@ -107,7 +107,7 @@ No component-specific custom properties. Styling uses design tokens:
 ## Usage
 
 ```html
-<div class="checkbox-demo-shell">
+<div class="checkbox-demo-shell" data-demo="checkbox">
   <section class="checkbox-demo-hero" aria-labelledby="checkbox-demo-title">
     <div class="checkbox-demo-copy">
       <span class="checkbox-demo-kicker">State contract</span>

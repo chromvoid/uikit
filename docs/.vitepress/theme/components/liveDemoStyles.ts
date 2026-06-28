@@ -1,10 +1,14 @@
-const LIVE_DEMO_STYLE_URLS = import.meta.glob('../live-demo-examples/*.css', {
+const LIVE_DEMO_STYLES = import.meta.glob('../live-demo-examples/*.css', {
   eager: true,
   import: 'default',
-  query: '?url',
+  query: '?raw',
 }) as Record<string, string>
 
 const styleCache = new Map<string, Promise<string>>()
+
+function styleKeyToModulePath(key: string): string {
+  return `../live-demo-examples/${key}.css`
+}
 
 function warnMissingStyleChunk(key: string): void {
   if (!import.meta.env.DEV) return
@@ -12,27 +16,17 @@ function warnMissingStyleChunk(key: string): void {
   console.warn(`No live demo CSS chunk found for data-demo="${key}".`)
 }
 
-function getStyleModulePath(key: string): string {
-  return `../live-demo-examples/${key}.css`
-}
-
 async function loadStyleChunk(key: string): Promise<string> {
   const cached = styleCache.get(key)
   if (cached) return cached
 
-  const url = LIVE_DEMO_STYLE_URLS[getStyleModulePath(key)]
-  if (!url) {
+  const style = LIVE_DEMO_STYLES[styleKeyToModulePath(key)]
+  if (!style) {
     warnMissingStyleChunk(key)
     return ''
   }
 
-  const promise = fetch(url).then(async (response) => {
-    if (!response.ok) {
-      throw new Error(`Failed to load live demo CSS chunk "${key}": ${response.status}`)
-    }
-
-    return response.text()
-  })
+  const promise = Promise.resolve(style)
   styleCache.set(key, promise)
   return promise
 }

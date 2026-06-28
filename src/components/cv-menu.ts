@@ -1,4 +1,4 @@
-import {createMenu, type MenuModel} from '@chromvoid/headless-ui/menu'
+import {createMenu, type MenuItem, type MenuModel} from '@chromvoid/headless-ui/menu'
 import {css, nothing} from 'lit'
 import type {PropertyValues} from 'lit'
 
@@ -21,6 +21,8 @@ interface MenuItemRecord {
   hasSubmenu: boolean
   group?: string
   element: CVMenuItem
+  submenu?: CVMenu
+  submenuItems: MenuItemRecord[]
 }
 
 interface MenuSnapshot {
@@ -29,7 +31,18 @@ interface MenuSnapshot {
   open: boolean
 }
 
-const menuKeysToPrevent = new Set(['ArrowUp', 'ArrowDown', 'Home', 'End', 'Enter', ' ', 'Spacebar', 'Escape'])
+const menuKeysToPrevent = new Set([
+  'ArrowUp',
+  'ArrowDown',
+  'ArrowLeft',
+  'ArrowRight',
+  'Home',
+  'End',
+  'Enter',
+  ' ',
+  'Spacebar',
+  'Escape',
+])
 
 let cvMenuNonce = 0
 
@@ -66,7 +79,10 @@ export class CVMenu extends ReatomLitElement {
 
   private readonly idBase = `cv-menu-${++cvMenuNonce}`
   private itemRecords: MenuItemRecord[] = []
-  private itemListeners = new WeakMap<CVMenuItem, {click: EventListener; focus: EventListener}>()
+  private itemListeners = new WeakMap<
+    CVMenuItem,
+    {click: EventListener; focus: EventListener; pointerenter: EventListener; pointerleave: EventListener}
+  >()
   private model?: MenuModel
 
   constructor() {
@@ -224,6 +240,27 @@ export class CVMenu extends ReatomLitElement {
     return items
   }
 
+  private getSubmenuElement(item: CVMenuItem): CVMenu | undefined {
+    const submenu = item.querySelector(':scope > cv-menu[slot="submenu"]')
+    return submenu instanceof CVMenu ? submenu : undefined
+  }
+
+  private getSubmenuItemElements(submenu: CVMenu): CVMenuItem[] {
+    const items: CVMenuItem[] = []
+    for (const child of Array.from(submenu.children)) {
+      if (child.tagName.toLowerCase() === CVMenuItem.elementName) {
+        items.push(child as CVMenuItem)
+      } else if (child.tagName.toLowerCase() === 'cv-menu-group') {
+        for (const groupChild of Array.from(child.children)) {
+          if (groupChild.tagName.toLowerCase() === CVMenuItem.elementName) {
+            items.push(groupChild as CVMenuItem)
+          }
+        }
+      }
+    }
+    return items
+  }
+
   private ensureItemValue(item: CVMenuItem, index: number): string {
     const normalized = item.value?.trim()
     if (normalized) return normalized
@@ -231,6 +268,70 @@ export class CVMenu extends ReatomLitElement {
     const fallback = `item-${index + 1}`
     item.value = fallback
     return fallback
+  }
+
+  private ensureSubmenuItemValue(parentId: string, item: CVMenuItem, index: number): string {
+    const normalized = item.value?.trim()
+    if (normalized) return normalized
+
+    const fallback = `${parentId}-item-${index + 1}`
+    item.value = fallback
+    return fallback
+  }
+
+  private createItemRecord(element: CVMenuItem, index: number, parentId?: string): MenuItemRecord {
+    const id =
+      parentId == null
+        ? this.ensureItemValue(element, index)
+        : this.ensureSubmenuItemValue(parentId, element, index)
+    const label = element.label?.trim() || element.textContent?.trim() || id
+    const itemType = element.type || 'normal'
+    const submenu = this.getSubmenuElement(element)
+    const hasSubmenu = element.hasSubmenu || submenu != null
+
+    // Inherit type from parent cv-menu-group if not explicitly set
+    let groupType: 'normal' | 'checkbox' | 'radio' = 'normal'
+    let groupId: string | undefined
+    const parent = element.parentElement
+    if (parent && parent.tagName.toLowerCase() === 'cv-menu-group') {
+      const parentType = parent.getAttribute('type')
+      if (parentType === 'checkbox' || parentType === 'radio') {
+        groupType = parentType
+        groupId = parent.getAttribute('label') || undefined
+      }
+    }
+
+    const effectiveType = itemType !== 'normal' ? itemType : groupType
+    const submenuItems = submenu
+      ? this.getSubmenuItemElements(submenu).map((submenuItem, submenuIndex) =>
+          this.createItemRecord(submenuItem, submenuIndex, id),
+        )
+      : []
+
+    return {
+      id,
+      label,
+      disabled: element.disabled,
+      type: effectiveType as 'normal' | 'checkbox' | 'radio',
+      checked: element.checked,
+      hasSubmenu,
+      group: groupId,
+      element,
+      submenu,
+      submenuItems,
+    }
+  }
+
+  private recordToHeadlessItem(record: MenuItemRecord): MenuItem {
+    return {
+      id: record.id,
+      label: record.label,
+      disabled: record.disabled,
+      type: record.type,
+      checked: record.checked,
+      hasSubmenu: record.hasSubmenu,
+      group: record.group,
+    }
   }
 
   private rebuildModelFromSlot(
@@ -249,37 +350,7 @@ export class CVMenu extends ReatomLitElement {
 
     this.detachItemListeners()
 
-    this.itemRecords = itemElements.map((element, index) => {
-      const id = this.ensureItemValue(element, index)
-      const label = element.label?.trim() || element.textContent?.trim() || id
-      const itemType = element.type || 'normal'
-      const hasSubmenu = element.hasSubmenu || element.querySelector('[slot="submenu"]') != null
-
-      // Inherit type from parent cv-menu-group if not explicitly set
-      let groupType: 'normal' | 'checkbox' | 'radio' = 'normal'
-      let groupId: string | undefined
-      const parent = element.parentElement
-      if (parent && parent.tagName.toLowerCase() === 'cv-menu-group') {
-        const parentType = parent.getAttribute('type')
-        if (parentType === 'checkbox' || parentType === 'radio') {
-          groupType = parentType
-          groupId = parent.getAttribute('label') || undefined
-        }
-      }
-
-      const effectiveType = itemType !== 'normal' ? itemType : groupType
-
-      return {
-        id,
-        label,
-        disabled: element.disabled,
-        type: effectiveType as 'normal' | 'checkbox' | 'radio',
-        checked: element.checked,
-        hasSubmenu,
-        group: groupId,
-        element,
-      }
-    })
+    this.itemRecords = itemElements.map((element, index) => this.createItemRecord(element, index))
 
     const enabledIds = new Set(
       this.itemRecords.filter((record) => !record.disabled).map((record) => record.id),
@@ -288,20 +359,21 @@ export class CVMenu extends ReatomLitElement {
 
     this.model = createMenu({
       idBase: this.idBase,
-      items: this.itemRecords.map((record) => ({
-        id: record.id,
-        label: record.label,
-        disabled: record.disabled,
-        type: record.type,
-        checked: record.checked,
-        hasSubmenu: record.hasSubmenu,
-        group: record.group,
-      })),
+      items: this.itemRecords.map((record) => this.recordToHeadlessItem(record)),
       initialOpen: previous.open,
       initialActiveId,
       closeOnSelect: this.closeOnSelect,
       ariaLabel: this.ariaLabel || undefined,
     })
+
+    for (const record of this.itemRecords) {
+      if (record.submenuItems.length > 0) {
+        this.model.actions.setSubmenuItems(
+          record.id,
+          record.submenuItems.map((item) => this.recordToHeadlessItem(item)),
+        )
+      }
+    }
 
     if (previous.value && enabledIds.has(previous.value)) {
       const wasOpen = this.model.state.isOpen()
@@ -333,6 +405,8 @@ export class CVMenu extends ReatomLitElement {
 
       record.element.removeEventListener('click', listeners.click)
       record.element.removeEventListener('focus', listeners.focus)
+      record.element.removeEventListener('pointerenter', listeners.pointerenter)
+      record.element.removeEventListener('pointerleave', listeners.pointerleave)
       this.itemListeners.delete(record.element)
     }
   }
@@ -350,9 +424,19 @@ export class CVMenu extends ReatomLitElement {
         this.handleItemFocus(record.id)
       }
 
+      const pointerenter = () => {
+        this.handleItemPointerEnter(record.id)
+      }
+
+      const pointerleave = () => {
+        this.handleItemPointerLeave(record.id)
+      }
+
       record.element.addEventListener('click', click)
       record.element.addEventListener('focus', focus)
-      this.itemListeners.set(record.element, {click, focus})
+      record.element.addEventListener('pointerenter', pointerenter)
+      record.element.addEventListener('pointerleave', pointerleave)
+      this.itemListeners.set(record.element, {click, focus, pointerenter, pointerleave})
     }
   }
 
@@ -399,6 +483,54 @@ export class CVMenu extends ReatomLitElement {
         record.element.setAttribute('aria-expanded', props['aria-expanded'])
       } else {
         record.element.removeAttribute('aria-expanded')
+      }
+
+      this.syncSubmenuElement(record)
+      this.syncSubmenuItemElements(record)
+    }
+  }
+
+  private syncSubmenuElement(record: MenuItemRecord): void {
+    if (!this.model || !record.submenu) return
+
+    const props = this.model.contracts.getSubmenuProps(record.id)
+    record.submenu.id = props.id
+    record.submenu.open = !props.hidden
+    record.submenu.hidden = props.hidden
+    if (!record.submenu.ariaLabel && props['aria-label']) {
+      record.submenu.ariaLabel = props['aria-label']
+    }
+  }
+
+  private syncSubmenuItemElements(record: MenuItemRecord): void {
+    if (!this.model || record.submenuItems.length === 0) return
+
+    const checked = this.model.state.checkedIds()
+
+    for (const submenuRecord of record.submenuItems) {
+      const props = this.model.contracts.getSubmenuItemProps(record.id, submenuRecord.id)
+
+      submenuRecord.element.id = props.id
+      submenuRecord.element.setAttribute('role', props.role)
+      submenuRecord.element.setAttribute('tabindex', props.tabindex)
+
+      if (props['aria-disabled']) {
+        submenuRecord.element.setAttribute('aria-disabled', props['aria-disabled'])
+      } else {
+        submenuRecord.element.removeAttribute('aria-disabled')
+      }
+
+      submenuRecord.element.setAttribute('data-active', props['data-active'])
+      submenuRecord.element.active = props['data-active'] === 'true'
+      submenuRecord.element.selected = this.model.state.selectedId() === submenuRecord.id
+      submenuRecord.element.disabled = props['aria-disabled'] === 'true'
+      submenuRecord.element.hidden = !this.open || this.model.state.openSubmenuId() !== record.id
+
+      if (props['aria-checked'] != null) {
+        submenuRecord.element.setAttribute('aria-checked', props['aria-checked'])
+        submenuRecord.element.checked = checked.has(submenuRecord.id)
+      } else {
+        submenuRecord.element.removeAttribute('aria-checked')
       }
     }
   }
@@ -485,7 +617,29 @@ export class CVMenu extends ReatomLitElement {
     if (!record || record.disabled) return
 
     const previous = this.captureState()
+    if (record.hasSubmenu) {
+      this.model.actions.openSubmenu(id)
+      this.applyInteractionResult(previous)
+      return
+    }
+
     this.model.actions.select(id)
+    this.applyInteractionResult(previous)
+  }
+
+  private handleItemPointerEnter(id: string): void {
+    if (!this.model) return
+
+    const previous = this.captureState()
+    this.model.actions.handleItemPointerEnter(id)
+    this.applyInteractionResult(previous)
+  }
+
+  private handleItemPointerLeave(id: string): void {
+    if (!this.model) return
+
+    const previous = this.captureState()
+    this.model.actions.handleItemPointerLeave(id)
     this.applyInteractionResult(previous)
   }
 

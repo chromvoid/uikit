@@ -11,9 +11,7 @@ const settle = async (element: CVTooltip) => {
 }
 
 const stylesToText = () =>
-  (CVTooltip.styles as Array<{cssText?: string}>)
-    .map((style) => style.cssText ?? '')
-    .join('\n')
+  (CVTooltip.styles as Array<{cssText?: string}>).map((style) => style.cssText ?? '').join('\n')
 
 const createTooltip = async (attrs?: Partial<CVTooltip>) => {
   const el = document.createElement('cv-tooltip') as CVTooltip
@@ -25,10 +23,37 @@ const createTooltip = async (attrs?: Partial<CVTooltip>) => {
 
 const getBase = (el: CVTooltip) => el.shadowRoot!.querySelector('[part="base"]') as HTMLElement
 
+const initialInnerWidth = Object.getOwnPropertyDescriptor(window, 'innerWidth')
+const initialInnerHeight = Object.getOwnPropertyDescriptor(window, 'innerHeight')
+
+function mockRect(element: HTMLElement, rect: {left: number; top: number; width: number; height: number}) {
+  Object.defineProperty(element, 'getBoundingClientRect', {
+    configurable: true,
+    value: () =>
+      ({
+        x: rect.left,
+        y: rect.top,
+        left: rect.left,
+        top: rect.top,
+        width: rect.width,
+        height: rect.height,
+        right: rect.left + rect.width,
+        bottom: rect.top + rect.height,
+        toJSON: () => rect,
+      }) as DOMRect,
+  })
+}
+
 afterEach(() => {
   document.body.innerHTML = ''
   vi.useRealTimers()
   vi.restoreAllMocks()
+  if (initialInnerWidth) {
+    Object.defineProperty(window, 'innerWidth', initialInnerWidth)
+  }
+  if (initialInnerHeight) {
+    Object.defineProperty(window, 'innerHeight', initialInnerHeight)
+  }
 })
 
 // ---------------------------------------------------------------------------
@@ -101,12 +126,37 @@ describe('cv-tooltip', () => {
       expect(cssText).toMatch(/\[part='content'\]\s*{[\s\S]*overflow-wrap:\s*anywhere;/)
     })
 
+    it('keeps native popover overflow visible so arrow protrusion does not create a scrollbar', () => {
+      const cssText = stylesToText()
+
+      expect(cssText).toMatch(/\[part='content'\]\s*{[\s\S]*overflow:\s*visible;/)
+    })
+
     it('keeps native anchor-positioned content offset from the trigger', () => {
       const cssText = stylesToText()
 
       expect(cssText).toMatch(
         /\[part='content'\]\[data-anchor-positioning='true'\]\s*{[\s\S]*margin:\s*var\(--cv-space-2,\s*8px\);/,
       )
+    })
+
+    it('uses bottom fallback positioning when top placement would overflow', async () => {
+      vi.spyOn(globalThis, 'requestAnimationFrame').mockImplementation((callback: FrameRequestCallback) => {
+        callback(0)
+        return 1
+      })
+      Object.defineProperty(window, 'innerWidth', {configurable: true, value: 320})
+      Object.defineProperty(window, 'innerHeight', {configurable: true, value: 160})
+
+      const {el, triggerWrap, contentPart} = await mountTooltip({showDelay: 0, hideDelay: 0})
+      mockRect(triggerWrap, {left: 100, top: 4, width: 40, height: 20})
+      mockRect(contentPart, {left: 0, top: 0, width: 120, height: 80})
+
+      triggerWrap.dispatchEvent(new MouseEvent('pointerenter', {bubbles: true}))
+      await settle(el)
+
+      expect(contentPart.dataset['placement']).toBe('bottom')
+      expect(contentPart.style.top).toBe('32px')
     })
 
     it('renders slot[name="trigger"] inside [part="trigger"]', async () => {
@@ -1135,7 +1185,9 @@ describe('cv-tooltip', () => {
     it('unhandled Escape still closes', async () => {
       const {el, triggerWrap} = await mountTooltip({trigger: 'manual', open: true})
 
-      triggerWrap.dispatchEvent(new KeyboardEvent('keydown', {key: 'Escape', bubbles: true, cancelable: true}))
+      triggerWrap.dispatchEvent(
+        new KeyboardEvent('keydown', {key: 'Escape', bubbles: true, cancelable: true}),
+      )
       await settle(el)
 
       expect(el.open).toBe(false)

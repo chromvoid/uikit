@@ -259,7 +259,9 @@ describe('cv-menu-button', () => {
     await settle(menu)
 
     expect(menu.open).toBe(true)
-    const activePortalItem = getPortal()?.querySelector('cv-menu-item[data-active="true"]') as CVMenuItem | null
+    const activePortalItem = getPortal()?.querySelector(
+      'cv-menu-item[data-active="true"]',
+    ) as CVMenuItem | null
     expect(activePortalItem?.value).toBe('b')
   })
 

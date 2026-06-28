@@ -226,6 +226,10 @@ export class CVSwitch extends FormAssociatedReatomElement {
         font-size: var(--cv-switch-help-text-font-size, 0.85em);
       }
 
+      .help-text-slot-probe {
+        display: none;
+      }
+
       @keyframes cv-switch-loader-spin {
         to {
           transform: rotate(360deg);
@@ -451,8 +455,8 @@ export class CVSwitch extends FormAssociatedReatomElement {
             </span>`
             : html`<slot
               name="help-text"
+              class="help-text-slot-probe"
               @slotchange=${this.handleHelpTextSlotChange}
-              style="display:none"
             ></slot>`
         }
       </div>

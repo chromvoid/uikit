@@ -147,9 +147,9 @@ A read-only indicator that communicates determinate or indeterminate loading/com
 ```
 <cv-progress> (host)
 └── <div part="base" role="progressbar">
-    └── <div part="indicator">
-        └── <span part="label">
-            └── <slot>
+    ├── <div part="indicator">
+    └── <span part="label">
+        └── <slot>
 ```
 
 ## Attributes
@@ -166,17 +166,17 @@ A read-only indicator that communicates determinate or indeterminate loading/com
 
 ## Slots
 
-| Slot        | Description                                                        |
-| ----------- | ------------------------------------------------------------------ |
-| `(default)` | Label content rendered inside the indicator (e.g. percentage text) |
+| Slot        | Description                                                       |
+| ----------- | ----------------------------------------------------------------- |
+| `(default)` | Label content rendered above the indicator (e.g. percentage text) |
 
 ## CSS Parts
 
-| Part        | Element  | Description                                              |
-| ----------- | -------- | -------------------------------------------------------- |
-| `base`      | `<div>`  | Outer track container with `role="progressbar"`          |
-| `indicator` | `<div>`  | Filled portion representing current progress             |
-| `label`     | `<span>` | Content overlay inside indicator; wraps the default slot |
+| Part        | Element  | Description                                                                       |
+| ----------- | -------- | --------------------------------------------------------------------------------- |
+| `base`      | `<div>`  | Outer track container with `role="progressbar"`                                   |
+| `indicator` | `<div>`  | Filled portion representing current progress through `transform: scaleX(...)`     |
+| `label`     | `<span>` | Content overlay inside the base; wraps the default slot without being transformed |
 
 ## Tones
 
@@ -208,6 +208,9 @@ A read-only indicator that communicates determinate or indeterminate loading/com
 | `:host([indeterminate])` | Animated sliding bar; indicator width fixed, translateX animation  |
 | `:host([data-complete])` | Success appearance when `value >= max` (uses `--cv-color-success`) |
 
+- In `prefers-reduced-motion: reduce`, the indeterminate animation remains understandable but slows from `1.15s` to `4.6s`.
+- Determinate fill uses a component-owned host CSS variable and `transform: scaleX(...)`, not `inline-size` animation or template `style=`.
+
 ## Reactive State Mapping
 
 `cv-progress` is a visual adapter over headless `createProgress`.
@@ -221,11 +224,11 @@ A read-only indicator that communicates determinate or indeterminate loading/com
 | `value-text`    | attr → option | Passed as `valueText` in `createProgress(options)` |
 | `aria-label`    | attr → option | Passed as `ariaLabel` in `createProgress(options)` |
 
-| Headless State            | Direction     | DOM Reflection                                          |
-| ------------------------- | ------------- | ------------------------------------------------------- |
-| `state.percentage()`      | state → style | Sets `--cv-progress-width` on indicator for inline-size |
-| `state.isIndeterminate()` | state → attr  | `[indeterminate]` host attribute                        |
-| `state.isComplete()`      | state → attr  | `[data-complete]` host attribute                        |
+| Headless State            | Direction     | DOM Reflection                                                                       |
+| ------------------------- | ------------- | ------------------------------------------------------------------------------------ |
+| `state.percentage()`      | state → style | Sets component-owned `--cv-progress-value-scale` on the host for indicator transform |
+| `state.isIndeterminate()` | state → attr  | `[indeterminate]` host attribute                                                     |
+| `state.isComplete()`      | state → attr  | `[data-complete]` host attribute                                                     |
 
 - `contracts.getProgressProps()` is spread onto the inner `[part="base"]` element to apply `role`, `aria-valuenow`, `aria-valuemin`, `aria-valuemax`, `aria-valuetext`, `aria-label`, and `id`.
 - ARIA value attributes are present only in determinate mode; headless omits them in indeterminate mode.

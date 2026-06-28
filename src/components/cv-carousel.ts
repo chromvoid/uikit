@@ -349,12 +349,29 @@ export class CVCarousel extends ReatomLitElement {
   }
 
   private ensureSlideValue(slide: CVCarouselSlide, index: number): string {
-    const normalized = slide.value?.trim()
-    if (normalized) return normalized
+    const normalized = (slide.value || slide.getAttribute('value') || '').trim()
+    if (normalized) {
+      if (slide.value !== normalized) {
+        slide.value = normalized
+      }
+      return normalized
+    }
 
     const fallback = `slide-${index + 1}`
     slide.value = fallback
     return fallback
+  }
+
+  private getSlideLabel(slide: CVCarouselSlide, index: number): string {
+    const label = (slide.label || slide.getAttribute('label') || slide.textContent || '').trim()
+    if (label) {
+      if (slide.label !== label) {
+        slide.label = label
+      }
+      return label
+    }
+
+    return `Slide ${index + 1}`
   }
 
   private rebuildModelFromSlot(preserveState: boolean, requestRender = true): void {
@@ -365,7 +382,7 @@ export class CVCarousel extends ReatomLitElement {
 
     this.slideRecords = this.getSlideElements().map((element, index) => ({
       id: this.ensureSlideValue(element, index),
-      label: element.label || element.textContent?.trim() || `Slide ${index + 1}`,
+      label: this.getSlideLabel(element, index),
       element,
     }))
 

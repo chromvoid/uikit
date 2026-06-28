@@ -182,11 +182,11 @@ export class CVImageViewer extends ReatomLitElement {
   private pendingNavigation: PendingNavigation | null = null
   private imageTransitionDirection: CVImageViewerNavigationDirection = 'none'
   private imageTransitionPreviousItem: CVImageViewerItem | null = null
-  private imageTransitionTimer: ReturnType<typeof window.setTimeout> | null = null
+  private imageTransitionTimer: number | null = null
   private imageTransitionCycle = 0
   private wheelGestureDeltaX = 0
   private wheelGestureLocked = false
-  private wheelGestureTimer: ReturnType<typeof window.setTimeout> | null = null
+  private wheelGestureTimer: number | null = null
 
   constructor() {
     super()

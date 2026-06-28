@@ -71,6 +71,193 @@ None in V1.
 ## Usage
 
 ```html
-<cv-time-picker name="reminder-time" required data-live-demo-height="420"></cv-time-picker>
-<cv-time-picker value="09:30" min="08:00" max="18:00" minute-step="15"></cv-time-picker>
+<div class="time-picker-demo-shell" data-demo="time-picker" data-live-demo-height="900">
+  <section class="time-picker-demo-hero" aria-labelledby="time-picker-demo-title">
+    <div class="time-picker-demo-copy">
+      <span class="time-picker-demo-kicker">Time-only form control</span>
+      <h3 id="time-picker-demo-title">
+        Use time picker when the public value is a precise `HH:mm` boundary.
+      </h3>
+      <p>
+        The component keeps time timezone-free. It owns shorthand parsing, stepping, range validity, clearing,
+        and form-associated state while the product flow owns labels and persistence.
+      </p>
+    </div>
+
+    <dl class="time-picker-demo-metrics" aria-label="Time picker contract summary">
+      <div>
+        <dt>Value</dt>
+        <dd>Committed `HH:mm` only</dd>
+      </div>
+      <div>
+        <dt>Input</dt>
+        <dd>digits, arrows, blur, Enter</dd>
+      </div>
+      <div>
+        <dt>Validity</dt>
+        <dd>required / range / bad input</dd>
+      </div>
+    </dl>
+  </section>
+
+  <section class="time-picker-demo-board" aria-label="Vault schedule time examples">
+    <form class="time-picker-demo-form" data-time-picker-form>
+      <div class="time-picker-demo-form-head">
+        <div>
+          <span>Visible policy window</span>
+          <strong>Relay maintenance schedule</strong>
+        </div>
+        <cv-badge variant="primary" pill>form associated</cv-badge>
+      </div>
+
+      <div class="time-picker-demo-field-grid">
+        <cv-field required>
+          <span slot="label">Unlock window starts</span>
+          <cv-time-picker
+            data-time-picker-primary
+            name="window-start"
+            value="09:30"
+            min="08:00"
+            max="18:00"
+            minute-step="15"
+            required
+            aria-label="Unlock window starts"
+          ></cv-time-picker>
+          <span slot="description">Step buttons and ArrowUp/ArrowDown move in 15 minute increments.</span>
+        </cv-field>
+
+        <cv-field>
+          <span slot="label">Rotation reminder</span>
+          <cv-time-picker
+            name="rotation-reminder"
+            placeholder="Type 942"
+            minute-step="5"
+            aria-label="Rotation reminder"
+          ></cv-time-picker>
+          <span slot="description">Three or four digits commit as shorthand, so `942` becomes `09:42`.</span>
+        </cv-field>
+
+        <cv-field invalid>
+          <span slot="label">Out-of-policy draft</span>
+          <cv-time-picker
+            name="blocked-window"
+            value="07:10"
+            min="08:00"
+            max="18:00"
+            minute-step="10"
+            aria-label="Out of policy draft"
+          ></cv-time-picker>
+          <span slot="error">The value is outside the allowed visible policy window.</span>
+        </cv-field>
+
+        <cv-field>
+          <span slot="label">Readonly audit time</span>
+          <cv-time-picker value="14:00" readonly aria-label="Readonly audit time"></cv-time-picker>
+          <span slot="description">Readonly keeps the value visible without allowing user edits.</span>
+        </cv-field>
+      </div>
+    </form>
+
+    <aside class="time-picker-demo-side" aria-label="Time picker event output">
+      <div class="time-picker-demo-side-head">
+        <span class="time-picker-demo-kicker">Event stream</span>
+        <h4>Interact with an active picker to inspect the public event contract.</h4>
+      </div>
+
+      <p class="time-picker-demo-log" role="status" aria-live="polite" data-time-picker-output>
+        Waiting for input. Type `942`, press Enter, step with arrows, or clear the value.
+      </p>
+
+      <dl class="time-picker-demo-live" aria-label="Live time picker state">
+        <div>
+          <dt>Primary value</dt>
+          <dd data-time-picker-value>09:30</dd>
+        </div>
+        <div>
+          <dt>Last source</dt>
+          <dd data-time-picker-source>none</dd>
+        </div>
+      </dl>
+    </aside>
+  </section>
+
+  <section class="time-picker-demo-section" aria-labelledby="time-picker-demo-states-title">
+    <div class="time-picker-demo-section-header">
+      <span class="time-picker-demo-kicker">States and density</span>
+      <h4 id="time-picker-demo-states-title">
+        The same control covers dense forms, bounded schedules, and non-editable policy states.
+      </h4>
+    </div>
+
+    <div class="time-picker-demo-state-grid" aria-label="Time picker state matrix">
+      <div>
+        <span>Step sizes</span>
+        <cv-time-picker value="10:00" minute-step="1" aria-label="One minute step"></cv-time-picker>
+        <cv-time-picker value="10:15" minute-step="15" aria-label="Fifteen minute step"></cv-time-picker>
+      </div>
+
+      <div>
+        <span>Bounded range</span>
+        <cv-time-picker value="12:00" min="09:00" max="17:00" minute-step="30"></cv-time-picker>
+        <cv-time-picker value="17:30" min="09:00" max="17:00" minute-step="30"></cv-time-picker>
+      </div>
+
+      <div>
+        <span>Entry lifecycle</span>
+        <cv-time-picker placeholder="Incomplete draft" aria-label="Incomplete draft"></cv-time-picker>
+        <cv-time-picker value="23:45" aria-label="Filled value"></cv-time-picker>
+      </div>
+
+      <div>
+        <span>Interaction guard</span>
+        <cv-time-picker value="11:20" readonly aria-label="Readonly state"></cv-time-picker>
+        <cv-time-picker value="11:20" disabled aria-label="Disabled state"></cv-time-picker>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script type="module">
+  document
+    .querySelectorAll('.time-picker-demo-shell[data-demo="time-picker"]:not([data-ready])')
+    .forEach((shell) => {
+      shell.dataset.ready = 'true'
+
+      const output = shell.querySelector('[data-time-picker-output]')
+      const primaryValue = shell.querySelector('[data-time-picker-value]')
+      const lastSource = shell.querySelector('[data-time-picker-source]')
+      const primaryPicker = shell.querySelector('[data-time-picker-primary]')
+
+      const setText = (element, value) => {
+        if (element) element.textContent = value
+      }
+
+      const getPickerName = (picker) => {
+        const label = picker.closest('cv-field')?.querySelector('[slot="label"]')?.textContent?.trim()
+        return label || picker.getAttribute('name') || 'time picker'
+      }
+
+      const report = (event) => {
+        const picker = event.target instanceof HTMLElement ? event.target : null
+        if (!picker?.matches('cv-time-picker')) return
+
+        const detail = event.detail || {}
+        const value = detail.value || 'empty'
+        const inputValue = detail.inputValue || value
+        const invalid = detail.invalid ? 'invalid' : 'valid'
+        const source = detail.source || 'program'
+        const name = getPickerName(picker)
+
+        setText(output, `${event.type}: ${name} -> ${inputValue} (${invalid}, source: ${source})`)
+        setText(lastSource, source)
+      }
+
+      primaryPicker?.addEventListener('cv-input', (event) => {
+        setText(primaryValue, event.detail.value || 'draft')
+      })
+
+      shell.addEventListener('cv-input', report)
+      shell.addEventListener('cv-change', report)
+    })
+</script>
 ```

@@ -114,6 +114,12 @@ export class CVProgressRing extends ReatomLitElement {
           transform: rotate(270deg);
         }
       }
+
+      @media (prefers-reduced-motion: reduce) {
+        :host([indeterminate]) [part='svg'] {
+          animation-duration: 4.6s;
+        }
+      }
     `,
   ]
 
@@ -193,7 +199,7 @@ export class CVProgressRing extends ReatomLitElement {
             cy="50"
             r="${RADIUS}"
             stroke-dasharray="${CIRCUMFERENCE}"
-            style="stroke-dashoffset: ${dashoffset};"
+            stroke-dashoffset="${dashoffset}"
           ></circle>
         </svg>
         <span part="label"><slot></slot></span>

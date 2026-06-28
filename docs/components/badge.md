@@ -269,6 +269,8 @@ Additionally, component styles depend on theme tokens through fallback values:
 | `:host([dot][pulse])`        | Dot with pulse animation combined                                                      |
 | `:host([decorative])`        | Decorative mode; no visual change, ARIA-hidden via headless                            |
 
+- In `prefers-reduced-motion: reduce`, pulse animation is disabled (`animation: none`) because it is decorative attention motion.
+
 ## Reactive State Mapping
 
 `cv-badge` is a visual adapter over headless `createBadge`.

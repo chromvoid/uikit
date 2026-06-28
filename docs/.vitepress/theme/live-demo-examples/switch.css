@@ -3,18 +3,11 @@
   inline-size: 100%;
   min-inline-size: 0;
   color: var(--live-demo-muted);
-  background:
-    linear-gradient(180deg, rgba(12, 20, 32, 0.98), rgba(7, 13, 22, 0.98)),
-    radial-gradient(circle at 12% 0%, rgba(101, 215, 255, 0.1), transparent 36%),
-    radial-gradient(circle at 88% 18%, rgba(179, 136, 255, 0.08), transparent 36%);
+  background: var(--live-demo-gradient-primary-soft);
 }
 
 .switch-demo-shell cv-switch {
   color: var(--live-demo-text);
-  --cv-color-text: var(--live-demo-text);
-  --cv-color-text-muted: var(--live-demo-muted);
-  --cv-color-surface-elevated: rgba(238, 245, 255, 0.065);
-  --cv-color-border: rgba(143, 220, 255, 0.34);
   --cv-switch-help-text-color: var(--live-demo-soft);
 }
 
@@ -45,11 +38,11 @@
 .switch-demo-hero {
   grid-template-columns: minmax(0, 1.05fr) minmax(260px, 0.95fr);
   align-items: stretch;
-  border-bottom: 1px solid rgba(118, 181, 222, 0.18);
+  border-bottom: 1px solid var(--live-demo-border-muted);
 }
 
 .switch-demo-section + .switch-demo-section {
-  border-top: 1px solid rgba(118, 181, 222, 0.14);
+  border-top: 1px solid var(--live-demo-border-muted);
 }
 
 .switch-demo-copy,
@@ -105,7 +98,7 @@
 }
 
 .switch-demo-kicker {
-  color: #94e9ff;
+  color: var(--live-demo-cyan);
 }
 
 .switch-demo-label {
@@ -116,10 +109,9 @@
 .switch-demo-cell,
 .switch-demo-panel,
 .switch-demo-fieldset {
-  border: 1px solid rgba(118, 181, 222, 0.18);
+  border: 1px solid var(--live-demo-border-muted);
   border-radius: 12px;
-  background:
-    linear-gradient(180deg, rgba(238, 245, 255, 0.052), rgba(238, 245, 255, 0.026)), rgba(7, 13, 22, 0.32);
+  background: var(--live-demo-gradient-panel);
 }
 
 .switch-demo-rack {
@@ -165,11 +157,11 @@
 
 .switch-demo-panel cv-switch + cv-switch {
   padding-block-start: 10px;
-  border-top: 1px solid rgba(118, 181, 222, 0.14);
+  border-top: 1px solid var(--live-demo-border-muted);
 }
 
 .switch-demo-track-text {
-  color: rgba(238, 245, 255, 0.86);
+  color: var(--live-demo-text);
   font-size: 0.56rem;
   line-height: 1;
 }

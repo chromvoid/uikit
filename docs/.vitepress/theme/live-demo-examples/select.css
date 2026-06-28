@@ -26,7 +26,7 @@
 .select-demo-cell::part(label),
 .textarea-demo-cell::part(label),
 .field-demo-grid cv-field::part(label) {
-  color: var(--cv-color-text-muted, #9aa6bf);
+  color: var(--cv-color-text-muted);
   font-family: var(--vp-font-family-mono);
   font-size: 0.72rem;
   letter-spacing: 0.04em;
@@ -76,13 +76,10 @@
   border: 1px solid var(--live-demo-border);
   border-radius: 16px;
   color: var(--live-demo-muted);
-  background:
-    linear-gradient(180deg, rgba(12, 20, 32, 0.98), rgba(7, 13, 22, 0.98)),
-    linear-gradient(135deg, rgba(101, 215, 255, 0.08), transparent 42%),
-    radial-gradient(circle at 92% 4%, rgba(179, 136, 255, 0.12), transparent 32%);
+  background: var(--live-demo-gradient-primary-soft);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.04),
-    0 18px 42px rgba(0, 0, 0, 0.22);
+    inset 0 1px 0 var(--cv-alpha-white-4),
+    0 18px 42px var(--cv-alpha-black-14);
 }
 
 .select-demo-shell,
@@ -91,7 +88,7 @@
 }
 
 .select-demo-shell code {
-  color: #bff3ff;
+  color: var(--live-demo-text);
   font-family: var(--vp-font-family-mono);
   font-size: 0.86em;
 }
@@ -140,7 +137,7 @@
 }
 
 .select-demo-kicker {
-  color: #94e9ff;
+  color: var(--live-demo-cyan);
 }
 
 .select-demo-copy h3,
@@ -191,8 +188,12 @@
 .select-demo-state div {
   border: 1px solid var(--live-demo-border);
   border-radius: 14px;
-  background:
-    linear-gradient(180deg, var(--live-demo-panel), rgba(238, 245, 255, 0.026)), rgba(7, 13, 22, 0.32);
+}
+
+.select-demo-panel,
+.select-demo-side,
+.select-demo-state div {
+  background: var(--live-demo-gradient-panel);
 }
 
 .select-demo-metrics div {
@@ -231,20 +232,16 @@
 
 .select-demo-panel {
   gap: 16px;
-  background:
-    linear-gradient(180deg, rgba(7, 13, 22, 0.52), rgba(7, 13, 22, 0.8)),
-    linear-gradient(90deg, rgba(101, 215, 255, 0.055), transparent 44%);
+  background: var(--live-demo-gradient-primary-soft);
 }
 
 .select-demo-panel--primary {
-  border-color: rgba(101, 215, 255, 0.22);
+  border-color: var(--live-demo-cyan-border);
 }
 
 .select-demo-side {
   gap: 12px;
-  background:
-    linear-gradient(180deg, rgba(18, 23, 38, 0.78), rgba(7, 13, 22, 0.78)),
-    linear-gradient(145deg, rgba(179, 136, 255, 0.075), transparent 54%);
+  background: var(--live-demo-gradient-brand);
 }
 
 .select-demo-field-grid,
@@ -262,7 +259,7 @@
   min-inline-size: 0;
   min-block-size: 66px;
   padding: 12px;
-  background: rgba(238, 245, 255, 0.042);
+  background: var(--live-demo-surface-highlight);
 }
 
 .select-demo-state dd,
@@ -276,10 +273,10 @@
   min-block-size: 82px;
   margin: 0;
   padding: 12px 14px;
-  border: 1px solid rgba(143, 220, 255, 0.18);
+  border: 1px solid var(--live-demo-cyan-surface);
   border-radius: 12px;
-  background: rgba(238, 245, 255, 0.046);
-  color: rgba(226, 239, 255, 0.86);
+  background: var(--live-demo-surface-highlight);
+  color: var(--live-demo-text);
   line-height: 1.45;
   overflow-wrap: anywhere;
 }
@@ -308,16 +305,16 @@
   min-inline-size: 0;
   --cv-select-inline-size: 100%;
   --cv-select-border-radius: 10px;
-  --cv-select-border-color: rgba(143, 220, 255, 0.2);
-  --cv-select-background: rgba(11, 19, 30, 0.88);
+  --cv-select-border-color: var(--live-demo-cyan-surface);
+  --cv-select-background: var(--live-demo-surface-glass-strong);
   --cv-select-listbox-transition-duration: 140ms;
 }
 
 .select-demo-shell cv-select::part(trigger) {
   min-inline-size: 0;
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.035),
-    0 0 0 1px rgba(0, 0, 0, 0.14);
+    inset 0 1px 0 var(--cv-alpha-white-4),
+    0 0 0 1px var(--cv-alpha-black-14);
   transition:
     border-color 160ms ease,
     background-color 160ms ease,
@@ -326,38 +323,36 @@
 
 .select-demo-shell cv-select:not([disabled]):hover::part(trigger),
 .select-demo-shell cv-select[open]::part(trigger) {
-  border-color: rgba(101, 215, 255, 0.42);
-  background: rgba(16, 27, 42, 0.94);
+  border-color: var(--live-demo-cyan-border);
+  background: var(--live-demo-surface);
 }
 
 .select-demo-shell cv-select[open]::part(trigger) {
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.05),
-    0 0 0 1px rgba(101, 215, 255, 0.16),
-    0 10px 26px rgba(0, 0, 0, 0.22);
+    inset 0 1px 0 var(--cv-alpha-white-4),
+    0 0 0 1px var(--live-demo-cyan-surface),
+    0 10px 26px var(--cv-alpha-black-14);
 }
 
 .select-demo-shell cv-select[invalid]::part(trigger) {
-  border-color: rgba(255, 125, 134, 0.6);
+  border-color: var(--live-demo-red-border-strong);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.035),
-    0 0 0 1px rgba(255, 125, 134, 0.12);
+    inset 0 1px 0 var(--cv-alpha-white-4),
+    0 0 0 1px var(--live-demo-red-surface);
 }
 
 .select-demo-shell cv-select::part(clear-button) {
   border-radius: 999px;
-  background: rgba(238, 245, 255, 0.06);
+  background: var(--live-demo-surface-highlight);
 }
 
 .select-demo-shell cv-select::part(listbox) {
-  border: 1px solid rgba(143, 220, 255, 0.2);
+  border: 1px solid var(--live-demo-cyan-surface);
   border-radius: 12px;
-  background:
-    linear-gradient(180deg, rgba(18, 27, 40, 0.98), rgba(8, 14, 23, 0.98)),
-    radial-gradient(circle at top right, rgba(101, 215, 255, 0.12), transparent 46%);
+  background: var(--live-demo-gradient-primary-soft);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.04),
-    0 18px 36px rgba(0, 0, 0, 0.32);
+    inset 0 1px 0 var(--cv-alpha-white-4),
+    0 18px 36px var(--cv-alpha-black-25);
 }
 
 .select-demo-shell cv-select-option::part(base) {
@@ -366,12 +361,11 @@
 }
 
 .select-demo-shell cv-select-option[active]::part(base) {
-  background: rgba(101, 215, 255, 0.18);
+  background: var(--live-demo-cyan-surface);
 }
 
 .select-demo-shell cv-select-option[selected]::part(base) {
-  background:
-    linear-gradient(90deg, rgba(101, 215, 255, 0.22), rgba(179, 136, 255, 0.16)), rgba(238, 245, 255, 0.04);
+  background: var(--live-demo-gradient-primary-soft);
   color: var(--live-demo-text);
 }
 
@@ -380,7 +374,7 @@
 }
 
 .select-demo-shell cv-select-group::part(label) {
-  color: #a5b8ff;
+  color: var(--live-demo-text);
   font-family: var(--vp-font-family-mono);
   font-size: 0.7rem;
   letter-spacing: 0;

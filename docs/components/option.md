@@ -12,39 +12,189 @@ Individual selectable option for use as a direct child of `cv-listbox` or `cv-li
 `cv-listbox-group`; the parent listbox owns ARIA attributes, selection,
 keyboard behavior, and events.
 
-This snippet is static because `cv-option` is a child element; live selection
-and keyboard behavior are demonstrated on `cv-listbox`.
+The demo keeps the ownership boundary explicit: `cv-option` renders row
+content, while `cv-listbox` owns focus, selection, ARIA, and events.
 
 ```html
-<cv-listbox aria-label="Storage locations">
-  <!-- Basic value + label text -->
-  <cv-option value="vault">Vault</cv-option>
+<div class="option-demo-shell" data-demo="option" data-live-demo-height="780">
+  <section class="option-demo-hero" aria-labelledby="option-demo-title">
+    <div class="option-demo-copy">
+      <span class="option-demo-kicker">Composable row primitive</span>
+      <h3 id="option-demo-title">Render the visible choice. Let the parent own the contract.</h3>
+      <p>
+        <code>cv-option</code> is intentionally dumb: it exposes a label, prefix, and suffix layout, then
+        accepts <code>selected</code>, <code>active</code>, and <code>disabled</code> state from its parent.
+      </p>
+    </div>
 
-  <!-- Disabled options stay in the collection but cannot be selected -->
-  <cv-option value="cloud" disabled>Cloud backup unavailable</cv-option>
+    <dl class="option-demo-contract" aria-label="Option contract summary">
+      <div>
+        <dt>Owns</dt>
+        <dd>row layout, slots, visual states</dd>
+      </div>
+      <div>
+        <dt>Parent owns</dt>
+        <dd>role, tabindex, selection, events</dd>
+      </div>
+      <div>
+        <dt>Slots</dt>
+        <dd>prefix, label, suffix</dd>
+      </div>
+    </dl>
+  </section>
 
-  <!-- selected declares initial parent listbox selection -->
-  <cv-option value="device" selected>Local device</cv-option>
+  <section class="option-demo-workbench" aria-labelledby="option-demo-workbench-title">
+    <div class="option-demo-section-header">
+      <span class="option-demo-kicker">Live listbox context</span>
+      <h4 id="option-demo-workbench-title">
+        Rich rows stay presentational while the listbox synchronizes active and selected state.
+      </h4>
+    </div>
 
-  <!-- Prefix slot -->
-  <cv-option value="archive">
-    <cv-icon slot="prefix" name="archive"></cv-icon>
-    Archive
-  </cv-option>
+    <div class="option-demo-grid">
+      <article class="option-demo-panel option-demo-panel--primary" aria-labelledby="option-demo-route-title">
+        <header class="option-demo-panel-header">
+          <div>
+            <span class="option-demo-label">Single select</span>
+            <h5 id="option-demo-route-title">Vault exposure route</h5>
+          </div>
+          <cv-badge variant="primary">parent managed</cv-badge>
+        </header>
 
-  <!-- Suffix slot -->
-  <cv-option value="shared">
-    Shared workspace
-    <cv-badge slot="suffix">team</cv-badge>
-  </cv-option>
+        <cv-listbox class="option-demo-listbox" aria-label="Vault exposure route">
+          <cv-option value="daily" data-label="Daily vault">
+            <span slot="prefix" class="option-demo-glyph">D</span>
+            <span class="option-demo-option-copy">
+              <strong>Daily vault</strong>
+              <small>Normal visible workspace</small>
+            </span>
+            <cv-badge slot="suffix" variant="neutral">stable</cv-badge>
+          </cv-option>
+          <cv-option value="travel" data-label="Travel profile" selected>
+            <span slot="prefix" class="option-demo-glyph option-demo-glyph--violet">T</span>
+            <span class="option-demo-option-copy">
+              <strong>Travel profile</strong>
+              <small>Deniable border surface</small>
+            </span>
+            <cv-badge slot="suffix" variant="primary">visible</cv-badge>
+          </cv-option>
+          <cv-option value="sealed" data-label="Sealed core">
+            <span slot="prefix" class="option-demo-glyph option-demo-glyph--success">S</span>
+            <span class="option-demo-option-copy">
+              <strong>Sealed core</strong>
+              <small>Requires hardware proof</small>
+            </span>
+            <cv-badge slot="suffix" variant="success">paired</cv-badge>
+          </cv-option>
+          <cv-option value="recovery" data-label="Remote recovery" disabled>
+            <span slot="prefix" class="option-demo-glyph option-demo-glyph--muted">R</span>
+            <span class="option-demo-option-copy">
+              <strong>Remote recovery</strong>
+              <small>Disabled until quorum returns</small>
+            </span>
+            <cv-badge slot="suffix" variant="neutral">locked</cv-badge>
+          </cv-option>
+        </cv-listbox>
+      </article>
 
-  <!-- Prefix + suffix rich row -->
-  <cv-option value="cold-storage">
-    <cv-icon slot="prefix" name="snowflake"></cv-icon>
-    Cold storage
-    <span slot="suffix">12 GB</span>
-  </cv-option>
-</cv-listbox>
+      <article class="option-demo-panel" aria-labelledby="option-demo-slots-title">
+        <header class="option-demo-panel-header">
+          <div>
+            <span class="option-demo-label">Slot composition</span>
+            <h5 id="option-demo-slots-title">Operational row shapes</h5>
+          </div>
+          <cv-badge variant="neutral">prefix + suffix</cv-badge>
+        </header>
+
+        <cv-listbox class="option-demo-listbox" selection-mode="multiple" aria-label="Export review fields">
+          <cv-option value="name" data-label="Record name" selected>
+            <span slot="prefix" class="option-demo-token">name</span>
+            <span class="option-demo-option-copy">
+              <strong>Record name</strong>
+              <small>Shown in review table</small>
+            </span>
+          </cv-option>
+          <cv-option value="owner" data-label="Owner" selected>
+            <span slot="prefix" class="option-demo-token">own</span>
+            <span class="option-demo-option-copy">
+              <strong>Owner</strong>
+              <small>Operational accountability</small>
+            </span>
+            <span slot="suffix" class="option-demo-value">required</span>
+          </cv-option>
+          <cv-option value="risk" data-label="Risk flag">
+            <span slot="prefix" class="option-demo-token option-demo-token--violet">risk</span>
+            <span class="option-demo-option-copy">
+              <strong>Risk flag with a longer label that wraps cleanly</strong>
+              <small>Visible in elevated review</small>
+            </span>
+            <span slot="suffix" class="option-demo-value">optional</span>
+          </cv-option>
+          <cv-option value="secret" data-label="Raw secret" disabled>
+            <span slot="prefix" class="option-demo-token option-demo-token--muted">raw</span>
+            <span class="option-demo-option-copy">
+              <strong>Raw secret</strong>
+              <small>Never exported from this route</small>
+            </span>
+          </cv-option>
+        </cv-listbox>
+      </article>
+    </div>
+
+    <output class="option-demo-readout" aria-live="polite" data-option-readout>
+      Option events are emitted by the parent listbox.
+    </output>
+
+    <article class="option-demo-state-board" aria-labelledby="option-demo-states-title">
+      <div>
+        <span class="option-demo-label">Visual state matrix</span>
+        <h5 id="option-demo-states-title">Host attributes supplied by the parent</h5>
+      </div>
+
+      <div class="option-demo-state-grid">
+        <cv-option value="default">Default option</cv-option>
+        <cv-option value="active" active>Active option</cv-option>
+        <cv-option value="selected" selected>Selected option</cv-option>
+        <cv-option value="disabled" disabled>Disabled option</cv-option>
+      </div>
+    </article>
+  </section>
+</div>
+
+<script>
+  document.querySelectorAll('.option-demo-shell[data-demo="option"]:not([data-ready])').forEach((shell) => {
+    shell.dataset.ready = 'true'
+
+    const readout = shell.querySelector('[data-option-readout]')
+    const getLabel = (option) =>
+      option?.dataset.label || option?.textContent?.trim().replace(/\s+/g, ' ') || 'none'
+    const getSelectedLabels = (listbox) =>
+      Array.from(listbox?.querySelectorAll('cv-option') ?? [])
+        .filter((option) => option.selected || option.hasAttribute('selected'))
+        .map(getLabel)
+
+    const update = () => {
+      if (!readout) return
+
+      const route = shell.querySelector('cv-listbox[aria-label="Vault exposure route"]')
+      const fields = shell.querySelector('cv-listbox[selection-mode="multiple"]')
+      const routeSelected = getSelectedLabels(route)[0] || 'none'
+      const routeActive = getLabel(route?.querySelector('cv-option[data-active="true"]'))
+      const fieldSelected = getSelectedLabels(fields)
+
+      readout.textContent = `Route: ${routeSelected}. Active option: ${routeActive}. Export fields: ${
+        fieldSelected.length > 0 ? fieldSelected.join(', ') : 'none'
+      }.`
+    }
+
+    shell.querySelectorAll('cv-listbox').forEach((listbox) => {
+      listbox.addEventListener('cv-input', update)
+      listbox.addEventListener('cv-change', update)
+    })
+
+    requestAnimationFrame(update)
+  })
+</script>
 ```
 
 ## Anatomy

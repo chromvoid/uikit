@@ -165,8 +165,8 @@ All keyboard handlers are no-ops.
       <h3>Route a vault policy with grouped, multiple, clearable, and invalid states.</h3>
       <p>
         The demo keeps DOM focus on the trigger, mirrors selection through
-        <code>cv-input</code> and <code>cv-change</code>, and shows the control inside
-        field labels, descriptions, and errors.
+        <code>cv-input</code> and <code>cv-change</code>, and shows the control inside field labels,
+        descriptions, and errors.
       </p>
     </div>
 
@@ -243,9 +243,7 @@ All keyboard handlers are no-ops.
           <dd data-select-demo-active>none</dd>
         </div>
       </dl>
-      <output class="select-demo-log" data-select-demo-output>
-        ready -> Trust boundary: hardware
-      </output>
+      <output class="select-demo-log" data-select-demo-output> ready -> Trust boundary: hardware </output>
     </aside>
   </section>
 
@@ -300,11 +298,7 @@ All keyboard handlers are no-ops.
 
 <script type="module">
   const formatSelectValues = (select) => {
-    const values = select.selectedValues?.length
-      ? select.selectedValues
-      : select.value
-        ? [select.value]
-        : []
+    const values = select.selectedValues?.length ? select.selectedValues : select.value ? [select.value] : []
 
     return values.length > 0 ? values.join(', ') : 'none'
   }
@@ -318,11 +312,8 @@ All keyboard handlers are no-ops.
     const primary = shell.querySelector('[data-select-demo-primary]')
 
     const emitState = (select, type, detail = {}) => {
-      const label = select
-        .closest('cv-field')
-        ?.querySelector('[slot="label"]')
-        ?.textContent
-        ?.trim() || 'Select'
+      const label =
+        select.closest('cv-field')?.querySelector('[slot="label"]')?.textContent?.trim() || 'Select'
       const selected = formatSelectValues(select)
 
       if (values) values.textContent = selected

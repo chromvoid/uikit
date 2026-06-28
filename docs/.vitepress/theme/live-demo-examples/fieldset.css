@@ -34,16 +34,13 @@
   inline-size: 100%;
   min-inline-size: 0;
   overflow: hidden;
-  border: 1px solid rgba(118, 181, 222, 0.18);
+  border: 1px solid var(--live-demo-border-muted);
   border-radius: 16px;
   color: var(--live-demo-muted);
-  background:
-    linear-gradient(180deg, rgba(12, 20, 32, 0.98), rgba(7, 13, 22, 0.98)),
-    linear-gradient(135deg, rgba(101, 215, 255, 0.08), transparent 43%),
-    linear-gradient(315deg, rgba(179, 136, 255, 0.06), transparent 44%);
+  background: var(--live-demo-gradient-primary-soft);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.04),
-    0 18px 42px rgba(0, 0, 0, 0.22);
+    inset 0 1px 0 var(--cv-alpha-white-4),
+    0 18px 42px var(--cv-alpha-black-14);
 }
 
 .fieldset-demo-shell,
@@ -92,7 +89,7 @@
 }
 
 .fieldset-demo-kicker {
-  color: #94e9ff;
+  color: var(--live-demo-cyan);
 }
 
 .fieldset-demo-label,
@@ -143,8 +140,11 @@
 .fieldset-demo-state-card {
   border: 1px solid var(--live-demo-border);
   border-radius: 14px;
-  background:
-    linear-gradient(180deg, var(--live-demo-panel), rgba(238, 245, 255, 0.026)), rgba(7, 13, 22, 0.32);
+}
+
+.fieldset-demo-proof,
+.fieldset-demo-state-card {
+  background: var(--live-demo-gradient-panel);
 }
 
 .fieldset-demo-metrics div {
@@ -193,19 +193,15 @@
   inline-size: 100%;
   min-inline-size: 0;
   color: var(--live-demo-text);
-  --cv-color-text: var(--live-demo-text);
-  --cv-color-text-muted: var(--live-demo-muted);
-  --cv-color-danger: var(--live-demo-red);
   --cv-fieldset-gap: 11px;
   --cv-fieldset-field-gap: 10px;
 }
 
 .fieldset-demo-shell cv-fieldset::part(base) {
   padding: 15px;
-  border: 1px solid rgba(118, 181, 222, 0.16);
+  border: 1px solid var(--live-demo-border-muted);
   border-radius: 14px;
-  background:
-    linear-gradient(180deg, rgba(238, 245, 255, 0.044), rgba(238, 245, 255, 0.02)), rgba(7, 13, 22, 0.34);
+  background: var(--live-demo-gradient-panel);
 }
 
 .fieldset-demo-shell cv-fieldset::part(legend) {
@@ -222,13 +218,12 @@
 }
 
 .fieldset-demo-shell cv-fieldset::part(error) {
-  color: #ffc7cd;
+  color: var(--live-demo-red);
 }
 
 .fieldset-demo-shell cv-fieldset[invalid]::part(base) {
-  border-color: rgba(255, 125, 134, 0.32);
-  background:
-    linear-gradient(180deg, rgba(255, 125, 134, 0.055), rgba(238, 245, 255, 0.02)), rgba(7, 13, 22, 0.34);
+  border-color: var(--live-demo-red-border);
+  background: var(--live-demo-gradient-danger-soft);
 }
 
 .fieldset-demo-shell cv-fieldset[disabled]::part(base) {
@@ -241,14 +236,12 @@
 }
 
 .fieldset-demo-primary::part(base) {
-  background:
-    linear-gradient(180deg, rgba(7, 13, 22, 0.52), rgba(7, 13, 22, 0.8)),
-    linear-gradient(90deg, rgba(101, 215, 255, 0.055), transparent 44%);
+  background: var(--live-demo-gradient-primary-soft);
 }
 
 .fieldset-demo-recovery::part(base) {
-  border-color: rgba(179, 136, 255, 0.22);
-  background: linear-gradient(90deg, rgba(179, 136, 255, 0.052), transparent 48%), rgba(238, 245, 255, 0.032);
+  border-color: var(--live-demo-violet-border);
+  background: var(--live-demo-gradient-brand);
 }
 
 .fieldset-demo-shell cv-field,
@@ -273,12 +266,6 @@
 
 .fieldset-demo-shell cv-input,
 .fieldset-demo-shell cv-select {
-  --cv-color-surface: rgba(238, 245, 255, 0.058);
-  --cv-color-surface-elevated: rgba(238, 245, 255, 0.065);
-  --cv-color-border: rgba(143, 220, 255, 0.3);
-  --cv-color-primary: var(--live-demo-cyan);
-  --cv-color-text: var(--live-demo-text);
-  --cv-color-text-muted: var(--live-demo-muted);
 }
 
 .fieldset-demo-shell cv-select {
@@ -288,12 +275,6 @@
 .live-demo-preview .fieldset-demo-shell cv-checkbox,
 .live-demo-preview .fieldset-demo-shell cv-switch {
   color: var(--live-demo-text);
-  --cv-color-text: var(--live-demo-text);
-  --cv-color-text-muted: var(--live-demo-muted);
-  --cv-color-border: rgba(143, 220, 255, 0.3);
-  --cv-color-primary: var(--live-demo-cyan);
-  --cv-color-surface: rgba(238, 245, 255, 0.058);
-  --cv-color-surface-elevated: rgba(238, 245, 255, 0.065);
 }
 
 .fieldset-demo-proof {
@@ -312,9 +293,9 @@
 
 .fieldset-demo-proof li {
   padding: 12px;
-  border: 1px solid rgba(118, 181, 222, 0.14);
+  border: 1px solid var(--live-demo-border-muted);
   border-radius: 12px;
-  background: rgba(238, 245, 255, 0.038);
+  background: var(--live-demo-surface-highlight);
 }
 
 .fieldset-demo-proof strong {

@@ -10,76 +10,133 @@ the same object or workflow, not as a replacement for page navigation.
 ## Usage
 
 ```html
-<div class="tabs-demo-shell">
+<div class="tabs-demo-shell" data-demo="tabs" data-live-demo-height="920">
   <section class="tabs-demo-hero" aria-labelledby="tabs-demo-title">
     <div class="tabs-demo-copy">
-      <span class="tabs-demo-kicker">Selection surface</span>
-      <h3 id="tabs-demo-title">One active panel inside a known context.</h3>
+      <span class="tabs-demo-kicker">Headless selection contract</span>
+      <h3 id="tabs-demo-title">One active view, one selected panel, no route change.</h3>
       <p>
-        Tabs keep sibling views close together, expose selected and focused state through the headless model,
-        and preserve keyboard movement without forcing a route change.
+        <code>cv-tabs</code> adapts the headless tabs model into a compact product surface: roving focus,
+        selected panel reflection, automatic or manual activation, and optional close events.
       </p>
     </div>
 
     <dl class="tabs-demo-metrics" aria-label="Tabs behavior summary">
       <div>
-        <dt>State</dt>
-        <dd>value</dd>
+        <dt>Selected</dt>
+        <dd><code>value</code> mirrors headless state</dd>
       </div>
       <div>
-        <dt>Keys</dt>
-        <dd>Arrows</dd>
+        <dt>Keyboard</dt>
+        <dd>Arrow keys move focus, Enter commits in manual mode</dd>
       </div>
       <div>
-        <dt>Modes</dt>
-        <dd>Auto / manual</dd>
+        <dt>Events</dt>
+        <dd><code>cv-input</code> for active changes, <code>cv-change</code> for selection</dd>
       </div>
     </dl>
   </section>
 
-  <section class="tabs-demo-section" aria-labelledby="tabs-demo-horizontal-title">
+  <section class="tabs-demo-workbench" aria-labelledby="tabs-demo-workbench-title">
     <div class="tabs-demo-section-header">
-      <span class="tabs-demo-kicker">Horizontal</span>
-      <h4 id="tabs-demo-horizontal-title">Use for compact panels with the same visual weight</h4>
+      <span class="tabs-demo-kicker">Record detail surface</span>
+      <h4 id="tabs-demo-workbench-title">
+        Horizontal tabs keep peer views attached to the same vault record.
+      </h4>
     </div>
 
-    <cv-tabs value="overview" aria-label="Vault record tabs">
-      <cv-tab slot="nav" value="overview">Overview</cv-tab>
-      <cv-tab slot="nav" value="history">History</cv-tab>
-      <cv-tab slot="nav" value="access">Access</cv-tab>
-      <cv-tab slot="nav" value="recovery" disabled>Recovery</cv-tab>
+    <div class="tabs-demo-board">
+      <cv-tabs value="overview" aria-label="Vault record tabs">
+        <cv-tab slot="nav" value="overview">Overview</cv-tab>
+        <cv-tab slot="nav" value="history">History</cv-tab>
+        <cv-tab slot="nav" value="access">Access</cv-tab>
+        <cv-tab slot="nav" value="recovery" disabled>Recovery</cv-tab>
 
-      <cv-tab-panel tab="overview">
-        <div class="tabs-demo-panel-content">
-          <h5>Overview</h5>
-          <p>Show the current record summary, freshness, and the next safe action.</p>
+        <cv-tab-panel tab="overview">
+          <article class="tabs-demo-panel-card">
+            <header>
+              <span class="tabs-demo-label">Visible record</span>
+              <strong>Gateway credentials</strong>
+            </header>
+            <dl class="tabs-demo-facts" aria-label="Overview facts">
+              <div>
+                <dt>Freshness</dt>
+                <dd>Rotated 18 min ago</dd>
+              </div>
+              <div>
+                <dt>Route</dt>
+                <dd>Visible vault</dd>
+              </div>
+              <div>
+                <dt>Status</dt>
+                <dd>Ready</dd>
+              </div>
+            </dl>
+          </article>
+        </cv-tab-panel>
+        <cv-tab-panel tab="history">
+          <article class="tabs-demo-panel-card">
+            <header>
+              <span class="tabs-demo-label">Recent activity</span>
+              <strong>Three committed changes</strong>
+            </header>
+            <ol class="tabs-demo-timeline" aria-label="Record history">
+              <li>Access policy reviewed</li>
+              <li>Password material rotated</li>
+              <li>Audit export denied</li>
+            </ol>
+          </article>
+        </cv-tab-panel>
+        <cv-tab-panel tab="access">
+          <article class="tabs-demo-panel-card">
+            <header>
+              <span class="tabs-demo-label">Access boundary</span>
+              <strong>Two trusted devices</strong>
+            </header>
+            <dl class="tabs-demo-facts" aria-label="Access facts">
+              <div>
+                <dt>Desktop</dt>
+                <dd>Paired</dd>
+              </div>
+              <div>
+                <dt>Mobile</dt>
+                <dd>Review</dd>
+              </div>
+            </dl>
+          </article>
+        </cv-tab-panel>
+        <cv-tab-panel tab="recovery">
+          <article class="tabs-demo-panel-card">
+            <header>
+              <span class="tabs-demo-label">Unavailable</span>
+              <strong>Recovery is locked</strong>
+            </header>
+            <p>Disabled tabs stay visible when the state exists but cannot be selected yet.</p>
+          </article>
+        </cv-tab-panel>
+      </cv-tabs>
+
+      <aside class="tabs-demo-status" aria-label="Tabs event contract">
+        <div>
+          <span class="tabs-demo-label">Activation</span>
+          <strong>Automatic</strong>
+          <p>Clicking or arrowing to a tab updates active and selected state together.</p>
         </div>
-      </cv-tab-panel>
-      <cv-tab-panel tab="history">
-        <div class="tabs-demo-panel-content">
-          <h5>History</h5>
-          <p>Review recent changes without leaving the record detail surface.</p>
+        <div>
+          <span class="tabs-demo-label">Panel contract</span>
+          <strong>Hidden panels remain mounted</strong>
+          <p>The adapter reflects <code>hidden</code>, <code>selected</code>, and ARIA ownership.</p>
         </div>
-      </cv-tab-panel>
-      <cv-tab-panel tab="access">
-        <div class="tabs-demo-panel-content">
-          <h5>Access</h5>
-          <p>Audit who can unlock or export this entry in the current vault context.</p>
-        </div>
-      </cv-tab-panel>
-      <cv-tab-panel tab="recovery">
-        <div class="tabs-demo-panel-content">
-          <h5>Recovery</h5>
-          <p>Disabled tabs stay visible when a state exists but is not available yet.</p>
-        </div>
-      </cv-tab-panel>
-    </cv-tabs>
+      </aside>
+    </div>
   </section>
 
   <section class="tabs-demo-section" aria-labelledby="tabs-demo-vertical-title">
     <div class="tabs-demo-section-header">
-      <span class="tabs-demo-kicker">Vertical manual</span>
-      <h4 id="tabs-demo-vertical-title">Use for longer labels and settings-style grouping</h4>
+      <span class="tabs-demo-kicker">Manual settings rail</span>
+      <h4 id="tabs-demo-vertical-title">
+        Vertical tabs work when focus preview and final selection are separate user decisions.
+      </h4>
     </div>
 
     <cv-tabs value="policy" orientation="vertical" activation-mode="manual" aria-label="Vault policy tabs">
@@ -88,36 +145,101 @@ the same object or workflow, not as a replacement for page navigation.
       <cv-tab slot="nav" value="exports">Export policy</cv-tab>
 
       <cv-tab-panel tab="policy">
-        <div class="tabs-demo-panel-content">
-          <h5>Threat model</h5>
-          <p>
-            In manual mode, arrow keys move focus first. Press Enter or Space to commit the selected panel.
-          </p>
+        <div class="tabs-demo-panel-card">
+          <span class="tabs-demo-label">Manual activation</span>
+          <strong>Arrow keys preview focus first.</strong>
+          <p>Press Enter or Space to commit the selected panel.</p>
         </div>
       </cv-tab-panel>
       <cv-tab-panel tab="devices">
-        <div class="tabs-demo-panel-content">
-          <h5>Trusted devices</h5>
-          <p>Use the vertical layout when the tab list behaves like a local settings rail.</p>
+        <div class="tabs-demo-panel-card">
+          <span class="tabs-demo-label">Device review</span>
+          <strong>Longer labels stay legible in a side rail.</strong>
+          <p>Use vertical orientation for settings groups with stable local navigation.</p>
         </div>
       </cv-tab-panel>
       <cv-tab-panel tab="exports">
-        <div class="tabs-demo-panel-content">
-          <h5>Export policy</h5>
-          <p>Panels keep the same width as the container, so content does not jump between tabs.</p>
+        <div class="tabs-demo-panel-card">
+          <span class="tabs-demo-label">Export guard</span>
+          <strong>Panels keep width stable across selected tabs.</strong>
+          <p>The content area does not jump when tab labels differ in length.</p>
         </div>
       </cv-tab-panel>
     </cv-tabs>
   </section>
 
-  <section class="tabs-demo-note" aria-labelledby="tabs-demo-close-title">
-    <span class="tabs-demo-kicker">Closable tabs</span>
-    <h4 id="tabs-demo-close-title">Close buttons are opt-in, not a default tab affordance.</h4>
-    <p>
-      Add <code>closable</code> only for removable workspace tabs such as open files or temporary records. The
-      consumer must remove the matching <code>cv-tab</code> and <code>cv-tab-panel</code> after the
-      <code>cv-close</code> event.
-    </p>
+  <section class="tabs-demo-section tabs-demo-closable" aria-labelledby="tabs-demo-close-title">
+    <div class="tabs-demo-section-header">
+      <span class="tabs-demo-kicker">Closable workspace tabs</span>
+      <h4 id="tabs-demo-close-title">
+        Close buttons are opt-in and must be paired with consumer-owned removal.
+      </h4>
+    </div>
+
+    <cv-tabs value="session" aria-label="Workspace tabs">
+      <cv-tab slot="nav" value="session" closable>Session notes</cv-tab>
+      <cv-tab slot="nav" value="audit" closable>Audit diff</cv-tab>
+      <cv-tab slot="nav" value="policy" closable>Policy draft</cv-tab>
+
+      <cv-tab-panel tab="session">
+        <div class="tabs-demo-panel-card">
+          <span class="tabs-demo-label">Consumer responsibility</span>
+          <p>
+            Handle <code>cv-close</code>, remove the matching <code>cv-tab</code> and
+            <code>cv-tab-panel</code>, then let the rebuilt model choose the fallback selection.
+          </p>
+        </div>
+      </cv-tab-panel>
+      <cv-tab-panel tab="audit">
+        <div class="tabs-demo-panel-card">
+          <span class="tabs-demo-label">Temporary record</span>
+          <p>Closable tabs fit removable workspaces, not ordinary settings groups.</p>
+        </div>
+      </cv-tab-panel>
+      <cv-tab-panel tab="policy">
+        <div class="tabs-demo-panel-card">
+          <span class="tabs-demo-label">Temporary draft</span>
+          <p>Keep close affordances explicit so basic tab selection remains calm.</p>
+        </div>
+      </cv-tab-panel>
+    </cv-tabs>
+
+    <cv-empty-state
+      class="tabs-demo-empty"
+      icon="folder-open"
+      headline="All workspace tabs are closed"
+      description="Temporary records were removed from this local workspace. Add a new record before continuing."
+      hidden
+    ></cv-empty-state>
+
+    <script>
+      document
+        .querySelectorAll('.tabs-demo-closable cv-tabs:not([data-close-demo-ready])')
+        .forEach((tabs) => {
+          tabs.dataset.closeDemoReady = 'true'
+          const section = tabs.closest('.tabs-demo-closable')
+          const emptyState = section?.querySelector('.tabs-demo-empty')
+          const updateEmptyState = () => {
+            const isEmpty = tabs.querySelectorAll('cv-tab').length === 0
+            tabs.hidden = isEmpty
+            if (emptyState instanceof HTMLElement) {
+              emptyState.hidden = !isEmpty
+            }
+          }
+
+          tabs.addEventListener('cv-close', (event) => {
+            const value = event.detail?.value
+            if (!value) return
+
+            const escaped = CSS.escape(value)
+            tabs.querySelector(`cv-tab[value="${escaped}"]`)?.remove()
+            tabs.querySelector(`cv-tab-panel[tab="${escaped}"]`)?.remove()
+            updateEmptyState()
+          })
+
+          updateEmptyState()
+        })
+    </script>
   </section>
 </div>
 ```

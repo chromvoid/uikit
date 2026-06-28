@@ -131,6 +131,8 @@ Additionally, component styles depend on theme tokens through fallback values:
 | `:host([size="small"])`      | Small size overrides                                              |
 | `:host([size="large"])`      | Large size overrides                                              |
 
+- In `prefers-reduced-motion: reduce`, the loading spinner remains visible but slows from `800ms` to `3200ms`.
+
 ## Reactive State Mapping
 
 `cv-button` is a visual adapter over headless `createButton`.
@@ -186,7 +188,9 @@ Normal (non-toggle) buttons rely on the native `click` event.
   <section class="button-demo-hero" aria-labelledby="button-demo-title">
     <div class="button-demo-copy">
       <span class="button-demo-kicker">Action primitive</span>
-      <h3 id="button-demo-title">Use button when a user commits intent, changes mode, or starts a safe action.</h3>
+      <h3 id="button-demo-title">
+        Use button when a user commits intent, changes mode, or starts a safe action.
+      </h3>
       <p>
         The component keeps activation, toggle, disabled, loading, and form behavior in the headless button
         model. UIKit owns only the action surface, slots, variants, and sizing.
@@ -283,7 +287,9 @@ Normal (non-toggle) buttons rely on the native `click` event.
   <section class="button-demo-section" aria-labelledby="button-demo-matrix-title">
     <div class="button-demo-section-header">
       <span class="button-demo-kicker">Variants, sizes, and shape</span>
-      <h4 id="button-demo-matrix-title">Use one action hierarchy, then tune emphasis with variant and modifier.</h4>
+      <h4 id="button-demo-matrix-title">
+        Use one action hierarchy, then tune emphasis with variant and modifier.
+      </h4>
     </div>
 
     <div class="button-demo-matrix" aria-label="Button variant and size matrix">

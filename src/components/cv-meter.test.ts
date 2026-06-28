@@ -47,12 +47,15 @@ describe('cv-meter', () => {
       expect(indicator!.tagName).toBe('DIV')
     })
 
-    it('renders [part="label"] as a span inside indicator', async () => {
+    it('renders [part="label"] as a span outside the transformed indicator', async () => {
       const meter = await createMeter()
       const indicator = getIndicator(meter)
       const label = indicator.querySelector('[part="label"]')
-      expect(label).not.toBeNull()
-      expect(label!.tagName).toBe('SPAN')
+      expect(label).toBeNull()
+      const baseLabel = meter.shadowRoot!.querySelector('[part="label"]') as HTMLElement
+      expect(baseLabel).not.toBeNull()
+      expect(baseLabel.tagName).toBe('SPAN')
+      expect(baseLabel.parentElement).toBe(getBase(meter))
     })
 
     it('renders default slot inside [part="label"]', async () => {
@@ -202,35 +205,36 @@ describe('cv-meter', () => {
   // --- Indicator percentage ---
 
   describe('indicator percentage', () => {
-    it('sets --cv-meter-width based on percentage', async () => {
+    it('sets --cv-meter-value-scale based on percentage', async () => {
       const meter = await createMeter({value: 50, min: 0, max: 200})
-      expect(getIndicator(meter).style.getPropertyValue('--cv-meter-width')).toBe('25%')
+      expect(meter.style.getPropertyValue('--cv-meter-value-scale')).toBe('0.25')
+      expect(getIndicator(meter).getAttribute('style')).toBeNull()
     })
 
-    it('clamps percentage to 0% for values below min', async () => {
+    it('clamps percentage scale to 0 for values below min', async () => {
       const meter = await createMeter({value: -10, min: 0, max: 100})
-      expect(getIndicator(meter).style.getPropertyValue('--cv-meter-width')).toBe('0%')
+      expect(meter.style.getPropertyValue('--cv-meter-value-scale')).toBe('0')
     })
 
-    it('clamps percentage to 100% for values above max', async () => {
+    it('clamps percentage scale to 1 for values above max', async () => {
       const meter = await createMeter({value: 150, min: 0, max: 100})
-      expect(getIndicator(meter).style.getPropertyValue('--cv-meter-width')).toBe('100%')
+      expect(meter.style.getPropertyValue('--cv-meter-value-scale')).toBe('1')
     })
   })
 
   // --- Dynamic state updates ---
 
   describe('dynamic state updates', () => {
-    it('updating value updates aria-valuenow and indicator width', async () => {
+    it('updating value updates aria-valuenow and fill scale', async () => {
       const meter = await createMeter({value: 30, min: 0, max: 100})
       expect(getBase(meter).getAttribute('aria-valuenow')).toBe('30')
-      expect(getIndicator(meter).style.getPropertyValue('--cv-meter-width')).toBe('30%')
+      expect(meter.style.getPropertyValue('--cv-meter-value-scale')).toBe('0.3')
 
       meter.value = 70
       await settle(meter)
 
       expect(getBase(meter).getAttribute('aria-valuenow')).toBe('70')
-      expect(getIndicator(meter).style.getPropertyValue('--cv-meter-width')).toBe('70%')
+      expect(meter.style.getPropertyValue('--cv-meter-value-scale')).toBe('0.7')
     })
 
     it('updating value clamps above max', async () => {
@@ -240,18 +244,18 @@ describe('cv-meter', () => {
       await settle(meter)
 
       expect(getBase(meter).getAttribute('aria-valuenow')).toBe('100')
-      expect(getIndicator(meter).style.getPropertyValue('--cv-meter-width')).toBe('100%')
+      expect(meter.style.getPropertyValue('--cv-meter-value-scale')).toBe('1')
     })
 
     it('changing max recreates model and updates indicator', async () => {
       const meter = await createMeter({value: 50, min: 0, max: 100})
-      expect(getIndicator(meter).style.getPropertyValue('--cv-meter-width')).toBe('50%')
+      expect(meter.style.getPropertyValue('--cv-meter-value-scale')).toBe('0.5')
 
       meter.max = 200
       await settle(meter)
 
       expect(getBase(meter).getAttribute('aria-valuemax')).toBe('200')
-      expect(getIndicator(meter).style.getPropertyValue('--cv-meter-width')).toBe('25%')
+      expect(meter.style.getPropertyValue('--cv-meter-value-scale')).toBe('0.25')
     })
 
     it('changing thresholds updates data-status', async () => {
@@ -267,9 +271,9 @@ describe('cv-meter', () => {
   // --- Range normalization corner cases ---
 
   describe('range normalization corner cases', () => {
-    it('zero-width range (min === max) yields 0% width without division blowup', async () => {
+    it('zero-width range (min === max) yields 0 fill scale without division blowup', async () => {
       const meter = await createMeter({value: 50, min: 50, max: 50})
-      expect(getIndicator(meter).style.getPropertyValue('--cv-meter-width')).toBe('0%')
+      expect(meter.style.getPropertyValue('--cv-meter-value-scale')).toBe('0')
       expect(getBase(meter).getAttribute('aria-valuenow')).toBe('50')
     })
 
@@ -277,7 +281,7 @@ describe('cv-meter', () => {
       const meter = await createMeter({value: 25, min: 100, max: 0})
       expect(getBase(meter).getAttribute('aria-valuemin')).toBe('0')
       expect(getBase(meter).getAttribute('aria-valuemax')).toBe('100')
-      expect(getIndicator(meter).style.getPropertyValue('--cv-meter-width')).toBe('25%')
+      expect(meter.style.getPropertyValue('--cv-meter-value-scale')).toBe('0.25')
     })
 
     it('clamps initial value below min up to min', async () => {
@@ -301,7 +305,7 @@ describe('cv-meter', () => {
     it('sanitizes a NaN initial value to min (no NaN aria/width)', async () => {
       const meter = await createMeter({value: NaN, min: 10, max: 100})
       expect(getBase(meter).getAttribute('aria-valuenow')).toBe('10')
-      expect(getIndicator(meter).style.getPropertyValue('--cv-meter-width')).toBe('0%')
+      expect(meter.style.getPropertyValue('--cv-meter-value-scale')).toBe('0')
     })
 
     it('sanitizes a NaN value set after mount to min', async () => {
@@ -312,7 +316,7 @@ describe('cv-meter', () => {
       await settle(meter)
 
       expect(getBase(meter).getAttribute('aria-valuenow')).toBe('0')
-      expect(getIndicator(meter).style.getPropertyValue('--cv-meter-width')).toBe('0%')
+      expect(meter.style.getPropertyValue('--cv-meter-value-scale')).toBe('0')
     })
 
     it('sanitizes an Infinity value to min', async () => {
@@ -365,7 +369,7 @@ describe('cv-meter', () => {
   // --- Default slot (label content) ---
 
   describe('default slot', () => {
-    it('projects slotted content inside the indicator label', async () => {
+    it('projects slotted content inside the base label', async () => {
       const meter = await createMeter()
       const label = meter.shadowRoot!.querySelector('[part="label"]')
       expect(label).not.toBeNull()
@@ -404,7 +408,7 @@ describe('cv-meter', () => {
     it('percentage derives from headless state.percentage(), not computed locally', async () => {
       const meter = await createMeter({value: 50, min: 0, max: 200})
       // Percentage is derived entirely from the headless model's state.percentage()
-      expect(getIndicator(meter).style.getPropertyValue('--cv-meter-width')).toBe('25%')
+      expect(meter.style.getPropertyValue('--cv-meter-value-scale')).toBe('0.25')
     })
   })
 })

@@ -391,13 +391,9 @@ export const cvImageViewerStyles = css`
   }
 
   [part='thumbnail'][aria-current='true'] {
-    border-color: color-mix(
-      in srgb,
-      var(--cv-color-primary-dark, #00b7cc) 62%,
-      var(--cv-image-viewer-border)
-    );
-    background: color-mix(in srgb, var(--cv-color-primary-dark, #00b7cc) 10%, var(--cv-alpha-white-8));
-    box-shadow: 0 0 0 1px color-mix(in srgb, var(--cv-color-primary-dark, #00b7cc) 24%, transparent);
+    border-color: var(--cv-color-primary-border-strong);
+    background: var(--cv-color-primary-surface);
+    box-shadow: 0 0 0 1px var(--cv-color-primary-ring);
   }
 
   [part='thumbnail']:focus-visible {

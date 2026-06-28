@@ -10,9 +10,7 @@
   overflow: hidden;
   border: 1px solid var(--cv-color-border-glass);
   border-radius: var(--cv-radius-4);
-  background:
-    linear-gradient(135deg, var(--cv-color-primary-subtle), transparent 42%),
-    linear-gradient(315deg, var(--cv-color-accent-surface), transparent 46%), var(--cv-gradient-surface-deep);
+  background: var(--live-demo-gradient-primary-soft);
   color: var(--cv-color-text-muted);
   box-shadow: var(--cv-shadow-glass);
 }
@@ -37,9 +35,7 @@
 }
 
 .dropzone-demo-hero {
-  background:
-    linear-gradient(90deg, var(--cv-color-surface-glass-subtle), transparent 72%),
-    var(--cv-color-surface-glass-subtle);
+  background: var(--live-demo-gradient-panel);
 }
 
 .dropzone-demo-copy,
@@ -117,6 +113,11 @@
 .dropzone-demo-state-card {
   border: 1px solid var(--cv-color-border-glass);
   border-radius: var(--cv-radius-3);
+}
+
+.dropzone-demo-product,
+.dropzone-demo-pipeline,
+.dropzone-demo-state-card {
   background: var(--cv-color-surface-glass-subtle);
 }
 
@@ -144,9 +145,7 @@
 .dropzone-demo-product {
   gap: var(--cv-space-4);
   padding: var(--cv-space-4);
-  background:
-    linear-gradient(180deg, var(--cv-color-surface-secondary-glass), var(--cv-color-surface-glass-subtle)),
-    var(--cv-color-bg);
+  background: var(--live-demo-gradient-panel);
 }
 
 .dropzone-demo-product-header {
@@ -183,9 +182,7 @@
   min-block-size: 360px;
   --cv-dropzone-overlay-border: 1px dashed var(--cv-color-primary);
   --cv-dropzone-overlay-radius: var(--cv-radius-3);
-  --cv-dropzone-overlay-background:
-    linear-gradient(180deg, var(--cv-color-overlay), var(--cv-color-surface-secondary-glass-strong)),
-    var(--cv-color-primary-surface);
+  --cv-dropzone-overlay-background: var(--live-demo-gradient-primary-soft);
   --cv-dropzone-overlay-color: var(--cv-color-text-strongest);
   --cv-dropzone-overlay-padding: var(--cv-space-6);
   --cv-dropzone-loading-background: var(--cv-color-surface-secondary-glass-strong);
@@ -220,9 +217,7 @@
   padding: var(--cv-space-4);
   border: 1px solid var(--cv-color-border-faint);
   border-radius: var(--cv-radius-3);
-  background:
-    linear-gradient(180deg, var(--cv-color-surface-glass), var(--cv-color-surface-glass-subtle)),
-    var(--cv-gradient-surface-deep);
+  background: var(--live-demo-gradient-panel);
 }
 
 .dropzone-demo-file-list article {
@@ -243,9 +238,7 @@
   block-size: 36px;
   border: 1px solid var(--cv-color-primary-border);
   border-radius: var(--cv-radius-1);
-  background:
-    linear-gradient(135deg, transparent 0 64%, var(--cv-color-primary-surface-strong) 65%),
-    var(--cv-color-surface-secondary-glass);
+  background: var(--live-demo-gradient-primary-soft);
 }
 
 .dropzone-demo-file-list article > div {
@@ -305,9 +298,7 @@
   block-size: 52px;
   border: 1px solid var(--cv-color-primary-border-strong);
   border-radius: var(--cv-radius-3);
-  background:
-    linear-gradient(135deg, var(--cv-color-primary-surface-strong), transparent 62%),
-    var(--cv-color-surface-secondary-glass);
+  background: var(--live-demo-gradient-primary-soft);
   color: var(--cv-color-primary);
   box-shadow: 0 0 0 6px var(--cv-color-primary-surface);
 }
@@ -341,9 +332,7 @@
 .dropzone-demo-pipeline {
   gap: var(--cv-space-4);
   padding: var(--cv-space-4);
-  background:
-    linear-gradient(180deg, var(--cv-color-accent-surface), transparent 62%),
-    var(--cv-color-surface-glass-subtle);
+  background: var(--live-demo-gradient-brand);
 }
 
 .dropzone-demo-pipeline ol {
@@ -411,9 +400,7 @@
   gap: var(--cv-space-2);
   border: 1px dashed var(--cv-color-accent-border);
   border-radius: calc(var(--cv-radius-2) - 1px);
-  background:
-    linear-gradient(180deg, var(--cv-color-accent-surface), var(--cv-color-surface-secondary-glass-strong)),
-    var(--cv-color-surface-2);
+  background: var(--live-demo-gradient-brand);
 }
 
 .dropzone-demo-target {

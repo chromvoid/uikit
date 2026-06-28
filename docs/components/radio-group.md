@@ -16,7 +16,7 @@ This document is the UIKit surface contract for Radio Group.
 ## Usage
 
 ```html
-<div class="radio-demo-shell" data-demo="radio-group" data-live-demo-height="1080" data-theme="dark">
+<div class="radio-demo-shell" data-demo="radio-group" data-live-demo-height="1080">
   <section class="radio-demo-hero" aria-labelledby="radio-demo-title">
     <div class="radio-demo-copy">
       <span class="radio-demo-kicker">Single-choice control</span>

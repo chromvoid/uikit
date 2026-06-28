@@ -125,7 +125,7 @@ The `help-text` part is rendered only when the `help-text` attribute is set or t
 ## Usage
 
 ```html
-<div class="switch-demo-shell">
+<div class="switch-demo-shell" data-demo="switch">
   <section class="switch-demo-hero" aria-labelledby="switch-demo-title">
     <div class="switch-demo-copy">
       <span class="switch-demo-kicker">Switch pattern</span>

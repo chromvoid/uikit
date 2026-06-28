@@ -17,41 +17,120 @@ This document is the UIKit surface contract for `cv-date-picker`.
 ## Usage
 
 ```html
-<cv-date-picker
-  data-live-demo-height="420"
-  mode="date"
-  aria-label="Flight date"
-  placeholder="Select departure date"
-  min="2026-01-01"
-  max="2026-12-31"
->
-  <icon-calendar slot="prefix"></icon-calendar>
-</cv-date-picker>
+<div class="date-picker-demo-shell" data-demo="date-picker" data-live-demo-height="860">
+  <section class="date-picker-demo-hero" aria-labelledby="date-picker-demo-title">
+    <div class="date-picker-demo-copy">
+      <span class="date-picker-demo-kicker">Temporal commit boundary</span>
+      <h3 id="date-picker-demo-title">Editable date input with explicit calendar commit.</h3>
+      <p>
+        <code>cv-date-picker</code> keeps typed input, draft calendar navigation, optional time editing, and
+        committed form value as separate states until the user applies a valid selection.
+      </p>
+    </div>
+    <dl class="date-picker-demo-metrics" aria-label="Date picker contract summary">
+      <div>
+        <dt>Modes</dt>
+        <dd><code>date</code> or <code>date-time</code> public values</dd>
+      </div>
+      <div>
+        <dt>Dialog</dt>
+        <dd>Grid calendar with explicit Apply / Cancel</dd>
+      </div>
+      <div>
+        <dt>Input</dt>
+        <dd>Editable combobox, parse and range validation</dd>
+      </div>
+    </dl>
+  </section>
 
-<cv-date-picker
-  mode="date-time"
-  aria-label="Flight date"
-  placeholder="Select departure date and time"
-  locale="en-US"
-  minute-step="15"
-  open
->
-  <icon-calendar slot="prefix"></icon-calendar>
-  <icon-clock slot="suffix"></icon-clock>
-</cv-date-picker>
+  <section class="date-picker-demo-workbench" aria-labelledby="date-picker-demo-workbench-title">
+    <div class="date-picker-demo-section-header">
+      <span class="date-picker-demo-kicker">Scheduling surface</span>
+      <h4 id="date-picker-demo-workbench-title">
+        The open control shows the full date-time path: draft day, time segments, range limits, and commit
+        actions.
+      </h4>
+    </div>
 
-<cv-date-picker
-  mode="date-time"
-  time-zone="utc"
-  hour-cycle="24"
-  min="2026-01-01T00:00"
-  max="2026-12-31T23:59"
-  disabled
-></cv-date-picker>
+    <div class="date-picker-demo-board">
+      <div class="date-picker-demo-form" aria-label="Vault maintenance window form">
+        <header class="date-picker-demo-form-header">
+          <div>
+            <span class="date-picker-demo-label">Maintenance window</span>
+            <strong>Visible vault route rotation</strong>
+          </div>
+          <span class="date-picker-demo-status">UTC locked</span>
+        </header>
 
-<cv-date-picker locale="ru-RU" size="large">
-  <icon-schedule slot="suffix"></icon-schedule>
-</cv-date-picker>
+        <cv-date-picker
+          class="date-picker-demo-primary"
+          mode="date-time"
+          value="2026-06-18T14:30"
+          min="2026-06-10T00:00"
+          max="2026-06-28T23:59"
+          minute-step="15"
+          time-zone="utc"
+          hour-cycle="24"
+          aria-label="Maintenance window start"
+          placeholder="Select start date and time"
+          open
+        ></cv-date-picker>
+      </div>
+
+      <aside class="date-picker-demo-summary" aria-label="Date picker state summary">
+        <div>
+          <span class="date-picker-demo-label">Committed value</span>
+          <strong>2026-06-18T14:30</strong>
+          <p>Public value remains stable until Apply commits the draft.</p>
+        </div>
+        <div>
+          <span class="date-picker-demo-label">Range guard</span>
+          <strong>Jun 10 - Jun 28</strong>
+          <p>Out-of-range days are still visible, but blocked by the headless contract.</p>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <section class="date-picker-demo-section" aria-labelledby="date-picker-demo-states-title">
+    <div class="date-picker-demo-section-header">
+      <span class="date-picker-demo-kicker">State matrix</span>
+      <h4 id="date-picker-demo-states-title">Common product states stay compact and scannable.</h4>
+    </div>
+
+    <div class="date-picker-demo-grid" aria-label="Date picker variants">
+      <article class="date-picker-demo-card">
+        <span class="date-picker-demo-label">Date only</span>
+        <cv-date-picker
+          mode="date"
+          value="2026-07-04"
+          aria-label="Expiry date"
+          placeholder="Select expiry date"
+        ></cv-date-picker>
+      </article>
+
+      <article class="date-picker-demo-card">
+        <span class="date-picker-demo-label">Large locale</span>
+        <cv-date-picker
+          locale="ru-RU"
+          size="large"
+          value="2026-12-24T09:15"
+          aria-label="Review time"
+        ></cv-date-picker>
+      </article>
+
+      <article class="date-picker-demo-card">
+        <span class="date-picker-demo-label">Read only</span>
+        <cv-date-picker readonly value="2026-08-12T18:45" aria-label="Audit timestamp"></cv-date-picker>
+      </article>
+
+      <article class="date-picker-demo-card">
+        <span class="date-picker-demo-label">Unavailable</span>
+        <cv-date-picker disabled value="2026-01-16T12:00" aria-label="Disabled timestamp"></cv-date-picker>
+      </article>
+    </div>
+  </section>
+</div>
 ```
 
 ## Anatomy

@@ -70,13 +70,15 @@ export class CVProgress extends ReatomLitElement {
 
       [part='indicator'] {
         block-size: 100%;
-        inline-size: var(--cv-progress-width, 0%);
+        inline-size: 100%;
         border-radius: inherit;
         background: var(
           --cv-progress-indicator-background,
           var(--cv-gradient-progress-primary, var(--cv-gradient-primary))
         );
-        transition: inline-size var(--cv-duration-normal, 220ms) var(--cv-easing-standard, ease);
+        transform: scaleX(var(--cv-progress-value-scale, 0));
+        transform-origin: left center;
+        transition: transform var(--cv-duration-normal, 220ms) var(--cv-easing-standard, ease);
         position: relative;
       }
 
@@ -118,6 +120,7 @@ export class CVProgress extends ReatomLitElement {
       :host([indeterminate]) [part='indicator'] {
         inline-size: 35%;
         animation: cv-progress-indeterminate 1.15s linear infinite;
+        transform: translateX(-120%);
       }
 
       :host([data-complete]) [part='indicator'] {
@@ -166,6 +169,12 @@ export class CVProgress extends ReatomLitElement {
           transform: translateX(320%);
         }
       }
+
+      @media (prefers-reduced-motion: reduce) {
+        :host([indeterminate]) [part='indicator'] {
+          animation-duration: 4.6s;
+        }
+      }
     `,
   ]
 
@@ -178,23 +187,23 @@ export class CVProgress extends ReatomLitElement {
   override willUpdate(changedProperties: PropertyValues): void {
     super.willUpdate(changedProperties)
 
-    if (
+    const shouldRecreateModel =
       changedProperties.has('min') ||
       changedProperties.has('max') ||
       changedProperties.has('valueText') ||
       changedProperties.has('ariaLabel')
-    ) {
-      this.model = this.createModel()
-      return
-    }
 
-    if (changedProperties.has('value') && this.model.state.value() !== this.value) {
+    if (shouldRecreateModel) {
+      this.model = this.createModel()
+    } else if (changedProperties.has('value') && this.model.state.value() !== this.value) {
       this.model.actions.setValue(this.value)
     }
 
     if (changedProperties.has('indeterminate')) {
       this.model.actions.setIndeterminate(this.indeterminate)
     }
+
+    this.syncVisualState()
   }
 
   private createModel(): ProgressModel {
@@ -209,11 +218,14 @@ export class CVProgress extends ReatomLitElement {
     })
   }
 
+  private syncVisualState(): void {
+    const percentage = Math.max(0, Math.min(100, this.model.state.percentage()))
+    this.style.setProperty('--cv-progress-value-scale', String(percentage / 100))
+    this.toggleAttribute('data-complete', this.model.state.isComplete())
+  }
+
   protected override render() {
     const props = this.model.contracts.getProgressProps()
-    const percentage = Math.max(0, Math.min(100, this.model.state.percentage()))
-    const isComplete = this.model.state.isComplete()
-    this.toggleAttribute('data-complete', isComplete)
 
     return html`
       <div
@@ -228,10 +240,8 @@ export class CVProgress extends ReatomLitElement {
         aria-describedby=${props['aria-describedby'] ?? nothing}
         part="base"
       >
-        <div
-          part="indicator"
-          style=${this.indeterminate ? nothing : `--cv-progress-width:${percentage}%;`}
-        ><span part="label"><slot></slot></span></div>
+        <div part="indicator"></div>
+        <span part="label"><slot></slot></span>
       </div>
     `
   }
