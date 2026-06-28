@@ -88,6 +88,16 @@ export class CVChip extends ReatomLitElement {
         border-radius: 999px;
       }
 
+      @supports (corner-shape: squircle) {
+        [part='base'] {
+          corner-shape: var(--cv-chip-corner-shape, squircle);
+        }
+
+        :host([pill]) [part='base'] {
+          corner-shape: round;
+        }
+      }
+
       :host([size='small']) [part='base'] {
         min-block-size: 1.5rem;
         font-size: var(--cv-font-size-xs, 12px);

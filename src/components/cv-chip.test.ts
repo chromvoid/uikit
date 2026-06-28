@@ -44,6 +44,15 @@ describe('cv-chip', () => {
       expect(stylesText).toContain("[part='remove-button']")
       expect(stylesText).toContain('flex: 0 0 auto;')
     })
+
+    it('applies enhanced corner shaping as a progressive enhancement', () => {
+      const stylesText = getStylesText()
+
+      expect(stylesText).toMatch(/\[part='base'\]\s*{[\s\S]*border-radius:\s*var\(--cv-chip-radius,/)
+      expect(stylesText).toContain('@supports (corner-shape: squircle)')
+      expect(stylesText).toContain('corner-shape: var(--cv-chip-corner-shape, squircle);')
+      expect(stylesText).toMatch(/:host\(\[pill\]\) \[part='base'\]\s*{[\s\S]*corner-shape:\s*round;/)
+    })
   })
 
   it('renders action chip parts and accessibility state', async () => {

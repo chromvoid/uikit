@@ -46,27 +46,34 @@ Use `cv-chip` when the visible token does something: activates a filter editor, 
 | `suffix`        | Suffix slot wrapper  |
 | `remove-button` | Remove action button |
 
+## CSS Custom Properties
+
+| Custom property          | Default                      | Description                                                                |
+| ------------------------ | ---------------------------- | -------------------------------------------------------------------------- |
+| `--cv-chip-radius`       | `var(--cv-radius-sm, 6px)`   | Fallback border radius and radius used by browsers without `corner-shape`. |
+| `--cv-chip-corner-shape` | `squircle` in supporting UAs | Enhanced corner shape for non-pill chips when `corner-shape` is supported. |
+
 ## Events
 
-| Event            | Detail                                             | Description                             |
-| ---------------- | -------------------------------------------------- | --------------------------------------- |
-| `cv-chip-action` | `{ value: string, source: "click" \| "keyboard" }` | Emitted by a chip activation            |
-| `cv-chip-remove` | `{ value: string }`                                | Emitted by a chip remove button         |
+| Event            | Detail                                             | Description                     |
+| ---------------- | -------------------------------------------------- | ------------------------------- |
+| `cv-chip-action` | `{ value: string, source: "click" \| "keyboard" }` | Emitted by a chip activation    |
+| `cv-chip-remove` | `{ value: string }`                                | Emitted by a chip remove button |
 
 ## Keyboard
 
-| Key           | Behavior                                   |
-| ------------- | ------------------------------------------ |
-| `Enter`/Space | Activates the focused chip                 |
+| Key           | Behavior                   |
+| ------------- | -------------------------- |
+| `Enter`/Space | Activates the focused chip |
 
 Arrow-key roving focus is handled by [`cv-chip-group`](./chip-group.md), not by a standalone chip.
 
 ## When to use chip vs badge
 
-| Need                                                     | Use        |
-| -------------------------------------------------------- | ---------- |
-| Applied filter, selected tag, quick facet, removable tag | `cv-chip`  |
-| Passive state, count, warning label, status dot          | `cv-badge` |
+| Need                                                     | Use             |
+| -------------------------------------------------------- | --------------- |
+| Applied filter, selected tag, quick facet, removable tag | `cv-chip`       |
+| Passive state, count, warning label, status dot          | `cv-badge`      |
 | Single or multiple selection across several chips        | `cv-chip-group` |
 
 ## Behavior notes
@@ -75,6 +82,8 @@ Arrow-key roving focus is handled by [`cv-chip-group`](./chip-group.md), not by 
 - `disabled` removes the chip from tab order and blocks action/remove events.
 - `removable` adds a nested remove button that emits `cv-chip-remove` without also emitting `cv-chip-action`.
 - `value` is the stable payload consumed by events and by `cv-chip-group`.
+- `corner-shape` is applied only inside `@supports`; unsupported browsers keep the regular `border-radius` shape.
+- `pill` chips keep round ends even in browsers that support enhanced corner shapes.
 
 ## Usage
 
@@ -85,8 +94,8 @@ Arrow-key roving focus is handled by [`cv-chip-group`](./chip-group.md), not by 
       <span class="chip-demo-kicker">Interactive token</span>
       <h3 id="chip-demo-title">Use chips when the label is also a control.</h3>
       <p>
-        A chip carries a stable value, optional selected state, and optional remove action in the same
-        compact surface.
+        A chip carries a stable value, optional selected state, and optional remove action in the same compact
+        surface.
       </p>
     </div>
 
