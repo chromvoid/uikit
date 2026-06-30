@@ -608,6 +608,21 @@ cv-theme-provider[mode='light'] {
   --cv-color-selected: hwb(186 0% 20% / 0.12);
   --cv-color-overlay: hwb(218 1.2% 94.5% / 0.38);
 
+  --cv-color-lockscreen-bg: var(--cv-color-bg);
+  --cv-color-lockscreen-surface: var(--cv-color-surface);
+  --cv-color-lockscreen-input-bg: var(--cv-color-surface-2);
+  --cv-color-lockscreen-text: var(--cv-color-text);
+  --cv-color-lockscreen-text-strong: var(--cv-color-text-strong);
+  --cv-color-lockscreen-text-muted: var(--cv-color-text-muted);
+  --cv-color-lockscreen-text-subtle: var(--cv-color-text-subtle);
+  --cv-color-lockscreen-border-faint: var(--cv-color-border-faint);
+  --cv-color-lockscreen-border-muted: var(--cv-color-border-soft);
+  --cv-color-lockscreen-border-strong: var(--cv-color-border-strong);
+  --cv-color-lockscreen-on-primary: var(--cv-color-on-primary);
+  --cv-color-lockscreen-primary-ring: var(--cv-color-primary-ring);
+  --cv-color-lockscreen-primary-shadow: var(--cv-color-primary-ring);
+  --cv-color-lockscreen-accent-glow: var(--cv-color-primary-surface);
+
   --cv-shadow-sm: 0 2px 8px var(--cv-alpha-black-10);
   --cv-shadow-md: 0 8px 28px var(--cv-alpha-black-10);
   --cv-shadow-lg: 0 16px 48px var(--cv-alpha-black-10);
@@ -738,6 +753,21 @@ cv-theme-provider[mode='light'] {
     --cv-color-active: hwb(186 0% 20% / 0.14);
     --cv-color-selected: hwb(186 0% 20% / 0.12);
     --cv-color-overlay: hwb(218 1.2% 94.5% / 0.38);
+
+    --cv-color-lockscreen-bg: var(--cv-color-bg);
+    --cv-color-lockscreen-surface: var(--cv-color-surface);
+    --cv-color-lockscreen-input-bg: var(--cv-color-surface-2);
+    --cv-color-lockscreen-text: var(--cv-color-text);
+    --cv-color-lockscreen-text-strong: var(--cv-color-text-strong);
+    --cv-color-lockscreen-text-muted: var(--cv-color-text-muted);
+    --cv-color-lockscreen-text-subtle: var(--cv-color-text-subtle);
+    --cv-color-lockscreen-border-faint: var(--cv-color-border-faint);
+    --cv-color-lockscreen-border-muted: var(--cv-color-border-soft);
+    --cv-color-lockscreen-border-strong: var(--cv-color-border-strong);
+    --cv-color-lockscreen-on-primary: var(--cv-color-on-primary);
+    --cv-color-lockscreen-primary-ring: var(--cv-color-primary-ring);
+    --cv-color-lockscreen-primary-shadow: var(--cv-color-primary-ring);
+    --cv-color-lockscreen-accent-glow: var(--cv-color-primary-surface);
 
     --cv-shadow-sm: 0 2px 8px var(--cv-alpha-black-10);
     --cv-shadow-md: 0 8px 28px var(--cv-alpha-black-10);
