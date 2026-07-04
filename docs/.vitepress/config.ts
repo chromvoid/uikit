@@ -1,5 +1,6 @@
 import {defineConfig} from 'vitepress'
 
+import {canonicalUrlFromMarkdownPath} from '../../scripts/docs-seo.mjs'
 import {componentGroups} from './component-catalog.mjs'
 import {liveDemoPlugin} from './markdown/liveDemo'
 import {responsiveTablesPlugin} from './markdown/responsiveTables'
@@ -58,6 +59,13 @@ export default defineConfig({
   appearance: 'dark',
   cleanUrls: false,
   lastUpdated: true,
+  transformHead: ({pageData}) => {
+    const canonicalHref = canonicalUrlFromMarkdownPath(pageData.relativePath)
+    return [
+      ['link', {rel: 'canonical', href: canonicalHref}],
+      ['meta', {property: 'og:url', content: canonicalHref}],
+    ]
+  },
   head: [
     ['script', {}, docsThemeBridgeScript],
     ['style', {}, fontFaceStyle],
