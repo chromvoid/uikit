@@ -165,7 +165,7 @@
 .drawer-demo-drawer--settings::part(trigger) {
   border-color: var(--live-demo-cyan-border);
   background: var(--live-demo-gradient-panel);
-  color: var(--live-demo-surface);
+  color: var(--live-demo-text);
   box-shadow: 0 14px 32px var(--live-demo-muted);
 }
 

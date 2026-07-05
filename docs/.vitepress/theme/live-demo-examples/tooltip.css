@@ -264,7 +264,7 @@
 .tooltip-demo-hotspot--primary {
   border-color: var(--live-demo-cyan-border);
   background: var(--live-demo-gradient-primary-soft);
-  color: var(--live-demo-surface);
+  color: var(--live-demo-text);
 }
 
 .tooltip-demo-hotspot--violet {

@@ -2470,6 +2470,10 @@ cv-disclosure.live-demo-source pre {
   --shiki-light: var(--cv-color-text) !important;
 }
 
+[data-theme='dark'] .shiki span[style*='--shiki-dark'][style*='6A737D'] {
+  --shiki-dark: var(--cv-color-text-muted) !important;
+}
+
 [data-theme='light'] .docs-table-shell {
   --uikit-table-row-bg: var(--cv-color-surface);
   --uikit-table-row-bg-alt: var(--cv-color-surface-2);
