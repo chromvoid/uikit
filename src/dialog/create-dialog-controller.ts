@@ -1,6 +1,7 @@
 import {render, type TemplateResult} from 'lit'
 
 import {CVDialog} from '../components/cv-dialog'
+import {isTextEditableFocusTarget} from '../components/focus-utils'
 
 export interface DialogControllerAdapters {
   findFirstFocusable?: (container: Element) => HTMLElement | null
@@ -244,22 +245,34 @@ function isElementVisible(element: HTMLElement): boolean {
   return style.visibility !== 'hidden' && style.display !== 'none'
 }
 
-function defaultFindFirstFocusable(container: Element): HTMLElement | null {
+type FindFocusableOptions = {
+  includeTextEditable?: boolean
+}
+
+function isEligibleFocusable(element: HTMLElement, options: FindFocusableOptions): boolean {
+  if (!isElementVisible(element)) return false
+  return options.includeTextEditable !== false || !isTextEditableFocusTarget(element)
+}
+
+function defaultFindFirstFocusable(
+  container: Element,
+  options: FindFocusableOptions = {},
+): HTMLElement | null {
   const autofocusElement = container.querySelector('[autofocus]') as HTMLElement | null
-  if (autofocusElement && isElementVisible(autofocusElement)) {
+  if (autofocusElement && isEligibleFocusable(autofocusElement, options)) {
     return autofocusElement
   }
 
   if (container.shadowRoot) {
     const shadowAutofocus = container.shadowRoot.querySelector('[autofocus]') as HTMLElement | null
-    if (shadowAutofocus && isElementVisible(shadowAutofocus)) {
+    if (shadowAutofocus && isEligibleFocusable(shadowAutofocus, options)) {
       return shadowAutofocus
     }
   }
 
   for (const tagName of INPUT_LIKE_COMPONENTS) {
     const component = container.querySelector(tagName) as HTMLElement | null
-    if (component && isElementVisible(component)) {
+    if (component && isEligibleFocusable(component, options)) {
       return component
     }
   }
@@ -267,14 +280,14 @@ function defaultFindFirstFocusable(container: Element): HTMLElement | null {
   const elements = container.querySelectorAll(STANDARD_FOCUSABLE_SELECTORS)
   for (const element of elements) {
     const htmlElement = element as HTMLElement
-    if (isElementVisible(htmlElement)) {
+    if (isEligibleFocusable(htmlElement, options)) {
       return htmlElement
     }
   }
 
   for (const child of container.children) {
     if (child.shadowRoot) {
-      const found = defaultFindFirstFocusable(child)
+      const found = defaultFindFirstFocusable(child, options)
       if (found) return found
     }
   }
@@ -294,6 +307,23 @@ export function createDialogController(adapters: DialogControllerAdapters = {}):
   const createCustomDialogElement =
     adapters.createCustomDialogElement ??
     (() => document.createElement('cv-dialog') as ManagedDialogSurfaceElement)
+
+  const findFirstFocusableForSurface = (element: HTMLElement): HTMLElement | null => {
+    if (element.localName !== 'cv-bottom-sheet') {
+      return findFirstFocusable(element)
+    }
+
+    if (!adapters.findFirstFocusable) {
+      return defaultFindFirstFocusable(element, {includeTextEditable: false})
+    }
+
+    const focusable = adapters.findFirstFocusable(element)
+    if (focusable && !isTextEditableFocusTarget(focusable)) {
+      return focusable
+    }
+
+    return defaultFindFirstFocusable(element, {includeTextEditable: false})
+  }
 
   const getNextZIndex = () => zIndexCounter++
 
@@ -329,7 +359,7 @@ export function createDialogController(adapters: DialogControllerAdapters = {}):
       () => {
         if (!activeDialogs.has(element)) return
         activateManagedInertSurface(element)
-        const firstFocusable = autoFocus ? findFirstFocusable(element) : null
+        const firstFocusable = autoFocus ? findFirstFocusableForSurface(element) : null
         if (firstFocusable) {
           setTimeout(() => {
             if (firstFocusable.isConnected) {
@@ -435,7 +465,7 @@ export function createDialogController(adapters: DialogControllerAdapters = {}):
         if (!activeDialogs.has(dialog)) return
         hasOpened = true
         activateManagedInertSurface(dialog)
-        const firstFocusable = findFirstFocusable(dialog)
+        const firstFocusable = findFirstFocusableForSurface(dialog)
         if (firstFocusable) {
           setTimeout(() => firstFocusable.focus(), 50)
         }

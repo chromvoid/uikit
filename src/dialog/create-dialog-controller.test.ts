@@ -10,6 +10,33 @@ const settleDialog = async (dialog: CVDialog) => {
   await dialog.updateComplete
 }
 
+const forceVisibleFocusTargets = () => {
+  const originalOffsetWidth = Object.getOwnPropertyDescriptor(HTMLElement.prototype, 'offsetWidth')
+  const originalOffsetHeight = Object.getOwnPropertyDescriptor(HTMLElement.prototype, 'offsetHeight')
+
+  Object.defineProperty(HTMLElement.prototype, 'offsetWidth', {
+    configurable: true,
+    get() {
+      return 10
+    },
+  })
+  Object.defineProperty(HTMLElement.prototype, 'offsetHeight', {
+    configurable: true,
+    get() {
+      return 10
+    },
+  })
+
+  return () => {
+    if (originalOffsetWidth) {
+      Object.defineProperty(HTMLElement.prototype, 'offsetWidth', originalOffsetWidth)
+    }
+    if (originalOffsetHeight) {
+      Object.defineProperty(HTMLElement.prototype, 'offsetHeight', originalOffsetHeight)
+    }
+  }
+}
+
 class TestManagedSurface extends HTMLElement implements ManagedDialogSurfaceElement {
   open = false
   noHeader = false
@@ -88,21 +115,7 @@ describe('createDialogController', () => {
   })
 
   it('present focuses the first focusable element after opening', async () => {
-    const originalOffsetWidth = Object.getOwnPropertyDescriptor(HTMLElement.prototype, 'offsetWidth')
-    const originalOffsetHeight = Object.getOwnPropertyDescriptor(HTMLElement.prototype, 'offsetHeight')
-
-    Object.defineProperty(HTMLElement.prototype, 'offsetWidth', {
-      configurable: true,
-      get() {
-        return 10
-      },
-    })
-    Object.defineProperty(HTMLElement.prototype, 'offsetHeight', {
-      configurable: true,
-      get() {
-        return 10
-      },
-    })
+    const restoreVisibleFocusTargets = forceVisibleFocusTargets()
 
     const controller = createDialogController()
     const element = document.createElement('div')
@@ -133,12 +146,7 @@ describe('createDialogController', () => {
       resolveShow?.('done')
       await expect(resultPromise).resolves.toBe('done')
     } finally {
-      if (originalOffsetWidth) {
-        Object.defineProperty(HTMLElement.prototype, 'offsetWidth', originalOffsetWidth)
-      }
-      if (originalOffsetHeight) {
-        Object.defineProperty(HTMLElement.prototype, 'offsetHeight', originalOffsetHeight)
-      }
+      restoreVisibleFocusTargets()
     }
   })
 
@@ -348,21 +356,7 @@ describe('createDialogController', () => {
   })
 
   it('showCustom focuses the first focusable element using the built-in finder', async () => {
-    const originalOffsetWidth = Object.getOwnPropertyDescriptor(HTMLElement.prototype, 'offsetWidth')
-    const originalOffsetHeight = Object.getOwnPropertyDescriptor(HTMLElement.prototype, 'offsetHeight')
-
-    Object.defineProperty(HTMLElement.prototype, 'offsetWidth', {
-      configurable: true,
-      get() {
-        return 10
-      },
-    })
-    Object.defineProperty(HTMLElement.prototype, 'offsetHeight', {
-      configurable: true,
-      get() {
-        return 10
-      },
-    })
+    const restoreVisibleFocusTargets = forceVisibleFocusTargets()
 
     const controller = createDialogController()
     let dialogRef: CVDialog | null = null
@@ -399,12 +393,88 @@ describe('createDialogController', () => {
       resolveDialog?.('done')
       await expect(resultPromise).resolves.toBe('done')
     } finally {
-      if (originalOffsetWidth) {
-        Object.defineProperty(HTMLElement.prototype, 'offsetWidth', originalOffsetWidth)
-      }
-      if (originalOffsetHeight) {
-        Object.defineProperty(HTMLElement.prototype, 'offsetHeight', originalOffsetHeight)
-      }
+      restoreVisibleFocusTargets()
+    }
+  })
+
+  it('showCustom skips text autofocus for adapter-created bottom sheet surfaces', async () => {
+    const restoreVisibleFocusTargets = forceVisibleFocusTargets()
+
+    const controller = createDialogController({
+      createCustomDialogElement: () =>
+        document.createElement('cv-bottom-sheet') as ManagedDialogSurfaceElement,
+    })
+    let resolveDialog: ((value: string | null) => void) | undefined
+
+    try {
+      const resultPromise = controller.showCustom<string>(
+        {
+          title: 'Bottom sheet focus',
+          content: html`
+            <input id="text-target" autofocus />
+            <button id="button-target">Done</button>
+          `,
+        },
+        (dialog, resolve) => {
+          resolveDialog = resolve
+          const input = dialog.querySelector('#text-target') as HTMLInputElement
+          const button = dialog.querySelector('#button-target') as HTMLButtonElement
+          input.focus = vi.fn()
+          button.focus = vi.fn()
+          dialog.dispatchEvent(new Event('cv-after-show', {bubbles: true}))
+        },
+      )
+
+      await new Promise((resolve) => window.setTimeout(resolve, 70))
+
+      const dialog = document.querySelector('cv-bottom-sheet')!
+      const input = dialog.querySelector('#text-target') as HTMLInputElement
+      const button = dialog.querySelector('#button-target') as HTMLButtonElement
+      expect(input.focus).not.toHaveBeenCalled()
+      expect(button.focus).toHaveBeenCalledTimes(1)
+
+      resolveDialog?.('done')
+      await expect(resultPromise).resolves.toBe('done')
+    } finally {
+      restoreVisibleFocusTargets()
+    }
+  })
+
+  it('showCustom leaves input-only adapter-created bottom sheet surfaces unfocused', async () => {
+    const restoreVisibleFocusTargets = forceVisibleFocusTargets()
+
+    const controller = createDialogController({
+      createCustomDialogElement: () =>
+        document.createElement('cv-bottom-sheet') as ManagedDialogSurfaceElement,
+    })
+    let resolveDialog: ((value: string | null) => void) | undefined
+
+    try {
+      const resultPromise = controller.showCustom<string>(
+        {
+          title: 'Input-only sheet',
+          content: html`
+            <input id="text-target" autofocus />
+          `,
+        },
+        (dialog, resolve) => {
+          resolveDialog = resolve
+          const input = dialog.querySelector('#text-target') as HTMLInputElement
+          input.focus = vi.fn()
+          dialog.dispatchEvent(new Event('cv-after-show', {bubbles: true}))
+        },
+      )
+
+      await new Promise((resolve) => window.setTimeout(resolve, 70))
+
+      const dialog = document.querySelector('cv-bottom-sheet')!
+      const input = dialog.querySelector('#text-target') as HTMLInputElement
+      expect(input.focus).not.toHaveBeenCalled()
+
+      resolveDialog?.('done')
+      await expect(resultPromise).resolves.toBe('done')
+    } finally {
+      restoreVisibleFocusTargets()
     }
   })
 

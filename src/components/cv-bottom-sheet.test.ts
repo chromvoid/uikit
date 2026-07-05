@@ -229,6 +229,7 @@ describe('cv-bottom-sheet', () => {
     expect(dialog.closeOnOutsidePointer).toBe(false)
     expect(dialog.closeOnOutsideFocus).toBe(false)
     expect(dialog.initialFocusId).toBe('target')
+    expect(dialog.preventInitialTextFocus).toBe(true)
     expect(dialog.noHeader).toBe(true)
     expect(dialog.closable).toBe(false)
   })

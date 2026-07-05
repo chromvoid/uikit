@@ -577,6 +577,7 @@ export class CVBottomSheet extends ReatomLitElement {
         .closeOnOutsidePointer=${this.closeOnOutsidePointer}
         .closeOnOutsideFocus=${this.closeOnOutsideFocus}
         .initialFocusId=${this.initialFocusId}
+        .preventInitialTextFocus=${true}
         .noHeader=${this.noHeader}
         .closable=${this.closable}
         @cv-input=${this.handleDialogInput}

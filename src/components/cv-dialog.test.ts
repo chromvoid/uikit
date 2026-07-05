@@ -853,6 +853,47 @@ describe('cv-dialog', () => {
   })
 
   describe('initial focus fallback', () => {
+    it('keeps default initial focus behavior for a requested text target', async () => {
+      const el = await createDialog()
+      const input = document.createElement('input')
+      input.id = 'target'
+      el.initialFocusId = 'target'
+      el.append(input)
+
+      await openDialog(el)
+      await Promise.resolve()
+
+      expect(document.activeElement).toBe(input)
+    })
+
+    it('skips a requested text target when initial text focus is prevented', async () => {
+      const el = await createDialog({preventInitialTextFocus: true})
+      const input = document.createElement('input')
+      input.id = 'target'
+      el.initialFocusId = 'target'
+      el.append(input)
+
+      await openDialog(el)
+      await Promise.resolve()
+
+      expect(document.activeElement).not.toBe(input)
+      expect(el.shadowRoot!.activeElement).toBe(getContent(el))
+    })
+
+    it('still focuses a requested button target when initial text focus is prevented', async () => {
+      const el = await createDialog({preventInitialTextFocus: true})
+      const button = document.createElement('button')
+      button.id = 'target'
+      button.textContent = 'Continue'
+      el.initialFocusId = 'target'
+      el.append(button)
+
+      await openDialog(el)
+      await Promise.resolve()
+
+      expect(document.activeElement).toBe(button)
+    })
+
     it('focuses the dialog content when no initial-focus-id is set', async () => {
       const el = await createDialog()
 

@@ -1,6 +1,6 @@
 import {afterEach, describe, expect, it} from 'vitest'
 
-import {hasTextEditableFocus} from './focus-utils'
+import {hasTextEditableFocus, isTextEditableFocusTarget} from './focus-utils'
 
 afterEach(() => {
   const active = document.activeElement
@@ -9,6 +9,37 @@ afterEach(() => {
 })
 
 describe('focus-utils', () => {
+  describe('isTextEditableFocusTarget', () => {
+    it.each(['cv-input', 'cv-number', 'cv-textarea', 'cv-combobox'])(
+      'returns true for a %s host',
+      (tagName) => {
+        const element = document.createElement(tagName)
+        expect(isTextEditableFocusTarget(element)).toBe(true)
+      },
+    )
+
+    it('returns false for a disabled or readonly UIKit text host', () => {
+      const disabled = document.createElement('cv-input')
+      disabled.setAttribute('disabled', '')
+      const readonly = document.createElement('cv-input')
+      readonly.setAttribute('readonly', '')
+
+      expect(isTextEditableFocusTarget(disabled)).toBe(false)
+      expect(isTextEditableFocusTarget(readonly)).toBe(false)
+    })
+
+    it('returns false for non-text controls', () => {
+      const checkbox = document.createElement('input')
+      checkbox.type = 'checkbox'
+      const select = document.createElement('select')
+      const button = document.createElement('button')
+
+      expect(isTextEditableFocusTarget(checkbox)).toBe(false)
+      expect(isTextEditableFocusTarget(select)).toBe(false)
+      expect(isTextEditableFocusTarget(button)).toBe(false)
+    })
+  })
+
   describe('hasTextEditableFocus', () => {
     it('returns false when nothing is focused', () => {
       expect(hasTextEditableFocus()).toBe(false)

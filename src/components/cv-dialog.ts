@@ -4,6 +4,7 @@ import {css, nothing, type PropertyValues} from 'lit'
 import {html} from '../reatom-lit/index.js'
 import {ReatomLitElement} from '../reatom-lit/ReatomLitElement'
 import {acquireBodyScrollLock, releaseBodyScrollLock} from './scroll-lock.js'
+import {isTextEditableFocusTarget} from './focus-utils'
 
 export interface CVDialogEventDetail {
   open: boolean
@@ -90,6 +91,7 @@ export class CVDialog extends ReatomLitElement {
       },
       closeOnOutsideFocus: {type: Boolean, attribute: 'close-on-outside-focus', reflect: true},
       initialFocusId: {type: String, attribute: 'initial-focus-id'},
+      preventInitialTextFocus: {type: Boolean, attribute: false},
       noHeader: {type: Boolean, attribute: 'no-header', reflect: true},
       closable: {type: Boolean},
     }
@@ -102,6 +104,7 @@ export class CVDialog extends ReatomLitElement {
   declare closeOnOutsidePointer: boolean
   declare closeOnOutsideFocus: boolean
   declare initialFocusId: string
+  declare preventInitialTextFocus: boolean
   declare noHeader: boolean
   declare closable: boolean
 
@@ -130,6 +133,7 @@ export class CVDialog extends ReatomLitElement {
     this.closeOnOutsidePointer = true
     this.closeOnOutsideFocus = true
     this.initialFocusId = ''
+    this.preventInitialTextFocus = false
     this.noHeader = false
     this.closable = true
     this.model = this.createModel()
@@ -895,6 +899,11 @@ export class CVDialog extends ReatomLitElement {
       const explicit =
         findComposedElementById(this, requestedId) ?? findComposedElementById(this.renderRoot, requestedId)
       if (explicit) {
+        if (this.preventInitialTextFocus && isTextEditableFocusTarget(explicit)) {
+          this.getContentElement()?.focus()
+          return
+        }
+
         explicit.focus()
         return
       }
