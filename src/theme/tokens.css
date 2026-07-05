@@ -145,6 +145,21 @@ cv-theme-provider[mode='dark'] {
   --cv-color-splash-grid-line: hwb(204 94.9% 3.1% / 0.018);
   --cv-color-splash-grid-line-subtle: hwb(204 94.9% 3.1% / 0.014);
 
+  --cv-color-lockscreen-bg: hwb(200 2.7% 96.1%);
+  --cv-color-lockscreen-surface: hwb(196 4.7% 92.5%);
+  --cv-color-lockscreen-input-bg: hwb(195 3.9% 93.3%);
+  --cv-color-lockscreen-text: hwb(190 91.8% 5.9%);
+  --cv-color-lockscreen-text-strong: hwb(190 94.5% 3.1%);
+  --cv-color-lockscreen-text-muted: hwb(193 54.1% 39.6%);
+  --cv-color-lockscreen-text-subtle: hwb(193 31% 62.4%);
+  --cv-color-lockscreen-border-faint: hwb(0 100% 0% / 0.07);
+  --cv-color-lockscreen-border-muted: hwb(0 100% 0% / 0.1);
+  --cv-color-lockscreen-border-strong: hwb(191 62.4% 28% / 0.4);
+  --cv-color-lockscreen-on-primary: hwb(173 1.6% 86.7%);
+  --cv-color-lockscreen-primary-ring: hwb(186 0% 0% / 0.13);
+  --cv-color-lockscreen-primary-shadow: hwb(186 0% 0% / 0.22);
+  --cv-color-lockscreen-accent-glow: hwb(186 0% 0% / 0.055);
+
   /* QR output stays scanner-safe across product themes. */
   --cv-color-qr-background: hwb(0 100% 0%);
   --cv-color-qr-foreground: hwb(210 1.2% 97.3%);
@@ -376,6 +391,14 @@ cv-theme-provider[mode='dark'] {
     var(--cv-color-text-strongest) 0%,
     transparent 72%
   );
+  --cv-gradient-lockscreen-bg:
+    radial-gradient(118% 70% at 50% 16%, var(--cv-color-lockscreen-accent-glow), transparent 58%),
+    var(--cv-color-lockscreen-bg);
+  --cv-gradient-lockscreen-orb: radial-gradient(
+    circle,
+    var(--cv-color-primary-surface-strong) 0%,
+    transparent 66%
+  );
 
   --cv-space-1: 4px;
   --cv-space-2: 8px;
@@ -591,6 +614,21 @@ cv-theme-provider[mode='light'] {
   --cv-color-selected: hwb(186 0% 20% / 0.12);
   --cv-color-overlay: hwb(218 1.2% 94.5% / 0.38);
 
+  --cv-color-lockscreen-bg: var(--cv-color-bg);
+  --cv-color-lockscreen-surface: var(--cv-color-surface);
+  --cv-color-lockscreen-input-bg: var(--cv-color-surface-2);
+  --cv-color-lockscreen-text: var(--cv-color-text);
+  --cv-color-lockscreen-text-strong: var(--cv-color-text-strong);
+  --cv-color-lockscreen-text-muted: var(--cv-color-text-muted);
+  --cv-color-lockscreen-text-subtle: var(--cv-color-text-subtle);
+  --cv-color-lockscreen-border-faint: var(--cv-color-border-faint);
+  --cv-color-lockscreen-border-muted: var(--cv-color-border-soft);
+  --cv-color-lockscreen-border-strong: var(--cv-color-border-strong);
+  --cv-color-lockscreen-on-primary: var(--cv-color-on-primary);
+  --cv-color-lockscreen-primary-ring: var(--cv-color-primary-ring);
+  --cv-color-lockscreen-primary-shadow: var(--cv-color-primary-ring);
+  --cv-color-lockscreen-accent-glow: var(--cv-color-primary-surface);
+
   --cv-shadow-sm: 0 2px 8px var(--cv-alpha-black-10);
   --cv-shadow-md: 0 8px 28px var(--cv-alpha-black-10);
   --cv-shadow-lg: 0 16px 48px var(--cv-alpha-black-10);
@@ -727,6 +765,21 @@ cv-theme-provider[mode='light'] {
     --cv-color-active: hwb(186 0% 20% / 0.14);
     --cv-color-selected: hwb(186 0% 20% / 0.12);
     --cv-color-overlay: hwb(218 1.2% 94.5% / 0.38);
+
+    --cv-color-lockscreen-bg: var(--cv-color-bg);
+    --cv-color-lockscreen-surface: var(--cv-color-surface);
+    --cv-color-lockscreen-input-bg: var(--cv-color-surface-2);
+    --cv-color-lockscreen-text: var(--cv-color-text);
+    --cv-color-lockscreen-text-strong: var(--cv-color-text-strong);
+    --cv-color-lockscreen-text-muted: var(--cv-color-text-muted);
+    --cv-color-lockscreen-text-subtle: var(--cv-color-text-subtle);
+    --cv-color-lockscreen-border-faint: var(--cv-color-border-faint);
+    --cv-color-lockscreen-border-muted: var(--cv-color-border-soft);
+    --cv-color-lockscreen-border-strong: var(--cv-color-border-strong);
+    --cv-color-lockscreen-on-primary: var(--cv-color-on-primary);
+    --cv-color-lockscreen-primary-ring: var(--cv-color-primary-ring);
+    --cv-color-lockscreen-primary-shadow: var(--cv-color-primary-ring);
+    --cv-color-lockscreen-accent-glow: var(--cv-color-primary-surface);
 
     --cv-shadow-sm: 0 2px 8px var(--cv-alpha-black-10);
     --cv-shadow-md: 0 8px 28px var(--cv-alpha-black-10);

@@ -2,7 +2,7 @@
 
 [![npm version](https://img.shields.io/npm/v/@chromvoid/uikit?color=65d7ff)](https://www.npmjs.com/package/@chromvoid/uikit)
 [![CI](https://github.com/chromvoid/uikit/actions/workflows/ci.yml/badge.svg)](https://github.com/chromvoid/uikit/actions/workflows/ci.yml)
-[![Docs](https://img.shields.io/badge/docs-GitHub%20Pages-65d7ff)](https://chromvoid.github.io/uikit/)
+[![Docs](https://img.shields.io/badge/docs-uikit.chromvoid.com-65d7ff)](https://uikit.chromvoid.com/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-2ea043.svg)](LICENSE)
 
 ChromVoid UIKit is a Lit-based custom element layer over
@@ -11,9 +11,9 @@ surface components, theme tokens, and controller helpers used across ChromVoid i
 
 ## Links
 
-- [Documentation](https://chromvoid.github.io/uikit/)
-- [Component reference](https://chromvoid.github.io/uikit/components/)
-- [Playground](https://chromvoid.github.io/uikit/guide/playground.html)
+- [Documentation](https://uikit.chromvoid.com/)
+- [Component reference](https://uikit.chromvoid.com/components/)
+- [Playground](https://uikit.chromvoid.com/guide/playground.html)
 - [npm package](https://www.npmjs.com/package/@chromvoid/uikit)
 - [GitHub repository](https://github.com/chromvoid/uikit)
 
@@ -90,8 +90,8 @@ UIKit covers application primitives such as:
 - data and structure: `cv-table`, `cv-treegrid`, `cv-grid`, `cv-listbox`, `cv-card`, `cv-feed`
 - product surfaces: `cv-sidebar`, `cv-image-viewer`, `cv-operation-queue`, `cv-window-splitter`
 
-See the [component reference](https://chromvoid.github.io/uikit/components/) for the full API,
-events, slots, CSS parts, and live demos.
+See the [component reference](https://uikit.chromvoid.com/components/) for the full API, events,
+slots, CSS parts, and live demos.
 
 ## Local Workflow
 

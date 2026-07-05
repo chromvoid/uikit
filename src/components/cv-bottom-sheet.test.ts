@@ -125,6 +125,13 @@ describe('cv-bottom-sheet', () => {
     expect(cssText).toMatch(/cv-dialog::part\(footer\)\s*{[\s\S]*padding:/)
   })
 
+  it('collapses footer padding when no footer content is slotted', () => {
+    const cssText = stylesToText(CVBottomSheet.styles)
+
+    expect(cssText).toMatch(/cv-dialog:not\(\.has-footer\)::part\(footer\)\s*{[\s\S]*display:\s*none;/)
+    expect(cssText).toMatch(/cv-dialog:not\(\.has-footer\)::part\(footer\)\s*{[\s\S]*padding:\s*0;/)
+  })
+
   it('maps sheet movement to cv-dialog content motion variables without animating keyboard geometry', () => {
     const cssText = stylesToText(CVBottomSheet.styles)
 
@@ -186,6 +193,7 @@ describe('cv-bottom-sheet', () => {
     expect(dialog.querySelector('[slot="before-header"]')).toBe(getHandle(el))
     expect(dialog.querySelector('slot:not([name])')).not.toBeNull()
     expect(dialog.querySelector('[slot="footer"]')).not.toBeNull()
+    expect(dialog.classList.contains('has-footer')).toBe(true)
     expect(dialog.getAttribute('exportparts')).toContain('content')
   })
 

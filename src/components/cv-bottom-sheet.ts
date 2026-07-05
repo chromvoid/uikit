@@ -250,6 +250,11 @@ export class CVBottomSheet extends ReatomLitElement {
       );
     }
 
+    cv-dialog:not(.has-footer)::part(footer) {
+      display: none;
+      padding: 0;
+    }
+
     .sheet-handle {
       inline-size: 100%;
       min-block-size: var(--cv-bottom-sheet-handle-block-size, 32px);
@@ -541,12 +546,22 @@ export class CVBottomSheet extends ReatomLitElement {
     this.resetSheetDragState()
   }
 
+  private hasFooterSlotContent(): boolean {
+    return Array.from(this.children ?? []).some((child) => child.getAttribute('slot') === 'footer')
+  }
+
+  private handleFooterSlotChange(): void {
+    this.requestUpdate()
+  }
+
   protected override render() {
     const hasDetents = this.hasDetents()
+    const hasFooter = this.hasFooterSlotContent()
     const dialogClass = [
       'sheet-dialog',
       hasDetents ? 'has-detents' : '',
       hasDetents ? `detent-${this.getResolvedDetent()}` : '',
+      hasFooter ? 'has-footer' : '',
     ]
       .filter(Boolean)
       .join(' ')
@@ -604,7 +619,7 @@ export class CVBottomSheet extends ReatomLitElement {
             : null
         }
         <slot></slot>
-        <slot name="footer" slot="footer"></slot>
+        <slot name="footer" slot="footer" @slotchange=${this.handleFooterSlotChange}></slot>
       </cv-dialog>
     `
   }

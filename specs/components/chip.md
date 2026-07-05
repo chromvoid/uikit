@@ -46,6 +46,13 @@ Use `cv-chip` when the visible token does something: activates a filter editor, 
 | `suffix`        | Suffix slot wrapper  |
 | `remove-button` | Remove action button |
 
+## CSS Custom Properties
+
+| Custom property          | Default                      | Description                                                                |
+| ------------------------ | ---------------------------- | -------------------------------------------------------------------------- |
+| `--cv-chip-radius`       | `var(--cv-radius-sm, 6px)`   | Fallback border radius and radius used by browsers without `corner-shape`. |
+| `--cv-chip-corner-shape` | `squircle` in supporting UAs | Enhanced corner shape for non-pill chips when `corner-shape` is supported. |
+
 ## Events
 
 | Event            | Detail                                             | Description                     |
@@ -75,6 +82,8 @@ Arrow-key roving focus is handled by [`cv-chip-group`](./chip-group.md), not by 
 - `disabled` removes the chip from tab order and blocks action/remove events.
 - `removable` adds a nested remove button that emits `cv-chip-remove` without also emitting `cv-chip-action`.
 - `value` is the stable payload consumed by events and by `cv-chip-group`.
+- `corner-shape` is applied only inside `@supports`; unsupported browsers keep the regular `border-radius` shape.
+- `pill` chips keep round ends even in browsers that support enhanced corner shapes.
 
 ## Usage
 
