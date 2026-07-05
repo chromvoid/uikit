@@ -220,6 +220,8 @@
 
 :root[data-theme='light'] .live-demo-preview {
   color: var(--cv-frame-color-text);
+  --live-demo-cyan: var(--cv-frame-color-primary-darker);
+  --live-demo-soft: var(--cv-frame-color-text-muted);
 }
 
 :root[data-theme='light']
@@ -256,7 +258,9 @@
 
 :root[data-theme='light']
   .live-demo-preview
-  :where([class*='-demo-kicker'], [class*='-demo-label']):not(cv-theme-provider):not(cv-theme-provider *) {
+  :where([class*='-demo-eyebrow'], [class*='-demo-kicker'], [class*='-demo-label']):not(cv-theme-provider):not(
+    cv-theme-provider *
+  ) {
   color: var(--cv-frame-color-primary-darker);
 }
 

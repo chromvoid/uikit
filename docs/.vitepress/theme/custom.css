@@ -331,9 +331,10 @@ body::after {
 }
 
 .VPButton.medium.brand {
-  border: 1px solid rgba(104, 216, 255, 0.4);
-  background: linear-gradient(135deg, #71d7ff, #3394ca);
-  color: #041018;
+  border: 1px solid var(--cv-color-primary-border-strong);
+  background: var(--cv-gradient-primary);
+  background-color: var(--cv-color-primary);
+  color: var(--cv-color-on-primary);
   box-shadow: 0 14px 30px rgba(24, 111, 158, 0.26);
 }
 
@@ -871,17 +872,19 @@ body::after {
 
 .vp-doc a.component-action-primary,
 .component-action-primary {
-  border-color: rgba(104, 216, 255, 0.32);
-  background: linear-gradient(135deg, rgba(112, 219, 255, 0.94), rgba(60, 139, 192, 0.94));
-  color: #03121b;
+  border-color: var(--cv-color-primary-border-strong);
+  background: var(--cv-gradient-primary);
+  background-color: var(--cv-color-primary);
+  color: var(--cv-color-on-primary);
   box-shadow: 0 14px 32px rgba(23, 109, 154, 0.24);
 }
 
 .vp-doc a.component-action-primary:hover,
 .component-action-primary:hover {
-  border-color: rgba(151, 236, 255, 0.54);
-  background: linear-gradient(135deg, rgba(154, 236, 255, 0.98), rgba(74, 159, 214, 0.98));
-  color: #020d14;
+  border-color: var(--cv-color-primary-border-strong);
+  background: var(--cv-gradient-primary);
+  background-color: var(--cv-color-primary-dark);
+  color: var(--cv-color-on-primary);
   box-shadow:
     0 16px 36px rgba(23, 109, 154, 0.32),
     inset 0 1px 0 rgba(255, 255, 255, 0.24);
@@ -2295,6 +2298,10 @@ cv-disclosure.live-demo-source pre {
   background-color: var(--cv-color-text-strong);
 }
 
+[data-theme='light'] .VPButton.medium.brand {
+  background-color: var(--cv-color-primary-darker);
+}
+
 [data-theme='light'] .VPSidebarItem .text,
 [data-theme='light'] .VPDocAside .outline-link,
 [data-theme='light'] .VPHero .tagline,
@@ -2427,8 +2434,9 @@ cv-disclosure.live-demo-source pre {
 [data-theme='light'] .component-action-primary:hover,
 [data-theme='light'] .vp-doc a.component-action-primary:hover {
   border-color: var(--cv-color-primary-border-strong);
-  background: var(--cv-color-primary);
-  color: var(--cv-color-text-strongest);
+  background: var(--cv-gradient-primary);
+  background-color: var(--cv-color-primary-darker);
+  color: var(--cv-color-on-primary);
   box-shadow: var(--cv-shadow-sm);
 }
 

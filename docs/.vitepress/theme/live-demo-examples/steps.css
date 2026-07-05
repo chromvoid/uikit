@@ -7,7 +7,8 @@
   border: 1px solid var(--live-demo-border-muted);
   border-radius: 16px;
   color: var(--live-demo-muted);
-  background: var(--live-demo-gradient-panel);
+  background: var(--live-demo-gradient-shell);
+  background-color: var(--live-demo-bg);
   box-shadow:
     inset 0 1px 0 var(--cv-alpha-white-4),
     0 18px 42px var(--cv-alpha-black-14);
@@ -89,7 +90,7 @@
 .steps-demo-shell cv-step[status='complete']::part(marker) {
   border-color: var(--live-demo-green-border-strong);
   background: var(--live-demo-green-surface);
-  color: var(--live-demo-green);
+  color: var(--live-demo-text);
 }
 
 .steps-demo-shell cv-step[status='current']::part(base) {
@@ -103,7 +104,7 @@
 .steps-demo-shell cv-step[status='current']::part(marker) {
   border-color: var(--live-demo-cyan-border-strong);
   background: var(--live-demo-cyan-surface);
-  color: var(--live-demo-green);
+  color: var(--live-demo-text);
 }
 
 .steps-demo-shell cv-step[status='error']::part(base) {
@@ -113,7 +114,7 @@
 .steps-demo-shell cv-step[status='error']::part(marker) {
   border-color: var(--live-demo-red-border-strong);
   background: var(--live-demo-red-surface);
-  color: var(--live-demo-red);
+  color: var(--live-demo-text);
 }
 
 .steps-demo-shell cv-step[disabled]::part(base) {

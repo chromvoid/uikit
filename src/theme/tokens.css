@@ -222,14 +222,26 @@ cv-theme-provider[mode='dark'] {
   --cv-alpha-black-95: hwb(0 0% 100% / 0.95);
 
   /* Named gradients */
-  --cv-gradient-primary: linear-gradient(135deg, var(--cv-color-primary-dark) 0%, var(--cv-color-accent) 100%);
+  --cv-gradient-primary: linear-gradient(
+    135deg,
+    var(--cv-color-primary-dark) 0%,
+    var(--cv-color-accent) 100%
+  );
   --cv-gradient-secondary: linear-gradient(
     135deg,
     var(--cv-color-accent-dark) 0%,
     var(--cv-color-primary-darker) 100%
   );
-  --cv-gradient-success: linear-gradient(135deg, var(--cv-color-success) 0%, var(--cv-color-success-dark) 100%);
-  --cv-gradient-brand: linear-gradient(135deg, var(--cv-color-primary-dark) 0%, var(--cv-color-accent-dark) 100%);
+  --cv-gradient-success: linear-gradient(
+    135deg,
+    var(--cv-color-success) 0%,
+    var(--cv-color-success-dark) 100%
+  );
+  --cv-gradient-brand: linear-gradient(
+    135deg,
+    var(--cv-color-primary-dark) 0%,
+    var(--cv-color-accent-dark) 100%
+  );
   --cv-gradient-subtle:
     linear-gradient(135deg, var(--cv-color-primary-subtle) 0%, var(--cv-color-accent-surface) 100%),
     var(--cv-color-surface);

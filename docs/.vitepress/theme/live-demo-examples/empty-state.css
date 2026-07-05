@@ -10,7 +10,8 @@
   overflow: hidden;
   border: 1px solid var(--cv-color-border-glass);
   border-radius: var(--cv-radius-4);
-  background: var(--cv-gradient-surface-deep);
+  background: var(--live-demo-gradient-shell);
+  background-color: var(--live-demo-bg);
   color: var(--cv-color-text-muted);
   box-shadow: var(--cv-shadow-glass);
 }
