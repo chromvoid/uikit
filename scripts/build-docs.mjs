@@ -9,7 +9,7 @@ import {
   buildSitemapXml,
   canonicalUrlFromMarkdownPath,
   docsSiteOrigin,
-} from './docs-seo.mjs'
+} from '../docs/.vitepress/docs-seo.mjs'
 
 const scriptDir = path.dirname(fileURLToPath(import.meta.url))
 const rootDir = path.resolve(scriptDir, '..')
