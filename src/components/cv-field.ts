@@ -90,7 +90,7 @@ export class CVField extends ReatomLitElement {
       }
 
       [part='error'] {
-        color: var(--cv-field-error-color, var(--cv-color-danger, #ff6b6b));
+        color: var(--cv-field-error-color, var(--cv-color-danger-dark, var(--cv-color-danger, #ff6b6b)));
       }
 
       :host([orientation='horizontal']) [part='control'],

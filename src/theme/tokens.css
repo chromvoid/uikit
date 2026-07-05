@@ -484,10 +484,13 @@ cv-theme-provider[mode='light'] {
   --cv-palette-accent-contrast: hwb(279 0% 87.8%);
   --cv-palette-success: hwb(159 0% 23.1%);
   --cv-palette-success-dark: hwb(159 0% 40%);
+  --cv-palette-success-text: hwb(151 2% 82%);
   --cv-palette-warning: hwb(39 11.4% 9.8%);
   --cv-palette-warning-dark: hwb(37 7.1% 27.8%);
+  --cv-palette-warning-text: hwb(42 1.6% 76.1%);
   --cv-palette-danger: hwb(3 16.9% 9.8%);
   --cv-palette-danger-dark: hwb(3 12.9% 27.8%);
+  --cv-palette-danger-text: hwb(354 3.9% 72.9%);
 
   --cv-color-bg: var(--cv-palette-bg);
   --cv-color-surface: var(--cv-palette-surface);
@@ -549,6 +552,7 @@ cv-theme-provider[mode='light'] {
 
   --cv-color-success: var(--cv-palette-success);
   --cv-color-success-dark: var(--cv-palette-success-dark);
+  --cv-color-success-text: var(--cv-palette-success-text);
   --cv-color-success-surface: hwb(159 0% 23.1% / 0.12);
   --cv-color-success-surface-strong: hwb(159 0% 23.1% / 0.2);
   --cv-color-success-border: hwb(159 0% 23.1% / 0.25);
@@ -557,6 +561,7 @@ cv-theme-provider[mode='light'] {
 
   --cv-color-warning: var(--cv-palette-warning);
   --cv-color-warning-dark: var(--cv-palette-warning-dark);
+  --cv-color-warning-text: var(--cv-palette-warning-text);
   --cv-color-warning-surface: hwb(39 11.4% 9.8% / 0.12);
   --cv-color-warning-surface-strong: hwb(39 11.4% 9.8% / 0.2);
   --cv-color-warning-border: hwb(39 11.4% 9.8% / 0.24);
@@ -565,6 +570,7 @@ cv-theme-provider[mode='light'] {
 
   --cv-color-danger: var(--cv-palette-danger);
   --cv-color-danger-dark: var(--cv-palette-danger-dark);
+  --cv-color-danger-text: var(--cv-palette-danger-text);
   --cv-color-danger-surface: hwb(3 16.9% 9.8% / 0.12);
   --cv-color-danger-surface-strong: hwb(3 16.9% 9.8% / 0.2);
   --cv-color-danger-border: hwb(3 16.9% 9.8% / 0.24);
@@ -615,10 +621,13 @@ cv-theme-provider[mode='light'] {
     --cv-palette-accent-contrast: hwb(279 0% 87.8%);
     --cv-palette-success: hwb(159 0% 23.1%);
     --cv-palette-success-dark: hwb(159 0% 40%);
+    --cv-palette-success-text: hwb(151 2% 82%);
     --cv-palette-warning: hwb(39 11.4% 9.8%);
     --cv-palette-warning-dark: hwb(37 7.1% 27.8%);
+    --cv-palette-warning-text: hwb(42 1.6% 76.1%);
     --cv-palette-danger: hwb(3 16.9% 9.8%);
     --cv-palette-danger-dark: hwb(3 12.9% 27.8%);
+    --cv-palette-danger-text: hwb(354 3.9% 72.9%);
 
     --cv-color-bg: var(--cv-palette-bg);
     --cv-color-surface: var(--cv-palette-surface);
@@ -680,6 +689,7 @@ cv-theme-provider[mode='light'] {
 
     --cv-color-success: var(--cv-palette-success);
     --cv-color-success-dark: var(--cv-palette-success-dark);
+    --cv-color-success-text: var(--cv-palette-success-text);
     --cv-color-success-surface: hwb(159 0% 23.1% / 0.12);
     --cv-color-success-surface-strong: hwb(159 0% 23.1% / 0.2);
     --cv-color-success-border: hwb(159 0% 23.1% / 0.25);
@@ -688,6 +698,7 @@ cv-theme-provider[mode='light'] {
 
     --cv-color-warning: var(--cv-palette-warning);
     --cv-color-warning-dark: var(--cv-palette-warning-dark);
+    --cv-color-warning-text: var(--cv-palette-warning-text);
     --cv-color-warning-surface: hwb(39 11.4% 9.8% / 0.12);
     --cv-color-warning-surface-strong: hwb(39 11.4% 9.8% / 0.2);
     --cv-color-warning-border: hwb(39 11.4% 9.8% / 0.24);
@@ -696,6 +707,7 @@ cv-theme-provider[mode='light'] {
 
     --cv-color-danger: var(--cv-palette-danger);
     --cv-color-danger-dark: var(--cv-palette-danger-dark);
+    --cv-color-danger-text: var(--cv-palette-danger-text);
     --cv-color-danger-surface: hwb(3 16.9% 9.8% / 0.12);
     --cv-color-danger-surface-strong: hwb(3 16.9% 9.8% / 0.2);
     --cv-color-danger-border: hwb(3 16.9% 9.8% / 0.24);

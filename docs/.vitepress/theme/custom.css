@@ -2222,7 +2222,7 @@ cv-disclosure.live-demo-source pre {
 }
 
 [data-theme='light'] {
-  --vp-c-brand-1: var(--cv-color-primary);
+  --vp-c-brand-1: var(--cv-color-primary-darker);
   --vp-c-brand-2: var(--cv-color-primary-dark);
   --vp-c-brand-3: var(--cv-color-primary-darker);
   --vp-c-text-1: var(--cv-color-text-strong);
@@ -2447,10 +2447,27 @@ cv-disclosure.live-demo-source pre {
 [data-theme='light'] .vp-doc li code,
 [data-theme='light'] .vp-doc td code,
 [data-theme='light'] .vp-doc th code,
+[data-theme='light'] .uikit-stat-label code,
 [data-theme='light'] .vp-doc div[class*='language-'] {
   border-color: var(--cv-color-border-soft);
   background: var(--cv-color-surface-2);
   color: var(--cv-color-text-strong);
+}
+
+[data-theme='light'] .shiki span[style*='--shiki-light:#22863A'] {
+  --shiki-light: var(--cv-color-success-text) !important;
+}
+
+[data-theme='light'] .shiki span[style*='--shiki-light:#D73A49'] {
+  --shiki-light: var(--cv-color-danger-text) !important;
+}
+
+[data-theme='light'] .shiki span[style*='--shiki-light:#E36209'] {
+  --shiki-light: var(--cv-color-warning-text) !important;
+}
+
+[data-theme='light'] .shiki span[style*='--shiki-light:#6A737D'] {
+  --shiki-light: var(--cv-color-text) !important;
 }
 
 [data-theme='light'] .docs-table-shell {
