@@ -1,7 +1,7 @@
 import {defineConfig} from 'vitepress'
 
-import {canonicalUrlFromMarkdownPath} from '../../scripts/docs-seo.mjs'
 import {componentGroups} from './component-catalog.mjs'
+import {canonicalUrlFromMarkdownPath} from './docs-seo.mjs'
 import {liveDemoPlugin} from './markdown/liveDemo'
 import {responsiveTablesPlugin} from './markdown/responsiveTables'
 
