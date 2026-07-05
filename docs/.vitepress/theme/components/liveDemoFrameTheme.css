@@ -226,7 +226,8 @@
   .live-demo-preview
   [class*='-demo-shell']:not(cv-theme-provider):not(cv-theme-provider *) {
   border-color: var(--cv-frame-color-border-soft);
-  background: var(--cv-frame-color-surface);
+  background: var(--live-demo-gradient-shell);
+  background-color: var(--cv-frame-color-bg);
   color: var(--cv-frame-color-text-muted);
   box-shadow: none;
 }
@@ -275,7 +276,8 @@
   .live-demo-preview
   :where([class*='-demo-card'], [class*='-demo-command'], [class*='-demo-console'], [class*='-demo-details'], [class*='-demo-field'], [class*='-demo-item'], [class*='-demo-layer'], [class*='-demo-log'], [class*='-demo-metric'], [class*='-demo-panel'], [class*='-demo-product'], [class*='-demo-readout'], [class*='-demo-record'], [class*='-demo-scroll'], [class*='-demo-side'], [class*='-demo-stage'], [class*='-demo-state'], [class*='-demo-step'], [class*='-demo-tile'], [class*='-demo-window']):not(cv-theme-provider):not(cv-theme-provider *) {
   border-color: var(--cv-frame-color-border-soft);
-  background: none;
+  background: var(--live-demo-gradient-panel);
+  background-color: var(--cv-frame-color-surface);
   color: var(--cv-frame-color-text-muted);
   box-shadow: none;
 }

@@ -193,11 +193,11 @@ export class CVToast extends ReatomLitElement {
       }
 
       [part='base'][data-level='warning'] [part='progress'] {
-        background: var(--cv-gradient-progress-warning, var(--cv-gradient-primary));
+        background: var(--cv-gradient-progress-warning, var(--cv-gradient-progress-primary));
       }
 
       [part='base'][data-level='error'] [part='progress'] {
-        background: var(--cv-gradient-progress-danger, var(--cv-gradient-primary));
+        background: var(--cv-gradient-progress-danger, var(--cv-gradient-progress-primary));
       }
 
       :host([progress]) [part='progress'] {

@@ -222,20 +222,17 @@ cv-theme-provider[mode='dark'] {
   --cv-alpha-black-95: hwb(0 0% 100% / 0.95);
 
   /* Named gradients */
-  --cv-gradient-primary: linear-gradient(135deg, var(--cv-color-primary) 0%, var(--cv-color-accent) 100%);
+  --cv-gradient-primary: linear-gradient(135deg, var(--cv-color-primary-dark) 0%, var(--cv-color-accent) 100%);
   --cv-gradient-secondary: linear-gradient(
     135deg,
-    var(--cv-color-accent) 0%,
-    var(--cv-color-primary-dark) 100%
+    var(--cv-color-accent-dark) 0%,
+    var(--cv-color-primary-darker) 100%
   );
-  --cv-gradient-success: linear-gradient(135deg, var(--cv-color-success) 0%, var(--cv-color-primary) 100%);
-  --cv-gradient-brand: linear-gradient(135deg, var(--cv-color-cyan) 0%, var(--cv-color-accent) 100%);
-  --cv-gradient-subtle: linear-gradient(
-    135deg,
-    var(--cv-color-primary-subtle) 0%,
-    var(--cv-color-accent-surface) 55%,
-    transparent 100%
-  );
+  --cv-gradient-success: linear-gradient(135deg, var(--cv-color-success) 0%, var(--cv-color-success-dark) 100%);
+  --cv-gradient-brand: linear-gradient(135deg, var(--cv-color-primary-dark) 0%, var(--cv-color-accent-dark) 100%);
+  --cv-gradient-subtle:
+    linear-gradient(135deg, var(--cv-color-primary-subtle) 0%, var(--cv-color-accent-surface) 100%),
+    var(--cv-color-surface);
   --cv-gradient-divider-subtle: linear-gradient(
     90deg,
     transparent 0%,
@@ -287,16 +284,12 @@ cv-theme-provider[mode='dark'] {
     transparent 60%,
     transparent 100%
   );
-  --cv-gradient-surface-primary: linear-gradient(
-    180deg,
-    var(--cv-color-primary-surface-strong) 0%,
-    var(--cv-color-primary-surface) 100%
-  );
-  --cv-gradient-surface-danger: linear-gradient(
-    180deg,
-    var(--cv-color-danger-surface-strong) 0%,
-    var(--cv-color-danger-surface) 100%
-  );
+  --cv-gradient-surface-primary:
+    linear-gradient(180deg, var(--cv-color-primary-surface-strong) 0%, var(--cv-color-primary-surface) 100%),
+    var(--cv-color-surface);
+  --cv-gradient-surface-danger:
+    linear-gradient(180deg, var(--cv-color-danger-surface-strong) 0%, var(--cv-color-danger-surface) 100%),
+    var(--cv-color-surface);
   --cv-gradient-card-face:
     radial-gradient(circle at 16% 18%, var(--cv-color-primary-surface) 0%, transparent 34%),
     radial-gradient(circle at 82% 84%, var(--cv-color-primary-surface) 0%, transparent 30%),
@@ -323,9 +316,9 @@ cv-theme-provider[mode='dark'] {
   );
   --cv-gradient-card-shimmer: linear-gradient(
     90deg,
-    var(--cv-alpha-white-10) 0%,
-    var(--cv-alpha-white-22) 50%,
-    var(--cv-alpha-white-10) 100%
+    transparent 0%,
+    var(--cv-color-surface-highlight) 50%,
+    transparent 100%
   );
   --cv-gradient-card-chip-soft: linear-gradient(
     135deg,
@@ -341,17 +334,17 @@ cv-theme-provider[mode='dark'] {
   --cv-gradient-progress-success: linear-gradient(
     90deg,
     var(--cv-color-success) 0%,
-    var(--cv-color-primary) 100%
+    var(--cv-color-success-dark) 100%
   );
   --cv-gradient-progress-warning: linear-gradient(
     90deg,
     var(--cv-color-warning) 0%,
-    var(--cv-color-primary) 100%
+    var(--cv-color-warning-dark) 100%
   );
   --cv-gradient-progress-danger: linear-gradient(
     90deg,
     var(--cv-color-danger) 0%,
-    var(--cv-color-warning) 100%
+    var(--cv-color-danger-dark) 100%
   );
   --cv-gradient-media-mini-surface:
     linear-gradient(180deg, var(--cv-alpha-white-4), transparent 34%),
@@ -614,6 +607,22 @@ cv-theme-provider[mode='light'] {
   --cv-color-selected: hwb(186 0% 20% / 0.12);
   --cv-color-overlay: hwb(218 1.2% 94.5% / 0.38);
 
+  --cv-gradient-primary: linear-gradient(
+    135deg,
+    var(--cv-color-primary-darker) 0%,
+    var(--cv-color-accent-dark) 100%
+  );
+  --cv-gradient-secondary: linear-gradient(
+    135deg,
+    var(--cv-color-accent-light) 0%,
+    var(--cv-color-primary) 100%
+  );
+  --cv-gradient-brand: linear-gradient(
+    135deg,
+    var(--cv-color-primary-darker) 0%,
+    var(--cv-color-accent-dark) 100%
+  );
+
   --cv-color-lockscreen-bg: var(--cv-color-bg);
   --cv-color-lockscreen-surface: var(--cv-color-surface);
   --cv-color-lockscreen-input-bg: var(--cv-color-surface-2);
@@ -765,6 +774,22 @@ cv-theme-provider[mode='light'] {
     --cv-color-active: hwb(186 0% 20% / 0.14);
     --cv-color-selected: hwb(186 0% 20% / 0.12);
     --cv-color-overlay: hwb(218 1.2% 94.5% / 0.38);
+
+    --cv-gradient-primary: linear-gradient(
+      135deg,
+      var(--cv-color-primary-darker) 0%,
+      var(--cv-color-accent-dark) 100%
+    );
+    --cv-gradient-secondary: linear-gradient(
+      135deg,
+      var(--cv-color-accent-light) 0%,
+      var(--cv-color-primary) 100%
+    );
+    --cv-gradient-brand: linear-gradient(
+      135deg,
+      var(--cv-color-primary-darker) 0%,
+      var(--cv-color-accent-dark) 100%
+    );
 
     --cv-color-lockscreen-bg: var(--cv-color-bg);
     --cv-color-lockscreen-surface: var(--cv-color-surface);

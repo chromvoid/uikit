@@ -124,11 +124,11 @@ export class CVMeter extends ReatomLitElement {
       }
 
       [part='indicator'][data-status='low'] {
-        background: var(--cv-gradient-progress-warning, var(--cv-gradient-primary));
+        background: var(--cv-gradient-progress-warning, var(--cv-gradient-progress-primary));
       }
 
       [part='indicator'][data-status='high'] {
-        background: var(--cv-gradient-progress-danger, var(--cv-gradient-primary));
+        background: var(--cv-gradient-progress-danger, var(--cv-gradient-progress-primary));
       }
 
       [part='indicator'][data-status='optimum'] {
