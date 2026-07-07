@@ -103,7 +103,7 @@
 
 .bottom-sheet-demo-mode[aria-pressed='true']::part(base) {
   box-shadow:
-    0 12px 30px var(--live-demo-text),
+    0 12px 30px var(--live-demo-cyan-ring),
     inset 0 1px 0 var(--cv-alpha-white-20);
 }
 
