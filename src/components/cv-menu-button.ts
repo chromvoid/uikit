@@ -70,6 +70,11 @@ export class CVMenuButton extends ReatomLitElement {
       variant: {type: String, reflect: true},
       preset: {type: String, reflect: true},
       closeOnSelect: {type: Boolean, attribute: 'close-on-select', reflect: true},
+      preserveFocusOnPointerOpen: {
+        type: Boolean,
+        attribute: 'preserve-focus-on-pointer-open',
+        reflect: true,
+      },
       ariaLabel: {type: String, attribute: 'aria-label'},
     }
   }
@@ -82,6 +87,7 @@ export class CVMenuButton extends ReatomLitElement {
   declare variant: 'default' | 'primary' | 'danger' | 'ghost'
   declare preset: CVMenuButtonPreset | undefined
   declare closeOnSelect: boolean
+  declare preserveFocusOnPointerOpen: boolean
   declare ariaLabel: string
 
   private readonly idBase = `cv-menu-button-${++cvMenuButtonNonce}`
@@ -94,6 +100,8 @@ export class CVMenuButton extends ReatomLitElement {
   private model?: MenuButtonModel
   private hasLayoutListeners = false
   private layoutFrame = -1
+  private pointerOpenPreserveRequested = false
+  private preserveFocusForOpenSession = false
   private portalRoot: HTMLDivElement | null = null
   private readonly portalClickListener: EventListener = (event) => this.handlePortalClick(event)
   private readonly portalKeydownListener: EventListener = (event) =>
@@ -109,6 +117,7 @@ export class CVMenuButton extends ReatomLitElement {
     this.variant = 'default'
     this.preset = undefined
     this.closeOnSelect = true
+    this.preserveFocusOnPointerOpen = false
     this.ariaLabel = ''
   }
 
@@ -970,13 +979,18 @@ export class CVMenuButton extends ReatomLitElement {
       }
     }
 
-    if (activeChanged) {
+    const skipActiveFocus = this.preserveFocusForOpenSession && !previous.open && next.open
+    if (activeChanged && !skipActiveFocus) {
       this.focusActiveItem()
     }
 
-    if (next.restoreTargetId) {
+    if (next.restoreTargetId && !this.preserveFocusForOpenSession) {
       const trigger = this.shadowRoot?.querySelector(`[id="${next.restoreTargetId}"]`) as HTMLElement | null
       trigger?.focus()
+    }
+
+    if (!next.open) {
+      this.preserveFocusForOpenSession = false
     }
   }
 
@@ -1037,10 +1051,21 @@ export class CVMenuButton extends ReatomLitElement {
     this.applyInteractionResult(previous, id)
   }
 
+  private handleTriggerPointerDown(event: PointerEvent): void {
+    if (this.disabled || !this.preserveFocusOnPointerOpen || this.open) return
+
+    event.preventDefault()
+    this.pointerOpenPreserveRequested = true
+  }
+
   private handleTriggerClick() {
     if (this.disabled || !this.model) return
 
     const previous = this.captureState()
+    if (this.pointerOpenPreserveRequested && !previous.open) {
+      this.preserveFocusForOpenSession = true
+    }
+    this.pointerOpenPreserveRequested = false
     this.model.contracts.getTriggerProps().onClick()
     this.applyInteractionResult(previous)
   }
@@ -1054,6 +1079,10 @@ export class CVMenuButton extends ReatomLitElement {
     if (this.disabled || !this.model) return
 
     const previous = this.captureState()
+    if (this.pointerOpenPreserveRequested && !previous.open) {
+      this.preserveFocusForOpenSession = true
+    }
+    this.pointerOpenPreserveRequested = false
     this.model.contracts.getTriggerProps().onClick()
     this.applyInteractionResult(previous)
   }
@@ -1152,6 +1181,7 @@ export class CVMenuButton extends ReatomLitElement {
           aria-controls=${triggerProps?.['aria-controls'] ?? `${this.idBase}-menu`}
           aria-label=${triggerProps?.['aria-label'] ?? 'More options'}
           ?disabled=${this.disabled}
+          @pointerdown=${this.handleTriggerPointerDown}
           @click=${this.handleDropdownClick}
           @keydown=${this.handleKeyDown}
           class="cv-u-control-shell"
@@ -1208,6 +1238,7 @@ export class CVMenuButton extends ReatomLitElement {
           part="trigger"
           class="cv-u-control-shell"
           ?disabled=${this.disabled}
+          @pointerdown=${this.handleTriggerPointerDown}
           @click=${this.handleTriggerClick}
           @keydown=${this.handleKeyDown}
         >
