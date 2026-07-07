@@ -117,6 +117,7 @@ export class CVBottomSheet extends ReatomLitElement {
     cv-dialog {
       --cv-bottom-sheet-overlay-block-start: max(
         var(--cv-bottom-sheet-safe-top, 16px),
+        var(--safe-area-top, env(safe-area-inset-top, 0px)),
         env(safe-area-inset-top, 0px)
       );
       --cv-bottom-sheet-safe-bottom-inset: var(

@@ -374,6 +374,8 @@ The underlying dialog exports `trigger`, `overlay`, `content`, `header`, `title`
 | `--cv-bottom-sheet-width`            | `100%`                            | Sheet inline size                |
 | `--cv-bottom-sheet-max-width`        | `100%`                            | Sheet maximum inline size        |
 | `--cv-bottom-sheet-max-height`       | `min(82dvh, calc(100dvh - 32px))` | Sheet maximum block size         |
+| `--cv-bottom-sheet-safe-top`         | `16px`                            | Top viewport clearance           |
+| `--cv-bottom-sheet-safe-bottom`      | app safe-area bottom token        | Bottom viewport clearance        |
 | `--cv-bottom-sheet-collapsed-height` | `148px`                           | Collapsed detent height          |
 | `--cv-bottom-sheet-middle-height`    | `min(52dvh, 440px)`               | Middle detent height             |
 | `--cv-bottom-sheet-expanded-height`  | `min(92dvh, calc(100dvh - 32px))` | Expanded detent height           |
@@ -382,9 +384,10 @@ The underlying dialog exports `trigger`, `overlay`, `content`, `header`, `title`
 | `--cv-bottom-sheet-grabber-color`    | `var(--cv-color-border-strong)`   | Grabber color                    |
 | `--cv-bottom-sheet-dismiss-duration` | `180ms`                           | Drag dismiss transition duration |
 
-When available, the app-level `--visual-viewport-block-size` token supplies the visible viewport
-height used for sheet sizing while software keyboards are open. Keyboard clearance still flows
-through `--cv-bottom-sheet-keyboard-inset` / `--visual-viewport-bottom-inset`.
+When available, the app-level `--safe-area-top` and `--visual-viewport-block-size` tokens supply
+the top clearance and visible viewport height used for sheet sizing while software keyboards are
+open. Keyboard clearance still flows through `--cv-bottom-sheet-keyboard-inset` /
+`--visual-viewport-bottom-inset`.
 
 `cv-bottom-sheet` composes with `cv-dialog` presence state by overriding dialog content motion variables. The sheet uses bottom-up `translateY(...)` transforms for open, close, drag, detent, and dismiss states instead of the centered dialog scale transform.
 

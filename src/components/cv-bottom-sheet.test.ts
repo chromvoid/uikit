@@ -70,6 +70,10 @@ describe('cv-bottom-sheet', () => {
     const cssText = stylesToText(CVBottomSheet.styles)
 
     expect(cssText).toContain('--cv-bottom-sheet-overlay-block-end: calc(')
+    expect(cssText).toContain('--safe-area-top')
+    expect(cssText).toMatch(
+      /--cv-bottom-sheet-overlay-block-start:\s*max\(\s*var\(\s*--cv-bottom-sheet-safe-top,\s*16px\),\s*var\(--safe-area-top,\s*env\(safe-area-inset-top,\s*0px\)\),\s*env\(safe-area-inset-top,\s*0px\)\s*\);/,
+    )
     expect(cssText).toContain('--safe-area-bottom-active')
     expect(cssText).toContain('--cv-bottom-sheet-keyboard-inset')
     expect(cssText).toContain('--cv-bottom-sheet-safe-bottom-inset')
