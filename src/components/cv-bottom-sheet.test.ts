@@ -466,6 +466,31 @@ describe('cv-bottom-sheet', () => {
     ])
   })
 
+  it('clamps upward drags at the top detent', async () => {
+    const el = await createBottomSheet({
+      open: true,
+      detents: 'collapsed middle expanded',
+      detent: 'expanded',
+    })
+    const changes: unknown[] = []
+    const handle = getHandle(el)!
+    const dialog = getDialog(el)
+    el.addEventListener('cv-change', (event) => changes.push((event as CustomEvent).detail))
+
+    handle.dispatchEvent(createPointerEvent('pointerdown', {clientY: 200}))
+    handle.dispatchEvent(createPointerEvent('pointermove', {clientY: 80}))
+
+    expect(dialog.style.getPropertyValue('--cv-bottom-sheet-drag-offset')).toBe('0px')
+
+    handle.dispatchEvent(createPointerEvent('pointerup', {clientY: 80}))
+    await settle(el)
+
+    expect(el.open).toBe(true)
+    expect(el.detent).toBe('expanded')
+    expect(changes).toEqual([])
+    expect(dialog.style.getPropertyValue('--cv-bottom-sheet-drag-offset')).toBe('')
+  })
+
   it('filters invalid detent tokens and falls back to the lowest enabled detent', async () => {
     const el = await createBottomSheet({
       open: true,

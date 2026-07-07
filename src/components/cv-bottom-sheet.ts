@@ -357,6 +357,13 @@ export class CVBottomSheet extends ReatomLitElement {
     return this.getEnabledDetents().indexOf(this.getResolvedDetent())
   }
 
+  private canDragAboveStartDetent(): boolean {
+    const enabled = this.getEnabledDetents()
+    const index = enabled.indexOf(this.dragStartDetent)
+
+    return index >= 0 && index < enabled.length - 1
+  }
+
   private resetSheetDragState(): void {
     this.dragPointerId = null
     this.dragStartY = 0
@@ -456,7 +463,7 @@ export class CVBottomSheet extends ReatomLitElement {
 
     const offset = event.clientY - this.dragStartY
     this.dragMoved ||= Math.abs(offset) > 4
-    this.setSheetDragOffset(offset, this.hasDetents())
+    this.setSheetDragOffset(offset, this.canDragAboveStartDetent())
     if (offset !== 0) {
       event.preventDefault()
     }

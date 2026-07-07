@@ -380,6 +380,67 @@ describe('cv-image-viewer', () => {
     expect(actions).toEqual([{value: 'download', itemId: 1, index: 0}])
   })
 
+  it('renders a deduplicated action menu instead of direct toolbar action buttons', async () => {
+    const viewer = await mountViewer({
+      actions: [
+        {value: 'download', label: 'Download', icon: 'download'},
+        {value: 'download', label: 'Download duplicate', icon: 'download'},
+        {value: 'share', label: 'Share', icon: 'share-2'},
+        {value: 'delete', label: 'Delete', icon: 'trash', dangerous: true},
+      ],
+    })
+
+    expect(viewer.shadowRoot?.querySelectorAll('cv-button[data-action]')).toHaveLength(0)
+    expect(
+      Array.from(viewer.shadowRoot?.querySelectorAll<HTMLElement>('cv-menu-item[data-action]') ?? []).map(
+        (item) => item.dataset['action'],
+      ),
+    ).toEqual(['download', 'share', 'delete'])
+  })
+
+  it('keeps overflow menu input events inside the viewer', async () => {
+    const viewer = await mountViewer({
+      actions: [
+        {value: 'download', label: 'Download', icon: 'download'},
+        {value: 'open-external', label: 'Open externally', icon: 'external-link'},
+        {value: 'info', label: 'Info', icon: 'info'},
+        {value: 'share', label: 'Share', icon: 'share-2'},
+      ],
+    })
+    const inputs: unknown[] = []
+    const changes: unknown[] = []
+    const actions: unknown[] = []
+    viewer.addEventListener('cv-input', (event) => inputs.push(event.detail))
+    viewer.addEventListener('cv-change', (event) => changes.push(event.detail))
+    viewer.addEventListener('cv-action', (event) => actions.push(event.detail))
+
+    const menu = viewer.shadowRoot?.querySelector<HTMLElement & {updateComplete?: Promise<unknown>}>(
+      'cv-menu-button',
+    )
+    const trigger = menu?.shadowRoot?.querySelector<HTMLButtonElement>('[part="trigger"]')
+    trigger?.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+    await menu?.updateComplete
+    await settle(viewer)
+
+    expect(inputs).toEqual([])
+    expect(changes).toEqual([])
+    expect(menu?.getAttribute('open')).toBe('')
+    expect(viewer.shadowRoot?.querySelector<HTMLImageElement>('[part="image"]')?.getAttribute('src')).toBe(
+      'blob:one',
+    )
+
+    const overflowItem = document.body.querySelector<HTMLElement>(
+      '[data-cv-menu-button-portal] cv-menu-item[value="share"]',
+    )
+    overflowItem?.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+    await menu?.updateComplete
+    await settle(viewer)
+
+    expect(inputs).toEqual([])
+    expect(changes).toEqual([])
+    expect(actions).toEqual([{value: 'share', itemId: 1, index: 0}])
+  })
+
   it('marks dangerous direct and overflow actions', async () => {
     const viewer = await mountViewer({
       actions: [
@@ -392,7 +453,7 @@ describe('cv-image-viewer', () => {
 
     expect(
       viewer.shadowRoot
-        ?.querySelector<HTMLElement>('cv-button[data-action="delete"]')
+        ?.querySelector<HTMLElement>('cv-menu-item[data-action="delete"]')
         ?.getAttribute('data-dangerous'),
     ).toBe('true')
     expect(

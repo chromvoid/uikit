@@ -589,16 +589,17 @@ export class CVImageViewer extends ReatomLitElement {
     this.finishImageTransition()
   }
 
-  private handleActionClick(event: Event) {
-    const value = (event.currentTarget as HTMLElement | null)?.dataset['action']
-    this.dispatchAction(value)
-  }
-
   private handleActionMenuInput(event: CVMenuButtonInputEvent) {
+    event.stopPropagation()
+
     const value = event.detail.value
     if (!value || event.detail.open) return
     ;(event.currentTarget as CVMenuButton).value = ''
     this.dispatchAction(value)
+  }
+
+  private handleActionMenuChange(event: Event) {
+    event.stopPropagation()
   }
 
   private dispatchAction(value: string | null | undefined): void {
@@ -613,30 +614,6 @@ export class CVImageViewer extends ReatomLitElement {
     })
   }
 
-  private renderActionButton(action: CVImageViewerAction) {
-    const label = action.loading ? this.busyLabel || action.label : action.label
-
-    return html`
-      <cv-button
-        unstyled
-        class="viewer-icon-button"
-        data-action=${action.value}
-        data-dangerous=${action.dangerous ? 'true' : nothing}
-        ?disabled=${Boolean(action.disabled || action.loading)}
-        .loading=${Boolean(action.loading)}
-        aria-label=${label}
-        title=${label}
-        @click=${this.handleActionClick}
-      >
-        ${
-          action.loading
-            ? html`<cv-spinner label=${label}></cv-spinner>`
-            : html`<cv-icon name=${action.icon || 'circle'} size="m"></cv-icon>`
-        }
-      </cv-button>
-    `
-  }
-
   private renderActionMenu(actions: CVImageViewerAction[]) {
     if (actions.length === 0) return nothing
 
@@ -647,6 +624,7 @@ export class CVImageViewer extends ReatomLitElement {
         preset="icon-overflow"
         aria-label="More actions"
         @cv-input=${this.handleActionMenuInput}
+        @cv-change=${this.handleActionMenuChange}
       >
         <cv-icon slot="prefix" name="three-dots" size="m"></cv-icon>
         ${actions.map((action) => {
@@ -675,14 +653,18 @@ export class CVImageViewer extends ReatomLitElement {
     `
   }
 
-  private renderActions() {
-    const visible = this.actions.slice(0, 3)
-    const overflow = this.actions.slice(3)
+  private getUniqueActions(): CVImageViewerAction[] {
+    const seen = new Set<string>()
+    return this.actions.filter((action) => {
+      const value = action.value.trim()
+      if (!value || seen.has(value)) return false
+      seen.add(value)
+      return true
+    })
+  }
 
-    return html`
-      ${visible.map((action) => this.renderActionButton(action))}
-      ${this.renderActionMenu(overflow)}
-    `
+  private renderActions() {
+    return this.renderActionMenu(this.getUniqueActions())
   }
 
   private renderFallbackViewport(item: CVImageViewerItem | undefined) {
