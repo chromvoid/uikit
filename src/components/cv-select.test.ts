@@ -61,6 +61,19 @@ describe('cv-select', () => {
       expect(cssText).toMatch(/transition-behavior:\s*allow-discrete/)
     })
 
+    it('uses viewport-aware popup listbox sizing', () => {
+      const cssText = stylesToText()
+
+      expect(cssText).toMatch(
+        /--cv-popup-listbox-max-block-size:\s*var\(--cv-select-listbox-max-block-size,\s*240px\)/,
+      )
+      expect(cssText).toContain('calc(100dvh - var(--cv-popup-listbox-viewport-block-gutter, 32px))')
+      expect(cssText).toContain('@supports (min-block-size: calc-size(fit-content, min(size, 1px)))')
+      expect(cssText).toContain('@supports (max-block-size: calc-size(stretch, min(size, 1px)))')
+      expect(cssText).toContain("[data-cv-popup-listbox][data-cv-anchor-positioned='true']")
+      expect(cssText).toMatch(/overscroll-behavior:\s*contain/)
+    })
+
     it('keeps value text flexible and trailing controls compact', () => {
       const cssText = stylesToText()
 
@@ -114,6 +127,7 @@ describe('cv-select', () => {
     it('renders [part="listbox"]', async () => {
       const el = await createSelect()
       expect(getListbox(el)).not.toBeNull()
+      expect(getListbox(el).hasAttribute('data-cv-popup-listbox')).toBe(true)
     })
 
     it('renders default slot inside listbox', async () => {

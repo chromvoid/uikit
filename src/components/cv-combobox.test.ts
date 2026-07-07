@@ -189,6 +189,19 @@ describe('cv-combobox', () => {
     expect(cssText).toMatch(/\[part='listbox'\]\s*{[\s\S]*min-inline-size:\s*100%;/)
   })
 
+  it('uses viewport-aware popup listbox sizing', () => {
+    const cssText = stylesToText()
+
+    expect(cssText).toMatch(
+      /--cv-popup-listbox-max-block-size:\s*var\(\s*--cv-combobox-listbox-max-block-size,\s*var\(--cv-combobox-max-height,\s*220px\)\s*\)/,
+    )
+    expect(cssText).toContain('calc(100dvh - var(--cv-popup-listbox-viewport-block-gutter, 32px))')
+    expect(cssText).toContain('@supports (min-block-size: calc-size(fit-content, min(size, 1px)))')
+    expect(cssText).toContain('@supports (max-block-size: calc-size(stretch, min(size, 1px)))')
+    expect(cssText).toContain("[data-cv-popup-listbox][data-cv-anchor-positioned='true']")
+    expect(cssText).toMatch(/overscroll-behavior:\s*contain/)
+  })
+
   it('hides slotted options when the listbox contract marks them hidden', () => {
     const cssText = optionStylesToText()
 
@@ -318,6 +331,7 @@ describe('cv-combobox', () => {
     const {combobox, input} = await mountCombobox()
     const listbox = combobox.shadowRoot?.querySelector('[part="listbox"]') as HTMLDivElement
 
+    expect(listbox.hasAttribute('data-cv-popup-listbox')).toBe(true)
     expect(input.getAttribute('role')).toBe('combobox')
     expect(input.getAttribute('aria-haspopup')).toBe('listbox')
     expect(input.getAttribute('aria-autocomplete')).toBe('list')

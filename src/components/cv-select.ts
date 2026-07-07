@@ -5,6 +5,7 @@ import type {PropertyValues} from 'lit'
 
 import {FormAssociatedReatomElement} from '../form-associated/FormAssociatedReatomElement'
 import type {FormAssociatedValidity} from '../form-associated/withFormAssociated'
+import {popupListboxSizingStyles} from '../styles/component-styles'
 import {CVSelectGroup} from './cv-select-group'
 import {CVSelectOption} from './cv-select-option'
 
@@ -241,8 +242,9 @@ export class CVSelect extends FormAssociatedReatomElement {
         inset-block-start: calc(100% + var(--cv-space-1, 4px));
         z-index: 20;
         min-inline-size: 100%;
-        max-block-size: 240px;
-        overflow: auto;
+        --cv-popup-listbox-max-block-size: var(--cv-select-listbox-max-block-size, 240px);
+        --cv-popup-listbox-min-fit-block-size: var(--cv-select-listbox-min-fit-block-size, 12rem);
+        --cv-popup-listbox-viewport-block-gutter: var(--cv-select-listbox-viewport-block-gutter, 32px);
         gap: var(--cv-space-1, 4px);
         padding: var(--cv-space-1, 4px);
         background: var(--cv-color-surface-elevated, #1d2432);
@@ -275,6 +277,7 @@ export class CVSelect extends FormAssociatedReatomElement {
         }
       }
     `,
+    popupListboxSizingStyles,
   ]
 
   static define() {
@@ -972,6 +975,7 @@ export class CVSelect extends FormAssociatedReatomElement {
           id=${listboxProps.id}
           role=${listboxProps.role}
           tabindex=${listboxProps.tabindex}
+          data-cv-popup-listbox
           aria-label=${this.ariaLabelledBy ? nothing : (listboxProps['aria-label'] ?? nothing)}
           aria-labelledby=${this.ariaLabelledBy || nothing}
           aria-multiselectable=${listboxProps['aria-multiselectable'] ?? nothing}

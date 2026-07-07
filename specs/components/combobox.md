@@ -111,19 +111,22 @@ This document is the UIKit surface contract for Combobox.
 
 ## CSS Custom Properties
 
-| Property                       | Default                           | Description                                |
-| ------------------------------ | --------------------------------- | ------------------------------------------ |
-| `--cv-combobox-min-width`      | `260px`                           | Minimum inline size of the host            |
-| `--cv-combobox-min-height`     | `36px`                            | Minimum block size of the input/trigger    |
-| `--cv-combobox-padding-inline` | `var(--cv-space-3, 12px)`         | Horizontal padding of the input/trigger    |
-| `--cv-combobox-max-height`     | `220px`                           | Maximum block size of the listbox popup    |
-| `--cv-combobox-border-color`   | `var(--cv-color-border, #2a3245)` | Border color for input/trigger and listbox |
-| `--cv-combobox-border-radius`  | `var(--cv-radius-sm, 6px)`        | Border radius of the input/trigger         |
-| `--cv-combobox-listbox-radius` | `var(--cv-radius-md, 10px)`       | Border radius of the listbox popup         |
-| `--cv-combobox-gap`            | `var(--cv-space-1, 4px)`          | Gap between base layout sections           |
-| `--cv-combobox-tag-gap`        | `var(--cv-space-1, 4px)`          | Gap between tags in multi-select           |
-| `--cv-combobox-tag-radius`     | `var(--cv-radius-sm, 6px)`        | Border radius of tag chips                 |
-| `--cv-combobox-font-size`      | `inherit`                         | Font size of the input/trigger text        |
+| Property                                      | Default                           | Description                                                |
+| --------------------------------------------- | --------------------------------- | ---------------------------------------------------------- |
+| `--cv-combobox-min-width`                     | `260px`                           | Minimum inline size of the host                            |
+| `--cv-combobox-min-height`                    | `36px`                            | Minimum block size of the input/trigger                    |
+| `--cv-combobox-padding-inline`                | `var(--cv-space-3, 12px)`         | Horizontal padding of the input/trigger                    |
+| `--cv-combobox-listbox-max-block-size`        | `220px`                           | Preferred maximum block size of the listbox popup          |
+| `--cv-combobox-listbox-min-fit-block-size`    | `12rem`                           | Fit-content minimum used by supported `calc-size()` sizing |
+| `--cv-combobox-listbox-viewport-block-gutter` | `32px`                            | Reserved viewport block space before popup scrolling       |
+| `--cv-combobox-max-height`                    | `220px`                           | Legacy alias for `--cv-combobox-listbox-max-block-size`    |
+| `--cv-combobox-border-color`                  | `var(--cv-color-border, #2a3245)` | Border color for input/trigger and listbox                 |
+| `--cv-combobox-border-radius`                 | `var(--cv-radius-sm, 6px)`        | Border radius of the input/trigger                         |
+| `--cv-combobox-listbox-radius`                | `var(--cv-radius-md, 10px)`       | Border radius of the listbox popup                         |
+| `--cv-combobox-gap`                           | `var(--cv-space-1, 4px)`          | Gap between base layout sections                           |
+| `--cv-combobox-tag-gap`                       | `var(--cv-space-1, 4px)`          | Gap between tags in multi-select                           |
+| `--cv-combobox-tag-radius`                    | `var(--cv-radius-sm, 6px)`        | Border radius of tag chips                                 |
+| `--cv-combobox-font-size`                     | `inherit`                         | Font size of the input/trigger text                        |
 
 ## Visual States
 

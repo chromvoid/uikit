@@ -73,6 +73,36 @@ export const componentResetStyles = css`
   }
 `
 
+export const popupListboxSizingStyles = css`
+  [data-cv-popup-listbox] {
+    max-block-size: var(--cv-popup-listbox-max-block-size, 240px);
+    max-block-size: min(
+      var(--cv-popup-listbox-max-block-size, 240px),
+      max(0px, calc(100dvh - var(--cv-popup-listbox-viewport-block-gutter, 32px)))
+    );
+    overflow: auto;
+    overscroll-behavior: contain;
+  }
+
+  @supports (min-block-size: calc-size(fit-content, min(size, 1px))) {
+    [data-cv-popup-listbox] {
+      min-block-size: calc-size(fit-content, min(size, var(--cv-popup-listbox-min-fit-block-size, 0px)));
+    }
+  }
+
+  @supports (max-block-size: calc-size(stretch, min(size, 1px))) {
+    [data-cv-popup-listbox][data-cv-anchor-positioned='true'] {
+      max-block-size: calc-size(
+        stretch,
+        min(
+          max(0px, size - var(--cv-popup-listbox-viewport-block-gutter, 32px)),
+          var(--cv-popup-listbox-max-block-size, 240px)
+        )
+      );
+    }
+  }
+`
+
 const hostDisplayStyles = new Map<ComponentHostDisplay, CSSResultOrNative>()
 
 export function getComponentHostDisplayStyles(display: ComponentHostDisplay): CSSResultOrNative {
