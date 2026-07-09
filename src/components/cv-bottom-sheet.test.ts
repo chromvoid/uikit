@@ -129,6 +129,18 @@ describe('cv-bottom-sheet', () => {
     expect(cssText).toMatch(/cv-dialog::part\(footer\)\s*{[\s\S]*padding:/)
   })
 
+  it('keeps the drag handle touch target larger than the visual grabber', () => {
+    const cssText = stylesToText(CVBottomSheet.styles)
+
+    expect(cssText).toMatch(/\.sheet-handle\s*{[\s\S]*box-sizing:\s*border-box;/)
+    expect(cssText).toMatch(
+      /\.sheet-handle\s*{[\s\S]*min-block-size:\s*var\(--cv-bottom-sheet-handle-block-size,\s*48px\);/,
+    )
+    expect(cssText).toMatch(
+      /\.sheet-handle\s*{[\s\S]*padding-block:\s*var\(--cv-bottom-sheet-handle-padding-block,\s*12px 20px\);/,
+    )
+  })
+
   it('collapses footer padding when no footer content is slotted', () => {
     const cssText = stylesToText(CVBottomSheet.styles)
 

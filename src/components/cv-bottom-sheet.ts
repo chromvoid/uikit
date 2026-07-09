@@ -257,12 +257,13 @@ export class CVBottomSheet extends ReatomLitElement {
     }
 
     .sheet-handle {
+      box-sizing: border-box;
       inline-size: 100%;
-      min-block-size: var(--cv-bottom-sheet-handle-block-size, 32px);
+      min-block-size: var(--cv-bottom-sheet-handle-block-size, 48px);
       display: flex;
       align-items: center;
       justify-content: center;
-      padding-block: var(--cv-bottom-sheet-handle-padding-block, 12px 8px);
+      padding-block: var(--cv-bottom-sheet-handle-padding-block, 12px 20px);
       border: 0;
       background: transparent;
       color: inherit;
