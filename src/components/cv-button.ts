@@ -443,7 +443,7 @@ export class CVButton extends FormAssociatedReatomElement {
         --cv-button-font-size: var(--cv-button-font-size-large, var(--cv-font-size-md, 16px));
       }
 
-      :host([preset='action-primary']) {
+      :host([preset='action-primary']) [part='base'] {
         --cv-button-background: var(--cv-button-action-primary-background, var(--cv-color-primary-dark));
         --cv-button-background-hover: var(
           --cv-button-action-primary-background-hover,
@@ -480,7 +480,7 @@ export class CVButton extends FormAssociatedReatomElement {
         );
       }
 
-      :host([preset='action-primary-subtle']) {
+      :host([preset='action-primary-subtle']) [part='base'] {
         --cv-button-background: var(
           --cv-button-action-primary-subtle-background,
           var(--cv-color-primary-surface-strong)

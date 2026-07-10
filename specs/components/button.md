@@ -61,6 +61,8 @@ The `outline` boolean modifier can be combined with any variant to produce an ou
 | `action-primary`        | Strong primary action surface for form/footer actions |
 | `action-primary-subtle` | Softer primary action surface for inline edit actions |
 
+When a preset is combined with `variant`, the semantic preset owns the button surface and foreground states.
+
 ## Sizes
 
 | Size     | `--cv-button-min-height` | `--cv-button-padding-inline` | `--cv-button-padding-block` | `--cv-button-font-size`          |

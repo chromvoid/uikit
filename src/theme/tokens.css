@@ -32,6 +32,9 @@ cv-theme-provider[mode='dark'] {
   --cv-palette-danger: hwb(3 18.8% 0%);
   --cv-palette-danger-dark: hwb(3 14.9% 20%);
   --cv-palette-danger-text: hwb(12 0% 89.8%);
+  --cv-palette-group-icon-blue: hwb(217 37.6% 2%);
+  --cv-palette-group-icon-pink: hwb(331 44.7% 4.3%);
+  --cv-palette-group-icon-orange: hwb(13 33.3% 6.3%);
 
   /* Semantic colors */
   --cv-color-bg: var(--cv-palette-bg);
@@ -96,6 +99,9 @@ cv-theme-provider[mode='dark'] {
   --cv-color-cyan: var(--cv-color-primary);
   --cv-color-cyan-light: hwb(186 18% 0%);
   --cv-color-cyan-dark: var(--cv-color-primary-dark);
+  --cv-color-group-icon-blue: var(--cv-palette-group-icon-blue);
+  --cv-color-group-icon-pink: var(--cv-palette-group-icon-pink);
+  --cv-color-group-icon-orange: var(--cv-palette-group-icon-orange);
 
   --cv-color-success: var(--cv-palette-success);
   --cv-color-success-dark: var(--cv-palette-success-dark);

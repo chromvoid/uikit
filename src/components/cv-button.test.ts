@@ -49,6 +49,13 @@ describe('cv-button', () => {
       expect(stylesText).toContain('--_cv-button-accent-color: var(--cv-color-danger, #ff7d86);')
     })
 
+    it('applies semantic preset tokens on the base so they override combined variants', () => {
+      const stylesText = getStylesText()
+
+      expect(stylesText).toContain(":host([preset='action-primary']) [part='base']")
+      expect(stylesText).toContain(":host([preset='action-primary-subtle']) [part='base']")
+    })
+
     it('keeps long labels inside the button shell', () => {
       const stylesText = getStylesText()
 
