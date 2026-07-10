@@ -173,7 +173,7 @@ export class CVBottomSheet extends ReatomLitElement {
         var(--_cv-bottom-sheet-available-block-size)
       );
       gap: 0;
-      grid-template-rows: auto minmax(0, 1fr) auto;
+      grid-template-rows: auto auto minmax(0, 1fr) auto;
       overflow: hidden;
       padding: 0;
       border-block-end: 0;

@@ -402,6 +402,7 @@ When `detents` is set, event detail is `{open, detent}`. In default open-close m
 
 ## Interaction Rules
 
+- The content grid reserves independent rows for the drag handle, header, scrollable body, and footer.
 - Backdrop pointer/click and Escape are delegated to `cv-dialog`.
 - Drag starts only from `part="handle"`.
 - Without `detents`, drag closes at `96px` downward movement or `0.75px/ms` downward velocity.

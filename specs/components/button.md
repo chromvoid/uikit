@@ -91,23 +91,26 @@ When a preset is combined with `variant`, the semantic preset owns the button su
 
 ## CSS Custom Properties
 
-| Property                          | Default                          | Description                          |
-| --------------------------------- | -------------------------------- | ------------------------------------ |
-| `--cv-button-min-height`          | `36px`                           | Minimum block size of the button     |
-| `--cv-button-padding-inline`      | `var(--cv-space-3, 12px)`        | Horizontal padding                   |
-| `--cv-button-padding-block`       | `var(--cv-space-2, 8px)`         | Vertical padding                     |
-| `--cv-button-border-radius`       | `var(--cv-radius-sm, 6px)`       | Border radius for button shape       |
-| `--cv-button-gap`                 | `var(--cv-space-2, 8px)`         | Spacing between button content parts |
-| `--cv-button-font-size`           | `var(--cv-font-size-base, 14px)` | Font size of button content          |
-| `--cv-button-font-weight`         | `inherit`                        | Font weight of button content        |
-| `--cv-button-text-color`          | `var(--cv-color-text)`           | Foreground color                     |
-| `--cv-button-background`          | `var(--cv-color-surface)`        | Default background                   |
-| `--cv-button-background-hover`    | derived from the active variant  | Hover background                     |
-| `--cv-button-background-active`   | derived from the active variant  | Active background                    |
-| `--cv-button-border-color`        | `var(--cv-color-border)`         | Default border color                 |
-| `--cv-button-border-color-hover`  | derived from the active variant  | Hover border color                   |
-| `--cv-button-border-color-active` | derived from the active variant  | Active border color                  |
-| `--cv-button-focus-ring-color`    | current variant accent           | Focus ring color                     |
+| Property                                       | Default                               | Description                          |
+| ---------------------------------------------- | ------------------------------------- | ------------------------------------ |
+| `--cv-button-min-height`                       | `36px`                                | Minimum block size of the button     |
+| `--cv-button-padding-inline`                   | `var(--cv-space-3, 12px)`             | Horizontal padding                   |
+| `--cv-button-padding-block`                    | `var(--cv-space-2, 8px)`              | Vertical padding                     |
+| `--cv-button-border-radius`                    | `var(--cv-radius-sm, 6px)`            | Border radius for button shape       |
+| `--cv-button-gap`                              | `var(--cv-space-2, 8px)`              | Spacing between button content parts |
+| `--cv-button-font-size`                        | `var(--cv-font-size-base, 14px)`      | Font size of button content          |
+| `--cv-button-font-weight`                      | `inherit`                             | Font weight of button content        |
+| `--cv-button-text-color`                       | `var(--cv-color-text)`                | Foreground color                     |
+| `--cv-button-background`                       | `var(--cv-color-surface)`             | Default background                   |
+| `--cv-button-background-hover`                 | derived from the active variant       | Hover background                     |
+| `--cv-button-background-active`                | derived from the active variant       | Active background                    |
+| `--cv-button-border-color`                     | `var(--cv-color-border)`              | Default border color                 |
+| `--cv-button-border-color-hover`               | derived from the active variant       | Hover border color                   |
+| `--cv-button-border-color-active`              | derived from the active variant       | Active border color                  |
+| `--cv-button-focus-ring-color`                 | current variant accent                | Focus ring color                     |
+| `--cv-button-action-primary-background`        | theme-specific primary action surface | `action-primary` background          |
+| `--cv-button-action-primary-background-hover`  | theme-specific primary action surface | `action-primary` hover background    |
+| `--cv-button-action-primary-background-active` | theme-specific primary action surface | `action-primary` active background   |
 
 Additionally, component styles depend on theme tokens through fallback values:
 

@@ -84,6 +84,9 @@ cv-theme-provider[mode='dark'] {
   --cv-color-primary-border-strong: hwb(186 0% 0% / 0.4);
   --cv-color-primary-ring: hwb(186 0% 0% / 0.24);
   --cv-color-on-primary: var(--cv-palette-on-primary);
+  --cv-button-action-primary-background: var(--cv-color-primary-dark);
+  --cv-button-action-primary-background-hover: var(--cv-color-primary);
+  --cv-button-action-primary-background-active: var(--cv-color-primary-dark);
 
   --cv-color-accent: var(--cv-palette-accent);
   --cv-color-accent-light: hwb(263 63.5% 0%);
@@ -409,6 +412,9 @@ cv-theme-provider[mode='light'] {
   --cv-color-primary-border-strong: hwb(186 0% 20% / 0.36);
   --cv-color-primary-ring: hwb(186 0% 20% / 0.18);
   --cv-color-on-primary: var(--cv-palette-on-primary);
+  --cv-button-action-primary-background: var(--cv-color-primary-darker);
+  --cv-button-action-primary-background-hover: var(--cv-color-primary-darker);
+  --cv-button-action-primary-background-active: var(--cv-color-primary-darker);
 
   --cv-color-accent: var(--cv-palette-accent);
   --cv-color-accent-light: hwb(263 63.5% 0%);
@@ -565,6 +571,9 @@ cv-theme-provider[mode='light'] {
     --cv-color-primary-border-strong: hwb(186 0% 20% / 0.36);
     --cv-color-primary-ring: hwb(186 0% 20% / 0.18);
     --cv-color-on-primary: var(--cv-palette-on-primary);
+    --cv-button-action-primary-background: var(--cv-color-primary-darker);
+    --cv-button-action-primary-background-hover: var(--cv-color-primary-darker);
+    --cv-button-action-primary-background-active: var(--cv-color-primary-darker);
 
     --cv-color-accent: var(--cv-palette-accent);
     --cv-color-accent-light: hwb(263 63.5% 0%);
