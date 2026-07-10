@@ -412,8 +412,8 @@ describe('cv-slider-multi-thumb', () => {
 
     // With the real denominator of (max-min)=0.5, the upper thumb must sit at
     // 100%, not at 50% as the old Math.max(range, 1) denominator produced.
-    expect(thumbs[0]!.style.getPropertyValue('--cv-thumb-percentage')).toBe('0%')
-    expect(thumbs[1]!.style.getPropertyValue('--cv-thumb-percentage')).toBe('100%')
+    expect(thumbs[0]!.style.getPropertyValue('--_cv-slider-multi-thumb-percentage')).toBe('0%')
+    expect(thumbs[1]!.style.getPropertyValue('--_cv-slider-multi-thumb-percentage')).toBe('100%')
   })
 
   it('prevents keyboard and pointer updates when disabled', async () => {

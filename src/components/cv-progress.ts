@@ -50,17 +50,20 @@ export class CVProgress extends ReatomLitElement {
     css`
       :host {
         display: block;
-        --cv-progress-effective-height: var(--cv-progress-height, 10px);
+        --_cv-progress-effective-block-size: var(--cv-progress-height, 10px);
       }
 
       :host(:not(:empty)) {
-        --cv-progress-effective-height: var(--cv-progress-height, var(--cv-progress-labeled-height, 18px));
+        --_cv-progress-effective-block-size: var(
+          --cv-progress-height,
+          var(--cv-progress-labeled-height, 18px)
+        );
       }
 
       [part='base'] {
         position: relative;
         inline-size: 100%;
-        block-size: var(--cv-progress-effective-height);
+        block-size: var(--_cv-progress-effective-block-size);
         border-radius: 999px;
         border: 1px solid var(--cv-color-border, #2a3245);
         background: var(--cv-progress-track-color, var(--cv-color-surface, #141923));
@@ -93,7 +96,7 @@ export class CVProgress extends ReatomLitElement {
         color: var(--cv-progress-label-color, var(--cv-color-text, #e8ecf6));
         font-size: var(
           --cv-progress-label-font-size,
-          min(var(--cv-font-size-xs, 0.75rem), max(0px, calc(var(--cv-progress-effective-height) - 3px)))
+          min(var(--cv-font-size-xs, 0.75rem), max(0px, calc(var(--_cv-progress-effective-block-size) - 3px)))
         );
         line-height: 1;
         text-overflow: ellipsis;

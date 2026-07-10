@@ -173,6 +173,16 @@ Reusable empty-result or empty-panel state with optional icon, body copy, and ac
 | `body`        | Default slot wrapper  |
 | `actions`     | Actions slot wrapper  |
 
+## CSS Custom Properties
+
+| Property                       | Default                             | Description               |
+| ------------------------------ | ----------------------------------- | ------------------------- |
+| `--cv-empty-state-padding`     | `var(--cv-space-6, 24px)`           | Root surface padding      |
+| `--cv-empty-state-border`      | `1px dashed var(--cv-color-border)` | Root surface border       |
+| `--cv-empty-state-radius`      | `var(--cv-radius-2, 12px)`          | Root surface radius       |
+| `--cv-empty-state-background`  | `var(--cv-color-surface-2)`         | Root surface background   |
+| `--cv-empty-state-title-color` | `var(--cv-color-text)`              | Headline foreground color |
+
 ## Events
 
 None. The component is presentational.

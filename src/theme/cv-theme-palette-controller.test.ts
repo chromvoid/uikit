@@ -135,7 +135,7 @@ describe('cv-theme-palette-swatch', () => {
     document.body.append(swatch)
     await settle(swatch)
 
-    expect(swatch.style.getPropertyValue('--cv-theme-palette-swatch-color')).toBe('hwb(200 10% 20%)')
+    expect(swatch.style.getPropertyValue('--_cv-theme-palette-swatch-color')).toBe('hwb(200 10% 20%)')
     expect(swatch.getAttribute('aria-label')).toBe('Preview')
   })
 })

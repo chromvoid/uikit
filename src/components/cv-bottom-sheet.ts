@@ -115,29 +115,25 @@ export class CVBottomSheet extends ReatomLitElement {
     }
 
     cv-dialog {
-      --cv-bottom-sheet-overlay-block-start: max(
+      --_cv-bottom-sheet-overlay-block-start: max(
         var(--cv-bottom-sheet-safe-top, 16px),
-        var(--safe-area-top, env(safe-area-inset-top, 0px)),
         env(safe-area-inset-top, 0px)
       );
-      --cv-bottom-sheet-safe-bottom-inset: var(
+      --_cv-bottom-sheet-safe-bottom-inset: var(
         --cv-bottom-sheet-safe-bottom,
-        var(--safe-area-bottom-active, var(--safe-area-bottom, env(safe-area-inset-bottom, 0px)))
+        env(safe-area-inset-bottom, 0px)
       );
-      --cv-bottom-sheet-keyboard-bottom-inset: var(
-        --cv-bottom-sheet-keyboard-inset,
-        var(--visual-viewport-bottom-inset, 0px)
+      --_cv-bottom-sheet-keyboard-bottom-inset: var(--cv-bottom-sheet-keyboard-inset, 0px);
+      --_cv-bottom-sheet-visible-viewport-block-size: var(--cv-bottom-sheet-viewport-block-size, 100dvh);
+      --_cv-bottom-sheet-overlay-block-end: calc(
+        var(--_cv-bottom-sheet-safe-bottom-inset) + var(--_cv-bottom-sheet-keyboard-bottom-inset)
       );
-      --cv-bottom-sheet-visible-viewport-block-size: var(--visual-viewport-block-size, 100dvh);
-      --cv-bottom-sheet-overlay-block-end: calc(
-        var(--cv-bottom-sheet-safe-bottom-inset) + var(--cv-bottom-sheet-keyboard-bottom-inset)
-      );
-      --cv-bottom-sheet-available-height: max(
+      --_cv-bottom-sheet-available-block-size: max(
         0px,
         calc(
-          var(--cv-bottom-sheet-visible-viewport-block-size) - var(
-              --cv-bottom-sheet-overlay-block-start
-            ) - var(--cv-bottom-sheet-safe-bottom-inset)
+          var(--_cv-bottom-sheet-visible-viewport-block-size) - var(
+              --_cv-bottom-sheet-overlay-block-start
+            ) - var(--_cv-bottom-sheet-safe-bottom-inset)
         )
       );
       --cv-dialog-z-index: var(--cv-bottom-sheet-z-index, 40);
@@ -155,16 +151,16 @@ export class CVBottomSheet extends ReatomLitElement {
       --cv-dialog-transition-easing-open: var(--cv-easing-decelerate, cubic-bezier(0, 0, 0.2, 1));
       --cv-dialog-transition-easing-close: var(--cv-easing-standard, ease);
       --cv-dialog-content-closed-transform: translateY(
-        calc(100% + var(--cv-bottom-sheet-overlay-block-end) + 32px)
+        calc(100% + var(--_cv-bottom-sheet-overlay-block-end) + 32px)
       );
-      --cv-dialog-content-open-transform: translateY(var(--cv-bottom-sheet-drag-offset, 0px));
+      --cv-dialog-content-open-transform: translateY(var(--_cv-bottom-sheet-drag-offset, 0px));
     }
 
     cv-dialog::part(overlay) {
       place-items: end center;
-      padding-block-start: var(--cv-bottom-sheet-overlay-block-start);
+      padding-block-start: var(--_cv-bottom-sheet-overlay-block-start);
       padding-block-end: 0px;
-      transform: translateY(calc(0px - var(--cv-bottom-sheet-overlay-block-end)));
+      transform: translateY(calc(0px - var(--_cv-bottom-sheet-overlay-block-end)));
       padding-inline: var(--cv-bottom-sheet-inline-inset, 0px);
       transition: transform 0.12s ease;
     }
@@ -174,7 +170,7 @@ export class CVBottomSheet extends ReatomLitElement {
       max-inline-size: var(--cv-bottom-sheet-max-width, 100%);
       max-block-size: min(
         var(--cv-bottom-sheet-max-height, min(82dvh, calc(100dvh - 32px))),
-        var(--cv-bottom-sheet-available-height)
+        var(--_cv-bottom-sheet-available-block-size)
       );
       gap: 0;
       grid-template-rows: auto minmax(0, 1fr) auto;
@@ -189,18 +185,18 @@ export class CVBottomSheet extends ReatomLitElement {
     }
 
     cv-dialog.has-detents {
-      --cv-bottom-sheet-detent-max-height: min(
+      --_cv-bottom-sheet-detent-max-block-size: min(
         var(--cv-bottom-sheet-expanded-height, min(92dvh, calc(100dvh - 32px))),
-        var(--cv-bottom-sheet-available-height)
+        var(--_cv-bottom-sheet-available-block-size)
       );
-      --cv-bottom-sheet-active-detent-height: var(--cv-bottom-sheet-detent-max-height);
+      --_cv-bottom-sheet-active-detent-block-size: var(--_cv-bottom-sheet-detent-max-block-size);
       --cv-bottom-sheet-detent-visible-height: min(
-        var(--cv-bottom-sheet-active-detent-height),
-        var(--cv-bottom-sheet-detent-max-height)
+        var(--_cv-bottom-sheet-active-detent-block-size),
+        var(--_cv-bottom-sheet-detent-max-block-size)
       );
-      --cv-bottom-sheet-detent-offset: 0px;
+      --_cv-bottom-sheet-detent-offset: 0px;
       --cv-dialog-content-open-transform: translateY(
-        calc(var(--cv-bottom-sheet-detent-offset, 0px) + var(--cv-bottom-sheet-drag-offset, 0px))
+        calc(var(--_cv-bottom-sheet-detent-offset, 0px) + var(--_cv-bottom-sheet-drag-offset, 0px))
       );
     }
 
@@ -217,21 +213,21 @@ export class CVBottomSheet extends ReatomLitElement {
     }
 
     cv-dialog.detent-collapsed {
-      --cv-bottom-sheet-active-detent-height: var(--cv-bottom-sheet-collapsed-height, 148px);
-      --cv-bottom-sheet-detent-offset: 0px;
+      --_cv-bottom-sheet-active-detent-block-size: var(--cv-bottom-sheet-collapsed-height, 148px);
+      --_cv-bottom-sheet-detent-offset: 0px;
     }
 
     cv-dialog.detent-middle {
-      --cv-bottom-sheet-active-detent-height: var(--cv-bottom-sheet-middle-height, min(52dvh, 440px));
-      --cv-bottom-sheet-detent-offset: 0px;
+      --_cv-bottom-sheet-active-detent-block-size: var(--cv-bottom-sheet-middle-height, min(52dvh, 440px));
+      --_cv-bottom-sheet-detent-offset: 0px;
     }
 
     cv-dialog.detent-expanded {
-      --cv-bottom-sheet-active-detent-height: var(
+      --_cv-bottom-sheet-active-detent-block-size: var(
         --cv-bottom-sheet-expanded-height,
         min(92dvh, calc(100dvh - 32px))
       );
-      --cv-bottom-sheet-detent-offset: 0px;
+      --_cv-bottom-sheet-detent-offset: 0px;
     }
 
     cv-dialog.is-dragging::part(content) {
@@ -375,12 +371,15 @@ export class CVBottomSheet extends ReatomLitElement {
 
     const dialog = this.getDialogElement()
     dialog?.classList.remove('is-dragging')
-    dialog?.style.removeProperty('--cv-bottom-sheet-drag-offset')
+    dialog?.style.removeProperty('--_cv-bottom-sheet-drag-offset')
   }
 
   private setSheetDragOffset(offset: number, allowNegative = false): void {
     const safeOffset = allowNegative ? offset : Math.max(0, offset)
-    this.getDialogElement()?.style.setProperty('--cv-bottom-sheet-drag-offset', `${Math.round(safeOffset)}px`)
+    this.getDialogElement()?.style.setProperty(
+      '--_cv-bottom-sheet-drag-offset',
+      `${Math.round(safeOffset)}px`,
+    )
   }
 
   private createEventDetail(open: boolean): CVBottomSheetEventDetail {

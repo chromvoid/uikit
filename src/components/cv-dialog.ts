@@ -3,8 +3,8 @@ import {css, nothing, type PropertyValues} from 'lit'
 
 import {html} from '../reatom-lit/index.js'
 import {ReatomLitElement} from '../reatom-lit/ReatomLitElement'
-import {acquireBodyScrollLock, releaseBodyScrollLock} from './scroll-lock.js'
 import {isTextEditableFocusTarget} from './focus-utils'
+import {acquireBodyScrollLock, releaseBodyScrollLock} from './scroll-lock.js'
 
 export interface CVDialogEventDetail {
   open: boolean
@@ -145,29 +145,41 @@ export class CVDialog extends ReatomLitElement {
     css`
       :host {
         display: contents;
-        --cv-dialog-viewport-inset-top: var(--safe-area-top, env(safe-area-inset-top, 0px));
-        --cv-dialog-viewport-inset-right: var(--safe-area-right, env(safe-area-inset-right, 0px));
-        --cv-dialog-viewport-inset-bottom: calc(
-          var(--safe-area-bottom-active, var(--safe-area-bottom, env(safe-area-inset-bottom, 0px))) +
-            var(--visual-viewport-bottom-inset, 0px)
+        --_cv-dialog-viewport-inset-block-start: var(
+          --cv-dialog-safe-area-block-start,
+          env(safe-area-inset-top, 0px)
         );
-        --cv-dialog-viewport-inset-left: var(--safe-area-left, env(safe-area-inset-left, 0px));
+        --_cv-dialog-viewport-inset-inline-end: var(
+          --cv-dialog-safe-area-inline-end,
+          env(safe-area-inset-right, 0px)
+        );
+        --_cv-dialog-viewport-inset-block-end: calc(
+          var(--cv-dialog-safe-area-block-end, env(safe-area-inset-bottom, 0px)) +
+            var(--cv-dialog-keyboard-inset, 0px)
+        );
+        --_cv-dialog-viewport-inset-inline-start: var(
+          --cv-dialog-safe-area-inline-start,
+          env(safe-area-inset-left, 0px)
+        );
         --cv-dialog-overlay-padding-block-start: calc(
-          var(--cv-dialog-padding-block, var(--cv-space-4, 16px)) + var(--cv-dialog-viewport-inset-top)
+          var(--cv-dialog-padding-block, var(--cv-space-4, 16px)) +
+            var(--_cv-dialog-viewport-inset-block-start)
         );
         --cv-dialog-overlay-padding-inline-end: calc(
-          var(--cv-dialog-padding-inline, var(--cv-space-4, 16px)) + var(--cv-dialog-viewport-inset-right)
+          var(--cv-dialog-padding-inline, var(--cv-space-4, 16px)) +
+            var(--_cv-dialog-viewport-inset-inline-end)
         );
         --cv-dialog-overlay-padding-block-end: calc(
-          var(--cv-dialog-padding-block, var(--cv-space-4, 16px)) + var(--cv-dialog-viewport-inset-bottom)
+          var(--cv-dialog-padding-block, var(--cv-space-4, 16px)) + var(--_cv-dialog-viewport-inset-block-end)
         );
         --cv-dialog-overlay-padding-inline-start: calc(
-          var(--cv-dialog-padding-inline, var(--cv-space-4, 16px)) + var(--cv-dialog-viewport-inset-left)
+          var(--cv-dialog-padding-inline, var(--cv-space-4, 16px)) +
+            var(--_cv-dialog-viewport-inset-inline-start)
         );
-        --cv-dialog-available-inline-size: calc(
+        --_cv-dialog-available-inline-size: calc(
           100vw - var(--cv-dialog-overlay-padding-inline-start) - var(--cv-dialog-overlay-padding-inline-end)
         );
-        --cv-dialog-available-block-size: calc(
+        --_cv-dialog-available-block-size: calc(
           100dvh - var(--cv-dialog-overlay-padding-block-start) - var(--cv-dialog-overlay-padding-block-end)
         );
         --cv-dialog-transition-duration: var(--cv-duration-fast, 120ms);
@@ -254,10 +266,10 @@ export class CVDialog extends ReatomLitElement {
         z-index: 1;
         box-sizing: border-box;
         inline-size: var(--cv-dialog-width, var(--cv-dialog-width-m, min(560px, calc(100vw - 32px))));
-        max-inline-size: min(var(--cv-dialog-width, 100%), var(--cv-dialog-available-inline-size));
+        max-inline-size: min(var(--cv-dialog-width, 100%), var(--_cv-dialog-available-inline-size));
         max-block-size: min(
-          var(--cv-dialog-max-height, var(--cv-dialog-available-block-size)),
-          var(--cv-dialog-available-block-size)
+          var(--cv-dialog-max-height, var(--_cv-dialog-available-block-size)),
+          var(--_cv-dialog-available-block-size)
         );
         overflow: auto;
         overscroll-behavior: contain;

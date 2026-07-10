@@ -98,7 +98,7 @@ export class CVSlider extends ReatomLitElement {
         inline-size: 100%;
         block-size: 24px;
         touch-action: pan-y;
-        --cv-slider-percentage: 0%;
+        --_cv-slider-percentage: 0%;
       }
 
       [part='track'] {
@@ -115,7 +115,7 @@ export class CVSlider extends ReatomLitElement {
         position: absolute;
         inset-block: 0;
         inset-inline-start: 0;
-        inline-size: var(--cv-slider-percentage);
+        inline-size: var(--_cv-slider-percentage);
         border-radius: inherit;
         background: linear-gradient(
           90deg,
@@ -126,7 +126,7 @@ export class CVSlider extends ReatomLitElement {
 
       [part='thumb'] {
         position: absolute;
-        inset-inline-start: var(--cv-slider-percentage);
+        inset-inline-start: var(--_cv-slider-percentage);
         inset-block-start: 50%;
         inline-size: 16px;
         block-size: 16px;
@@ -166,7 +166,7 @@ export class CVSlider extends ReatomLitElement {
 
       :host([orientation='vertical']) [part='range'] {
         inline-size: 100%;
-        block-size: var(--cv-slider-percentage);
+        block-size: var(--_cv-slider-percentage);
         inset-inline-start: 0;
         inset-block-end: 0;
         inset-block-start: auto;
@@ -180,7 +180,7 @@ export class CVSlider extends ReatomLitElement {
       :host([orientation='vertical']) [part='thumb'] {
         inset-inline-start: 50%;
         inset-block-start: auto;
-        inset-block-end: var(--cv-slider-percentage);
+        inset-block-end: var(--_cv-slider-percentage);
         transform: translate(-50%, 50%);
         touch-action: pan-x;
       }
@@ -273,7 +273,7 @@ export class CVSlider extends ReatomLitElement {
 
   private applySliderPercentage(): void {
     const base = this.shadowRoot?.querySelector('[part="base"]') as HTMLElement | null
-    base?.style.setProperty('--cv-slider-percentage', `${this.getSliderPercentage()}%`)
+    base?.style.setProperty('--_cv-slider-percentage', `${this.getSliderPercentage()}%`)
   }
 
   private dispatchInput(detail: CVSliderEventDetail): void {

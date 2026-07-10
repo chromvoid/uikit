@@ -46,19 +46,24 @@ The component provides task-list structure, accessible busy/empty semantics, and
 
 ## CSS Custom Properties
 
-| Property                              | Default                                 | Description                    |
-| ------------------------------------- | --------------------------------------- | ------------------------------ |
-| `--cv-task-list-gap`                  | `var(--cv-space-3, 12px)`               | Gap between shell regions      |
-| `--cv-task-list-padding`              | `var(--cv-space-4, 16px)`               | Root section padding           |
-| `--cv-task-list-radius`               | `var(--cv-radius-md, 10px)`             | Root section radius            |
-| `--cv-task-list-background`           | `var(--cv-color-surface-2, #181f2b)`    | Root section background        |
-| `--cv-task-list-border`               | `1px solid var(--cv-color-border, ...)` | Root section border            |
-| `--cv-task-list-row-gap`              | `var(--cv-space-2, 8px)`                | Gap between rows               |
-| `--cv-task-list-row-padding-block`    | `var(--cv-space-3, 12px)`               | Row block padding              |
-| `--cv-task-list-row-padding-inline`   | `var(--cv-space-3, 12px)`               | Row inline padding             |
-| `--cv-task-list-row-radius`           | `var(--cv-radius-sm, 6px)`              | Row radius                     |
-| `--cv-task-list-row-background`       | `var(--cv-color-surface-glass-subtle)`  | Direct `role="listitem"` rows  |
-| `--cv-task-list-empty-min-block-size` | `96px`                                  | Minimum empty-state block size |
+| Property                                | Default                                 | Description                    |
+| --------------------------------------- | --------------------------------------- | ------------------------------ |
+| `--cv-task-list-gap`                    | `var(--cv-space-3, 12px)`               | Gap between shell regions      |
+| `--cv-task-list-padding`                | `var(--cv-space-4, 16px)`               | Root section padding           |
+| `--cv-task-list-radius`                 | `var(--cv-radius-md, 10px)`             | Root section radius            |
+| `--cv-task-list-background`             | `var(--cv-color-surface-2, #181f2b)`    | Root section background        |
+| `--cv-task-list-border`                 | `1px solid var(--cv-color-border, ...)` | Root section border            |
+| `--cv-task-list-row-gap`                | `var(--cv-space-2, 8px)`                | Gap between rows               |
+| `--cv-task-list-row-padding-block`      | `var(--cv-space-3, 12px)`               | Row block padding              |
+| `--cv-task-list-row-padding-inline`     | `var(--cv-space-3, 12px)`               | Row inline padding             |
+| `--cv-task-list-row-radius`             | `var(--cv-radius-sm, 6px)`              | Row radius                     |
+| `--cv-task-list-row-background`         | `var(--cv-color-surface-glass-subtle)`  | Direct `role="listitem"` rows  |
+| `--cv-task-list-row-background-hover`   | `var(--cv-color-surface-glass)`         | Row hover background           |
+| `--cv-task-list-row-color`              | `var(--cv-color-text)`                  | Row foreground color           |
+| `--cv-task-list-row-border-color`       | `var(--cv-color-border-muted)`          | Row border color               |
+| `--cv-task-list-row-border-color-hover` | `var(--cv-color-border-strong)`         | Row hover border color         |
+| `--cv-task-list-shadow`                 | `var(--cv-shadow-sm)`                   | Root panel shadow              |
+| `--cv-task-list-empty-min-block-size`   | `96px`                                  | Minimum empty-state block size |
 
 ## Visual States
 

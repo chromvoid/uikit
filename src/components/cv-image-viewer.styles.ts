@@ -3,15 +3,15 @@ import {css} from 'lit'
 export const cvImageViewerStyles = css`
   :host {
     display: contents;
-    --cv-image-viewer-bg: var(--cv-alpha-black-95);
-    --cv-image-viewer-panel: var(--cv-color-surface-glass);
-    --cv-image-viewer-panel-strong: var(--cv-color-surface-glass-strong);
-    --cv-image-viewer-border: var(--cv-color-border-glass);
-    --cv-image-viewer-text: var(--cv-color-text-strongest);
-    --cv-image-viewer-muted: var(--cv-color-text-muted);
-    --cv-image-viewer-backdrop: var(--cv-color-background, #070b12);
-    --cv-image-viewer-image-transition-duration: var(--cv-duration-normal, 250ms);
-    --cv-image-viewer-image-transition-easing: var(--cv-easing-decelerate, cubic-bezier(0, 0, 0.2, 1));
+    --_cv-image-viewer-background: var(--cv-alpha-black-95);
+    --_cv-image-viewer-panel: var(--cv-color-surface-glass);
+    --_cv-image-viewer-panel-strong: var(--cv-color-surface-glass-strong);
+    --_cv-image-viewer-border: var(--cv-color-border-glass);
+    --_cv-image-viewer-text: var(--cv-color-text-strongest);
+    --_cv-image-viewer-muted: var(--cv-color-text-muted);
+    --_cv-image-viewer-backdrop: var(--cv-color-background, #070b12);
+    --_cv-image-viewer-image-transition-duration: var(--cv-duration-normal, 250ms);
+    --_cv-image-viewer-image-transition-easing: var(--cv-easing-decelerate, cubic-bezier(0, 0, 0.2, 1));
   }
 
   cv-dialog {
@@ -54,8 +54,9 @@ export const cvImageViewerStyles = css`
     overflow: hidden;
     background:
       linear-gradient(180deg, var(--cv-color-primary-surface) 0%, transparent 34%),
-      linear-gradient(var(--cv-image-viewer-bg), var(--cv-image-viewer-bg)), var(--cv-image-viewer-backdrop);
-    color: var(--cv-image-viewer-text);
+      linear-gradient(var(--_cv-image-viewer-background), var(--_cv-image-viewer-background)),
+      var(--_cv-image-viewer-backdrop);
+    color: var(--_cv-image-viewer-text);
   }
 
   [part='header'],
@@ -63,8 +64,8 @@ export const cvImageViewerStyles = css`
     position: relative;
     z-index: 4;
     min-inline-size: 0;
-    border-color: var(--cv-image-viewer-border);
-    background: var(--cv-image-viewer-panel);
+    border-color: var(--_cv-image-viewer-border);
+    background: var(--_cv-image-viewer-panel);
     backdrop-filter: blur(18px);
     -webkit-backdrop-filter: blur(18px);
     transition:
@@ -77,10 +78,13 @@ export const cvImageViewerStyles = css`
     grid-template-columns: minmax(0, 1fr) auto;
     align-items: center;
     gap: var(--cv-space-3, 12px);
-    padding: max(var(--cv-space-3, 12px), var(--safe-area-top, env(safe-area-inset-top, 0px)))
+    padding: max(
+        var(--cv-space-3, 12px),
+        var(--cv-image-viewer-safe-area-block-start, env(safe-area-inset-top, 0px))
+      )
       max(var(--cv-space-4, 16px), env(safe-area-inset-right, 0px)) var(--cv-space-3, 12px)
       max(var(--cv-space-4, 16px), env(safe-area-inset-left, 0px));
-    border-block-end: 1px solid var(--cv-image-viewer-border);
+    border-block-end: 1px solid var(--_cv-image-viewer-border);
   }
 
   [part='title-group'] {
@@ -92,7 +96,7 @@ export const cvImageViewerStyles = css`
   [part='title'] {
     min-inline-size: 0;
     overflow: hidden;
-    color: var(--cv-image-viewer-text);
+    color: var(--_cv-image-viewer-text);
     font-size: var(--cv-image-viewer-title-font-size, var(--cv-font-size-lg, 18px));
     font-weight: var(--cv-font-weight-semibold, 600);
     line-height: 1.2;
@@ -106,7 +110,7 @@ export const cvImageViewerStyles = css`
     align-items: center;
     gap: var(--cv-space-2, 8px);
     min-inline-size: 0;
-    color: var(--cv-image-viewer-muted);
+    color: var(--_cv-image-viewer-muted);
     font-size: var(--cv-font-size-sm, 13px);
   }
 
@@ -134,7 +138,7 @@ export const cvImageViewerStyles = css`
     min-block-size: 0;
     display: grid;
     place-items: center;
-    padding: var(--cv-image-viewer-viewport-padding, var(--cv-space-6, 24px));
+    padding: var(--_cv-image-viewer-viewport-padding, var(--cv-space-6, 24px));
     touch-action: pinch-zoom pan-x pan-y;
   }
 
@@ -171,24 +175,24 @@ export const cvImageViewerStyles = css`
   }
 
   [part='image-stage'][data-transition-direction='forward'] [part='image'][data-transition-phase='current'] {
-    animation: cv-image-viewer-current-forward var(--cv-image-viewer-image-transition-duration)
-      var(--cv-image-viewer-image-transition-easing) both;
+    animation: cv-image-viewer-current-forward var(--_cv-image-viewer-image-transition-duration)
+      var(--_cv-image-viewer-image-transition-easing) both;
   }
 
   [part='image-stage'][data-transition-direction='forward'] [part='image'][data-transition-phase='outgoing'] {
-    animation: cv-image-viewer-outgoing-forward var(--cv-image-viewer-image-transition-duration)
-      var(--cv-image-viewer-image-transition-easing) both;
+    animation: cv-image-viewer-outgoing-forward var(--_cv-image-viewer-image-transition-duration)
+      var(--_cv-image-viewer-image-transition-easing) both;
   }
 
   [part='image-stage'][data-transition-direction='backward'] [part='image'][data-transition-phase='current'] {
-    animation: cv-image-viewer-current-backward var(--cv-image-viewer-image-transition-duration)
-      var(--cv-image-viewer-image-transition-easing) both;
+    animation: cv-image-viewer-current-backward var(--_cv-image-viewer-image-transition-duration)
+      var(--_cv-image-viewer-image-transition-easing) both;
   }
 
   [part='image-stage'][data-transition-direction='backward']
     [part='image'][data-transition-phase='outgoing'] {
-    animation: cv-image-viewer-outgoing-backward var(--cv-image-viewer-image-transition-duration)
-      var(--cv-image-viewer-image-transition-easing) both;
+    animation: cv-image-viewer-outgoing-backward var(--_cv-image-viewer-image-transition-duration)
+      var(--_cv-image-viewer-image-transition-easing) both;
   }
 
   @keyframes cv-image-viewer-current-forward {
@@ -245,7 +249,7 @@ export const cvImageViewerStyles = css`
     justify-items: center;
     gap: var(--cv-space-3, 12px);
     padding: var(--cv-space-4, 16px);
-    color: var(--cv-image-viewer-muted);
+    color: var(--_cv-image-viewer-muted);
     font-size: var(--cv-font-size-sm, 13px);
     line-height: 1.45;
     text-align: center;
@@ -280,7 +284,7 @@ export const cvImageViewerStyles = css`
     --cv-button-border-color: var(--cv-alpha-white-20);
     --cv-button-background: var(--cv-alpha-white-10);
     --cv-button-background-hover: var(--cv-alpha-white-15);
-    --cv-button-text-color: var(--cv-image-viewer-text);
+    --cv-button-text-color: var(--_cv-image-viewer-text);
     inline-size: 40px;
     block-size: 40px;
   }
@@ -307,7 +311,7 @@ export const cvImageViewerStyles = css`
     --cv-menu-button-menu-z-index: 70;
     inline-size: 40px;
     block-size: 40px;
-    color: var(--cv-image-viewer-text);
+    color: var(--_cv-image-viewer-text);
   }
 
   cv-menu-button.viewer-menu-button::part(trigger) {
@@ -343,9 +347,9 @@ export const cvImageViewerStyles = css`
     padding: var(--cv-space-3, 12px) var(--cv-space-4, 16px);
     border: 1px solid var(--cv-alpha-white-15);
     border-radius: var(--cv-radius-md, 8px);
-    background: var(--cv-image-viewer-panel-strong);
+    background: var(--_cv-image-viewer-panel-strong);
     box-shadow: 0 18px 48px var(--cv-alpha-black-35);
-    color: var(--cv-image-viewer-text);
+    color: var(--_cv-image-viewer-text);
     font-size: var(--cv-font-size-sm, 13px);
     font-weight: var(--cv-font-weight-semibold, 600);
   }
@@ -356,7 +360,7 @@ export const cvImageViewerStyles = css`
     padding: var(--cv-space-3, 12px) max(var(--cv-space-4, 16px), env(safe-area-inset-right, 0px))
       max(var(--cv-space-3, 12px), env(safe-area-inset-bottom, 0px))
       max(var(--cv-space-4, 16px), env(safe-area-inset-left, 0px));
-    border-block-start: 1px solid var(--cv-image-viewer-border);
+    border-block-start: 1px solid var(--_cv-image-viewer-border);
   }
 
   [part='thumbnails'] {
@@ -371,7 +375,7 @@ export const cvImageViewerStyles = css`
   [part='thumbnail-window-spacer'] {
     flex: 0 0 auto;
     min-inline-size: var(--cv-space-2, 8px);
-    color: var(--cv-image-viewer-muted);
+    color: var(--_cv-image-viewer-muted);
     font-size: var(--cv-font-size-xs, 12px);
   }
 
@@ -385,7 +389,7 @@ export const cvImageViewerStyles = css`
     border: 1px solid var(--cv-alpha-white-15);
     border-radius: var(--cv-radius-sm, 6px);
     background: var(--cv-alpha-white-8);
-    color: var(--cv-image-viewer-muted);
+    color: var(--_cv-image-viewer-muted);
     cursor: pointer;
     overflow: hidden;
   }
@@ -438,7 +442,7 @@ export const cvImageViewerStyles = css`
   }
 
   :host([layout='mobile']) [part='base'] {
-    --cv-image-viewer-viewport-padding: 0;
+    --_cv-image-viewer-viewport-padding: 0;
   }
 
   :host([layout='mobile']) [part='header'] {
@@ -468,7 +472,7 @@ export const cvImageViewerStyles = css`
 
   @media (max-width: 720px) {
     :host([layout='auto']) [part='base'] {
-      --cv-image-viewer-viewport-padding: 0;
+      --_cv-image-viewer-viewport-padding: 0;
     }
 
     :host([layout='auto']) [part='title'] {

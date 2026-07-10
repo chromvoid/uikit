@@ -69,26 +69,24 @@ describe('cv-bottom-sheet', () => {
   it('reserves visual viewport keyboard space through the public sheet-level clearance hook', () => {
     const cssText = stylesToText(CVBottomSheet.styles)
 
-    expect(cssText).toContain('--cv-bottom-sheet-overlay-block-end: calc(')
-    expect(cssText).toContain('--safe-area-top')
+    expect(cssText).toContain('--_cv-bottom-sheet-overlay-block-end: calc(')
     expect(cssText).toMatch(
-      /--cv-bottom-sheet-overlay-block-start:\s*max\(\s*var\(\s*--cv-bottom-sheet-safe-top,\s*16px\),\s*var\(--safe-area-top,\s*env\(safe-area-inset-top,\s*0px\)\),\s*env\(safe-area-inset-top,\s*0px\)\s*\);/,
+      /--_cv-bottom-sheet-overlay-block-start:\s*max\(\s*var\(\s*--cv-bottom-sheet-safe-top,\s*16px\),\s*env\(safe-area-inset-top,\s*0px\)\s*\);/,
     )
-    expect(cssText).toContain('--safe-area-bottom-active')
     expect(cssText).toContain('--cv-bottom-sheet-keyboard-inset')
-    expect(cssText).toContain('--cv-bottom-sheet-safe-bottom-inset')
-    expect(cssText).toContain('--cv-bottom-sheet-keyboard-bottom-inset')
-    expect(cssText).toContain('--cv-bottom-sheet-visible-viewport-block-size')
-    expect(cssText).toContain('var(--visual-viewport-block-size, 100dvh)')
+    expect(cssText).toContain('--_cv-bottom-sheet-safe-bottom-inset')
+    expect(cssText).toContain('--_cv-bottom-sheet-keyboard-bottom-inset')
+    expect(cssText).toContain('--_cv-bottom-sheet-visible-viewport-block-size')
+    expect(cssText).toContain('var(--cv-bottom-sheet-viewport-block-size, 100dvh)')
     expect(cssText).toMatch(
-      /--cv-bottom-sheet-keyboard-bottom-inset:\s*var\(\s*--cv-bottom-sheet-keyboard-inset,\s*var\(--visual-viewport-bottom-inset,\s*0px\)\s*\);/,
+      /--_cv-bottom-sheet-keyboard-bottom-inset:\s*var\(\s*--cv-bottom-sheet-keyboard-inset,\s*0px\s*\);/,
     )
     expect(cssText).toContain(
-      'var(--cv-bottom-sheet-safe-bottom-inset) + var(--cv-bottom-sheet-keyboard-bottom-inset)',
+      'var(--_cv-bottom-sheet-safe-bottom-inset) + var(--_cv-bottom-sheet-keyboard-bottom-inset)',
     )
-    expect(cssText).toContain('var(--cv-bottom-sheet-visible-viewport-block-size)')
-    expect(cssText).toContain('transform: translateY(calc(0px - var(--cv-bottom-sheet-overlay-block-end)));')
-    expect(cssText).toContain('var(--cv-bottom-sheet-safe-bottom-inset)')
+    expect(cssText).toContain('var(--_cv-bottom-sheet-visible-viewport-block-size)')
+    expect(cssText).toContain('transform: translateY(calc(0px - var(--_cv-bottom-sheet-overlay-block-end)));')
+    expect(cssText).toContain('var(--_cv-bottom-sheet-safe-bottom-inset)')
   })
 
   it('keeps the sheet footer in a reserved grid row while the body scrolls', () => {
@@ -106,9 +104,9 @@ describe('cv-bottom-sheet', () => {
     const cssText = stylesToText(CVBottomSheet.styles)
 
     expect(cssText).toContain('cv-dialog.has-detents::part(content)')
-    expect(cssText).toContain('--cv-bottom-sheet-detent-max-height')
+    expect(cssText).toContain('--_cv-bottom-sheet-detent-max-block-size')
     expect(cssText).toContain('--cv-bottom-sheet-detent-visible-height')
-    expect(cssText).toContain('--cv-bottom-sheet-detent-offset')
+    expect(cssText).toContain('--_cv-bottom-sheet-detent-offset')
     expect(cssText).toContain('--cv-bottom-sheet-collapsed-height')
     expect(cssText).toContain('--cv-bottom-sheet-middle-height')
     expect(cssText).toContain('--cv-bottom-sheet-expanded-height')
@@ -117,8 +115,8 @@ describe('cv-bottom-sheet', () => {
       /cv-dialog\.has-detents::part\(content\)\s*{[\s\S]*block-size:\s*var\(--cv-bottom-sheet-detent-visible-height\)/,
     )
     expect(cssText).toMatch(/cv-dialog\.has-detents::part\(body\)\s*{[\s\S]*max-block-size:\s*none;/)
-    expect(cssText).toMatch(/cv-dialog\.detent-collapsed\s*{[\s\S]*--cv-bottom-sheet-detent-offset:\s*0px;/)
-    expect(cssText).toMatch(/cv-dialog\.detent-middle\s*{[\s\S]*--cv-bottom-sheet-detent-offset:\s*0px;/)
+    expect(cssText).toMatch(/cv-dialog\.detent-collapsed\s*{[\s\S]*--_cv-bottom-sheet-detent-offset:\s*0px;/)
+    expect(cssText).toMatch(/cv-dialog\.detent-middle\s*{[\s\S]*--_cv-bottom-sheet-detent-offset:\s*0px;/)
   })
 
   it('keeps header, body, and footer readable inside the active detent', () => {
@@ -160,9 +158,9 @@ describe('cv-bottom-sheet', () => {
     expect(cssText).toContain(
       '--cv-dialog-transition-duration: var(--cv-bottom-sheet-dismiss-duration, 180ms);',
     )
-    expect(cssText).toContain('calc(100% + var(--cv-bottom-sheet-overlay-block-end) + 32px)')
+    expect(cssText).toContain('calc(100% + var(--_cv-bottom-sheet-overlay-block-end) + 32px)')
     expect(cssText).toContain(
-      '--cv-dialog-content-open-transform: translateY(var(--cv-bottom-sheet-drag-offset, 0px));',
+      '--cv-dialog-content-open-transform: translateY(var(--_cv-bottom-sheet-drag-offset, 0px));',
     )
     expect(cssText).not.toContain('scale(')
   })
@@ -171,7 +169,7 @@ describe('cv-bottom-sheet', () => {
     const cssText = stylesToText(CVBottomSheet.styles)
 
     expect(cssText).toMatch(
-      /cv-dialog\.has-detents\s*{[\s\S]*--cv-dialog-content-open-transform:\s*translateY\(\s*calc\(var\(--cv-bottom-sheet-detent-offset,\s*0px\) \+ var\(--cv-bottom-sheet-drag-offset,\s*0px\)\)\s*\);/,
+      /cv-dialog\.has-detents\s*{[\s\S]*--cv-dialog-content-open-transform:\s*translateY\(\s*calc\(var\(--_cv-bottom-sheet-detent-offset,\s*0px\) \+ var\(--_cv-bottom-sheet-drag-offset,\s*0px\)\)\s*\);/,
     )
     expect(cssText).not.toContain('is-dismissing')
   })
@@ -318,22 +316,22 @@ describe('cv-bottom-sheet', () => {
     handle.dispatchEvent(createPointerEvent('pointerdown', {clientY: 0}))
     handle.dispatchEvent(createPointerEvent('pointermove', {clientY: 120}))
 
-    expect(dialog.style.getPropertyValue('--cv-bottom-sheet-drag-offset')).toBe('120px')
+    expect(dialog.style.getPropertyValue('--_cv-bottom-sheet-drag-offset')).toBe('120px')
 
     handle.dispatchEvent(createPointerEvent('pointerup', {clientY: 120}))
 
     expect(dialog.classList.contains('is-dragging')).toBe(false)
     expect(dialog.classList.contains('is-dismissing')).toBe(false)
-    expect(dialog.style.getPropertyValue('--cv-bottom-sheet-drag-offset')).toBe('120px')
+    expect(dialog.style.getPropertyValue('--_cv-bottom-sheet-drag-offset')).toBe('120px')
     expect(el.open).toBe(false)
     expect(changes).toEqual([{open: false}])
     await settle(el)
 
-    expect(dialog.style.getPropertyValue('--cv-bottom-sheet-drag-offset')).toBe('120px')
+    expect(dialog.style.getPropertyValue('--_cv-bottom-sheet-drag-offset')).toBe('120px')
     vi.advanceTimersByTime(120)
     await settle(el)
 
-    expect(dialog.style.getPropertyValue('--cv-bottom-sheet-drag-offset')).toBe('')
+    expect(dialog.style.getPropertyValue('--_cv-bottom-sheet-drag-offset')).toBe('')
     expect(changes).toEqual([{open: false}])
   })
 
@@ -353,7 +351,7 @@ describe('cv-bottom-sheet', () => {
     expect(el.open).toBe(true)
     expect(changes).toEqual([])
     expect(dialog.classList.contains('is-dismissing')).toBe(false)
-    expect(dialog.style.getPropertyValue('--cv-bottom-sheet-drag-offset')).toBe('')
+    expect(dialog.style.getPropertyValue('--_cv-bottom-sheet-drag-offset')).toBe('')
   })
 
   it('does not drag or close when drag-to-close is false', async () => {
@@ -370,7 +368,7 @@ describe('cv-bottom-sheet', () => {
 
     expect(el.open).toBe(true)
     expect(changes).toEqual([])
-    expect(dialog.style.getPropertyValue('--cv-bottom-sheet-drag-offset')).toBe('')
+    expect(dialog.style.getPropertyValue('--_cv-bottom-sheet-drag-offset')).toBe('')
   })
 
   it('ignores slotted cv-change events that do not carry dialog open state', async () => {
@@ -451,7 +449,7 @@ describe('cv-bottom-sheet', () => {
 
     handle.dispatchEvent(createPointerEvent('pointerdown', {clientY: 200}))
     handle.dispatchEvent(createPointerEvent('pointermove', {clientY: 120}))
-    expect(dialog.style.getPropertyValue('--cv-bottom-sheet-drag-offset')).toBe('-80px')
+    expect(dialog.style.getPropertyValue('--_cv-bottom-sheet-drag-offset')).toBe('-80px')
     handle.dispatchEvent(createPointerEvent('pointerup', {clientY: 120}))
     await settle(el)
 
@@ -472,7 +470,7 @@ describe('cv-bottom-sheet', () => {
 
     expect(dialog.classList.contains('is-dragging')).toBe(false)
     expect(dialog.classList.contains('is-dismissing')).toBe(false)
-    expect(dialog.style.getPropertyValue('--cv-bottom-sheet-drag-offset')).toBe('100px')
+    expect(dialog.style.getPropertyValue('--_cv-bottom-sheet-drag-offset')).toBe('100px')
     expect(el.open).toBe(false)
     await settle(el)
     expect(changes).toEqual([
@@ -496,7 +494,7 @@ describe('cv-bottom-sheet', () => {
     handle.dispatchEvent(createPointerEvent('pointerdown', {clientY: 200}))
     handle.dispatchEvent(createPointerEvent('pointermove', {clientY: 80}))
 
-    expect(dialog.style.getPropertyValue('--cv-bottom-sheet-drag-offset')).toBe('0px')
+    expect(dialog.style.getPropertyValue('--_cv-bottom-sheet-drag-offset')).toBe('0px')
 
     handle.dispatchEvent(createPointerEvent('pointerup', {clientY: 80}))
     await settle(el)
@@ -504,7 +502,7 @@ describe('cv-bottom-sheet', () => {
     expect(el.open).toBe(true)
     expect(el.detent).toBe('expanded')
     expect(changes).toEqual([])
-    expect(dialog.style.getPropertyValue('--cv-bottom-sheet-drag-offset')).toBe('')
+    expect(dialog.style.getPropertyValue('--_cv-bottom-sheet-drag-offset')).toBe('')
   })
 
   it('filters invalid detent tokens and falls back to the lowest enabled detent', async () => {
@@ -540,7 +538,7 @@ describe('cv-bottom-sheet', () => {
 
     expect(el.open).toBe(true)
     expect(changes).toEqual([])
-    expect(dialog.style.getPropertyValue('--cv-bottom-sheet-drag-offset')).toBe('')
+    expect(dialog.style.getPropertyValue('--_cv-bottom-sheet-drag-offset')).toBe('')
   })
 
   it('ignores handle drags while the sheet is closed', async () => {
@@ -552,7 +550,7 @@ describe('cv-bottom-sheet', () => {
     handle.dispatchEvent(createPointerEvent('pointermove', {clientY: 200}))
 
     expect(dialog.classList.contains('is-dragging')).toBe(false)
-    expect(dialog.style.getPropertyValue('--cv-bottom-sheet-drag-offset')).toBe('')
+    expect(dialog.style.getPropertyValue('--_cv-bottom-sheet-drag-offset')).toBe('')
   })
 
   it('ignores pointer moves from a different pointer than the active drag', async () => {
@@ -563,7 +561,7 @@ describe('cv-bottom-sheet', () => {
     handle.dispatchEvent(createPointerEvent('pointerdown', {clientY: 0, pointerId: 1}))
     handle.dispatchEvent(createPointerEvent('pointermove', {clientY: 150, pointerId: 2}))
 
-    expect(dialog.style.getPropertyValue('--cv-bottom-sheet-drag-offset')).toBe('0px')
+    expect(dialog.style.getPropertyValue('--_cv-bottom-sheet-drag-offset')).toBe('0px')
 
     handle.dispatchEvent(createPointerEvent('pointerup', {clientY: 0, pointerId: 1}))
   })
@@ -578,7 +576,7 @@ describe('cv-bottom-sheet', () => {
     handle.dispatchEvent(createPointerEvent('pointerdown', {clientY: 100}))
     handle.dispatchEvent(createPointerEvent('pointermove', {clientY: 40}))
 
-    expect(dialog.style.getPropertyValue('--cv-bottom-sheet-drag-offset')).toBe('0px')
+    expect(dialog.style.getPropertyValue('--_cv-bottom-sheet-drag-offset')).toBe('0px')
 
     handle.dispatchEvent(createPointerEvent('pointerup', {clientY: 40}))
 
@@ -617,7 +615,7 @@ describe('cv-bottom-sheet', () => {
     expect(el.open).toBe(true)
     expect(changes).toEqual([])
     expect(dialog.classList.contains('is-dragging')).toBe(false)
-    expect(dialog.style.getPropertyValue('--cv-bottom-sheet-drag-offset')).toBe('')
+    expect(dialog.style.getPropertyValue('--_cv-bottom-sheet-drag-offset')).toBe('')
   })
 
   it('does not advance past the top detent on handle click', async () => {

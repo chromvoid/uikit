@@ -366,26 +366,27 @@ The underlying dialog exports `trigger`, `overlay`, `content`, `header`, `title`
 
 ## CSS Custom Properties
 
-| Property                             | Default                           | Description                      |
-| ------------------------------------ | --------------------------------- | -------------------------------- |
-| `--cv-bottom-sheet-z-index`          | `40`                              | Overlay stack level              |
-| `--cv-bottom-sheet-width`            | `100%`                            | Sheet inline size                |
-| `--cv-bottom-sheet-max-width`        | `100%`                            | Sheet maximum inline size        |
-| `--cv-bottom-sheet-max-height`       | `min(82dvh, calc(100dvh - 32px))` | Sheet maximum block size         |
-| `--cv-bottom-sheet-safe-top`         | `16px`                            | Top viewport clearance           |
-| `--cv-bottom-sheet-safe-bottom`      | app safe-area bottom token        | Bottom viewport clearance        |
-| `--cv-bottom-sheet-collapsed-height` | `148px`                           | Collapsed detent height          |
-| `--cv-bottom-sheet-middle-height`    | `min(52dvh, 440px)`               | Middle detent height             |
-| `--cv-bottom-sheet-expanded-height`  | `min(92dvh, calc(100dvh - 32px))` | Expanded detent height           |
-| `--cv-bottom-sheet-overlay-color`    | `var(--cv-color-overlay)`         | Backdrop color                   |
-| `--cv-bottom-sheet-border-radius`    | top corners rounded               | Sheet corner radius              |
-| `--cv-bottom-sheet-grabber-color`    | `var(--cv-color-border-strong)`   | Grabber color                    |
-| `--cv-bottom-sheet-dismiss-duration` | `180ms`                           | Drag dismiss transition duration |
+| Property                                  | Default                           | Description                                       |
+| ----------------------------------------- | --------------------------------- | ------------------------------------------------- |
+| `--cv-bottom-sheet-z-index`               | `40`                              | Overlay stack level                               |
+| `--cv-bottom-sheet-width`                 | `100%`                            | Sheet inline size                                 |
+| `--cv-bottom-sheet-max-width`             | `100%`                            | Sheet maximum inline size                         |
+| `--cv-bottom-sheet-max-height`            | `min(82dvh, calc(100dvh - 32px))` | Sheet maximum block size                          |
+| `--cv-bottom-sheet-safe-top`              | `16px`                            | Top viewport clearance                            |
+| `--cv-bottom-sheet-safe-bottom`           | `env(safe-area-inset-bottom)`     | Bottom viewport clearance                         |
+| `--cv-bottom-sheet-keyboard-inset`        | `0px`                             | Software keyboard clearance                       |
+| `--cv-bottom-sheet-viewport-block-size`   | `100dvh`                          | Visible viewport block size                       |
+| `--cv-bottom-sheet-collapsed-height`      | `148px`                           | Collapsed detent height                           |
+| `--cv-bottom-sheet-middle-height`         | `min(52dvh, 440px)`               | Middle detent height                              |
+| `--cv-bottom-sheet-expanded-height`       | `min(92dvh, calc(100dvh - 32px))` | Expanded detent height                            |
+| `--cv-bottom-sheet-detent-visible-height` | computed active detent height     | Visible sheet block size when detents are enabled |
+| `--cv-bottom-sheet-overlay-color`         | `var(--cv-color-overlay)`         | Backdrop color                                    |
+| `--cv-bottom-sheet-border-radius`         | top corners rounded               | Sheet corner radius                               |
+| `--cv-bottom-sheet-grabber-color`         | `var(--cv-color-border-strong)`   | Grabber color                                     |
+| `--cv-bottom-sheet-dismiss-duration`      | `180ms`                           | Drag dismiss transition duration                  |
 
-When available, the app-level `--safe-area-top` and `--visual-viewport-block-size` tokens supply
-the top clearance and visible viewport height used for sheet sizing while software keyboards are
-open. Keyboard clearance still flows through `--cv-bottom-sheet-keyboard-inset` /
-`--visual-viewport-bottom-inset`.
+Applications can map their runtime environment values into the documented safe-area, keyboard,
+and viewport properties. Standalone usage falls back to native `env()` insets and `100dvh`.
 
 `cv-bottom-sheet` composes with `cv-dialog` presence state by overriding dialog content motion variables. The sheet uses bottom-up `translateY(...)` transforms for open, close, drag, detent, and dismiss states instead of the centered dialog scale transform.
 

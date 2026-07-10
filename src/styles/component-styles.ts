@@ -73,35 +73,38 @@ export const componentResetStyles = css`
   }
 `
 
-export const popupListboxSizingStyles = css`
-  [data-cv-popup-listbox] {
-    max-block-size: var(--cv-popup-listbox-max-block-size, 240px);
-    max-block-size: min(
-      var(--cv-popup-listbox-max-block-size, 240px),
-      max(0px, calc(100dvh - var(--cv-popup-listbox-viewport-block-gutter, 32px)))
-    );
-    overflow: auto;
-    overscroll-behavior: contain;
-  }
+interface PopupListboxSizingProperties {
+  maxBlockSize: CSSResultOrNative
+  minFitBlockSize: CSSResultOrNative
+  viewportBlockGutter: CSSResultOrNative
+}
 
-  @supports (min-block-size: calc-size(fit-content, min(size, 1px))) {
+export function getPopupListboxSizingStyles({
+  maxBlockSize,
+  minFitBlockSize,
+  viewportBlockGutter,
+}: PopupListboxSizingProperties): CSSResultOrNative {
+  return css`
     [data-cv-popup-listbox] {
-      min-block-size: calc-size(fit-content, min(size, var(--cv-popup-listbox-min-fit-block-size, 0px)));
+      max-block-size: ${maxBlockSize};
+      max-block-size: min(${maxBlockSize}, max(0px, calc(100dvh - ${viewportBlockGutter})));
+      overflow: auto;
+      overscroll-behavior: contain;
     }
-  }
 
-  @supports (max-block-size: calc-size(stretch, min(size, 1px))) {
-    [data-cv-popup-listbox][data-cv-anchor-positioned='true'] {
-      max-block-size: calc-size(
-        stretch,
-        min(
-          max(0px, size - var(--cv-popup-listbox-viewport-block-gutter, 32px)),
-          var(--cv-popup-listbox-max-block-size, 240px)
-        )
-      );
+    @supports (min-block-size: calc-size(fit-content, min(size, 1px))) {
+      [data-cv-popup-listbox] {
+        min-block-size: calc-size(fit-content, min(size, ${minFitBlockSize}));
+      }
     }
-  }
-`
+
+    @supports (max-block-size: calc-size(stretch, min(size, 1px))) {
+      [data-cv-popup-listbox][data-cv-anchor-positioned='true'] {
+        max-block-size: calc-size(stretch, min(max(0px, size - ${viewportBlockGutter}), ${maxBlockSize}));
+      }
+    }
+  `
+}
 
 const hostDisplayStyles = new Map<ComponentHostDisplay, CSSResultOrNative>()
 

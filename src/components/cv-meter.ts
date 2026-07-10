@@ -58,17 +58,17 @@ export class CVMeter extends ReatomLitElement {
     css`
       :host {
         display: block;
-        --cv-meter-effective-height: var(--cv-meter-height, 10px);
+        --_cv-meter-effective-block-size: var(--cv-meter-height, 10px);
       }
 
       :host(:not(:empty)) {
-        --cv-meter-effective-height: var(--cv-meter-height, var(--cv-meter-labeled-height, 18px));
+        --_cv-meter-effective-block-size: var(--cv-meter-height, var(--cv-meter-labeled-height, 18px));
       }
 
       [part='base'] {
         position: relative;
         inline-size: 100%;
-        block-size: var(--cv-meter-effective-height);
+        block-size: var(--_cv-meter-effective-block-size);
         border-radius: var(--cv-meter-border-radius, 999px);
         border: 1px solid var(--cv-color-border, #2a3245);
         background: var(--cv-color-surface, #141923);
@@ -99,7 +99,7 @@ export class CVMeter extends ReatomLitElement {
         color: var(--cv-meter-label-color, var(--cv-color-text, #e8ecf6));
         font-size: var(
           --cv-meter-label-font-size,
-          min(var(--cv-font-size-xs, 0.75rem), max(0px, calc(var(--cv-meter-effective-height) - 3px)))
+          min(var(--cv-font-size-xs, 0.75rem), max(0px, calc(var(--_cv-meter-effective-block-size) - 3px)))
         );
         line-height: 1;
         text-overflow: ellipsis;

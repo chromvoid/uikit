@@ -28,7 +28,7 @@ export class CVThemePaletteSwatch extends LitElement {
         block-size: 28px;
         border: 1px solid var(--cv-color-border);
         border-radius: var(--cv-radius-sm);
-        background: var(--cv-theme-palette-swatch-color, var(--cv-color-surface-2));
+        background: var(--_cv-theme-palette-swatch-color, var(--cv-color-surface-2));
       }
     `,
   ]
@@ -43,9 +43,9 @@ export class CVThemePaletteSwatch extends LitElement {
     super.updated(changedProperties)
     if (changedProperties.has('color')) {
       if (this.color) {
-        this.style.setProperty('--cv-theme-palette-swatch-color', this.color)
+        this.style.setProperty('--_cv-theme-palette-swatch-color', this.color)
       } else {
-        this.style.removeProperty('--cv-theme-palette-swatch-color')
+        this.style.removeProperty('--_cv-theme-palette-swatch-color')
       }
     }
     if (changedProperties.has('label')) {

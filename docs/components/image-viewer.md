@@ -310,6 +310,12 @@ type CVImageViewerThumbnailWindow = {
 | `thumbnail-window-spacer` | Virtual-window before/after count marker |
 | `thumbnail-placeholder`   | Thumbnail fallback label                 |
 
+## CSS Custom Properties
+
+| Property                                  | Default                    | Description          |
+| ----------------------------------------- | -------------------------- | -------------------- |
+| `--cv-image-viewer-safe-area-block-start` | `env(safe-area-inset-top)` | Header top clearance |
+
 ## Events
 
 | Event                  | Detail                                                           | Description                              |

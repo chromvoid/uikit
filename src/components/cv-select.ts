@@ -5,7 +5,7 @@ import type {PropertyValues} from 'lit'
 
 import {FormAssociatedReatomElement} from '../form-associated/FormAssociatedReatomElement'
 import type {FormAssociatedValidity} from '../form-associated/withFormAssociated'
-import {popupListboxSizingStyles} from '../styles/component-styles'
+import {getPopupListboxSizingStyles} from '../styles/component-styles'
 import {CVSelectGroup} from './cv-select-group'
 import {CVSelectOption} from './cv-select-option'
 
@@ -44,6 +44,12 @@ interface SelectSnapshot {
   activeId: string | null
   isOpen: boolean
 }
+
+const selectPopupListboxSizingStyles = getPopupListboxSizingStyles({
+  maxBlockSize: css`var(--cv-select-listbox-max-block-size, 240px)`,
+  minFitBlockSize: css`var(--cv-select-listbox-min-fit-block-size, 12rem)`,
+  viewportBlockGutter: css`var(--cv-select-listbox-viewport-block-gutter, 32px)`,
+})
 
 const selectKeysToPrevent = new Set([
   'ArrowUp',
@@ -151,7 +157,7 @@ export class CVSelect extends FormAssociatedReatomElement {
     css`
       :host {
         inline-size: var(--cv-select-inline-size, 260px);
-        --cv-select-border-color: var(--cv-color-border, #2a3245);
+        --_cv-select-border-color: var(--cv-color-border, #2a3245);
         --cv-select-border-radius: var(--cv-radius-sm, 6px);
         --cv-select-background: var(--cv-color-surface, #141923);
       }
@@ -174,7 +180,7 @@ export class CVSelect extends FormAssociatedReatomElement {
         min-block-size: var(--cv-select-min-height, 36px);
         padding: var(--cv-select-padding-block, var(--cv-space-2, 8px))
           var(--cv-select-padding-inline, var(--cv-space-3, 12px));
-        border: 1px solid var(--cv-select-border-color);
+        border: 1px solid var(--_cv-select-border-color);
         border-radius: var(--cv-select-border-radius);
         background: var(--cv-select-background);
         color: var(--cv-color-text, #e8ecf6);
@@ -242,9 +248,6 @@ export class CVSelect extends FormAssociatedReatomElement {
         inset-block-start: calc(100% + var(--cv-space-1, 4px));
         z-index: 20;
         min-inline-size: 100%;
-        --cv-popup-listbox-max-block-size: var(--cv-select-listbox-max-block-size, 240px);
-        --cv-popup-listbox-min-fit-block-size: var(--cv-select-listbox-min-fit-block-size, 12rem);
-        --cv-popup-listbox-viewport-block-gutter: var(--cv-select-listbox-viewport-block-gutter, 32px);
         gap: var(--cv-space-1, 4px);
         padding: var(--cv-space-1, 4px);
         background: var(--cv-color-surface-elevated, #1d2432);
@@ -277,7 +280,7 @@ export class CVSelect extends FormAssociatedReatomElement {
         }
       }
     `,
-    popupListboxSizingStyles,
+    selectPopupListboxSizingStyles,
   ]
 
   static define() {

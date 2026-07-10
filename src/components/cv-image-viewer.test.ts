@@ -95,11 +95,11 @@ afterEach(() => {
 
 describe('cv-image-viewer', () => {
   it('derives muted chrome text from the active text token', () => {
-    expect(cvImageViewerStyles.cssText).toContain('--cv-image-viewer-muted: var(--cv-color-text-muted);')
+    expect(cvImageViewerStyles.cssText).toContain('--_cv-image-viewer-muted: var(--cv-color-text-muted);')
     expect(cvImageViewerStyles.cssText).toContain(
-      '--cv-image-viewer-backdrop: var(--cv-color-background, #070b12);',
+      '--_cv-image-viewer-backdrop: var(--cv-color-background, #070b12);',
     )
-    expect(cvImageViewerStyles.cssText).toContain('var(--cv-image-viewer-backdrop);')
+    expect(cvImageViewerStyles.cssText).toContain('var(--_cv-image-viewer-backdrop);')
   })
 
   it('uses contain-fit sizing for the main image viewport', () => {
@@ -116,7 +116,7 @@ describe('cv-image-viewer', () => {
 
   it('uses directional image transitions that respect reduced motion', () => {
     expect(cvImageViewerStyles.cssText).toContain(
-      '--cv-image-viewer-image-transition-duration: var(--cv-duration-normal, 250ms);',
+      '--_cv-image-viewer-image-transition-duration: var(--cv-duration-normal, 250ms);',
     )
     expect(cvImageViewerStyles.cssText).toContain(
       "[part='image-stage'][data-transition-direction='forward'] [part='image'][data-transition-phase='current']",
@@ -147,7 +147,7 @@ describe('cv-image-viewer', () => {
       /\[part='thumbnail'\]\[aria-current='true'\]\s*\{[\s\S]*var\(--cv-color-primary-border-strong/,
     )
     expect(cvImageViewerStyles.cssText).not.toContain(
-      "[part='thumbnail'][aria-current='true'] {\n    border-color: var(--cv-image-viewer-text);",
+      "[part='thumbnail'][aria-current='true'] {\n    border-color: var(--_cv-image-viewer-text);",
     )
   })
 

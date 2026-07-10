@@ -52,14 +52,15 @@ A read-only indicator that communicates determinate or indeterminate loading/com
 
 ## CSS Custom Properties
 
-| Property                        | Default                            | Description                                                                            |
-| ------------------------------- | ---------------------------------- | -------------------------------------------------------------------------------------- |
-| `--cv-progress-height`          | `10px`                             | Block size (height) of the track                                                       |
-| `--cv-progress-labeled-height`  | `18px`                             | Default track height when label content is present and `--cv-progress-height` is unset |
-| `--cv-progress-track-color`     | `var(--cv-color-surface, #141923)` | Background color of the track                                                          |
-| `--cv-progress-indicator-color` | `var(--cv-color-primary, #65d7ff)` | Base color of the filled indicator                                                     |
-| `--cv-progress-label-color`     | `var(--cv-color-text, #e8ecf6)`    | Text color for the label slot content                                                  |
-| `--cv-progress-label-font-size` | Calculated from track height       | Font size for the label slot content                                                   |
+| Property                             | Default                            | Description                                                                            |
+| ------------------------------------ | ---------------------------------- | -------------------------------------------------------------------------------------- |
+| `--cv-progress-height`               | `10px`                             | Block size (height) of the track                                                       |
+| `--cv-progress-labeled-height`       | `18px`                             | Default track height when label content is present and `--cv-progress-height` is unset |
+| `--cv-progress-track-color`          | `var(--cv-color-surface, #141923)` | Background color of the track                                                          |
+| `--cv-progress-indicator-color`      | `var(--cv-color-primary, #65d7ff)` | Base color of the filled indicator                                                     |
+| `--cv-progress-indicator-background` | current tone color or gradient     | Filled indicator background                                                            |
+| `--cv-progress-label-color`          | `var(--cv-color-text, #e8ecf6)`    | Text color for the label slot content                                                  |
+| `--cv-progress-label-font-size`      | Calculated from track height       | Font size for the label slot content                                                   |
 
 - The visual label is hidden when the effective track height is below `14px`; progress value remains exposed through ARIA.
 

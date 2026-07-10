@@ -65,19 +65,19 @@ export class CVOperationQueue extends ReatomLitElement {
         --cv-operation-queue-border: 1px solid var(--cv-color-border, #2a3245);
         --cv-operation-queue-background: var(--cv-color-surface-2, #181f2b);
         --cv-operation-queue-shadow: var(--cv-shadow-sm, 0 2px 8px rgba(0, 0, 0, 0.24));
-        --cv-operation-queue-overflow: hidden;
-        --cv-operation-queue-header-gap: var(--cv-space-2, 8px);
+        --_cv-operation-queue-overflow: hidden;
+        --_cv-operation-queue-header-gap: var(--cv-space-2, 8px);
         --cv-operation-queue-body-gap: var(--cv-space-2, 8px);
-        --cv-operation-queue-footer-gap: var(--cv-space-2, 8px);
+        --_cv-operation-queue-footer-gap: var(--cv-space-2, 8px);
         --cv-operation-queue-row-background: color-mix(
           in oklab,
           var(--cv-operation-queue-background) 88%,
-          var(--cv-operation-queue-accent-color) 4%
+          var(--_cv-operation-queue-accent-color) 4%
         );
         --cv-operation-queue-empty-min-block-size: 96px;
-        --cv-operation-queue-accent-color: var(--cv-color-border-strong, #4c5870);
-        --cv-operation-queue-accent-border: var(--cv-color-border-strong, #4c5870);
-        --cv-operation-queue-accent-ring: transparent;
+        --_cv-operation-queue-accent-color: var(--cv-color-border-strong, #4c5870);
+        --_cv-operation-queue-accent-border: var(--cv-color-border-strong, #4c5870);
+        --_cv-operation-queue-accent-ring: transparent;
         --cv-operation-queue-busy-line-opacity: 0.86;
       }
 
@@ -89,27 +89,27 @@ export class CVOperationQueue extends ReatomLitElement {
 
       :host([tone='primary']),
       :host([tone='info']) {
-        --cv-operation-queue-accent-color: var(--cv-color-primary, #65d7ff);
-        --cv-operation-queue-accent-border: var(--cv-color-primary-border, rgba(101, 215, 255, 0.3));
-        --cv-operation-queue-accent-ring: var(--cv-color-primary-ring, rgba(101, 215, 255, 0.24));
+        --_cv-operation-queue-accent-color: var(--cv-color-primary, #65d7ff);
+        --_cv-operation-queue-accent-border: var(--cv-color-primary-border, rgba(101, 215, 255, 0.3));
+        --_cv-operation-queue-accent-ring: var(--cv-color-primary-ring, rgba(101, 215, 255, 0.24));
       }
 
       :host([tone='success']) {
-        --cv-operation-queue-accent-color: var(--cv-color-success, #5beba0);
-        --cv-operation-queue-accent-border: var(--cv-color-success-border, rgba(91, 235, 160, 0.3));
-        --cv-operation-queue-accent-ring: var(--cv-color-success-ring, rgba(91, 235, 160, 0.1));
+        --_cv-operation-queue-accent-color: var(--cv-color-success, #5beba0);
+        --_cv-operation-queue-accent-border: var(--cv-color-success-border, rgba(91, 235, 160, 0.3));
+        --_cv-operation-queue-accent-ring: var(--cv-color-success-ring, rgba(91, 235, 160, 0.1));
       }
 
       :host([tone='warning']) {
-        --cv-operation-queue-accent-color: var(--cv-color-warning, #ffd166);
-        --cv-operation-queue-accent-border: var(--cv-color-warning-border, rgba(255, 209, 102, 0.3));
-        --cv-operation-queue-accent-ring: var(--cv-color-warning-ring, rgba(255, 209, 102, 0.1));
+        --_cv-operation-queue-accent-color: var(--cv-color-warning, #ffd166);
+        --_cv-operation-queue-accent-border: var(--cv-color-warning-border, rgba(255, 209, 102, 0.3));
+        --_cv-operation-queue-accent-ring: var(--cv-color-warning-ring, rgba(255, 209, 102, 0.1));
       }
 
       :host([tone='danger']) {
-        --cv-operation-queue-accent-color: var(--cv-color-danger, #ff6b6b);
-        --cv-operation-queue-accent-border: var(--cv-color-danger-border, rgba(255, 107, 107, 0.3));
-        --cv-operation-queue-accent-ring: var(--cv-color-danger-ring, rgba(255, 107, 107, 0.1));
+        --_cv-operation-queue-accent-color: var(--cv-color-danger, #ff6b6b);
+        --_cv-operation-queue-accent-border: var(--cv-color-danger-border, rgba(255, 107, 107, 0.3));
+        --_cv-operation-queue-accent-ring: var(--cv-color-danger-ring, rgba(255, 107, 107, 0.1));
       }
 
       [part='base'] {
@@ -119,7 +119,7 @@ export class CVOperationQueue extends ReatomLitElement {
         box-sizing: border-box;
         min-inline-size: 0;
         padding: var(--cv-operation-queue-padding);
-        overflow: var(--cv-operation-queue-overflow);
+        overflow: var(--_cv-operation-queue-overflow);
         border: var(--cv-operation-queue-border);
         border-radius: var(--cv-operation-queue-radius);
         background: var(--cv-operation-queue-background);
@@ -135,16 +135,21 @@ export class CVOperationQueue extends ReatomLitElement {
         position: absolute;
         inset: 0 0 auto;
         block-size: 1px;
-        background: linear-gradient(90deg, transparent, var(--cv-operation-queue-accent-border), transparent);
+        background: linear-gradient(
+          90deg,
+          transparent,
+          var(--_cv-operation-queue-accent-border),
+          transparent
+        );
         opacity: 0.52;
         pointer-events: none;
       }
 
       :host([busy]) [part='base'] {
-        border-color: var(--cv-operation-queue-accent-border);
+        border-color: var(--_cv-operation-queue-accent-border);
         box-shadow:
           var(--cv-operation-queue-shadow),
-          0 0 0 1px var(--cv-operation-queue-accent-ring);
+          0 0 0 1px var(--_cv-operation-queue-accent-ring);
       }
 
       :host([busy]) [part='base']::after {
@@ -153,7 +158,7 @@ export class CVOperationQueue extends ReatomLitElement {
         inset: 0 auto auto 0;
         inline-size: 42%;
         block-size: 2px;
-        background: linear-gradient(90deg, transparent, var(--cv-operation-queue-accent-color), transparent);
+        background: linear-gradient(90deg, transparent, var(--_cv-operation-queue-accent-color), transparent);
         opacity: var(--cv-operation-queue-busy-line-opacity);
         animation: cv-operation-queue-busy-scan 1.24s linear infinite;
         pointer-events: none;
@@ -163,7 +168,7 @@ export class CVOperationQueue extends ReatomLitElement {
         display: grid;
         grid-template-columns: auto minmax(0, 1fr) auto;
         align-items: center;
-        gap: var(--cv-operation-queue-header-gap);
+        gap: var(--_cv-operation-queue-header-gap);
         min-inline-size: 0;
       }
 
@@ -212,7 +217,7 @@ export class CVOperationQueue extends ReatomLitElement {
 
       [part='footer'] {
         display: grid;
-        gap: var(--cv-operation-queue-footer-gap);
+        gap: var(--_cv-operation-queue-footer-gap);
         color: var(--cv-color-text-muted, #9aa6bd);
         font-size: var(--cv-font-size-xs, 12px);
         line-height: 1.4;
@@ -220,7 +225,7 @@ export class CVOperationQueue extends ReatomLitElement {
 
       [part='icon'] {
         grid-column: 1;
-        color: var(--cv-operation-queue-accent-color);
+        color: var(--_cv-operation-queue-accent-color);
       }
 
       [part='actions'],
@@ -272,10 +277,10 @@ export class CVOperationQueue extends ReatomLitElement {
         --cv-task-list-row-background-hover: color-mix(
           in oklab,
           var(--cv-operation-queue-row-background) 82%,
-          var(--cv-operation-queue-accent-color) 10%
+          var(--_cv-operation-queue-accent-color) 10%
         );
         --cv-task-list-row-border-color: var(--cv-color-border-muted, #2a3245);
-        --cv-task-list-row-border-color-hover: var(--cv-operation-queue-accent-border);
+        --cv-task-list-row-border-color-hover: var(--_cv-operation-queue-accent-border);
       }
 
       @media (prefers-reduced-motion: reduce) {

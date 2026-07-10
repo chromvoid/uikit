@@ -255,16 +255,18 @@ Non-reflected properties:
 
 ## CSS Custom Properties
 
-| Property                                    | Default                   | Description                                                |
-| ------------------------------------------- | ------------------------- | ---------------------------------------------------------- |
-| `--cv-select-inline-size`                   | `260px`                   | Inline size of the host element                            |
-| `--cv-select-min-height`                    | `36px`                    | Minimum block size of the trigger                          |
-| `--cv-select-padding-inline`                | `var(--cv-space-3, 12px)` | Horizontal padding of the trigger                          |
-| `--cv-select-padding-block`                 | `var(--cv-space-2, 8px)`  | Vertical padding of the trigger                            |
-| `--cv-select-clear-button-size`             | `1.4em`                   | Inline and block size of the clear button                  |
-| `--cv-select-listbox-max-block-size`        | `240px`                   | Preferred maximum block size of the listbox popup          |
-| `--cv-select-listbox-min-fit-block-size`    | `12rem`                   | Fit-content minimum used by supported `calc-size()` sizing |
-| `--cv-select-listbox-viewport-block-gutter` | `32px`                    | Reserved viewport block space before popup scrolling       |
+| Property                                    | Default                    | Description                                                |
+| ------------------------------------------- | -------------------------- | ---------------------------------------------------------- |
+| `--cv-select-inline-size`                   | `260px`                    | Inline size of the host element                            |
+| `--cv-select-min-height`                    | `36px`                     | Minimum block size of the trigger                          |
+| `--cv-select-padding-inline`                | `var(--cv-space-3, 12px)`  | Horizontal padding of the trigger                          |
+| `--cv-select-padding-block`                 | `var(--cv-space-2, 8px)`   | Vertical padding of the trigger                            |
+| `--cv-select-clear-button-size`             | `1.4em`                    | Inline and block size of the clear button                  |
+| `--cv-select-background`                    | `var(--cv-color-surface)`  | Background of the trigger                                  |
+| `--cv-select-border-radius`                 | `var(--cv-radius-sm, 6px)` | Border radius of the trigger                               |
+| `--cv-select-listbox-max-block-size`        | `240px`                    | Preferred maximum block size of the listbox popup          |
+| `--cv-select-listbox-min-fit-block-size`    | `12rem`                    | Fit-content minimum used by supported `calc-size()` sizing |
+| `--cv-select-listbox-viewport-block-gutter` | `32px`                     | Reserved viewport block space before popup scrolling       |
 
 ## Visual States
 

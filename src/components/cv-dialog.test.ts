@@ -55,7 +55,7 @@ describe('cv-dialog', () => {
       const stylesText = getStylesText()
 
       expect(stylesText).toMatch(
-        /--cv-dialog-viewport-inset-bottom:\s*calc\([\s\S]*--visual-viewport-bottom-inset,\s*0px/,
+        /--_cv-dialog-viewport-inset-block-end:\s*calc\([\s\S]*--cv-dialog-keyboard-inset,\s*0px/,
       )
     })
 

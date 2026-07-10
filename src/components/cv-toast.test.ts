@@ -108,7 +108,7 @@ describe('cv-toast', () => {
     })
 
     expect(el.shadowRoot!.querySelector('[part="progress"]')).not.toBeNull()
-    expect(el.style.getPropertyValue('--cv-toast-progress-duration').trim()).toBe('1500ms')
+    expect(el.style.getPropertyValue('--_cv-toast-progress-duration').trim()).toBe('1500ms')
   })
 
   it('dispatches a bubbling composed close event with the toast id', async () => {
@@ -142,7 +142,7 @@ describe('cv-toast', () => {
 
   it('clamps a negative durationMs to 0ms in the progress duration custom property', async () => {
     const el = await createToast({durationMs: -500})
-    expect(el.style.getPropertyValue('--cv-toast-progress-duration').trim()).toBe('0ms')
+    expect(el.style.getPropertyValue('--_cv-toast-progress-duration').trim()).toBe('0ms')
   })
 
   it('updates role when level changes at runtime', async () => {

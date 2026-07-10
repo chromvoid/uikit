@@ -9,6 +9,7 @@ export const componentGroups = [
       {name: 'cv-badge', slug: 'badge', spec: 'badge'},
       {name: 'cv-callout', slug: 'callout', spec: 'callout'},
       {name: 'cv-card', slug: 'card', spec: 'card'},
+      {name: 'cv-icon', slug: 'icon', spec: 'icon'},
       {name: 'cv-link', slug: 'link', spec: 'link'},
     ],
   },

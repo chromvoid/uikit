@@ -1,6 +1,6 @@
 {
   "name": "@chromvoid/uikit",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Thin Lit UI kit on top of @chromvoid/headless-ui",
   "homepage": "https://github.com/chromvoid/uikit#readme",
   "bugs": {

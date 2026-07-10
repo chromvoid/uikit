@@ -58,7 +58,7 @@ export class CVTaskList extends ReatomLitElement {
         --cv-task-list-row-padding-block: var(--cv-space-3, 12px);
         --cv-task-list-row-padding-inline: var(--cv-space-3, 12px);
         --cv-task-list-row-radius: var(--cv-radius-sm, 6px);
-        --cv-task-list-row-column-gap: var(--cv-space-3, 12px);
+        --_cv-task-list-row-column-gap: var(--cv-space-3, 12px);
       }
 
       :host([density='compact']) {
@@ -169,7 +169,7 @@ export class CVTaskList extends ReatomLitElement {
         display: grid;
         grid-template-columns: minmax(0, 1fr) auto;
         align-items: center;
-        gap: var(--cv-task-list-row-gap) var(--cv-task-list-row-column-gap);
+        gap: var(--cv-task-list-row-gap) var(--_cv-task-list-row-column-gap);
         box-sizing: border-box;
         min-inline-size: 0;
         padding: var(--cv-task-list-row-padding-block) var(--cv-task-list-row-padding-inline);

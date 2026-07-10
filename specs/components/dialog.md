@@ -70,24 +70,37 @@ Modal or non-modal dialog overlay for presenting focused content, confirmations,
 
 ## CSS Custom Properties
 
-| Property                               | Default                                                    | Description                          |
-| -------------------------------------- | ---------------------------------------------------------- | ------------------------------------ |
-| `--cv-dialog-width`                    | `var(--cv-dialog-width-m, min(560px, calc(100vw - 32px)))` | Preferred dialog inline size         |
-| `--cv-dialog-width-s`                  | app/theme provided                                         | Standard small dialog inline size    |
-| `--cv-dialog-width-m`                  | app/theme provided                                         | Standard medium dialog inline size   |
-| `--cv-dialog-width-l`                  | app/theme provided                                         | Standard large dialog inline size    |
-| `--cv-dialog-width-xl`                 | app/theme provided                                         | Standard extra-large dialog size     |
-| `--cv-dialog-max-height`               | `calc(100dvh - 32px)`                                      | Maximum block size before scrolling  |
-| `--cv-dialog-header-spacing`           | `var(--cv-space-4, 16px)`                                  | Header padding                       |
-| `--cv-dialog-body-spacing`             | `var(--cv-space-4, 16px)`                                  | Body padding                         |
-| `--cv-dialog-footer-spacing`           | `var(--cv-space-4, 16px)`                                  | Footer padding                       |
-| `--cv-dialog-overlay-color`            | `var(--cv-color-overlay)`                                  | Backdrop overlay color               |
-| `--cv-dialog-border-radius`            | `var(--cv-radius-lg, 14px)`                                | Panel border radius                  |
-| `--cv-dialog-transition-duration`      | `var(--cv-duration-fast, 120ms)`                           | Presence transition duration         |
-| `--cv-dialog-transition-easing-open`   | `var(--cv-easing-decelerate)`                              | Opening transition easing            |
-| `--cv-dialog-transition-easing-close`  | `var(--cv-easing-accelerate)`                              | Closing transition easing            |
-| `--cv-dialog-content-closed-transform` | `translate3d(0, 8px, 0) scale(0.98)`                       | Panel transform while closed/closing |
-| `--cv-dialog-content-open-transform`   | `translate3d(0, 0, 0) scale(1)`                            | Panel transform while open           |
+| Property                                   | Default                                                    | Description                           |
+| ------------------------------------------ | ---------------------------------------------------------- | ------------------------------------- |
+| `--cv-dialog-width`                        | `var(--cv-dialog-width-m, min(560px, calc(100vw - 32px)))` | Preferred dialog inline size          |
+| `--cv-dialog-width-s`                      | app/theme provided                                         | Standard small dialog inline size     |
+| `--cv-dialog-width-m`                      | app/theme provided                                         | Standard medium dialog inline size    |
+| `--cv-dialog-width-l`                      | app/theme provided                                         | Standard large dialog inline size     |
+| `--cv-dialog-width-xl`                     | app/theme provided                                         | Standard extra-large dialog size      |
+| `--cv-dialog-z-index`                      | `40`                                                       | Overlay stack level                   |
+| `--cv-dialog-max-height`                   | `calc(100dvh - 32px)`                                      | Maximum block size before scrolling   |
+| `--cv-dialog-safe-area-block-start`        | `env(safe-area-inset-top)`                                 | Top safe-area inset                   |
+| `--cv-dialog-safe-area-inline-end`         | `env(safe-area-inset-right)`                               | End safe-area inset                   |
+| `--cv-dialog-safe-area-block-end`          | `env(safe-area-inset-bottom)`                              | Bottom safe-area inset                |
+| `--cv-dialog-safe-area-inline-start`       | `env(safe-area-inset-left)`                                | Start safe-area inset                 |
+| `--cv-dialog-keyboard-inset`               | `0px`                                                      | Software keyboard bottom clearance    |
+| `--cv-dialog-padding-block`                | `var(--cv-space-4, 16px)`                                  | Base overlay block padding            |
+| `--cv-dialog-padding-inline`               | `var(--cv-space-4, 16px)`                                  | Base overlay inline padding           |
+| `--cv-dialog-overlay-padding-block-start`  | base padding plus safe-area inset                          | Resolved overlay block-start padding  |
+| `--cv-dialog-overlay-padding-inline-end`   | base padding plus safe-area inset                          | Resolved overlay inline-end padding   |
+| `--cv-dialog-overlay-padding-block-end`    | base padding plus safe-area and keyboard insets            | Resolved overlay block-end padding    |
+| `--cv-dialog-overlay-padding-inline-start` | base padding plus safe-area inset                          | Resolved overlay inline-start padding |
+| `--cv-dialog-header-spacing`               | `var(--cv-space-4, 16px)`                                  | Header padding                        |
+| `--cv-dialog-body-spacing`                 | `var(--cv-space-4, 16px)`                                  | Body padding                          |
+| `--cv-dialog-footer-spacing`               | `var(--cv-space-4, 16px)`                                  | Footer padding                        |
+| `--cv-dialog-overlay-color`                | `var(--cv-color-overlay)`                                  | Backdrop overlay color                |
+| `--cv-dialog-border-radius`                | `var(--cv-radius-lg, 14px)`                                | Panel border radius                   |
+| `--cv-dialog-transition-duration`          | `var(--cv-duration-fast, 120ms)`                           | Presence transition duration          |
+| `--cv-dialog-transition-easing-open`       | `var(--cv-easing-decelerate)`                              | Opening transition easing             |
+| `--cv-dialog-transition-easing-close`      | `var(--cv-easing-accelerate)`                              | Closing transition easing             |
+| `--cv-dialog-content-closed-transform`     | `translate3d(0, 8px, 0) scale(0.98)`                       | Panel transform while closed/closing  |
+| `--cv-dialog-content-open-transform`       | `translate3d(0, 0, 0) scale(1)`                            | Panel transform while open            |
+| `--cv-dialog-content-transition-property`  | `opacity, transform`                                       | Animated content properties           |
 
 ## Visual States
 

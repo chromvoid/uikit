@@ -338,12 +338,17 @@ Actionable item within a menu. Supports standard, checkbox, and radio types, as 
 
 #### CSS Custom Properties
 
-| Property                        | Default                    | Description                                                                 |
-| ------------------------------- | -------------------------- | --------------------------------------------------------------------------- |
-| `--cv-menu-item-padding-inline` | `var(--cv-space-3, 12px)`  | Horizontal padding of the item                                              |
-| `--cv-menu-item-padding-block`  | `var(--cv-space-2, 8px)`   | Vertical padding of the item                                                |
-| `--cv-menu-item-border-radius`  | `var(--cv-radius-sm, 6px)` | Border radius of the item                                                   |
-| `--cv-menu-item-gap`            | `var(--cv-space-2, 8px)`   | Gap between internal parts (checkmark, prefix, label, suffix, submenu-icon) |
+| Property                             | Default                          | Description                                                                 |
+| ------------------------------------ | -------------------------------- | --------------------------------------------------------------------------- |
+| `--cv-menu-item-padding-inline`      | `var(--cv-space-3, 12px)`        | Horizontal padding of the item                                              |
+| `--cv-menu-item-padding-block`       | `var(--cv-space-2, 8px)`         | Vertical padding of the item                                                |
+| `--cv-menu-item-border-radius`       | `var(--cv-radius-sm, 6px)`       | Border radius of the item                                                   |
+| `--cv-menu-item-gap`                 | `var(--cv-space-2, 8px)`         | Gap between internal parts (checkmark, prefix, label, suffix, submenu-icon) |
+| `--cv-menu-item-hover-background`    | `var(--cv-color-primary-ring)`   | Hover background                                                            |
+| `--cv-menu-item-active-color`        | `var(--cv-color-text)`           | Active foreground color                                                     |
+| `--cv-menu-item-active-background`   | `var(--cv-color-primary-ring)`   | Active background                                                           |
+| `--cv-menu-item-selected-background` | `var(--cv-color-primary-border)` | Selected background                                                         |
+| `--cv-menu-item-focus-ring`          | `var(--cv-color-focus-ring)`     | Keyboard focus ring                                                         |
 
 #### Visual States
 
@@ -531,7 +536,10 @@ Split-button mode (`[split]`):
 | `--cv-menu-button-border-radius`        | `var(--cv-radius-sm, 6px)` | Border radius of the trigger          |
 | `--cv-menu-button-gap`                  | `var(--cv-space-2, 8px)`   | Gap between trigger content parts     |
 | `--cv-menu-button-font-size`            | `inherit`                  | Font size of button content           |
+| `--cv-menu-button-background`           | `var(--cv-color-surface)`  | Trigger background                    |
+| `--cv-menu-button-border-color`         | `var(--cv-color-border)`   | Trigger border color                  |
 | `--cv-menu-button-menu-offset`          | `var(--cv-space-1, 4px)`   | Gap between trigger and menu popup    |
+| `--cv-menu-button-menu-align`           | `start`                    | Logical popup alignment               |
 | `--cv-menu-button-menu-min-inline-size` | `max(180px, 100%)`         | Minimum inline size of the menu popup |
 | `--cv-menu-button-menu-max-inline-size` | `calc(100vw - 16px)`       | Maximum inline size of the menu popup |
 | `--cv-menu-button-menu-z-index`         | `20`                       | Z-index of the menu popup             |

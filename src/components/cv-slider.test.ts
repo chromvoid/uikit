@@ -61,7 +61,7 @@ describe('cv-slider', () => {
 
       const base = slider.shadowRoot?.querySelector('[part="base"]') as HTMLElement | null
       expect(styleAttributeWrites).toEqual([])
-      expect(base?.style.getPropertyValue('--cv-slider-percentage')).toBe('25%')
+      expect(base?.style.getPropertyValue('--_cv-slider-percentage')).toBe('25%')
     } finally {
       HTMLElement.prototype.setAttribute = originalSetAttribute
     }
@@ -130,7 +130,7 @@ describe('cv-slider', () => {
     await settle(slider)
 
     expect(slider.value).toBe(75)
-    expect(base.style.getPropertyValue('--cv-slider-percentage')).toBe('75%')
+    expect(base.style.getPropertyValue('--_cv-slider-percentage')).toBe('75%')
     expect(inputValues.at(-1)).toBe(75)
     expect(changeValues).toEqual([75])
   })

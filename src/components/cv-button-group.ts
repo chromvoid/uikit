@@ -37,12 +37,12 @@ export class CVButtonGroup extends ReatomLitElement {
     css`
       :host {
         display: inline-flex;
-        --cv-button-group-gap: var(--cv-space-2, 8px);
+        --_cv-button-group-gap: var(--cv-space-2, 8px);
       }
 
       [part='base'] {
         display: inline-flex;
-        gap: var(--cv-button-group-gap);
+        gap: var(--_cv-button-group-gap);
       }
 
       :host([orientation='vertical']) [part='base'] {

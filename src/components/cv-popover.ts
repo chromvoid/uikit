@@ -41,9 +41,9 @@ export interface CVPopoverShowOptions {
 
 const popoverTriggerKeys = new Set(['Enter', ' ', 'Spacebar', 'ArrowDown'])
 const popoverLayoutCustomProperties = [
-  '--cv-popover-anchor-inline-size',
-  '--cv-popover-arrow-inline-start',
-  '--cv-popover-arrow-block-start',
+  '--_cv-popover-anchor-inline-size',
+  '--_cv-popover-arrow-inline-start',
+  '--_cv-popover-arrow-block-start',
 ]
 
 let cvPopoverNonce = 0
@@ -162,7 +162,7 @@ export class CVPopover extends ReatomLitElement {
         z-index: var(--cv-popover-z-index, 20);
         min-inline-size: var(
           --cv-popover-min-inline-size,
-          max(220px, var(--cv-popover-anchor-inline-size, 0px))
+          max(220px, var(--_cv-popover-anchor-inline-size, 0px))
         );
         max-inline-size: var(--cv-popover-max-inline-size, min(560px, calc(100vw - 32px)));
         display: grid;
@@ -224,24 +224,24 @@ export class CVPopover extends ReatomLitElement {
 
       [part='content'][data-placement^='bottom'] [part='arrow'] {
         inset-block-start: calc(var(--cv-popover-arrow-size, 10px) / -2);
-        inset-inline-start: var(--cv-popover-arrow-inline-start, var(--cv-space-4, 16px));
+        inset-inline-start: var(--_cv-popover-arrow-inline-start, var(--cv-space-4, 16px));
       }
 
       [part='content'][data-placement^='top'] [part='arrow'] {
         inset-block-end: calc(var(--cv-popover-arrow-size, 10px) / -2);
-        inset-inline-start: var(--cv-popover-arrow-inline-start, var(--cv-space-4, 16px));
+        inset-inline-start: var(--_cv-popover-arrow-inline-start, var(--cv-space-4, 16px));
         transform: rotate(225deg);
       }
 
       [part='content'][data-placement^='right'] [part='arrow'] {
         inset-inline-start: calc(var(--cv-popover-arrow-size, 10px) / -2);
-        inset-block-start: var(--cv-popover-arrow-block-start, var(--cv-space-4, 16px));
+        inset-block-start: var(--_cv-popover-arrow-block-start, var(--cv-space-4, 16px));
         transform: rotate(315deg);
       }
 
       [part='content'][data-placement^='left'] [part='arrow'] {
         inset-inline-end: calc(var(--cv-popover-arrow-size, 10px) / -2);
-        inset-block-start: var(--cv-popover-arrow-block-start, var(--cv-space-4, 16px));
+        inset-block-start: var(--_cv-popover-arrow-block-start, var(--cv-space-4, 16px));
         transform: rotate(135deg);
       }
     `,
@@ -607,18 +607,18 @@ export class CVPopover extends ReatomLitElement {
 
     if (side === 'top' || side === 'bottom') {
       content.style.setProperty(
-        '--cv-popover-arrow-inline-start',
+        '--_cv-popover-arrow-inline-start',
         `${resolvePopoverArrowOffset(anchorRect, contentRect, arrowWidth, 'inline')}px`,
       )
-      content.style.removeProperty('--cv-popover-arrow-block-start')
+      content.style.removeProperty('--_cv-popover-arrow-block-start')
       return
     }
 
     content.style.setProperty(
-      '--cv-popover-arrow-block-start',
+      '--_cv-popover-arrow-block-start',
       `${resolvePopoverArrowOffset(anchorRect, contentRect, arrowHeight, 'block')}px`,
     )
-    content.style.removeProperty('--cv-popover-arrow-inline-start')
+    content.style.removeProperty('--_cv-popover-arrow-inline-start')
   }
 
   private applyDirectionalOffset(content: HTMLElement, placement: CVPopoverPlacement): void {
@@ -689,7 +689,7 @@ export class CVPopover extends ReatomLitElement {
     if (supportsNativeAnchoredAutoplacement()) {
       clearPopoverLayout(content, {customProperties: popoverLayoutCustomProperties})
       content.style.setProperty(
-        '--cv-popover-anchor-inline-size',
+        '--_cv-popover-anchor-inline-size',
         `${Math.max(0, Math.round(anchorRect.width))}px`,
       )
       content.dataset['anchorPositioning'] = 'true'
@@ -719,7 +719,7 @@ export class CVPopover extends ReatomLitElement {
 
     clearPopoverLayout(content, {customProperties: popoverLayoutCustomProperties})
     content.style.setProperty(
-      '--cv-popover-anchor-inline-size',
+      '--_cv-popover-anchor-inline-size',
       `${Math.max(0, Math.round(anchorRect.width))}px`,
     )
     content.dataset['anchorPositioning'] = 'false'

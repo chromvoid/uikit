@@ -11,7 +11,7 @@ import type {PropertyValues} from 'lit'
 
 import {html} from '../reatom-lit/index.js'
 import {ReatomLitElement} from '../reatom-lit/ReatomLitElement'
-import {popupListboxSizingStyles} from '../styles/component-styles'
+import {getPopupListboxSizingStyles} from '../styles/component-styles'
 import {CVComboboxGroup} from './cv-combobox-group'
 import {CVComboboxOption} from './cv-combobox-option'
 
@@ -47,6 +47,12 @@ interface ComboboxGroupRecord {
   element: CVComboboxGroup
   optionIds: string[]
 }
+
+const comboboxPopupListboxSizingStyles = getPopupListboxSizingStyles({
+  maxBlockSize: css`var(--cv-combobox-listbox-max-block-size, var(--cv-combobox-max-height, 220px))`,
+  minFitBlockSize: css`var(--cv-combobox-listbox-min-fit-block-size, 12rem)`,
+  viewportBlockGutter: css`var(--cv-combobox-listbox-viewport-block-gutter, 32px)`,
+})
 
 const comboboxNavigationKeys = new Set(['ArrowUp', 'ArrowDown', 'Home', 'End', 'Enter', 'Escape'])
 
@@ -264,12 +270,6 @@ export class CVCombobox extends ReatomLitElement {
         z-index: 20;
         min-inline-size: 100%;
         gap: var(--cv-space-1, 4px);
-        --cv-popup-listbox-max-block-size: var(
-          --cv-combobox-listbox-max-block-size,
-          var(--cv-combobox-max-height, 220px)
-        );
-        --cv-popup-listbox-min-fit-block-size: var(--cv-combobox-listbox-min-fit-block-size, 12rem);
-        --cv-popup-listbox-viewport-block-gutter: var(--cv-combobox-listbox-viewport-block-gutter, 32px);
         padding: var(--cv-space-1, 4px);
         background: var(--cv-color-surface, #141923);
         opacity: 1;
@@ -308,7 +308,7 @@ export class CVCombobox extends ReatomLitElement {
         color: var(--cv-color-text-muted, #9aa6bf);
       }
     `,
-    popupListboxSizingStyles,
+    comboboxPopupListboxSizingStyles,
   ]
 
   static define() {

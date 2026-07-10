@@ -1,0 +1,48 @@
+# cv-icon
+
+Reusable icon renderer backed by the UIKit icon registry.
+
+## Anatomy
+
+```
+<cv-icon> (host)
+└── <span class="icon">
+    ├── loaded SVG markup
+    └── <slot> fallback or consumer-provided SVG
+```
+
+## Attributes
+
+| Attribute | Type    | Default     | Description                                                   |
+| --------- | ------- | ----------- | ------------------------------------------------------------- |
+| `name`    | String  | `""`        | Registered icon name                                          |
+| `src`     | String  | -           | Explicit SVG asset URL                                        |
+| `size`    | String  | `"m"`       | Preset size: `xs`, `s`, `m`/`md`, or `l`/`lg`                 |
+| `color`   | String  | `"default"` | `default`, `muted`, `primary`, `success`, `warning`, `danger` |
+| `label`   | String  | -           | Accessible label; omitted icons are decorative                |
+| `fill`    | Boolean | `false`     | Uses the current foreground as SVG fill                       |
+
+## Slots
+
+| Slot        | Description                                           |
+| ----------- | ----------------------------------------------------- |
+| `(default)` | Consumer-provided SVG or fallback while loading fails |
+
+## CSS Custom Properties
+
+| Property         | Default | Description                |
+| ---------------- | ------- | -------------------------- |
+| `--cv-icon-size` | `1em`   | Icon inline and block size |
+
+## Usage
+
+```html
+<div data-demo="icon" data-live-demo-height="240">
+  <cv-icon name="lock" color="primary" label="Locked"></cv-icon>
+  <cv-icon name="check" color="success" size="l" label="Complete"></cv-icon>
+</div>
+```
+
+## Events
+
+None. The component is presentational.

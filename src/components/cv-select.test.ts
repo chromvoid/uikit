@@ -64,10 +64,8 @@ describe('cv-select', () => {
     it('uses viewport-aware popup listbox sizing', () => {
       const cssText = stylesToText()
 
-      expect(cssText).toMatch(
-        /--cv-popup-listbox-max-block-size:\s*var\(--cv-select-listbox-max-block-size,\s*240px\)/,
-      )
-      expect(cssText).toContain('calc(100dvh - var(--cv-popup-listbox-viewport-block-gutter, 32px))')
+      expect(cssText).toMatch(/max-block-size:\s*var\(--cv-select-listbox-max-block-size,\s*240px\)/)
+      expect(cssText).toContain('calc(100dvh - var(--cv-select-listbox-viewport-block-gutter, 32px))')
       expect(cssText).toContain('@supports (min-block-size: calc-size(fit-content, min(size, 1px)))')
       expect(cssText).toContain('@supports (max-block-size: calc-size(stretch, min(size, 1px)))')
       expect(cssText).toContain("[data-cv-popup-listbox][data-cv-anchor-positioned='true']")

@@ -97,20 +97,20 @@ export class CVToast extends ReatomLitElement {
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        color: var(--cv-toast-accent, var(--cv-color-primary, #65d7ff));
+        color: var(--_cv-toast-accent, var(--cv-color-primary, #65d7ff));
         margin-top: 1px;
       }
 
       [part='base'][data-level='success'] [part='icon-wrap'] {
-        --cv-toast-accent: var(--cv-color-success, #6ef7c8);
+        --_cv-toast-accent: var(--cv-color-success, #6ef7c8);
       }
 
       [part='base'][data-level='warning'] [part='icon-wrap'] {
-        --cv-toast-accent: var(--cv-color-warning, #ffd36e);
+        --_cv-toast-accent: var(--cv-color-warning, #ffd36e);
       }
 
       [part='base'][data-level='error'] [part='icon-wrap'] {
-        --cv-toast-accent: var(--cv-color-danger, #ff7d86);
+        --_cv-toast-accent: var(--cv-color-danger, #ff7d86);
       }
 
       [part='content'] {
@@ -201,17 +201,17 @@ export class CVToast extends ReatomLitElement {
       }
 
       :host([progress]) [part='progress'] {
-        animation: cv-toast-progress var(--cv-toast-progress-duration, 5000ms) linear forwards;
-        animation-play-state: var(--cv-toast-progress-play-state, running);
+        animation: cv-toast-progress var(--_cv-toast-progress-duration, 5000ms) linear forwards;
+        animation-play-state: var(--_cv-toast-progress-play-state, running);
         opacity: 0.85;
       }
 
       :host([paused]) {
-        --cv-toast-progress-play-state: paused;
+        --_cv-toast-progress-play-state: paused;
       }
 
       cv-spinner {
-        --cv-spinner-size: 18px;
+        --_cv-spinner-size: 18px;
         --cv-spinner-track-width: 2px;
         color: currentColor;
       }
@@ -268,7 +268,7 @@ export class CVToast extends ReatomLitElement {
     super.updated(changedProperties)
 
     if (changedProperties.has('durationMs')) {
-      this.style.setProperty('--cv-toast-progress-duration', `${Math.max(this.durationMs, 0)}ms`)
+      this.style.setProperty('--_cv-toast-progress-duration', `${Math.max(this.durationMs, 0)}ms`)
     }
   }
 

@@ -85,28 +85,28 @@ export class CVCodeInput extends FormAssociatedReatomElement {
     css`
       :host {
         display: inline-block;
-        --cv-code-input-size: 40px;
-        --cv-code-input-gap: var(--cv-space-2, 8px);
-        --cv-code-input-border-radius: var(--cv-radius-sm, 6px);
-        --cv-code-input-border-color: var(--cv-color-border, #2a3245);
-        --cv-code-input-background: var(--cv-color-surface, #141923);
-        --cv-code-input-color: var(--cv-color-text, #e8ecf6);
+        --_cv-code-input-size: 40px;
+        --_cv-code-input-gap: var(--cv-space-2, 8px);
+        --_cv-code-input-border-radius: var(--cv-radius-sm, 6px);
+        --_cv-code-input-border-color: var(--cv-color-border, #2a3245);
+        --_cv-code-input-background: var(--cv-color-surface, #141923);
+        --_cv-code-input-color: var(--cv-color-text, #e8ecf6);
       }
 
       [part='group'] {
         display: inline-flex;
-        gap: var(--cv-code-input-gap);
+        gap: var(--_cv-code-input-gap);
         align-items: center;
       }
 
       [part='input'] {
         box-sizing: border-box;
-        inline-size: var(--cv-code-input-size);
-        block-size: var(--cv-code-input-size);
-        border: 1px solid var(--cv-code-input-border-color);
-        border-radius: var(--cv-code-input-border-radius);
-        background: var(--cv-code-input-background);
-        color: var(--cv-code-input-color);
+        inline-size: var(--_cv-code-input-size);
+        block-size: var(--_cv-code-input-size);
+        border: 1px solid var(--_cv-code-input-border-color);
+        border-radius: var(--_cv-code-input-border-radius);
+        background: var(--_cv-code-input-background);
+        color: var(--_cv-code-input-color);
         font: inherit;
         font-variant-numeric: tabular-nums;
         text-align: center;

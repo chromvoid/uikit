@@ -87,8 +87,8 @@ export class CVSliderMultiThumb extends ReatomLitElement {
         place-items: center;
         inline-size: 100%;
         block-size: 24px;
-        --cv-range-start: 0%;
-        --cv-range-size: 0%;
+        --_cv-slider-multi-thumb-range-start: 0%;
+        --_cv-slider-multi-thumb-range-size: 0%;
       }
 
       [part='track'] {
@@ -103,8 +103,8 @@ export class CVSliderMultiThumb extends ReatomLitElement {
       [part='range'] {
         position: absolute;
         inset-block: 0;
-        inset-inline-start: var(--cv-range-start);
-        inline-size: var(--cv-range-size);
+        inset-inline-start: var(--_cv-slider-multi-thumb-range-start);
+        inline-size: var(--_cv-slider-multi-thumb-range-size);
         border-radius: inherit;
         background: linear-gradient(
           90deg,
@@ -115,7 +115,7 @@ export class CVSliderMultiThumb extends ReatomLitElement {
 
       [part='thumb'] {
         position: absolute;
-        inset-inline-start: var(--cv-thumb-percentage);
+        inset-inline-start: var(--_cv-slider-multi-thumb-percentage);
         inset-block-start: 50%;
         inline-size: 16px;
         block-size: 16px;
@@ -156,9 +156,9 @@ export class CVSliderMultiThumb extends ReatomLitElement {
 
       :host([orientation='vertical']) [part='range'] {
         inline-size: 100%;
-        block-size: var(--cv-range-size);
+        block-size: var(--_cv-slider-multi-thumb-range-size);
         inset-inline-start: 0;
-        inset-block-end: var(--cv-range-start);
+        inset-block-end: var(--_cv-slider-multi-thumb-range-start);
         inset-block-start: auto;
         background: linear-gradient(
           180deg,
@@ -170,7 +170,7 @@ export class CVSliderMultiThumb extends ReatomLitElement {
       :host([orientation='vertical']) [part='thumb'] {
         inset-inline-start: 50%;
         inset-block-start: auto;
-        inset-block-end: var(--cv-thumb-percentage);
+        inset-block-end: var(--_cv-slider-multi-thumb-percentage);
         transform: translate(-50%, 50%);
       }
 
@@ -302,13 +302,13 @@ export class CVSliderMultiThumb extends ReatomLitElement {
     const rangeEnd = percentages.length === 0 ? 0 : Math.max(...percentages)
     const rangeSize = Math.max(0, rangeEnd - rangeStart)
     const base = this.shadowRoot?.querySelector('[part="base"]') as HTMLElement | null
-    base?.style.setProperty('--cv-range-start', `${rangeStart}%`)
-    base?.style.setProperty('--cv-range-size', `${rangeSize}%`)
+    base?.style.setProperty('--_cv-slider-multi-thumb-range-start', `${rangeStart}%`)
+    base?.style.setProperty('--_cv-slider-multi-thumb-range-size', `${rangeSize}%`)
 
     const thumbs = Array.from(this.shadowRoot?.querySelectorAll('[part="thumb"]') ?? []) as HTMLElement[]
     for (const thumb of thumbs) {
       const index = Number(thumb.dataset.index)
-      thumb.style.setProperty('--cv-thumb-percentage', `${percentages[index] ?? 0}%`)
+      thumb.style.setProperty('--_cv-slider-multi-thumb-percentage', `${percentages[index] ?? 0}%`)
     }
   }
 

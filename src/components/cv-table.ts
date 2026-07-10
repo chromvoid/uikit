@@ -179,7 +179,7 @@ export class CVTable extends ReatomLitElement {
       }
 
       :host([bordered]) ::slotted(cv-table-row) {
-        --cv-table-cell-border: 1px solid var(--cv-table-border-color, var(--cv-color-border, #2a3245));
+        --_cv-table-cell-border: 1px solid var(--cv-table-border-color, var(--cv-color-border, #2a3245));
       }
 
       :host([interactive]) {

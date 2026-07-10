@@ -122,6 +122,7 @@ This document is the UIKit surface contract for Combobox.
 | `--cv-combobox-max-height`                    | `220px`                           | Legacy alias for `--cv-combobox-listbox-max-block-size`    |
 | `--cv-combobox-border-color`                  | `var(--cv-color-border, #2a3245)` | Border color for input/trigger and listbox                 |
 | `--cv-combobox-border-radius`                 | `var(--cv-radius-sm, 6px)`        | Border radius of the input/trigger                         |
+| `--cv-combobox-background`                    | `var(--cv-color-surface)`         | Background of the input/trigger                            |
 | `--cv-combobox-listbox-radius`                | `var(--cv-radius-md, 10px)`       | Border radius of the listbox popup                         |
 | `--cv-combobox-gap`                           | `var(--cv-space-1, 4px)`          | Gap between base layout sections                           |
 | `--cv-combobox-tag-gap`                       | `var(--cv-space-1, 4px)`          | Gap between tags in multi-select                           |

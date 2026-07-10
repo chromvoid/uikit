@@ -110,15 +110,15 @@ export class CVQrCode extends ReatomLitElement {
         --cv-qr-code-foreground: var(--cv-color-qr-foreground);
         --cv-qr-code-logo-backdrop-background: var(--cv-qr-code-background);
         --cv-qr-code-logo-radius: var(--cv-radius-md);
-        --cv-qr-code-logo-size: 22%;
+        --_cv-qr-code-logo-size: 22%;
       }
 
       :host([logo-size='small']) {
-        --cv-qr-code-logo-size: 16%;
+        --_cv-qr-code-logo-size: 16%;
       }
 
       :host([logo-size='large']) {
-        --cv-qr-code-logo-size: 28%;
+        --_cv-qr-code-logo-size: 28%;
       }
 
       [part='base'] {
@@ -152,8 +152,8 @@ export class CVQrCode extends ReatomLitElement {
         position: absolute;
         inset-block-start: 50%;
         inset-inline-start: 50%;
-        inline-size: var(--cv-qr-code-logo-size);
-        block-size: var(--cv-qr-code-logo-size);
+        inline-size: var(--_cv-qr-code-logo-size);
+        block-size: var(--_cv-qr-code-logo-size);
         transform: translate(-50%, -50%);
         place-items: center;
         pointer-events: none;
