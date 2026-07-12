@@ -52,6 +52,7 @@ describe('cv-disclosure', () => {
       const icon = getTriggerIcon(el)
       expect(icon).not.toBeNull()
       expect(icon.getAttribute('aria-hidden')).toBe('true')
+      expect(icon.textContent).toBe('')
     })
 
     it('renders [part="panel"]', async () => {

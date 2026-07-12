@@ -80,8 +80,18 @@ export class CVDisclosure extends ReatomLitElement {
         display: inline-flex;
         align-items: center;
         justify-content: center;
+        flex: 0 0 auto;
         color: var(--cv-color-text-muted, #9aa6bf);
         transition: transform var(--cv-disclosure-duration) var(--cv-disclosure-easing);
+      }
+
+      [part='trigger-icon']::before {
+        content: '';
+        inline-size: 6px;
+        block-size: 6px;
+        border-inline-end: 1.5px solid currentColor;
+        border-block-end: 1.5px solid currentColor;
+        transform: rotate(-45deg);
       }
 
       :host([open]) [part='trigger-icon'] {
@@ -103,6 +113,12 @@ export class CVDisclosure extends ReatomLitElement {
       :host([disabled]) [part='trigger'] {
         cursor: not-allowed;
         opacity: 0.55;
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        [part='trigger-icon'] {
+          transition-duration: 0ms;
+        }
       }
     `,
   ]
@@ -275,7 +291,7 @@ export class CVDisclosure extends ReatomLitElement {
           @keydown=${this.handleTriggerKeyDown}
         >
           <slot name="trigger"></slot>
-          <span part="trigger-icon" aria-hidden="true">&#x25B6;</span>
+          <span part="trigger-icon" aria-hidden="true"></span>
         </div>
 
         <div

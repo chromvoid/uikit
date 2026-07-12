@@ -37,7 +37,7 @@ Expandable panel that controls the visibility of a content area, with support fo
 | -------------- | -------- | ------------------------------------------------ |
 | `base`         | `<div>`  | Root layout wrapper                              |
 | `trigger`      | `<div>`  | Interactive trigger element with `role="button"` |
-| `trigger-icon` | `<span>` | Chevron/arrow indicator that rotates when open   |
+| `trigger-icon` | `<span>` | Lightweight CSS chevron that rotates when open   |
 | `panel`        | `<div>`  | Collapsible content container                    |
 
 ## CSS Custom Properties
