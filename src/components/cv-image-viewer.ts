@@ -827,7 +827,7 @@ export class CVImageViewer extends ReatomLitElement {
             <div part="header-actions">
               ${this.renderActions()}
               <cv-button
-                unstyled
+                ?unstyled=${this.layout !== 'mobile'}
                 class="viewer-icon-button"
                 aria-label="Close"
                 title="Close"

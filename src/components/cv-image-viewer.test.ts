@@ -178,6 +178,13 @@ describe('cv-image-viewer', () => {
     expect(viewer.shadowRoot?.querySelector('[part~="nav-next"]')).not.toBeNull()
   })
 
+  it('uses the full icon-button treatment for the mobile close action', async () => {
+    const viewer = await mountViewer({layout: 'mobile'})
+    const close = viewer.shadowRoot?.querySelector<HTMLElement>('cv-button.viewer-icon-button')
+
+    expect(close?.hasAttribute('unstyled')).toBe(false)
+  })
+
   it('emits typed navigation and close events from keyboard input', async () => {
     const viewer = await mountViewer()
     const inputs: unknown[] = []

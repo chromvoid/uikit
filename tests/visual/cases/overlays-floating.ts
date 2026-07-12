@@ -1,5 +1,6 @@
+import {setIconBasePath} from '../../../src/components/cv-icon'
 import type {UikitVisualCase} from '../component-visual-types'
-import {dataSvg, setElementProps, visualCase} from './helpers'
+import {dataSvg, setElementProps, visualCase, waitForElementUpdate} from './helpers'
 
 export const overlaysFloatingCases: readonly UikitVisualCase[] = [
   visualCase({
@@ -100,6 +101,80 @@ export const overlaysFloatingCases: readonly UikitVisualCase[] = [
           thumbnailStepPx: 64,
         },
       })
+    },
+  }),
+  visualCase({
+    id: 'cv-image-viewer/mobile-header',
+    component: 'cv-image-viewer',
+    title: 'Mobile image viewer header with a long filename and compact actions',
+    states: ['mobile-layout', 'long-title', 'counter', 'file-type', 'overflow-action', 'close-action'],
+    fullPage: true,
+    viewports: ['compact'],
+    requiredSelectors: ['cv-image-viewer [part="header"]', 'cv-image-viewer [part="meta"]'],
+    html: `
+      <cv-image-viewer open current-index="0" layout="mobile"></cv-image-viewer>
+    `,
+    async afterMount(root) {
+      setIconBasePath(
+        new URL('../../../../../apps/webview/src/assets/icons/lucide', import.meta.url).toString(),
+      )
+
+      const viewer = setElementProps<HTMLElement & {updateComplete?: Promise<unknown>}>(
+        root,
+        'cv-image-viewer',
+        {
+          items: [
+            {
+              id: 'heic',
+              title: 'IMG20260602172514.heic',
+              alt: 'HEIC photo preview',
+              meta: ['image/heic'],
+              src: dataSvg('Photo'),
+            },
+          ],
+          actions: [
+            {value: 'share', label: 'Share'},
+            {value: 'delete', label: 'Delete', dangerous: true},
+          ],
+          showThumbnails: false,
+        },
+      )
+
+      await waitForElementUpdate(viewer)
+      const icons = Array.from(
+        viewer.shadowRoot?.querySelectorAll<HTMLElement & {name: string; updateComplete?: Promise<unknown>}>(
+          'cv-icon',
+        ) ?? [],
+      )
+      const iconNames = icons.map((icon) => icon.name)
+
+      icons.forEach((icon) => {
+        icon.name = ''
+      })
+      await Promise.all(icons.map((icon) => waitForElementUpdate(icon)))
+
+      icons.forEach((icon, index) => {
+        icon.name = iconNames[index] ?? ''
+      })
+      await new Promise<void>((resolve) => window.setTimeout(resolve, 100))
+      await Promise.all(icons.map((icon) => waitForElementUpdate(icon)))
+
+      if (icons.some((icon) => !icon.shadowRoot?.querySelector('svg'))) {
+        throw new Error('Image viewer visual case could not load its header icons.')
+      }
+
+      const header = viewer.shadowRoot?.querySelector<HTMLElement>('[part="header"]')
+      const headerActions = viewer.shadowRoot?.querySelector<HTMLElement>('[part="header-actions"]')
+      const headerRect = header?.getBoundingClientRect()
+      const headerActionsRect = headerActions?.getBoundingClientRect()
+
+      const actionsAreVisible =
+        headerActionsRect && headerRect && headerActionsRect.width >= 80 && headerActionsRect.right <= headerRect.right
+      if (!actionsAreVisible) {
+        throw new Error(
+          `Image viewer mobile header actions are outside the header: width=${headerActionsRect?.width ?? 0} right=${headerActionsRect?.right ?? 0} headerRight=${headerRect?.right ?? 0}`,
+        )
+      }
     },
   }),
   visualCase({

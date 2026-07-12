@@ -446,19 +446,55 @@ export const cvImageViewerStyles = css`
   }
 
   :host([layout='mobile']) [part='header'] {
-    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: start;
+    gap: var(--cv-space-2, 8px);
+    padding-block: max(
+        var(--cv-space-2, 8px),
+        var(--cv-image-viewer-safe-area-block-start, env(safe-area-inset-top, 0px))
+      )
+      var(--cv-space-2, 8px);
     padding-inline: max(var(--cv-space-3, 12px), env(safe-area-inset-left, 0px))
       max(var(--cv-space-3, 12px), env(safe-area-inset-right, 0px));
   }
 
+  :host([layout='mobile']) [part='title-group'] {
+    align-content: center;
+    gap: var(--cv-space-1, 4px);
+    padding-block: var(--cv-space-1, 4px);
+  }
+
   :host([layout='mobile']) [part='title'] {
-    font-size: var(--cv-font-size-base, 14px);
-    text-align: center;
+    font-size: var(--cv-font-size-md, 16px);
+    line-height: 1.25;
+    text-align: start;
   }
 
   :host([layout='mobile']) [part='meta'] {
-    justify-content: center;
+    justify-content: flex-start;
     font-size: var(--cv-font-size-xs, 12px);
+  }
+
+  :host([layout='mobile']) [part='meta'] > span + span::before {
+    content: '·';
+    margin-inline: var(--cv-space-2, 8px);
+    color: var(--cv-color-text-subtle);
+  }
+
+  :host([layout='mobile']) [part='header-actions'] {
+    align-self: center;
+    gap: var(--cv-space-1, 4px);
+  }
+
+  :host([layout='mobile']) cv-button.viewer-icon-button {
+    --cv-button-border-radius: 50%;
+  }
+
+  :host([layout='mobile']) cv-menu-button.viewer-menu-button {
+    --cv-menu-button-border-radius: 50%;
+  }
+
+  :host([layout='mobile']) cv-menu-button.viewer-menu-button::part(dropdown-icon) {
+    display: none;
   }
 
   :host([layout='mobile']) [part='footer'] {
