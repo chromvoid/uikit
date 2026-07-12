@@ -212,6 +212,10 @@ export class CVBottomSheet extends ReatomLitElement {
       padding: var(--cv-bottom-sheet-header-padding, var(--cv-space-4, 16px));
     }
 
+    :host([show-handle]) cv-dialog::part(header) {
+      padding: var(--cv-bottom-sheet-header-padding, 0 var(--cv-space-4, 16px) var(--cv-space-4, 16px));
+    }
+
     cv-dialog.detent-collapsed {
       --_cv-bottom-sheet-active-detent-block-size: var(--cv-bottom-sheet-collapsed-height, 148px);
       --_cv-bottom-sheet-detent-offset: 0px;

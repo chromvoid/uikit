@@ -182,7 +182,7 @@ linkage for one slotted control.
 
 | Property                       | Default                               | Description                    |
 | ------------------------------ | ------------------------------------- | ------------------------------ |
-| `--cv-field-gap`               | `var(--cv-space-1, 4px)`              | Vertical spacing between parts |
+| `--cv-field-gap`               | `var(--cv-space-2, 8px)`              | Vertical spacing between parts |
 | `--cv-field-horizontal-gap`    | `var(--cv-space-3, 12px)`             | Horizontal layout column gap   |
 | `--cv-field-label-color`       | `var(--cv-color-text, #e8ecf6)`       | Label text color               |
 | `--cv-field-label-font-size`   | `var(--cv-font-size-sm, 13px)`        | Label text size                |

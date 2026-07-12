@@ -384,6 +384,7 @@ The underlying dialog exports `trigger`, `overlay`, `content`, `header`, `title`
 | `--cv-bottom-sheet-detent-visible-height` | computed active detent height     | Visible sheet block size when detents are enabled |
 | `--cv-bottom-sheet-overlay-color`         | `var(--cv-color-overlay)`         | Backdrop color                                    |
 | `--cv-bottom-sheet-border-radius`         | top corners rounded               | Sheet corner radius                               |
+| `--cv-bottom-sheet-header-padding`        | `16px`; `0 16px 16px` with handle | Header padding                                    |
 | `--cv-bottom-sheet-grabber-color`         | `var(--cv-color-border-strong)`   | Grabber color                                     |
 | `--cv-bottom-sheet-dismiss-duration`      | `180ms`                           | Drag dismiss transition duration                  |
 

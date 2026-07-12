@@ -25,6 +25,12 @@ afterEach(() => {
 })
 
 describe('foundation primitives', () => {
+  it('cv-field uses the standard form rhythm by default', () => {
+    const cssText = CVField.styles.map((style) => style.cssText ?? '').join('\n')
+
+    expect(cssText).toContain('gap: var(--cv-field-gap, var(--cv-space-2, 8px));')
+  })
+
   it('cv-field propagates required, disabled, invalid, and descriptions to the slotted control', async () => {
     const field = document.createElement('cv-field') as CVField
     field.required = true

@@ -123,6 +123,9 @@ describe('cv-bottom-sheet', () => {
     const cssText = stylesToText(CVBottomSheet.styles)
 
     expect(cssText).toMatch(/cv-dialog::part\(header\)\s*{[\s\S]*padding:/)
+    expect(cssText).toMatch(
+      /:host\(\[show-handle\]\) cv-dialog::part\(header\)\s*{[\s\S]*0 var\(--cv-space-4,\s*16px\) var\(--cv-space-4,\s*16px\)/,
+    )
     expect(cssText).toMatch(/cv-dialog::part\(body\)\s*{[\s\S]*padding:/)
     expect(cssText).toMatch(/cv-dialog::part\(footer\)\s*{[\s\S]*padding:/)
   })

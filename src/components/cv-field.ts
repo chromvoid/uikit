@@ -55,7 +55,7 @@ export class CVField extends ReatomLitElement {
     css`
       :host {
         display: grid;
-        gap: var(--cv-field-gap, var(--cv-space-1, 4px));
+        gap: var(--cv-field-gap, var(--cv-space-2, 8px));
       }
 
       :host([orientation='horizontal']) {
