@@ -44,6 +44,7 @@ Modal or non-modal dialog overlay for presenting focused content, confirmations,
 | `close-on-outside-focus`   | Boolean | `true`     | Whether focusing outside closes the dialog                 |
 | `initial-focus-id`         | String  | —          | Id of element to focus when dialog opens                   |
 | `no-header`                | Boolean | `false`    | Hides the header (title, description, header close button) |
+| `always-on-top`            | Boolean | `false`    | Keeps the dialog above subsequently opened dialogs         |
 
 ## Slots
 
@@ -142,6 +143,7 @@ The top-layer shell, overlay, and content expose `data-state="closed|opening|ope
 | `close-on-outside-focus`   | attr → option | passed as `closeOnOutsideFocus` in `createDialog(options)`   |
 | `initial-focus-id`         | attr → option | passed as `initialFocusId` in `createDialog(options)`        |
 | `no-header`                | attr → DOM    | controls header visibility (UIKit-only, no headless binding) |
+| `always-on-top`            | attr → DOM    | prioritizes this surface in the native top-layer stack       |
 
 | Headless State                 | Direction      | DOM Reflection                                |
 | ------------------------------ | -------------- | --------------------------------------------- |

@@ -233,6 +233,7 @@ describe('cv-dialog', () => {
       expect(el.closeOnOutsidePointer).toBe(true)
       expect(el.closeOnOutsideFocus).toBe(true)
       expect(el.noHeader).toBe(false)
+      expect(el.alwaysOnTop).toBe(false)
     })
   })
 
@@ -263,6 +264,37 @@ describe('cv-dialog', () => {
     it('close-on-escape attribute reflects', async () => {
       const el = await createDialog()
       expect(el.hasAttribute('close-on-escape')).toBe(true)
+    })
+
+    it('always-on-top attribute reflects', async () => {
+      const el = await createDialog({alwaysOnTop: true})
+      expect(el.hasAttribute('always-on-top')).toBe(true)
+    })
+  })
+
+  describe('top-layer stacking', () => {
+    it('promotes an always-on-top dialog after a regular dialog opens later', async () => {
+      const elevated = await createDialog({alwaysOnTop: true})
+      const elevatedShell = getModalShell(elevated)!
+      const elevatedShowModal = vi.fn(() => elevatedShell.setAttribute('open', ''))
+      const elevatedClose = vi.fn(() => elevatedShell.removeAttribute('open'))
+      elevatedShell.showModal = elevatedShowModal
+      elevatedShell.close = elevatedClose
+
+      await openDialog(elevated)
+
+      const regular = await createDialog()
+      const regularShell = getModalShell(regular)!
+      const regularShowModal = vi.fn(() => regularShell.setAttribute('open', ''))
+      regularShell.showModal = regularShowModal
+
+      await openDialog(regular)
+
+      expect(regularShowModal).toHaveBeenCalledTimes(1)
+      expect(elevatedClose).toHaveBeenCalledTimes(1)
+      expect(elevatedShowModal).toHaveBeenCalledTimes(2)
+      expect(elevated.open).toBe(true)
+      expect(regular.open).toBe(true)
     })
   })
 

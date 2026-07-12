@@ -18,11 +18,23 @@ type PopoverHostElement = HTMLElement & {
 type DialogPresenceState = 'closed' | 'opening' | 'open' | 'closing'
 
 let cvDialogNonce = 0
+let cvDialogOpenOrderNonce = 0
+let topLayerReorderInProgress = false
 
 // Stack of currently-open dialogs in open order. Only the topmost dialog
 // reacts to outside-focus dismissal, so opening/closing a stacked dialog does
 // not cascade-close the dialogs beneath it.
 const openDialogStack: CVDialog[] = []
+const openDialogOrder = new WeakMap<CVDialog, number>()
+
+function sortOpenDialogStack(): void {
+  openDialogStack.sort((left, right) => {
+    const alwaysOnTopOrder = Number(left.alwaysOnTop) - Number(right.alwaysOnTop)
+    if (alwaysOnTopOrder !== 0) return alwaysOnTopOrder
+
+    return (openDialogOrder.get(left) ?? 0) - (openDialogOrder.get(right) ?? 0)
+  })
+}
 
 function getDeepActiveElement(): HTMLElement | null {
   let activeElement = document.activeElement
@@ -94,6 +106,7 @@ export class CVDialog extends ReatomLitElement {
       preventInitialTextFocus: {type: Boolean, attribute: false},
       noHeader: {type: Boolean, attribute: 'no-header', reflect: true},
       closable: {type: Boolean},
+      alwaysOnTop: {type: Boolean, attribute: 'always-on-top', reflect: true},
     }
   }
 
@@ -107,6 +120,7 @@ export class CVDialog extends ReatomLitElement {
   declare preventInitialTextFocus: boolean
   declare noHeader: boolean
   declare closable: boolean
+  declare alwaysOnTop: boolean
 
   private readonly idBase = `cv-dialog-${++cvDialogNonce}`
   private model: DialogModel
@@ -136,6 +150,7 @@ export class CVDialog extends ReatomLitElement {
     this.preventInitialTextFocus = false
     this.noHeader = false
     this.closable = true
+    this.alwaysOnTop = false
     this.model = this.createModel()
     this.portalVisible = this.open
     this.presenceState = this.open ? 'open' : 'closed'
@@ -481,6 +496,13 @@ export class CVDialog extends ReatomLitElement {
 
     this.syncTopLayerVisibility()
     this.syncOutsideFocusListener()
+    if (
+      changedProperties.has('open') ||
+      changedProperties.has('modal') ||
+      changedProperties.has('alwaysOnTop')
+    ) {
+      this.syncTopLayerStackOrder()
+    }
     this.syncScrollLock()
     this.syncRenderedPresenceState()
 
@@ -859,6 +881,43 @@ export class CVDialog extends ReatomLitElement {
     }
   }
 
+  private syncTopLayerStackOrder(): void {
+    if (!this.open) return
+
+    sortOpenDialogStack()
+    const topmostDialog = openDialogStack[openDialogStack.length - 1]
+    if (!topmostDialog || topmostDialog === this) return
+
+    topmostDialog.promoteTopLayerShell()
+  }
+
+  private promoteTopLayerShell(): void {
+    if (!this.portalVisible) return
+
+    topLayerReorderInProgress = true
+    try {
+      if (this.modal) {
+        const shell = this.getModalShell()
+        if (!shell?.open) return
+
+        try {
+          shell.close()
+          shell.showModal()
+        } catch {
+          shell.setAttribute('open', '')
+        }
+        return
+      }
+
+      const shell = this.getPopoverShell()
+      if (!shell || !this.isPopoverOpen(shell)) return
+      this.closePopoverShell(shell)
+      this.openPopoverShell(shell)
+    } finally {
+      topLayerReorderInProgress = false
+    }
+  }
+
   private syncOutsideFocusListener(forceOff = false): void {
     const shouldListen = !forceOff && this.open
     if (shouldListen) {
@@ -871,13 +930,17 @@ export class CVDialog extends ReatomLitElement {
   }
 
   private pushOntoOpenStack(): void {
-    if (openDialogStack.includes(this)) return
-    openDialogStack.push(this)
+    if (!openDialogStack.includes(this)) {
+      openDialogOrder.set(this, ++cvDialogOpenOrderNonce)
+      openDialogStack.push(this)
+    }
+    sortOpenDialogStack()
   }
 
   private removeFromOpenStack(): void {
     const index = openDialogStack.indexOf(this)
     if (index >= 0) openDialogStack.splice(index, 1)
+    openDialogOrder.delete(this)
   }
 
   private isTopmostOpenDialog(): boolean {
@@ -983,6 +1046,7 @@ export class CVDialog extends ReatomLitElement {
 
   private handleDocumentFocusIn(event: FocusEvent) {
     if (!this.open) return
+    if (topLayerReorderInProgress) return
 
     // Only the topmost open dialog reacts to outside focus. Otherwise opening
     // a stacked dialog B focuses its content, which would dismiss the
