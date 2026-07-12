@@ -205,33 +205,33 @@ The provider defines the full design token surface. All tokens use the `--cv-` p
 
 ### Typography tokens
 
-| Property                     | Value                                                                           | Description            |
-| ---------------------------- | ------------------------------------------------------------------------------- | ---------------------- |
-| `--cv-font-family-primary`   | `'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif` | Primary font stack     |
-| `--cv-font-family-body`      | `var(--cv-font-family-primary)`                                                 | Body text font         |
-| `--cv-font-family-display`   | `'Satoshi', var(--cv-font-family-primary)`                                      | Display / heading font |
-| `--cv-font-family-sans`      | `var(--cv-font-family-primary)`                                                 | Alias: sans-serif      |
-| `--cv-font-family-code`      | `'JetBrains Mono', 'SF Mono', 'Monaco', 'Consolas', monospace`                  | Monospace font         |
-| `--cv-font-size-xs`          | `0.75rem`                                                                       | Extra-small text       |
-| `--cv-font-size-sm`          | `0.875rem`                                                                      | Small text             |
-| `--cv-font-size-base`        | `1rem`                                                                          | Base text size         |
-| `--cv-font-size-md`          | `var(--cv-font-size-base)`                                                      | Alias: medium          |
-| `--cv-font-size-lg`          | `1.125rem`                                                                      | Large text             |
-| `--cv-font-size-xl`          | `1.25rem`                                                                       | Extra-large text       |
-| `--cv-font-size-2xl`         | `1.5rem`                                                                        | 2x-large text          |
-| `--cv-font-size-3xl`         | `1.875rem`                                                                      | 3x-large text          |
-| `--cv-font-size-4xl`         | `2.25rem`                                                                       | 4x-large text          |
-| `--cv-font-size-5xl`         | `3rem`                                                                          | 5x-large text          |
-| `--cv-font-size-6xl`         | `3.75rem`                                                                       | 6x-large text          |
-| `--cv-font-weight-thin`      | `100`                                                                           | Thin weight            |
-| `--cv-font-weight-light`     | `300`                                                                           | Light weight           |
-| `--cv-font-weight-normal`    | `400`                                                                           | Normal weight          |
-| `--cv-font-weight-regular`   | `var(--cv-font-weight-normal)`                                                  | Alias: regular         |
-| `--cv-font-weight-medium`    | `500`                                                                           | Medium weight          |
-| `--cv-font-weight-semibold`  | `600`                                                                           | Semi-bold weight       |
-| `--cv-font-weight-bold`      | `700`                                                                           | Bold weight            |
-| `--cv-font-weight-extrabold` | `800`                                                                           | Extra-bold weight      |
-| `--cv-font-weight-black`     | `900`                                                                           | Black weight           |
+| Property                     | Value                                                                                      | Description            |
+| ---------------------------- | ------------------------------------------------------------------------------------------ | ---------------------- |
+| `--cv-font-family-primary`   | `'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif`            | Primary font stack     |
+| `--cv-font-family-body`      | `var(--cv-font-family-primary)`                                                            | Body text font         |
+| `--cv-font-family-display`   | `var(--cv-font-family-primary)`                                                            | Display / heading font |
+| `--cv-font-family-sans`      | `var(--cv-font-family-primary)`                                                            | Alias: sans-serif      |
+| `--cv-font-family-code`      | `'JetBrains Mono', ui-monospace, 'SFMono-Regular', 'Cascadia Mono', 'Consolas', monospace` | Monospace font         |
+| `--cv-font-size-xs`          | `0.75rem`                                                                                  | Extra-small text       |
+| `--cv-font-size-sm`          | `0.875rem`                                                                                 | Small text             |
+| `--cv-font-size-base`        | `1rem`                                                                                     | Base text size         |
+| `--cv-font-size-md`          | `var(--cv-font-size-base)`                                                                 | Alias: medium          |
+| `--cv-font-size-lg`          | `1.125rem`                                                                                 | Large text             |
+| `--cv-font-size-xl`          | `1.25rem`                                                                                  | Extra-large text       |
+| `--cv-font-size-2xl`         | `1.5rem`                                                                                   | 2x-large text          |
+| `--cv-font-size-3xl`         | `1.875rem`                                                                                 | 3x-large text          |
+| `--cv-font-size-4xl`         | `2.25rem`                                                                                  | 4x-large text          |
+| `--cv-font-size-5xl`         | `3rem`                                                                                     | 5x-large text          |
+| `--cv-font-size-6xl`         | `3.75rem`                                                                                  | 6x-large text          |
+| `--cv-font-weight-thin`      | `100`                                                                                      | Thin weight            |
+| `--cv-font-weight-light`     | `300`                                                                                      | Light weight           |
+| `--cv-font-weight-normal`    | `400`                                                                                      | Normal weight          |
+| `--cv-font-weight-regular`   | `var(--cv-font-weight-normal)`                                                             | Alias: regular         |
+| `--cv-font-weight-medium`    | `500`                                                                                      | Medium weight          |
+| `--cv-font-weight-semibold`  | `600`                                                                                      | Semi-bold weight       |
+| `--cv-font-weight-bold`      | `700`                                                                                      | Bold weight            |
+| `--cv-font-weight-extrabold` | `800`                                                                                      | Extra-bold weight      |
+| `--cv-font-weight-black`     | `900`                                                                                      | Black weight           |
 
 ### Shadow tokens
 
