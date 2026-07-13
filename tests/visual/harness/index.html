@@ -138,6 +138,17 @@
       .visual-long-text {
         max-width: 260px;
       }
+      .visual-radio-overflow {
+        inline-size: 260px;
+      }
+      .visual-radio-overflow cv-radio-group {
+        display: block;
+        inline-size: 100%;
+      }
+      .visual-radio-overflow cv-radio::part(base) {
+        justify-content: center;
+        inline-size: 100%;
+      }
       .visual-wide-control {
         width: min(520px, 100%);
       }

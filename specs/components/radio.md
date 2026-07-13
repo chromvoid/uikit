@@ -335,13 +335,13 @@ Individual radio option within a radio group. Purely presentational — all stat
 
 #### CSS Parts
 
-| Part          | Element  | Description                                |
-| ------------- | -------- | ------------------------------------------ |
-| `base`        | `<div>`  | Root layout wrapper                        |
-| `indicator`   | `<span>` | Circular border container for the dot      |
-| `dot`         | `<span>` | Inner filled circle (visible when checked) |
-| `label`       | `<span>` | Wrapper around the default slot            |
-| `description` | `<span>` | Wrapper around the `description` slot      |
+| Part          | Element  | Description                                        |
+| ------------- | -------- | -------------------------------------------------- |
+| `base`        | `<div>`  | Border-box root wrapper safe for percentage sizing |
+| `indicator`   | `<span>` | Circular border container for the dot              |
+| `dot`         | `<span>` | Inner filled circle (visible when checked)         |
+| `label`       | `<span>` | Wrapper around the default slot                    |
+| `description` | `<span>` | Wrapper around the `description` slot              |
 
 #### CSS Custom Properties
 

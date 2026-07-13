@@ -69,6 +69,14 @@ describe('cv-radio', () => {
     })
   })
 
+  describe('layout contract', () => {
+    it('keeps percentage-sized base parts inside the host border box', () => {
+      const styleText = CVRadio.styles.map((style) => style.cssText).join('\n')
+
+      expect(styleText).toMatch(/\.radio\s*\{[^}]*box-sizing:\s*border-box;/s)
+    })
+  })
+
   // --- Default property values ---
 
   describe('default property values', () => {

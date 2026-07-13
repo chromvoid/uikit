@@ -212,17 +212,53 @@ export const inputsSelectionCases: readonly UikitVisualCase[] = [
   visualCase({
     id: 'cv-radio-group/overflow',
     component: 'cv-radio-group',
-    title: 'Horizontal radio groups preserve option width and expose inline overflow',
-    states: ['segmented', 'constrained', 'long-labels', 'horizontal-scroll'],
+    title: 'Horizontal radios keep shadow bases inside their hosts and expose inline overflow',
+    states: ['segmented', 'constrained', 'full-width-parts', 'horizontal-scroll'],
     html: `
-      <div class="visual-long-text">
-        <cv-radio-group variant="segmented" value="recommended" aria-label="Deployment strategy">
-          <cv-radio value="recommended">Recommended strategy</cv-radio>
-          <cv-radio value="compatible">Compatibility mode</cv-radio>
-          <cv-radio value="advanced">Advanced configuration</cv-radio>
+      <div class="visual-radio-overflow">
+        <cv-radio-group variant="segmented" value="ed25519" aria-label="SSH key type">
+          <cv-radio value="ed25519">Ed25519</cv-radio>
+          <cv-radio value="rsa">RSA-4096</cv-radio>
+          <cv-radio value="ecdsa">ECDSA-P256</cv-radio>
         </cv-radio-group>
       </div>
     `,
+    afterMount: async (root) => {
+      const group = root.querySelector<HTMLElement>('cv-radio-group')
+      if (!group) throw new Error('Radio overflow case did not render its group')
+
+      await waitForElementUpdate(group)
+      const radios = Array.from(group.querySelectorAll<HTMLElement>('cv-radio'))
+      await Promise.all(radios.map((radio) => waitForElementUpdate(radio)))
+      const hostRects = radios.map((radio) => {
+        const base = radio.shadowRoot?.querySelector<HTMLElement>('[part="base"]')
+        if (!base) throw new Error(`Radio ${radio.getAttribute('value')} did not render its base part`)
+
+        const hostRect = radio.getBoundingClientRect()
+        const baseRect = base.getBoundingClientRect()
+        if (baseRect.left < hostRect.left - 0.5 || baseRect.right > hostRect.right + 0.5) {
+          throw new Error(`Radio ${radio.getAttribute('value')} base overflows its host`)
+        }
+        return hostRect
+      })
+
+      for (let index = 1; index < hostRects.length; index += 1) {
+        if (hostRects[index]!.left < hostRects[index - 1]!.right - 0.5) {
+          throw new Error('Horizontal radio hosts overlap')
+        }
+      }
+
+      if (getComputedStyle(group).overflowX !== 'auto' || group.scrollWidth <= group.clientWidth) {
+        throw new Error('Constrained horizontal radio group is not scrollable')
+      }
+
+      group.scrollLeft = group.scrollWidth
+      await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()))
+      if (group.scrollLeft <= 0) {
+        throw new Error('Horizontal radio group did not accept native inline scrolling')
+      }
+      group.scrollLeft = 0
+    },
   }),
   visualCase({
     id: 'cv-switch/states',

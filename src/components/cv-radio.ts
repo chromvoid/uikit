@@ -61,6 +61,7 @@ export class CVRadio extends LitElement {
       .radio {
         display: inline-flex;
         align-items: center;
+        box-sizing: border-box;
         gap: var(--cv-radio-gap);
         min-block-size: 32px;
         padding: 0 var(--cv-space-1, 4px);
