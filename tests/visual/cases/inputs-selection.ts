@@ -210,6 +210,21 @@ export const inputsSelectionCases: readonly UikitVisualCase[] = [
     `,
   }),
   visualCase({
+    id: 'cv-radio-group/overflow',
+    component: 'cv-radio-group',
+    title: 'Horizontal radio groups preserve option width and expose inline overflow',
+    states: ['segmented', 'constrained', 'long-labels', 'horizontal-scroll'],
+    html: `
+      <div class="visual-long-text">
+        <cv-radio-group variant="segmented" value="recommended" aria-label="Deployment strategy">
+          <cv-radio value="recommended">Recommended strategy</cv-radio>
+          <cv-radio value="compatible">Compatibility mode</cv-radio>
+          <cv-radio value="advanced">Advanced configuration</cv-radio>
+        </cv-radio-group>
+      </div>
+    `,
+  }),
+  visualCase({
     id: 'cv-switch/states',
     component: 'cv-switch',
     title: 'Switch checked, unchecked, disabled, required, sizes, and help text',

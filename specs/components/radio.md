@@ -49,11 +49,12 @@ This document is the UIKit surface contract for Radio Group.
 
 ## Visual States
 
-| Host selector                     | Description                          |
-| --------------------------------- | ------------------------------------ |
-| `:host([disabled])`               | All child radios are non-interactive |
-| `:host([orientation="vertical"])` | Items stacked vertically             |
-| `:host([variant="segmented"])`    | Segmented-control visual treatment   |
+| Host selector                       | Description                                              |
+| ----------------------------------- | -------------------------------------------------------- |
+| `:host([disabled])`                 | All child radios are non-interactive                     |
+| `:host([orientation="horizontal"])` | Items stay on one row and scroll inline when constrained |
+| `:host([orientation="vertical"])`   | Items stacked vertically                                 |
+| `:host([variant="segmented"])`      | Segmented-control visual treatment                       |
 
 ## Reactive State Mapping
 

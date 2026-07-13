@@ -131,6 +131,10 @@ export class CVRadio extends LitElement {
         display: none;
       }
 
+      :host([variant='segmented']) [part='label'] {
+        white-space: nowrap;
+      }
+
       :host([variant='segmented'][active]) .radio {
         border-color: color-mix(
           in oklab,

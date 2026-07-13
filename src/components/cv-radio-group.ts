@@ -85,13 +85,15 @@ export class CVRadioGroup extends FormAssociatedReatomElement {
     css`
       :host {
         display: inline-block;
+        max-inline-size: 100%;
         --cv-radio-group-gap: var(--cv-space-2, 8px);
       }
 
       [part='base'] {
         display: inline-flex;
-        flex-wrap: wrap;
+        flex-wrap: nowrap;
         align-items: center;
+        box-sizing: border-box;
         gap: var(--cv-radio-group-gap);
         padding: var(--cv-space-1, 4px);
         border-radius: var(--cv-radius-md, 10px);
@@ -99,8 +101,24 @@ export class CVRadioGroup extends FormAssociatedReatomElement {
         background: var(--cv-color-surface, #141923);
       }
 
+      :host([orientation='horizontal']) {
+        overflow-x: auto;
+        overscroll-behavior-inline: contain;
+        scrollbar-width: thin;
+      }
+
+      :host([orientation='horizontal']) [part='base'] {
+        inline-size: max-content;
+        min-inline-size: 100%;
+      }
+
+      :host([orientation='horizontal']) ::slotted(cv-radio) {
+        flex: 0 0 auto;
+      }
+
       :host([orientation='vertical']) [part='base'] {
         display: inline-grid;
+        min-inline-size: 0;
         justify-items: start;
       }
 
