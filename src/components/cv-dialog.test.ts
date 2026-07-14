@@ -1,8 +1,10 @@
 import {afterEach, describe, expect, it, vi} from 'vitest'
 
+import {CVButton} from './cv-button'
 import {CVDialog} from './cv-dialog'
 import {resetBodyScrollLockForTesting} from './scroll-lock'
 
+CVButton.define()
 CVDialog.define()
 
 const settle = async (element: CVDialog) => {
@@ -740,7 +742,11 @@ describe('cv-dialog', () => {
       const el = await createDialog({closeOnEscape: false, open: true})
       const content = getContent(el)
 
-      const event = new KeyboardEvent('keydown', {key: 'Escape', bubbles: true, cancelable: true})
+      const event = new KeyboardEvent('keydown', {
+        key: 'Escape',
+        bubbles: true,
+        cancelable: true,
+      })
       content.dispatchEvent(event)
       await settle(el)
 
@@ -752,7 +758,11 @@ describe('cv-dialog', () => {
       const el = await createDialog({open: true})
       const content = getContent(el)
 
-      const event = new KeyboardEvent('keydown', {key: 'Escape', bubbles: true, cancelable: true})
+      const event = new KeyboardEvent('keydown', {
+        key: 'Escape',
+        bubbles: true,
+        cancelable: true,
+      })
       event.preventDefault()
       content.dispatchEvent(event)
       await settle(el)
@@ -924,6 +934,22 @@ describe('cv-dialog', () => {
       await Promise.resolve()
 
       expect(document.activeElement).toBe(button)
+    })
+
+    it('focuses the native control inside a requested cv-button target', async () => {
+      const el = await createDialog()
+      const button = document.createElement('cv-button') as CVButton
+      button.id = 'target'
+      button.textContent = 'Reject'
+      el.initialFocusId = button.id
+      el.append(button)
+      await button.updateComplete
+
+      await openDialog(el)
+      await Promise.resolve()
+
+      expect(document.activeElement).toBe(button)
+      expect(button.shadowRoot?.activeElement).toBe(button.shadowRoot?.querySelector('[part="base"]'))
     })
 
     it('focuses the dialog content when no initial-focus-id is set', async () => {

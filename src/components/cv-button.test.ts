@@ -159,6 +159,21 @@ describe('cv-button', () => {
     })
   })
 
+  describe('focus contract', () => {
+    it('delegates host focus to the native button and forwards FocusOptions', async () => {
+      const button = await createButton()
+      const base = getBase(button)
+      const options: FocusOptions = {preventScroll: true}
+      const focusSpy = vi.spyOn(base, 'focus')
+
+      button.focus(options)
+
+      expect(focusSpy).toHaveBeenCalledWith(options)
+      expect(document.activeElement).toBe(button)
+      expect(button.shadowRoot?.activeElement).toBe(base)
+    })
+  })
+
   // --- 2b. Default property values ---
 
   describe('default property values', () => {

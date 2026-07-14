@@ -609,6 +609,15 @@ export class CVButton extends FormAssociatedReatomElement {
     }
   }
 
+  override focus(options?: FocusOptions): void {
+    const button = this.shadowRoot?.querySelector<HTMLButtonElement>('[part="base"]')
+    if (button) {
+      button.focus(options)
+      return
+    }
+    super.focus(options)
+  }
+
   override connectedCallback(): void {
     super.connectedCallback()
     this.addEventListener('click', this.handleHostClick, {capture: true})
