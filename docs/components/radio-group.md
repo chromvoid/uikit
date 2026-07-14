@@ -253,11 +253,12 @@ This document is the UIKit surface contract for Radio Group.
 
 ## Visual States
 
-| Host selector                     | Description                          |
-| --------------------------------- | ------------------------------------ |
-| `:host([disabled])`               | All child radios are non-interactive |
-| `:host([orientation="vertical"])` | Items stacked vertically             |
-| `:host([variant="segmented"])`    | Segmented-control visual treatment   |
+| Host selector                       | Description                                              |
+| ----------------------------------- | -------------------------------------------------------- |
+| `:host([disabled])`                 | All child radios are non-interactive                     |
+| `:host([orientation="horizontal"])` | Items stay on one row and scroll inline when constrained |
+| `:host([orientation="vertical"])`   | Items stacked vertically                                 |
+| `:host([variant="segmented"])`      | Segmented-control visual treatment                       |
 
 ## Reactive State Mapping
 
@@ -336,13 +337,13 @@ Individual radio option within a radio group. Purely presentational — all stat
 
 #### CSS Parts
 
-| Part          | Element  | Description                                |
-| ------------- | -------- | ------------------------------------------ |
-| `base`        | `<div>`  | Root layout wrapper                        |
-| `indicator`   | `<span>` | Circular border container for the dot      |
-| `dot`         | `<span>` | Inner filled circle (visible when checked) |
-| `label`       | `<span>` | Wrapper around the default slot            |
-| `description` | `<span>` | Wrapper around the `description` slot      |
+| Part          | Element  | Description                                        |
+| ------------- | -------- | -------------------------------------------------- |
+| `base`        | `<div>`  | Border-box root wrapper safe for percentage sizing |
+| `indicator`   | `<span>` | Circular border container for the dot              |
+| `dot`         | `<span>` | Inner filled circle (visible when checked)         |
+| `label`       | `<span>` | Wrapper around the default slot                    |
+| `description` | `<span>` | Wrapper around the `description` slot              |
 
 #### CSS Custom Properties
 

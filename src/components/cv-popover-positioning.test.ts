@@ -29,15 +29,39 @@ const panelRect = {
 
 describe('cv-popover positioning helpers', () => {
   it('maps placement to position-area syntax', () => {
-    expect(getPositionAreaForPlacement('top-start')).toBe('top left')
-    expect(getPositionAreaForPlacement('bottom')).toBe('bottom center')
-    expect(getPositionAreaForPlacement('right-end')).toBe('bottom right')
-    expect(getPositionAreaForPlacement('left')).toBe('center left')
+    expect(getPositionAreaForPlacement('top-start')).toBe('top span-right')
+    expect(getPositionAreaForPlacement('bottom')).toBe('bottom')
+    expect(getPositionAreaForPlacement('right-end')).toBe('right span-top')
+    expect(getPositionAreaForPlacement('left')).toBe('left')
+  })
+
+  it('mirrors top and bottom inline alignment in RTL while keeping side placements physical', () => {
+    expect(getPositionAreaForPlacement('top-start', 'rtl')).toBe('top span-left')
+    expect(getPositionAreaForPlacement('top-end', 'rtl')).toBe('top span-right')
+    expect(getPositionAreaForPlacement('bottom-start', 'rtl')).toBe('bottom span-left')
+    expect(getPositionAreaForPlacement('bottom-end', 'rtl')).toBe('bottom span-right')
+    expect(getPositionAreaForPlacement('left-start', 'rtl')).toBe('left span-bottom')
+    expect(getPositionAreaForPlacement('right-end', 'rtl')).toBe('right span-top')
   })
 
   it('prefers mirrored and orthogonal fallbacks after the requested placement', () => {
     expect(getPlacementFallbacks('right-end')).toEqual(['right-end', 'left-end', 'bottom-end', 'top-end'])
     expect(getPlacementFallbacks('top')).toEqual(['top', 'bottom', 'right', 'left'])
+  })
+
+  it('orders inline-axis fallbacks from the corresponding RTL side', () => {
+    expect(getPlacementFallbacks('top-start', 'rtl')).toEqual([
+      'top-start',
+      'bottom-start',
+      'left-start',
+      'right-start',
+    ])
+    expect(getPlacementFallbacks('left-end', 'rtl')).toEqual([
+      'left-end',
+      'right-end',
+      'bottom-end',
+      'top-end',
+    ])
   })
 
   it('keeps right-end placement when it fits the viewport', () => {
@@ -94,12 +118,51 @@ describe('cv-popover positioning helpers', () => {
     expect(resolved.top).toBe(460)
   })
 
+  it('resolves top and bottom start/end against the RTL inline axis', () => {
+    const start = resolvePopoverPosition(
+      anchorRect,
+      panelRect,
+      'bottom-start',
+      8,
+      {width: 800, height: 600, padding: 8},
+      'rtl',
+    )
+    const end = resolvePopoverPosition(
+      anchorRect,
+      panelRect,
+      'bottom-end',
+      8,
+      {width: 800, height: 600, padding: 8},
+      'rtl',
+    )
+
+    expect(start.left).toBe(40)
+    expect(end.left).toBe(100)
+    expect(start.top).toBe(172)
+    expect(end.top).toBe(172)
+  })
+
+  it('keeps left and right placement geometry physical in RTL', () => {
+    const resolved = resolvePopoverPosition(
+      {...anchorRect, left: 400, right: 480},
+      panelRect,
+      'left-start',
+      8,
+      {width: 800, height: 600, padding: 8},
+      'rtl',
+    )
+
+    expect(resolved.left).toBe(252)
+    expect(resolved.top).toBe(120)
+    expect(resolved.placement).toBe('left-start')
+  })
+
   it('maps side-only and start/end side placements to position-area syntax', () => {
-    expect(getPositionAreaForPlacement('left-start')).toBe('top left')
-    expect(getPositionAreaForPlacement('left-end')).toBe('bottom left')
-    expect(getPositionAreaForPlacement('right-start')).toBe('top right')
-    expect(getPositionAreaForPlacement('top-end')).toBe('top right')
-    expect(getPositionAreaForPlacement('top')).toBe('top center')
+    expect(getPositionAreaForPlacement('left-start')).toBe('left span-bottom')
+    expect(getPositionAreaForPlacement('left-end')).toBe('left span-top')
+    expect(getPositionAreaForPlacement('right-start')).toBe('right span-bottom')
+    expect(getPositionAreaForPlacement('top-end')).toBe('top span-left')
+    expect(getPositionAreaForPlacement('top')).toBe('top')
   })
 
   it('returns center-aligned fallbacks for side-only left placement', () => {
@@ -276,6 +339,33 @@ describe('cv-popover positioning helpers', () => {
     )
 
     expect(offset).toBe(115)
+  })
+
+  it('measures inline arrow offset from the RTL inline-start edge', () => {
+    const offset = resolvePopoverArrowOffset(
+      {
+        left: 100,
+        top: 120,
+        right: 180,
+        bottom: 160,
+        width: 80,
+        height: 40,
+      },
+      {
+        left: 20,
+        top: 12,
+        right: 340,
+        bottom: 112,
+        width: 320,
+        height: 100,
+      },
+      10,
+      'inline',
+      8,
+      'rtl',
+    )
+
+    expect(offset).toBe(195)
   })
 
   it('clamps arrow offset inside the panel edge padding', () => {

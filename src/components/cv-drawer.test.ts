@@ -48,7 +48,11 @@ function createPointerEvent(
     isPrimary?: boolean
   },
 ): PointerEvent {
-  const event = new Event(type, {bubbles: true, composed: true, cancelable: true}) as PointerEvent
+  const event = new Event(type, {
+    bubbles: true,
+    composed: true,
+    cancelable: true,
+  }) as PointerEvent
   Object.defineProperties(event, {
     button: {value: options.button ?? 0},
     clientX: {value: options.clientX},
@@ -63,6 +67,7 @@ function createPointerEvent(
 afterEach(() => {
   document.body.innerHTML = ''
   document.body.style.overflow = ''
+  document.documentElement.removeAttribute('dir')
   vi.restoreAllMocks()
   vi.useRealTimers()
 })
@@ -513,6 +518,29 @@ describe('cv-drawer', () => {
       expect(cssText).toContain('block-size: min(var(--cv-drawer-size, 360px), 100%);')
       expect(cssText).toContain('max-block-size: min(var(--cv-drawer-max-size, calc(100dvh - 32px)), 100%);')
     })
+
+    it('uses logical inline-edge radii and mirrored closed transforms in RTL', () => {
+      const cssText = stylesToText(CVDrawer.styles)
+
+      expect(cssText).toMatch(
+        /\[part='panel'\]\[data-placement='start'\][\s\S]*inset-inline-start:\s*0;[\s\S]*border-start-end-radius:[\s\S]*border-end-end-radius:[\s\S]*transform:\s*translate3d\(-100%, 0, 0\);/,
+      )
+      expect(cssText).toMatch(
+        /:host\(:dir\(rtl\)\) \[part='panel'\]\[data-placement='start'\]\[data-state='closed'\][\s\S]*transform:\s*translate3d\(100%, 0, 0\);/,
+      )
+      expect(cssText).toMatch(
+        /\[part='panel'\]\[data-placement='end'\][\s\S]*inset-inline-end:\s*0;[\s\S]*border-start-start-radius:[\s\S]*border-end-start-radius:[\s\S]*transform:\s*translate3d\(100%, 0, 0\);/,
+      )
+      expect(cssText).toMatch(
+        /:host\(:dir\(rtl\)\) \[part='panel'\]\[data-placement='end'\]\[data-state='closed'\][\s\S]*transform:\s*translate3d\(-100%, 0, 0\);/,
+      )
+      expect(cssText).toMatch(
+        /\[part='panel'\]\[data-placement='top'\][\s\S]*transform:\s*translate3d\(0, -100%, 0\);/,
+      )
+      expect(cssText).toMatch(
+        /\[part='panel'\]\[data-placement='bottom'\][\s\S]*transform:\s*translate3d\(0, 100%, 0\);/,
+      )
+    })
   })
 
   // --- Open and close behavior ---
@@ -701,6 +729,56 @@ describe('cv-drawer', () => {
       expect(el.open).toBe(false)
       expect(inputDetails).toEqual([{open: false}])
       expect(changeDetails).toEqual([{open: false}])
+    })
+
+    it('closes an RTL start drawer toward the physical right edge', async () => {
+      document.documentElement.dir = 'rtl'
+      const el = await createDrawer({open: true, placement: 'start', dragToClose: true})
+      const panel = getPanel(el)
+
+      panel.dispatchEvent(createPointerEvent('pointerdown', {clientX: 120, clientY: 40}))
+      panel.dispatchEvent(createPointerEvent('pointermove', {clientX: 240, clientY: 40}))
+
+      expect(panel.style.getPropertyValue('--cv-drawer-drag-offset-x')).toBe('120px')
+
+      panel.dispatchEvent(createPointerEvent('pointerup', {clientX: 240, clientY: 40}))
+      await settle(el)
+
+      expect(el.open).toBe(false)
+    })
+
+    it('closes an RTL end drawer toward the physical left edge', async () => {
+      document.documentElement.dir = 'rtl'
+      const el = await createDrawer({open: true, placement: 'end', dragToClose: true})
+      const panel = getPanel(el)
+
+      panel.dispatchEvent(createPointerEvent('pointerdown', {clientX: 240, clientY: 40}))
+      panel.dispatchEvent(createPointerEvent('pointermove', {clientX: 120, clientY: 40}))
+
+      expect(panel.style.getPropertyValue('--cv-drawer-drag-offset-x')).toBe('-120px')
+
+      panel.dispatchEvent(createPointerEvent('pointerup', {clientX: 120, clientY: 40}))
+      await settle(el)
+
+      expect(el.open).toBe(false)
+    })
+
+    it('resets an active drag when inherited root direction changes while open', async () => {
+      document.documentElement.dir = 'ltr'
+      const el = await createDrawer({open: true, placement: 'start', dragToClose: true})
+      const panel = getPanel(el)
+
+      panel.dispatchEvent(createPointerEvent('pointerdown', {clientX: 240, clientY: 40}))
+      panel.dispatchEvent(createPointerEvent('pointermove', {clientX: 180, clientY: 40}))
+      expect(panel.getAttribute('data-dragging')).toBe('true')
+
+      document.documentElement.dir = 'rtl'
+
+      await vi.waitFor(() => {
+        expect(panel.getAttribute('data-dragging')).toBeNull()
+      })
+      expect(panel.style.getPropertyValue('--cv-drawer-drag-offset-x')).toBe('')
+      expect(el.open).toBe(true)
     })
 
     it('snaps back after a below-threshold touch drag without closing', async () => {
@@ -900,7 +978,11 @@ describe('cv-drawer', () => {
       expect(el.open).toBe(true)
 
       const panel = getPanel(el)
-      const event = new KeyboardEvent('keydown', {key: 'Escape', bubbles: true, cancelable: true})
+      const event = new KeyboardEvent('keydown', {
+        key: 'Escape',
+        bubbles: true,
+        cancelable: true,
+      })
       panel.dispatchEvent(event)
       await settle(el)
 
@@ -919,7 +1001,11 @@ describe('cv-drawer', () => {
       expect(el.open).toBe(true)
 
       const panel = getPanel(el)
-      const event = new KeyboardEvent('keydown', {key: 'Escape', bubbles: true, cancelable: true})
+      const event = new KeyboardEvent('keydown', {
+        key: 'Escape',
+        bubbles: true,
+        cancelable: true,
+      })
       event.preventDefault()
       panel.dispatchEvent(event)
       await settle(el)

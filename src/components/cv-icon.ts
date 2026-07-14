@@ -149,6 +149,13 @@ const BOOTSTRAP_TO_LUCIDE: Record<string, string> = {
   history: 'history',
 }
 
+const INLINE_DIRECTIONAL_ICONS: Record<string, string> = {
+  'chevron-inline-start': 'chevron-left',
+  'chevron-inline-end': 'chevron-right',
+  'arrow-inline-start': 'arrow-left',
+  'arrow-inline-end': 'arrow-right',
+}
+
 export type CVIconSize = 'xs' | 's' | 'm' | 'md' | 'l' | 'lg'
 export type CVIconColor = 'default' | 'muted' | 'primary' | 'success' | 'warning' | 'danger'
 
@@ -245,6 +252,10 @@ export class CVIcon extends ReatomLitElement {
         flex: 0 0 100%;
       }
 
+      :host(:dir(rtl)) .icon--inline-directional {
+        transform: scaleX(-1);
+      }
+
       .icon svg,
       ::slotted(svg) {
         inline-size: 100%;
@@ -311,8 +322,16 @@ export class CVIcon extends ReatomLitElement {
     }
   }
 
-  private static resolveIconName(name: string): string {
-    return BOOTSTRAP_TO_LUCIDE[name] ?? name
+  private static resolveIconName(name: string, includeInlineDirectional = true): string {
+    return (
+      (includeInlineDirectional ? INLINE_DIRECTIONAL_ICONS[name] : undefined) ??
+      BOOTSTRAP_TO_LUCIDE[name] ??
+      name
+    )
+  }
+
+  private isInlineDirectionalIcon(): boolean {
+    return !this.src && Object.hasOwn(INLINE_DIRECTIONAL_ICONS, this.name)
   }
 
   private static getCollectionBasePath(name: string): string | null {
@@ -339,7 +358,7 @@ export class CVIcon extends ReatomLitElement {
       urls.push(`${collectionBasePath}/${iconName}.svg`)
     }
 
-    const fallbackUrl = `${iconBasePath}/${CVIcon.resolveIconName(iconName)}.svg`
+    const fallbackUrl = `${iconBasePath}/${CVIcon.resolveIconName(iconName, false)}.svg`
     if (!urls.includes(fallbackUrl)) {
       urls.push(fallbackUrl)
     }
@@ -420,17 +439,18 @@ export class CVIcon extends ReatomLitElement {
   protected override render() {
     const ariaHidden = this.label ? 'false' : 'true'
     const ariaLabel = this.label ?? ''
+    const iconClass = this.isInlineDirectionalIcon() ? 'icon icon--inline-directional' : 'icon'
 
     if (this.svgMarkup && !this.hasSlottedContent) {
       return html`
-        <span class="icon" role="img" aria-hidden=${ariaHidden} aria-label=${ariaLabel}>
+        <span class=${iconClass} role="img" aria-hidden=${ariaHidden} aria-label=${ariaLabel}>
           ${unsafeHTML(this.svgMarkup)}
         </span>
       `
     }
 
     return html`
-      <span class="icon" role="img" aria-hidden=${ariaHidden} aria-label=${ariaLabel}>
+      <span class=${iconClass} role="img" aria-hidden=${ariaHidden} aria-label=${ariaLabel}>
         <slot @slotchange=${this.handleSlotChange}></slot>
         ${this.svgMarkup ? unsafeHTML(this.svgMarkup) : ''}
       </span>

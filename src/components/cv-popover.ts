@@ -22,6 +22,7 @@ import {
   toPopoverRect,
   type NativePopoverElement,
 } from './cv-popover-positioning'
+import {observeInheritedDirection, readInheritedDirection, type CVTextDirection} from './text-direction.js'
 
 export interface CVPopoverEventDetail {
   open: boolean
@@ -57,7 +58,11 @@ export class CVPopover extends ReatomLitElement {
       ariaLabel: {type: String, attribute: 'aria-label'},
       ariaLabelledBy: {type: String, attribute: 'aria-labelledby'},
       closeOnEscape: {type: Boolean, attribute: 'close-on-escape', reflect: true},
-      closeOnOutsidePointer: {type: Boolean, attribute: 'close-on-outside-pointer', reflect: true},
+      closeOnOutsidePointer: {
+        type: Boolean,
+        attribute: 'close-on-outside-pointer',
+        reflect: true,
+      },
       closeOnOutsideFocus: {type: Boolean, attribute: 'close-on-outside-focus', reflect: true},
       placement: {type: String, reflect: true},
       anchor: {type: String, reflect: true},
@@ -87,6 +92,8 @@ export class CVPopover extends ReatomLitElement {
   private focusContentOnNextUpdate = false
   private restoreFocusTarget: HTMLElement | null = null
   private _sourceEl: HTMLElement | null = null
+  private layoutDirection: CVTextDirection = 'ltr'
+  private directionObserver: MutationObserver | null = null
 
   get sourceEl(): HTMLElement | null {
     return this._sourceEl
@@ -205,6 +212,23 @@ export class CVPopover extends ReatomLitElement {
         }
       }
 
+      @media (prefers-reduced-motion: reduce) {
+        [part='content'] {
+          transition-duration: 0ms;
+        }
+
+        [part='content'][hidden],
+        [part='content'][popover]:not(:popover-open) {
+          transform: none;
+        }
+
+        @starting-style {
+          [part='content']:not([hidden]) {
+            transform: none;
+          }
+        }
+      }
+
       [part='content']:focus-visible {
         outline: 2px solid var(--cv-color-primary, #65d7ff);
         outline-offset: 1px;
@@ -256,6 +280,7 @@ export class CVPopover extends ReatomLitElement {
   override connectedCallback(): void {
     super.connectedCallback()
     this.syncOutsideListeners()
+    this.syncDirectionObserver(this.model.state.isOpen())
     // Re-attach layout (resize/scroll) listeners when reconnected while open;
     // disconnectedCallback tears them down, and without this they would not
     // come back until the next property change triggers updated().
@@ -268,6 +293,7 @@ export class CVPopover extends ReatomLitElement {
   override disconnectedCallback(): void {
     this.syncOutsideListeners(true)
     this.toggleLayoutListeners(false)
+    this.syncDirectionObserver(false)
     this.cancelLayoutFrame()
 
     if (supportsNativePopover()) {
@@ -324,6 +350,7 @@ export class CVPopover extends ReatomLitElement {
     const modelOpen = this.model.state.isOpen()
     const shouldTrackLayout = modelOpen && !supportsNativeAnchoredAutoplacement()
     this.toggleLayoutListeners(shouldTrackLayout)
+    this.syncDirectionObserver(modelOpen)
 
     if (modelOpen) {
       this.scheduleLayout()
@@ -424,6 +451,8 @@ export class CVPopover extends ReatomLitElement {
     if (anchor) {
       this.restoreFocusTarget = anchor
     }
+
+    this.layoutDirection = readInheritedDirection(this)
   }
 
   private buildEventDetail(): CVPopoverEventDetail {
@@ -595,7 +624,12 @@ export class CVPopover extends ReatomLitElement {
     this.requestUpdate()
   }
 
-  private syncArrowPosition(content: HTMLElement, anchor: HTMLElement, placement: CVPopoverPlacement): void {
+  private syncArrowPosition(
+    content: HTMLElement,
+    anchor: HTMLElement,
+    placement: CVPopoverPlacement,
+    direction: CVTextDirection,
+  ): void {
     const arrow = content.querySelector('[part="arrow"]') as HTMLElement | null
     if (!arrow) return
 
@@ -608,7 +642,7 @@ export class CVPopover extends ReatomLitElement {
     if (side === 'top' || side === 'bottom') {
       content.style.setProperty(
         '--_cv-popover-arrow-inline-start',
-        `${resolvePopoverArrowOffset(anchorRect, contentRect, arrowWidth, 'inline')}px`,
+        `${resolvePopoverArrowOffset(anchorRect, contentRect, arrowWidth, 'inline', 8, direction)}px`,
       )
       content.style.removeProperty('--_cv-popover-arrow-block-start')
       return
@@ -684,6 +718,8 @@ export class CVPopover extends ReatomLitElement {
     const anchor = this.resolveAnchorElement()
     if (!content || !anchor) return
 
+    this.layoutDirection = readInheritedDirection(this)
+    const direction = this.layoutDirection
     const anchorRect = toPopoverRect(anchor.getBoundingClientRect())
 
     if (supportsNativeAnchoredAutoplacement()) {
@@ -698,24 +734,31 @@ export class CVPopover extends ReatomLitElement {
       content.style.inset = 'auto'
       content.style.margin = '0'
       this.applyDirectionalOffset(content, this.placement)
-      content.style.setProperty('position-area', getPositionAreaForPlacement(this.placement))
+      content.style.setProperty('position-area', getPositionAreaForPlacement(this.placement, direction))
       content.style.setProperty(
         'position-try-fallbacks',
-        getPlacementFallbacks(this.placement)
+        getPlacementFallbacks(this.placement, direction)
           .slice(1)
-          .map((candidate) => getPositionAreaForPlacement(candidate))
+          .map((candidate) => getPositionAreaForPlacement(candidate, direction))
           .join(', '),
       )
-      this.syncArrowPosition(content, anchor, this.placement)
+      this.syncArrowPosition(content, anchor, this.placement, direction)
       return
     }
 
     const contentRect = toPopoverRect(content.getBoundingClientRect())
-    const resolved = resolvePopoverPosition(anchorRect, contentRect, this.placement, this.offset, {
-      width: window.innerWidth,
-      height: window.innerHeight,
-      padding: 8,
-    })
+    const resolved = resolvePopoverPosition(
+      anchorRect,
+      contentRect,
+      this.placement,
+      this.offset,
+      {
+        width: window.innerWidth,
+        height: window.innerHeight,
+        padding: 8,
+      },
+      direction,
+    )
 
     clearPopoverLayout(content, {customProperties: popoverLayoutCustomProperties})
     content.style.setProperty(
@@ -729,7 +772,7 @@ export class CVPopover extends ReatomLitElement {
     content.style.left = `${resolved.left}px`
     content.style.transform = 'none'
     content.style.translate = 'none'
-    this.syncArrowPosition(content, anchor, resolved.placement)
+    this.syncArrowPosition(content, anchor, resolved.placement, direction)
   }
 
   private cancelLayoutFrame(): void {
@@ -758,6 +801,24 @@ export class CVPopover extends ReatomLitElement {
 
     window.removeEventListener('resize', this.handleViewportChange)
     window.removeEventListener('scroll', this.handleViewportChange, true)
+  }
+
+  private syncDirectionObserver(shouldObserve: boolean): void {
+    if (!shouldObserve) {
+      this.directionObserver?.disconnect()
+      this.directionObserver = null
+      return
+    }
+
+    if (this.directionObserver) return
+
+    this.layoutDirection = readInheritedDirection(this)
+    this.directionObserver = observeInheritedDirection(this, (direction) => {
+      this.layoutDirection = direction
+      if (this.model.state.isOpen()) {
+        this.scheduleLayout()
+      }
+    })
   }
 
   private handleViewportChange = () => {

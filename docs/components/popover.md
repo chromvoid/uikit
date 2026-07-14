@@ -280,7 +280,13 @@ When the native Popover API is not available, the component falls back to `hidde
 
 ### Placement (UIKit-only)
 
-Placement is CSS-only (no Floating UI). The `placement` attribute maps to `data-placement` on the content element, which drives absolute positioning rules via CSS selectors. The `anchor` attribute controls whether the content panel is positioned relative to the trigger button or the host element. The `offset` attribute maps to `--cv-popover-offset`.
+Placement uses native CSS anchor positioning when the complete browser contract is available and a centralized UIKit JS geometry fallback otherwise (no Floating UI). The `placement` attribute maps to `data-placement` on the content element. The `anchor` attribute controls whether the content panel is positioned relative to the trigger button or the host element. The `offset` attribute maps to `--cv-popover-offset`.
+
+- For `top-*` and `bottom-*`, `start` / `end` are inline-logical: start is left in LTR and right in RTL.
+- `left-*` and `right-*` remain physical sides; their `start` / `end` alignment stays on the physical block axis.
+- Native `position-area`, native fallback order, JS fallback coordinates, and arrow inline offset use the same resolved direction.
+- Direction is sampled at open/layout boundaries. While open, UIKit observes only the component's direction-inheritance chain for `dir` changes, schedules one layout frame when the effective direction changes, and tears the observer down on close/disconnect.
+- Open/close presence uses `transform` and `opacity`; reduced motion removes spatial displacement and makes the transition instant.
 
 ### Arrow (UIKit-only)
 

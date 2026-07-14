@@ -90,7 +90,7 @@ const withNativePopoverSupport = () => {
   const originalCssSupports = css.supports.bind(css)
   vi.spyOn(css, 'supports').mockImplementation((query: string) => {
     if (
-      query === 'position-area: top left' ||
+      query === 'position-area: top span-right' ||
       query === 'anchor-name: --cv-popover-anchor' ||
       query === 'position-anchor: --cv-popover-anchor' ||
       query === 'top: anchor(bottom)' ||
@@ -139,6 +139,7 @@ const getToggleDetail = (event: Event) => (event as unknown as CustomEvent<Popov
 
 afterEach(() => {
   document.body.innerHTML = ''
+  document.documentElement.removeAttribute('dir')
   const proto = HTMLElement.prototype as HTMLElement & {
     showPopover?: unknown
     hidePopover?: unknown
@@ -171,6 +172,18 @@ describe('cv-popover', () => {
       const cssText = stylesToText()
 
       expect(cssText).toMatch(/\[part='content'\]\[popover\]:not\(:popover-open\)[\s\S]*display:\s*none/)
+    })
+
+    it('removes spatial displacement under reduced motion', () => {
+      const cssText = stylesToText()
+
+      expect(cssText).toMatch(/@media \(prefers-reduced-motion: reduce\)/)
+      expect(cssText).toMatch(
+        /@media \(prefers-reduced-motion: reduce\)[\s\S]*\[part='content'\][\s\S]*transition-duration:\s*0ms;/,
+      )
+      expect(cssText).toMatch(
+        /@media \(prefers-reduced-motion: reduce\)[\s\S]*\[part='content'\]\[hidden\],[\s\S]*transform:\s*none;/,
+      )
     })
   })
 
@@ -279,7 +292,11 @@ describe('cv-popover', () => {
     })
 
     it('string attributes reflect: placement, anchor, trigger-mode', async () => {
-      const el = await createPopover({placement: 'top-end', anchor: 'host', triggerMode: 'external'})
+      const el = await createPopover({
+        placement: 'top-end',
+        anchor: 'host',
+        triggerMode: 'external',
+      })
       expect(el.getAttribute('placement')).toBe('top-end')
       expect(el.getAttribute('anchor')).toBe('host')
       expect(el.getAttribute('trigger-mode')).toBe('external')
@@ -885,7 +902,11 @@ describe('cv-popover', () => {
       const el = await createPopover({open: true, closeOnEscape: false})
       const content = getContent(el)
 
-      const event = new KeyboardEvent('keydown', {key: 'Escape', bubbles: true, cancelable: true})
+      const event = new KeyboardEvent('keydown', {
+        key: 'Escape',
+        bubbles: true,
+        cancelable: true,
+      })
       content.dispatchEvent(event)
       await settle(el)
 
@@ -897,7 +918,11 @@ describe('cv-popover', () => {
       const el = await createPopover({open: true})
       const content = getContent(el)
 
-      const event = new KeyboardEvent('keydown', {key: 'Escape', bubbles: true, cancelable: true})
+      const event = new KeyboardEvent('keydown', {
+        key: 'Escape',
+        bubbles: true,
+        cancelable: true,
+      })
       event.preventDefault()
       content.dispatchEvent(event)
       await settle(el)
@@ -923,6 +948,16 @@ describe('cv-popover', () => {
 
       const reattached = addSpy.mock.calls.some(([type]) => type === 'resize' || type === 'scroll')
       expect(reattached).toBe(true)
+    })
+
+    it('tears down inherited-direction observation when closed', async () => {
+      const disconnect = vi.spyOn(MutationObserver.prototype, 'disconnect')
+      const el = await createPopover({open: true})
+
+      el.hide()
+      await settle(el)
+
+      expect(disconnect).toHaveBeenCalled()
     })
   })
 
@@ -1073,6 +1108,29 @@ describe('cv-popover', () => {
       expect(el.open).toBe(false)
       native.restore()
     })
+
+    it('mirrors native position-area and fallback ordering for RTL top-start placement', async () => {
+      vi.spyOn(window, 'requestAnimationFrame').mockImplementation(
+        (callback: FrameRequestCallback): number => {
+          callback(0)
+          return 1
+        },
+      )
+      vi.spyOn(window, 'cancelAnimationFrame').mockImplementation((): void => {})
+      document.documentElement.dir = 'rtl'
+      const native = withNativePopoverSupport()
+
+      const el = await createPopover({open: true, placement: 'top-start'})
+      const content = getContent(el)
+
+      expect(content.dataset['anchorPositioning']).toBe('true')
+      expect(content.style.getPropertyValue('position-area')).toBe('top span-left')
+      expect(content.style.getPropertyValue('position-try-fallbacks')).toBe(
+        'bottom span-left, left span-bottom, right span-bottom',
+      )
+
+      native.restore()
+    })
   })
 
   describe('fallback positioning', () => {
@@ -1085,7 +1143,11 @@ describe('cv-popover', () => {
       )
       vi.spyOn(window, 'cancelAnimationFrame').mockImplementation((): void => {})
 
-      const el = await createPopover({triggerMode: 'external', placement: 'right-end', offset: 8})
+      const el = await createPopover({
+        triggerMode: 'external',
+        placement: 'right-end',
+        offset: 8,
+      })
       const source = document.createElement('button')
       source.getBoundingClientRect = () => new DOMRect(120, 140, 64, 36)
       document.body.append(source)
@@ -1101,6 +1163,68 @@ describe('cv-popover', () => {
       expect(content.style.position).toBe('fixed')
       expect(content.style.left).toBe('192px')
       expect(content.style.top).toBe('104px')
+    })
+
+    it('aligns bottom-start to the physical right edge in RTL fallback positioning', async () => {
+      vi.spyOn(window, 'requestAnimationFrame').mockImplementation(
+        (callback: FrameRequestCallback): number => {
+          callback(0)
+          return 1
+        },
+      )
+      vi.spyOn(window, 'cancelAnimationFrame').mockImplementation((): void => {})
+      document.documentElement.dir = 'rtl'
+
+      const el = await createPopover({
+        triggerMode: 'external',
+        placement: 'bottom-start',
+        offset: 8,
+      })
+      const source = document.createElement('button')
+      source.getBoundingClientRect = () => new DOMRect(120, 140, 64, 36)
+      document.body.append(source)
+
+      const content = getContent(el)
+      content.getBoundingClientRect = () => new DOMRect(0, 0, 140, 72)
+
+      el.show({source, openedBy: 'pointer'})
+      await settle(el)
+
+      expect(content.style.left).toBe('44px')
+      expect(content.style.top).toBe('184px')
+    })
+
+    it('repositions an open fallback popover when the inherited root direction changes', async () => {
+      vi.spyOn(window, 'requestAnimationFrame').mockImplementation(
+        (callback: FrameRequestCallback): number => {
+          callback(0)
+          return 1
+        },
+      )
+      vi.spyOn(window, 'cancelAnimationFrame').mockImplementation((): void => {})
+      document.documentElement.dir = 'ltr'
+
+      const el = await createPopover({
+        triggerMode: 'external',
+        placement: 'bottom-start',
+        offset: 8,
+      })
+      const source = document.createElement('button')
+      source.getBoundingClientRect = () => new DOMRect(120, 140, 64, 36)
+      document.body.append(source)
+
+      const content = getContent(el)
+      content.getBoundingClientRect = () => new DOMRect(0, 0, 140, 72)
+
+      el.show({source, openedBy: 'pointer'})
+      await settle(el)
+      expect(content.style.left).toBe('120px')
+
+      document.documentElement.dir = 'rtl'
+
+      await vi.waitFor(() => {
+        expect(content.style.left).toBe('44px')
+      })
     })
   })
 })

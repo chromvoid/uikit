@@ -1,3 +1,5 @@
+import type {CVTextDirection} from './text-direction.js'
+
 export type CVPopoverPlacement =
   | 'top-start'
   | 'top'
@@ -61,6 +63,15 @@ const orthogonalSidesMap: Record<PlacementSide, PlacementSide[]> = {
   left: ['bottom', 'top'],
 }
 
+function getOrthogonalSides(side: PlacementSide, direction: CVTextDirection): PlacementSide[] {
+  const sides = orthogonalSidesMap[side]
+  if (direction === 'rtl' && (side === 'top' || side === 'bottom')) {
+    return [...sides].reverse()
+  }
+
+  return sides
+}
+
 function parsePlacement(placement: CVPopoverPlacement): {
   side: PlacementSide
   align: PlacementAlign
@@ -82,6 +93,7 @@ function computeCoords(
   panelRect: CVPopoverRect,
   placement: CVPopoverPlacement,
   offset: number,
+  direction: CVTextDirection,
 ): CVPopoverResolvedPosition {
   const {side, align} = parsePlacement(placement)
   let left = 0
@@ -89,9 +101,9 @@ function computeCoords(
 
   if (side === 'top' || side === 'bottom') {
     if (align === 'start') {
-      left = anchorRect.left
+      left = direction === 'rtl' ? anchorRect.right - panelRect.width : anchorRect.left
     } else if (align === 'end') {
-      left = anchorRect.right - panelRect.width
+      left = direction === 'rtl' ? anchorRect.left : anchorRect.right - panelRect.width
     } else {
       left = anchorRect.left + (anchorRect.width - panelRect.width) / 2
     }
@@ -203,7 +215,7 @@ export function supportsAnchorPositioning(): boolean {
   return (
     CSS.supports('anchor-name: --cv-popover-anchor') &&
     CSS.supports('position-anchor: --cv-popover-anchor') &&
-    (CSS.supports('position-area: top left') || CSS.supports('position-area: top')) &&
+    CSS.supports('position-area: top span-right') &&
     CSS.supports('top: anchor(bottom)')
   )
 }
@@ -265,12 +277,15 @@ export function clearPopoverLayout(element: HTMLElement, options: CVPopoverLayou
   }
 }
 
-export function getPlacementFallbacks(placement: CVPopoverPlacement): CVPopoverPlacement[] {
+export function getPlacementFallbacks(
+  placement: CVPopoverPlacement,
+  direction: CVTextDirection = 'ltr',
+): CVPopoverPlacement[] {
   const {side, align} = parsePlacement(placement)
   const candidates = [
     placement,
     formatPlacement(mirrorSideMap[side], align),
-    ...orthogonalSidesMap[side].map((nextSide) => formatPlacement(nextSide, align)),
+    ...getOrthogonalSides(side, direction).map((nextSide) => formatPlacement(nextSide, align)),
   ]
 
   return Array.from(new Set(candidates))
@@ -281,30 +296,19 @@ export function getBlockPlacementFallbacks(placement: CVPopoverPlacement): CVPop
   return [placement, formatPlacement(mirrorSideMap[side], align)]
 }
 
-export function getPositionAreaForPlacement(placement: CVPopoverPlacement): string {
+export function getPositionAreaForPlacement(
+  placement: CVPopoverPlacement,
+  direction: CVTextDirection = 'ltr',
+): string {
   const {side, align} = parsePlacement(placement)
-  const row =
-    side === 'top'
-      ? 'top'
-      : side === 'bottom'
-        ? 'bottom'
-        : align === 'start'
-          ? 'top'
-          : align === 'end'
-            ? 'bottom'
-            : 'center'
-  const column =
-    side === 'left'
-      ? 'left'
-      : side === 'right'
-        ? 'right'
-        : align === 'start'
-          ? 'left'
-          : align === 'end'
-            ? 'right'
-            : 'center'
+  if (align === 'center') return side
 
-  return `${row} ${column}`
+  if (side === 'left' || side === 'right') {
+    return `${side} ${align === 'start' ? 'span-bottom' : 'span-top'}`
+  }
+
+  const alignsLeft = (align === 'start' && direction === 'ltr') || (align === 'end' && direction === 'rtl')
+  return `${side} ${alignsLeft ? 'span-right' : 'span-left'}`
 }
 
 export function resolvePopoverArrowOffset(
@@ -313,12 +317,17 @@ export function resolvePopoverArrowOffset(
   arrowSize: number,
   axis: CVPopoverArrowAxis,
   padding = 8,
+  direction: CVTextDirection = 'ltr',
 ): number {
   const anchorCenter =
     axis === 'inline' ? anchorRect.left + anchorRect.width / 2 : anchorRect.top + anchorRect.height / 2
-  const panelStart = axis === 'inline' ? panelRect.left : panelRect.top
+  const panelStart =
+    axis === 'inline' ? (direction === 'rtl' ? panelRect.right : panelRect.left) : panelRect.top
   const panelSize = axis === 'inline' ? panelRect.width : panelRect.height
-  const arrowOffset = anchorCenter - panelStart - arrowSize / 2
+  const arrowOffset =
+    axis === 'inline' && direction === 'rtl'
+      ? panelStart - anchorCenter - arrowSize / 2
+      : anchorCenter - panelStart - arrowSize / 2
   const maxOffset = Math.max(padding, panelSize - arrowSize - padding)
 
   return Math.round(clampValue(arrowOffset, padding, maxOffset))
@@ -330,17 +339,22 @@ export function resolvePopoverPosition(
   placement: CVPopoverPlacement,
   offset: number,
   viewport: CVPopoverViewport,
+  direction: CVTextDirection = 'ltr',
 ): CVPopoverResolvedPosition {
-  const candidates = getPlacementFallbacks(placement)
+  const candidates = getPlacementFallbacks(placement, direction)
 
   for (const candidate of candidates) {
-    const position = computeCoords(anchorRect, panelRect, candidate, offset)
+    const position = computeCoords(anchorRect, panelRect, candidate, offset, direction)
     if (fitsViewport(position, panelRect, viewport)) {
       return position
     }
   }
 
-  return clampToViewport(computeCoords(anchorRect, panelRect, placement, offset), panelRect, viewport)
+  return clampToViewport(
+    computeCoords(anchorRect, panelRect, placement, offset, direction),
+    panelRect,
+    viewport,
+  )
 }
 
 export function resolvePopoverBlockPosition(
@@ -349,11 +363,12 @@ export function resolvePopoverBlockPosition(
   placement: CVPopoverPlacement,
   offset: number,
   viewport: CVPopoverViewport,
+  direction: CVTextDirection = 'ltr',
 ): CVPopoverResolvedPosition {
   const candidates = getBlockPlacementFallbacks(placement)
 
   for (const candidate of candidates) {
-    const position = computeCoords(anchorRect, panelRect, candidate, offset)
+    const position = computeCoords(anchorRect, panelRect, candidate, offset, direction)
     if (fitsPlacementAxis(position, panelRect, viewport)) {
       return clampToViewport(position, panelRect, viewport)
     }
@@ -365,5 +380,9 @@ export function resolvePopoverBlockPosition(
     return candidateSpace > bestSpace ? candidate : best
   }, candidates[0]!)
 
-  return clampToViewport(computeCoords(anchorRect, panelRect, bestCandidate, offset), panelRect, viewport)
+  return clampToViewport(
+    computeCoords(anchorRect, panelRect, bestCandidate, offset, direction),
+    panelRect,
+    viewport,
+  )
 }

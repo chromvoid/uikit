@@ -9,7 +9,10 @@ export const overlaysFloatingCases: readonly UikitVisualCase[] = [
     title: 'Bottom sheet open, handle, detent, title, body, and footer states',
     states: ['open', 'handle', 'middle-detent', 'title', 'description', 'footer'],
     fullPage: true,
-    requiredSelectors: ['cv-bottom-sheet cv-dialog [part="content"]', 'cv-bottom-sheet cv-dialog [part="footer"]'],
+    requiredSelectors: [
+      'cv-bottom-sheet cv-dialog [part="content"]',
+      'cv-bottom-sheet cv-dialog [part="footer"]',
+    ],
     html: `
       <cv-bottom-sheet open detent="middle" detents="collapsed middle expanded" show-handle>
         <span slot="title">Bottom sheet title</span>
@@ -169,7 +172,10 @@ export const overlaysFloatingCases: readonly UikitVisualCase[] = [
       const headerActionsRect = headerActions?.getBoundingClientRect()
 
       const actionsAreVisible =
-        headerActionsRect && headerRect && headerActionsRect.width >= 80 && headerActionsRect.right <= headerRect.right
+        headerActionsRect &&
+        headerRect &&
+        headerActionsRect.width >= 80 &&
+        headerActionsRect.right <= headerRect.right
       if (!actionsAreVisible) {
         throw new Error(
           `Image viewer mobile header actions are outside the header: width=${headerActionsRect?.width ?? 0} right=${headerActionsRect?.right ?? 0} headerRight=${headerRect?.right ?? 0}`,
@@ -233,6 +239,28 @@ export const overlaysFloatingCases: readonly UikitVisualCase[] = [
           <strong>Popover title</strong>
           <p class="visual-long-text">Popover content with longer body copy validates max width and wrapping.</p>
           <cv-button size="small" variant="primary">Action</cv-button>
+        </cv-popover>
+      </div>
+    `,
+  }),
+  visualCase({
+    id: 'cv-popover/rtl-bottom-start',
+    component: 'cv-popover',
+    title: 'RTL popover bottom-start aligned to logical inline-start with arrow',
+    states: ['open', 'rtl', 'bottom-start', 'logical-alignment', 'arrow'],
+    diagnosticsIgnoredSelectors: ['.visual-overlay-frame'],
+    requiredSelectors: ['cv-popover[placement="bottom-start"] [part="content"]'],
+    html: `
+      <div class="visual-overlay-frame" dir="rtl">
+        <cv-popover open arrow placement="bottom-start" offset="12">
+          <cv-button slot="trigger">مرساة RTL</cv-button>
+          <div class="visual-popover-panel">
+            <span class="visual-popover-panel__title">محاذاة البداية المنطقية</span>
+            <span class="visual-popover-panel__body">
+              ينعكس موضع البداية السفلية إلى الحافة اليمنى للمرساة مع بقاء السهم في المنتصف.
+            </span>
+            <cv-button size="small" variant="primary">تأكيد</cv-button>
+          </div>
         </cv-popover>
       </div>
     `,

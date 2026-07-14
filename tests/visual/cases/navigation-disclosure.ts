@@ -244,4 +244,29 @@ export const navigationDisclosureCases: readonly UikitVisualCase[] = [
       </div>
     `,
   }),
+  visualCase({
+    id: 'cv-drawer/rtl-start',
+    component: 'cv-drawer',
+    title: 'RTL drawer open from logical inline-start with inward radii',
+    states: ['open', 'rtl', 'placement-start', 'logical-edge', 'inward-radii'],
+    fullPage: true,
+    requiredSelectors: ['cv-drawer[placement="start"] [part="panel"]'],
+    html: `
+      <div class="visual-stack" dir="rtl">
+        <cv-drawer open placement="start" drag-to-close>
+          <cv-button slot="trigger">فتح درج RTL</cv-button>
+          <span slot="title">درج البداية المنطقية</span>
+          <span slot="description">تتبع اللوحة بداية السطر بينما يظل الأعلى والأسفل ثابتين.</span>
+          <div class="visual-stack">
+            <p>تحافظ هندسة RTL على الحافة المستديرة باتجاه مساحة العمل.</p>
+            <cv-callout variant="info">يتبع السحب للإغلاق حافة السطر نفسها.</cv-callout>
+          </div>
+          <div slot="footer" class="visual-row">
+            <cv-button>إلغاء</cv-button>
+            <cv-button variant="primary">متابعة</cv-button>
+          </div>
+        </cv-drawer>
+      </div>
+    `,
+  }),
 ]

@@ -5,6 +5,7 @@ import type {PropertyValues} from 'lit'
 import {html} from '../reatom-lit/index.js'
 import {ReatomLitElement} from '../reatom-lit/ReatomLitElement'
 import {acquireBodyScrollLock, releaseBodyScrollLock} from './scroll-lock.js'
+import {observeInheritedDirection, readInheritedDirection, type CVTextDirection} from './text-direction.js'
 
 export interface CVDrawerEventDetail {
   open: boolean
@@ -31,7 +32,11 @@ export class CVDrawer extends ReatomLitElement {
       placement: {type: String, reflect: true},
       type: {type: String, reflect: true},
       closeOnEscape: {type: Boolean, attribute: 'close-on-escape', reflect: true},
-      closeOnOutsidePointer: {type: Boolean, attribute: 'close-on-outside-pointer', reflect: true},
+      closeOnOutsidePointer: {
+        type: Boolean,
+        attribute: 'close-on-outside-pointer',
+        reflect: true,
+      },
       closeOnOutsideFocus: {type: Boolean, attribute: 'close-on-outside-focus', reflect: true},
       initialFocusId: {type: String, attribute: 'initial-focus-id'},
       noHeader: {type: Boolean, attribute: 'no-header', reflect: true},
@@ -66,6 +71,8 @@ export class CVDrawer extends ReatomLitElement {
   private dragStartedAt = 0
   private dragMoved = false
   private overlayPointerDownOnSelf = false
+  private layoutDirection: CVTextDirection = 'ltr'
+  private directionObserver: MutationObserver | null = null
 
   constructor() {
     super()
@@ -165,10 +172,14 @@ export class CVDrawer extends ReatomLitElement {
         inset-inline-start: 0;
         inline-size: min(var(--cv-drawer-size, 360px), 100%);
         max-inline-size: min(var(--cv-drawer-max-size, calc(100dvh - 32px)), 100%);
-        border-radius: 0 var(--cv-drawer-border-radius, var(--cv-radius-lg, 14px))
-          var(--cv-drawer-border-radius, var(--cv-radius-lg, 14px)) 0;
+        border-start-end-radius: var(--cv-drawer-border-radius, var(--cv-radius-lg, 14px));
+        border-end-end-radius: var(--cv-drawer-border-radius, var(--cv-radius-lg, 14px));
         transform: translate3d(-100%, 0, 0);
         touch-action: pan-y;
+      }
+
+      :host(:dir(rtl)) [part='panel'][data-placement='start'][data-state='closed'] {
+        transform: translate3d(100%, 0, 0);
       }
 
       /* Placement: end (inline-end edge) */
@@ -177,10 +188,14 @@ export class CVDrawer extends ReatomLitElement {
         inset-inline-end: 0;
         inline-size: min(var(--cv-drawer-size, 360px), 100%);
         max-inline-size: min(var(--cv-drawer-max-size, calc(100dvh - 32px)), 100%);
-        border-radius: var(--cv-drawer-border-radius, var(--cv-radius-lg, 14px)) 0 0
-          var(--cv-drawer-border-radius, var(--cv-radius-lg, 14px));
+        border-start-start-radius: var(--cv-drawer-border-radius, var(--cv-radius-lg, 14px));
+        border-end-start-radius: var(--cv-drawer-border-radius, var(--cv-radius-lg, 14px));
         transform: translate3d(100%, 0, 0);
         touch-action: pan-y;
+      }
+
+      :host(:dir(rtl)) [part='panel'][data-placement='end'][data-state='closed'] {
+        transform: translate3d(-100%, 0, 0);
       }
 
       /* Placement: top */
@@ -299,6 +314,7 @@ export class CVDrawer extends ReatomLitElement {
     super.connectedCallback()
     this.syncOutsideFocusListener()
     this.syncScrollLock()
+    this.syncDirectionObserver(this.open)
   }
 
   override disconnectedCallback(): void {
@@ -307,6 +323,7 @@ export class CVDrawer extends ReatomLitElement {
     this.releaseScrollLock()
     this.clearAnimationQueue()
     this.resetDragState()
+    this.syncDirectionObserver(false)
   }
 
   override willUpdate(changedProperties: PropertyValues): void {
@@ -356,6 +373,7 @@ export class CVDrawer extends ReatomLitElement {
 
     this.syncOutsideFocusListener()
     this.syncScrollLock()
+    this.syncDirectionObserver(this.open)
 
     if (changedProperties.has('open')) {
       this.syncRenderedState()
@@ -595,6 +613,22 @@ export class CVDrawer extends ReatomLitElement {
     }
   }
 
+  private syncDirectionObserver(shouldObserve: boolean): void {
+    if (!shouldObserve) {
+      this.directionObserver?.disconnect()
+      this.directionObserver = null
+      return
+    }
+
+    if (this.directionObserver) return
+
+    this.layoutDirection = readInheritedDirection(this)
+    this.directionObserver = observeInheritedDirection(this, (direction) => {
+      this.layoutDirection = direction
+      this.resetDragState()
+    })
+  }
+
   private resetDragState(): void {
     this.dragPointerId = null
     this.dragStartX = 0
@@ -627,9 +661,13 @@ export class CVDrawer extends ReatomLitElement {
   private getClosingDistance(event: PointerEvent): number {
     switch (this.placement) {
       case 'start':
-        return this.dragStartX - event.clientX
+        return this.layoutDirection === 'rtl'
+          ? event.clientX - this.dragStartX
+          : this.dragStartX - event.clientX
       case 'end':
-        return event.clientX - this.dragStartX
+        return this.layoutDirection === 'rtl'
+          ? this.dragStartX - event.clientX
+          : event.clientX - this.dragStartX
       case 'top':
         return this.dragStartY - event.clientY
       case 'bottom':
@@ -641,7 +679,10 @@ export class CVDrawer extends ReatomLitElement {
 
   private getVisualDragOffset(closingDistance: number): number {
     const offset = Math.max(0, closingDistance)
-    return this.placement === 'start' || this.placement === 'top' ? -offset : offset
+    if (this.placement === 'top') return -offset
+    if (this.placement === 'bottom') return offset
+    if (this.placement === 'start') return this.layoutDirection === 'rtl' ? offset : -offset
+    return this.layoutDirection === 'rtl' ? -offset : offset
   }
 
   private getPanelDragSize(panel: HTMLElement | null): number {
@@ -797,6 +838,8 @@ export class CVDrawer extends ReatomLitElement {
     if (event.pointerType !== 'touch') return
     if (event.isPrimary === false) return
     if (typeof event.button === 'number' && event.button !== 0) return
+
+    this.layoutDirection = readInheritedDirection(this)
 
     this.dragPointerId = event.pointerId
     this.dragStartX = event.clientX

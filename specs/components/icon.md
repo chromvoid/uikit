@@ -22,6 +22,19 @@ Reusable icon renderer backed by the UIKit icon registry.
 | `label`   | String  | -           | Accessible label; omitted icons are decorative                |
 | `fill`    | Boolean | `false`     | Uses the current foreground as SVG fill                       |
 
+### Logical direction aliases
+
+UIKit provides semantic aliases for icons whose meaning follows the inline reading direction:
+
+| Semantic name          | LTR physical asset | RTL rendering                |
+| ---------------------- | ------------------ | ---------------------------- |
+| `chevron-inline-start` | `chevron-left`     | Mirrored toward inline-start |
+| `chevron-inline-end`   | `chevron-right`    | Mirrored toward inline-end   |
+| `arrow-inline-start`   | `arrow-left`       | Mirrored toward inline-start |
+| `arrow-inline-end`     | `arrow-right`      | Mirrored toward inline-end   |
+
+Physical names such as `chevron-left`, `chevron-right`, `arrow-left`, and `arrow-right` remain physical and are never mirrored. Namespaced third-party collection names are not treated as UIKit semantic aliases.
+
 ## Slots
 
 | Slot        | Description                                           |

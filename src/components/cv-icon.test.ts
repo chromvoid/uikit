@@ -31,6 +31,9 @@ const createIcon = async (attrs?: Partial<CVIcon>) => {
   return el
 }
 
+const stylesToText = () =>
+  (CVIcon.styles as Array<{cssText?: string}>).map((style) => style.cssText ?? '').join('\n')
+
 afterEach(() => {
   document.body.innerHTML = ''
   setIconBasePath('/assets/icons/lucide')
@@ -63,6 +66,54 @@ describe('cv-icon', () => {
     await createIcon({name: 'check-lg'})
 
     expect(fetchMock).toHaveBeenCalledWith('/assets/icons/lucide/check.svg')
+  })
+
+  it.each([
+    ['chevron-inline-start', 'chevron-left'],
+    ['chevron-inline-end', 'chevron-right'],
+    ['arrow-inline-start', 'arrow-left'],
+    ['arrow-inline-end', 'arrow-right'],
+  ])('maps the semantic %s alias to its LTR physical asset', async (name, asset) => {
+    const fetchMock = vi.fn(async () => ({
+      ok: true,
+      text: async () => '<svg viewBox="0 0 24 24"></svg>',
+    }))
+    vi.stubGlobal('fetch', fetchMock)
+
+    const el = await createIcon({name})
+
+    expect(fetchMock).toHaveBeenCalledWith(`/assets/icons/lucide/${asset}.svg`)
+    expect(el.shadowRoot?.querySelector('.icon--inline-directional')).not.toBeNull()
+  })
+
+  it('mirrors semantic inline icons through inherited RTL without changing physical icon names', async () => {
+    const cssText = stylesToText()
+    const fetchMock = vi.fn(async () => ({
+      ok: true,
+      text: async () => '<svg viewBox="0 0 24 24"></svg>',
+    }))
+    vi.stubGlobal('fetch', fetchMock)
+
+    const physical = await createIcon({name: 'chevron-left'})
+
+    expect(cssText).toMatch(
+      /:host\(:dir\(rtl\)\) \.icon--inline-directional\s*{[\s\S]*transform:\s*scaleX\(-1\);/,
+    )
+    expect(fetchMock).toHaveBeenCalledWith('/assets/icons/lucide/chevron-left.svg')
+    expect(physical.shadowRoot?.querySelector('.icon--inline-directional')).toBeNull()
+  })
+
+  it('does not apply UIKit semantic mirroring to an explicit src override', async () => {
+    const fetchMock = vi.fn(async () => ({
+      ok: true,
+      text: async () => '<svg viewBox="0 0 24 24"></svg>',
+    }))
+    vi.stubGlobal('fetch', fetchMock)
+
+    const el = await createIcon({name: 'chevron-inline-start', src: '/icons/physical.svg'})
+
+    expect(fetchMock).toHaveBeenCalledWith('/icons/physical.svg')
+    expect(el.shadowRoot?.querySelector('.icon--inline-directional')).toBeNull()
   })
 
   it('uses the configured base path when loading icons by name', async () => {
