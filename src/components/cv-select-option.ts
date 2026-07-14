@@ -1,9 +1,10 @@
 import {LitElement, css, html} from 'lit'
 
 import {componentResetStyles} from '../styles/component-styles'
+import {cvSelectOptionElementName} from './cv-select.element-names'
 
 export class CVSelectOption extends LitElement {
-  static elementName = 'cv-select-option'
+  static elementName = cvSelectOptionElementName
 
   static get properties() {
     return {

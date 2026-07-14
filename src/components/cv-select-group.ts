@@ -1,7 +1,9 @@
 import {LitElement, css, html} from 'lit'
 
+import {cvSelectGroupElementName} from './cv-select.element-names'
+
 export class CVSelectGroup extends LitElement {
-  static elementName = 'cv-select-group'
+  static elementName = cvSelectGroupElementName
 
   static get properties() {
     return {

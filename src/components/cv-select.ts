@@ -6,8 +6,9 @@ import type {PropertyValues} from 'lit'
 import {FormAssociatedReatomElement} from '../form-associated/FormAssociatedReatomElement'
 import type {FormAssociatedValidity} from '../form-associated/withFormAssociated'
 import {getPopupListboxSizingStyles} from '../styles/component-styles'
-import {CVSelectGroup} from './cv-select-group'
-import {CVSelectOption} from './cv-select-option'
+import type {CVSelectGroup} from './cv-select-group'
+import type {CVSelectOption} from './cv-select-option'
+import {cvSelectGroupElementName, cvSelectOptionElementName} from './cv-select.element-names'
 
 export interface CVSelectEventDetail {
   value: string | null
@@ -387,7 +388,7 @@ export class CVSelect extends FormAssociatedReatomElement {
 
   private getOptionElementsWithinGroup(group: CVSelectGroup): CVSelectOption[] {
     return Array.from(group.children).filter(
-      (element): element is CVSelectOption => element.tagName.toLowerCase() === CVSelectOption.elementName,
+      (element): element is CVSelectOption => element.tagName.toLowerCase() === cvSelectOptionElementName,
     )
   }
 
@@ -413,7 +414,7 @@ export class CVSelect extends FormAssociatedReatomElement {
     for (const child of Array.from(this.children)) {
       const tag = child.tagName.toLowerCase()
 
-      if (tag === CVSelectGroup.elementName) {
+      if (tag === cvSelectGroupElementName) {
         const group = child as CVSelectGroup
         groupIndex += 1
 
@@ -449,7 +450,7 @@ export class CVSelect extends FormAssociatedReatomElement {
         continue
       }
 
-      if (tag === CVSelectOption.elementName) {
+      if (tag === cvSelectOptionElementName) {
         const option = child as CVSelectOption
         optionIndex += 1
         const id = this.ensureOptionValue(option, optionIndex)
