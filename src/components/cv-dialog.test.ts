@@ -388,6 +388,51 @@ describe('cv-dialog', () => {
       expect(document.activeElement).toBe(opener)
     })
 
+    it('restores through the connected shadow host when its original inner target was replaced', async () => {
+      vi.useFakeTimers()
+      const fixtureName = 'cv-dialog-focus-restore-host-fixture'
+      if (!customElements.get(fixtureName)) {
+        customElements.define(
+          fixtureName,
+          class extends HTMLElement {
+            constructor() {
+              super()
+              this.attachShadow({mode: 'open'}).innerHTML = '<button>Open review</button>'
+            }
+
+            override focus(options?: FocusOptions): void {
+              this.shadowRoot?.querySelector('button')?.focus(options)
+            }
+
+            replaceInnerButton(): void {
+              this.shadowRoot!.innerHTML = '<button>Open review again</button>'
+            }
+          },
+        )
+      }
+      const opener = document.createElement(fixtureName) as HTMLElement & {
+        replaceInnerButton(): void
+      }
+      document.body.append(opener)
+      opener.focus()
+      const originalInner = opener.shadowRoot!.activeElement
+
+      const el = await createDialog()
+      setPresenceTransitionDuration(el, '120ms')
+      el.open = true
+      await settle(el)
+      await advancePresenceTimers(el, 120)
+      opener.replaceInnerButton()
+      expect(originalInner?.isConnected).toBe(false)
+
+      el.open = false
+      await settle(el)
+      await advancePresenceTimers(el, 120)
+
+      expect(document.activeElement).toBe(opener)
+      expect(opener.shadowRoot!.activeElement?.textContent).toBe('Open review again')
+    })
+
     it('ignores a disconnected controlled focus restore target without throwing', async () => {
       vi.useFakeTimers()
       const opener = document.createElement('button')

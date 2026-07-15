@@ -128,6 +128,7 @@ export class CVDialog extends ReatomLitElement {
   private suppressLifecycleFromUpdate = false
   private lifecycleToken = 0
   private focusRestoreTarget: HTMLElement | null = null
+  private focusRestoreHost: HTMLElement | null = null
   private portalVisible = false
   private presenceState: DialogPresenceState = 'closed'
   private presenceAnimationTimeout = 0
@@ -738,6 +739,11 @@ export class CVDialog extends ReatomLitElement {
 
   private captureFocusRestoreTarget(): void {
     this.focusRestoreTarget = getFocusRestoreTarget()
+    const host = document.activeElement
+    this.focusRestoreHost =
+      host instanceof HTMLElement && host !== document.body && host !== document.documentElement
+        ? host
+        : null
   }
 
   private queueFocusRestore(restoreTargetId: string | null): void {
@@ -752,12 +758,14 @@ export class CVDialog extends ReatomLitElement {
   private restoreFocus(restoreTargetId: string | null): void {
     const target =
       (this.focusRestoreTarget?.isConnected ? this.focusRestoreTarget : null) ??
+      (this.focusRestoreHost?.isConnected ? this.focusRestoreHost : null) ??
       (restoreTargetId
         ? ((this.shadowRoot?.querySelector(`[id="${restoreTargetId}"]`) as HTMLElement | null) ?? null)
         : null)
 
     target?.focus({preventScroll: true})
     this.focusRestoreTarget = null
+    this.focusRestoreHost = null
   }
 
   private getPortalOverlay(): HTMLElement | null {
