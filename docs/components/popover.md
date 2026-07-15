@@ -162,11 +162,14 @@ Non-modal overlay anchored to a trigger element for contextual content such as m
 
 ## Slots
 
-| Slot        | Description                                   |
-| ----------- | --------------------------------------------- |
-| `(default)` | Popover content                               |
-| `trigger`   | Trigger element (defaults to a styled button) |
-| `arrow`     | Custom arrow content (replaces default arrow) |
+| Slot        | Description                                                              |
+| ----------- | ------------------------------------------------------------------------ |
+| `(default)` | Popover content                                                          |
+| `trigger`   | Label or icon content rendered inside the component-owned trigger button |
+| `arrow`     | Custom arrow content (replaces default arrow)                            |
+
+The `trigger` slot does not replace the trigger element. Do not place a button or another interactive control
+inside it; use non-interactive label/icon content instead.
 
 ## CSS Parts
 

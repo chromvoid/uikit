@@ -235,7 +235,7 @@ export const overlaysFloatingCases: readonly UikitVisualCase[] = [
     html: `
       <div class="visual-overlay-frame">
         <cv-popover open arrow placement="bottom-start" offset="12">
-          <cv-button slot="trigger">Open popover</cv-button>
+          <span slot="trigger">Open popover</span>
           <strong>Popover title</strong>
           <p class="visual-long-text">Popover content with longer body copy validates max width and wrapping.</p>
           <cv-button size="small" variant="primary">Action</cv-button>
@@ -253,7 +253,7 @@ export const overlaysFloatingCases: readonly UikitVisualCase[] = [
     html: `
       <div class="visual-overlay-frame" dir="rtl">
         <cv-popover open arrow placement="bottom-start" offset="12">
-          <cv-button slot="trigger">مرساة RTL</cv-button>
+          <span slot="trigger">مرساة RTL</span>
           <div class="visual-popover-panel">
             <span class="visual-popover-panel__title">محاذاة البداية المنطقية</span>
             <span class="visual-popover-panel__body">
@@ -276,7 +276,7 @@ export const overlaysFloatingCases: readonly UikitVisualCase[] = [
       <div class="visual-overlay-frame visual-overlay-frame--compact">
         <div class="visual-overlay-row">
           <cv-popover open placement="right">
-            <cv-button slot="trigger">Right placement</cv-button>
+            <span slot="trigger">Right placement</span>
             <div class="visual-popover-panel">
               <span class="visual-popover-panel__title">Sync options</span>
               <span class="visual-popover-panel__body">Choose the next vault sync action.</span>
