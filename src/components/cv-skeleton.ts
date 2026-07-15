@@ -113,26 +113,14 @@ export class CVSkeleton extends ReatomLitElement {
     if (this.decorative) {
       return html`
         <span part="base" aria-hidden="true">
-          ${Array.from(
-            {length: lineCount},
-            () =>
-              html`
-                <span part="line"></span>
-              `,
-          )}
+          ${Array.from({length: lineCount}, () => html` <span part="line"></span> `)}
         </span>
       `
     }
 
     return html`
       <span part="base" role="status" aria-label=${this.label || 'Loading'}>
-        ${Array.from(
-          {length: lineCount},
-          () =>
-            html`
-              <span part="line"></span>
-            `,
-        )}
+        ${Array.from({length: lineCount}, () => html` <span part="line"></span> `)}
       </span>
     `
   }

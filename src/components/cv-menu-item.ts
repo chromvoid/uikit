@@ -138,17 +138,13 @@ export class CVMenuItem extends LitElement {
 
     return html`
       <div class="item cv-u-row" part="base">
-        ${isCheckable ? html`<span part="checkmark" class="cv-u-icon-slot">${this.checked ? '\u2713' : ''}</span>` : nothing}
+        ${isCheckable
+          ? html`<span part="checkmark" class="cv-u-icon-slot">${this.checked ? '\u2713' : ''}</span>`
+          : nothing}
         <span part="prefix" class="cv-u-icon-slot"><slot name="prefix"></slot></span>
         <span part="label" class="cv-u-fill"><slot></slot></span>
         <span part="suffix" class="cv-u-icon-slot"><slot name="suffix"></slot></span>
-        ${
-          this.hasSubmenu
-            ? html`
-                <span part="submenu-icon" class="cv-u-icon-slot">\u25B6</span>
-              `
-            : nothing
-        }
+        ${this.hasSubmenu ? html` <span part="submenu-icon" class="cv-u-icon-slot">▶</span> ` : nothing}
       </div>
       <slot name="submenu" @slotchange=${this.handleSubmenuSlotChange}></slot>
     `

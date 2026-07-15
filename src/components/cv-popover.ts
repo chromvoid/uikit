@@ -833,9 +833,8 @@ export class CVPopover extends ReatomLitElement {
 
     return html`
       <div part="base">
-        ${
-          renderTrigger
-            ? html`
+        ${renderTrigger
+          ? html`
               <button
                 id=${triggerProps.id}
                 role=${triggerProps.role}
@@ -851,8 +850,7 @@ export class CVPopover extends ReatomLitElement {
                 <slot name="trigger">Open popover</slot>
               </button>
             `
-            : nothing
-        }
+          : nothing}
 
         <div
           id=${contentProps.id}
@@ -873,13 +871,7 @@ export class CVPopover extends ReatomLitElement {
           @toggle=${this.handleNativeToggle}
         >
           <slot></slot>
-          ${
-            this.arrow
-              ? html`
-                  <span part="arrow"><slot name="arrow"></slot></span>
-                `
-              : nothing
-          }
+          ${this.arrow ? html` <span part="arrow"><slot name="arrow"></slot></span> ` : nothing}
         </div>
       </div>
     `

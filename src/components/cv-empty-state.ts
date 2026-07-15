@@ -168,11 +168,9 @@ export class CVEmptyState extends ReatomLitElement {
   protected override render() {
     return html`
       <section part="base" role="status">
-        ${
-          this.icon
-            ? html`<cv-icon part="icon" name=${this.icon} ?fill=${this.iconFill} aria-hidden="true"></cv-icon>`
-            : nothing
-        }
+        ${this.icon
+          ? html`<cv-icon part="icon" name=${this.icon} ?fill=${this.iconFill} aria-hidden="true"></cv-icon>`
+          : nothing}
         <p part="title">${this.headline}</p>
         ${this.description ? html`<p part="description">${this.description}</p>` : nothing}
         <div part="body" ?hidden=${!this.hasDefaultSlot}>

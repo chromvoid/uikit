@@ -50,6 +50,10 @@ export class CVToolbarSeparator extends LitElement {
   }
 
   protected override render() {
-    return html`<div part="base" role=${this.separatorRole} aria-orientation=${this.separatorOrientation}></div>`
+    return html`<div
+      part="base"
+      role=${this.separatorRole}
+      aria-orientation=${this.separatorOrientation}
+    ></div>`
   }
 }

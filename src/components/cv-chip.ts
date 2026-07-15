@@ -181,9 +181,8 @@ export class CVChip extends ReatomLitElement {
         <span part="prefix"><slot name="prefix"></slot></span>
         <span part="label"><slot></slot></span>
         <span part="suffix"><slot name="suffix"></slot></span>
-        ${
-          this.removable
-            ? html`
+        ${this.removable
+          ? html`
               <button
                 part="remove-button"
                 type="button"
@@ -194,8 +193,7 @@ export class CVChip extends ReatomLitElement {
                 ×
               </button>
             `
-            : nothing
-        }
+          : nothing}
       </span>
     `
   }

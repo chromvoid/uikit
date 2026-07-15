@@ -265,11 +265,16 @@ export class CVThemePaletteEditor extends ReatomLitElement {
     return html`
       <div part="role-row" data-role=${role}>
         <div part="role-heading">
-          <cv-theme-palette-swatch .color=${formatHwbColor(color)} .label=${`${scheme} ${role}`}></cv-theme-palette-swatch>
+          <cv-theme-palette-swatch
+            .color=${formatHwbColor(color)}
+            .label=${`${scheme} ${role}`}
+          ></cv-theme-palette-swatch>
           <span part="role-name">${roleLabels[role]}</span>
         </div>
         <div part="channels">
-          ${CV_THEME_PALETTE_CHANNELS.map((channel) => this.renderChannel(scheme, role, channel, color[channel]))}
+          ${CV_THEME_PALETTE_CHANNELS.map((channel) =>
+            this.renderChannel(scheme, role, channel, color[channel]),
+          )}
         </div>
       </div>
     `

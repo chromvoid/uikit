@@ -1204,36 +1204,33 @@ export class CVDialog extends ReatomLitElement {
             <p id=${descriptionProps.id} part="description">
               <slot name="description"></slot>
             </p>
-            ${
-              this.closable
-                ? html`
-                    <button
-                      id=${headerCloseProps.id}
-                      role=${headerCloseProps.role}
-                      tabindex=${headerCloseProps.tabindex}
-                      aria-label=${headerCloseProps['aria-label']}
-                      type="button"
-                      part="header-close"
-                      @click=${this.handleHeaderCloseClick}
-                    >
-                      <slot name="header-close"
-                        ><svg
-                          width="16"
-                          height="16"
-                          viewBox="0 0 16 16"
-                          fill="none"
-                          stroke="currentColor"
-                          stroke-width="1.5"
-                          stroke-linecap="round"
-                        >
-                          <line x1="4" y1="4" x2="12" y2="12" />
-                          <line x1="12" y1="4" x2="4" y2="12" />
-                        </svg></slot
+            ${this.closable
+              ? html`
+                  <button
+                    id=${headerCloseProps.id}
+                    role=${headerCloseProps.role}
+                    tabindex=${headerCloseProps.tabindex}
+                    aria-label=${headerCloseProps['aria-label']}
+                    type="button"
+                    part="header-close"
+                    @click=${this.handleHeaderCloseClick}
+                  >
+                    <slot name="header-close"
+                      ><svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 16 16"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.5"
+                        stroke-linecap="round"
                       >
-                    </button>
-                  `
-                : nothing
-            }
+                        <line x1="4" y1="4" x2="12" y2="12" />
+                        <line x1="12" y1="4" x2="4" y2="12" /></svg
+                    ></slot>
+                  </button>
+                `
+              : nothing}
           </header>
 
           <div part="body">
@@ -1250,29 +1247,27 @@ export class CVDialog extends ReatomLitElement {
 
   protected override render() {
     return html`
-      ${
-        this.modal
-          ? html`
-              <dialog
-                class="portal-shell cv-u-discrete-presence"
-                data-state=${this.presenceState}
-                ?hidden=${!this.portalVisible}
-                @cancel=${this.handleNativeCancel}
-              >
-                ${this.renderContent()}
-              </dialog>
-            `
-          : html`
-              <div
-                class="portal-shell popover-shell cv-u-discrete-presence"
-                popover="manual"
-                data-state=${this.presenceState}
-                ?hidden=${!this.portalVisible}
-              >
-                ${this.renderContent()}
-              </div>
-            `
-      }
+      ${this.modal
+        ? html`
+            <dialog
+              class="portal-shell cv-u-discrete-presence"
+              data-state=${this.presenceState}
+              ?hidden=${!this.portalVisible}
+              @cancel=${this.handleNativeCancel}
+            >
+              ${this.renderContent()}
+            </dialog>
+          `
+        : html`
+            <div
+              class="portal-shell popover-shell cv-u-discrete-presence"
+              popover="manual"
+              data-state=${this.presenceState}
+              ?hidden=${!this.portalVisible}
+            >
+              ${this.renderContent()}
+            </div>
+          `}
     `
   }
 }

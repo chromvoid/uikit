@@ -35,8 +35,6 @@ export class CVComboboxGroup extends LitElement {
   }
 
   protected override render() {
-    return html`
-      <slot></slot>
-    `
+    return html` <slot></slot> `
   }
 }

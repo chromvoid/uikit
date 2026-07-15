@@ -135,9 +135,8 @@ export class CVTab extends LitElement {
     return html`
       <div class="tab" part="base">
         <slot></slot>
-        ${
-          this.closable
-            ? html`
+        ${this.closable
+          ? html`
               <button
                 class="close-button"
                 part="close-button"
@@ -149,8 +148,7 @@ export class CVTab extends LitElement {
                 &times;
               </button>
             `
-            : null
-        }
+          : null}
       </div>
     `
   }

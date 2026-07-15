@@ -1034,7 +1034,9 @@ export class CVCombobox extends ReatomLitElement {
                   e.stopPropagation()
                   this.handleTagRemove(record.id)
                 }}
-              >&times;</button>
+              >
+                &times;
+              </button>
             </span>
           `,
         )}
@@ -1086,11 +1088,9 @@ export class CVCombobox extends ReatomLitElement {
             aria-labelledby=${groupProps['aria-labelledby']}
             ?hidden=${!this.open || !isGroupVisible}
           >
-            <div
-              part="group-label"
-              id=${groupLabelProps.id}
-              role=${groupLabelProps.role}
-            >${groupRecord.label}</div>
+            <div part="group-label" id=${groupLabelProps.id} role=${groupLabelProps.role}>
+              ${groupRecord.label}
+            </div>
             <slot name=${groupRecord.id}></slot>
           </div>
         `
@@ -1135,9 +1135,8 @@ export class CVCombobox extends ReatomLitElement {
           data-has-clear=${hasClearButton ? 'true' : nothing}
         >
           ${this.renderTags()}
-          ${
-            isSelectOnly
-              ? html`
+          ${isSelectOnly
+            ? html`
                 <div
                   id=${inputProps.id}
                   role=${inputProps.role}
@@ -1156,7 +1155,7 @@ export class CVCombobox extends ReatomLitElement {
                   <span part="label" class="cv-u-fill">${this.getSelectedOptionLabel()}</span>
                 </div>
               `
-              : html`
+            : html`
                 <input
                   id=${inputProps.id}
                   role=${inputProps.role}
@@ -1178,8 +1177,7 @@ export class CVCombobox extends ReatomLitElement {
                   @click=${this.handleInputClick}
                   @keydown=${this.handleKeyDown}
                 />
-              `
-          }
+              `}
           ${this.renderClearButton()}
         </div>
 
@@ -1194,7 +1192,9 @@ export class CVCombobox extends ReatomLitElement {
           part="listbox"
           class="cv-u-panel-shell cv-u-discrete-presence"
         >
-          ${hasGroups ? this.renderListboxContent() : html`<slot @slotchange=${this.handleSlotChange}></slot>`}
+          ${hasGroups
+            ? this.renderListboxContent()
+            : html`<slot @slotchange=${this.handleSlotChange}></slot>`}
         </div>
       </div>
     `

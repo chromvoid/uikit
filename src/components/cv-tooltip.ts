@@ -521,13 +521,7 @@ export class CVTooltip extends ReatomLitElement {
           part="content"
         >
           <slot name="content"></slot>
-          ${
-            this.arrow
-              ? html`
-                  <span part="arrow"></span>
-                `
-              : ''
-          }
+          ${this.arrow ? html` <span part="arrow"></span> ` : ''}
         </span>
       </span>
     `

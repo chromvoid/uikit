@@ -253,15 +253,9 @@ export class CVTaskList extends ReatomLitElement {
         <div part="header" ?hidden=${!this.hasHeaderSlot}>
           <slot name="header" @slotchange=${this.handleHeaderSlotChange}></slot>
         </div>
-        ${
-          this.empty
-            ? html`
-                <div part="empty"><slot name="empty"></slot></div>
-              `
-            : html`
-                <div part="list" role="list"><slot></slot></div>
-              `
-        }
+        ${this.empty
+          ? html` <div part="empty"><slot name="empty"></slot></div> `
+          : html` <div part="list" role="list"><slot></slot></div> `}
         <div part="footer" ?hidden=${!this.hasFooterSlot}>
           <slot name="footer" @slotchange=${this.handleFooterSlotChange}></slot>
         </div>

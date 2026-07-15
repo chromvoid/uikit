@@ -129,8 +129,6 @@ export class CVThemePaletteControllerElement extends LitElement {
   }
 
   protected override render() {
-    return html`
-      <slot @slotchange=${this.syncEditors}></slot>
-    `
+    return html` <slot @slotchange=${this.syncEditors}></slot> `
   }
 }

@@ -830,13 +830,7 @@ export class CVButton extends FormAssociatedReatomElement {
         @keydown=${this.handleKeyDown}
         @keyup=${this.handleKeyUp}
       >
-        ${
-          this.loading
-            ? html`
-                <span part="spinner" aria-hidden="true"></span>
-              `
-            : nothing
-        }
+        ${this.loading ? html` <span part="spinner" aria-hidden="true"></span> ` : nothing}
         <span part="prefix" class="cv-u-icon-slot" ?hidden=${!hasPrefixContent}
           ><slot name="prefix" @slotchange=${this.handleContentSlotChange}></slot
         ></span>

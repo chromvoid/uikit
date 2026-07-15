@@ -75,8 +75,6 @@ export class CVToolbarItem extends LitElement {
   }
 
   protected override render() {
-    return html`
-      <div class="item" part="base"><slot></slot></div>
-    `
+    return html` <div class="item" part="base"><slot></slot></div> `
   }
 }

@@ -187,12 +187,7 @@ export class CVProgressRing extends ReatomLitElement {
         part="base"
       >
         <svg part="svg" viewBox="0 0 100 100">
-          <circle
-            part="track"
-            cx="50"
-            cy="50"
-            r="${RADIUS}"
-          ></circle>
+          <circle part="track" cx="50" cy="50" r="${RADIUS}"></circle>
           <circle
             part="indicator"
             cx="50"

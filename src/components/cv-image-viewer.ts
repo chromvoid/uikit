@@ -638,13 +638,11 @@ export class CVImageViewer extends ReatomLitElement {
               data-dangerous=${action.dangerous ? 'true' : nothing}
               ?disabled=${Boolean(action.disabled || action.loading)}
             >
-              ${
-                action.loading
-                  ? html`<cv-spinner slot="prefix" size="xs" label=${label}></cv-spinner>`
-                  : action.icon
-                    ? html`<cv-icon slot="prefix" name=${action.icon} size="s"></cv-icon>`
-                    : nothing
-              }
+              ${action.loading
+                ? html`<cv-spinner slot="prefix" size="xs" label=${label}></cv-spinner>`
+                : action.icon
+                  ? html`<cv-icon slot="prefix" name=${action.icon} size="s"></cv-icon>`
+                  : nothing}
               ${label}
             </cv-menu-item>
           `
@@ -669,9 +667,7 @@ export class CVImageViewer extends ReatomLitElement {
 
   private renderFallbackViewport(item: CVImageViewerItem | undefined) {
     if (!item) {
-      return html`
-        <div part="state" role="status">No image selected</div>
-      `
+      return html` <div part="state" role="status">No image selected</div> `
     }
 
     if (item.loading) {
@@ -687,9 +683,7 @@ export class CVImageViewer extends ReatomLitElement {
     }
 
     if (!item.src) {
-      return html`
-        <div part="state" role="status">Image is not available</div>
-      `
+      return html` <div part="state" role="status">Image is not available</div> `
     }
 
     const transitionDirection = this.imageTransitionDirection
@@ -717,23 +711,21 @@ export class CVImageViewer extends ReatomLitElement {
             />
           `,
         )}
-        ${
-          outgoingItem
-            ? keyed(
-                `outgoing-${this.imageTransitionCycle}-${outgoingItem.id}-${outgoingItem.src}`,
-                html`
-                  <img
-                    part="image"
-                    data-transition-phase="outgoing"
-                    src=${outgoingItem.src}
-                    alt=""
-                    aria-hidden="true"
-                    decoding="async"
-                  />
-                `,
-              )
-            : nothing
-        }
+        ${outgoingItem
+          ? keyed(
+              `outgoing-${this.imageTransitionCycle}-${outgoingItem.id}-${outgoingItem.src}`,
+              html`
+                <img
+                  part="image"
+                  data-transition-phase="outgoing"
+                  src=${outgoingItem.src}
+                  alt=""
+                  aria-hidden="true"
+                  decoding="async"
+                />
+              `,
+            )
+          : nothing}
       </div>
     `
   }
@@ -759,11 +751,9 @@ export class CVImageViewer extends ReatomLitElement {
 
     return html`
       <div part="thumbnails" @scroll=${this.handleThumbnailScroll}>
-        ${
-          beforeCount > 0
-            ? html`<span part="thumbnail-window-spacer" aria-hidden="true">+${beforeCount}</span>`
-            : nothing
-        }
+        ${beforeCount > 0
+          ? html`<span part="thumbnail-window-spacer" aria-hidden="true">+${beforeCount}</span>`
+          : nothing}
         ${this.thumbnailIndices.map((index) => {
           const item = this.items[index]
           if (!item) return nothing
@@ -778,19 +768,15 @@ export class CVImageViewer extends ReatomLitElement {
               @click=${this.handleThumbnailClick}
               @pointerenter=${this.handleThumbnailPointerEnter}
             >
-              ${
-                item.thumbnailSrc
-                  ? html`<img src=${item.thumbnailSrc} alt="" loading="lazy" />`
-                  : html`<span part="thumbnail-placeholder">${index + 1}</span>`
-              }
+              ${item.thumbnailSrc
+                ? html`<img src=${item.thumbnailSrc} alt="" loading="lazy" />`
+                : html`<span part="thumbnail-placeholder">${index + 1}</span>`}
             </button>
           `
         })}
-        ${
-          afterCount > 0
-            ? html`<span part="thumbnail-window-spacer" aria-hidden="true">+${afterCount}</span>`
-            : nothing
-        }
+        ${afterCount > 0
+          ? html`<span part="thumbnail-window-spacer" aria-hidden="true">+${afterCount}</span>`
+          : nothing}
       </div>
     `
   }

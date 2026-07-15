@@ -957,9 +957,8 @@ export class CVSelect extends FormAssociatedReatomElement {
           <span part="value">
             <slot name="trigger">${this.getValueText()}</slot>
           </span>
-          ${
-            showClear
-              ? html`
+          ${showClear
+            ? html`
                 <button
                   part="clear-button"
                   class="cv-u-icon-slot"
@@ -970,8 +969,7 @@ export class CVSelect extends FormAssociatedReatomElement {
                   ✕
                 </button>
               `
-              : nothing
-          }
+            : nothing}
           <span part="chevron" aria-hidden="true">▾</span>
         </div>
 

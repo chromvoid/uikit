@@ -434,13 +434,7 @@ export class CVCard extends ReatomLitElement {
           @keydown=${this.handleHeaderKeyDown}
         >
           <slot name="header" @slotchange=${this.handleHeaderSlotChange}></slot>
-          ${
-            isExpandable
-              ? html`
-                  <span part="indicator" aria-hidden="true"></span>
-                `
-              : nothing
-          }
+          ${isExpandable ? html` <span part="indicator" aria-hidden="true"></span> ` : nothing}
         </div>
 
         <div

@@ -110,20 +110,22 @@ export class CVDropzone extends ReatomLitElement {
 
   protected override render() {
     return html`
-      <div part="base" aria-busy=${this.loading ? 'true' : 'false'} aria-disabled=${this.disabled ? 'true' : 'false'}>
+      <div
+        part="base"
+        aria-busy=${this.loading ? 'true' : 'false'}
+        aria-disabled=${this.disabled ? 'true' : 'false'}
+      >
         <div part="content"><slot></slot></div>
         <div part="overlay">
           <slot name="message">${this.message}</slot>
         </div>
-        ${
-          this.loading
-            ? html`
+        ${this.loading
+          ? html`
               <div part="loading-overlay" role="status">
                 <slot name="loading"><cv-spinner aria-hidden="true"></cv-spinner>${this.loadingLabel}</slot>
               </div>
             `
-            : nothing
-        }
+          : nothing}
       </div>
     `
   }

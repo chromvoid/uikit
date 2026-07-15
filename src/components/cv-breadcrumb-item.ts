@@ -147,7 +147,13 @@ export class CVBreadcrumbItem extends LitElement {
   protected override render() {
     return html`
       <span part="prefix"><slot name="prefix"></slot></span>
-      <a id=${this.linkId || nothing} role="link" href=${this.href} aria-current=${this.current ? 'page' : nothing} part="link">
+      <a
+        id=${this.linkId || nothing}
+        role="link"
+        href=${this.href}
+        aria-current=${this.current ? 'page' : nothing}
+        part="link"
+      >
         <slot></slot>
       </a>
       <span part="suffix"><slot name="suffix"></slot></span>

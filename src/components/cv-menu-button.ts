@@ -615,8 +615,9 @@ export class CVMenuButton extends ReatomLitElement {
   }
 
   private getItemElements(): CVMenuItem[] {
-    return Array.from(this.querySelectorAll(':scope > [slot="menu"]')).filter(
-      (element): element is CVMenuItem => element.tagName.toLowerCase() === CVMenuItem.elementName,
+    return Array.from(this.children).filter(
+      (element): element is CVMenuItem =>
+        element.getAttribute('slot') === 'menu' && element.tagName.toLowerCase() === CVMenuItem.elementName,
     )
   }
 

@@ -74,18 +74,16 @@ export class CVShortcut extends ReatomLitElement {
 
     return html`
       <span part="base" aria-label=${label}>
-        ${
-          keys.length > 0
-            ? keys.map(
-                (key, index) => html`
-                ${index > 0 ? html`<span part="separator" aria-hidden="true">${this.separator}</span>` : nothing}
+        ${keys.length > 0
+          ? keys.map(
+              (key, index) => html`
+                ${index > 0
+                  ? html`<span part="separator" aria-hidden="true">${this.separator}</span>`
+                  : nothing}
                 <cv-kbd part="key">${key}</cv-kbd>
               `,
-              )
-            : html`
-                <slot></slot>
-              `
-        }
+            )
+          : html` <slot></slot> `}
       </span>
     `
   }

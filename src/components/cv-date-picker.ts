@@ -1083,9 +1083,8 @@ export class CVDatePicker extends FormAssociatedReatomElement {
             })}
           </div>
 
-          ${
-            isDateTimeMode && hourInputProps && minuteInputProps
-              ? html`
+          ${isDateTimeMode && hourInputProps && minuteInputProps
+            ? html`
                 <div part="time-row">
                   <input
                     part="hour-input"
@@ -1120,8 +1119,7 @@ export class CVDatePicker extends FormAssociatedReatomElement {
                   />
                 </div>
               `
-              : nothing
-          }
+            : nothing}
 
           <div part="actions">
             <button

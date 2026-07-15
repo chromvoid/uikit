@@ -477,7 +477,8 @@ export class CVCopyButton extends ReatomLitElement {
           role=${statusProps.role}
           aria-live=${statusProps['aria-live']}
           aria-atomic=${statusProps['aria-atomic']}
-        >${statusAnnouncement}</span>
+          >${statusAnnouncement}</span
+        >
       </div>
     `
   }

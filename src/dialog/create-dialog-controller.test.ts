@@ -189,12 +189,8 @@ describe('createDialogController', () => {
     const resultPromise = controller.showCustom<string>(
       {
         title: 'Custom dialog',
-        content: html`
-          <button id="inside-button">Inside</button>
-        `,
-        footer: html`
-          <button id="inside-action">Action</button>
-        `,
+        content: html` <button id="inside-button">Inside</button> `,
+        footer: html` <button id="inside-action">Action</button> `,
       },
       (dialog, resolve) => {
         dialogRef = dialog as CVDialog
@@ -216,9 +212,7 @@ describe('createDialogController', () => {
     const resultPromise = controller.showCustom<string>(
       {
         title: 'Dismiss dialog',
-        content: html`
-          <button id="dismiss-button">Dismiss</button>
-        `,
+        content: html` <button id="dismiss-button">Dismiss</button> `,
       },
       (dialog) => {
         dialogRef = dialog as CVDialog
@@ -276,9 +270,7 @@ describe('createDialogController', () => {
     const resultPromise = controller.showCustom<string>(
       {
         title: 'Immediate dialog',
-        content: html`
-          <span>Immediate</span>
-        `,
+        content: html` <span>Immediate</span> `,
       },
       (_dialog, resolve) => {
         resolve('instant')
@@ -366,9 +358,7 @@ describe('createDialogController', () => {
       const resultPromise = controller.showCustom<string>(
         {
           title: 'Focus dialog',
-          content: html`
-            <button id="focus-target">Focusable</button>
-          `,
+          content: html` <button id="focus-target">Focusable</button> `,
         },
         (dialog, resolve) => {
           dialogRef = dialog as CVDialog
@@ -453,9 +443,7 @@ describe('createDialogController', () => {
       const resultPromise = controller.showCustom<string>(
         {
           title: 'Input-only sheet',
-          content: html`
-            <input id="text-target" autofocus />
-          `,
+          content: html` <input id="text-target" autofocus /> `,
         },
         (dialog, resolve) => {
           resolveDialog = resolve

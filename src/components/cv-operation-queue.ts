@@ -310,20 +310,16 @@ export class CVOperationQueue extends ReatomLitElement {
           <span part="icon" ?hidden=${!this.hasIconSlot}>
             <slot name="icon" @slotchange=${this.handleIconSlotChange}></slot>
           </span>
-          <div part="title"><span part="summary"><slot name="summary">${this.label}</slot></span></div>
+          <div part="title">
+            <span part="summary"><slot name="summary">${this.label}</slot></span>
+          </div>
           <div part="actions" ?hidden=${!this.hasActionsSlot}>
             <slot name="actions" @slotchange=${this.handleActionsSlotChange}></slot>
           </div>
         </header>
-        ${
-          this.empty
-            ? html`
-                <div part="empty"><slot name="empty"></slot></div>
-              `
-            : html`
-                <div part="body"><slot></slot></div>
-              `
-        }
+        ${this.empty
+          ? html` <div part="empty"><slot name="empty"></slot></div> `
+          : html` <div part="body"><slot></slot></div> `}
         <footer part="footer" ?hidden=${!this.hasFooterSlot}>
           <slot name="footer" @slotchange=${this.handleFooterSlotChange}></slot>
         </footer>

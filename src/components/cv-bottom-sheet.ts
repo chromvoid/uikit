@@ -131,9 +131,8 @@ export class CVBottomSheet extends ReatomLitElement {
       --_cv-bottom-sheet-available-block-size: max(
         0px,
         calc(
-          var(--_cv-bottom-sheet-visible-viewport-block-size) - var(
-              --_cv-bottom-sheet-overlay-block-start
-            ) - var(--_cv-bottom-sheet-safe-bottom-inset)
+          var(--_cv-bottom-sheet-visible-viewport-block-size) - var(--_cv-bottom-sheet-overlay-block-start) -
+            var(--_cv-bottom-sheet-safe-bottom-inset)
         )
       );
       --cv-dialog-z-index: var(--cv-bottom-sheet-z-index, 40);
@@ -611,26 +610,24 @@ export class CVBottomSheet extends ReatomLitElement {
             <line x1="4" y1="4" x2="12" y2="12" />
             <line x1="12" y1="4" x2="4" y2="12" /></svg
         ></slot>
-        ${
-          this.showHandle
-            ? html`
-                <button
-                  slot="before-header"
-                  class="sheet-handle"
-                  part="handle"
-                  type="button"
-                  aria-label=${this.handleLabel}
-                  @pointerdown=${this.handleDragPointerDown}
-                  @pointermove=${this.handleDragPointerMove}
-                  @pointerup=${this.handleDragPointerUp}
-                  @pointercancel=${this.handleDragPointerCancel}
-                  @click=${this.handleHandleClick}
-                >
-                  <span class="sheet-grabber" part="grabber"></span>
-                </button>
-              `
-            : null
-        }
+        ${this.showHandle
+          ? html`
+              <button
+                slot="before-header"
+                class="sheet-handle"
+                part="handle"
+                type="button"
+                aria-label=${this.handleLabel}
+                @pointerdown=${this.handleDragPointerDown}
+                @pointermove=${this.handleDragPointerMove}
+                @pointerup=${this.handleDragPointerUp}
+                @pointercancel=${this.handleDragPointerCancel}
+                @click=${this.handleHandleClick}
+              >
+                <span class="sheet-grabber" part="grabber"></span>
+              </button>
+            `
+          : null}
         <slot></slot>
         <slot name="footer" slot="footer" @slotchange=${this.handleFooterSlotChange}></slot>
       </cv-dialog>

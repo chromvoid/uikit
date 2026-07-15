@@ -186,9 +186,7 @@ export class CVTreegridCell extends LitElement {
     this.style.setProperty('--cv-treegrid-level', String(this.level || 1))
 
     if (!this.treeControl) {
-      return html`
-        <slot></slot>
-      `
+      return html` <slot></slot> `
     }
 
     return html`

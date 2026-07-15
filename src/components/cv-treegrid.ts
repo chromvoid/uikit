@@ -948,25 +948,21 @@ export class CVTreegrid extends ReatomLitElement {
         @cv-treegrid-row-toggle=${this.handleRowToggle}
       >
         <slot name="definitions" @slotchange=${this.handleSlotChange}></slot>
-        ${
-          hasColumns
-            ? html`
+        ${hasColumns
+          ? html`
               <div part="header" role="row">
                 ${this.columnRecords.map(
                   (column, index) => html`
                     <span part="columnheader" role="columnheader" aria-colindex=${String(index + 1)}>
-                      ${
-                        column.id === this.getTreeColumnId()
-                          ? html`<span part="tree-column-header">${this.getColumnLabel(column)}</span>`
-                          : this.getColumnLabel(column)
-                      }
+                      ${column.id === this.getTreeColumnId()
+                        ? html`<span part="tree-column-header">${this.getColumnLabel(column)}</span>`
+                        : this.getColumnLabel(column)}
                     </span>
                   `,
                 )}
               </div>
             `
-            : nothing
-        }
+          : nothing}
         <slot @slotchange=${this.handleSlotChange}></slot>
       </div>
     `

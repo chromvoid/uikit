@@ -438,27 +438,19 @@ export class CVSwitch extends FormAssociatedReatomElement {
           <span part="toggled" aria-hidden="true" ?hidden=${!isChecked}><slot name="toggled"></slot></span>
           <span part="untoggled" aria-hidden="true" ?hidden=${isChecked}><slot name="untoggled"></slot></span>
           <span part="thumb">
-            ${
-              this.loading
-                ? html`
-                    <span part="loader" aria-hidden="true"></span>
-                  `
-                : nothing
-            }
+            ${this.loading ? html` <span part="loader" aria-hidden="true"></span> ` : nothing}
           </span>
         </div>
         <span part="label" id=${fallbackLabelId ?? nothing}><slot></slot></span>
-        ${
-          this.hasHelpText
-            ? html`<span part="help-text" id=${this.helpTextId}>
+        ${this.hasHelpText
+          ? html`<span part="help-text" id=${this.helpTextId}>
               <slot name="help-text" @slotchange=${this.handleHelpTextSlotChange}>${this.helpText}</slot>
             </span>`
-            : html`<slot
+          : html`<slot
               name="help-text"
               class="help-text-slot-probe"
               @slotchange=${this.handleHelpTextSlotChange}
-            ></slot>`
-        }
+            ></slot>`}
       </div>
     `
   }

@@ -71,8 +71,6 @@ export class CVKbd extends ReatomLitElement {
   }
 
   protected override render() {
-    return html`
-      <kbd part="base"><slot></slot></kbd>
-    `
+    return html` <kbd part="base"><slot></slot></kbd> `
   }
 }

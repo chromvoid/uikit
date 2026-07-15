@@ -393,29 +393,15 @@ export class CVFeed extends ReatomLitElement {
         @keydown=${this.handleKeyDown}
       >
         <div part="sentinel-top"></div>
-        ${
-          this.loading
-            ? html`
-                <div part="loading-indicator" aria-hidden="true">
-                  <slot name="loading"></slot>
-                </div>
-              `
-            : nothing
-        }
-        ${
-          this.empty
-            ? html`
-                <slot name="empty" part="empty"></slot>
-              `
-            : nothing
-        }
-        ${
-          this.error
-            ? html`
-                <slot name="error" part="error"></slot>
-              `
-            : nothing
-        }
+        ${this.loading
+          ? html`
+              <div part="loading-indicator" aria-hidden="true">
+                <slot name="loading"></slot>
+              </div>
+            `
+          : nothing}
+        ${this.empty ? html` <slot name="empty" part="empty"></slot> ` : nothing}
+        ${this.error ? html` <slot name="error" part="error"></slot> ` : nothing}
         <slot @slotchange=${this.handleSlotChange}></slot>
         <div part="sentinel-bottom"></div>
       </div>

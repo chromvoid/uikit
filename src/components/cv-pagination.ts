@@ -234,23 +234,23 @@ export class CVPagination extends ReatomLitElement {
           <li part="item">
             ${this.renderButton(previousProps, 'button previous-button', '‹', this.handlePreviousClick)}
           </li>
-          ${this.model.state.items().map((item) =>
-            item.type === 'ellipsis'
-              ? html`
-                  <li part="item"><span part="ellipsis" aria-hidden="true">…</span></li>
-                `
-              : html`
-                  <li part="item">
-                    ${this.renderButton(
-                      this.model.contracts.getPageProps(item.page),
-                      'button page-button',
-                      item.page,
-                      this.handlePageClick,
-                      item.page,
-                    )}
-                  </li>
-                `,
-          )}
+          ${this.model.state
+            .items()
+            .map((item) =>
+              item.type === 'ellipsis'
+                ? html` <li part="item"><span part="ellipsis" aria-hidden="true">…</span></li> `
+                : html`
+                    <li part="item">
+                      ${this.renderButton(
+                        this.model.contracts.getPageProps(item.page),
+                        'button page-button',
+                        item.page,
+                        this.handlePageClick,
+                        item.page,
+                      )}
+                    </li>
+                  `,
+            )}
           <li part="item">
             ${this.renderButton(nextProps, 'button next-button', '›', this.handleNextClick)}
           </li>
