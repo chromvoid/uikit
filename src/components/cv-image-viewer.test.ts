@@ -564,6 +564,25 @@ describe('cv-image-viewer', () => {
     expect(imageErrors).toEqual([{itemId: 1, index: 0, sourceUrl: 'blob:one'}])
   })
 
+  it('requests thumbnail metrics again when the controlled selection changes', async () => {
+    const items = Array.from(
+      {length: 46},
+      (_, index): CVImageViewerItem => ({
+        id: index + 1,
+        title: `image-${index + 1}.jpg`,
+        src: `blob:image-${index + 1}`,
+      }),
+    )
+    const viewer = await mountViewer({items, currentIndex: 24})
+    const metrics: unknown[] = []
+    viewer.addEventListener('cv-thumbnail-metrics', (event) => metrics.push(event.detail))
+
+    viewer.currentIndex = 30
+    await settle(viewer)
+
+    expect(metrics).toContainEqual({viewportWidth: 0, thumbnailStepPx: 64, centerIndex: 30})
+  })
+
   it('does not emit built-in thumbnail metrics when thumbnails are slotted out', async () => {
     const metrics: unknown[] = []
     const footer = document.createElement('div')

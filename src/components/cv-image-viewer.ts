@@ -257,6 +257,7 @@ export class CVImageViewer extends ReatomLitElement {
 
     if (changedProperties.has('currentIndex')) {
       this.dispatchCommittedNavigation(changedProperties.get('currentIndex'))
+      this.dispatchThumbnailMetrics()
     }
   }
 
