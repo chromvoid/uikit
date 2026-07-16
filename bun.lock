@@ -5,7 +5,7 @@
     "": {
       "name": "@chromvoid/uikit",
       "dependencies": {
-        "@chromvoid/headless-ui": "0.3.0",
+        "@chromvoid/headless-ui": "0.4.0",
         "@reatom/core": "^1001.0.0",
         "qrcode-generator": "2.0.4",
       },
@@ -82,7 +82,7 @@
 
     "@blazediff/core": ["@blazediff/core@1.9.1", "", {}, "sha512-ehg3jIkYKulZh+8om/O25vkvSsXXwC+skXmyA87FFx6A/45eqOkZsBltMw/TVteb0mloiGT8oGRTcjRAz66zaA=="],
 
-    "@chromvoid/headless-ui": ["@chromvoid/headless-ui@0.3.0", "", { "dependencies": { "@reatom/core": "^1001.0.0" } }, "sha512-8gG3U2kpPewywfnk2xe2cznRjjG52xgh6Fd+cH9tG/W+V2F/tnWs9WJUF5VfpwBJsb4fCP01YPlyWYuoEXPMZA=="],
+    "@chromvoid/headless-ui": ["@chromvoid/headless-ui@0.4.0", "", { "dependencies": { "@reatom/core": "^1001.0.0" } }, "sha512-Kgvl/8mPT/WP64Mm5nwS6F97AdQ1ypwwgibZfhNjdHYFx3N+7zzxZQnEigWpSkuf5g+Sn2DCCP2Q2LCiHW3m7w=="],
 
     "@csstools/color-helpers": ["@csstools/color-helpers@5.1.0", "", {}, "sha512-S11EXWJyy0Mz5SYvRmY8nJYTFFd1LCNV+7cXyAgQtOOuzb4EsgfqDufL+9esx72/eLhsRdGZwaldu/h+E4t4BA=="],
 
