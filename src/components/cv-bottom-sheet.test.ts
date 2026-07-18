@@ -85,6 +85,9 @@ describe('cv-bottom-sheet', () => {
       'var(--_cv-bottom-sheet-safe-bottom-inset) + var(--_cv-bottom-sheet-keyboard-bottom-inset)',
     )
     expect(cssText).toContain('var(--_cv-bottom-sheet-visible-viewport-block-size)')
+    expect(cssText).toMatch(
+      /--_cv-bottom-sheet-available-block-size:[\s\S]*var\(\s*--_cv-bottom-sheet-keyboard-bottom-inset\s*\)/,
+    )
     expect(cssText).toContain('transform: translateY(calc(0px - var(--_cv-bottom-sheet-overlay-block-end)));')
     expect(cssText).toContain('var(--_cv-bottom-sheet-safe-bottom-inset)')
   })
@@ -98,6 +101,8 @@ describe('cv-bottom-sheet', () => {
     expect(cssText).toMatch(/cv-dialog::part\(content\)\s*{[\s\S]*overflow:\s*hidden;/)
     expect(cssText).toMatch(/cv-dialog::part\(body\)\s*{[\s\S]*min-block-size:\s*0;/)
     expect(cssText).toMatch(/cv-dialog::part\(body\)\s*{[\s\S]*overflow:\s*auto;/)
+    expect(cssText).toMatch(/cv-dialog::part\(body\)\s*{[\s\S]*overscroll-behavior:\s*contain;/)
+    expect(cssText).toMatch(/cv-dialog::part\(body\)\s*{[\s\S]*-webkit-overflow-scrolling:\s*touch;/)
   })
 
   it('defines detent sizing hooks without changing the default open-close mode', () => {

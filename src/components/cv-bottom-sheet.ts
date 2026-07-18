@@ -133,7 +133,7 @@ export class CVBottomSheet extends ReatomLitElement {
         calc(
           var(--_cv-bottom-sheet-visible-viewport-block-size) - var(
               --_cv-bottom-sheet-overlay-block-start
-            ) - var(--_cv-bottom-sheet-safe-bottom-inset)
+            ) - var(--_cv-bottom-sheet-safe-bottom-inset) - var(--_cv-bottom-sheet-keyboard-bottom-inset)
         )
       );
       --cv-dialog-z-index: var(--cv-bottom-sheet-z-index, 40);
@@ -241,6 +241,8 @@ export class CVBottomSheet extends ReatomLitElement {
     cv-dialog::part(body) {
       min-block-size: 0;
       overflow: auto;
+      overscroll-behavior: contain;
+      -webkit-overflow-scrolling: touch;
       padding: var(--cv-bottom-sheet-body-padding, 0 var(--cv-space-4, 16px) var(--cv-space-4, 16px));
     }
 
