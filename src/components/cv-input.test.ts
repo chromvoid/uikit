@@ -69,6 +69,36 @@ describe('cv-input', () => {
       expect(input.tagName.toLowerCase()).toBe('input')
     })
 
+    it('forwards control-id without replacing the native input ARIA references', async () => {
+      const el = document.createElement('cv-input') as CVInput
+      el.setAttribute('control-id', 'smoke.password')
+      el.setAttribute('aria-labelledby', 'password-label')
+      el.setAttribute('aria-describedby', 'password-help')
+      document.body.append(el)
+      await settle(el)
+
+      const input = getInput(el)
+      expect(input.id).toBe('smoke.password')
+      expect(input.getAttribute('aria-labelledby')).toBe('password-label')
+      expect(input.getAttribute('aria-describedby')).toBe('password-help')
+    })
+
+    it('keeps the generated native input id when control-id is absent', async () => {
+      const el = await createInput()
+
+      expect(getInput(el).id).toMatch(/^cv-input-\d+-input$/)
+    })
+
+    it('forwards enterkeyhint to the native input', async () => {
+      const el = document.createElement('cv-input') as CVInput
+      el.setAttribute('enterkeyhint', 'done')
+      document.body.append(el)
+      await settle(el)
+
+      expect(el.enterKeyHint).toBe('done')
+      expect(getInput(el).getAttribute('enterkeyhint')).toBe('done')
+    })
+
     it('renders [part="prefix"] containing slot[name="prefix"]', async () => {
       const el = await createInput()
       const prefix = el.shadowRoot!.querySelector('[part="prefix"]')
@@ -131,8 +161,10 @@ describe('cv-input', () => {
       expect(el.name).toBe('')
       expect(el.autofocus).toBe(false)
       expect(el.autocomplete).toBe('')
+      expect(el.enterKeyHint).toBe('')
       expect(el.maxlength).toBeUndefined()
       expect(el.invalid).toBe(false)
+      expect(el.controlId).toBe('')
     })
   })
 

@@ -52,6 +52,7 @@ export class CVButton extends FormAssociatedReatomElement {
       type: {type: String, reflect: true},
       unstyled: {type: Boolean, reflect: true},
       buttonTabIndex: {type: String, attribute: 'button-tabindex'},
+      controlId: {type: String, attribute: 'control-id'},
     }
   }
 
@@ -71,6 +72,7 @@ export class CVButton extends FormAssociatedReatomElement {
   declare type: CVButtonType
   declare unstyled: boolean
   declare buttonTabIndex: string | null
+  declare controlId: string
 
   private model: ButtonModel
   private suppressKeyboardClick = false
@@ -89,6 +91,7 @@ export class CVButton extends FormAssociatedReatomElement {
     this.type = 'button'
     this.unstyled = false
     this.buttonTabIndex = null
+    this.controlId = ''
     this.model = this.createModel()
   }
 
@@ -807,7 +810,7 @@ export class CVButton extends FormAssociatedReatomElement {
 
     return html`
       <button
-        id=${props.id}
+        id=${this.controlId || props.id}
         type="button"
         role=${this.getAttribute('role') ?? props.role}
         tabindex=${tabIndex}

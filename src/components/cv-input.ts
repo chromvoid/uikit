@@ -50,10 +50,12 @@ export class CVInput extends FormAssociatedReatomElement {
       name: {type: String},
       autofocus: {type: Boolean, reflect: true},
       autocomplete: {type: String},
+      enterKeyHint: {type: String, attribute: 'enterkeyhint'},
       maxlength: {type: Number},
       invalid: {type: Boolean, reflect: true},
       ariaLabelledBy: {type: String, attribute: 'aria-labelledby'},
       ariaDescribedBy: {type: String, attribute: 'aria-describedby'},
+      controlId: {type: String, attribute: 'control-id'},
     }
   }
 
@@ -71,10 +73,12 @@ export class CVInput extends FormAssociatedReatomElement {
   declare name: string
   declare autofocus: boolean
   declare autocomplete: string
+  declare enterKeyHint: string
   declare maxlength: number | undefined
   declare invalid: boolean
   declare ariaLabelledBy: string
   declare ariaDescribedBy: string
+  declare controlId: string
 
   private model: InputModel
   private _valueOnFocus = ''
@@ -98,10 +102,12 @@ export class CVInput extends FormAssociatedReatomElement {
     this.name = ''
     this.autofocus = false
     this.autocomplete = ''
+    this.enterKeyHint = ''
     this.maxlength = undefined
     this.invalid = false
     this.ariaLabelledBy = ''
     this.ariaDescribedBy = ''
+    this.controlId = ''
 
     this.model = this.createModel()
   }
@@ -573,7 +579,7 @@ export class CVInput extends FormAssociatedReatomElement {
         <input
           part="input"
           class="cv-u-fill"
-          id=${inputProps.id}
+          id=${this.controlId || inputProps.id}
           type=${inputProps.type}
           .value=${this.model.state.value()}
           tabindex=${inputProps.tabindex}
@@ -589,6 +595,7 @@ export class CVInput extends FormAssociatedReatomElement {
           ?disabled=${inputProps.disabled}
           ?readonly=${inputProps.readonly}
           autocomplete=${resolvedAutocomplete ?? nothing}
+          enterkeyhint=${this.enterKeyHint || nothing}
           @input=${this.handleNativeInput}
           @focus=${this.handleNativeFocus}
           @blur=${this.handleNativeBlur}

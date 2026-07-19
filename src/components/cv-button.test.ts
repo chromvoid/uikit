@@ -83,6 +83,26 @@ describe('cv-button', () => {
       expect(base.getAttribute('class')).toBeNull()
     })
 
+    it('forwards control-id to the native button without changing its ARIA contract', async () => {
+      const button = document.createElement('cv-button') as CVButton
+      button.setAttribute('control-id', 'smoke.submit')
+      button.setAttribute('aria-label', 'Submit')
+      document.body.append(button)
+      await settle(button)
+
+      const base = getBase(button)
+
+      expect(base.id).toBe('smoke.submit')
+      expect(base.getAttribute('aria-label')).toBe('Submit')
+      expect(base.getAttribute('role')).toBe('button')
+    })
+
+    it('keeps the generated native button id when control-id is absent', async () => {
+      const button = await createButton()
+
+      expect(getBase(button).id).toMatch(/^cv-button-\d+-root$/)
+    })
+
     it('renders [part="label"] containing default slot', async () => {
       const button = await createButton()
       const label = button.shadowRoot!.querySelector('[part="label"]')
@@ -189,6 +209,7 @@ describe('cv-button', () => {
       expect(button.pill).toBe(false)
       expect(button.size).toBe('medium')
       expect(button.type).toBe('button')
+      expect(button.controlId).toBe('')
     })
   })
 
