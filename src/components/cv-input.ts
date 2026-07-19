@@ -12,6 +12,8 @@ type CVInputSize = 'small' | 'medium' | 'large'
 type CVInputVariant = 'outlined' | 'filled'
 type CVInputPreset = 'search-mobile'
 
+const passthroughAttributes = ['aria-label'] as const
+
 export interface CVInputValueDetail {
   value: string
 }
@@ -57,6 +59,10 @@ export class CVInput extends FormAssociatedReatomElement {
       ariaDescribedBy: {type: String, attribute: 'aria-describedby'},
       controlId: {type: String, attribute: 'control-id'},
     }
+  }
+
+  static override get observedAttributes(): string[] {
+    return Array.from(new Set([...super.observedAttributes, ...passthroughAttributes]))
   }
 
   declare value: string
@@ -110,6 +116,13 @@ export class CVInput extends FormAssociatedReatomElement {
     this.controlId = ''
 
     this.model = this.createModel()
+  }
+
+  override attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null) {
+    super.attributeChangedCallback(name, oldValue, newValue)
+    if (name === 'aria-label' && oldValue !== newValue) {
+      this.requestUpdate()
+    }
   }
 
   static styles = [
@@ -171,6 +184,13 @@ export class CVInput extends FormAssociatedReatomElement {
 
       [part='clear-button'],
       [part='password-toggle'] {
+        appearance: none;
+        border: 0;
+        padding: 0;
+        margin: 0;
+        background: transparent;
+        color: inherit;
+        font: inherit;
         cursor: pointer;
         user-select: none;
       }
@@ -563,6 +583,10 @@ export class CVInput extends FormAssociatedReatomElement {
     this.requestUpdate()
   }
 
+  private getPassthroughAttribute(name: (typeof passthroughAttributes)[number]) {
+    return this.getAttribute(name) ?? nothing
+  }
+
   protected override render() {
     const inputProps = this.model.contracts.getInputProps()
     const clearButtonProps = this.model.contracts.getClearButtonProps()
@@ -587,6 +611,7 @@ export class CVInput extends FormAssociatedReatomElement {
           aria-readonly=${inputProps['aria-readonly'] ?? nothing}
           aria-required=${inputProps['aria-required'] ?? nothing}
           aria-invalid=${this.invalid ? 'true' : nothing}
+          aria-label=${this.getPassthroughAttribute('aria-label')}
           aria-labelledby=${this.ariaLabelledBy || nothing}
           aria-describedby=${this.ariaDescribedBy || nothing}
           placeholder=${inputProps.placeholder ?? nothing}
@@ -613,7 +638,8 @@ export class CVInput extends FormAssociatedReatomElement {
         >
           <slot name="clear-icon">&times;</slot>
         </span>
-        <span
+        <button
+          type="button"
           part="password-toggle"
           class="cv-u-icon-slot"
           role=${passwordToggleProps.role}
@@ -659,7 +685,7 @@ export class CVInput extends FormAssociatedReatomElement {
                     <circle cx="12" cy="12" r="3" /></svg
                 ></slot>
               `}
-        </span>
+        </button>
         <span part="suffix" class="cv-u-icon-slot"><slot name="suffix"></slot></span>
       </div>
     `

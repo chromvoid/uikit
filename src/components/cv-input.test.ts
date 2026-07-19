@@ -83,10 +83,39 @@ describe('cv-input', () => {
       expect(input.getAttribute('aria-describedby')).toBe('password-help')
     })
 
+    it('forwards, updates, and removes aria-label while preserving the labelledby fallback', async () => {
+      const el = document.createElement('cv-input') as CVInput
+      el.setAttribute('aria-label', 'Password')
+      el.setAttribute('aria-labelledby', 'password-label')
+      document.body.append(el)
+      await settle(el)
+
+      const input = getInput(el)
+      expect(input.getAttribute('aria-label')).toBe('Password')
+      expect(input.getAttribute('aria-labelledby')).toBe('password-label')
+
+      el.setAttribute('aria-label', 'Vault password')
+      await settle(el)
+      expect(input.getAttribute('aria-label')).toBe('Vault password')
+
+      el.removeAttribute('aria-label')
+      await settle(el)
+      expect(input.hasAttribute('aria-label')).toBe(false)
+      expect(input.getAttribute('aria-labelledby')).toBe('password-label')
+    })
+
     it('keeps the generated native input id when control-id is absent', async () => {
       const el = await createInput()
 
       expect(getInput(el).id).toMatch(/^cv-input-\d+-input$/)
+    })
+
+    it('renders the password toggle as a native non-submitting button', async () => {
+      const el = await createInput({type: 'password', passwordToggle: true})
+      const toggle = getPasswordToggle(el)
+
+      expect(toggle).toBeInstanceOf(HTMLButtonElement)
+      expect((toggle as HTMLButtonElement).type).toBe('button')
     })
 
     it('forwards enterkeyhint to the native input', async () => {
