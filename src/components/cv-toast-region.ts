@@ -28,12 +28,14 @@ export class CVToastRegion extends ReatomLitElement {
       controller: {attribute: false},
       position: {type: String, reflect: true},
       maxVisible: {type: Number, attribute: 'max-visible', reflect: true},
+      dismissLabel: {type: String, attribute: 'dismiss-label'},
     }
   }
 
   declare controller: CVToastController
   declare position: ToastRegionPosition
   declare maxVisible: number
+  declare dismissLabel: string
 
   private previousToastIds = new Set<string>()
 
@@ -41,6 +43,7 @@ export class CVToastRegion extends ReatomLitElement {
     super()
     this.position = 'top-end'
     this.maxVisible = 3
+    this.dismissLabel = 'Dismiss notification'
     this.controller = createToastController({maxVisible: this.maxVisible})
   }
 
@@ -157,6 +160,22 @@ export class CVToastRegion extends ReatomLitElement {
     this.controller.resume()
   }
 
+  private handleFocusIn() {
+    this.controller.pause()
+  }
+
+  private handleFocusOut(event: FocusEvent) {
+    const nextTarget = event.relatedTarget
+    if (
+      nextTarget instanceof Node &&
+      event.currentTarget instanceof Node &&
+      event.currentTarget.contains(nextTarget)
+    ) {
+      return
+    }
+    this.controller.resume()
+  }
+
   private handleToastClose(event: Event) {
     const customEvent = event as CustomEvent<{id: string}>
     this.controller.dismiss(customEvent.detail.id)
@@ -171,13 +190,12 @@ export class CVToastRegion extends ReatomLitElement {
     return html`
       <section
         id=${regionProps.id}
-        role=${regionProps.role}
-        aria-live=${regionProps['aria-live']}
-        aria-atomic=${regionProps['aria-atomic']}
         part="base"
         data-paused=${paused ? 'true' : 'false'}
         @mouseenter=${this.handlePause}
         @mouseleave=${this.handleResume}
+        @focusin=${this.handleFocusIn}
+        @focusout=${this.handleFocusOut}
       >
         ${items.map((item) => {
           const toastProps = model.contracts.getToastProps(item.id)
@@ -198,6 +216,7 @@ export class CVToastRegion extends ReatomLitElement {
               .durationMs=${item.durationMs ?? 0}
               .paused=${paused}
               .actions=${item.actions ?? []}
+              .dismissLabel=${this.dismissLabel}
               @cv-close=${this.handleToastClose}
             ></cv-toast>
           `

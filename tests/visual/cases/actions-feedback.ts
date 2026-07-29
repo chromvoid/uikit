@@ -111,13 +111,18 @@ export const actionsFeedbackCases: readonly UikitVisualCase[] = [
     id: 'cv-toast/states',
     component: 'cv-toast',
     title: 'Toast levels, progress, paused, closable, and actions',
-    states: ['info', 'success', 'warning', 'error', 'loading', 'progress', 'paused', 'actions'],
+    states: ['info', 'success', 'warning', 'error', 'loading', 'progress', 'paused', 'actions', 'long-copy'],
+    viewports: ['compact', 'default'],
     html: `
       <div class="visual-grid">
         <cv-toast level="info" title="Info" message="Informational toast message."></cv-toast>
         <cv-toast level="success" title="Saved" message="The vault item was saved." progress paused></cv-toast>
         <cv-toast level="warning" title="Review" message="Check the pending sync result."></cv-toast>
-        <cv-toast level="error" title="Failed" message="The export could not be completed."></cv-toast>
+        <cv-toast
+          level="error"
+          title="Group wasn’t deleted"
+          message="The encrypted vault could not confirm this operation. The group is still available, so you can safely try again."
+        ></cv-toast>
         <cv-toast data-visual-id="actions" level="loading" title="Uploading" message="Uploading encrypted attachment."></cv-toast>
       </div>
     `,

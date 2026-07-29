@@ -49,6 +49,20 @@ describe('cv-toast-region', () => {
     expect(getToastItems(region)).toHaveLength(0)
   })
 
+  it('updates a toast in place through the controller', async () => {
+    const region = await mountRegion()
+    const id = region.controller.push({message: 'Deleting…', level: 'loading', durationMs: 0})
+    await settle(region)
+
+    expect(region.controller.update(id, {message: 'Deleted', level: 'success', durationMs: 0})).toBe(true)
+    await settle(region)
+
+    const items = getToastItems(region)
+    expect(items).toHaveLength(1)
+    expect(items[0]?.getAttribute('data-level')).toBe('success')
+    expect((items[0] as HTMLElement & {message: string}).message).toBe('Deleted')
+  })
+
   it('auto-dismisses toasts and emits close events', async () => {
     vi.useFakeTimers()
 
@@ -95,7 +109,33 @@ describe('cv-toast-region', () => {
     expect(getToastItems(region)).toHaveLength(0)
   })
 
-  it('renders aria region and level-based item roles from headless contracts', async () => {
+  it('pauses timers while focus is inside an action', async () => {
+    vi.useFakeTimers()
+    const region = await mountRegion()
+    region.controller.push({
+      message: 'Action',
+      durationMs: 100,
+      actions: [{label: 'Retry'}],
+    })
+    await settle(region)
+
+    const action = region.shadowRoot
+      ?.querySelector('cv-toast')
+      ?.shadowRoot?.querySelector('[part="action"]') as HTMLButtonElement
+    action.dispatchEvent(new FocusEvent('focusin', {bubbles: true, composed: true}))
+    vi.advanceTimersByTime(200)
+    await settle(region)
+    expect(getToastItems(region)).toHaveLength(1)
+
+    action.dispatchEvent(
+      new FocusEvent('focusout', {bubbles: true, composed: true, relatedTarget: document.body}),
+    )
+    vi.advanceTimersByTime(100)
+    await settle(region)
+    expect(getToastItems(region)).toHaveLength(0)
+  })
+
+  it('keeps the region silent and renders one level-based role per toast', async () => {
     const region = await mountRegion()
 
     region.controller.push({message: 'Warn', level: 'warning', durationMs: 0})
@@ -103,8 +143,8 @@ describe('cv-toast-region', () => {
     await settle(region)
 
     const base = region.shadowRoot?.querySelector('[part="base"]') as HTMLElement
-    expect(base.getAttribute('role')).toBe('region')
-    expect(base.getAttribute('aria-live')).toBe('polite')
+    expect(base.hasAttribute('role')).toBe(false)
+    expect(base.hasAttribute('aria-live')).toBe(false)
 
     const warning = region.shadowRoot?.querySelector('[data-level="warning"]') as HTMLElement
     const info = region.shadowRoot?.querySelector('[data-level="info"]') as HTMLElement
@@ -247,10 +287,10 @@ describe('cv-toast-region', () => {
   // --- Region ARIA structure ---
 
   describe('region ARIA structure', () => {
-    it('renders [part="base"] with aria-atomic="false"', async () => {
+    it('does not create a second live region', async () => {
       const region = await mountRegion()
       const base = region.shadowRoot?.querySelector('[part="base"]') as HTMLElement
-      expect(base.getAttribute('aria-atomic')).toBe('false')
+      expect(base.hasAttribute('aria-atomic')).toBe(false)
     })
   })
 

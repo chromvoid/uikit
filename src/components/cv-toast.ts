@@ -27,6 +27,7 @@ export class CVToast extends ReatomLitElement {
       paused: {type: Boolean, reflect: true},
       durationMs: {type: Number, attribute: false},
       actions: {attribute: false},
+      dismissLabel: {type: String, attribute: 'dismiss-label'},
     }
   }
 
@@ -40,6 +41,7 @@ export class CVToast extends ReatomLitElement {
   declare paused: boolean
   declare durationMs: number
   declare actions: readonly ToastAction[]
+  declare dismissLabel: string
 
   constructor() {
     super()
@@ -53,6 +55,7 @@ export class CVToast extends ReatomLitElement {
     this.paused = false
     this.durationMs = 5000
     this.actions = []
+    this.dismissLabel = 'Dismiss notification'
   }
 
   static styles = [
@@ -132,6 +135,8 @@ export class CVToast extends ReatomLitElement {
         color: var(--cv-color-text-muted, #9aa6bf);
         cursor: pointer;
         padding: 0 var(--cv-space-2, 8px);
+        min-inline-size: 32px;
+        min-block-size: 32px;
       }
 
       [part='dismiss']:hover {
@@ -167,6 +172,7 @@ export class CVToast extends ReatomLitElement {
         padding: 4px 10px;
         border-radius: var(--cv-radius-sm, 6px);
         cursor: pointer;
+        min-block-size: 32px;
       }
 
       [part='action']:hover {
@@ -230,6 +236,20 @@ export class CVToast extends ReatomLitElement {
           transform: scaleX(0);
         }
       }
+
+      @media (max-width: 767px) {
+        [part='dismiss'],
+        [part='action'] {
+          min-inline-size: 48px;
+          min-block-size: 48px;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        [part='progress'] {
+          display: none;
+        }
+      }
     `,
   ]
 
@@ -267,6 +287,11 @@ export class CVToast extends ReatomLitElement {
   override updated(changedProperties: Map<string, unknown>): void {
     super.updated(changedProperties)
 
+    if (changedProperties.has('level')) {
+      this.setAttribute('role', this.getRole())
+      this.setAttribute('aria-atomic', 'true')
+    }
+
     if (changedProperties.has('durationMs')) {
       this.style.setProperty('--_cv-toast-progress-duration', `${Math.max(this.durationMs, 0)}ms`)
     }
@@ -285,13 +310,12 @@ export class CVToast extends ReatomLitElement {
   }
 
   protected override render() {
-    const role = this.getRole()
     const hasActions = this.actions.length > 0
     const hasTitle = this.title.length > 0
     const hasMessage = this.message.length > 0
 
     return html`
-      <div part="base" role=${role} data-level=${this.level}>
+      <div part="base" data-level=${this.level}>
         <span part="icon-wrap"><slot name="icon">${this.renderFallbackIcon()}</slot></span>
         <div part="content">
           ${hasTitle ? html`<span part="title">${this.title}</span>` : nothing}
@@ -320,9 +344,7 @@ export class CVToast extends ReatomLitElement {
               <button
                 part="dismiss"
                 type="button"
-                role="button"
-                tabindex="0"
-                aria-label="Dismiss notification"
+                aria-label=${this.dismissLabel}
                 @click=${this.handleDismiss}
               >
                 ×

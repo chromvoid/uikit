@@ -741,9 +741,7 @@ export class CVDialog extends ReatomLitElement {
     this.focusRestoreTarget = getFocusRestoreTarget()
     const host = document.activeElement
     this.focusRestoreHost =
-      host instanceof HTMLElement && host !== document.body && host !== document.documentElement
-        ? host
-        : null
+      host instanceof HTMLElement && host !== document.body && host !== document.documentElement ? host : null
   }
 
   private queueFocusRestore(restoreTargetId: string | null): void {

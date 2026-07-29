@@ -42,16 +42,17 @@ describe('cv-toast', () => {
 
   it('uses status for info/success and alert for warning/error', async () => {
     const info = await createToast({level: 'info'})
-    expect(getBase(info).getAttribute('role')).toBe('status')
+    expect(info.getAttribute('role')).toBe('status')
+    expect(getBase(info).hasAttribute('role')).toBe(false)
 
     const success = await createToast({level: 'success'})
-    expect(getBase(success).getAttribute('role')).toBe('status')
+    expect(success.getAttribute('role')).toBe('status')
 
     const warning = await createToast({level: 'warning'})
-    expect(getBase(warning).getAttribute('role')).toBe('alert')
+    expect(warning.getAttribute('role')).toBe('alert')
 
     const error = await createToast({level: 'error'})
-    expect(getBase(error).getAttribute('role')).toBe('alert')
+    expect(error.getAttribute('role')).toBe('alert')
   })
 
   it('renders title and message props', async () => {
@@ -132,6 +133,12 @@ describe('cv-toast', () => {
     expect(closeComposed).toBe(true)
   })
 
+  it('uses a localized dismiss label', async () => {
+    const el = await createToast({dismissLabel: 'Закрыть уведомление'})
+    const dismiss = el.shadowRoot!.querySelector('[part="dismiss"]')
+    expect(dismiss?.getAttribute('aria-label')).toBe('Закрыть уведомление')
+  })
+
   it('does not render the progress indicator when durationMs is not positive', async () => {
     const zero = await createToast({progress: true, durationMs: 0})
     expect(zero.shadowRoot!.querySelector('[part="progress"]')).toBeNull()
@@ -147,15 +154,15 @@ describe('cv-toast', () => {
 
   it('updates role when level changes at runtime', async () => {
     const el = await createToast({level: 'info'})
-    expect(getBase(el).getAttribute('role')).toBe('status')
+    expect(el.getAttribute('role')).toBe('status')
 
     el.level = 'error'
     await settle(el)
-    expect(getBase(el).getAttribute('role')).toBe('alert')
+    expect(el.getAttribute('role')).toBe('alert')
 
     el.level = 'loading'
     await settle(el)
-    expect(getBase(el).getAttribute('role')).toBe('status')
+    expect(el.getAttribute('role')).toBe('status')
   })
 
   it('invokes the matching handler for each action button', async () => {

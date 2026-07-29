@@ -8,6 +8,7 @@ import {
 export interface CVToastController {
   readonly model: ToastModel
   push(item: Omit<ToastItem, 'id'> & {id?: string}): string
+  update(id: string, item: Omit<ToastItem, 'id'>): boolean
   dismiss(id: string): void
   clear(): void
   pause(): void
@@ -22,6 +23,7 @@ export function createToastController(options: CreateToastOptions = {}): CVToast
   return {
     model,
     push: (item) => model.actions.push(item),
+    update: (id, item) => model.actions.update(id, item),
     dismiss: (id) => model.actions.dismiss(id),
     clear: () => model.actions.clear(),
     pause: () => model.actions.pause(),

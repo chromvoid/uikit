@@ -8,7 +8,7 @@ Container that manages a queue of toast notifications with positioning, stacking
 
 ```
 <cv-toast-region> (host)
-└── <section part="base" role="region" aria-live="polite" aria-atomic="false">
+└── <section part="base">
     ├── <cv-toast part="item" role="status|alert" data-level="info">
     ├── <cv-toast part="item" role="alert" data-level="error">
     └── …
@@ -16,10 +16,11 @@ Container that manages a queue of toast notifications with positioning, stacking
 
 ## Attributes
 
-| Attribute     | Type   | Default     | Description                                                                                                              |
-| ------------- | ------ | ----------- | ------------------------------------------------------------------------------------------------------------------------ |
-| `position`    | String | `"top-end"` | Positioning of the region: `top-start` \| `top-center` \| `top-end` \| `bottom-start` \| `bottom-center` \| `bottom-end` |
-| `max-visible` | Number | `3`         | Maximum number of toasts displayed simultaneously                                                                        |
+| Attribute       | Type   | Default                  | Description                                                                                                              |
+| --------------- | ------ | ------------------------ | ------------------------------------------------------------------------------------------------------------------------ |
+| `position`      | String | `"top-end"`              | Positioning of the region: `top-start` \| `top-center` \| `top-end` \| `bottom-start` \| `bottom-center` \| `bottom-end` |
+| `max-visible`   | Number | `3`                      | Maximum number of toasts displayed simultaneously                                                                        |
+| `dismiss-label` | String | `"Dismiss notification"` | Localized accessible name for each dismiss button                                                                        |
 
 ## Slots
 
@@ -29,9 +30,9 @@ Container that manages a queue of toast notifications with positioning, stacking
 
 ## CSS Parts
 
-| Part   | Element     | Description                                              |
-| ------ | ----------- | -------------------------------------------------------- |
-| `base` | `<section>` | Root region element with `role="region"` and `aria-live` |
+| Part   | Element     | Description                                                |
+| ------ | ----------- | ---------------------------------------------------------- |
+| `base` | `<section>` | Structural stack container; it is not a second live region |
 
 ## CSS Custom Properties
 
@@ -65,18 +66,19 @@ Container that manages a queue of toast notifications with positioning, stacking
 
 `cv-toast-region` is a visual adapter over headless `createToast`.
 
-| UIKit Property | Direction     | Headless Binding                                                                                          |
-| -------------- | ------------- | --------------------------------------------------------------------------------------------------------- |
-| `max-visible`  | attr → option | Passed as `maxVisible` in `createToast(options)`                                                          |
-| _(controller)_ | property      | `createToastController()` wraps `createToast()` and exposes `push`, `dismiss`, `clear`, `pause`, `resume` |
+| UIKit Property | Direction     | Headless Binding                                                                                                    |
+| -------------- | ------------- | ------------------------------------------------------------------------------------------------------------------- |
+| `max-visible`  | attr → option | Passed as `maxVisible` in `createToast(options)`                                                                    |
+| _(controller)_ | property      | `createToastController()` wraps `createToast()` and exposes `push`, `update`, `dismiss`, `clear`, `pause`, `resume` |
 
-| Headless State         | Direction        | DOM Reflection                                                              |
-| ---------------------- | ---------------- | --------------------------------------------------------------------------- |
-| `state.visibleItems()` | state → render   | Drives the rendered list of `cv-toast` items                                |
-| `state.isPaused()`     | state → internal | Tracked internally; toggled by `mouseenter`/`mouseleave` on `[part="base"]` |
+| Headless State         | Direction        | DOM Reflection                                                               |
+| ---------------------- | ---------------- | ---------------------------------------------------------------------------- |
+| `state.visibleItems()` | state → render   | Drives the rendered list of `cv-toast` items                                 |
+| `state.isPaused()`     | state → internal | Tracked internally; toggled by pointer and focus presence on `[part="base"]` |
 
-- `contracts.getRegionProps()` is spread onto the inner `[part="base"]` element to apply `id`, `role="region"`, `aria-live`, and `aria-atomic`.
-- `mouseenter` on `[part="base"]` calls `actions.pause()`; `mouseleave` calls `actions.resume()`.
+- `contracts.getRegionProps()` supplies only the structural id. Exactly one `status`/`alert` role remains on each toast host.
+- `mouseenter`/`focusin` on `[part="base"]` call `actions.pause()`; `mouseleave`/focus leaving the region call `actions.resume()`.
+- `controller.update(id, replacement)` preserves the toast id and position while replacing its presentation and timer.
 - UIKit tracks the previous set of toast IDs across renders and dispatches a `cv-close` event for each ID that disappears from the queue.
 - UIKit does not own queue logic, timer management, or visibility slicing; headless state is the source of truth.
 
@@ -373,8 +375,8 @@ Individual toast notification item rendered within `cv-toast-region`. Displays a
 #### Anatomy
 
 ```
-<cv-toast> (host)
-└── <div part="base" role="status|alert" data-level="info">
+<cv-toast role="status|alert"> (host)
+└── <div part="base" data-level="info">
     ├── <span part="icon">
     │   └── <slot name="icon">         ← severity icon
     ├── <div part="content">
@@ -385,11 +387,12 @@ Individual toast notification item rendered within `cv-toast-region`. Displays a
 
 #### Attributes
 
-| Attribute  | Type    | Default  | Description                                                       |
-| ---------- | ------- | -------- | ----------------------------------------------------------------- |
-| `level`    | String  | `"info"` | Severity level: `info` \| `success` \| `warning` \| `error`       |
-| `closable` | Boolean | `true`   | Whether the dismiss button is shown                               |
-| `toast-id` | String  | `""`     | Identifier for the toast, included in the `cv-close` event detail |
+| Attribute       | Type    | Default                  | Description                                                       |
+| --------------- | ------- | ------------------------ | ----------------------------------------------------------------- |
+| `level`         | String  | `"info"`                 | Severity level: `info` \| `success` \| `warning` \| `error`       |
+| `closable`      | Boolean | `true`                   | Whether the dismiss button is shown                               |
+| `toast-id`      | String  | `""`                     | Identifier for the toast, included in the `cv-close` event detail |
+| `dismiss-label` | String  | `"Dismiss notification"` | Localized accessible name for the dismiss button                  |
 
 #### Slots
 
@@ -400,13 +403,13 @@ Individual toast notification item rendered within `cv-toast-region`. Displays a
 
 #### CSS Parts
 
-| Part      | Element    | Description                                                  |
-| --------- | ---------- | ------------------------------------------------------------ |
-| `base`    | `<div>`    | Root wrapper for the toast item with `role` and `data-level` |
-| `icon`    | `<span>`   | Wrapper around the `icon` slot                               |
-| `content` | `<div>`    | Wrapper around the message area                              |
-| `label`   | `<span>`   | Wrapper around the default slot (message text)               |
-| `dismiss` | `<button>` | Dismiss/close button                                         |
+| Part      | Element    | Description                                              |
+| --------- | ---------- | -------------------------------------------------------- |
+| `base`    | `<div>`    | Root visual wrapper for the toast item with `data-level` |
+| `icon`    | `<span>`   | Wrapper around the `icon` slot                           |
+| `content` | `<div>`    | Wrapper around the message area                          |
+| `label`   | `<span>`   | Wrapper around the default slot (message text)           |
+| `dismiss` | `<button>` | Dismiss/close button                                     |
 
 #### CSS Custom Properties
 
@@ -459,10 +462,13 @@ Each toast item is bound to headless contracts per toast ID.
 
 | Headless Contract                     | Direction     | DOM Binding                                                                                            |
 | ------------------------------------- | ------------- | ------------------------------------------------------------------------------------------------------ |
-| `contracts.getToastProps(id)`         | state → attrs | Spread onto `[part="base"]`: `id`, `role` (`status` or `alert`), `data-level`                          |
+| `contracts.getToastProps(id)`         | state → attrs | Applied to the `cv-toast` host: `id`, `role` (`status` or `alert`), `data-level`                       |
 | `contracts.getDismissButtonProps(id)` | state → attrs | Spread onto `[part="dismiss"]`: `id`, `role="button"`, `tabindex="0"`, `aria-label`, `onClick` handler |
 
 - `role` is determined by the headless contract based on level: `role="status"` for `info`/`success`, `role="alert"` for `warning`/`error`.
 - In standalone usage, `cv-toast` computes role from its `level` property matching the headless contract logic.
-- When rendered within `cv-toast-region`, the region spreads headless contract props onto each inline toast item.
+- When rendered within `cv-toast-region`, the region applies headless contract props to each `cv-toast` host.
+- The inner visual wrapper does not repeat the role, and the outer stack does not add another live region.
+- Pointer/focus pause keeps action text reachable without allowing the auto-dismiss timer to expire.
+- Mobile action and dismiss targets are at least 48×48 CSS pixels; reduced-motion removes the progress animation.
 - The dismiss button `onClick` handler from `getDismissButtonProps(id)` calls `actions.dismiss(id)` internally.
