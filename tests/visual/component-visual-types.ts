@@ -1,5 +1,5 @@
 export type UikitVisualTheme = 'dark' | 'light'
-export type UikitVisualViewport = 'compact' | 'default' | 'wide'
+export type UikitVisualViewport = 'mobile-360' | 'mobile-390' | 'mobile-430' | 'compact' | 'default' | 'wide'
 export type UikitVisualTier = 'smoke' | 'full'
 
 export type UikitVisualCase = {
@@ -37,6 +37,9 @@ export const UIKIT_VISUAL_VIEWPORTS: Record<
   UikitVisualViewport,
   {width: number; height: number}
 > = {
+  'mobile-360': {width: 360, height: 640},
+  'mobile-390': {width: 390, height: 844},
+  'mobile-430': {width: 430, height: 844},
   compact: {width: 390, height: 760},
   default: {width: 900, height: 720},
   wide: {width: 1280, height: 820},

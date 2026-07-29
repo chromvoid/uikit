@@ -55,6 +55,11 @@
         gap: 12px;
         min-width: min(860px, 100%);
       }
+      @media (max-width: 767px) {
+        .visual-toast-grid {
+          grid-template-columns: 1fr;
+        }
+      }
       .visual-wide-grid {
         display: grid;
         grid-template-columns: repeat(2, minmax(360px, 1fr));

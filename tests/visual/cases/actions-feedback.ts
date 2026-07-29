@@ -112,9 +112,9 @@ export const actionsFeedbackCases: readonly UikitVisualCase[] = [
     component: 'cv-toast',
     title: 'Toast levels, progress, paused, closable, and actions',
     states: ['info', 'success', 'warning', 'error', 'loading', 'progress', 'paused', 'actions', 'long-copy'],
-    viewports: ['compact', 'default'],
+    viewports: ['mobile-360', 'mobile-390', 'mobile-430', 'default'],
     html: `
-      <div class="visual-grid">
+      <div class="visual-grid visual-toast-grid">
         <cv-toast level="info" title="Info" message="Informational toast message."></cv-toast>
         <cv-toast level="success" title="Saved" message="The vault item was saved." progress paused></cv-toast>
         <cv-toast level="warning" title="Review" message="Check the pending sync result."></cv-toast>
