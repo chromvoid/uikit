@@ -281,7 +281,7 @@ Slide-out panel dialog anchored to a viewport edge, used for navigation, forms, 
 - `start` and `end` follow the inherited CSS direction: edge anchoring, inward radii, closed transform, drag offset, and drag-close threshold direction automatically flip in RTL layouts.
 - `top` and `bottom` remain physical placements in both LTR and RTL.
 - Direction is sampled at the open and drag boundaries. While open, UIKit observes only the component's direction-inheritance chain for `dir` changes and tears the observer down on close/disconnect; direction remains layout input, not product state.
-- Presence motion uses `transform` and `opacity` only. `prefers-reduced-motion: reduce` makes the transition instant while preserving the same open/closed state.
+- Presence motion uses `transform` and `opacity` only. Completion follows the longest overlay or panel transition (including delay); `prefers-reduced-motion: reduce` makes the transition and completion immediate while preserving the same open/closed state.
 
 ## Events
 
@@ -294,7 +294,7 @@ Slide-out panel dialog anchored to a viewport edge, used for navigation, forms, 
 | `cv-hide`       | ---               | Fires when drawer begins to close                  |
 | `cv-after-hide` | ---               | Fires after drawer close animation completes       |
 
-`cv-input` and `cv-change` fire only for user-initiated state changes (trigger click, Escape, outside pointer, outside focus, header close). Programmatic `open` attribute changes do not emit these events.
+`cv-input` and `cv-change` fire immediately and only for user-initiated state changes (trigger click, Escape, outside pointer, outside focus, header close). Programmatic `open` attribute changes do not emit these events. `cv-after-show` and `cv-after-hide` fire only when the corresponding presence transition has actually completed.
 
 ## Reactive State Mapping
 
@@ -320,7 +320,7 @@ Slide-out panel dialog anchored to a viewport edge, used for navigation, forms, 
 | `state.placement()`            | state -> attr   | `[placement]` host attribute                  |
 | `state.isFocusTrapped()`       | state -> effect | activates focus trap within the drawer        |
 | `state.shouldLockScroll()`     | state -> effect | applies `overflow: hidden` to `document.body` |
-| `state.restoreTargetId()`      | state -> effect | focuses the trigger element on close          |
+| `state.restoreTargetId()`      | state -> effect | provides the internal trigger focus fallback  |
 | `state.initialFocusTargetId()` | state -> effect | focuses the specified element on open         |
 
 - `contracts.getTriggerProps()` is spread onto `[part="trigger"]` to apply `role`, `aria-haspopup`, `aria-expanded`, `aria-controls`, `tabindex`, and click/keydown handlers.
@@ -331,4 +331,5 @@ Slide-out panel dialog anchored to a viewport edge, used for navigation, forms, 
 - `contracts.getHeaderCloseButtonProps()` is spread onto `[part="header-close"]` to apply `role`, `tabindex`, `aria-label: 'Close'`, and click handler.
 - UIKit dispatches `cv-input` and `cv-change` events by observing `isOpen` changes triggered by user interaction (not by controlled `open` attribute changes).
 - UIKit dispatches `cv-show`/`cv-after-show`/`cv-hide`/`cv-after-hide` lifecycle events to bracket CSS transitions.
+- On controlled open, UIKit captures the deep focused external opener and its connected shadow host. After every completed close transition, focus is restored in this order: captured opener, connected host, internal trigger fallback.
 - UIKit owns scroll lock implementation, focus trap implementation, focus restoration, backdrop rendering, slide animations, and CSS transitions -- headless provides signals, UIKit applies side effects.

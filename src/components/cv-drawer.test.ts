@@ -1,6 +1,6 @@
 import {afterEach, describe, expect, it, vi} from 'vitest'
 
-import {CVDrawer} from './cv-drawer'
+import {CVDrawer, type CVDrawerEventDetail} from './cv-drawer'
 import {resetBodyScrollLockForTesting} from './scroll-lock'
 
 CVDrawer.define()
@@ -22,6 +22,22 @@ const createDrawer = async (attrs?: Partial<CVDrawer>) => {
 const getPanel = (el: CVDrawer) => el.shadowRoot!.querySelector('[part="panel"]') as HTMLElement
 
 const getOverlay = (el: CVDrawer) => el.shadowRoot!.querySelector('[part="overlay"]') as HTMLElement
+
+const setPresenceTransitionDuration = (el: CVDrawer, duration: string) => {
+  getOverlay(el).style.transitionDuration = duration
+  getPanel(el).style.transitionDuration = duration
+}
+
+const advanceOpenAnimationFrame = async (el: CVDrawer) => {
+  await vi.advanceTimersToNextTimerAsync()
+  await settle(el)
+}
+
+const finishOpenPresence = async (el: CVDrawer, duration = 120) => {
+  await advanceOpenAnimationFrame(el)
+  await vi.advanceTimersByTimeAsync(duration)
+  await settle(el)
+}
 
 const nextFrame = async () => new Promise<void>((resolve) => requestAnimationFrame(() => resolve()))
 
@@ -333,6 +349,7 @@ describe('cv-drawer', () => {
     })
 
     it('cv-after-show fires after drawer open animation completes', async () => {
+      vi.useFakeTimers()
       const el = await createDrawer()
       const trigger = el.shadowRoot!.querySelector('[part="trigger"]') as HTMLElement
       let fired = false
@@ -341,9 +358,17 @@ describe('cv-drawer', () => {
         fired = true
       })
 
+      setPresenceTransitionDuration(el, '120ms')
       trigger.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
       await settle(el)
 
+      expect(fired).toBe(false)
+
+      await advanceOpenAnimationFrame(el)
+      await vi.advanceTimersByTimeAsync(119)
+      expect(fired).toBe(false)
+
+      await vi.advanceTimersByTimeAsync(1)
       expect(fired).toBe(true)
     })
 
@@ -363,6 +388,7 @@ describe('cv-drawer', () => {
     })
 
     it('cv-after-hide fires after drawer close animation completes', async () => {
+      vi.useFakeTimers()
       const el = await createDrawer({open: true})
       const panel = getPanel(el)
       let fired = false
@@ -371,13 +397,21 @@ describe('cv-drawer', () => {
         fired = true
       })
 
+      setPresenceTransitionDuration(el, '120ms')
       panel.dispatchEvent(new KeyboardEvent('keydown', {key: 'Escape', bubbles: true}))
       await settle(el)
 
+      expect(fired).toBe(false)
+
+      await vi.advanceTimersByTimeAsync(119)
+      expect(fired).toBe(false)
+
+      await vi.advanceTimersByTimeAsync(1)
       expect(fired).toBe(true)
     })
 
     it('programmatic open and close fire lifecycle events in order', async () => {
+      vi.useFakeTimers()
       const el = await createDrawer()
       const events: string[] = []
 
@@ -386,13 +420,305 @@ describe('cv-drawer', () => {
       el.addEventListener('cv-hide', () => events.push('hide'))
       el.addEventListener('cv-after-hide', () => events.push('after-hide'))
 
+      setPresenceTransitionDuration(el, '120ms')
       el.open = true
       await settle(el)
+      expect(events).toEqual(['show'])
 
+      await advanceOpenAnimationFrame(el)
+      await vi.advanceTimersByTimeAsync(120)
+      expect(events).toEqual(['show', 'after-show'])
+
+      el.open = false
+      await settle(el)
+      expect(events).toEqual(['show', 'after-show', 'hide'])
+
+      await vi.advanceTimersByTimeAsync(120)
+
+      expect(events).toEqual(['show', 'after-show', 'hide', 'after-hide'])
+    })
+
+    it('dispatches after lifecycle events immediately when transitions are reduced to zero', async () => {
+      const el = await createDrawer()
+      const events: string[] = []
+
+      el.addEventListener('cv-show', () => events.push('show'))
+      el.addEventListener('cv-after-show', () => events.push('after-show'))
+      el.addEventListener('cv-hide', () => events.push('hide'))
+      el.addEventListener('cv-after-hide', () => events.push('after-hide'))
+
+      setPresenceTransitionDuration(el, '0ms')
+      el.open = true
+      await settle(el)
       el.open = false
       await settle(el)
 
       expect(events).toEqual(['show', 'after-show', 'hide', 'after-hide'])
+    })
+
+    it('keeps user close input/change immediate while delaying cv-after-hide', async () => {
+      vi.useFakeTimers()
+      const el = await createDrawer({open: true})
+      const events: string[] = []
+
+      setPresenceTransitionDuration(el, '120ms')
+      el.addEventListener('cv-hide', () => events.push('hide'))
+      el.addEventListener('cv-input', (event) =>
+        events.push(`input:${(event as CustomEvent<CVDrawerEventDetail>).detail.open}`),
+      )
+      el.addEventListener('cv-change', (event) =>
+        events.push(`change:${(event as CustomEvent<CVDrawerEventDetail>).detail.open}`),
+      )
+      el.addEventListener('cv-after-hide', () => events.push('after-hide'))
+
+      getPanel(el).dispatchEvent(new KeyboardEvent('keydown', {key: 'Escape', bubbles: true}))
+      await settle(el)
+
+      expect(events).toEqual(['hide', 'input:false', 'change:false'])
+
+      await vi.advanceTimersByTimeAsync(120)
+
+      expect(events).toEqual(['hide', 'input:false', 'change:false', 'after-hide'])
+    })
+  })
+
+  describe('focus restoration', () => {
+    it('restores a controlled external opener only after the close transition', async () => {
+      vi.useFakeTimers()
+      const el = await createDrawer()
+      const opener = document.createElement('button')
+      opener.textContent = 'Open navigation'
+      document.body.prepend(opener)
+      setPresenceTransitionDuration(el, '120ms')
+
+      opener.focus()
+      el.open = true
+      await settle(el)
+      await finishOpenPresence(el)
+
+      const focusSpy = vi.spyOn(opener, 'focus')
+      el.open = false
+      await settle(el)
+
+      expect(focusSpy).not.toHaveBeenCalled()
+      expect(document.activeElement).not.toBe(opener)
+
+      await vi.advanceTimersByTimeAsync(119)
+      expect(focusSpy).not.toHaveBeenCalled()
+
+      await vi.advanceTimersByTimeAsync(1)
+      await settle(el)
+
+      expect(focusSpy).toHaveBeenCalledWith({preventScroll: true})
+      expect(document.activeElement).toBe(opener)
+    })
+
+    it('restores through a connected shadow host when the captured inner opener is replaced', async () => {
+      vi.useFakeTimers()
+      const innerFixtureName = 'cv-drawer-focus-restore-inner-fixture'
+      const outerFixtureName = 'cv-drawer-focus-restore-outer-fixture'
+      if (!customElements.get(innerFixtureName)) {
+        customElements.define(
+          innerFixtureName,
+          class extends HTMLElement {
+            constructor() {
+              super()
+              this.attachShadow({mode: 'open'}).innerHTML = '<button>Open navigation</button>'
+            }
+
+            override focus(options?: FocusOptions): void {
+              this.shadowRoot?.querySelector('button')?.focus(options)
+            }
+
+            replaceInnerButton(): void {
+              this.shadowRoot!.innerHTML = '<button>Open navigation again</button>'
+            }
+          },
+        )
+      }
+      if (!customElements.get(outerFixtureName)) {
+        customElements.define(
+          outerFixtureName,
+          class extends HTMLElement {
+            constructor() {
+              super()
+              this.attachShadow({mode: 'open'}).innerHTML = `<${innerFixtureName}></${innerFixtureName}>`
+            }
+          },
+        )
+      }
+
+      const outerHost = document.createElement(outerFixtureName)
+      document.body.append(outerHost)
+      const opener = outerHost.shadowRoot!.querySelector(innerFixtureName) as HTMLElement & {
+        replaceInnerButton(): void
+      }
+      opener.focus()
+      const originalInner = opener.shadowRoot!.activeElement
+
+      const el = await createDrawer()
+      setPresenceTransitionDuration(el, '120ms')
+      el.open = true
+      await settle(el)
+      await finishOpenPresence(el)
+
+      opener.replaceInnerButton()
+      expect(originalInner?.isConnected).toBe(false)
+
+      el.open = false
+      await settle(el)
+      await vi.advanceTimersByTimeAsync(120)
+      await settle(el)
+
+      expect(document.activeElement).toBe(outerHost)
+      expect(outerHost.shadowRoot!.activeElement).toBe(opener)
+      expect(opener.shadowRoot!.activeElement?.textContent).toBe('Open navigation again')
+    })
+
+    it('falls back to the internal trigger when a controlled opener disconnects', async () => {
+      vi.useFakeTimers()
+      const opener = document.createElement('button')
+      document.body.append(opener)
+      opener.focus()
+
+      const el = await createDrawer()
+      setPresenceTransitionDuration(el, '120ms')
+      el.open = true
+      await settle(el)
+      await finishOpenPresence(el)
+
+      opener.remove()
+      el.open = false
+      await settle(el)
+      await vi.advanceTimersByTimeAsync(120)
+      await settle(el)
+
+      expect(el.shadowRoot!.activeElement).toBe(el.shadowRoot!.querySelector('[part="trigger"]'))
+    })
+
+    it('uses the internal trigger as the user-initiated fallback', async () => {
+      const el = await createDrawer()
+      const trigger = el.shadowRoot!.querySelector('[part="trigger"]') as HTMLElement
+
+      trigger.focus()
+      trigger.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+      await settle(el)
+
+      getPanel(el).dispatchEvent(new KeyboardEvent('keydown', {key: 'Escape', bubbles: true}))
+      await settle(el)
+
+      expect(el.shadowRoot!.activeElement).toBe(trigger)
+    })
+
+    it('restores the controlled opener after backdrop dismissal', async () => {
+      vi.useFakeTimers()
+      const opener = document.createElement('button')
+      document.body.append(opener)
+      opener.focus()
+
+      const el = await createDrawer()
+      setPresenceTransitionDuration(el, '120ms')
+      el.open = true
+      await settle(el)
+      await finishOpenPresence(el)
+
+      const overlay = getOverlay(el)
+      overlay.dispatchEvent(new MouseEvent('mousedown', {bubbles: true}))
+      overlay.dispatchEvent(new MouseEvent('click', {bubbles: true}))
+      await settle(el)
+
+      expect(document.activeElement).not.toBe(opener)
+
+      await vi.advanceTimersByTimeAsync(120)
+      await settle(el)
+
+      expect(document.activeElement).toBe(opener)
+    })
+
+    it('restores the controlled opener after drag dismissal', async () => {
+      vi.useFakeTimers()
+      const opener = document.createElement('button')
+      document.body.append(opener)
+      opener.focus()
+
+      const el = await createDrawer({dragToClose: true, placement: 'start'})
+      setPresenceTransitionDuration(el, '120ms')
+      el.open = true
+      await settle(el)
+      await finishOpenPresence(el)
+
+      const panel = getPanel(el)
+      panel.dispatchEvent(createPointerEvent('pointerdown', {clientX: 240, clientY: 40}))
+      panel.dispatchEvent(createPointerEvent('pointermove', {clientX: 120, clientY: 40}))
+      panel.dispatchEvent(createPointerEvent('pointerup', {clientX: 120, clientY: 40}))
+      await settle(el)
+
+      expect(el.open).toBe(false)
+      expect(document.activeElement).not.toBe(opener)
+
+      await vi.advanceTimersByTimeAsync(120)
+      await settle(el)
+
+      expect(document.activeElement).toBe(opener)
+    })
+
+    it('preserves the original opener across a cancelled close and subsequent close', async () => {
+      vi.useFakeTimers()
+      const opener = document.createElement('button')
+      document.body.append(opener)
+      opener.focus()
+
+      const el = await createDrawer()
+      setPresenceTransitionDuration(el, '120ms')
+      el.open = true
+      await settle(el)
+      await finishOpenPresence(el)
+
+      const focusSpy = vi.spyOn(opener, 'focus')
+      let afterHideCount = 0
+      el.addEventListener('cv-after-hide', () => afterHideCount++)
+
+      el.open = false
+      await settle(el)
+      el.open = true
+      await settle(el)
+      await finishOpenPresence(el)
+
+      expect(el.open).toBe(true)
+      expect(getOverlay(el).hidden).toBe(false)
+      expect(focusSpy).not.toHaveBeenCalled()
+      expect(afterHideCount).toBe(0)
+
+      el.open = false
+      await settle(el)
+      await vi.advanceTimersByTimeAsync(120)
+      await settle(el)
+
+      expect(document.activeElement).toBe(opener)
+      expect(focusSpy).toHaveBeenCalledWith({preventScroll: true})
+      expect(afterHideCount).toBe(1)
+    })
+
+    it('cancels pending focus restoration when disconnected during close', async () => {
+      vi.useFakeTimers()
+      const opener = document.createElement('button')
+      document.body.append(opener)
+      opener.focus()
+
+      const el = await createDrawer()
+      setPresenceTransitionDuration(el, '120ms')
+      el.open = true
+      await settle(el)
+      await finishOpenPresence(el)
+
+      const focusSpy = vi.spyOn(opener, 'focus')
+      el.open = false
+      await settle(el)
+      el.remove()
+
+      await vi.advanceTimersByTimeAsync(120)
+
+      expect(focusSpy).not.toHaveBeenCalled()
     })
   })
 
@@ -640,6 +966,7 @@ describe('cv-drawer', () => {
       const el = await createDrawer()
       const trigger = el.shadowRoot!.querySelector('[part="trigger"]') as HTMLElement
       const panel = getPanel(el)
+      setPresenceTransitionDuration(el, '20ms')
 
       expect(panel.getAttribute('data-state')).toBe('closed')
 

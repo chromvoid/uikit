@@ -45,6 +45,35 @@ function isContentEditableTarget(element: HTMLElement): boolean {
   return element.isContentEditable || contentEditable === 'true' || contentEditable === ''
 }
 
+/**
+ * Returns the innermost focused HTMLElement, following active elements through
+ * open shadow roots.
+ */
+export function getDeepActiveElement(root: Document | ShadowRoot = document): HTMLElement | null {
+  let activeElement = root.activeElement
+  while (
+    activeElement instanceof HTMLElement &&
+    activeElement.shadowRoot?.activeElement instanceof HTMLElement
+  ) {
+    activeElement = activeElement.shadowRoot.activeElement
+  }
+
+  return activeElement instanceof HTMLElement ? activeElement : null
+}
+
+/**
+ * Returns a meaningful focus-restoration target, excluding the document
+ * fallback elements reported when no interactive target owns focus.
+ */
+export function getFocusRestoreTarget(root: Document | ShadowRoot = document): HTMLElement | null {
+  const activeElement = getDeepActiveElement(root)
+  if (!activeElement || activeElement === document.body || activeElement === document.documentElement) {
+    return null
+  }
+
+  return activeElement
+}
+
 export function isTextEditableFocusTarget(element: HTMLElement): boolean {
   if (isDisabledOrReadonly(element)) return false
   if (isContentEditableTarget(element)) return true
@@ -74,11 +103,7 @@ export function isTextEditableFocusTarget(element: HTMLElement): boolean {
 export function hasTextEditableFocus(): boolean {
   if (typeof document === 'undefined') return false
 
-  let active: Element | null = document.activeElement
-  while (active instanceof HTMLElement && active.shadowRoot?.activeElement) {
-    active = active.shadowRoot.activeElement
-  }
-
-  if (!(active instanceof HTMLElement)) return false
+  const active = getDeepActiveElement()
+  if (!active) return false
   return isTextEditableFocusTarget(active)
 }

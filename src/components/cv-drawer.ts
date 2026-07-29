@@ -4,6 +4,7 @@ import type {PropertyValues} from 'lit'
 
 import {html} from '../reatom-lit/index.js'
 import {ReatomLitElement} from '../reatom-lit/ReatomLitElement'
+import {getFocusRestoreTarget} from './focus-utils'
 import {acquireBodyScrollLock, releaseBodyScrollLock} from './scroll-lock.js'
 import {observeInheritedDirection, readInheritedDirection, type CVTextDirection} from './text-direction.js'
 
@@ -60,10 +61,14 @@ export class CVDrawer extends ReatomLitElement {
   private lockScrollApplied = false
   private suppressLifecycleFromUpdate = false
   private lifecycleToken = 0
+  private focusRestoreTarget: HTMLElement | null = null
+  private focusRestoreHost: HTMLElement | null = null
   private overlayVisible = false
   private renderState: 'open' | 'closed' = 'closed'
   private openAnimationFrame = 0
-  private closeAnimationTimeout = 0
+  private presenceAnimationTimeout = 0
+  private closeTransitionPending = false
+  private pendingFocusRestoreTargetId: string | null = null
   private shouldAnimatePresence = false
   private dragPointerId: number | null = null
   private dragStartX = 0
@@ -322,6 +327,9 @@ export class CVDrawer extends ReatomLitElement {
     this.syncOutsideFocusListener(true)
     this.releaseScrollLock()
     this.clearAnimationQueue()
+    this.pendingFocusRestoreTargetId = null
+    this.focusRestoreTarget = null
+    this.focusRestoreHost = null
     this.resetDragState()
     this.syncDirectionObserver(false)
   }
@@ -343,6 +351,15 @@ export class CVDrawer extends ReatomLitElement {
       this.model = this.createModel(wasOpen)
     }
 
+    if (
+      changedProperties.has('open') &&
+      this.open &&
+      changedProperties.get('open') !== true &&
+      !this.closeTransitionPending
+    ) {
+      this.captureFocusRestoreTarget()
+    }
+
     if (changedProperties.has('open') && this.model.state.isOpen() !== this.open) {
       if (this.open) {
         this.model.actions.open()
@@ -355,6 +372,7 @@ export class CVDrawer extends ReatomLitElement {
       this.clearAnimationQueue()
 
       if (this.open) {
+        this.pendingFocusRestoreTargetId = null
         this.overlayVisible = true
         this.renderState = this.hasUpdated ? 'closed' : 'open'
       } else {
@@ -376,19 +394,29 @@ export class CVDrawer extends ReatomLitElement {
     this.syncDirectionObserver(this.open)
 
     if (changedProperties.has('open')) {
+      const previousOpen = changedProperties.get('open')
+      const hasLogicalTransition = previousOpen !== undefined && previousOpen !== this.open
       this.syncRenderedState()
 
       if (this.suppressLifecycleFromUpdate) {
         this.suppressLifecycleFromUpdate = false
-      } else if (changedProperties.get('open') !== this.open) {
+      } else if (hasLogicalTransition) {
         this.dispatchLifecycleTransition(this.open)
       }
 
-      if (this.shouldAnimatePresence) {
-        if (this.open) {
-          this.startOpenAnimation()
+      if (hasLogicalTransition && previousOpen === true && this.open === false) {
+        this.queueFocusRestore(this.model.state.restoreTargetId())
+      }
+
+      if (hasLogicalTransition) {
+        if (this.shouldAnimatePresence) {
+          if (this.open) {
+            this.startOpenAnimation()
+          } else {
+            this.startCloseAnimation()
+          }
         } else {
-          this.startCloseAnimation()
+          this.finishPresenceTransition(this.open)
         }
       }
       this.shouldAnimatePresence = false
@@ -405,21 +433,39 @@ export class CVDrawer extends ReatomLitElement {
       this.openAnimationFrame = 0
     }
 
-    if (this.closeAnimationTimeout) {
-      window.clearTimeout(this.closeAnimationTimeout)
-      this.closeAnimationTimeout = 0
+    if (this.presenceAnimationTimeout) {
+      window.clearTimeout(this.presenceAnimationTimeout)
+      this.presenceAnimationTimeout = 0
     }
+
+    this.closeTransitionPending = false
   }
 
   private startOpenAnimation(): void {
     this.resetDragState()
+    const duration = this.getTransitionDuration()
+
+    if (duration === 0) {
+      this.renderState = 'open'
+      this.syncRenderedState()
+      this.finishPresenceTransition(true)
+      return
+    }
+
+    const token = this.lifecycleToken
     this.openAnimationFrame = requestAnimationFrame(() => {
       this.openAnimationFrame = 0
 
-      if (!this.open) return
+      if (!this.open || token !== this.lifecycleToken) return
 
       this.renderState = 'open'
       this.syncRenderedState()
+
+      this.presenceAnimationTimeout = window.setTimeout(() => {
+        this.presenceAnimationTimeout = 0
+        if (!this.open || token !== this.lifecycleToken) return
+        this.finishPresenceTransition(true)
+      }, duration)
     })
   }
 
@@ -427,21 +473,39 @@ export class CVDrawer extends ReatomLitElement {
     const duration = this.getTransitionDuration()
 
     if (duration === 0) {
-      this.overlayVisible = false
-      this.resetDragState()
-      this.syncRenderedState()
+      this.finishPresenceTransition(false)
       return
     }
 
-    this.closeAnimationTimeout = window.setTimeout(() => {
-      this.closeAnimationTimeout = 0
+    this.closeTransitionPending = true
+    const token = this.lifecycleToken
+    this.presenceAnimationTimeout = window.setTimeout(() => {
+      this.presenceAnimationTimeout = 0
 
-      if (this.open) return
+      if (this.open || token !== this.lifecycleToken) return
 
-      this.overlayVisible = false
-      this.resetDragState()
-      this.syncRenderedState()
+      this.finishPresenceTransition(false)
     }, duration)
+  }
+
+  private finishPresenceTransition(open: boolean): void {
+    if (this.open !== open) return
+
+    if (open) {
+      this.overlayVisible = true
+      this.renderState = 'open'
+      this.syncRenderedState()
+      this.dispatchLifecycleEvent('cv-after-show')
+      return
+    }
+
+    this.overlayVisible = false
+    this.renderState = 'closed'
+    this.closeTransitionPending = false
+    this.resetDragState()
+    this.syncRenderedState()
+    this.restoreQueuedFocus()
+    this.dispatchLifecycleEvent('cv-after-hide')
   }
 
   private syncRenderedState(): void {
@@ -546,14 +610,8 @@ export class CVDrawer extends ReatomLitElement {
   }
 
   private dispatchLifecycleTransition(open: boolean): void {
-    const token = ++this.lifecycleToken
-
+    ++this.lifecycleToken
     this.dispatchLifecycleEvent(open ? 'cv-show' : 'cv-hide')
-
-    this.updateComplete.then(() => {
-      if (this.lifecycleToken !== token) return
-      this.dispatchLifecycleEvent(open ? 'cv-after-show' : 'cv-after-hide')
-    })
   }
 
   private applyInteractionResult(previous: {open: boolean; restoreTargetId: string | null}): void {
@@ -571,11 +629,38 @@ export class CVDrawer extends ReatomLitElement {
       this.open = nextOpen
     }
 
-    const restoreTargetId = this.model.state.restoreTargetId()
-    if (restoreTargetId && previous.restoreTargetId !== restoreTargetId) {
-      const trigger = this.shadowRoot?.querySelector(getIdSelector(restoreTargetId)) as HTMLElement | null
-      trigger?.focus()
+    if (!nextOpen) {
+      this.queueFocusRestore(previous.restoreTargetId)
     }
+  }
+
+  private captureFocusRestoreTarget(): void {
+    this.focusRestoreTarget = getFocusRestoreTarget()
+    const root = this.focusRestoreTarget?.getRootNode()
+    const host = root instanceof ShadowRoot ? root.host : null
+    this.focusRestoreHost = host instanceof HTMLElement && host !== this ? host : null
+  }
+
+  private queueFocusRestore(restoreTargetId: string | null): void {
+    this.pendingFocusRestoreTargetId = restoreTargetId
+  }
+
+  private restoreQueuedFocus(): void {
+    this.restoreFocus(this.pendingFocusRestoreTargetId)
+    this.pendingFocusRestoreTargetId = null
+  }
+
+  private restoreFocus(restoreTargetId: string | null): void {
+    const target =
+      (this.focusRestoreTarget?.isConnected ? this.focusRestoreTarget : null) ??
+      (this.focusRestoreHost?.isConnected ? this.focusRestoreHost : null) ??
+      (restoreTargetId
+        ? ((this.shadowRoot?.querySelector(getIdSelector(restoreTargetId)) as HTMLElement | null) ?? null)
+        : null)
+
+    target?.focus({preventScroll: true})
+    this.focusRestoreTarget = null
+    this.focusRestoreHost = null
   }
 
   private syncOutsideFocusListener(forceOff = false): void {

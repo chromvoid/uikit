@@ -3,7 +3,7 @@ import {css, nothing, type PropertyValues} from 'lit'
 
 import {html} from '../reatom-lit/index.js'
 import {ReatomLitElement} from '../reatom-lit/ReatomLitElement'
-import {isTextEditableFocusTarget} from './focus-utils'
+import {getFocusRestoreTarget, isTextEditableFocusTarget} from './focus-utils'
 import {acquireBodyScrollLock, releaseBodyScrollLock} from './scroll-lock.js'
 
 export interface CVDialogEventDetail {
@@ -34,27 +34,6 @@ function sortOpenDialogStack(): void {
 
     return (openDialogOrder.get(left) ?? 0) - (openDialogOrder.get(right) ?? 0)
   })
-}
-
-function getDeepActiveElement(): HTMLElement | null {
-  let activeElement = document.activeElement
-  while (
-    activeElement instanceof HTMLElement &&
-    activeElement.shadowRoot?.activeElement instanceof HTMLElement
-  ) {
-    activeElement = activeElement.shadowRoot.activeElement
-  }
-
-  return activeElement instanceof HTMLElement ? activeElement : null
-}
-
-function getFocusRestoreTarget(): HTMLElement | null {
-  const activeElement = getDeepActiveElement()
-  if (!activeElement || activeElement === document.body || activeElement === document.documentElement) {
-    return null
-  }
-
-  return activeElement
 }
 
 function getIdSelector(id: string): string {

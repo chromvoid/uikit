@@ -1,6 +1,11 @@
 import {afterEach, describe, expect, it} from 'vitest'
 
-import {hasTextEditableFocus, isTextEditableFocusTarget} from './focus-utils'
+import {
+  getDeepActiveElement,
+  getFocusRestoreTarget,
+  hasTextEditableFocus,
+  isTextEditableFocusTarget,
+} from './focus-utils'
 
 afterEach(() => {
   const active = document.activeElement
@@ -9,6 +14,30 @@ afterEach(() => {
 })
 
 describe('focus-utils', () => {
+  describe('deep active element lookup', () => {
+    it('returns the innermost focused element through nested shadow roots', () => {
+      const outerHost = document.createElement('div')
+      const outerRoot = outerHost.attachShadow({mode: 'open'})
+      const innerHost = document.createElement('div')
+      const innerRoot = innerHost.attachShadow({mode: 'open'})
+      const button = document.createElement('button')
+
+      innerRoot.append(button)
+      outerRoot.append(innerHost)
+      document.body.append(outerHost)
+      button.focus()
+
+      expect(document.activeElement).toBe(outerHost)
+      expect(getDeepActiveElement()).toBe(button)
+      expect(getFocusRestoreTarget()).toBe(button)
+    })
+
+    it('returns null when focus only falls back to the document body', () => {
+      expect(document.activeElement).toBe(document.body)
+      expect(getFocusRestoreTarget()).toBeNull()
+    })
+  })
+
   describe('isTextEditableFocusTarget', () => {
     it.each(['cv-input', 'cv-number', 'cv-textarea', 'cv-combobox'])(
       'returns true for a %s host',
