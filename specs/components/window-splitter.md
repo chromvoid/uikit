@@ -25,18 +25,19 @@ A resizable pane separator that lets users drag or keyboard-navigate to redistri
 
 ## Attributes
 
-| Attribute         | Type    | Default        | Description                                                                                                                                                                                      |
-| ----------------- | ------- | -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `position`        | Number  | `50`           | Current splitter position within `[min, max]`. Reflected as an attribute.                                                                                                                        |
-| `min`             | Number  | `0`            | Minimum allowed position (inclusive).                                                                                                                                                            |
-| `max`             | Number  | `100`          | Maximum allowed position (inclusive).                                                                                                                                                            |
-| `step`            | Number  | `1`            | Step size applied per arrow-key press.                                                                                                                                                           |
-| `orientation`     | String  | `"horizontal"` | Axis of the separator bar: `"vertical"` (vertical bar, left/right split) \| `"horizontal"` (horizontal bar, top/bottom split). Matches `aria-orientation`.                                       |
-| `fixed`           | Boolean | `false`        | Enables fixed (toggle) mode. Arrow keys are disabled; `Enter` toggles position between `min` and `max`.                                                                                          |
-| `snap`            | String  | —              | Space-separated snap positions, e.g. `"25 50 75"` or `"25% 50% 75%"`. Values ending in `%` are resolved as percentages of the `[min, max]` range. Snap logic runs inside headless `setPosition`. |
-| `snap-threshold`  | Number  | `12`           | Maximum distance from a snap point within which `setPosition` snaps instead of using the raw value. Expressed in the same unit as `position`.                                                    |
-| `aria-label`      | String  | `""`           | Accessible label applied to the separator element.                                                                                                                                               |
-| `aria-labelledby` | String  | `""`           | ID(s) of element(s) that label the separator.                                                                                                                                                    |
+| Attribute         | Type                  | Default        | Description                                                                                                                                                                                                                            |
+| ----------------- | --------------------- | -------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `position`        | Number                | `50`           | Current splitter position within `[min, max]`. Reflected as an attribute. Its numeric meaning is unchanged by UIKit; `position-unit` only controls pointer-coordinate mapping and the emitted CSS track unit.                          |
+| `position-unit`   | `"percent"` \| `"px"` | `"percent"`    | Reflected UIKit presentation mode (`CVWindowSplitterPositionUnit`). Invalid or removed values fall back to `"percent"`. `"percent"` preserves range-relative sizing; `"px"` treats `position` as the primary track size in CSS pixels. |
+| `min`             | Number                | `0`            | Minimum allowed position (inclusive), in the same headless numeric coordinate space as `position`.                                                                                                                                     |
+| `max`             | Number                | `100`          | Maximum allowed position (inclusive), in the same headless numeric coordinate space as `position`.                                                                                                                                     |
+| `step`            | Number                | `1`            | Step size applied per arrow-key press in headless numeric units.                                                                                                                                                                       |
+| `orientation`     | String                | `"horizontal"` | Axis of the separator bar: `"vertical"` (vertical bar, left/right split) \| `"horizontal"` (horizontal bar, top/bottom split). Matches `aria-orientation`.                                                                             |
+| `fixed`           | Boolean               | `false`        | Enables fixed (toggle) mode. Arrow keys are disabled; `Enter` toggles position between `min` and `max`.                                                                                                                                |
+| `snap`            | String                | —              | Space-separated snap positions, e.g. `"25 50 75"` or `"25% 50% 75%"`. Values ending in `%` are resolved as percentages of the `[min, max]` range. Snap logic runs inside headless `setPosition`.                                       |
+| `snap-threshold`  | Number                | `12`           | Maximum distance from a snap point within which `setPosition` snaps instead of using the raw value. Expressed in the same headless numeric unit as `position`.                                                                         |
+| `aria-label`      | String                | `""`           | Accessible label applied to the separator element.                                                                                                                                                                                     |
+| `aria-labelledby` | String                | `""`           | ID(s) of element(s) that label the separator.                                                                                                                                                                                          |
 
 ## Variants
 
@@ -45,7 +46,7 @@ A resizable pane separator that lets users drag or keyboard-navigate to redistri
 | Default | _(none)_  | Continuous slider; arrow keys adjust position by `step`.          |
 | Fixed   | `fixed`   | Toggle mode; `Enter` collapses/restores. Arrow keys are disabled. |
 
-> `orientation` is a configuration attribute, not a visual variant — both orientations share the same variant rows above.
+> `orientation` and `position-unit` are configuration attributes, not visual variants — their values share the same variant rows above.
 
 ## Slots
 
@@ -82,10 +83,10 @@ A resizable pane separator that lets users drag or keyboard-navigate to redistri
 
 ### Component properties
 
-| Property                            | Default | Description                                                                                                                                          |
-| ----------------------------------- | ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `--cv-window-splitter-primary-size` | `50%`   | Computed percentage size of the primary pane, set by the component on the host as the grid track size. Updated during drag and keyboard interaction. |
-| `--cv-window-splitter-divider-size` | `8px`   | Width (vertical orientation) or height (horizontal orientation) of the separator track in the grid layout.                                           |
+| Property                            | Default | Description                                                                                                                                                                                                |
+| ----------------------------------- | ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `--cv-window-splitter-primary-size` | `50%`   | Computed primary-pane grid track set by the component on the host. It is a normalized percentage in `position-unit="percent"` and the current numeric position with a `px` suffix in `position-unit="px"`. |
+| `--cv-window-splitter-divider-size` | `8px`   | Width (vertical orientation) or height (horizontal orientation) of the separator track in the grid layout.                                                                                                 |
 
 ### Theme tokens consumed (via fallback values)
 
@@ -112,28 +113,31 @@ A resizable pane separator that lets users drag or keyboard-navigate to redistri
 
 ### UIKit attributes → headless options / actions
 
-| UIKit Attribute   | Direction     | Headless Binding                                             |
-| ----------------- | ------------- | ------------------------------------------------------------ |
-| `position`        | attr → action | `actions.setPosition(value)` on change                       |
-| `min`             | attr → option | `createWindowSplitter({ min })` (model recreated)            |
-| `max`             | attr → option | `createWindowSplitter({ max })` (model recreated)            |
-| `step`            | attr → option | `createWindowSplitter({ step })` (model recreated)           |
-| `orientation`     | attr → option | `createWindowSplitter({ orientation })` (model recreated)    |
-| `fixed`           | attr → option | `createWindowSplitter({ isFixed })` (model recreated)        |
-| `snap`            | attr → option | `createWindowSplitter({ snap })` (model recreated)           |
-| `snap-threshold`  | attr → option | `createWindowSplitter({ snapThreshold })` (model recreated)  |
-| `aria-label`      | attr → option | `createWindowSplitter({ ariaLabel })` (model recreated)      |
-| `aria-labelledby` | attr → option | `createWindowSplitter({ ariaLabelledBy })` (model recreated) |
+| UIKit Attribute   | Direction     | Headless Binding / UIKit Effect                                                                                            |
+| ----------------- | ------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| `position`        | attr → action | `actions.setPosition(value)` on change                                                                                     |
+| `position-unit`   | attr → UIKit  | Selects range-relative percentage or direct pixel pointer mapping and CSS track serialization; it is not a headless option |
+| `min`             | attr → option | `createWindowSplitter({ min })` (model recreated)                                                                          |
+| `max`             | attr → option | `createWindowSplitter({ max })` (model recreated)                                                                          |
+| `step`            | attr → option | `createWindowSplitter({ step })` (model recreated)                                                                         |
+| `orientation`     | attr → option | `createWindowSplitter({ orientation })` (model recreated)                                                                  |
+| `fixed`           | attr → option | `createWindowSplitter({ isFixed })` (model recreated)                                                                      |
+| `snap`            | attr → option | `createWindowSplitter({ snap })` (model recreated)                                                                         |
+| `snap-threshold`  | attr → option | `createWindowSplitter({ snapThreshold })` (model recreated)                                                                |
+| `aria-label`      | attr → option | `createWindowSplitter({ ariaLabel })` (model recreated)                                                                    |
+| `aria-labelledby` | attr → option | `createWindowSplitter({ ariaLabelledBy })` (model recreated)                                                               |
 
 > Model recreation: when any option-only attribute changes, the entire headless model is recreated via `createWindowSplitter(...)` with the latest values.
+>
+> `position-unit` is UIKit-only. The headless model continues to own clamping, step rounding, snap points, keyboard actions, and ARIA values in the same numeric coordinate space.
 
 ### Headless state → DOM reflection
 
-| Headless Signal       | Direction    | DOM / CSS Reflection                                                                           |
-| --------------------- | ------------ | ---------------------------------------------------------------------------------------------- |
-| `state.position()`    | state → CSS  | `--cv-window-splitter-primary-size` on the host; `position` host attribute updated             |
-| `state.isDragging()`  | state → attr | `[data-dragging]` on `[part="separator"]`                                                      |
-| `state.orientation()` | state → attr | `data-orientation` on `[part="base"]`, `[part="separator"]`, and both `[part="pane"]` elements |
+| Headless Signal       | Direction    | DOM / CSS Reflection                                                                                                       |
+| --------------------- | ------------ | -------------------------------------------------------------------------------------------------------------------------- |
+| `state.position()`    | state → CSS  | `--cv-window-splitter-primary-size` on the host serialized according to `position-unit`; `position` host attribute updated |
+| `state.isDragging()`  | state → attr | `[data-dragging]` on `[part="separator"]`                                                                                  |
+| `state.orientation()` | state → attr | `data-orientation` on `[part="base"]`, `[part="separator"]`, and both `[part="pane"]` elements                             |
 
 ### Contract spreading
 
@@ -163,7 +167,8 @@ The implementation MUST use pointer events with capture for reliable cross-bound
    - Compute and apply the initial position via `actions.setPosition(...)`.
 
 2. **`pointermove`** on `[part="separator"]` (while captured):
-   - Convert `event.clientX` / `event.clientY` to a position value relative to `[part="base"]` bounding rect, clamped to `[0, 1]` ratio.
+   - In `position-unit="percent"`, preserve the range-relative mapping: convert `event.clientX` / `event.clientY` to a `[0, 1]` ratio within `[part="base"]`, then map the ratio into `[min, max]`.
+   - In `position-unit="px"`, map the pointer to a direct offset: `clientX - left` for a vertical LTR splitter, `right - clientX` for a vertical RTL splitter, and `clientY - top` for a horizontal splitter.
    - Call `actions.setPosition(computedValue)` (snap logic applied inside headless).
    - Dispatch `cv-input` event with `{ position }`.
 
@@ -186,6 +191,23 @@ The implementation MUST use pointer events with capture for reliable cross-bound
 Both events are dispatched as `CustomEvent` with `bubbles: true` and `composed: true`. The `cv-input` event fires continuously during interaction; `cv-change` fires once per committed gesture.
 
 ## Usage
+
+Use pixel mode when the primary pane represents a bounded fixed-width or fixed-height workbench region. The numeric `min`, `max`, `step`, snap points, keyboard behavior, ARIA values, and event detail remain unchanged:
+
+```html
+<cv-window-splitter
+  orientation="vertical"
+  position-unit="px"
+  position="256"
+  min="232"
+  max="320"
+  step="8"
+  aria-label="Resize groups sidebar"
+>
+  <aside slot="primary">Groups</aside>
+  <main slot="secondary">Credentials</main>
+</cv-window-splitter>
+```
 
 ```html
 <div class="window-splitter-demo-shell" data-demo="window-splitter" data-live-demo-height="760">

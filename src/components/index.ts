@@ -253,7 +253,7 @@ export {CVToolbar} from './cv-toolbar'
 export {CVToolbarItem} from './cv-toolbar-item'
 export {CVToolbarSeparator} from './cv-toolbar-separator'
 export {CVTooltip} from './cv-tooltip'
-export {CVWindowSplitter} from './cv-window-splitter'
+export {CVWindowSplitter, type CVWindowSplitterPositionUnit} from './cv-window-splitter'
 export {CVButtonGroup} from './cv-button-group'
 export {CVCodeInput} from './cv-code-input'
 export type {

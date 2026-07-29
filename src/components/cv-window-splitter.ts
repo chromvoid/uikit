@@ -13,6 +13,8 @@ export interface CVWindowSplitterEventDetail {
   position: number
 }
 
+export type CVWindowSplitterPositionUnit = 'percent' | 'px'
+
 const splitterKeysToPrevent = new Set([
   'ArrowLeft',
   'ArrowRight',
@@ -35,6 +37,7 @@ export class CVWindowSplitter extends ReatomLitElement {
       max: {type: Number, reflect: true},
       step: {type: Number, reflect: true},
       orientation: {type: String, reflect: true},
+      positionUnit: {type: String, attribute: 'position-unit', reflect: true},
       fixed: {type: Boolean, reflect: true},
       snap: {type: String},
       snapThreshold: {type: Number, attribute: 'snap-threshold'},
@@ -48,6 +51,7 @@ export class CVWindowSplitter extends ReatomLitElement {
   declare max: number
   declare step: number
   declare orientation: WindowSplitterOrientation
+  declare positionUnit: CVWindowSplitterPositionUnit
   declare fixed: boolean
   declare snap: string | undefined
   declare snapThreshold: number
@@ -57,7 +61,8 @@ export class CVWindowSplitter extends ReatomLitElement {
   private readonly idBase = `cv-window-splitter-${++cvWindowSplitterNonce}`
   private model: WindowSplitterModel
   private _dragStartPosition = 0
-  private _dragRect: Pick<DOMRect, 'left' | 'top' | 'width' | 'height'> | null = null
+  private _dragRect: Pick<DOMRect, 'left' | 'right' | 'top' | 'width' | 'height'> | null = null
+  private _dragDirection: 'ltr' | 'rtl' = 'ltr'
 
   constructor() {
     super()
@@ -66,6 +71,7 @@ export class CVWindowSplitter extends ReatomLitElement {
     this.max = 100
     this.step = 1
     this.orientation = 'vertical'
+    this.positionUnit = 'percent'
     this.fixed = false
     this.snap = undefined
     this.snapThreshold = 12
@@ -166,6 +172,14 @@ export class CVWindowSplitter extends ReatomLitElement {
     }
 
     if (
+      changedProperties.has('positionUnit') &&
+      this.positionUnit !== 'percent' &&
+      this.positionUnit !== 'px'
+    ) {
+      this.positionUnit = 'percent'
+    }
+
+    if (
       changedProperties.has('min') ||
       changedProperties.has('max') ||
       changedProperties.has('step') ||
@@ -216,7 +230,8 @@ export class CVWindowSplitter extends ReatomLitElement {
   }
 
   private applyPrimarySize(): void {
-    this.style.setProperty('--cv-window-splitter-primary-size', `${this.getPercentage()}%`)
+    const size = this.positionUnit === 'px' ? `${this.model.state.position()}px` : `${this.getPercentage()}%`
+    this.style.setProperty('--cv-window-splitter-primary-size', size)
   }
 
   private dispatchInput(detail: CVWindowSplitterEventDetail): void {
@@ -283,8 +298,9 @@ export class CVWindowSplitter extends ReatomLitElement {
     const base = this.shadowRoot?.querySelector('[part="base"]') as HTMLElement | null
     if (!base) return
 
-    const {left, top, width, height} = base.getBoundingClientRect()
-    this._dragRect = {left, top, width, height}
+    const {left, right, top, width, height} = base.getBoundingClientRect()
+    this._dragRect = {left, right, top, width, height}
+    this._dragDirection = this.matches(':dir(rtl)') ? 'rtl' : 'ltr'
     sep.setPointerCapture(e.pointerId)
     this.model.actions.startDragging()
     this._dragStartPosition = this.position
@@ -300,15 +316,24 @@ export class CVWindowSplitter extends ReatomLitElement {
     if (!rect) return
     if (rect.width <= 0 || rect.height <= 0) return
 
-    const ratioRaw =
-      this.orientation === 'vertical'
-        ? (e.clientX - rect.left) / rect.width
-        : (e.clientY - rect.top) / rect.height
-
-    const ratio = Math.max(0, Math.min(1, ratioRaw))
-    const min = this.model.state.min()
-    const max = this.model.state.max()
-    const newPos = min + ratio * (max - min)
+    let newPos: number
+    if (this.positionUnit === 'px') {
+      newPos =
+        this.orientation === 'vertical'
+          ? this._dragDirection === 'rtl'
+            ? rect.right - e.clientX
+            : e.clientX - rect.left
+          : e.clientY - rect.top
+    } else {
+      const ratioRaw =
+        this.orientation === 'vertical'
+          ? (e.clientX - rect.left) / rect.width
+          : (e.clientY - rect.top) / rect.height
+      const ratio = Math.max(0, Math.min(1, ratioRaw))
+      const min = this.model.state.min()
+      const max = this.model.state.max()
+      newPos = min + ratio * (max - min)
+    }
     const previousPos = this.model.state.position()
     this.model.actions.setPosition(newPos)
     const pos = this.model.state.position()
@@ -409,7 +434,12 @@ export class CVWindowSplitter extends ReatomLitElement {
   protected override updated(changedProperties: PropertyValues): void {
     super.updated(changedProperties)
 
-    if (changedProperties.has('position') || changedProperties.has('min') || changedProperties.has('max')) {
+    if (
+      changedProperties.has('position') ||
+      changedProperties.has('min') ||
+      changedProperties.has('max') ||
+      changedProperties.has('positionUnit')
+    ) {
       this.applyPrimarySize()
     }
   }

@@ -143,6 +143,12 @@ describe('cv-window-splitter', () => {
       expect(el.orientation).toBe('vertical')
     })
 
+    it('has reflected positionUnit = "percent"', async () => {
+      const el = await createSplitter()
+      expect(el.positionUnit).toBe('percent')
+      expect(el.getAttribute('position-unit')).toBe('percent')
+    })
+
     it('has fixed = false', async () => {
       const el = await createSplitter()
       expect(el.fixed).toBe(false)
@@ -961,6 +967,48 @@ describe('cv-window-splitter', () => {
     })
   })
 
+  describe('position units', () => {
+    it('sizes the primary track directly from the numeric position in px mode', async () => {
+      const el = await createSplitter({
+        positionUnit: 'px',
+        position: 256,
+        min: 232,
+        max: 320,
+        step: 8,
+      })
+
+      expect(el.style.getPropertyValue('--cv-window-splitter-primary-size')).toBe('256px')
+    })
+
+    it('keeps keyboard stepping in headless numeric units in px mode', async () => {
+      const el = await createSplitter({
+        orientation: 'vertical',
+        positionUnit: 'px',
+        position: 256,
+        min: 232,
+        max: 320,
+        step: 8,
+      })
+
+      getSeparator(el).dispatchEvent(new KeyboardEvent('keydown', {key: 'ArrowRight', bubbles: true}))
+      await settle(el)
+
+      expect(el.position).toBe(264)
+      expect(el.style.getPropertyValue('--cv-window-splitter-primary-size')).toBe('264px')
+    })
+
+    it('preserves percent sizing for explicit percent consumers', async () => {
+      const el = await createSplitter({
+        positionUnit: 'percent',
+        position: 50,
+        min: 20,
+        max: 80,
+      })
+
+      expect(el.style.getPropertyValue('--cv-window-splitter-primary-size')).toBe('50%')
+    })
+  })
+
   // ──────────────────────────────────────────────────────────────────────────
   // 12. Keyboard edge cases
   // ──────────────────────────────────────────────────────────────────────────
@@ -1137,6 +1185,112 @@ describe('cv-window-splitter', () => {
       expect(el.position).toBe(75)
     })
 
+    it('px vertical drag maps the LTR pointer offset and clamps to the numeric range', async () => {
+      const el = await createSplitter({
+        orientation: 'vertical',
+        positionUnit: 'px',
+        position: 256,
+        min: 232,
+        max: 320,
+        step: 8,
+      })
+      mockBaseRect(el, {left: 40, right: 440, width: 400})
+      const inputDetails: unknown[] = []
+      el.addEventListener('cv-input', (event) => {
+        inputDetails.push((event as CustomEvent).detail)
+      })
+
+      const separator = await startDrag(el, 296)
+      separator.dispatchEvent(new PointerEvent('pointermove', {pointerId: 1, clientX: 288, bubbles: true}))
+      await settle(el)
+
+      expect(el.position).toBe(248)
+      expect(inputDetails).toEqual([{position: 248}])
+
+      separator.dispatchEvent(new PointerEvent('pointermove', {pointerId: 1, clientX: 500, bubbles: true}))
+      await settle(el)
+
+      expect(el.position).toBe(320)
+      expect(el.style.getPropertyValue('--cv-window-splitter-primary-size')).toBe('320px')
+    })
+
+    it('px vertical drag maps RTL from the container right edge', async () => {
+      const el = await createSplitter({
+        orientation: 'vertical',
+        positionUnit: 'px',
+        position: 256,
+        min: 232,
+        max: 320,
+        step: 8,
+      })
+      el.dir = 'rtl'
+      mockBaseRect(el, {left: 100, right: 500, width: 400})
+
+      const separator = await startDrag(el, 244)
+      separator.dispatchEvent(new PointerEvent('pointermove', {pointerId: 1, clientX: 252, bubbles: true}))
+      await settle(el)
+
+      expect(el.position).toBe(248)
+    })
+
+    it('px horizontal drag maps the pointer offset from the container top', async () => {
+      const el = await createSplitter({
+        orientation: 'horizontal',
+        positionUnit: 'px',
+        position: 256,
+        min: 232,
+        max: 320,
+        step: 8,
+      })
+      mockBaseRect(el, {top: 20, bottom: 420, height: 400})
+
+      const separator = await startDrag(el, 100, 276)
+      separator.dispatchEvent(
+        new PointerEvent('pointermove', {pointerId: 1, clientX: 20, clientY: 268, bubbles: true}),
+      )
+      await settle(el)
+
+      expect(el.position).toBe(248)
+    })
+
+    it('px drag keeps snap points in headless numeric units', async () => {
+      const el = await createSplitter({
+        orientation: 'vertical',
+        positionUnit: 'px',
+        position: 232,
+        min: 232,
+        max: 320,
+        snap: '256',
+        snapThreshold: 4,
+      })
+      mockBaseRect(el, {left: 40, right: 440, width: 400})
+
+      const separator = await startDrag(el, 272)
+      separator.dispatchEvent(new PointerEvent('pointermove', {pointerId: 1, clientX: 293, bubbles: true}))
+      await settle(el)
+
+      expect(el.position).toBe(256)
+      expect(el.style.getPropertyValue('--cv-window-splitter-primary-size')).toBe('256px')
+    })
+
+    it('explicit percent mode preserves range-relative pointer mapping', async () => {
+      const el = await createSplitter({
+        orientation: 'vertical',
+        positionUnit: 'percent',
+        position: 50,
+        min: 20,
+        max: 80,
+      })
+      mockBaseRect(el, {left: 100, right: 300, width: 200})
+
+      const separator = await startDrag(el, 200)
+      separator.dispatchEvent(new PointerEvent('pointermove', {pointerId: 1, clientX: 150, bubbles: true}))
+      await settle(el)
+
+      expect(el.position).toBe(35)
+      expect(el.style.getPropertyValue('--cv-window-splitter-primary-size')).toBe('25%')
+    })
+
     it('no cv-change fires during pointermove (only on pointerup)', async () => {
       const el = await createSplitter({orientation: 'vertical', position: 50, min: 0, max: 100})
       mockBaseRect(el)
@@ -1256,6 +1410,18 @@ describe('cv-window-splitter', () => {
       expect(el.orientation).toBe('vertical')
       expect(getSeparator(el).getAttribute('aria-orientation')).toBe('vertical')
       expect(getBase(el).getAttribute('data-orientation')).toBe('vertical')
+    })
+
+    it('falls back to reflected percent mode for an invalid position-unit attribute', async () => {
+      const el = document.createElement('cv-window-splitter') as CVWindowSplitter
+      el.setAttribute('position', '25')
+      el.setAttribute('position-unit', 'pixels')
+      document.body.append(el)
+      await settle(el)
+
+      expect(el.positionUnit).toBe('percent')
+      expect(el.getAttribute('position-unit')).toBe('percent')
+      expect(el.style.getPropertyValue('--cv-window-splitter-primary-size')).toBe('25%')
     })
   })
 
