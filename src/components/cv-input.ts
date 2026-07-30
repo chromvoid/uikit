@@ -323,7 +323,19 @@ export class CVInput extends FormAssociatedReatomElement {
     if (!hasTextEditableFocus()) return
 
     const input = this.shadowRoot?.querySelector('[part="input"]') as HTMLInputElement | null
-    if (!input || event.composedPath().includes(input)) return
+    const path = event.composedPath()
+    const startsFromSlottedContent = path.some(
+      (target) => target instanceof Node && target !== this && this.contains(target),
+    )
+    const startsFromInteractiveControl = path.some(
+      (target) =>
+        target instanceof HTMLElement &&
+        (target.matches('button, a[href], input, select, textarea, [role="button"], [role="link"]') ||
+          target.isContentEditable),
+    )
+    if (!input || path.includes(input) || (startsFromSlottedContent && startsFromInteractiveControl)) {
+      return
+    }
 
     event.preventDefault()
     try {

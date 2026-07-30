@@ -1276,6 +1276,26 @@ describe('cv-input', () => {
       expect(event.defaultPrevented).toBe(false)
     })
 
+    it('does not focus the input for an interactive control in a slot', async () => {
+      const other = document.createElement('input')
+      document.body.append(other)
+      other.focus()
+
+      const el = await createInput()
+      const suffix = document.createElement('span')
+      const action = document.createElement('button')
+      suffix.slot = 'suffix'
+      suffix.append(action)
+      el.append(suffix)
+      await settle(el)
+
+      const event = dispatchHostPointerDown(el, action)
+
+      expect(event.defaultPrevented).toBe(false)
+      expect(el.shadowRoot!.activeElement).toBeNull()
+      expect(document.activeElement).toBe(other)
+    })
+
     it('does not intercept when disabled', async () => {
       const other = document.createElement('input')
       document.body.append(other)
