@@ -214,6 +214,7 @@ export class CVBottomSheet extends ReatomLitElement {
     }
 
     cv-dialog::part(header) {
+      grid-row: 2;
       padding: var(--cv-bottom-sheet-header-padding, var(--cv-space-4, 16px));
     }
 
@@ -244,12 +245,14 @@ export class CVBottomSheet extends ReatomLitElement {
     }
 
     cv-dialog::part(body) {
+      grid-row: 3;
       min-block-size: 0;
       overflow: auto;
       padding: var(--cv-bottom-sheet-body-padding, 0 var(--cv-space-4, 16px) var(--cv-space-4, 16px));
     }
 
     cv-dialog::part(footer) {
+      grid-row: 4;
       padding: var(
         --cv-bottom-sheet-footer-padding,
         var(--cv-space-3, 12px) var(--cv-space-4, 16px) var(--cv-space-4, 16px)
@@ -262,6 +265,7 @@ export class CVBottomSheet extends ReatomLitElement {
     }
 
     .sheet-handle {
+      grid-row: 1;
       box-sizing: border-box;
       inline-size: 100%;
       min-block-size: var(--cv-bottom-sheet-handle-block-size, 48px);

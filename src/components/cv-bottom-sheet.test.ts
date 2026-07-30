@@ -97,8 +97,11 @@ describe('cv-bottom-sheet', () => {
       /cv-dialog::part\(content\)\s*{[\s\S]*grid-template-rows:\s*auto auto minmax\(0,\s*1fr\) auto;/,
     )
     expect(cssText).toMatch(/cv-dialog::part\(content\)\s*{[\s\S]*overflow:\s*hidden;/)
-    expect(cssText).toMatch(/cv-dialog::part\(body\)\s*{[\s\S]*min-block-size:\s*0;/)
+    expect(cssText).toMatch(/\.sheet-handle\s*{[\s\S]*grid-row:\s*1;/)
+    expect(cssText).toMatch(/cv-dialog::part\(header\)\s*{[\s\S]*grid-row:\s*2;/)
+    expect(cssText).toMatch(/cv-dialog::part\(body\)\s*{[\s\S]*grid-row:\s*3;/)
     expect(cssText).toMatch(/cv-dialog::part\(body\)\s*{[\s\S]*overflow:\s*auto;/)
+    expect(cssText).toMatch(/cv-dialog::part\(footer\)\s*{[\s\S]*grid-row:\s*4;/)
   })
 
   it('defines detent sizing hooks without changing the default open-close mode', () => {
@@ -213,6 +216,24 @@ describe('cv-bottom-sheet', () => {
     expect(dialog.querySelector('[slot="footer"]')).not.toBeNull()
     expect(dialog.classList.contains('has-footer')).toBe(true)
     expect(dialog.getAttribute('exportparts')).toContain('content')
+  })
+
+  it('keeps forwarded content and footer when the optional handle is hidden', async () => {
+    const el = await createBottomSheet({showHandle: false})
+    const body = document.createElement('p')
+    body.textContent = 'Sheet body'
+    const footer = document.createElement('button')
+    footer.slot = 'footer'
+    footer.textContent = 'Done'
+    el.append(body, footer)
+    await settle(el)
+
+    const dialog = getDialog(el)
+
+    expect(getHandle(el)).toBeNull()
+    expect(dialog.querySelector('slot:not([name])')).not.toBeNull()
+    expect(dialog.querySelector('[slot="footer"]')).not.toBeNull()
+    expect(dialog.classList.contains('has-footer')).toBe(true)
   })
 
   it('keeps the default header close icon when no header-close content is slotted', async () => {
