@@ -410,5 +410,6 @@ When `detents` is set, event detail is `{open, detent}`. In default open-close m
 - Drag starts only from `part="handle"`.
 - Without `detents`, drag closes at `96px` downward movement or `0.75px/ms` downward velocity.
 - With `detents`, upward/downward drags snap one detent at a time; dragging down from the smallest detent dismisses when `drag-to-close` is enabled.
+- While dragging upward toward a larger detent, the sheet increases its visible block size up to the expanded limit instead of translating above the viewport edge, so its bottom edge remains anchored.
 - Tapping the handle advances to the next larger detent when one exists.
 - Below-threshold drags snap back without changing `open` or `detent`.

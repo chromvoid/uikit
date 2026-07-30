@@ -112,7 +112,7 @@ describe('cv-bottom-sheet', () => {
     expect(cssText).toContain('--cv-bottom-sheet-expanded-height')
     expect(cssText).toContain('cv-dialog.has-detents::part(body)')
     expect(cssText).toMatch(
-      /cv-dialog\.has-detents::part\(content\)\s*{[\s\S]*block-size:\s*var\(--cv-bottom-sheet-detent-visible-height\)/,
+      /cv-dialog\.has-detents::part\(content\)\s*{[\s\S]*block-size:\s*min\([\s\S]*var\(--cv-bottom-sheet-detent-visible-height\)[\s\S]*var\(--_cv-bottom-sheet-drag-expansion,\s*0px\)/,
     )
     expect(cssText).toMatch(/cv-dialog\.has-detents::part\(body\)\s*{[\s\S]*max-block-size:\s*none;/)
     expect(cssText).toMatch(/cv-dialog\.detent-collapsed\s*{[\s\S]*--_cv-bottom-sheet-detent-offset:\s*0px;/)
@@ -452,12 +452,14 @@ describe('cv-bottom-sheet', () => {
 
     handle.dispatchEvent(createPointerEvent('pointerdown', {clientY: 200}))
     handle.dispatchEvent(createPointerEvent('pointermove', {clientY: 120}))
-    expect(dialog.style.getPropertyValue('--_cv-bottom-sheet-drag-offset')).toBe('-80px')
+    expect(dialog.style.getPropertyValue('--_cv-bottom-sheet-drag-offset')).toBe('0px')
+    expect(dialog.style.getPropertyValue('--_cv-bottom-sheet-drag-expansion')).toBe('80px')
     handle.dispatchEvent(createPointerEvent('pointerup', {clientY: 120}))
     await settle(el)
 
     expect(el.open).toBe(true)
     expect(el.detent).toBe('middle')
+    expect(dialog.style.getPropertyValue('--_cv-bottom-sheet-drag-expansion')).toBe('')
 
     handle.dispatchEvent(createPointerEvent('pointerdown', {clientY: 120}))
     handle.dispatchEvent(createPointerEvent('pointermove', {clientY: 210}))
@@ -498,6 +500,7 @@ describe('cv-bottom-sheet', () => {
     handle.dispatchEvent(createPointerEvent('pointermove', {clientY: 80}))
 
     expect(dialog.style.getPropertyValue('--_cv-bottom-sheet-drag-offset')).toBe('0px')
+    expect(dialog.style.getPropertyValue('--_cv-bottom-sheet-drag-expansion')).toBe('0px')
 
     handle.dispatchEvent(createPointerEvent('pointerup', {clientY: 80}))
     await settle(el)
@@ -506,6 +509,7 @@ describe('cv-bottom-sheet', () => {
     expect(el.detent).toBe('expanded')
     expect(changes).toEqual([])
     expect(dialog.style.getPropertyValue('--_cv-bottom-sheet-drag-offset')).toBe('')
+    expect(dialog.style.getPropertyValue('--_cv-bottom-sheet-drag-expansion')).toBe('')
   })
 
   it('filters invalid detent tokens and falls back to the lowest enabled detent', async () => {
@@ -619,6 +623,7 @@ describe('cv-bottom-sheet', () => {
     expect(changes).toEqual([])
     expect(dialog.classList.contains('is-dragging')).toBe(false)
     expect(dialog.style.getPropertyValue('--_cv-bottom-sheet-drag-offset')).toBe('')
+    expect(dialog.style.getPropertyValue('--_cv-bottom-sheet-drag-expansion')).toBe('')
   })
 
   it('does not advance past the top detent on handle click', async () => {

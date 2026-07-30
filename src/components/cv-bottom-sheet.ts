@@ -200,7 +200,10 @@ export class CVBottomSheet extends ReatomLitElement {
     }
 
     cv-dialog.has-detents::part(content) {
-      block-size: var(--cv-bottom-sheet-detent-visible-height);
+      block-size: min(
+        var(--_cv-bottom-sheet-detent-max-block-size),
+        calc(var(--cv-bottom-sheet-detent-visible-height) + var(--_cv-bottom-sheet-drag-expansion, 0px))
+      );
     }
 
     cv-dialog.has-detents::part(body) {
@@ -375,14 +378,16 @@ export class CVBottomSheet extends ReatomLitElement {
     const dialog = this.getDialogElement()
     dialog?.classList.remove('is-dragging')
     dialog?.style.removeProperty('--_cv-bottom-sheet-drag-offset')
+    dialog?.style.removeProperty('--_cv-bottom-sheet-drag-expansion')
   }
 
-  private setSheetDragOffset(offset: number, allowNegative = false): void {
-    const safeOffset = allowNegative ? offset : Math.max(0, offset)
-    this.getDialogElement()?.style.setProperty(
-      '--_cv-bottom-sheet-drag-offset',
-      `${Math.round(safeOffset)}px`,
-    )
+  private setSheetDragOffset(offset: number, allowExpansion = false): void {
+    const dialog = this.getDialogElement()
+    const dragOffset = Math.max(0, offset)
+    const dragExpansion = allowExpansion ? Math.max(0, -offset) : 0
+
+    dialog?.style.setProperty('--_cv-bottom-sheet-drag-offset', `${Math.round(dragOffset)}px`)
+    dialog?.style.setProperty('--_cv-bottom-sheet-drag-expansion', `${Math.round(dragExpansion)}px`)
   }
 
   private createEventDetail(open: boolean): CVBottomSheetEventDetail {
