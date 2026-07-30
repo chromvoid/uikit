@@ -390,6 +390,9 @@ The underlying dialog exports `trigger`, `overlay`, `content`, `header`, `title`
 
 Applications can map their runtime environment values into the documented safe-area, keyboard,
 and viewport properties. Standalone usage falls back to native `env()` insets and `100dvh`.
+The sheet clamps its usable block size to the smaller of the reported visible viewport and the
+layout viewport minus the keyboard inset. This keeps overlay-keyboard runtimes safe when their
+`visualViewport.height` does not shrink.
 
 `cv-bottom-sheet` composes with `cv-dialog` presence state by overriding dialog content motion variables. The sheet uses bottom-up `translateY(...)` transforms for open, close, drag, detent, and dismiss states instead of the centered dialog scale transform.
 

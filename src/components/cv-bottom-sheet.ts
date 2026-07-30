@@ -124,7 +124,10 @@ export class CVBottomSheet extends ReatomLitElement {
         env(safe-area-inset-bottom, 0px)
       );
       --_cv-bottom-sheet-keyboard-bottom-inset: var(--cv-bottom-sheet-keyboard-inset, 0px);
-      --_cv-bottom-sheet-visible-viewport-block-size: var(--cv-bottom-sheet-viewport-block-size, 100dvh);
+      --_cv-bottom-sheet-visible-viewport-block-size: min(
+        var(--cv-bottom-sheet-viewport-block-size, 100dvh),
+        max(0px, calc(100dvh - var(--_cv-bottom-sheet-keyboard-bottom-inset)))
+      );
       --_cv-bottom-sheet-overlay-block-end: calc(
         var(--_cv-bottom-sheet-safe-bottom-inset) + var(--_cv-bottom-sheet-keyboard-bottom-inset)
       );

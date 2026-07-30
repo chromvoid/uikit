@@ -78,6 +78,7 @@ describe('cv-bottom-sheet', () => {
     expect(cssText).toContain('--_cv-bottom-sheet-keyboard-bottom-inset')
     expect(cssText).toContain('--_cv-bottom-sheet-visible-viewport-block-size')
     expect(cssText).toContain('var(--cv-bottom-sheet-viewport-block-size, 100dvh)')
+    expect(cssText).toContain('max(0px, calc(100dvh - var(--_cv-bottom-sheet-keyboard-bottom-inset)))')
     expect(cssText).toMatch(
       /--_cv-bottom-sheet-keyboard-bottom-inset:\s*var\(\s*--cv-bottom-sheet-keyboard-inset,\s*0px\s*\);/,
     )
