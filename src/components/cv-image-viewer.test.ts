@@ -106,8 +106,12 @@ describe('cv-image-viewer', () => {
     expect(cvImageViewerStyles.cssText).toContain("[part='viewport'] {")
     expect(cvImageViewerStyles.cssText).toContain("[part='image'] {")
     expect(cvImageViewerStyles.cssText).toContain("[part='image-stage'] {")
-    expect(cvImageViewerStyles.cssText).toContain('position: absolute;')
-    expect(cvImageViewerStyles.cssText).toContain('inset: 0;')
+    expect(cvImageViewerStyles.cssText).toMatch(
+      /\[part='image-stage'\]\s*\{[\s\S]*?position:\s*relative;/,
+    )
+    expect(cvImageViewerStyles.cssText).toMatch(
+      /\[part='image-stage'\] \[part='image'\]\s*\{[\s\S]*?position:\s*absolute;[\s\S]*?inset:\s*0;/,
+    )
     expect(cvImageViewerStyles.cssText).toContain('inline-size: 100%;')
     expect(cvImageViewerStyles.cssText).toContain('block-size: 100%;')
     expect(cvImageViewerStyles.cssText).toContain('object-fit: contain;')

@@ -153,16 +153,16 @@ export const cvImageViewerStyles = css`
   }
 
   [part='image-stage'] {
+    position: relative;
     inline-size: 100%;
     block-size: 100%;
-    display: grid;
-    place-items: center;
     overflow: hidden;
     isolation: isolate;
   }
 
   [part='image-stage'] [part='image'] {
-    grid-area: 1 / 1;
+    position: absolute;
+    inset: 0;
   }
 
   [part='image'][data-transition-phase='current'] {
