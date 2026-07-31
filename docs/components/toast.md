@@ -302,11 +302,12 @@ Container that manages a queue of toast notifications with positioning, stacking
 
 ## Attributes
 
-| Attribute       | Type   | Default                  | Description                                                                                                              |
-| --------------- | ------ | ------------------------ | ------------------------------------------------------------------------------------------------------------------------ |
-| `position`      | String | `"top-end"`              | Positioning of the region: `top-start` \| `top-center` \| `top-end` \| `bottom-start` \| `bottom-center` \| `bottom-end` |
-| `max-visible`   | Number | `3`                      | Maximum number of toasts displayed simultaneously                                                                        |
-| `dismiss-label` | String | `"Dismiss notification"` | Localized accessible name for each dismiss button                                                                        |
+| Attribute       | Type    | Default                  | Description                                                                                                              |
+| --------------- | ------- | ------------------------ | ------------------------------------------------------------------------------------------------------------------------ |
+| `position`      | String  | `"top-end"`              | Positioning of the region: `top-start` \| `top-center` \| `top-end` \| `bottom-start` \| `bottom-center` \| `bottom-end` |
+| `max-visible`   | Number  | `3`                      | Maximum number of toasts displayed simultaneously                                                                        |
+| `dismiss-label` | String  | `"Dismiss notification"` | Localized accessible name for each dismiss button                                                                        |
+| `top-layer`     | Boolean | `false`                  | Uses the native Popover API while visible toasts exist, with a fixed-position fallback                                   |
 
 ## Slots
 
@@ -322,14 +323,14 @@ Container that manages a queue of toast notifications with positioning, stacking
 
 ## CSS Custom Properties
 
-| Property                      | Default                   | Description                         |
-| ----------------------------- | ------------------------- | ----------------------------------- |
-| `--cv-toast-region-gap`       | `var(--cv-space-2, 8px)`  | Spacing between stacked toasts      |
-| `--cv-toast-region-inset`     | `var(--cv-space-4, 16px)` | Distance from viewport edges        |
-| `--cv-toast-region-position`  | `fixed`                   | CSS positioning mode for the region |
-| `--cv-toast-region-width`     | `auto`                    | Inline size of the toast region     |
-| `--cv-toast-region-z-index`   | `9999`                    | Stacking order above page content   |
-| `--cv-toast-region-max-width` | `420px`                   | Maximum width of the toast region   |
+| Property                      | Default                   | Description                                                                           |
+| ----------------------------- | ------------------------- | ------------------------------------------------------------------------------------- |
+| `--cv-toast-region-gap`       | `var(--cv-space-2, 8px)`  | Spacing between stacked toasts                                                        |
+| `--cv-toast-region-inset`     | `var(--cv-space-4, 16px)` | Distance from viewport edges                                                          |
+| `--cv-toast-region-position`  | `fixed`                   | CSS positioning mode for the region                                                   |
+| `--cv-toast-region-width`     | `auto`                    | Inline size of the toast region                                                       |
+| `--cv-toast-region-z-index`   | `9999`                    | Fallback stacking order when native top-layer presentation is unavailable or disabled |
+| `--cv-toast-region-max-width` | `420px`                   | Maximum width of the toast region                                                     |
 
 ## Visual States
 
@@ -364,6 +365,7 @@ Container that manages a queue of toast notifications with positioning, stacking
 
 - `contracts.getRegionProps()` supplies only the structural id. Exactly one `status`/`alert` role remains on each toast host.
 - `mouseenter`/`focusin` on `[part="base"]` call `actions.pause()`; `mouseleave`/focus leaving the region call `actions.resume()`.
+- `top-layer` uses `popover="manual"` only while visible toast content exists. When the region is registered through `registerDialogTopLayerAccessory`, feedback can appear above native dialogs without keeping an empty top-layer surface mounted.
 - `controller.update(id, replacement)` preserves the toast id and position while replacing its presentation and timer.
 - UIKit tracks the previous set of toast IDs across renders and dispatches a `cv-close` event for each ID that disappears from the queue.
 - UIKit does not own queue logic, timer management, or visibility slicing; headless state is the source of truth.

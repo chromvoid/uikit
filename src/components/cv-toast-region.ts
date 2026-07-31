@@ -29,6 +29,7 @@ export class CVToastRegion extends ReatomLitElement {
       position: {type: String, reflect: true},
       maxVisible: {type: Number, attribute: 'max-visible', reflect: true},
       dismissLabel: {type: String, attribute: 'dismiss-label'},
+      topLayer: {type: Boolean, attribute: 'top-layer', reflect: true},
     }
   }
 
@@ -36,14 +37,18 @@ export class CVToastRegion extends ReatomLitElement {
   declare position: ToastRegionPosition
   declare maxVisible: number
   declare dismissLabel: string
+  declare topLayer: boolean
 
   private previousToastIds = new Set<string>()
+  private topLayerVisible = false
+  private topLayerUnavailable = false
 
   constructor() {
     super()
     this.position = 'top-end'
     this.maxVisible = 3
     this.dismissLabel = 'Dismiss notification'
+    this.topLayer = false
     this.controller = createToastController({maxVisible: this.maxVisible})
   }
 
@@ -56,6 +61,16 @@ export class CVToastRegion extends ReatomLitElement {
         inline-size: var(--cv-toast-region-width, auto);
         max-inline-size: var(--cv-toast-region-max-width, 420px);
         pointer-events: none;
+      }
+
+      :host([popover]) {
+        inset: auto;
+        margin: 0;
+        padding: 0;
+        border: 0;
+        overflow: visible;
+        background: transparent;
+        color: inherit;
       }
 
       :host([position='top-start']) {
@@ -113,6 +128,12 @@ export class CVToastRegion extends ReatomLitElement {
   override connectedCallback(): void {
     super.connectedCallback()
     this.previousToastIds = new Set(this.controller.model.state.items().map((item) => item.id))
+    this.syncTopLayerVisibility()
+  }
+
+  override disconnectedCallback(): void {
+    this.hideFromTopLayer()
+    super.disconnectedCallback()
   }
 
   override willUpdate(changedProperties: PropertyValues): void {
@@ -127,6 +148,11 @@ export class CVToastRegion extends ReatomLitElement {
         this.controller.setMaxVisible(this.maxVisible)
       }
     }
+
+    if (changedProperties.has('topLayer')) {
+      this.topLayerUnavailable = false
+      this.syncTopLayerAttribute()
+    }
   }
 
   override updated(changedProperties: PropertyValues): void {
@@ -134,6 +160,7 @@ export class CVToastRegion extends ReatomLitElement {
 
     if (changedProperties.has('controller')) {
       this.previousToastIds = new Set(this.controller.model.state.items().map((item) => item.id))
+      this.syncTopLayerVisibility()
       return
     }
 
@@ -150,6 +177,56 @@ export class CVToastRegion extends ReatomLitElement {
       }
     }
     this.previousToastIds = currentIds
+    this.syncTopLayerVisibility()
+  }
+
+  private supportsTopLayer(): boolean {
+    return typeof this.showPopover === 'function' && typeof this.hidePopover === 'function'
+  }
+
+  private syncTopLayerAttribute(): void {
+    if (this.topLayer && !this.topLayerUnavailable && this.supportsTopLayer()) {
+      this.setAttribute('popover', 'manual')
+      return
+    }
+
+    this.hideFromTopLayer()
+    this.removeAttribute('popover')
+  }
+
+  private syncTopLayerVisibility(): void {
+    this.syncTopLayerAttribute()
+    if (!this.hasAttribute('popover')) return
+
+    if (this.controller.model.state.visibleItems().length > 0) {
+      this.showInTopLayer()
+      return
+    }
+
+    this.hideFromTopLayer()
+  }
+
+  private showInTopLayer(): void {
+    if (this.topLayerVisible) return
+
+    try {
+      this.showPopover()
+      this.topLayerVisible = true
+    } catch {
+      this.topLayerUnavailable = true
+      this.removeAttribute('popover')
+    }
+  }
+
+  private hideFromTopLayer(): void {
+    if (!this.topLayerVisible) return
+
+    try {
+      this.hidePopover()
+    } catch {
+      // The browser may already have removed the popover from the top layer.
+    }
+    this.topLayerVisible = false
   }
 
   private handlePause() {

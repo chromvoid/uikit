@@ -26,6 +26,13 @@ let topLayerReorderInProgress = false
 // not cascade-close the dialogs beneath it.
 const openDialogStack: CVDialog[] = []
 const openDialogOrder = new WeakMap<CVDialog, number>()
+const topLayerAccessories = new Map<HTMLElement, TopLayerAccessoryRegistration>()
+
+type TopLayerAccessoryRegistration = {
+  element: HTMLElement
+  originParent: Node | null
+  originNextSibling: ChildNode | null
+}
 
 function sortOpenDialogStack(): void {
   openDialogStack.sort((left, right) => {
@@ -34,6 +41,59 @@ function sortOpenDialogStack(): void {
 
     return (openDialogOrder.get(left) ?? 0) - (openDialogOrder.get(right) ?? 0)
   })
+}
+
+function getTopLayerAccessoryHost(dialog: CVDialog): HTMLElement | null {
+  return dialog.shadowRoot?.querySelector('.top-layer-accessory-host') as HTMLElement | null
+}
+
+function restoreTopLayerAccessory(registration: TopLayerAccessoryRegistration): void {
+  const {element, originParent, originNextSibling} = registration
+  if (!originParent || element.parentNode === originParent) return
+
+  if (originNextSibling?.parentNode === originParent) {
+    originParent.insertBefore(element, originNextSibling)
+    return
+  }
+
+  originParent.appendChild(element)
+}
+
+function unregisterTopLayerAccessory(registration: TopLayerAccessoryRegistration): void {
+  if (topLayerAccessories.get(registration.element) !== registration) return
+  topLayerAccessories.delete(registration.element)
+  restoreTopLayerAccessory(registration)
+}
+
+function syncTopLayerAccessories(): void {
+  const topmostDialog = openDialogStack[openDialogStack.length - 1]
+  const target = topmostDialog ? getTopLayerAccessoryHost(topmostDialog) : null
+
+  for (const registration of topLayerAccessories.values()) {
+    if (target) {
+      if (registration.element.parentNode !== target) target.append(registration.element)
+      continue
+    }
+
+    restoreTopLayerAccessory(registration)
+  }
+}
+
+export function registerDialogTopLayerAccessory(element: HTMLElement): () => void {
+  const existingRegistration = topLayerAccessories.get(element)
+  if (existingRegistration) {
+    return () => unregisterTopLayerAccessory(existingRegistration)
+  }
+
+  const registration: TopLayerAccessoryRegistration = {
+    element,
+    originParent: element.parentNode,
+    originNextSibling: element.nextSibling,
+  }
+  topLayerAccessories.set(element, registration)
+  syncTopLayerAccessories()
+
+  return () => unregisterTopLayerAccessory(registration)
 }
 
 function getIdSelector(id: string): string {
@@ -215,6 +275,10 @@ export class CVDialog extends ReatomLitElement {
       .popover-shell {
         position: fixed;
         inset: 0;
+      }
+
+      .top-layer-accessory-host {
+        display: contents;
       }
 
       [part='overlay'] {
@@ -424,6 +488,7 @@ export class CVDialog extends ReatomLitElement {
     super.disconnectedCallback()
     this.syncOutsideFocusListener(true)
     this.releaseScrollLock()
+    syncTopLayerAccessories()
   }
 
   override willUpdate(changedProperties: PropertyValues): void {
@@ -592,6 +657,7 @@ export class CVDialog extends ReatomLitElement {
     this.syncRenderedPresenceState()
     this.restoreQueuedFocus()
     this.dispatchLifecycleEvent('cv-after-hide')
+    syncTopLayerAccessories()
   }
 
   private syncRenderedPresenceState(): void {
@@ -920,6 +986,7 @@ export class CVDialog extends ReatomLitElement {
       openDialogStack.push(this)
     }
     sortOpenDialogStack()
+    syncTopLayerAccessories()
   }
 
   private removeFromOpenStack(): void {
@@ -1241,6 +1308,7 @@ export class CVDialog extends ReatomLitElement {
               @cancel=${this.handleNativeCancel}
             >
               ${this.renderContent()}
+              <div class="top-layer-accessory-host"></div>
             </dialog>
           `
         : html`
@@ -1251,6 +1319,7 @@ export class CVDialog extends ReatomLitElement {
               ?hidden=${!this.portalVisible}
             >
               ${this.renderContent()}
+              <div class="top-layer-accessory-host"></div>
             </div>
           `}
     `

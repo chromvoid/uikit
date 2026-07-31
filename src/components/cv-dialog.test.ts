@@ -1,7 +1,7 @@
 import {afterEach, describe, expect, it, vi} from 'vitest'
 
 import {CVButton} from './cv-button'
-import {CVDialog} from './cv-dialog'
+import {CVDialog, registerDialogTopLayerAccessory} from './cv-dialog'
 import {resetBodyScrollLockForTesting} from './scroll-lock'
 
 CVButton.define()
@@ -31,6 +31,8 @@ const getOverlay = (el: CVDialog) => el.shadowRoot!.querySelector('[part="overla
 const getModalShell = (el: CVDialog) =>
   el.shadowRoot!.querySelector('dialog.portal-shell') as HTMLDialogElement | null
 const getPopoverShell = (el: CVDialog) => el.shadowRoot!.querySelector('.popover-shell') as HTMLElement | null
+const getTopLayerAccessoryHost = (el: CVDialog) =>
+  el.shadowRoot!.querySelector('.top-layer-accessory-host') as HTMLElement
 const getStylesText = () =>
   (CVDialog.styles as Array<{cssText?: string}>).map((style) => style.cssText ?? '').join('\n')
 
@@ -297,6 +299,32 @@ describe('cv-dialog', () => {
       expect(elevatedShowModal).toHaveBeenCalledTimes(2)
       expect(elevated.open).toBe(true)
       expect(regular.open).toBe(true)
+    })
+
+    it('portals registered accessories through the topmost dialog and restores their origin', async () => {
+      const accessory = document.createElement('div')
+      const originMarker = document.createElement('div')
+      document.body.append(accessory, originMarker)
+      const unregister = registerDialogTopLayerAccessory(accessory)
+
+      const first = await createDialog()
+      await openDialog(first)
+      expect(accessory.parentElement).toBe(getTopLayerAccessoryHost(first))
+
+      const second = await createDialog()
+      await openDialog(second)
+      expect(accessory.parentElement).toBe(getTopLayerAccessoryHost(second))
+
+      second.open = false
+      await settle(second)
+      expect(accessory.parentElement).toBe(getTopLayerAccessoryHost(first))
+
+      first.open = false
+      await settle(first)
+      expect(accessory.parentElement).toBe(document.body)
+      expect(accessory.nextSibling).toBe(originMarker)
+
+      unregister()
     })
   })
 

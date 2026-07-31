@@ -204,6 +204,71 @@ describe('cv-toast-region', () => {
     })
   })
 
+  describe('top-layer presentation', () => {
+    it('opens only while visible toasts exist', async () => {
+      const region = await mountRegion()
+      const showPopover = vi.fn()
+      const hidePopover = vi.fn()
+      Object.defineProperties(region, {
+        showPopover: {value: showPopover, configurable: true},
+        hidePopover: {value: hidePopover, configurable: true},
+      })
+
+      region.topLayer = true
+      await settle(region)
+
+      expect(region.getAttribute('popover')).toBe('manual')
+      expect(showPopover).not.toHaveBeenCalled()
+
+      const toastId = region.controller.push({message: 'Visible above dialogs', durationMs: 0})
+      await settle(region)
+
+      expect(showPopover).toHaveBeenCalledOnce()
+
+      region.controller.dismiss(toastId)
+      await settle(region)
+
+      expect(hidePopover).toHaveBeenCalledOnce()
+    })
+
+    it('keeps fixed-position fallback when the Popover API is unavailable', async () => {
+      const region = await mountRegion()
+      Object.defineProperties(region, {
+        showPopover: {value: undefined, configurable: true},
+        hidePopover: {value: undefined, configurable: true},
+      })
+
+      region.topLayer = true
+      region.controller.push({message: 'Fallback toast', durationMs: 0})
+      await settle(region)
+
+      expect(region.hasAttribute('popover')).toBe(false)
+      expect(getToastItems(region)).toHaveLength(1)
+    })
+
+    it('reopens after it is portalled between connected top-layer hosts', async () => {
+      const region = await mountRegion()
+      const showPopover = vi.fn()
+      const hidePopover = vi.fn()
+      Object.defineProperties(region, {
+        showPopover: {value: showPopover, configurable: true},
+        hidePopover: {value: hidePopover, configurable: true},
+      })
+      region.topLayer = true
+      region.controller.push({message: 'Moving toast', durationMs: 0})
+      await settle(region)
+
+      const nextHost = document.createElement('div')
+      document.body.append(nextHost)
+      nextHost.append(region)
+      await settle(region)
+
+      expect(hidePopover).toHaveBeenCalledOnce()
+      expect(showPopover).toHaveBeenCalledTimes(2)
+      expect(region.matches('[top-layer]')).toBe(true)
+    })
+  })
+
   // --- Max visible ---
 
   describe('max-visible attribute', () => {

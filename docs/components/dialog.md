@@ -130,7 +130,7 @@ Modal or non-modal dialog overlay for presenting focused content, confirmations,
 <cv-dialog> (host)
 ├── modal=true:
     └── <dialog class="portal-shell"> (top layer)
-        └── <div part="overlay">
+        ├── <div part="overlay">
             └── <section part="content" role="dialog|alertdialog">
                 ├── <header part="header">
                 │   ├── <h2 part="title" id="...">
@@ -143,13 +143,15 @@ Modal or non-modal dialog overlay for presenting focused content, confirmations,
                 │   └── <slot>
                 └── <footer part="footer">
                     └── <slot name="footer">
+        └── <div class="top-layer-accessory-host">
 └── modal=false:
     └── <div class="portal-shell popover-shell" popover="manual"> (top layer)
-        └── <div part="overlay">
+        ├── <div part="overlay">
             └── <section part="content" role="dialog|alertdialog">
                 ├── <header part="header">
                 ├── <div part="body">
                 └── <footer part="footer">
+        └── <div class="top-layer-accessory-host">
 ```
 
 ## Attributes
@@ -248,6 +250,10 @@ The top-layer shell, overlay, and content expose `data-state="closed|opening|ope
 `cv-input` and `cv-change` fire only for user-initiated close interactions (Escape, outside pointer, outside focus, header close). Programmatic `open` attribute changes do not emit these events.
 
 `cv-after-show` and `cv-after-hide` fire after the presence transition completes. Reduced-motion and zero-duration paths complete immediately.
+
+## Top-layer accessories
+
+`registerDialogTopLayerAccessory(element)` portals a global feedback or utility host into the current topmost dialog shell and returns an unregister callback. The element is restored to its original parent and sibling position when the final dialog closes or the registration is removed. Descendant popovers can therefore render above a modal dialog without turning non-blocking feedback into another modal surface.
 
 ## Reactive State Mapping
 
