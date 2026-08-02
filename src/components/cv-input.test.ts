@@ -31,6 +31,33 @@ const getPasswordToggle = (el: CVInput) =>
 const getStylesText = () =>
   (CVInput.styles as Array<{cssText?: string}>).map((style) => style.cssText ?? '').join('\n')
 
+const setHorizontalOverflow = (input: HTMLInputElement) => {
+  Object.defineProperties(input, {
+    clientWidth: {configurable: true, value: 100},
+    scrollWidth: {configurable: true, value: 300},
+  })
+}
+
+function createPointerEvent(
+  type: string,
+  options: {clientX: number; clientY: number; pointerId?: number; pointerType?: string},
+): PointerEvent {
+  const event = new Event(type, {
+    bubbles: true,
+    composed: true,
+    cancelable: true,
+  }) as PointerEvent
+  Object.defineProperties(event, {
+    button: {value: 0},
+    clientX: {value: options.clientX},
+    clientY: {value: options.clientY},
+    isPrimary: {value: true},
+    pointerId: {value: options.pointerId ?? 1},
+    pointerType: {value: options.pointerType ?? 'touch'},
+  })
+  return event
+}
+
 afterEach(() => {
   document.body.innerHTML = ''
 })
@@ -894,6 +921,46 @@ describe('cv-input', () => {
 
       expect(inputFired).toBe(false)
       expect(el.value).toBe('hello')
+    })
+
+    it('scrolls an overflowing readonly value with a horizontal touch drag', async () => {
+      const el = await createInput({readonly: true, readonlyScrollable: true, value: 'a'.repeat(100)})
+      const input = getInput(el)
+      setHorizontalOverflow(input)
+      input.scrollLeft = 20
+
+      input.dispatchEvent(createPointerEvent('pointerdown', {clientX: 140, clientY: 20}))
+      const move = createPointerEvent('pointermove', {clientX: 80, clientY: 22})
+      input.dispatchEvent(move)
+
+      expect(move.defaultPrevented).toBe(true)
+      expect(input.scrollLeft).toBe(80)
+    })
+
+    it('leaves vertical readonly drags to the containing page scroller', async () => {
+      const el = await createInput({readonly: true, readonlyScrollable: true, value: 'a'.repeat(100)})
+      const input = getInput(el)
+      setHorizontalOverflow(input)
+
+      input.dispatchEvent(createPointerEvent('pointerdown', {clientX: 140, clientY: 20}))
+      const move = createPointerEvent('pointermove', {clientX: 138, clientY: 80})
+      input.dispatchEvent(move)
+
+      expect(move.defaultPrevented).toBe(false)
+      expect(input.scrollLeft).toBe(0)
+    })
+
+    it('does not intercept touch drags unless readonly scrolling is enabled', async () => {
+      const el = await createInput({readonly: true, value: 'a'.repeat(100)})
+      const input = getInput(el)
+      setHorizontalOverflow(input)
+
+      input.dispatchEvent(createPointerEvent('pointerdown', {clientX: 140, clientY: 20}))
+      const move = createPointerEvent('pointermove', {clientX: 80, clientY: 22})
+      input.dispatchEvent(move)
+
+      expect(move.defaultPrevented).toBe(false)
+      expect(input.scrollLeft).toBe(0)
     })
   })
 

@@ -12,6 +12,14 @@ type CVInputSize = 'small' | 'medium' | 'large'
 type CVInputVariant = 'outlined' | 'filled'
 type CVInputPreset = 'search-mobile'
 
+type ReadonlyScrollGesture = {
+  axis: 'pending' | 'horizontal'
+  pointerId: number
+  startScrollLeft: number
+  startX: number
+  startY: number
+}
+
 const passthroughAttributes = ['aria-label'] as const
 
 export interface CVInputValueDetail {
@@ -43,6 +51,7 @@ export class CVInput extends FormAssociatedReatomElement {
       placeholder: {type: String},
       disabled: {type: Boolean, reflect: true},
       readonly: {type: Boolean, reflect: true},
+      readonlyScrollable: {type: Boolean, reflect: true, attribute: 'readonly-scrollable'},
       required: {type: Boolean, reflect: true},
       clearable: {type: Boolean, reflect: true},
       passwordToggle: {type: Boolean, reflect: true, attribute: 'password-toggle'},
@@ -70,6 +79,7 @@ export class CVInput extends FormAssociatedReatomElement {
   declare placeholder: string
   declare disabled: boolean
   declare readonly: boolean
+  declare readonlyScrollable: boolean
   declare required: boolean
   declare clearable: boolean
   declare passwordToggle: boolean
@@ -91,6 +101,7 @@ export class CVInput extends FormAssociatedReatomElement {
   private defaultValue = ''
   private didCaptureDefaultValue = false
   private didAutoFocus = false
+  private readonlyScrollGesture: ReadonlyScrollGesture | null = null
 
   constructor() {
     super()
@@ -99,6 +110,7 @@ export class CVInput extends FormAssociatedReatomElement {
     this.placeholder = ''
     this.disabled = false
     this.readonly = false
+    this.readonlyScrollable = false
     this.required = false
     this.clearable = false
     this.passwordToggle = false
@@ -288,6 +300,10 @@ export class CVInput extends FormAssociatedReatomElement {
       :host([readonly]) [part='input'] {
         cursor: default;
       }
+
+      :host([readonly][readonly-scrollable]) [part='input'] {
+        touch-action: pan-y pinch-zoom;
+      }
     `,
   ]
 
@@ -309,6 +325,7 @@ export class CVInput extends FormAssociatedReatomElement {
   override disconnectedCallback(): void {
     super.disconnectedCallback()
     this.removeEventListener('pointerdown', this.handleHostPointerDown)
+    this.readonlyScrollGesture = null
   }
 
   // A tap on the shell padding hits non-editable content, so the WebView
@@ -583,6 +600,50 @@ export class CVInput extends FormAssociatedReatomElement {
     this.syncFormAssociatedState()
   }
 
+  private handleReadonlyScrollPointerDown(event: PointerEvent) {
+    if (!this.readonly || !this.readonlyScrollable || this.isEffectivelyDisabled()) return
+    if (event.pointerType === 'mouse') return
+    if (!event.isPrimary || event.button !== 0) return
+
+    const input = event.currentTarget as HTMLInputElement
+    if (input.scrollWidth <= input.clientWidth) return
+    this.readonlyScrollGesture = {
+      axis: 'pending',
+      pointerId: event.pointerId,
+      startScrollLeft: input.scrollLeft,
+      startX: event.clientX,
+      startY: event.clientY,
+    }
+  }
+
+  private handleReadonlyScrollPointerMove(event: PointerEvent) {
+    const gesture = this.readonlyScrollGesture
+    if (!gesture || gesture.pointerId !== event.pointerId) return
+
+    const deltaX = event.clientX - gesture.startX
+    const deltaY = event.clientY - gesture.startY
+    if (gesture.axis === 'pending') {
+      const absX = Math.abs(deltaX)
+      const absY = Math.abs(deltaY)
+      if (Math.max(absX, absY) < 4) return
+      if (absY >= absX) {
+        this.readonlyScrollGesture = null
+        return
+      }
+      gesture.axis = 'horizontal'
+    }
+
+    event.preventDefault()
+    const input = event.currentTarget as HTMLInputElement
+    input.scrollLeft = gesture.startScrollLeft - deltaX
+  }
+
+  private handleReadonlyScrollPointerEnd(event: PointerEvent) {
+    if (this.readonlyScrollGesture?.pointerId === event.pointerId) {
+      this.readonlyScrollGesture = null
+    }
+  }
+
   private handleClearClick() {
     this.model.actions.clear()
     // onClear callback handles the cv-clear event dispatch and value sync
@@ -637,6 +698,10 @@ export class CVInput extends FormAssociatedReatomElement {
           @focus=${this.handleNativeFocus}
           @blur=${this.handleNativeBlur}
           @keydown=${this.handleNativeKeyDown}
+          @pointerdown=${this.handleReadonlyScrollPointerDown}
+          @pointermove=${this.handleReadonlyScrollPointerMove}
+          @pointerup=${this.handleReadonlyScrollPointerEnd}
+          @pointercancel=${this.handleReadonlyScrollPointerEnd}
         />
         <span
           part="clear-button"

@@ -250,22 +250,23 @@ Single-line text input control supporting text-like types, clearable behavior, a
 
 ## Attributes
 
-| Attribute          | Type        | Default      | Reflects | Description                                                                |
-| ------------------ | ----------- | ------------ | -------- | -------------------------------------------------------------------------- |
-| `value`            | String      | `""`         | no       | Current input value                                                        |
-| `type`             | `InputType` | `"text"`     | no       | Input type: `text` \| `password` \| `email` \| `url` \| `tel` \| `search`  |
-| `placeholder`      | String      | `""`         | no       | Placeholder text displayed when the input is empty                         |
-| `disabled`         | Boolean     | `false`      | yes      | Prevents interaction and dims the component                                |
-| `readonly`         | Boolean     | `false`      | yes      | Prevents editing while keeping the input focusable                         |
-| `required`         | Boolean     | `false`      | yes      | Marks the input as required for form validation                            |
-| `clearable`        | Boolean     | `false`      | yes      | Shows a clear button when the input has a value                            |
-| `password-toggle`  | Boolean     | `false`      | yes      | Shows a password visibility toggle (only effective when `type="password"`) |
-| `size`             | String      | `"medium"`   | yes      | Component size: `small` \| `medium` \| `large`                             |
-| `variant`          | String      | `"outlined"` | yes      | Visual variant: `outlined` \| `filled`                                     |
-| `preset`           | String      | —            | yes      | Semantic preset: `search-mobile`                                           |
-| `name`             | String      | `""`         | no       | Name for form association                                                  |
-| `aria-labelledby`  | String      | `""`         | no       | ID reference passed to the native input                                    |
-| `aria-describedby` | String      | `""`         | no       | Description/error ID reference passed to the native input                  |
+| Attribute             | Type        | Default      | Reflects | Description                                                                |
+| --------------------- | ----------- | ------------ | -------- | -------------------------------------------------------------------------- |
+| `value`               | String      | `""`         | no       | Current input value                                                        |
+| `type`                | `InputType` | `"text"`     | no       | Input type: `text` \| `password` \| `email` \| `url` \| `tel` \| `search`  |
+| `placeholder`         | String      | `""`         | no       | Placeholder text displayed when the input is empty                         |
+| `disabled`            | Boolean     | `false`      | yes      | Prevents interaction and dims the component                                |
+| `readonly`            | Boolean     | `false`      | yes      | Prevents editing while keeping the input focusable                         |
+| `readonly-scrollable` | Boolean     | `false`      | yes      | Enables horizontal touch drag for an overflowing readonly value            |
+| `required`            | Boolean     | `false`      | yes      | Marks the input as required for form validation                            |
+| `clearable`           | Boolean     | `false`      | yes      | Shows a clear button when the input has a value                            |
+| `password-toggle`     | Boolean     | `false`      | yes      | Shows a password visibility toggle (only effective when `type="password"`) |
+| `size`                | String      | `"medium"`   | yes      | Component size: `small` \| `medium` \| `large`                             |
+| `variant`             | String      | `"outlined"` | yes      | Visual variant: `outlined` \| `filled`                                     |
+| `preset`              | String      | —            | yes      | Semantic preset: `search-mobile`                                           |
+| `name`                | String      | `""`         | no       | Name for form association                                                  |
+| `aria-labelledby`     | String      | `""`         | no       | ID reference passed to the native input                                    |
+| `aria-describedby`    | String      | `""`         | no       | Description/error ID reference passed to the native input                  |
 
 ## Variants
 
@@ -349,19 +350,20 @@ Additionally, component styles depend on theme tokens through fallback values:
 
 ## Visual States
 
-| Host selector                 | Description                                                      |
-| ----------------------------- | ---------------------------------------------------------------- |
-| `:host([disabled])`           | Reduced opacity (`0.55`), `cursor: not-allowed`, no interaction  |
-| `:host([readonly])`           | Normal opacity, `cursor: default`, input text not editable       |
-| `:host([required])`           | No visual change by default (can be styled via part selectors)   |
-| `:host([focused])`            | Focus ring applied via `--cv-input-focus-ring`                   |
-| `:host([filled])`             | Indicates non-empty value (e.g., for floating label transitions) |
-| `:host([clearable])`          | Clear button space reserved in layout                            |
-| `:host([password-toggle])`    | Password toggle button space reserved in layout                  |
-| `:host([size="small"])`       | Small size overrides                                             |
-| `:host([size="large"])`       | Large size overrides                                             |
-| `:host([variant="outlined"])` | Visible border, transparent background                           |
-| `:host([variant="filled"])`   | Subtle background (`--cv-color-surface`), no visible border      |
+| Host selector                            | Description                                                                                        |
+| ---------------------------------------- | -------------------------------------------------------------------------------------------------- |
+| `:host([disabled])`                      | Reduced opacity (`0.55`), `cursor: not-allowed`, no interaction                                    |
+| `:host([readonly])`                      | Normal opacity, `cursor: default`, input text not editable                                         |
+| `:host([readonly][readonly-scrollable])` | Overflowing values support horizontal touch drag while vertical drag remains available to the page |
+| `:host([required])`                      | No visual change by default (can be styled via part selectors)                                     |
+| `:host([focused])`                       | Focus ring applied via `--cv-input-focus-ring`                                                     |
+| `:host([filled])`                        | Indicates non-empty value (e.g., for floating label transitions)                                   |
+| `:host([clearable])`                     | Clear button space reserved in layout                                                              |
+| `:host([password-toggle])`               | Password toggle button space reserved in layout                                                    |
+| `:host([size="small"])`                  | Small size overrides                                                                               |
+| `:host([size="large"])`                  | Large size overrides                                                                               |
+| `:host([variant="outlined"])`            | Visible border, transparent background                                                             |
+| `:host([variant="filled"])`              | Subtle background (`--cv-color-surface`), no visible border                                        |
 
 ## Reactive State Mapping
 
@@ -409,6 +411,7 @@ Additionally, component styles depend on theme tokens through fallback values:
 - Native `<input>` `blur` event -> `actions.setFocused(false)` -> dispatches `cv-blur` CustomEvent; if value changed since focus, dispatches `cv-change` CustomEvent
 - Clear button `click` -> `actions.clear()` -> dispatches `cv-clear` CustomEvent
 - Password toggle `click` -> `actions.togglePasswordVisibility()`
+- Horizontal touch drag on an overflowing `[readonly][readonly-scrollable]` input -> native `scrollLeft`; vertical drag remains available to the containing page scroller
 
 UIKit does not own value management, type resolution, clearable logic, or password toggle logic; headless state is the source of truth.
 
