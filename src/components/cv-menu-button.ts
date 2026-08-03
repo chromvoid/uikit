@@ -8,10 +8,17 @@ import {CVIcon} from './cv-icon'
 import {CVMenuItem} from './cv-menu-item'
 import {
   clearPopoverLayout,
+  getPlacementFallbacks,
+  getPositionAreaForPlacement,
+  isPopoverOpen,
   resolvePopoverBlockPosition,
+  supportsNativeAnchoredAutoplacement,
+  supportsNativePopover,
   toPopoverRect,
   type CVPopoverPlacement,
+  type NativePopoverElement,
 } from './cv-popover-positioning'
+import {observeInheritedDirection, readInheritedDirection} from './text-direction.js'
 
 export interface CVMenuButtonEventDetail {
   value: string | null
@@ -33,11 +40,6 @@ interface MenuItemRecord {
   id: string
   label: string
   disabled: boolean
-  element: CVMenuItem
-}
-
-interface PortalItemRecord {
-  id: string
   element: CVMenuItem
 }
 
@@ -92,7 +94,6 @@ export class CVMenuButton extends ReatomLitElement {
 
   private readonly idBase = `cv-menu-button-${++cvMenuButtonNonce}`
   private itemRecords: MenuItemRecord[] = []
-  private portalItemRecords: PortalItemRecord[] = []
   private itemListeners = new WeakMap<CVMenuItem, {click: EventListener; keydown: EventListener}>()
   private hasPrefixContent = false
   private hasLabelContent = false
@@ -100,12 +101,9 @@ export class CVMenuButton extends ReatomLitElement {
   private model?: MenuButtonModel
   private hasLayoutListeners = false
   private layoutFrame = -1
+  private directionObserver: MutationObserver | null = null
   private pointerOpenPreserveRequested = false
   private preserveFocusForOpenSession = false
-  private portalRoot: HTMLDivElement | null = null
-  private readonly portalClickListener: EventListener = (event) => this.handlePortalClick(event)
-  private readonly portalKeydownListener: EventListener = (event) =>
-    this.handlePortalKeyDown(event as KeyboardEvent)
 
   constructor() {
     super()
@@ -192,6 +190,10 @@ export class CVMenuButton extends ReatomLitElement {
         padding: var(--cv-space-1, 4px);
         background: var(--cv-color-surface-elevated, #1d2432);
         overflow-y: auto;
+      }
+
+      [part='menu'][popover]:not(:popover-open) {
+        display: none;
       }
 
       ::slotted([slot='menu']) {
@@ -318,23 +320,37 @@ export class CVMenuButton extends ReatomLitElement {
     if (!this.model) {
       this.rebuildModelFromSlot(false, false)
     } else {
-      // Reconnect: disconnectedCallback detached the inline item listeners but
-      // the model survives, so no slotchange fires to re-attach them. Without
-      // this, inline menu item clicks are dead after a remove()+append()
-      // (portal items work since they are rebuilt on open, masking the bug).
+      // Reconnect: disconnectedCallback detached item listeners but the model
+      // survives, so no slotchange fires to re-attach them.
       this.attachItemListeners()
     }
 
     this.syncOutsidePointerListener()
+    this.syncDirectionObserver(this.open)
+    if (this.open) {
+      this.syncNativeMenu()
+      this.toggleLayoutListeners(!supportsNativeAnchoredAutoplacement())
+      this.scheduleLayout()
+    }
   }
 
   override disconnectedCallback(): void {
-    super.disconnectedCallback()
     this.detachItemListeners()
-    this.destroyPortal()
     this.syncOutsidePointerListener(true)
     this.toggleLayoutListeners(false)
+    this.syncDirectionObserver(false)
     this.cancelLayoutFrame()
+
+    const menu = this.getMenuElement()
+    if (supportsNativePopover() && menu && isPopoverOpen(menu)) {
+      try {
+        menu.hidePopover?.()
+      } catch {
+        // Ignore native cleanup failures during detach.
+      }
+    }
+
+    super.disconnectedCallback()
   }
 
   override willUpdate(changedProperties: PropertyValues): void {
@@ -401,9 +417,11 @@ export class CVMenuButton extends ReatomLitElement {
   override updated(changedProperties: PropertyValues): void {
     super.updated(changedProperties)
     this.syncOutsidePointerListener()
+    this.syncNativeMenu()
 
-    const shouldTrackLayout = this.open
+    const shouldTrackLayout = this.open && !supportsNativeAnchoredAutoplacement()
     this.toggleLayoutListeners(shouldTrackLayout)
+    this.syncDirectionObserver(this.open)
 
     if (this.open) {
       const menu = this.getMenuElement()
@@ -413,10 +431,9 @@ export class CVMenuButton extends ReatomLitElement {
       this.scheduleLayout()
     } else {
       this.cancelLayoutFrame()
-      this.destroyPortal()
       const menu = this.getMenuElement()
       if (menu) {
-        this.clearInlineLayout(menu)
+        this.clearMenuLayout(menu)
       }
     }
 
@@ -425,42 +442,15 @@ export class CVMenuButton extends ReatomLitElement {
     }
   }
 
-  private getMenuElement(): HTMLElement | null {
-    return this.shadowRoot?.querySelector('[part="menu"]') as HTMLElement | null
+  private getMenuElement(): NativePopoverElement | null {
+    return this.shadowRoot?.querySelector('[part="menu"]') as NativePopoverElement | null
   }
 
   private getBaseElement(): HTMLElement | null {
     return this.shadowRoot?.querySelector('[part="base"]') as HTMLElement | null
   }
 
-  private ensurePortalRoot(): HTMLDivElement | null {
-    const ownerDocument = this.ownerDocument
-    if (!ownerDocument?.body) return null
-
-    if (this.portalRoot?.isConnected) {
-      return this.portalRoot
-    }
-
-    const portal = ownerDocument.createElement('div')
-    portal.setAttribute('data-cv-menu-button-portal', this.idBase)
-    portal.addEventListener('click', this.portalClickListener)
-    portal.addEventListener('keydown', this.portalKeydownListener)
-    ownerDocument.body.append(portal)
-    this.portalRoot = portal
-    return portal
-  }
-
-  private destroyPortal(): void {
-    if (!this.portalRoot) return
-
-    this.portalRoot.removeEventListener('click', this.portalClickListener)
-    this.portalRoot.removeEventListener('keydown', this.portalKeydownListener)
-    this.portalRoot.remove()
-    this.portalRoot = null
-    this.portalItemRecords = []
-  }
-
-  private clearInlineLayout(menu: HTMLElement): void {
+  private clearMenuLayout(menu: HTMLElement): void {
     clearPopoverLayout(menu)
     menu.style.minWidth = ''
     menu.style.visibility = ''
@@ -487,86 +477,49 @@ export class CVMenuButton extends ReatomLitElement {
     return 'bottom-start'
   }
 
-  private getMenuItemProperty(source: CSSStyleDeclaration | null, name: string, fallback: string): string {
-    return (
-      source?.getPropertyValue(name).trim() ||
-      getComputedStyle(this).getPropertyValue(name).trim() ||
-      fallback
-    )
-  }
-
   private applyMenuLayout(menu: HTMLElement, base: HTMLElement): void {
     const baseRect = base.getBoundingClientRect()
     const minWidth = Math.max(this.getMenuMinInlineSize(), Math.ceil(baseRect.width))
+    const placement = this.getMenuPlacement()
+    const direction = readInheritedDirection(this)
 
-    menu.style.position = 'absolute'
+    clearPopoverLayout(menu)
     menu.style.minWidth = `${minWidth}px`
+
+    if (supportsNativeAnchoredAutoplacement()) {
+      menu.style.position = 'fixed'
+      menu.style.inset = 'auto'
+      menu.style.margin = '0'
+      menu.style.marginTop = `${this.getMenuOffset()}px`
+      menu.style.setProperty('position-area', getPositionAreaForPlacement(placement, direction))
+      menu.style.setProperty(
+        'position-try-fallbacks',
+        getPlacementFallbacks(placement, direction)
+          .slice(1)
+          .map((candidate) => getPositionAreaForPlacement(candidate, direction))
+          .join(', '),
+      )
+      menu.style.visibility = 'visible'
+      return
+    }
+
+    menu.style.position = 'fixed'
     menu.style.top = '0px'
     menu.style.left = '0px'
-    menu.style.bottom = 'auto'
-    menu.style.right = 'auto'
-    menu.style.transform = 'none'
-    menu.style.translate = 'none'
     menu.style.visibility = 'hidden'
 
-    const menuRect = menu.getBoundingClientRect()
     const resolved = resolvePopoverBlockPosition(
       toPopoverRect(baseRect),
-      toPopoverRect(menuRect),
-      this.getMenuPlacement(),
+      toPopoverRect(menu.getBoundingClientRect()),
+      placement,
       this.getMenuOffset(),
-      {
-        width: window.innerWidth,
-        height: window.innerHeight,
-        padding: 8,
-      },
+      {width: window.innerWidth, height: window.innerHeight, padding: 8},
+      direction,
     )
 
-    menu.style.position = 'absolute'
-    menu.style.top = `${resolved.top - baseRect.top}px`
-    menu.style.left = `${resolved.left - baseRect.left}px`
-    menu.style.bottom = 'auto'
-    menu.style.right = 'auto'
-    menu.style.transform = 'none'
-    menu.style.translate = 'none'
+    menu.style.top = `${resolved.top}px`
+    menu.style.left = `${resolved.left}px`
     menu.style.visibility = 'visible'
-  }
-
-  private applyPortalLayout(portal: HTMLElement, base: HTMLElement): void {
-    const baseRect = base.getBoundingClientRect()
-    const minWidth = Math.max(this.getMenuMinInlineSize(), Math.ceil(baseRect.width))
-
-    portal.style.position = 'fixed'
-    portal.style.minWidth = `${minWidth}px`
-    portal.style.top = '0px'
-    portal.style.left = '0px'
-    portal.style.bottom = 'auto'
-    portal.style.right = 'auto'
-    portal.style.transform = 'none'
-    portal.style.translate = 'none'
-    portal.style.visibility = 'hidden'
-
-    const menuRect = portal.getBoundingClientRect()
-    const resolved = resolvePopoverBlockPosition(
-      toPopoverRect(baseRect),
-      toPopoverRect(menuRect),
-      this.getMenuPlacement(),
-      this.getMenuOffset(),
-      {
-        width: window.innerWidth,
-        height: window.innerHeight,
-        padding: 8,
-      },
-    )
-
-    portal.style.position = 'fixed'
-    portal.style.top = `${resolved.top}px`
-    portal.style.left = `${resolved.left}px`
-    portal.style.bottom = 'auto'
-    portal.style.right = 'auto'
-    portal.style.transform = 'none'
-    portal.style.translate = 'none'
-    portal.style.visibility = 'visible'
   }
 
   private syncMenuLayout(): void {
@@ -575,10 +528,6 @@ export class CVMenuButton extends ReatomLitElement {
     if (!menu || !base) return
 
     this.applyMenuLayout(menu, base)
-
-    if (this.portalRoot) {
-      this.applyPortalLayout(this.portalRoot, base)
-    }
   }
 
   private cancelLayoutFrame(): void {
@@ -612,6 +561,50 @@ export class CVMenuButton extends ReatomLitElement {
   private handleViewportChange = () => {
     if (!this.open) return
     this.scheduleLayout()
+  }
+
+  private syncDirectionObserver(shouldObserve: boolean): void {
+    if (!shouldObserve) {
+      this.directionObserver?.disconnect()
+      this.directionObserver = null
+      return
+    }
+
+    if (this.directionObserver) return
+
+    this.directionObserver = observeInheritedDirection(this, () => {
+      if (this.open) this.scheduleLayout()
+    })
+  }
+
+  private syncNativeMenu(): void {
+    if (!supportsNativePopover()) return
+
+    const menu = this.getMenuElement()
+    if (!menu) return
+
+    const popoverOpen = isPopoverOpen(menu)
+    if (this.open && !popoverOpen) {
+      try {
+        const source = this.getBaseElement()
+        if (source) {
+          menu.showPopover?.({source})
+        } else {
+          menu.showPopover?.()
+        }
+      } catch {
+        // Ignore native open failures; component state remains authoritative.
+      }
+      return
+    }
+
+    if (!this.open && popoverOpen) {
+      try {
+        menu.hidePopover?.()
+      } catch {
+        // Ignore native close failures during state reconciliation.
+      }
+    }
   }
 
   private getItemElements(): CVMenuItem[] {
@@ -780,12 +773,6 @@ export class CVMenuButton extends ReatomLitElement {
       const props = this.model.contracts.getItemProps(record.id)
       this.applyItemElementState(record.element, props, this.value === record.id, !this.open)
     }
-
-    if (this.open) {
-      this.syncPortalElements()
-    } else {
-      this.destroyPortal()
-    }
   }
 
   private applyItemElementState(
@@ -809,90 +796,6 @@ export class CVMenuButton extends ReatomLitElement {
     element.selected = selected
     element.disabled = props['aria-disabled'] === 'true'
     element.hidden = hidden
-  }
-
-  private syncPortalElements(): void {
-    if (!this.open || !this.model) return
-
-    const portal = this.ensurePortalRoot()
-    if (!portal) return
-
-    const menu = this.getMenuElement()
-    this.applyPortalBaseState(portal, menu)
-
-    const fragment = this.ownerDocument.createDocumentFragment()
-    const nextPortalRecords: PortalItemRecord[] = []
-
-    for (const record of this.itemRecords) {
-      const clone = record.element.cloneNode(true) as CVMenuItem
-      const props = this.model.contracts.getItemProps(record.id)
-
-      clone.removeAttribute('slot')
-      clone.setAttribute('data-cv-menu-value', record.id)
-      clone.value = record.id
-      clone.className = record.element.className
-      this.applyItemElementState(clone, props, this.value === record.id, false)
-
-      fragment.append(clone)
-      nextPortalRecords.push({id: record.id, element: clone})
-    }
-
-    portal.replaceChildren(fragment)
-    this.portalItemRecords = nextPortalRecords
-
-    const base = this.getBaseElement()
-    if (base) {
-      this.applyPortalLayout(portal, base)
-    } else {
-      portal.style.visibility = 'hidden'
-    }
-  }
-
-  private applyPortalBaseState(portal: HTMLDivElement, menu: HTMLElement | null): void {
-    const source = menu ? getComputedStyle(menu) : null
-
-    portal.hidden = false
-    portal.setAttribute('role', menu?.getAttribute('role') ?? 'menu')
-    portal.setAttribute('tabindex', menu?.getAttribute('tabindex') ?? '-1')
-    portal.setAttribute('aria-label', menu?.getAttribute('aria-label') ?? this.ariaLabel ?? '')
-
-    portal.style.boxSizing = 'border-box'
-    portal.style.display = 'inline-grid'
-    portal.style.gap = source?.gap || '4px'
-    portal.style.alignContent = source?.alignContent || 'start'
-    portal.style.padding = source?.padding || '4px'
-    portal.style.background = source?.background || 'var(--cv-color-surface-elevated, #1d2432)'
-    portal.style.border = source?.border || '0px solid transparent'
-    portal.style.borderRadius = source?.borderRadius || 'var(--cv-radius-sm, 6px)'
-    portal.style.boxShadow = source?.boxShadow || ''
-    portal.style.color = source?.color || 'var(--cv-color-text, #e8ecf6)'
-    portal.style.font = source?.font || 'inherit'
-    portal.style.maxWidth = source?.maxWidth || 'calc(100vw - 16px)'
-    portal.style.maxHeight = source?.maxHeight || 'calc(100dvh - 16px)'
-    portal.style.overflowY = source?.overflowY || 'auto'
-    portal.style.pointerEvents = 'auto'
-    portal.style.zIndex = source?.zIndex || this.getMenuZIndex()
-    portal.style.setProperty(
-      '--cv-menu-item-gap',
-      this.getMenuItemProperty(source, '--cv-menu-item-gap', '10px'),
-    )
-    portal.style.setProperty(
-      '--cv-menu-item-padding-block',
-      this.getMenuItemProperty(source, '--cv-menu-item-padding-block', '10px'),
-    )
-    portal.style.setProperty(
-      '--cv-menu-item-padding-inline',
-      this.getMenuItemProperty(source, '--cv-menu-item-padding-inline', '12px'),
-    )
-    portal.style.setProperty(
-      '--cv-menu-item-border-radius',
-      this.getMenuItemProperty(source, '--cv-menu-item-border-radius', 'var(--cv-radius-1, 6px)'),
-    )
-  }
-
-  private getMenuZIndex(): string {
-    const raw = getComputedStyle(this).getPropertyValue('--cv-menu-button-menu-z-index').trim()
-    return raw || '20'
   }
 
   private captureState() {
@@ -939,12 +842,6 @@ export class CVMenuButton extends ReatomLitElement {
 
     const activeId = this.model.state.activeId()
     if (!activeId) return
-
-    const activePortalRecord = this.portalItemRecords.find((record) => record.id === activeId)
-    if (activePortalRecord) {
-      activePortalRecord.element.focus()
-      return
-    }
 
     const activeRecord = this.itemRecords.find((record) => record.id === activeId)
     activeRecord?.element.focus()
@@ -1009,37 +906,10 @@ export class CVMenuButton extends ReatomLitElement {
 
     const path = event.composedPath()
     if (path.includes(this)) return
-    if (this.portalRoot && path.includes(this.portalRoot)) return
 
     const previous = this.captureState()
     this.model.actions.handleOutsidePointer()
     this.applyInteractionResult(previous)
-  }
-
-  private getPortalItemIdFromEvent(event: Event): string | null {
-    for (const target of event.composedPath()) {
-      if (!(target instanceof HTMLElement)) continue
-      if (target === this.portalRoot) break
-      if (target.tagName.toLowerCase() !== CVMenuItem.elementName) continue
-
-      const id = target.dataset['cvMenuValue']?.trim()
-      if (id) return id
-    }
-
-    return null
-  }
-
-  private handlePortalClick(event: Event): void {
-    const id = this.getPortalItemIdFromEvent(event)
-    if (!id) return
-
-    event.preventDefault()
-    this.handleItemClick(id)
-  }
-
-  private handlePortalKeyDown(event: KeyboardEvent): void {
-    event.stopPropagation()
-    this.handleKeyDown(event)
   }
 
   private handleItemClick(id: string): void {
@@ -1195,6 +1065,7 @@ export class CVMenuButton extends ReatomLitElement {
           role=${menuProps.role}
           tabindex=${menuProps.tabindex}
           aria-label=${menuProps['aria-label'] ?? nothing}
+          popover=${supportsNativePopover() ? 'manual' : nothing}
           ?hidden=${menuProps.hidden}
           part="menu"
           class="cv-u-panel-shell"
@@ -1260,6 +1131,7 @@ export class CVMenuButton extends ReatomLitElement {
           role=${menuProps.role}
           tabindex=${menuProps.tabindex}
           aria-label=${menuProps['aria-label'] ?? nothing}
+          popover=${supportsNativePopover() ? 'manual' : nothing}
           ?hidden=${menuProps.hidden}
           part="menu"
           class="cv-u-panel-shell"

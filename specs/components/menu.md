@@ -464,6 +464,17 @@ Split-button mode (`[split]`):
         └── <slot name="menu">
 ```
 
+#### Popup Rendering
+
+`[part="menu"]` is the only rendered menu surface. UIKit never clones menu items or mirrors the menu into a
+document-level portal, so the DOM, focus order, and accessibility tree contain one `role="menu"` controlled by
+the trigger.
+
+- Browsers with the Popover API promote that same menu node to the top layer with `popover="manual"`.
+- Browsers with native anchor positioning use the trigger as the implicit anchor.
+- Older browsers keep the same node and use the shared fixed-position UIKit fallback with viewport clamping.
+- The original slotted `cv-menu-item` elements receive active, selected, disabled, and focus state directly.
+
 #### Attributes
 
 | Attribute         | Type    | Default     | Description                                                       |
@@ -538,7 +549,7 @@ Split-button mode (`[split]`):
 | `--cv-menu-button-border-color`         | `var(--cv-color-border)`   | Trigger border color                  |
 | `--cv-menu-button-menu-offset`          | `var(--cv-space-1, 4px)`   | Gap between trigger and menu popup    |
 | `--cv-menu-button-menu-align`           | `start`                    | Logical popup alignment               |
-| `--cv-menu-button-menu-min-inline-size` | `max(180px, 100%)`         | Minimum inline size of the menu popup |
+| `--cv-menu-button-menu-min-inline-size` | `180px`                    | Minimum inline size of the menu popup |
 | `--cv-menu-button-menu-max-inline-size` | `calc(100vw - 16px)`       | Maximum inline size of the menu popup |
 | `--cv-menu-button-menu-z-index`         | `20`                       | Z-index of the menu popup             |
 
@@ -596,7 +607,8 @@ Contracts applied to DOM elements:
 - `contracts.getSplitTriggerProps()` -> action button (`[part="action"]`): provides `id`, `tabindex`, `role` (only when `split` is `true`)
 - `contracts.getSplitDropdownProps()` -> dropdown button (`[part="dropdown"]`): provides `id`, `tabindex`, `role`, `aria-haspopup`, `aria-expanded`, `aria-controls`, `aria-label` (only when `split` is `true`)
 
-UIKit does not own activation, navigation, toggle, or dismiss logic; headless state is the source of truth.
+UIKit owns only the single-surface top-layer/fallback presentation and positioning. Headless state remains the
+source of truth for activation, navigation, toggle, and dismiss behavior.
 
 #### ARIA Contract
 

@@ -4,6 +4,23 @@ import {dataSvg, setElementProps, visualCase, waitForElementUpdate} from './help
 
 export const overlaysFloatingCases: readonly UikitVisualCase[] = [
   visualCase({
+    id: 'cv-menu-button/open',
+    component: 'cv-menu-button',
+    title: 'Menu button with one anchored open action surface',
+    states: ['open', 'menu-items', 'disabled-item', 'single-popup-surface'],
+    fullPage: true,
+    html: `
+      <div class="visual-stack">
+        <cv-menu-button open aria-label="Document actions">
+          Document actions
+          <cv-menu-item slot="menu" value="rename">Rename</cv-menu-item>
+          <cv-menu-item slot="menu" value="share">Share</cv-menu-item>
+          <cv-menu-item slot="menu" value="archive" disabled>Archive</cv-menu-item>
+        </cv-menu-button>
+      </div>
+    `,
+  }),
+  visualCase({
     id: 'cv-bottom-sheet/open',
     component: 'cv-bottom-sheet',
     title: 'Bottom sheet open, handle, detent, title, body, and footer states',

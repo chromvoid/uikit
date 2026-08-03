@@ -87,12 +87,44 @@ function mockRect(element: HTMLElement, rect: {left: number; top: number; width:
   })
 }
 
-function getPortal() {
-  return document.body.querySelector('[data-cv-menu-button-portal]') as HTMLDivElement | null
-}
+function enableNativePopoverSupport() {
+  const proto = HTMLElement.prototype as HTMLElement & {
+    showPopover?: (options?: {source?: HTMLElement}) => void
+    hidePopover?: () => void
+  }
+  const originalShowPopover = proto.showPopover
+  const originalHidePopover = proto.hidePopover
+  const showPopover = vi.fn()
+  const hidePopover = vi.fn()
 
-function getPortalItem(value: string) {
-  return getPortal()?.querySelector(`cv-menu-item[value="${value}"]`) as CVMenuItem | null
+  Object.defineProperty(proto, 'showPopover', {value: showPopover, configurable: true, writable: true})
+  Object.defineProperty(proto, 'hidePopover', {value: hidePopover, configurable: true, writable: true})
+
+  return {
+    showPopover,
+    hidePopover,
+    restore() {
+      if (originalShowPopover) {
+        Object.defineProperty(proto, 'showPopover', {
+          value: originalShowPopover,
+          configurable: true,
+          writable: true,
+        })
+      } else {
+        Reflect.deleteProperty(proto, 'showPopover')
+      }
+
+      if (originalHidePopover) {
+        Object.defineProperty(proto, 'hidePopover', {
+          value: originalHidePopover,
+          configurable: true,
+          writable: true,
+        })
+      } else {
+        Reflect.deleteProperty(proto, 'hidePopover')
+      }
+    },
+  }
 }
 
 afterEach(() => {
@@ -163,8 +195,8 @@ describe('cv-menu-button', () => {
     expect(changeCount).toBe(1)
   })
 
-  it('mirrors open menu items into a document portal and selects from the portal', async () => {
-    const {menu, trigger} = await mountMenuButton()
+  it('renders and selects from one menu surface without a document portal', async () => {
+    const {menu, trigger, menuBox, items} = await mountMenuButton()
     let changeCount = 0
 
     menu.addEventListener('cv-change', () => {
@@ -174,35 +206,36 @@ describe('cv-menu-button', () => {
     trigger!.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
     await settle(menu)
 
-    const portal = getPortal()
-    expect(portal).not.toBeNull()
-    expect(getPortalItem('a')?.hidden).toBe(false)
-    expect(getPortalItem('b')?.disabled).toBe(true)
+    expect(menu.shadowRoot?.querySelectorAll('[role="menu"]')).toHaveLength(1)
+    expect(document.body.querySelector('[data-cv-menu-button-portal]')).toBeNull()
+    expect(menuBox.hidden).toBe(false)
+    expect(items[0]?.hidden).toBe(false)
+    expect(items[1]?.disabled).toBe(true)
 
-    getPortalItem('c')!.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+    items[2]!.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
     await settle(menu)
 
     expect(menu.value).toBe('c')
     expect(menu.open).toBe(false)
     expect(changeCount).toBe(1)
-    expect(getPortal()).toBeNull()
+    expect(document.body.querySelector('[data-cv-menu-button-portal]')).toBeNull()
   })
 
-  it('ignores disabled portal items without closing the menu', async () => {
-    const {menu, trigger} = await mountMenuButton()
+  it('ignores disabled menu items without closing the menu', async () => {
+    const {menu, trigger, items} = await mountMenuButton()
     const onChange = vi.fn()
     menu.addEventListener('cv-change', onChange as EventListener)
 
     trigger!.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
     await settle(menu)
 
-    getPortalItem('b')!.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+    items[1]!.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
     await settle(menu)
 
     expect(menu.value).toBe('')
     expect(menu.open).toBe(true)
     expect(onChange).not.toHaveBeenCalled()
-    expect(getPortal()).not.toBeNull()
+    expect(items[1]?.hidden).toBe(false)
   })
 
   it('syncs trigger aria-expanded with open state', async () => {
@@ -247,7 +280,7 @@ describe('cv-menu-button', () => {
   })
 
   it('Enter on closed trigger opens the menu and activates the first enabled item', async () => {
-    const {menu, trigger} = await mountMenuButton({
+    const {menu, trigger, items} = await mountMenuButton({
       content: `
         Actions
         <cv-menu-item slot="menu" value="a" disabled>Alpha</cv-menu-item>
@@ -259,10 +292,7 @@ describe('cv-menu-button', () => {
     await settle(menu)
 
     expect(menu.open).toBe(true)
-    const activePortalItem = getPortal()?.querySelector(
-      'cv-menu-item[data-active="true"]',
-    ) as CVMenuItem | null
-    expect(activePortalItem?.value).toBe('b')
+    expect(items.find((item) => item.active)?.value).toBe('b')
   })
 
   it('typeahead in the open menu activates the matching item for selection', async () => {
@@ -292,47 +322,50 @@ describe('cv-menu-button', () => {
     expect(menu.open).toBe(false)
   })
 
-  it('does not treat portal pointer events as outside clicks', async () => {
-    const {menu, trigger} = await mountMenuButton()
+  it('does not treat menu pointer events as outside clicks', async () => {
+    const {menu, trigger, items} = await mountMenuButton()
 
     trigger!.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
     await settle(menu)
     expect(menu.open).toBe(true)
 
-    getPortal()!.dispatchEvent(new MouseEvent('pointerdown', {bubbles: true, composed: true}))
+    items[0]!.dispatchEvent(new MouseEvent('pointerdown', {bubbles: true, composed: true}))
     await settle(menu)
 
     expect(menu.open).toBe(true)
   })
 
-  it('removes the portal on close and disconnect', async () => {
-    const {menu, trigger} = await mountMenuButton()
+  it('keeps one menu node across close and reconnect', async () => {
+    const {menu, trigger, menuBox} = await mountMenuButton()
 
     trigger!.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
     await settle(menu)
-    expect(getPortal()).not.toBeNull()
+    expect(menu.shadowRoot?.querySelector('[part="menu"]')).toBe(menuBox)
+    expect(document.body.querySelector('[data-cv-menu-button-portal]')).toBeNull()
 
     trigger!.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
     await settle(menu)
-    expect(getPortal()).toBeNull()
+    expect(menuBox.hidden).toBe(true)
 
     trigger!.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
     await settle(menu)
-    expect(getPortal()).not.toBeNull()
+    expect(menu.shadowRoot?.querySelector('[part="menu"]')).toBe(menuBox)
 
     menu.remove()
     await Promise.resolve()
-    expect(getPortal()).toBeNull()
+    document.body.append(menu)
+    await settle(menu)
+    expect(menu.shadowRoot?.querySelector('[part="menu"]')).toBe(menuBox)
   })
 
-  it('supports keyboard selection from the portal', async () => {
-    const {menu, trigger} = await mountMenuButton()
+  it('supports keyboard selection from the menu surface', async () => {
+    const {menu, trigger, menuBox} = await mountMenuButton()
 
     trigger!.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
     await settle(menu)
 
-    getPortal()!.dispatchEvent(new KeyboardEvent('keydown', {key: 'ArrowDown', bubbles: true}))
-    getPortal()!.dispatchEvent(new KeyboardEvent('keydown', {key: 'Enter', bubbles: true}))
+    menuBox.dispatchEvent(new KeyboardEvent('keydown', {key: 'ArrowDown', bubbles: true}))
+    menuBox.dispatchEvent(new KeyboardEvent('keydown', {key: 'Enter', bubbles: true}))
     await settle(menu)
 
     expect(menu.value).toBe('c')
@@ -368,9 +401,9 @@ describe('cv-menu-button', () => {
     trigger!.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
     await settle(menu)
 
-    expect(menuBox.style.position).toBe('absolute')
+    expect(menuBox.style.position).toBe('fixed')
     expect(parseFloat(menuBox.style.left)).toBeCloseTo(8, 3)
-    expect(parseFloat(menuBox.style.top)).toBeCloseTo(-124, 3)
+    expect(parseFloat(menuBox.style.top)).toBeCloseTo(280, 3)
   })
 
   it('keeps fallback-positioned menu inside the viewport near the right edge', async () => {
@@ -388,9 +421,9 @@ describe('cv-menu-button', () => {
     trigger!.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
     await settle(menu)
 
-    expect(menuBox.style.position).toBe('absolute')
-    expect(parseFloat(menuBox.style.left)).toBeCloseTo(-148, 3)
-    expect(parseFloat(menuBox.style.top)).toBeCloseTo(40, 3)
+    expect(menuBox.style.position).toBe('fixed')
+    expect(parseFloat(menuBox.style.left)).toBeCloseTo(132, 3)
+    expect(parseFloat(menuBox.style.top)).toBeCloseTo(160, 3)
   })
 
   it('supports centered popup alignment', async () => {
@@ -409,7 +442,7 @@ describe('cv-menu-button', () => {
     trigger!.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
     await settle(menu)
 
-    expect(parseFloat(menuBox.style.left)).toBeCloseTo(-70, 3)
+    expect(parseFloat(menuBox.style.left)).toBeCloseTo(70, 3)
   })
 
   it('uses the trigger width as the floor for popup min-width without stretching to the viewport', async () => {
@@ -428,17 +461,24 @@ describe('cv-menu-button', () => {
     await settle(menu)
 
     expect(menuBox.style.minWidth).toBe('240px')
-    expect(parseFloat(menuBox.style.left)).toBeCloseTo(0, 3)
+    expect(parseFloat(menuBox.style.left)).toBeCloseTo(24, 3)
   })
 
-  it('mirrors customized menu item gap into the portal', async () => {
-    const {menu, trigger} = await mountMenuButton()
-    menu.style.setProperty('--cv-menu-item-gap', '14px')
+  it('uses the same menu node with the native Popover API when available', async () => {
+    const native = enableNativePopoverSupport()
+    try {
+      const {menu, trigger, base, menuBox} = await mountMenuButton()
 
-    trigger!.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
-    await settle(menu)
+      trigger!.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+      await settle(menu)
 
-    expect(getPortal()?.style.getPropertyValue('--cv-menu-item-gap')).toBe('14px')
+      expect(menuBox.getAttribute('popover')).toBe('manual')
+      expect(native.showPopover).toHaveBeenCalledWith({source: base})
+      expect(menu.shadowRoot?.querySelectorAll('[role="menu"]')).toHaveLength(1)
+      expect(document.body.querySelector('[data-cv-menu-button-portal]')).toBeNull()
+    } finally {
+      native.restore()
+    }
   })
 
   describe('slots', () => {
