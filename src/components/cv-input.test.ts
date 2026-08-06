@@ -64,6 +64,12 @@ afterEach(() => {
 
 describe('cv-input', () => {
   describe('style contract', () => {
+    it('stretches the native input across the shell height', () => {
+      const stylesText = getStylesText()
+
+      expect(stylesText).toMatch(/\[part='input'\]\s*{[^}]*height:\s*100%;/)
+    })
+
     it('renders filled variant with a visible non-prominent shell', () => {
       const stylesText = getStylesText()
 
@@ -1373,6 +1379,36 @@ describe('cv-input', () => {
 
       expect(event.defaultPrevented).toBe(false)
       expect(document.activeElement).toBe(other)
+    })
+  })
+
+  describe('shell activation', () => {
+    it('focuses the inner input after a click on non-interactive shell space', async () => {
+      const el = await createInput()
+
+      getBase(el).dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+
+      expect(el.shadowRoot!.activeElement).toBe(getInput(el))
+    })
+
+    it('leaves interactive slotted content in control of its own activation', async () => {
+      const el = await createInput()
+      const action = document.createElement('button')
+      action.slot = 'suffix'
+      el.append(action)
+      await settle(el)
+
+      action.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+
+      expect(el.shadowRoot!.activeElement).toBeNull()
+    })
+
+    it('does not focus the inner input when disabled', async () => {
+      const el = await createInput({disabled: true})
+
+      getBase(el).dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+
+      expect(el.shadowRoot!.activeElement).toBeNull()
     })
   })
 })

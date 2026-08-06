@@ -174,6 +174,7 @@ export class CVInput extends FormAssociatedReatomElement {
 
       [part='input'] {
         width: 100%;
+        height: 100%;
         border: none;
         outline: none;
         background: transparent;
@@ -360,6 +361,22 @@ export class CVInput extends FormAssociatedReatomElement {
     } catch {
       input.focus()
     }
+  }
+
+  private handleBaseClick(event: MouseEvent): void {
+    if (this.isEffectivelyDisabled()) return
+
+    const startsFromInteractiveControl = event
+      .composedPath()
+      .some(
+        (target) =>
+          target instanceof HTMLElement &&
+          (target.matches('button, a[href], input, select, textarea, [role="button"], [role="link"]') ||
+            target.isContentEditable),
+      )
+    if (startsFromInteractiveControl) return
+
+    this.focus({preventScroll: true})
   }
 
   override updated(changedProperties: PropertyValues): void {
@@ -671,7 +688,7 @@ export class CVInput extends FormAssociatedReatomElement {
       typeof this.maxlength === 'number' && Number.isFinite(this.maxlength) ? this.maxlength : null
 
     return html`
-      <div part="base" class="cv-u-control-shell">
+      <div part="base" class="cv-u-control-shell" @click=${this.handleBaseClick}>
         <span part="prefix" class="cv-u-icon-slot"><slot name="prefix"></slot></span>
         <input
           part="input"

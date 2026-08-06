@@ -248,6 +248,10 @@ Single-line text input control supporting text-like types, clearable behavior, a
         └── <slot name="suffix">
 ```
 
+The native input stretches across the full block size of the base so its touch target matches the visual field
+height. A completed tap or click on non-interactive base, prefix, or suffix space focuses the native input;
+built-in action buttons and interactive slotted content keep their own activation behavior.
+
 ## Attributes
 
 | Attribute             | Type        | Default      | Reflects | Description                                                                |
