@@ -42,18 +42,6 @@ export class CVEmptyState extends ReatomLitElement {
 
   static styles = [
     css`
-      @keyframes cv-empty-state-reveal {
-        from {
-          opacity: 0;
-          transform: translateY(12px) scale(0.98);
-        }
-
-        to {
-          opacity: 1;
-          transform: translateY(0) scale(1);
-        }
-      }
-
       :host {
         display: grid;
         box-sizing: border-box;
@@ -79,13 +67,6 @@ export class CVEmptyState extends ReatomLitElement {
         border-radius: var(--cv-empty-state-radius, var(--cv-radius-2, 12px));
         background: var(--cv-empty-state-background, var(--cv-color-surface-2, #181f2b));
         text-align: center;
-        animation: cv-empty-state-reveal 0.32s var(--cv-easing-standard, ease-out);
-      }
-
-      @media (prefers-reduced-motion: reduce) {
-        [part='base'] {
-          animation: none;
-        }
       }
 
       :host([variant='dropzone']) [part='base'] {
