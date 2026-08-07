@@ -202,6 +202,7 @@ describe('cv-drawer', () => {
       expect(el.closeOnEscape).toBe(true)
       expect(el.closeOnOutsidePointer).toBe(true)
       expect(el.closeOnOutsideFocus).toBe(true)
+      expect(el.closeLabel).toBe('Close')
       expect(el.noHeader).toBe(false)
       expect(el.dragToClose).toBe(false)
     })
@@ -254,6 +255,15 @@ describe('cv-drawer', () => {
     it('close-on-outside-focus attribute reflects', async () => {
       const el = await createDrawer()
       expect(el.hasAttribute('close-on-outside-focus')).toBe(true)
+    })
+
+    it('reads close-label into the closeLabel property', async () => {
+      const el = document.createElement('cv-drawer') as CVDrawer
+      el.setAttribute('close-label', 'Close tag manager')
+      document.body.append(el)
+      await settle(el)
+
+      expect(el.closeLabel).toBe('Close tag manager')
     })
 
     it('placement defaults to "end" in attribute', async () => {
@@ -786,10 +796,10 @@ describe('cv-drawer', () => {
       expect(trigger.getAttribute('aria-controls')).toBe(panel.id)
     })
 
-    it('header-close button has aria-label="Close"', async () => {
-      const el = await createDrawer()
+    it('header-close button uses the configured close label', async () => {
+      const el = await createDrawer({closeLabel: 'Close tag manager'})
       const headerClose = el.shadowRoot!.querySelector('[part="header-close"]') as HTMLElement
-      expect(headerClose.getAttribute('aria-label')).toBe('Close')
+      expect(headerClose.getAttribute('aria-label')).toBe('Close tag manager')
     })
   })
 
@@ -1401,6 +1411,60 @@ describe('cv-drawer', () => {
       await settle(el)
 
       expect(document.body.style.overflow).not.toBe('hidden')
+    })
+
+    it('keeps the overlay pointer-transparent while the panel remains interactive', () => {
+      const cssText = stylesToText(CVDrawer.styles)
+
+      expect(cssText).toMatch(
+        /:host\(:not\(\[modal\]\)\) \[part='overlay'\]\s*{[\s\S]*background:\s*transparent;[\s\S]*pointer-events:\s*none;/,
+      )
+      expect(cssText).toMatch(/:host\(:not\(\[modal\]\)\) \[part='panel'\]\s*{[\s\S]*pointer-events:\s*auto;/)
+    })
+
+    it('closes from a document pointer outside when enabled', async () => {
+      const el = await createDrawer({open: true, modal: false})
+      const outside = document.createElement('button')
+      document.body.prepend(outside)
+
+      outside.dispatchEvent(new Event('pointerdown', {bubbles: true, composed: true}))
+      await settle(el)
+
+      expect(el.open).toBe(false)
+    })
+
+    it('stays open from a document pointer outside when disabled', async () => {
+      const el = await createDrawer({
+        open: true,
+        modal: false,
+        closeOnOutsidePointer: false,
+      })
+      const outside = document.createElement('button')
+      document.body.prepend(outside)
+
+      outside.dispatchEvent(new Event('pointerdown', {bubbles: true, composed: true}))
+      await settle(el)
+
+      expect(el.open).toBe(true)
+    })
+
+    it('ignores document pointers from inside the non-modal panel', async () => {
+      const el = await createDrawer({open: true, modal: false})
+
+      getPanel(el).dispatchEvent(new Event('pointerdown', {bubbles: true, composed: true}))
+      await settle(el)
+
+      expect(el.open).toBe(true)
+    })
+
+    it('removes the document pointer listener when disconnected', async () => {
+      const el = await createDrawer({open: true, modal: false})
+      el.remove()
+
+      document.body.dispatchEvent(new Event('pointerdown', {bubbles: true, composed: true}))
+      await Promise.resolve()
+
+      expect(el.open).toBe(true)
     })
 
     it('aria-modal is "true" when modal=true (default)', async () => {

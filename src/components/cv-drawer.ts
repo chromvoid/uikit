@@ -40,6 +40,7 @@ export class CVDrawer extends ReatomLitElement {
       },
       closeOnOutsideFocus: {type: Boolean, attribute: 'close-on-outside-focus', reflect: true},
       initialFocusId: {type: String, attribute: 'initial-focus-id'},
+      closeLabel: {type: String, attribute: 'close-label'},
       noHeader: {type: Boolean, attribute: 'no-header', reflect: true},
       dragToClose: {type: Boolean, attribute: 'drag-to-close', reflect: true},
     }
@@ -53,6 +54,7 @@ export class CVDrawer extends ReatomLitElement {
   declare closeOnOutsidePointer: boolean
   declare closeOnOutsideFocus: boolean
   declare initialFocusId: string
+  declare closeLabel: string
   declare noHeader: boolean
   declare dragToClose: boolean
 
@@ -89,6 +91,7 @@ export class CVDrawer extends ReatomLitElement {
     this.closeOnOutsidePointer = true
     this.closeOnOutsideFocus = true
     this.initialFocusId = ''
+    this.closeLabel = 'Close'
     this.noHeader = false
     this.dragToClose = false
     this.model = this.createModel()
@@ -148,6 +151,11 @@ export class CVDrawer extends ReatomLitElement {
         transition: none;
       }
 
+      :host(:not([modal])) [part='overlay'] {
+        background: transparent;
+        pointer-events: none;
+      }
+
       [part='panel'] {
         --cv-drawer-drag-offset-x: 0px;
         --cv-drawer-drag-offset-y: 0px;
@@ -164,6 +172,10 @@ export class CVDrawer extends ReatomLitElement {
           transform var(--cv-drawer-transition-duration, 250ms) ease,
           opacity var(--cv-drawer-transition-duration, 250ms) ease;
         transition-behavior: allow-discrete;
+      }
+
+      :host(:not([modal])) [part='panel'] {
+        pointer-events: auto;
       }
 
       [part='panel']:focus-visible {
@@ -318,6 +330,7 @@ export class CVDrawer extends ReatomLitElement {
   override connectedCallback(): void {
     super.connectedCallback()
     this.syncOutsideFocusListener()
+    this.syncOutsidePointerListener()
     this.syncScrollLock()
     this.syncDirectionObserver(this.open)
   }
@@ -325,6 +338,7 @@ export class CVDrawer extends ReatomLitElement {
   override disconnectedCallback(): void {
     super.disconnectedCallback()
     this.syncOutsideFocusListener(true)
+    this.syncOutsidePointerListener(true)
     this.releaseScrollLock()
     this.clearAnimationQueue()
     this.pendingFocusRestoreTargetId = null
@@ -390,6 +404,7 @@ export class CVDrawer extends ReatomLitElement {
     super.updated(changedProperties)
 
     this.syncOutsideFocusListener()
+    this.syncOutsidePointerListener()
     this.syncScrollLock()
     this.syncDirectionObserver(this.open)
 
@@ -672,6 +687,15 @@ export class CVDrawer extends ReatomLitElement {
     }
   }
 
+  private syncOutsidePointerListener(forceOff = false): void {
+    const shouldListen = !forceOff && this.open && !this.modal && this.closeOnOutsidePointer
+    if (shouldListen) {
+      document.addEventListener('pointerdown', this.handleDocumentPointerDown)
+    } else {
+      document.removeEventListener('pointerdown', this.handleDocumentPointerDown)
+    }
+  }
+
   private syncScrollLock(): void {
     if (!this.model.state.shouldLockScroll()) {
       this.releaseScrollLock()
@@ -863,6 +887,15 @@ export class CVDrawer extends ReatomLitElement {
     this.applyInteractionResult(previous)
   }
 
+  private handleDocumentPointerDown = (event: PointerEvent) => {
+    if (!this.open || this.modal || !this.closeOnOutsidePointer) return
+    if (event.composedPath().includes(this)) return
+
+    const previous = this.captureState()
+    this.model.contracts.getOverlayProps().onPointerDownOutside()
+    this.applyInteractionResult(previous)
+  }
+
   private handleTriggerClick() {
     const previous = this.captureState()
     this.model.contracts.getTriggerProps().onClick()
@@ -1050,7 +1083,7 @@ export class CVDrawer extends ReatomLitElement {
               id=${headerCloseProps.id}
               role=${headerCloseProps.role}
               tabindex=${headerCloseProps.tabindex}
-              aria-label=${headerCloseProps['aria-label']}
+              aria-label=${this.closeLabel}
               type="button"
               part="header-close"
               @click=${this.handleHeaderCloseClick}

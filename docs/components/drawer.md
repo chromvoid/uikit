@@ -203,18 +203,19 @@ Slide-out panel dialog anchored to a viewport edge, used for navigation, forms, 
 
 ## Attributes
 
-| Attribute                  | Type    | Default    | Description                                                        |
-| -------------------------- | ------- | ---------- | ------------------------------------------------------------------ |
-| `open`                     | Boolean | `false`    | Whether the drawer is visible                                      |
-| `modal`                    | Boolean | `true`     | Enables modal behavior (focus trap, scroll lock, backdrop)         |
-| `placement`                | String  | `"end"`    | Edge the drawer slides from: `start` \| `end` \| `top` \| `bottom` |
-| `type`                     | String  | `"dialog"` | ARIA role type: `dialog` \| `alertdialog`                          |
-| `close-on-escape`          | Boolean | `true`     | Whether Escape key closes the drawer                               |
-| `close-on-outside-pointer` | Boolean | `true`     | Whether clicking outside closes the drawer                         |
-| `close-on-outside-focus`   | Boolean | `true`     | Whether focusing outside closes the drawer                         |
-| `initial-focus-id`         | String  | ---        | Id of element to focus when drawer opens                           |
-| `no-header`                | Boolean | `false`    | Hides the header (title, description, header close button)         |
-| `drag-to-close`            | Boolean | `false`    | Enables touch drag dismissal in the drawer's closing direction     |
+| Attribute                  | Type    | Default    | Description                                                         |
+| -------------------------- | ------- | ---------- | ------------------------------------------------------------------- |
+| `open`                     | Boolean | `false`    | Whether the drawer is visible                                       |
+| `modal`                    | Boolean | `true`     | Enables modal behavior (focus trap, scroll lock, blocking backdrop) |
+| `placement`                | String  | `"end"`    | Edge the drawer slides from: `start` \| `end` \| `top` \| `bottom`  |
+| `type`                     | String  | `"dialog"` | ARIA role type: `dialog` \| `alertdialog`                           |
+| `close-on-escape`          | Boolean | `true`     | Whether Escape key closes the drawer                                |
+| `close-on-outside-pointer` | Boolean | `true`     | Whether clicking outside closes the drawer                          |
+| `close-on-outside-focus`   | Boolean | `true`     | Whether focusing outside closes the drawer                          |
+| `initial-focus-id`         | String  | ---        | Id of element to focus when drawer opens                            |
+| `close-label`              | String  | `"Close"`  | Accessible label for the header close button                        |
+| `no-header`                | Boolean | `false`    | Hides the header (title, description, header close button)          |
+| `drag-to-close`            | Boolean | `false`    | Enables touch drag dismissal in the drawer's closing direction      |
 
 ## Slots
 
@@ -282,6 +283,7 @@ Slide-out panel dialog anchored to a viewport edge, used for navigation, forms, 
 - `top` and `bottom` remain physical placements in both LTR and RTL.
 - Direction is sampled at the open and drag boundaries. While open, UIKit observes only the component's direction-inheritance chain for `dir` changes and tears the observer down on close/disconnect; direction remains layout input, not product state.
 - Presence motion uses `transform` and `opacity` only. Completion follows the longest overlay or panel transition (including delay); `prefers-reduced-motion: reduce` makes the transition and completion immediate while preserving the same open/closed state.
+- Non-modal drawers render no backdrop and keep the page pointer- and focus-reachable. The panel remains interactive, while `close-on-outside-pointer` is handled at the document boundary when enabled.
 
 ## Events
 
@@ -310,6 +312,7 @@ Slide-out panel dialog anchored to a viewport edge, used for navigation, forms, 
 | `close-on-outside-pointer` | attr -> option | passed as `closeOnOutsidePointer` in `createDrawer(options)`                           |
 | `close-on-outside-focus`   | attr -> option | passed as `closeOnOutsideFocus` in `createDrawer(options)`                             |
 | `initial-focus-id`         | attr -> option | passed as `initialFocusId` in `createDrawer(options)`                                  |
+| `close-label`              | attr -> DOM    | labels the UIKit-owned header close button                                             |
 | `no-header`                | attr -> DOM    | controls header visibility (UIKit-only, no headless binding)                           |
 
 | Headless State                 | Direction       | DOM Reflection                                |
@@ -328,8 +331,8 @@ Slide-out panel dialog anchored to a viewport edge, used for navigation, forms, 
 - `contracts.getPanelProps()` is spread onto `[part="panel"]` to apply `role` (`dialog` or `alertdialog`), `aria-modal`, `aria-labelledby`, `aria-describedby`, `data-placement`, `tabindex`, and keydown handler.
 - `contracts.getTitleProps()` is spread onto `[part="title"]` to apply the `id` for `aria-labelledby`.
 - `contracts.getDescriptionProps()` is spread onto `[part="description"]` to apply the `id` for `aria-describedby`.
-- `contracts.getHeaderCloseButtonProps()` is spread onto `[part="header-close"]` to apply `role`, `tabindex`, `aria-label: 'Close'`, and click handler.
+- `contracts.getHeaderCloseButtonProps()` is spread onto `[part="header-close"]` to apply `role`, `tabindex`, and click handler; UIKit applies the localized `close-label` value.
 - UIKit dispatches `cv-input` and `cv-change` events by observing `isOpen` changes triggered by user interaction (not by controlled `open` attribute changes).
 - UIKit dispatches `cv-show`/`cv-after-show`/`cv-hide`/`cv-after-hide` lifecycle events to bracket CSS transitions.
 - On controlled open, UIKit captures the deep focused external opener and its connected shadow host. After every completed close transition, focus is restored in this order: captured opener, connected host, internal trigger fallback.
-- UIKit owns scroll lock implementation, focus trap implementation, focus restoration, backdrop rendering, slide animations, and CSS transitions -- headless provides signals, UIKit applies side effects.
+- UIKit owns scroll lock implementation, focus trap implementation, focus restoration, modal backdrop rendering, non-modal outside-pointer delegation, slide animations, and CSS transitions -- headless provides signals, UIKit applies side effects.

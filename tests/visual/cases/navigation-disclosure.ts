@@ -245,6 +245,39 @@ export const navigationDisclosureCases: readonly UikitVisualCase[] = [
     `,
   }),
   visualCase({
+    id: 'cv-drawer/non-modal',
+    component: 'cv-drawer',
+    title: 'Non-modal drawer preserves the visible workspace without a backdrop',
+    states: ['open', 'non-modal', 'placement-end', 'no-backdrop'],
+    fullPage: true,
+    requiredSelectors: ['cv-drawer:not([modal]) [part="panel"]', '[data-drawer-background-action]'],
+    html: `
+      <div class="drawer-demo-stage">
+        <main class="drawer-demo-workspace">
+          <h3>Vault workspace remains available</h3>
+          <p>The utility drawer overlays this content without dimming or resizing it.</p>
+          <cv-button data-drawer-background-action>Background action</cv-button>
+        </main>
+        <cv-drawer data-visual-id="non-modal" open placement="end" close-label="Close utility panel">
+          <span slot="title">Utility drawer</span>
+          <span slot="description">Non-modal supporting work</span>
+          <div class="visual-stack">
+            <p>Review and edit supporting data while the workspace stays visible.</p>
+            <cv-input value="Searchable content"></cv-input>
+          </div>
+        </cv-drawer>
+      </div>
+    `,
+    async afterMount(root) {
+      const drawer = setElementProps<HTMLElement>(root, 'cv-drawer[data-visual-id="non-modal"]', {
+        modal: false,
+        closeOnOutsidePointer: false,
+        closeOnOutsideFocus: false,
+      })
+      await waitForElementUpdate(drawer)
+    },
+  }),
+  visualCase({
     id: 'cv-drawer/rtl-start',
     component: 'cv-drawer',
     title: 'RTL drawer open from logical inline-start with inward radii',
