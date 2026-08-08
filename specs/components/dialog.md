@@ -171,6 +171,7 @@ The top-layer shell, overlay, and content expose `data-state="closed|opening|ope
 - UIKit renders the visible dialog through native top-layer primitives (`<dialog>` for modal, popover root for non-modal) so it is not clipped by ancestor `overflow`, `contain`, `transform`, or `isolation`.
 - UIKit owns scroll lock implementation, focus trap implementation, focus restoration, backdrop rendering, and CSS transitions — headless provides signals, UIKit applies side effects.
 - UIKit keeps modal scroll lock and native top-layer presence active during the close transition, then restores focus after the shell has closed.
+- Programmatic focus on the dialog content container is visually silent; interactive descendants keep their own `:focus-visible` indicators.
 
 ## Usage
 

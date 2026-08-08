@@ -71,6 +71,13 @@ describe('cv-dialog', () => {
       )
     })
 
+    it('keeps programmatic focus on the dialog surface visually silent', () => {
+      const stylesText = getStylesText()
+
+      expect(stylesText).toMatch(/\[part='content'\]:focus-visible\s*\{\s*outline:\s*none;/)
+      expect(stylesText).toMatch(/\[part='header-close'\]:focus-visible\s*\{[\s\S]*outline:\s*2px solid/)
+    })
+
     it('defines token-based dialog presence motion for shell, overlay, and content', () => {
       const stylesText = getStylesText()
 

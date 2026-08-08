@@ -18,6 +18,13 @@ afterEach(() => {
 })
 
 describe('cv-alert-dialog', () => {
+  it('keeps programmatic focus on the dialog surface visually silent', () => {
+    const cssText = stylesToText()
+
+    expect(cssText).toMatch(/\[part='content'\]:focus-visible\s*\{\s*outline:\s*none;/)
+    expect(cssText).toMatch(/\[part='trigger'\]:focus-visible\s*\{[\s\S]*outline:\s*2px solid/)
+  })
+
   it('defines discrete display presence for overlay', () => {
     const cssText = stylesToText()
 

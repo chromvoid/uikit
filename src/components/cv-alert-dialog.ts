@@ -121,8 +121,7 @@ export class CVAlertDialog extends ReatomLitElement {
       }
 
       [part='content']:focus-visible {
-        outline: 2px solid var(--cv-color-primary, #65d7ff);
-        outline-offset: 1px;
+        outline: none;
       }
 
       [part='header'] {
