@@ -104,6 +104,12 @@ describe('cv-bottom-sheet', () => {
     expect(cssText).toMatch(/cv-dialog::part\(footer\)\s*{[\s\S]*grid-row:\s*4;/)
   })
 
+  it('keeps interactive sheet handle focus visible', () => {
+    const cssText = stylesToText(CVBottomSheet.styles)
+
+    expect(cssText).toMatch(/\.sheet-handle:focus-visible\s*{[\s\S]*outline:\s*2px solid/)
+  })
+
   it('defines detent sizing hooks without changing the default open-close mode', () => {
     const cssText = stylesToText(CVBottomSheet.styles)
 
@@ -143,6 +149,9 @@ describe('cv-bottom-sheet', () => {
     )
     expect(cssText).toMatch(
       /\.sheet-handle\s*{[\s\S]*padding-block:\s*var\(--cv-bottom-sheet-handle-padding-block,\s*12px 20px\);/,
+    )
+    expect(cssText).toMatch(
+      /@media \(hover:\s*none\) and \(pointer:\s*coarse\)\s*{[\s\S]*\.sheet-handle\s*{[\s\S]*min-block-size:\s*max\(48px,\s*var\(--cv-bottom-sheet-handle-block-size,\s*48px\)\);/,
     )
   })
 

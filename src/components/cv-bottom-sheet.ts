@@ -282,6 +282,12 @@ export class CVBottomSheet extends ReatomLitElement {
       user-select: none;
     }
 
+    @media (hover: none) and (pointer: coarse) {
+      .sheet-handle {
+        min-block-size: max(48px, var(--cv-bottom-sheet-handle-block-size, 48px));
+      }
+    }
+
     .sheet-handle:focus-visible {
       outline: 2px solid var(--cv-color-primary, #65d7ff);
       outline-offset: -2px;

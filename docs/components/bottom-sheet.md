@@ -385,6 +385,7 @@ The underlying dialog exports `trigger`, `overlay`, `content`, `header`, `title`
 | `--cv-bottom-sheet-overlay-color`         | `var(--cv-color-overlay)`         | Backdrop color                                    |
 | `--cv-bottom-sheet-border-radius`         | top corners rounded               | Sheet corner radius                               |
 | `--cv-bottom-sheet-header-padding`        | `16px`; `0 16px 16px` with handle | Header padding                                    |
+| `--cv-bottom-sheet-handle-block-size`     | `48px`                            | Handle height; clamped to at least 48px for touch |
 | `--cv-bottom-sheet-grabber-color`         | `var(--cv-color-border-strong)`   | Grabber color                                     |
 | `--cv-bottom-sheet-dismiss-duration`      | `180ms`                           | Drag dismiss transition duration                  |
 
@@ -409,6 +410,8 @@ When `detents` is set, event detail is `{open, detent}`. In default open-close m
 ## Interaction Rules
 
 - The content grid reserves independent rows for the drag handle, header, scrollable body, and footer.
+- On coarse-pointer devices, `part="handle"` keeps a minimum 48px hit area even when a smaller visual height is requested.
+- Programmatic focus on the sheet container is visually silent; interactive controls keep their own `:focus-visible` indicators.
 - Backdrop pointer/click and Escape are delegated to `cv-dialog`.
 - Drag starts only from `part="handle"`.
 - Without `detents`, drag closes at `96px` downward movement or `0.75px/ms` downward velocity.
