@@ -172,6 +172,12 @@ export class CVPopover extends ReatomLitElement {
           max(220px, var(--_cv-popover-anchor-inline-size, 0px))
         );
         max-inline-size: var(--cv-popover-max-inline-size, min(560px, calc(100vw - 32px)));
+        /*
+         * Override the intrinsic block-size from the native popover UA styles.
+         * WebKit stretches fixed grid popovers with intrinsic sizing to the
+         * viewport; auto preserves content sizing and position-area alignment.
+         */
+        block-size: auto;
         display: grid;
         gap: var(--cv-popover-gap, var(--cv-space-2, 8px));
         padding: var(--cv-popover-padding, var(--cv-space-3, 12px));

@@ -288,6 +288,7 @@ Placement uses native CSS anchor positioning when the complete browser contract 
 - For `top-*` and `bottom-*`, `start` / `end` are inline-logical: start is left in LTR and right in RTL.
 - `left-*` and `right-*` remain physical sides; their `start` / `end` alignment stays on the physical block axis.
 - Native `position-area`, native fallback order, JS fallback coordinates, and arrow inline offset use the same resolved direction.
+- The content panel explicitly uses an automatic block size. This overrides intrinsic native popover sizing that can stretch fixed grid popovers across the viewport in WebKit while preserving content-sized anchor positioning in other engines.
 - Direction is sampled at open/layout boundaries. While open, UIKit observes only the component's direction-inheritance chain for `dir` changes, schedules one layout frame when the effective direction changes, and tears the observer down on close/disconnect.
 - Open/close presence uses `transform` and `opacity`; reduced motion removes spatial displacement and makes the transition instant.
 

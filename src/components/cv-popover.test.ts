@@ -160,6 +160,13 @@ afterEach(() => {
 
 describe('cv-popover', () => {
   describe('style contract', () => {
+    it('keeps content auto-sized along the anchor block axis', () => {
+      const cssText = stylesToText()
+
+      expect(cssText).toMatch(/\[part='content'\][\s\S]*block-size:\s*auto;/)
+      expect(cssText).not.toMatch(/\[part='content'\][\s\S]*block-size:\s*fit-content;/)
+    })
+
     it('defines discrete display presence for content', () => {
       const cssText = stylesToText()
 
