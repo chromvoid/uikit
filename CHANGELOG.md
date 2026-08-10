@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.0.1
+
+### Fixed
+
+- Kept bottom sheets scrollable when their content extends above an on-screen keyboard.
+
 ## 2.0.0
 
 ### Added
